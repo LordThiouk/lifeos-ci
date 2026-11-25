@@ -553,7 +553,7 @@ jobs:
       # filtre, include ou alias du dépôt de l'agent n'est exécuté avec CI_TOKEN.
       - name: Porte gitleaks, garde-fou, push fast-forward et PR brouillon
         id: push
-        if: always()
+        if: always() && !cancelled()
         env:
           CI_TOKEN: ${{ secrets.CI_TOKEN }}
           GH_TOKEN: ${{ secrets.CI_TOKEN }}
@@ -573,6 +573,33 @@ jobs:
           fail() { echo "::error::$1"; exit 1; }
           gclean() { git -c core.hooksPath=/dev/null -c core.fsmonitor=false "$@"; }
 
+          # Conserve le travail partiel de l'agent avant toute rebase : sans commit,
+          # `git rebase` refuse un arbre non propre (« cannot rebase: You have unstaged
+          # changes ») et le runner effacé perd tout. `git add -A` respecte .gitignore ;
+          # .fullrun (checkpoints, journaux, secrets) n'est jamais ajouté.
+          wipgit() {
+            env -i PATH=/usr/local/bin:/usr/bin:/bin HOME=/nonexistent \
+              GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_TERMINAL_PROMPT=0 \
+              GIT_ASKPASS=/bin/false \
+              git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                  -c commit.gpgsign=false "$@"
+          }
+          wip_commit() {
+            local r="$1" dir="$2" branch="$3"
+            [ -d "$dir/.git" ] || return 0
+            [ "$(wipgit -C "$dir" rev-parse --abbrev-ref HEAD)" = "$branch" ] || return 0
+            [ -n "$(wipgit -C "$dir" status --porcelain)" ] || return 0
+            wipgit -C "$dir" add -A
+            wipgit -C "$dir" reset -q -- .fullrun 2>/dev/null || true
+            if ! wipgit -C "$dir" diff --cached --quiet; then
+              wipgit -C "$dir" -c user.name="Papa Diop" \
+                -c user.email="76528706+LordThiouk@users.noreply.github.com" \
+                commit --no-verify -q -m "wip(${IN_JOB}): partial work (agent stopped)" \
+                || fail "$r : commit du travail partiel impossible"
+              echo "$r : travail partiel conservé dans wip(${IN_JOB})"
+            fi
+          }
+
           # Référence distante réelle d'une branche (vide si absente). Sert aux
           # dépôts extra en lecture seule : on compare le remote, jamais le HEAD
           # local que l'agent peut déplacer en changeant de branche.
@@ -591,9 +618,10 @@ jobs:
             local r="$1" dir="$2" base="$3" branch="$4" refspec="${5:-HEAD:refs/heads/$4}"
             local h b
             [ -d "$dir/.git" ] || fail "$r : dépôt absent"
-            h=$(gclean -C "$dir" rev-parse HEAD)
             [ "$(gclean -C "$dir" rev-parse --abbrev-ref HEAD)" = "$branch" ] \
               || fail "$r : branche $branch modifiée par l'agent"
+            wip_commit "$r" "$dir" "$branch"
+            h=$(gclean -C "$dir" rev-parse HEAD)
             # Resynchronisation juste avant le push : si la branche distante existe,
             # on rebase les commits de l'agent dessus pour rester en fast-forward.
             if env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$RUNNER_TEMP" \
@@ -676,6 +704,7 @@ jobs:
               echo "$r : extra en lecture seule, aucun push (HEAD local ignoré)"
               continue
             fi
+            wip_commit "$r" "$dir" "$IN_BRANCH"
             h=$(gclean -C "$dir" rev-parse HEAD)
             head_sha="$h"
             count=$(gclean -C "$dir" rev-list --count "$base..$h")
@@ -693,12 +722,7 @@ jobs:
             lifeos_branch="lifeos-ci/$(printf '%s' "$IN_JOB" | tr -c 'A-Za-z0-9_-' '-')"
             base=$(cat "$STATE_DIR/lifeos-base")
             gclean -C lifeos checkout -B "$lifeos_branch" >/dev/null 2>&1
-            if [ -n "$(gclean -C lifeos status --porcelain)" ]; then
-              gclean -C lifeos add -A
-              gclean -C lifeos -c user.name="Papa Diop" \
-                -c user.email="76528706+LordThiouk@users.noreply.github.com" \
-                commit --no-verify -m "lifeos-ci ${IN_AGENT} ${IN_JOB}" >/dev/null
-            fi
+            wip_commit "lifeos" "lifeos" "$lifeos_branch"
             lh=$(gclean -C lifeos rev-parse HEAD)
             lcount=$(gclean -C lifeos rev-list --count "$base..$lh")
             if [ "$lcount" -eq 0 ]; then

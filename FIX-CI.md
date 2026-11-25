@@ -29,3 +29,7 @@ la sandbox) : analyse par lecture des workflows, `actionlint`, `shellcheck` et t
 - Suite complète `opencode/tests/run-all.sh` : PASS 42/42 (rg/age/bun installés
   dans la sandbox ; les échecs précédents venaient de ces binaires absents).
 - `gitleaks detect --source .` : aucun leak. Aucun autre échec de script réel.
+
+- Travail partiel : `_agent-run.yml` commite `wip(<job>): partial work (agent stopped)` (`git add -A`, `.fullrun` exclu) avant la rebase.
+- Step push en `if: always() && !cancelled()` : il tourne aussi après un arrêt de l'agent (quota, timeout, erreur).
+- Commit : fix(ci): keep partial work on agent failure
