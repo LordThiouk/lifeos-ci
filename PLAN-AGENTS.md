@@ -86,7 +86,5 @@ si `status == ok`. Granularité : `plan`/`close` = étape, `build` = tâche, `ve
 
 ## Questions tranchées par lifeos
 
-- Vera/Serena = clés des étapes 2/3 ; agents **Algorithm**/**Architect** (alias `Vera`/`Serena`).
-- `close` = étape 7 `nixOnly`, `agents: []` : Nix exécute `CheckCompleteness` + `phase: complete`.
-- `bugbot` = audit optionnel, jamais bloquant ; `Cato` → alias Forge ; chercheurs = étape
-  `research` (-1) ; `Artist` = skill Media ; `Arthur` = narrateur.
+- Vera/Serena = clés 2/3, agents **Algorithm**/**Architect** (alias) ; `close` = étape 7 `nixOnly`.
+- `bugbot` optionnel non bloquant ; `Cato` → Forge ; chercheurs = `research` (-1) ; `Artist`/`Arthur` hors FullRun.
