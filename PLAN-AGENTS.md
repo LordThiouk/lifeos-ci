@@ -63,3 +63,14 @@ si `status == ok`. Granularité : `plan`/`close` = étape, `build` = tâche, `ve
 | 5 Forge audit | `fr-verify-forge-audit.yml` | 10 min | aucun code : audit croisé signé | même agent, PASS frais exigé |
 | 5 Silas | `fr-verify-silas.yml` | 10 min | aucun code : verdict sécurité signé | même agent, PASS frais exigé |
 | 6 Max | `fr-close-max.yml` | 10 min | aucun code : verdict final signé | même agent, PASS frais exigé |
+
+## Reprise après échec
+
+- Le FullRun lit l'état signé (`fullrun-state-$job`, HMAC + AES, restauré par le lien suivant) et
+  `unit --isa` (lifeos) : il recalcule l'étape en cours, puis **redispatch le seul** `fr-*` concerné.
+  Aucun redémarrage à zéro ; `stop_after_step` borne chaque lien et interdit tout chaînage aveugle.
+- Timeout / modèle vide : `run-fullrun.sh` bascule sur le **modèle libre suivant** de `model_chain`
+  (même session, même étape) ; si tous sont épuisés, l'étape est marquée en échec et le FullRun la
+  rejoue telle quelle. Jamais de saut de gate ni de PASS par défaut.
+- Chaque mini-workflow committe **avant** de rendre la main : un échec ultérieur ne perd pas le
+  travail validé ; les builds poussent leur branche d'agent, le FullRun fusionne.
