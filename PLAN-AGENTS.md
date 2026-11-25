@@ -57,3 +57,13 @@ Un wrapper `fr-<phase>-<agent>.yml` par agent dispatchable, sans duplication :
 `close` (7) n'est pas un agent : Nix exécute `CheckCompleteness` + `phase: complete` après
 le PASS de Max. Pas d'`agent-close`, ni `agent-aditi`, ni doublon `agent-algorithm`/`agent-architect`
 (Vera/Serena sont leurs alias).
+
+## Vagues parallèles
+
+- Vague 0 : `vera` (Algorithm).
+- Vague 1 : `serena` (Architect), dépend de Vera.
+- Vague 2 (build, parallèle si scopes `[scope:…]` disjoints et branches séparées) :
+  `aditi-ui`, `engineer`, `anvil`, `forge-code` — un job par agent.
+- Vague 3 (verify, parallèle) : `code-review`, `silas`, `forge-audit` (+ `bugbot`) — un verdict par agent.
+- Vague 4 : `max` (6), puis `close` (7) par Nix après le PASS de Max.
+- `Nix/LifeOS` orchestre (0, 1, 7) et ne se lance pas dans les vagues.
