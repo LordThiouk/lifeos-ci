@@ -560,6 +560,20 @@ jobs:
           fail() { echo "::error::$1"; exit 1; }
           gclean() { git -c core.hooksPath=/dev/null -c core.fsmonitor=false "$@"; }
 
+          # Référence distante réelle d'une branche (vide si absente). Sert aux
+          # dépôts extra en lecture seule : on compare le remote, jamais le HEAD
+          # local que l'agent peut déplacer en changeant de branche.
+          remote_sha() {
+            local dir="$1" branch="$2"
+            env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$RUNNER_TEMP" \
+              GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_TERMINAL_PROMPT=0 \
+              GIT_CONFIG_COUNT=1 \
+              GIT_CONFIG_KEY_0=http.https://github.com/.extraheader \
+              GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth" \
+              git -C "$dir" ls-remote --heads origin "$branch" 2>/dev/null \
+              | awk 'NR==1{print $1}'
+          }
+
           push_branch() {
             local r="$1" dir="$2" base="$3" branch="$4" refspec="${5:-HEAD:refs/heads/$4}"
             local h b
@@ -637,8 +651,19 @@ jobs:
           while IFS=$'\t' read -r r dir base; do
             [ -n "$r" ] || continue
             [ -d "$dir/.git" ] || continue
+            if [ "$r" != "$TARGET_REPO" ]; then
+              # extra_repos en lecture seule : seul compte le fait qu'aucun push
+              # n'a eu lieu (référence distante inchangée). Le HEAD local est
+              # ignoré, l'agent peut changer de branche pour inspecter le dépôt.
+              remote=$(remote_sha "$dir" "$IN_BRANCH")
+              if [ -n "$remote" ] && [ "$remote" != "$base" ]; then
+                fail "$r : référence distante $IN_BRANCH modifiée (extra en lecture seule)"
+              fi
+              echo "$r : extra en lecture seule, aucun push (HEAD local ignoré)"
+              continue
+            fi
             h=$(gclean -C "$dir" rev-parse HEAD)
-            [ "$r" = "$TARGET_REPO" ] && head_sha="$h"
+            head_sha="$h"
             count=$(gclean -C "$dir" rev-list --count "$base..$h")
             if [ "$count" -eq 0 ]; then
               echo "$r : aucun nouveau commit"
