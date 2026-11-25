@@ -13,7 +13,7 @@ par lecture des workflows et `actionlint` (les échecs de quota modèle sont ign
 - Échec : l'agent inspecte une autre branche d'un extra (read-only) et le job échoue.
 - Cause : `.github/workflows/_agent-run.yml:637-649` poussait chaque extra et comparait son HEAD local à `IN_BRANCH`.
 - Fix : les extras ne sont jamais poussés ; `git ls-remote` compare la ref distante au SHA de départ.
-- Commits : bf49442, 7a1a5b7
+- Commits : bf49442, 7a1a5b7, 6546444
 
 ## 3. Actionlint en échec (job CI)
 - Échec : `actionlint` retourne 1 sur un default posé sur un input `workflow_call` requis.
@@ -22,7 +22,7 @@ par lecture des workflows et `actionlint` (les échecs de quota modèle sont ign
 - Commit : ac70b13
 
 ## Validation
-- `actionlint -ignore SC2129 .github/workflows/*.yml` : OK.
+- `actionlint 1.7.12 -ignore SC2129 .github/workflows/*.yml` : OK.
 - `shellcheck -x opencode/*.sh targets/*.sh` : OK.
-- YAML parsé pour tous les workflows modifiés.
-- `opencode/tests/run-all.sh` : seuls des échecs d'environnement restent (bun/age absents), hors dépôt.
+- YAML parsé pour tous les workflows.
+- 13 tests socle (`opencode/tests/*-test.sh`) : OK ; `run-all.sh` non allant (timeout sandbox).
