@@ -1,9 +1,7 @@
 # Plan — un workflow par agent LifeOS (FullRun)
 
 Vérifié sur le clone lifeos (lecture seule, `main`) : `skills/FullRunWorkflow/SKILL.md`,
-`LIFEOS/TOOLS/FullRunPipeline.ts` (`FULLRUN_STEPS`, `AGENT_ALIASES`, `VERIFY_AGENT_ORDER`,
-`buildStepGuidance`), `FullRunAgentNames.test.ts` (fichier par agent d'étape, sauf `bugbot`).
-opencode charge `agents/*.md` et `opencode/agent/*.md`. Auteur : Papa Diop.
+`LIFEOS/TOOLS/FullRunPipeline.ts` (`FULLRUN_STEPS`, `AGENT_ALIASES`, `VERIFY_AGENT_ORDER`, `buildStepGuidance`), `FullRunAgentNames.test.ts`. opencode charge `agents/*.md` et `opencode/agent/*.md`. Auteur : Papa Diop.
 
 ## Agents réels (étapes FullRun)
 
@@ -35,13 +33,12 @@ opencode charge `agents/*.md` et `opencode/agent/*.md`. Auteur : Papa Diop.
 | 7 | `close` | Nix seul (`nixOnly`), `CheckCompleteness` | exit 0, puis `phase: complete` |
 | 8 | `deploy` | Nix seul, jamais une porte (`start_step` refuse) | drapeau posé explicitement par le principal |
 
-Un agent par job (`unit --stop-after-step <step> --agent <nom>`). Ordre verify imposé par la
-porte : `code-reviewer`, `forge`, `silas` (`VERIFY_AGENT_ORDER`), chacun dans son propre job.
-Échec verify → retour au build (4), jamais à `vera`/`serena`, sauf critères ISC changés (→ 2).
+Un agent par job (`unit --stop-after-step <step> --agent <nom>`). Ordre verify imposé par la porte :
+`code-reviewer`, `forge`, `silas`, chacun dans son propre job. Échec verify → build (4), jamais `vera`/`serena`, sauf critères ISC changés (→ 2).
 
 ## Workflows à créer
 
-Wrapper `fr-<phase>-<agent>.yml` par agent, sans duplication : `uses: ./.github/workflows/_agent-run.yml`
+Wrapper `fr-<phase>-<agent>.yml` sans duplication : `uses: ./.github/workflows/_agent-run.yml`
 (`agent`, `phase`, `step`, `target_agent`), puis `_next.yml`.
 
 | Workflow | Agent → canonique | Étape |
@@ -60,25 +57,21 @@ Wrapper `fr-<phase>-<agent>.yml` par agent, sans duplication : `uses: ./.github/
 ## Vagues
 
 - Vague 0 : `vera` (Algorithm). Vague 1 : `serena` (Architect), dépend de Vera.
-- Vague 2 (build, parallèle si scopes `[scope:…]` disjoints et branches séparées) :
-  `aditi-ui`, `engineer`, `anvil`, `forge-code` — un job par agent, aucun ordre entre eux.
-- Vague 3 (verify) : **séquentielle** — `code-reviewer` → `forge-audit` → `silas` ; un job qui
-  saute un prédécesseur sans PASS frais échoue. `bugbot` optionnel en sus. (Le skill dit
-  « any order » ; le code impose l'ordre.)
-- Vague 4 : `max` (6), puis `close` (7) par Nix après le PASS de Max.
-- `Nix/LifeOS` orchestre (0, 1, 7, 8) et ne se lance pas dans les vagues.
+- Vague 2 (build) : `aditi-ui`, `engineer`, `anvil`, `forge-code` — un job par agent, parallèle si scopes `[scope:…]` disjoints et branches séparées.
+- Vague 3 (verify) : **séquentielle** — `code-reviewer` → `forge-audit` → `silas`, un saut sans
+  PASS frais échoue ; `bugbot` optionnel (le skill dit « any order », le code impose l'ordre).
+- Vague 4 : `max` (6), puis `close` (7) par Nix après le PASS de Max. `Nix/LifeOS` orchestre
+  (0, 1, 7, 8) et ne se lance pas dans les vagues.
 
 ## Questions tranchées par lifeos
 
-- **Vera/Serena : agent ou phase ?** Les deux : `vera`/`serena` sont les clés des étapes 2/3 ;
-  les agents sont **Algorithm**/**Architect**, alias `Vera`/`Serena` (`AGENT_ALIASES` + fichiers
-  générés `opencode/agent/Vera.md`, `Serena.md`).
+- **Vera/Serena : agent ou phase ?** Les deux : `vera`/`serena` = clés des étapes 2/3 ; les agents
+  sont **Algorithm**/**Architect**, alias `Vera`/`Serena` (`AGENT_ALIASES`, `opencode/agent/{Vera,Serena}.md`).
 - **`close` : son propre agent ou dans Max ?** Ni l'un ni l'autre : étape 7 `nixOnly`,
-  `agents: []` — Nix exécute `CheckCompleteness` puis `phase: complete` après le PASS de Max (6).
+  `agents: []` — Nix exécute `CheckCompleteness` + `phase: complete` après le PASS de Max (6).
 - **`bugbot`** : audit optionnel, « jamais bloquant pour l'étape » (`FullRunPipeline.ts`).
-- **Hors FullRun** : `Cato` aliasé → Forge ; `BrowserAgent`/`QATester`/`UIReviewer` DEPRECATED
-  (skill Interceptor) ; chercheurs = étape `research` (-1) ; `Artist` = skill Media ;
-  `Arthur` = narrateur de crédentiels, ne décide jamais d'une release.
+- **Hors FullRun** : `Cato` → alias Forge ; `BrowserAgent`/`QATester`/`UIReviewer` DEPRECATED
+  (Interceptor) ; chercheurs = étape `research` (-1) ; `Artist` = skill Media ; `Arthur` = narrateur.
 
 ## Questions ouvertes (non tranchées par lifeos)
 
