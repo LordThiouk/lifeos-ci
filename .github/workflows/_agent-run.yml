@@ -655,7 +655,8 @@ jobs:
               # extra_repos en lecture seule : seul compte le fait qu'aucun push
               # n'a eu lieu (référence distante inchangée). Le HEAD local est
               # ignoré, l'agent peut changer de branche pour inspecter le dépôt.
-              remote=$(remote_sha "$dir" "$IN_BRANCH")
+              remote=$(remote_sha "$dir" "$IN_BRANCH") \
+                || fail "$r : lecture de la référence distante $IN_BRANCH impossible"
               if [ -n "$remote" ] && [ "$remote" != "$base" ]; then
                 fail "$r : référence distante $IN_BRANCH modifiée (extra en lecture seule)"
               fi
