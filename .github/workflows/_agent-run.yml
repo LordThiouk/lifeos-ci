@@ -570,7 +570,7 @@ jobs:
               GIT_CONFIG_COUNT=1 \
               GIT_CONFIG_KEY_0=http.https://github.com/.extraheader \
               GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth" \
-              git -C "$dir" ls-remote --heads origin "$branch" 2>/dev/null \
+              git -C "$dir" ls-remote --heads origin "refs/heads/$branch" 2>/dev/null \
               | awk 'NR==1{print $1}'
           }
 
