@@ -1,0 +1,671 @@
+name: Agent run (lifeos-ci)
+
+# Workflow réutilisable : toute la logique commune d'un run opencode lifeos-ci.
+# Appelé par task.yml (agent: task) et par les workflows fr-*.yml (agents FullRun).
+on:
+  workflow_call:
+    inputs:
+      agent:
+        description: "Agent logique (task, vera, serena, ...)"
+        required: true
+        type: string
+      target_repo:
+        description: "Dépôt cible (liste blanche targets/allowed-repos.sh)"
+        required: true
+        type: string
+      extra_repos:
+        description: "Dépôts supplémentaires, séparés par des virgules ou espaces"
+        required: false
+        type: string
+        default: ""
+      lifeos_write:
+        description: "Autoriser l'écriture (branche + PR) vers LordThiouk/lifeos"
+        required: false
+        type: boolean
+        default: false
+      branch:
+        description: "Branche de fonctionnalité du dépôt cible (jamais main/master)"
+        required: true
+        type: string
+      prompt_path:
+        description: "prompts:<chemin sur fullrun-prompts de lifeos-ci> ou target:<chemin sur la branche cible>"
+        required: true
+        type: string
+      isa_path:
+        description: "Chemin optionnel de l'ISA sur la branche cible"
+        required: false
+        type: string
+        default: ""
+      job_name:
+        description: "Nom court du job (lettres, chiffres, - _ .)"
+        required: true
+        type: string
+      lifeos_ref:
+        description: "Réf lifeos cloné en référence (lecture seule si lifeos_write=false)"
+        required: false
+        type: string
+        default: "main"
+      timeout_minutes:
+        description: "Durée max d'exécution opencode en minutes (10 à 90)"
+        required: false
+        type: string
+        default: "45"
+    secrets:
+      CI_TOKEN:
+        required: true
+      ISA_STAMP_KEY:
+        required: false
+      OC_NOTIFY_URL:
+        required: false
+      OC_NOTIFY_KEY:
+        required: false
+      HF_TOKEN:
+        required: false
+    outputs:
+      status:
+        description: "ok, quota, timeout, vide ou erreur"
+        value: ${{ jobs.run.outputs.status }}
+      model:
+        description: "Modèle opencode utilisé"
+        value: ${{ jobs.run.outputs.model }}
+      head_sha:
+        description: "SHA poussé (ou HEAD local si aucun push)"
+        value: ${{ jobs.run.outputs.head_sha }}
+
+permissions:
+  contents: read
+
+env:
+  OPENCODE_VERSION: "1.19.4"
+  GITLEAKS_VERSION: "8.30.1"
+  GITLEAKS_SHA256: "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
+  # Copies root-owned, hors de l'espace de travail de l'agent (C1).
+  TOOLS_DIR: /opt/lifeos-ci-tools
+  # État de sécurité écrit avant opencode, root-owned, non modifiable par l'agent (C3).
+  STATE_DIR: /opt/lifeos-ci-state
+
+jobs:
+  run:
+    if: github.actor == 'LordThiouk'
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    permissions:
+      contents: read
+    concurrency:
+      group: agent-${{ inputs.target_repo }}
+      cancel-in-progress: false
+    outputs:
+      status: ${{ steps.oc.outputs.status }}
+      model: ${{ steps.oc.outputs.model }}
+      head_sha: ${{ steps.push.outputs.head_sha }}
+    env:
+      IN_AGENT: ${{ inputs.agent }}
+      TARGET_REPO: ${{ inputs.target_repo }}
+      IN_EXTRA: ${{ inputs.extra_repos }}
+      LIFEOS_WRITE: ${{ inputs.lifeos_write }}
+      IN_BRANCH: ${{ inputs.branch }}
+      IN_PROMPT: ${{ inputs.prompt_path }}
+      IN_ISA: ${{ inputs.isa_path }}
+      IN_JOB: ${{ inputs.job_name }}
+      LIFEOS_REF: ${{ inputs.lifeos_ref }}
+      IN_TIMEOUT_MIN: ${{ inputs.timeout_minutes }}
+    steps:
+      - name: Checkout lifeos-ci (outils)
+        uses: actions/checkout@v4
+        with:
+          path: ci
+          fetch-depth: 0
+          persist-credentials: false
+
+      # C1 : on fige une copie root-owned des outils de confiance AVANT opencode.
+      # L'agent peut éditer ci/ ; les étapes post-opencode n'exécutent plus rien de ci/.
+      # Modèle repris de galass-ci/.github/workflows/opencode-fullrun.yml (step
+      # « Outils de contrôle figés (root, avant opencode) », lignes 756-830) et de
+      # antenly-ci/.github/workflows/opencode-fullrun.yml (même step).
+      - name: Outils de confiance figés (root, avant opencode)
+        run: |
+          set -euo pipefail
+          T="$TOOLS_DIR"
+          # /opt est 0777 sur les runners hébergés : sans cela l'agent (même UID) pourrait
+          # renommer /opt/lifeos-ci-tools et y placer sa propre copie.
+          sudo chmod go-w /opt
+          [ -z "$(find /opt -maxdepth 0 -perm /022)" ] \
+            || { echo "::error::/opt reste inscriptible par le groupe ou les autres"; exit 1; }
+          sudo rm -rf "$T" "$STATE_DIR"
+          sudo install -d -o root -g root -m 0755 "$T" "$STATE_DIR"
+          sudo cp -a ci/opencode "$T/opencode"
+          sudo cp -a ci/targets "$T/targets"
+          sudo install -o root -g root -m 0644 ci/models.txt "$T/models.txt"
+          sudo chown -R root:root "$T" "$STATE_DIR"
+          sudo chmod -R go-w "$T" "$STATE_DIR"
+          sudo find "$T" -type f -exec chmod 0644 {} +
+          sudo find "$T" -type f -name '*.sh' -exec chmod 0755 {} +
+          sudo find "$T" -type f \( -name bench-capped -o -name gitleaks \) -exec chmod 0755 {} +
+          # Preuve : aucun fichier de confiance n'appartient à l'utilisateur du runner.
+          [ -z "$(find "$T" -user "$(id -u)" -print -quit)" ] \
+            || { echo "::error::des outils figés appartiennent encore au runner"; exit 1; }
+          echo "Outils figés dans $T (root, non modifiables par opencode)"
+
+      - name: Validation des entrées
+        id: validate
+        env:
+          CI_TOKEN: ${{ secrets.CI_TOKEN }}
+        run: |
+          set -euo pipefail
+          fail() { echo "::error::$1"; exit 1; }
+          [ -n "${CI_TOKEN:-}" ] || fail "secret CI_TOKEN absent"
+          [[ "$IN_AGENT" =~ ^[a-z0-9][a-z0-9-]{0,31}$ ]] || fail "agent invalide"
+          [[ "$IN_BRANCH" =~ ^[A-Za-z0-9][A-Za-z0-9._/-]{0,99}$ ]] || fail "branche invalide"
+          case "${IN_BRANCH,,}" in
+            main|master|head|refs/*|*..*|*/|*.lock|fullrun-logs/*|fullrun-prompts|fullrun-prompts/*)
+              fail "branche interdite : seule une branche de fonctionnalité est acceptée" ;;
+          esac
+          [[ "$IN_JOB" =~ ^[A-Za-z0-9._-]{1,64}$ ]] || fail "job_name invalide"
+          [[ "$IN_PROMPT" =~ ^(prompts|target):[A-Za-z0-9._/-]+$ && "$IN_PROMPT" != *..* ]] \
+            || fail "prompt_path invalide (prompts:<chemin> ou target:<chemin>)"
+          [[ "${IN_PROMPT#*:}" != /* ]] || fail "prompt_path doit être relatif"
+          if [ -n "$IN_ISA" ]; then
+            [[ "$IN_ISA" =~ ^[A-Za-z0-9._/-]+$ && "$IN_ISA" != *..* && "$IN_ISA" != /* ]] \
+              || fail "isa_path invalide"
+          fi
+          [[ "$LIFEOS_REF" =~ ^[A-Za-z0-9][A-Za-z0-9._/-]{0,99}$ ]] || fail "lifeos_ref invalide"
+          case "${LIFEOS_REF,,}" in
+            refs/*|*..*|*/|*.lock) fail "lifeos_ref invalide" ;;
+          esac
+          [[ "$IN_TIMEOUT_MIN" =~ ^[0-9]+$ ]] && [ "$IN_TIMEOUT_MIN" -ge 10 ] && [ "$IN_TIMEOUT_MIN" -le 90 ] \
+            || fail "timeout_minutes doit être entre 10 et 90"
+          out=$(bash "$TOOLS_DIR/targets/allowed-repos.sh" validate "$TARGET_REPO" "$IN_EXTRA") \
+            || fail "target_repo ou extra_repos invalide"
+          norm=$(printf '%s\n' "$out" | sed -n 's/^extra=//p')
+          bash "$TOOLS_DIR/opencode/lifeos-guard.sh" writes "$LIFEOS_WRITE" "$TARGET_REPO" "$norm" \
+            || fail "garde-fou lifeos_write"
+          bash "$TOOLS_DIR/opencode/quota.sh" validate "$TOOLS_DIR/models.txt" >/dev/null \
+            || fail "models.txt invalide"
+          # Output immuable (géré par Actions) : plus de GITHUB_ENV réutilisé après opencode.
+          echo "extra_norm=$norm" >> "$GITHUB_OUTPUT"
+          echo "Entrées valides : $TARGET_REPO@$IN_BRANCH (extra=${norm:-aucun}, lifeos_write=$LIFEOS_WRITE)"
+
+      - name: Checkout du dépôt cible
+        uses: actions/checkout@v4
+        with:
+          repository: LordThiouk/${{ inputs.target_repo }}
+          ref: ${{ inputs.branch }}
+          path: target
+          fetch-depth: 0
+          persist-credentials: false
+          token: ${{ secrets.CI_TOKEN }}
+
+      - name: Checkout des dépôts supplémentaires
+        if: ${{ inputs.extra_repos != '' }}
+        env:
+          CI_TOKEN: ${{ secrets.CI_TOKEN }}
+          EXTRA_NORM: ${{ steps.validate.outputs.extra_norm }}
+        run: |
+          set -euo pipefail
+          auth=$(printf 'x-access-token:%s' "$CI_TOKEN" | base64 -w0)
+          echo "::add-mask::$auth"
+          export GIT_CONFIG_GLOBAL=/dev/null
+          export GIT_CONFIG_NOSYSTEM=1
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0=http.https://github.com/.extraheader
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth"
+          mkdir -p extra
+          IFS=',' read -r -a repos <<< "$EXTRA_NORM"
+          for r in "${repos[@]}"; do
+            [ -n "$r" ] || continue
+            url="https://github.com/LordThiouk/$r.git"
+            rm -rf "extra/$r"
+            if ! git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                 clone --depth 1 --branch "$IN_BRANCH" "$url" "extra/$r" >/dev/null 2>&1; then
+              git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                clone --depth 1 "$url" "extra/$r" >/dev/null
+              git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                -C "extra/$r" checkout -B "$IN_BRANCH"
+            fi
+            echo "Checkout $r @ $IN_BRANCH"
+          done
+
+      - name: Clone lifeos (lecture seule ou non selon lifeos_write)
+        env:
+          CI_TOKEN: ${{ secrets.CI_TOKEN }}
+        run: |
+          set -euo pipefail
+          url="https://github.com/LordThiouk/lifeos.git"
+          rm -rf lifeos
+          if ! GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 \
+               git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+               clone --depth 1 --branch "$LIFEOS_REF" "$url" lifeos >/dev/null 2>&1; then
+            [ -n "${CI_TOKEN:-}" ] || { echo "::error::clone lifeos impossible"; exit 1; }
+            auth=$(printf 'x-access-token:%s' "$CI_TOKEN" | base64 -w0)
+            echo "::add-mask::$auth"
+            GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 \
+            GIT_CONFIG_COUNT=1 \
+            GIT_CONFIG_KEY_0=http.https://github.com/.extraheader \
+            GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth" \
+              git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+              clone --depth 1 --branch "$LIFEOS_REF" "$url" lifeos >/dev/null
+          fi
+          # Aucun identifiant dans le remote, dans tous les modes.
+          git -C lifeos remote set-url origin "$url"
+          git -C lifeos config --local --unset-all http.https://github.com/.extraheader 2>/dev/null || true
+          if [ "$LIFEOS_WRITE" = false ]; then
+            chmod -R a-w lifeos
+            bash "$TOOLS_DIR/opencode/lifeos-guard.sh" readonly lifeos
+          fi
+          echo "lifeos cloné à $LIFEOS_REF (write=$LIFEOS_WRITE)"
+
+      # C3 : les SHA de départ sont écrits en root dans STATE_DIR avant opencode.
+      # L'agent ne peut pas les réécrire ; les étapes suivantes les relisent là,
+      # jamais depuis un fichier de $RUNNER_TEMP ni depuis GITHUB_ENV.
+      - name: Enregistrer l'état de départ (root, hors portée de l'agent)
+        env:
+          EXTRA_NORM: ${{ steps.validate.outputs.extra_norm }}
+        run: |
+          set -euo pipefail
+          tmp="$RUNNER_TEMP/bases.$$"
+          : > "$tmp"
+          base=$(git -C target rev-parse HEAD)
+          printf '%s\t%s\t%s\n' "$TARGET_REPO" "target" "$base" >> "$tmp"
+          IFS=',' read -r -a repos <<< "$EXTRA_NORM"
+          for r in "${repos[@]}"; do
+            [ -n "$r" ] || continue
+            [ -d "extra/$r/.git" ] || { echo "::error::dépôt extra absent : $r"; exit 1; }
+            b=$(git -C "extra/$r" rev-parse HEAD)
+            printf '%s\t%s\t%s\n' "$r" "extra/$r" "$b" >> "$tmp"
+          done
+          sudo install -o root -g root -m 0644 "$tmp" "$STATE_DIR/bases"
+          rm -f "$tmp"
+          if [ "$LIFEOS_WRITE" = true ] && [ -d lifeos/.git ]; then
+            ltmp="$RUNNER_TEMP/lifeos-base.$$"
+            git -C lifeos rev-parse HEAD > "$ltmp"
+            sudo install -o root -g root -m 0644 "$ltmp" "$STATE_DIR/lifeos-base"
+            rm -f "$ltmp"
+          fi
+          sudo chmod 0644 "$STATE_DIR/bases"
+          echo "État de départ figé (root) dans $STATE_DIR"
+
+      - name: Préparer le prompt (préambule + prompt + ISA)
+        env:
+          EXTRA_NORM: ${{ steps.validate.outputs.extra_norm }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/oc"
+          pfile="$RUNNER_TEMP/oc/prompt.md"
+          {
+            printf '# Contexte d exécution lifeos-ci\n\n'
+            printf -- '- Job : %s\n' "$IN_JOB"
+            printf -- '- Agent : %s\n' "$IN_AGENT"
+            printf -- '- Dépôt cible : LordThiouk/%s\n' "$TARGET_REPO"
+            printf -- '- Branche : %s\n' "$IN_BRANCH"
+            printf -- '- lifeos_write : %s\n' "$LIFEOS_WRITE"
+            printf -- '- lifeos de référence : %s\n\n' "$LIFEOS_REF"
+            printf '## Règles\n\n'
+            printf -- '- Travaille uniquement dans les dépôts fournis ; committe ton travail validé sur la branche courante.\n'
+            printf -- '- Jamais de push, jamais de merge, jamais gh/ssh/scp ; le workflow pousse et ouvre la PR.\n'
+            printf -- '- Jamais de secret ni de clé en dur. Ne modifie pas main/master.\n'
+            printf -- '- Écris un court résumé factuel (SHA, tests, résultats) dans /tmp/task_done.md.\n'
+            printf -- '- lifeos de référence : lifeos/ (lecture seule si lifeos_write=false).\n'
+            if [ "$LIFEOS_WRITE" = false ]; then
+              printf -- '- lifeos est en lecture seule : ne tente jamais de le modifier.\n'
+            else
+              printf -- '- lifeos/ est modifiable : le workflow committe tes changements sur une branche dédiée et ouvre la PR ; ne pousse jamais toi-même.\n'
+            fi
+            if [ -n "$EXTRA_NORM" ]; then
+              printf '\n## Dépôts supplémentaires\n\n'
+              IFS=',' read -r -a extra_list <<< "$EXTRA_NORM"
+              for e in "${extra_list[@]}"; do
+                [ -n "$e" ] || continue
+                printf -- '- LordThiouk/%s : extra/%s\n' "$e" "$e"
+              done
+            fi
+            printf '\n## Prompt\n\n'
+          } > "$pfile"
+          scheme="${IN_PROMPT%%:*}"
+          rel="${IN_PROMPT#*:}"
+          case "$scheme" in
+            prompts)
+              git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                -C ci fetch --depth 1 origin fullrun-prompts >/dev/null 2>&1 \
+                || { echo "::error::branche fullrun-prompts introuvable sur lifeos-ci"; exit 1; }
+              git -C ci show "FETCH_HEAD:$rel" >> "$pfile" \
+                || { echo "::error::prompt introuvable sur fullrun-prompts : $rel"; exit 1; }
+              ;;
+            target)
+              git -C target show "HEAD:$rel" >> "$pfile" \
+                || { echo "::error::prompt introuvable sur la branche cible : $rel"; exit 1; }
+              ;;
+            *)
+              echo "::error::schéma de prompt inconnu : $scheme"
+              exit 1
+              ;;
+          esac
+          if [ -n "$IN_ISA" ]; then
+            printf '\n\n## ISA\n\n' >> "$pfile"
+            git -C target show "HEAD:$IN_ISA" >> "$pfile" \
+              || { echo "::error::ISA introuvable : $IN_ISA"; exit 1; }
+          fi
+
+      - name: Installer opencode et gitleaks
+        run: |
+          set -euo pipefail
+          npm install -g --no-fund --no-audit "opencode-ai@${OPENCODE_VERSION}" >/dev/null 2>&1
+          v=$(opencode --version | awk '{print $NF}')
+          [ "$v" = "$OPENCODE_VERSION" ] || { echo "::error::opencode $v au lieu de $OPENCODE_VERSION"; exit 1; }
+          f="$RUNNER_TEMP/gitleaks.tgz"
+          curl -sSfL -o "$f" "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  ${f}" | sha256sum -c - >/dev/null
+          mkdir -p "$RUNNER_TEMP/gl" && tar -xzf "$f" -C "$RUNNER_TEMP/gl" gitleaks
+          sudo install -o root -g root -m 0755 "$RUNNER_TEMP/gl/gitleaks" /usr/local/bin/gitleaks
+          # Copie figée utilisée par la porte post-opencode (jamais le PATH de l'agent).
+          sudo install -o root -g root -m 0755 "$RUNNER_TEMP/gl/gitleaks" "$TOOLS_DIR/opencode/gitleaks"
+          gitleaks version
+
+      - name: Configurer opencode et git
+        env:
+          EXTRA_NORM: ${{ steps.validate.outputs.extra_norm }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/oc"
+          cat > "$RUNNER_TEMP/oc/opencode.json" <<'CFG'
+          {
+            "$schema": "https://opencode.ai/config.json",
+            "autoupdate": false,
+            "share": "disabled",
+            "mcp": {},
+            "permission": {
+              "doom_loop": "deny",
+              "read": { "*": "allow" },
+              "edit": { "*": "allow" },
+              "external_directory": { "*": "allow", "{env:HOME}/.ssh/*": "deny" },
+              "bash": {
+                "*": "allow",
+                "git push*": "deny",
+                "git merge*": "deny",
+                "gh *": "deny",
+                "ssh *": "deny",
+                "scp *": "deny",
+                "sudo *": "deny",
+                "*sudo *": "deny",
+                "*git remote*": "deny",
+                "*http.extraheader*": "deny"
+              }
+            }
+          }
+          CFG
+          git -C target config user.name "Papa Diop"
+          git -C target config user.email "76528706+LordThiouk@users.noreply.github.com"
+          IFS=',' read -r -a repos <<< "$EXTRA_NORM"
+          for r in "${repos[@]}"; do
+            [ -n "$r" ] || continue
+            [ -d "extra/$r/.git" ] || continue
+            git -C "extra/$r" config user.name "Papa Diop"
+            git -C "extra/$r" config user.email "76528706+LordThiouk@users.noreply.github.com"
+          done
+          if [ "$LIFEOS_WRITE" = true ] && [ -d lifeos/.git ]; then
+            git -C lifeos config user.name "Papa Diop"
+            git -C lifeos config user.email "76528706+LordThiouk@users.noreply.github.com"
+          fi
+
+      # C3 : opencode tourne avec un environnement vidé (env -i) et un HOME/TMPDIR
+      # dédiés. Il n'hérite ni de GITHUB_ENV, ni de GITHUB_OUTPUT, ni de
+      # GITHUB_PATH, ni de $RUNNER_TEMP. Son résultat est déposé en root dans
+      # STATE_DIR ; le statut est publié par l'étape suivante, hors de sa portée.
+      - name: Exécuter opencode (quota et bascule unique)
+        run: |
+          set -euo pipefail
+          agent_tmp="$RUNNER_TEMP/oc-agent"
+          agent_home="$agent_tmp/home"
+          mkdir -p "$agent_tmp" "$agent_home"
+          mapfile -t models < <(bash "$TOOLS_DIR/opencode/quota.sh" list "$TOOLS_DIR/models.txt")
+          [ "${#models[@]}" -gt 0 ] || { echo "::error::models.txt vide"; exit 1; }
+          secs=$(( IN_TIMEOUT_MIN * 60 ))
+          logdir="$agent_home/.local/share/opencode/log"
+          status="erreur"
+          used=""
+          switched=0
+          for m in "${models[@]}"; do
+            used="$m"
+            log="$agent_tmp/run-${m##*/}.log"
+            marker="$agent_tmp/attempt.start"
+            touch "$marker"
+            set +e
+            (cd target && env -i \
+              PATH="/usr/local/bin:/usr/bin:/bin" \
+              HOME="$agent_home" TMPDIR="$agent_tmp" LANG=C.UTF-8 \
+              OPENCODE_CONFIG="$RUNNER_TEMP/oc/opencode.json" \
+              timeout "$secs" opencode run --model "$m" \
+              "Lis $RUNNER_TEMP/oc/prompt.md et exécute-le complètement.") > "$log" 2>&1
+            rc=$?
+            set -e
+            qrc=0
+            bash "$TOOLS_DIR/opencode/quota.sh" next "$TOOLS_DIR/models.txt" "$m" \
+              --output "$log" --internal-log-dir "$logdir" --since-file "$marker" >/dev/null || qrc=$?
+            if [ "$qrc" -eq 10 ]; then
+              if [ "$switched" -eq 1 ]; then
+                status="quota"
+                break
+              fi
+              switched=1
+              echo "Quota atteint sur $m : bascule unique vers le modèle suivant"
+              continue
+            fi
+            if [ "$qrc" -eq 20 ]; then
+              status="quota"
+              break
+            fi
+            if [ "$qrc" -ne 0 ]; then
+              status="erreur"
+              break
+            fi
+            if [ "$rc" -eq 124 ]; then
+              status="timeout"
+              break
+            fi
+            new_commits=0
+            while IFS=$'\t' read -r r dir base; do
+              [ -n "$r" ] || continue
+              c=$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                -C "$dir" rev-list --count "$base..HEAD" 2>/dev/null || echo 0)
+              new_commits=$((new_commits + c))
+            done < "$STATE_DIR/bases"
+            if [ "$LIFEOS_WRITE" = true ] && [ -f "$STATE_DIR/lifeos-base" ] && [ -d lifeos/.git ]; then
+              c=$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                -C lifeos rev-list --count "$(cat "$STATE_DIR/lifeos-base")..HEAD" 2>/dev/null || echo 0)
+              new_commits=$((new_commits + c))
+              if [ -n "$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                    -C lifeos status --porcelain 2>/dev/null)" ]; then
+                new_commits=$((new_commits + 1))
+              fi
+            fi
+            if [ "$rc" -eq 0 ] && { [ "$new_commits" -gt 0 ] || [ -f /tmp/task_done.md ]; }; then
+              status="ok"
+            elif [ ! -s "$log" ]; then
+              status="vide"
+            else
+              status="erreur"
+            fi
+            break
+          done
+          # Filet : opencode encore vivant ne doit plus écrire pendant les contrôles.
+          pkill -KILL -f '(^|[ /])opencode run ' 2>/dev/null || true
+          res="$RUNNER_TEMP/oc-result.$$"
+          printf 'status=%s\nmodel=%s\n' "$status" "$used" > "$res"
+          sudo install -o root -g root -m 0644 "$res" "$STATE_DIR/oc-result"
+          rm -f "$res"
+          echo "opencode : status=$status model=$used"
+
+      - name: Statut opencode (publié hors de portée de l'agent)
+        id: oc
+        if: always()
+        run: |
+          set -euo pipefail
+          status="erreur"
+          model=""
+          if res=$(sudo cat "$STATE_DIR/oc-result" 2>/dev/null); then
+            s=$(printf '%s\n' "$res" | sed -n 's/^status=//p' | tail -1)
+            model=$(printf '%s\n' "$res" | sed -n 's/^model=//p' | tail -1)
+            case "$s" in
+              ok|quota|timeout|vide|erreur) status="$s" ;;
+            esac
+          fi
+          printf 'status=%s\n' "$status" >> "$GITHUB_OUTPUT"
+          printf 'model=%s\n' "$model" >> "$GITHUB_OUTPUT"
+          echo "Statut recalculé depuis l'état root : status=$status model=$model"
+
+      # C1/C2 : garde-fou, quota, gitleaks, push et PR s'appuient sur les copies
+      # root-owned (TOOLS_DIR) et poussent depuis une copie nue isolée. Aucun hook,
+      # filtre, include ou alias du dépôt de l'agent n'est exécuté avec CI_TOKEN.
+      - name: Porte gitleaks, garde-fou, push fast-forward et PR brouillon
+        id: push
+        if: always()
+        env:
+          CI_TOKEN: ${{ secrets.CI_TOKEN }}
+          GH_TOKEN: ${{ secrets.CI_TOKEN }}
+          EXTRA_NORM: ${{ steps.validate.outputs.extra_norm }}
+          GIT_CONFIG_GLOBAL: /dev/null
+          GIT_CONFIG_NOSYSTEM: "1"
+        run: |
+          set -euo pipefail
+          pkill -KILL -f '(^|[ /])opencode run ' 2>/dev/null || true
+          head_sha=""
+          [ -f "$STATE_DIR/bases" ] || { echo "head_sha=" >> "$GITHUB_OUTPUT"; exit 0; }
+          auth=$(printf 'x-access-token:%s' "$CI_TOKEN" | base64 -w0)
+          echo "::add-mask::$auth"
+          work=$(mktemp -d "$RUNNER_TEMP/push.XXXXXX")
+          trap 'rm -rf "$work"' EXIT
+
+          fail() { echo "::error::$1"; exit 1; }
+          gclean() { git -c core.hooksPath=/dev/null -c core.fsmonitor=false "$@"; }
+
+          push_branch() {
+            local r="$1" dir="$2" base="$3" branch="$4" refspec="${5:-HEAD:refs/heads/$4}"
+            local h b
+            [ -d "$dir/.git" ] || fail "$r : dépôt absent"
+            h=$(gclean -C "$dir" rev-parse HEAD)
+            [ "$(gclean -C "$dir" rev-parse --abbrev-ref HEAD)" = "$branch" ] \
+              || fail "$r : branche $branch modifiée par l'agent"
+            gclean -C "$dir" merge-base --is-ancestor "$base" "$h" \
+              || fail "$r : historique réécrit depuis le SHA de départ"
+            bash "$TOOLS_DIR/opencode/lifeos-guard.sh" destination \
+              "$LIFEOS_WRITE" "LordThiouk/$r" "$branch"
+            "$TOOLS_DIR/opencode/gitleaks" detect --source "$dir" \
+              --log-opts="$base..$h" --no-banner --redact >/dev/null
+            b="$work/$(printf '%s' "$r" | tr -c 'A-Za-z0-9._-' '_').git"
+            git init -q --bare "$b"
+            env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$RUNNER_TEMP" \
+              GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_TERMINAL_PROMPT=0 \
+              GIT_CONFIG_COUNT=1 \
+              GIT_CONFIG_KEY_0=protocol.file.allow GIT_CONFIG_VALUE_0=always \
+              git -C "$b" fetch -q --no-tags \
+              "file://$dir" "+refs/heads/$branch:refs/heads/$branch" >/dev/null
+            [ "$(git -C "$b" rev-parse "refs/heads/$branch")" = "$h" ] \
+              || fail "$r : copie locale incohérente"
+            git -C "$b" symbolic-ref HEAD "refs/heads/$branch"
+            env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$RUNNER_TEMP" \
+              GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_TERMINAL_PROMPT=0 \
+              GIT_CONFIG_COUNT=2 \
+              GIT_CONFIG_KEY_0=core.hooksPath GIT_CONFIG_VALUE_0=/dev/null \
+              GIT_CONFIG_KEY_1=http.https://github.com/.extraheader \
+              GIT_CONFIG_VALUE_1="AUTHORIZATION: basic $auth" \
+              git -C "$b" push --no-verify --porcelain \
+              "https://github.com/LordThiouk/$r.git" \
+              "$refspec" >/dev/null
+            echo "Push OK : $r@$branch (${h:0:7})"
+          }
+
+          pr_for() {
+            local r="$1" branch="$2" existing base_branch
+            command -v gh >/dev/null 2>&1 || return 0
+            existing=$(gh pr list --repo "LordThiouk/$r" --head "$branch" \
+              --state open --json number --jq 'length' 2>/dev/null || echo 0)
+            if [ "$existing" = "0" ]; then
+              base_branch=$(gh api "repos/LordThiouk/$r" --jq .default_branch 2>/dev/null || echo main)
+              gh pr create --repo "LordThiouk/$r" --draft \
+                --base "$base_branch" --head "$branch" \
+                --title "lifeos-ci ${IN_AGENT} ${IN_JOB} (${branch})" \
+                --body "Run automatique lifeos-ci. PR en brouillon : revue humaine obligatoire, jamais de fusion automatique." \
+                >/dev/null || echo "::warning::$r : PR non créée (déjà ouverte ou droits insuffisants)"
+            else
+              echo "$r : PR déjà ouverte pour $branch"
+            fi
+          }
+
+          while IFS=$'\t' read -r r dir base; do
+            [ -n "$r" ] || continue
+            [ -d "$dir/.git" ] || continue
+            h=$(gclean -C "$dir" rev-parse HEAD)
+            [ "$r" = "$TARGET_REPO" ] && head_sha="$h"
+            count=$(gclean -C "$dir" rev-list --count "$base..$h")
+            if [ "$count" -eq 0 ]; then
+              echo "$r : aucun nouveau commit"
+              continue
+            fi
+            push_branch "$r" "$dir" "$base" "$IN_BRANCH"
+            pr_for "$r" "$IN_BRANCH"
+          done < "$STATE_DIR/bases"
+
+          # Écriture LifeOS : commit sur une branche dédiée, push par le workflow,
+          # puis PR brouillon. Jamais main/master comme destination.
+          if [ "$LIFEOS_WRITE" = true ] && [ -d lifeos/.git ] && [ -f "$STATE_DIR/lifeos-base" ]; then
+            lifeos_branch="lifeos-ci/$(printf '%s' "$IN_JOB" | tr -c 'A-Za-z0-9_-' '-')"
+            base=$(cat "$STATE_DIR/lifeos-base")
+            gclean -C lifeos checkout -B "$lifeos_branch" >/dev/null 2>&1
+            if [ -n "$(gclean -C lifeos status --porcelain)" ]; then
+              gclean -C lifeos add -A
+              gclean -C lifeos -c user.name="Papa Diop" \
+                -c user.email="76528706+LordThiouk@users.noreply.github.com" \
+                commit --no-verify -m "lifeos-ci ${IN_AGENT} ${IN_JOB}" >/dev/null
+            fi
+            lh=$(gclean -C lifeos rev-parse HEAD)
+            lcount=$(gclean -C lifeos rev-list --count "$base..$lh")
+            if [ "$lcount" -eq 0 ]; then
+              echo "lifeos : aucun nouveau commit"
+            else
+              # shellcheck disable=SC2086
+              bash $TOOLS_DIR/opencode/lifeos-guard.sh destination "$LIFEOS_WRITE" "LordThiouk/lifeos" "$lifeos_branch"
+              push_branch "lifeos" "lifeos" "$base" "$lifeos_branch" \
+                "HEAD:refs/heads/$lifeos_branch"
+              pr_for "lifeos" "$lifeos_branch"
+            fi
+          fi
+
+          echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Notification de fin
+        if: always()
+        continue-on-error: true
+        timeout-minutes: 3
+        env:
+          OC_NOTIFY_URL: ${{ secrets.OC_NOTIFY_URL }}
+          OC_NOTIFY_KEY: ${{ secrets.OC_NOTIFY_KEY }}
+          OC_JOB: ${{ inputs.job_name }}
+          OC_AGENT: ${{ inputs.agent }}
+          OC_STATUS: ${{ steps.oc.outputs.status }}
+          OC_TARGET_REPO: ${{ inputs.target_repo }}
+          OC_BRANCH: ${{ inputs.branch }}
+          OC_MODEL: ${{ steps.oc.outputs.model }}
+          OC_SHA: ${{ steps.push.outputs.head_sha }}
+          OC_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -x "$TOOLS_DIR/opencode/notify.sh" ]; then
+            bash "$TOOLS_DIR/opencode/notify.sh"
+          fi
+
+      - name: Statut final
+        if: always()
+        env:
+          OC_STATUS: ${{ steps.oc.outputs.status }}
+        run: |
+          set -euo pipefail
+          case "${OC_STATUS:-erreur}" in
+            ok)
+              echo "Run opencode terminé : ok"
+              ;;
+            quota)
+              echo "::notice::quota atteint sur tous les modèles disponibles : fin propre, pas de lien suivant"
+              ;;
+            *)
+              echo "::error::run opencode non terminé : ${OC_STATUS:-erreur}"
+              exit 1
+              ;;
+          esac
