@@ -420,16 +420,28 @@ jobs:
             git -C lifeos config user.email "76528706+LordThiouk@users.noreply.github.com"
           fi
 
+      - name: Installer ffmpeg
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          ffmpeg -version | head -1
+
       # C3 : opencode tourne avec un environnement vidé (env -i) et un HOME/TMPDIR
       # dédiés. Il n'hérite ni de GITHUB_ENV, ni de GITHUB_OUTPUT, ni de
       # GITHUB_PATH, ni de $RUNNER_TEMP. Son résultat est déposé en root dans
       # STATE_DIR ; le statut est publié par l'étape suivante, hors de sa portée.
       - name: Exécuter opencode (quota et bascule unique)
+        env:
+          HF_TOKEN: ${{ (inputs.target_repo == 'antenly' || inputs.target_repo == 'antenly-ci') && secrets.HF_TOKEN || '' }}
         run: |
           set -euo pipefail
           agent_tmp="$RUNNER_TEMP/oc-agent"
           agent_home="$agent_tmp/home"
           mkdir -p "$agent_tmp" "$agent_home"
+          hf_env=()
+          if [ -n "${HF_TOKEN:-}" ]; then
+            hf_env+=(HF_TOKEN="$HF_TOKEN" HUGGING_FACE_HUB_TOKEN="$HF_TOKEN")
+          fi
           mapfile -t models < <(bash "$TOOLS_DIR/opencode/quota.sh" list "$TOOLS_DIR/models.txt")
           [ "${#models[@]}" -gt 0 ] || { echo "::error::models.txt vide"; exit 1; }
           secs=$(( IN_TIMEOUT_MIN * 60 ))
@@ -454,6 +466,7 @@ jobs:
               PATH="/usr/local/bin:/usr/bin:/bin" \
               HOME="$agent_home" TMPDIR="$agent_tmp" LANG=C.UTF-8 \
               CHAIN_PHASE="$CHAIN_PHASE" \
+              "${hf_env[@]}" \
               OPENCODE_CONFIG="$RUNNER_TEMP/oc/opencode.json" \
               timeout "$secs" opencode run --model "$m" \
               "${agent_args[@]}" \
