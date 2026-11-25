@@ -1,0 +1,57 @@
+name: Pipeline (lifeos-ci)
+run-name: Pipeline → ${{ inputs.target_repo }}
+
+# Pipeline enchaîné : exécute une suite de tâches opencode dans l'ordre fourni.
+# Chaque étape appelle le workflow réutilisable _agent-run.yml.
+on:
+  workflow_dispatch:
+    inputs:
+      target_repo:
+        description: "Dépôt cible (liste blanche targets/allowed-repos.sh)"
+        type: choice
+        required: true
+        default: antenly
+        options:
+          - antenly
+          - antenly-ci
+          - galass-ci
+          - Galass_Rider
+          - Galass_Driver
+          - Galass_backend
+          - galass-emu-actions-pub
+          - lifeos
+          - lifeos-ci
+      steps:
+        description: "JSON array d'étapes {job_name, branch, prompt_path, timeout_minutes}"
+        type: string
+        required: true
+      extra_repos:
+        description: "Dépôts supplémentaires, séparés par des virgules ou espaces (vide = aucun)"
+        type: string
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pipeline-${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    strategy:
+      max-parallel: 1
+      fail-fast: true
+      matrix:
+        step: ${{ fromJSON(inputs.steps) }}
+    uses: ./.github/workflows/_agent-run.yml
+    with:
+      agent: task
+      target_repo: ${{ inputs.target_repo }}
+      extra_repos: ${{ inputs.extra_repos }}
+      branch: ${{ matrix.step.branch }}
+      prompt_path: ${{ matrix.step.prompt_path }}
+      job_name: ${{ matrix.step.job_name }}
+      timeout_minutes: ${{ matrix.step.timeout_minutes }}
+    secrets: inherit
