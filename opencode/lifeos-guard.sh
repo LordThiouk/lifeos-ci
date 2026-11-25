@@ -122,7 +122,7 @@ lg_check_readonly() {
   local dir="${1-}"
   [ -n "$dir" ] || { lg_error "répertoire lifeos vide"; return 1; }
   [ -d "$dir" ] || { lg_error "répertoire lifeos absent : $dir"; return 1; }
-  if find "$dir" -xdev -perm /222 -print -quit 2>/dev/null | grep -q .; then
+  if find "$dir" -xdev ! -type l -perm /222 -print -quit 2>/dev/null | grep -q .; then
     lg_error "lifeos_write=false : $dir n'est pas en lecture seule"
     return 1
   fi
