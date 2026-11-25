@@ -222,13 +222,19 @@ jobs:
             url="https://github.com/LordThiouk/$r.git"
             rm -rf "extra/$r"
             if ! git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
-                 clone --depth 1 --branch "$IN_BRANCH" "$url" "extra/$r" >/dev/null 2>&1; then
+                 clone --branch "$IN_BRANCH" "$url" "extra/$r" >/dev/null 2>&1; then
               git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
-                clone --depth 1 "$url" "extra/$r" >/dev/null
+                clone "$url" "extra/$r" >/dev/null
               git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
                 -C "extra/$r" checkout -B "$IN_BRANCH"
             fi
-            echo "Checkout $r @ $IN_BRANCH"
+            # Clone complet : toutes les branches distantes sont récupérées.
+            git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+              -C "extra/$r" fetch --prune origin '+refs/heads/*:refs/remotes/origin/*' >/dev/null
+            git -C "extra/$r" config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+            # Identifiants de lecture conservés dans le clone pour les git fetch de l'agent.
+            git -C "extra/$r" config http.https://github.com/.extraheader "AUTHORIZATION: basic $auth"
+            echo "Checkout $r @ $IN_BRANCH (clone complet, toutes branches)"
           done
 
       - name: Clone lifeos (lecture seule ou non selon lifeos_write)
