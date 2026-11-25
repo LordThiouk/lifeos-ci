@@ -38,3 +38,8 @@ la sandbox) : analyse par lecture des workflows, `actionlint`, `shellcheck` et t
 - Cause : `_next.yml` demandait `actions: write`, au-delà du plafond `contents: read` de la chaîne réutilisable fr-fullrun ; GitHub rejette la chaîne au démarrage même si `next` est sauté.
 - Fichier : `.github/workflows/_next.yml:73-75`
 - Fix : permission ramenée à `contents: read` (dispatch via `CI_TOKEN`, donc `actions: write` inutile) ; `loop` utilise `!cancelled() && contains(...)` (`fr-fullrun.yml:309`).
+
+## 5. Timeout, porte d'étape et modèle (run 45628583677)
+- `_agent-run.yml` : opencode borné par `timeout (timeout_minutes - 5)` sous le `timeout-minutes` du step ; le commit partiel et le push tournent encore après un arrêt.
+- `fr-fullrun.yml` : étape suivante conditionnée à `success + status ok + head_sha` (ou `skipped` pour une phase/`only` non exécutée, sinon la relance `start_phase=build` s'arrêterait) ; job `gate` en échec si une étape réussit sans commit.
+- Relance `loop` réessayée 3× avec 30 s d'attente sur HTTP 5xx ; nouvel input `model` propagé jusqu'à opencode (repli `models.txt`) ; `actionlint` OK.

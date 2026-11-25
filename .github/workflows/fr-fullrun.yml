@@ -56,6 +56,11 @@ on:
         type: string
         required: false
         default: "45"
+      model:
+        description: "Modèle opencode à essayer en premier, ex. opencode/mimo-v2.6-flash-free (vide = ordre de models.txt)"
+        type: string
+        required: false
+        default: ""
       start_phase:
         description: "Phase de départ du FullRun"
         type: choice
@@ -99,13 +104,14 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      model: ${{ inputs.model }}
       chain: false
     secrets: inherit
 
   serena:
     needs:
       - vera
-    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'serena') && inputs.start_phase == 'plan' }}
+    if: ${{ !cancelled() && (inputs.only == 'serena' || (inputs.only == '' && (needs.vera.result == 'skipped' || (needs.vera.result == 'success' && needs.vera.outputs.status == 'ok' && needs.vera.outputs.head_sha != '')))) && inputs.start_phase == 'plan' }}
     uses: ./.github/workflows/fr-plan-serena.yml
     with:
       target_repo: ${{ inputs.target_repo }}
@@ -117,6 +123,7 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      model: ${{ inputs.model }}
       chain: false
     secrets: inherit
 
@@ -124,7 +131,7 @@ jobs:
     needs:
       - vera
       - serena
-    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'aditi-ui') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
+    if: ${{ !cancelled() && (inputs.only == 'aditi-ui' || (inputs.only == '' && (needs.vera.result == 'skipped' || (needs.vera.result == 'success' && needs.vera.outputs.status == 'ok' && needs.vera.outputs.head_sha != '')) && (needs.serena.result == 'skipped' || (needs.serena.result == 'success' && needs.serena.outputs.status == 'ok' && needs.serena.outputs.head_sha != '')))) && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
     uses: ./.github/workflows/fr-build-aditi-ui.yml
     with:
       target_repo: ${{ inputs.target_repo }}
@@ -136,6 +143,7 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      model: ${{ inputs.model }}
       chain: false
     secrets: inherit
 
@@ -143,7 +151,7 @@ jobs:
     needs:
       - vera
       - serena
-    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'engineer') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
+    if: ${{ !cancelled() && (inputs.only == 'engineer' || (inputs.only == '' && (needs.vera.result == 'skipped' || (needs.vera.result == 'success' && needs.vera.outputs.status == 'ok' && needs.vera.outputs.head_sha != '')) && (needs.serena.result == 'skipped' || (needs.serena.result == 'success' && needs.serena.outputs.status == 'ok' && needs.serena.outputs.head_sha != '')))) && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
     uses: ./.github/workflows/fr-build-engineer.yml
     with:
       target_repo: ${{ inputs.target_repo }}
@@ -155,6 +163,7 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      model: ${{ inputs.model }}
       chain: false
     secrets: inherit
 
@@ -162,7 +171,7 @@ jobs:
     needs:
       - vera
       - serena
-    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'anvil') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
+    if: ${{ !cancelled() && (inputs.only == 'anvil' || (inputs.only == '' && (needs.vera.result == 'skipped' || (needs.vera.result == 'success' && needs.vera.outputs.status == 'ok' && needs.vera.outputs.head_sha != '')) && (needs.serena.result == 'skipped' || (needs.serena.result == 'success' && needs.serena.outputs.status == 'ok' && needs.serena.outputs.head_sha != '')))) && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
     uses: ./.github/workflows/fr-build-anvil.yml
     with:
       target_repo: ${{ inputs.target_repo }}
@@ -174,6 +183,7 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      model: ${{ inputs.model }}
       chain: false
     secrets: inherit
 
@@ -181,7 +191,7 @@ jobs:
     needs:
       - vera
       - serena
-    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'forge-code') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
+    if: ${{ !cancelled() && (inputs.only == 'forge-code' || (inputs.only == '' && (needs.vera.result == 'skipped' || (needs.vera.result == 'success' && needs.vera.outputs.status == 'ok' && needs.vera.outputs.head_sha != '')) && (needs.serena.result == 'skipped' || (needs.serena.result == 'success' && needs.serena.outputs.status == 'ok' && needs.serena.outputs.head_sha != '')))) && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
     uses: ./.github/workflows/fr-build-forge-code.yml
     with:
       target_repo: ${{ inputs.target_repo }}
@@ -193,6 +203,7 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      model: ${{ inputs.model }}
       chain: false
     secrets: inherit
 
@@ -204,7 +215,7 @@ jobs:
       - engineer
       - anvil
       - forge_code
-    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'code-review') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build' || inputs.start_phase == 'verify') }}
+    if: ${{ !cancelled() && (inputs.only == 'code-review' || (inputs.only == '' && (needs.vera.result == 'skipped' || (needs.vera.result == 'success' && needs.vera.outputs.status == 'ok' && needs.vera.outputs.head_sha != '')) && (needs.serena.result == 'skipped' || (needs.serena.result == 'success' && needs.serena.outputs.status == 'ok' && needs.serena.outputs.head_sha != '')) && (needs.aditi_ui.result == 'skipped' || (needs.aditi_ui.result == 'success' && needs.aditi_ui.outputs.status == 'ok' && needs.aditi_ui.outputs.head_sha != '')) && (needs.engineer.result == 'skipped' || (needs.engineer.result == 'success' && needs.engineer.outputs.status == 'ok' && needs.engineer.outputs.head_sha != '')) && (needs.anvil.result == 'skipped' || (needs.anvil.result == 'success' && needs.anvil.outputs.status == 'ok' && needs.anvil.outputs.head_sha != '')) && (needs.forge_code.result == 'skipped' || (needs.forge_code.result == 'success' && needs.forge_code.outputs.status == 'ok' && needs.forge_code.outputs.head_sha != '')))) && (inputs.start_phase == 'plan' || inputs.start_phase == 'build' || inputs.start_phase == 'verify') }}
     uses: ./.github/workflows/fr-verify-code-review.yml
     with:
       target_repo: ${{ inputs.target_repo }}
@@ -216,6 +227,7 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      model: ${{ inputs.model }}
       chain: false
     secrets: inherit
 
@@ -228,7 +240,7 @@ jobs:
       - anvil
       - forge_code
       - code_review
-    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'forge-audit') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build' || inputs.start_phase == 'verify') }}
+    if: ${{ !cancelled() && (inputs.only == 'forge-audit' || (inputs.only == '' && (needs.vera.result == 'skipped' || (needs.vera.result == 'success' && needs.vera.outputs.status == 'ok' && needs.vera.outputs.head_sha != '')) && (needs.serena.result == 'skipped' || (needs.serena.result == 'success' && needs.serena.outputs.status == 'ok' && needs.serena.outputs.head_sha != '')) && (needs.aditi_ui.result == 'skipped' || (needs.aditi_ui.result == 'success' && needs.aditi_ui.outputs.status == 'ok' && needs.aditi_ui.outputs.head_sha != '')) && (needs.engineer.result == 'skipped' || (needs.engineer.result == 'success' && needs.engineer.outputs.status == 'ok' && needs.engineer.outputs.head_sha != '')) && (needs.anvil.result == 'skipped' || (needs.anvil.result == 'success' && needs.anvil.outputs.status == 'ok' && needs.anvil.outputs.head_sha != '')) && (needs.forge_code.result == 'skipped' || (needs.forge_code.result == 'success' && needs.forge_code.outputs.status == 'ok' && needs.forge_code.outputs.head_sha != '')) && (needs.code_review.result == 'skipped' || (needs.code_review.result == 'success' && needs.code_review.outputs.status == 'ok' && needs.code_review.outputs.head_sha != '')))) && (inputs.start_phase == 'plan' || inputs.start_phase == 'build' || inputs.start_phase == 'verify') }}
     uses: ./.github/workflows/fr-verify-forge-audit.yml
     with:
       target_repo: ${{ inputs.target_repo }}
@@ -240,6 +252,7 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      model: ${{ inputs.model }}
       chain: false
     secrets: inherit
 
@@ -253,7 +266,7 @@ jobs:
       - forge_code
       - code_review
       - forge_audit
-    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'silas') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build' || inputs.start_phase == 'verify') }}
+    if: ${{ !cancelled() && (inputs.only == 'silas' || (inputs.only == '' && (needs.vera.result == 'skipped' || (needs.vera.result == 'success' && needs.vera.outputs.status == 'ok' && needs.vera.outputs.head_sha != '')) && (needs.serena.result == 'skipped' || (needs.serena.result == 'success' && needs.serena.outputs.status == 'ok' && needs.serena.outputs.head_sha != '')) && (needs.aditi_ui.result == 'skipped' || (needs.aditi_ui.result == 'success' && needs.aditi_ui.outputs.status == 'ok' && needs.aditi_ui.outputs.head_sha != '')) && (needs.engineer.result == 'skipped' || (needs.engineer.result == 'success' && needs.engineer.outputs.status == 'ok' && needs.engineer.outputs.head_sha != '')) && (needs.anvil.result == 'skipped' || (needs.anvil.result == 'success' && needs.anvil.outputs.status == 'ok' && needs.anvil.outputs.head_sha != '')) && (needs.forge_code.result == 'skipped' || (needs.forge_code.result == 'success' && needs.forge_code.outputs.status == 'ok' && needs.forge_code.outputs.head_sha != '')) && (needs.code_review.result == 'skipped' || (needs.code_review.result == 'success' && needs.code_review.outputs.status == 'ok' && needs.code_review.outputs.head_sha != '')) && (needs.forge_audit.result == 'skipped' || (needs.forge_audit.result == 'success' && needs.forge_audit.outputs.status == 'ok' && needs.forge_audit.outputs.head_sha != '')))) && (inputs.start_phase == 'plan' || inputs.start_phase == 'build' || inputs.start_phase == 'verify') }}
     uses: ./.github/workflows/fr-verify-silas.yml
     with:
       target_repo: ${{ inputs.target_repo }}
@@ -265,6 +278,7 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      model: ${{ inputs.model }}
       chain: false
     secrets: inherit
 
@@ -279,7 +293,7 @@ jobs:
       - code_review
       - forge_audit
       - silas
-    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'max') }}
+    if: ${{ !cancelled() && (inputs.only == 'max' || (inputs.only == '' && (needs.vera.result == 'skipped' || (needs.vera.result == 'success' && needs.vera.outputs.status == 'ok' && needs.vera.outputs.head_sha != '')) && (needs.serena.result == 'skipped' || (needs.serena.result == 'success' && needs.serena.outputs.status == 'ok' && needs.serena.outputs.head_sha != '')) && (needs.aditi_ui.result == 'skipped' || (needs.aditi_ui.result == 'success' && needs.aditi_ui.outputs.status == 'ok' && needs.aditi_ui.outputs.head_sha != '')) && (needs.engineer.result == 'skipped' || (needs.engineer.result == 'success' && needs.engineer.outputs.status == 'ok' && needs.engineer.outputs.head_sha != '')) && (needs.anvil.result == 'skipped' || (needs.anvil.result == 'success' && needs.anvil.outputs.status == 'ok' && needs.anvil.outputs.head_sha != '')) && (needs.forge_code.result == 'skipped' || (needs.forge_code.result == 'success' && needs.forge_code.outputs.status == 'ok' && needs.forge_code.outputs.head_sha != '')) && (needs.code_review.result == 'skipped' || (needs.code_review.result == 'success' && needs.code_review.outputs.status == 'ok' && needs.code_review.outputs.head_sha != '')) && (needs.forge_audit.result == 'skipped' || (needs.forge_audit.result == 'success' && needs.forge_audit.outputs.status == 'ok' && needs.forge_audit.outputs.head_sha != '')) && (needs.silas.result == 'skipped' || (needs.silas.result == 'success' && needs.silas.outputs.status == 'ok' && needs.silas.outputs.head_sha != '')))) }}
     uses: ./.github/workflows/fr-close-max.yml
     with:
       target_repo: ${{ inputs.target_repo }}
@@ -291,8 +305,54 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      model: ${{ inputs.model }}
       chain: false
     secrets: inherit
+
+  # Une étape qui a réussi sans commit ne doit pas laisser la chaîne continuer
+  # silencieusement : ce garde-fou échoue pour que `loop` relance (ou que le run
+  # apparaisse en échec). Les jobs sautés (phase ou `only`) sont ignorés ; `max`
+  # est la dernière étape, son absence de commit ne bloque plus rien.
+  gate:
+    needs:
+      - vera
+      - serena
+      - aditi_ui
+      - engineer
+      - anvil
+      - forge_code
+      - code_review
+      - forge_audit
+      - silas
+      - max
+    if: ${{ always() && !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Vérifier que chaque étape exécutée a produit un commit
+        env:
+          NEEDS_JSON: ${{ toJSON(needs) }}
+        run: |
+          set -euo pipefail
+          ok=$(printf '%s' "$NEEDS_JSON" | jq -r '
+            ( [ to_entries[]
+                | select(.value.result != "success" and .value.result != "skipped")
+              ] | length == 0 )
+            and
+            ( [ to_entries[]
+                | select(.key != "max")
+                | select(.value.result == "success")
+                | select((.value.outputs.status // "") != "ok" or (.value.outputs.head_sha // "") == "")
+              ] | length == 0 )
+          ')
+          if [ "$ok" = "true" ]; then
+            echo "Chaîne cohérente : chaque étape exécutée a produit un commit."
+            exit 0
+          fi
+          echo "::error::étape réussie sans commit (ou annulée) : chaîne bloquée"
+          exit 1
 
   loop:
     needs:
@@ -306,6 +366,7 @@ jobs:
       - forge_audit
       - silas
       - max
+      - gate
     if: ${{ !cancelled() && contains(needs.*.result, 'failure') && fromJSON(inputs.attempt) < fromJSON(inputs.max_attempts) }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -325,26 +386,48 @@ jobs:
           IN_JOB: ${{ inputs.job_name }}
           LIFEOS_REF: ${{ inputs.lifeos_ref }}
           IN_TIMEOUT_MIN: ${{ inputs.timeout_minutes }}
+          IN_MODEL: ${{ inputs.model }}
           IN_ONLY: ${{ inputs.only }}
           IN_ATTEMPT: ${{ inputs.attempt }}
           IN_MAX: ${{ inputs.max_attempts }}
         run: |
           set -euo pipefail
           next=$(( IN_ATTEMPT + 1 ))
-          echo "Échec verify/max — relance depuis build (tentative ${next}/${IN_MAX})"
-          gh workflow run fr-fullrun.yml \
-            --repo "$GITHUB_REPOSITORY" \
-            --ref "$GITHUB_REF_NAME" \
-            -f target_repo="$IN_TARGET" \
-            -f extra_repos="$IN_EXTRA" \
-            -F lifeos_write="$LIFEOS_WRITE" \
-            -f branch="$IN_BRANCH" \
-            -f prompt_path="$IN_PROMPT" \
-            -f isa_path="$IN_ISA" \
-            -f job_name="$IN_JOB" \
-            -f lifeos_ref="$LIFEOS_REF" \
-            -f timeout_minutes="$IN_TIMEOUT_MIN" \
-            -f start_phase=build \
-            -f only="$IN_ONLY" \
-            -f attempt="$next" \
-            -f max_attempts="$IN_MAX"
+          echo "Échec de la chaîne — relance depuis build (tentative ${next}/${IN_MAX})"
+          attempt=1
+          while :; do
+            if out=$(gh workflow run fr-fullrun.yml \
+              --repo "$GITHUB_REPOSITORY" \
+              --ref "$GITHUB_REF_NAME" \
+              -f target_repo="$IN_TARGET" \
+              -f extra_repos="$IN_EXTRA" \
+              -F lifeos_write="$LIFEOS_WRITE" \
+              -f branch="$IN_BRANCH" \
+              -f prompt_path="$IN_PROMPT" \
+              -f isa_path="$IN_ISA" \
+              -f job_name="$IN_JOB" \
+              -f lifeos_ref="$LIFEOS_REF" \
+              -f timeout_minutes="$IN_TIMEOUT_MIN" \
+              -f model="$IN_MODEL" \
+              -f start_phase=build \
+              -f only="$IN_ONLY" \
+              -f attempt="$next" \
+              -f max_attempts="$IN_MAX" 2>&1); then
+              printf '%s\n' "$out"
+              break
+            fi
+            printf '%s\n' "$out"
+            # Seules les erreurs 5xx (API GitHub) méritent une nouvelle tentative.
+            if ! printf '%s\n' "$out" \
+                 | grep -Eq 'HTTP[[:space:]]*5[0-9][0-9]|status code[^0-9]*5[0-9][0-9]'; then
+              echo "::error::dispatch refusé (non 5xx), abandon"
+              exit 1
+            fi
+            if [ "$attempt" -ge 3 ]; then
+              echo "::error::dispatch toujours en 5xx après 3 tentatives"
+              exit 1
+            fi
+            echo "HTTP 5xx : nouvelle tentative dans 30 s (${attempt}/3)"
+            sleep 30
+            attempt=$((attempt + 1))
+          done

@@ -50,6 +50,11 @@ on:
         required: false
         type: string
         default: "45"
+      model:
+        description: "Modèle opencode à essayer en premier (vide = ordre de models.txt)"
+        required: false
+        type: string
+        default: ""
       stop_after_step: {type: string, required: false, default: ""}
       target_agent: {type: string, required: false, default: ""}
       chain_phase: {type: string, required: false, default: ""}
@@ -112,6 +117,7 @@ jobs:
       IN_JOB: ${{ inputs.job_name }}
       LIFEOS_REF: ${{ inputs.lifeos_ref }}
       IN_TIMEOUT_MIN: ${{ inputs.timeout_minutes }}
+      IN_MODEL: ${{ inputs.model }}
       STOP_AFTER_STEP: ${{ inputs.stop_after_step }}
       TARGET_AGENT: ${{ inputs.target_agent }}
       CHAIN_PHASE: ${{ inputs.chain_phase }}
@@ -180,6 +186,11 @@ jobs:
           esac
           [[ "$IN_TIMEOUT_MIN" =~ ^[0-9]+$ ]] && [ "$IN_TIMEOUT_MIN" -ge 10 ] && [ "$IN_TIMEOUT_MIN" -le 90 ] \
             || fail "timeout_minutes doit être entre 10 et 90"
+          if [ -n "$IN_MODEL" ]; then
+            [[ "$IN_MODEL" =~ ^opencode/[a-z0-9.-]+-free$ ]] || fail "model invalide"
+            bash "$TOOLS_DIR/opencode/quota.sh" list "$TOOLS_DIR/models.txt" \
+              | grep -qxF -- "$IN_MODEL" || fail "model absent de models.txt"
+          fi
           out=$(bash "$TOOLS_DIR/targets/allowed-repos.sh" validate "$TARGET_REPO" "$IN_EXTRA") \
             || fail "target_repo ou extra_repos invalide"
           norm=$(printf '%s\n' "$out" | sed -n 's/^extra=//p')
@@ -431,6 +442,10 @@ jobs:
       # GITHUB_PATH, ni de $RUNNER_TEMP. Son résultat est déposé en root dans
       # STATE_DIR ; le statut est publié par l'étape suivante, hors de sa portée.
       - name: Exécuter opencode (quota et bascule unique)
+        # Le plafond interne (timeout_minutes - 5) expire AVANT ce timeout-minutes :
+        # opencode est arrêté proprement (rc=124) au lieu de faire annuler le job, donc
+        # le commit du travail partiel et le push s'exécutent encore.
+        timeout-minutes: ${{ fromJSON(inputs.timeout_minutes) }}
         env:
           HF_TOKEN: ${{ (inputs.target_repo == 'antenly' || inputs.target_repo == 'antenly-ci') && secrets.HF_TOKEN || '' }}
         run: |
@@ -444,7 +459,17 @@ jobs:
           fi
           mapfile -t models < <(bash "$TOOLS_DIR/opencode/quota.sh" list "$TOOLS_DIR/models.txt")
           [ "${#models[@]}" -gt 0 ] || { echo "::error::models.txt vide"; exit 1; }
-          secs=$(( IN_TIMEOUT_MIN * 60 ))
+          # Modèle imposé : il passe en tête, les autres restent en repli sur quota.
+          if [ -n "$IN_MODEL" ]; then
+            ordered=("$IN_MODEL")
+            for m in "${models[@]}"; do
+              [ "$m" = "$IN_MODEL" ] || ordered+=("$m")
+            done
+            models=("${ordered[@]}")
+          fi
+          # Marge de 5 min sous le timeout-minutes du step : le kill vient de `timeout`,
+          # pas de GitHub, ce qui laisse le temps du commit partiel et du push.
+          secs=$(( (IN_TIMEOUT_MIN - 5) * 60 ))
           agent_args=()
           if [ -n "$TARGET_AGENT" ]; then
             agent_args+=(--agent "$TARGET_AGENT")

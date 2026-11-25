@@ -87,6 +87,7 @@ jobs:
           IN_JOB: ${{ inputs.job_name }}
           LIFEOS_REF: ${{ inputs.lifeos_ref }}
           IN_TIMEOUT_MIN: ${{ inputs.timeout_minutes }}
+          IN_MODEL: ${{ inputs.model }}
         run: |
           set -euo pipefail
           if [ "${STATUS:-}" != "ok" ]; then
@@ -132,5 +133,6 @@ jobs:
             -f isa_path="$IN_ISA" \
             -f job_name="$IN_JOB" \
             -f lifeos_ref="$LIFEOS_REF" \
-            -f timeout_minutes="$IN_TIMEOUT_MIN"
+            -f timeout_minutes="$IN_TIMEOUT_MIN" \
+            -f model="$IN_MODEL"
           echo "lien suivant dispatché : $next_wf ($next_agent, phase $phase)"
