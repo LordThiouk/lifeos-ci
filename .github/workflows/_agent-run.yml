@@ -92,7 +92,7 @@ jobs:
     permissions:
       contents: read
     concurrency:
-      group: agent-${{ inputs.target_repo }}
+      group: agent-${{ inputs.target_repo }}-${{ inputs.job_name }}
       cancel-in-progress: false
     outputs:
       status: ${{ steps.oc.outputs.status }}
