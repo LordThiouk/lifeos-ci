@@ -1,4 +1,4 @@
-# Plan — un workflow par agent LifeOS (FullRun)
+# Plan — mini-workflows par étape et par agent (FullRun v3)
 
 Vérifié sur le clone lifeos (lecture seule, `main`) : `skills/FullRunWorkflow/SKILL.md`,
 `LIFEOS/TOOLS/FullRunPipeline.ts` (`FULLRUN_STEPS`, `AGENT_ALIASES`, `VERIFY_AGENT_ORDER`, `buildStepGuidance`), `FullRunAgentNames.test.ts`. opencode charge `agents/*.md` et `opencode/agent/*.md`. Auteur : Papa Diop.
