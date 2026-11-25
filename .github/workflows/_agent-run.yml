@@ -50,6 +50,9 @@ on:
         required: false
         type: string
         default: "45"
+      stop_after_step: {type: string, required: false, default: ""}
+      target_agent: {type: string, required: false, default: ""}
+      chain_phase: {type: string, required: false, default: ""}
     secrets:
       CI_TOKEN:
         required: true
@@ -109,6 +112,9 @@ jobs:
       IN_JOB: ${{ inputs.job_name }}
       LIFEOS_REF: ${{ inputs.lifeos_ref }}
       IN_TIMEOUT_MIN: ${{ inputs.timeout_minutes }}
+      STOP_AFTER_STEP: ${{ inputs.stop_after_step }}
+      TARGET_AGENT: ${{ inputs.target_agent }}
+      CHAIN_PHASE: ${{ inputs.chain_phase }}
     steps:
       - name: Checkout lifeos-ci (outils)
         uses: actions/checkout@v4
@@ -419,6 +425,13 @@ jobs:
           mapfile -t models < <(bash "$TOOLS_DIR/opencode/quota.sh" list "$TOOLS_DIR/models.txt")
           [ "${#models[@]}" -gt 0 ] || { echo "::error::models.txt vide"; exit 1; }
           secs=$(( IN_TIMEOUT_MIN * 60 ))
+          agent_args=()
+          if [ -n "$TARGET_AGENT" ]; then
+            agent_args+=(--agent "$TARGET_AGENT")
+          fi
+          if [ -n "$STOP_AFTER_STEP" ]; then
+            agent_args+=(--stop-after-step "$STOP_AFTER_STEP")
+          fi
           logdir="$agent_home/.local/share/opencode/log"
           status="erreur"
           used=""
@@ -432,8 +445,10 @@ jobs:
             (cd target && env -i \
               PATH="/usr/local/bin:/usr/bin:/bin" \
               HOME="$agent_home" TMPDIR="$agent_tmp" LANG=C.UTF-8 \
+              CHAIN_PHASE="$CHAIN_PHASE" \
               OPENCODE_CONFIG="$RUNNER_TEMP/oc/opencode.json" \
               timeout "$secs" opencode run --model "$m" \
+              "${agent_args[@]}" \
               "Lis $RUNNER_TEMP/oc/prompt.md et exécute-le complètement.") > "$log" 2>&1
             rc=$?
             set -e
