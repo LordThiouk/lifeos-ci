@@ -74,3 +74,19 @@ si `status == ok`. Granularité : `plan`/`close` = étape, `build` = tâche, `ve
   rejoue telle quelle. Jamais de saut de gate ni de PASS par défaut.
 - Chaque mini-workflow committe **avant** de rendre la main : un échec ultérieur ne perd pas le
   travail validé ; les builds poussent leur branche d'agent, le FullRun fusionne.
+
+## Ordre de création
+
+1. `_agent-run.yml` : ajouter `stop_after_step`, `target_agent`, `chain_phase` (socle commun).
+2. Plus petits d'abord, un workflow = une tâche : `fr-plan-vera` (existe) puis `fr-plan-serena`.
+3. Indépendants en parallèle : `fr-build-aditi-ui`, `fr-build-engineer`, `fr-build-anvil`,
+   `fr-build-forge-code` — une branche par agent, fusion dans la branche du FullRun.
+4. Séquentiel : `fr-verify-code-review` → `fr-verify-forge-audit` → `fr-verify-silas`.
+5. Enfin `fr-close-max`. Hors FullRun (Artist, chercheurs, Arthur, Cato) : plus tard.
+
+## Questions tranchées par lifeos
+
+- Vera/Serena = clés des étapes 2/3 ; agents **Algorithm**/**Architect** (alias `Vera`/`Serena`).
+- `close` = étape 7 `nixOnly`, `agents: []` : Nix exécute `CheckCompleteness` + `phase: complete`.
+- `bugbot` = audit optionnel, jamais bloquant ; `Cato` → alias Forge ; chercheurs = étape
+  `research` (-1) ; `Artist` = skill Media ; `Arthur` = narrateur.
