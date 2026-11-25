@@ -36,45 +36,11 @@ Vérifié sur le clone lifeos (lecture seule, `main`) : `skills/FullRunWorkflow/
 Un agent par job (`unit --stop-after-step <step> --agent <nom>`). Ordre verify imposé par la porte :
 `code-reviewer`, `forge`, `silas`, chacun dans son propre job. Échec verify → build (4), jamais `vera`/`serena`, sauf critères ISC changés (→ 2).
 
-## Workflows à créer
+## Décisions Papa (2026-11-25)
 
-Wrapper `fr-<phase>-<agent>.yml` sans duplication : `uses: ./.github/workflows/_agent-run.yml`
-(`agent`, `phase`, `step`, `target_agent`), puis `_next.yml`.
+1. `_agent-run.yml` expose `stop_after_step`, `target_agent` et `chain_phase` (inputs à ajouter).
+2. Build parallèle : **une branche par agent**, fusionnée dans la branche du FullRun.
+3. Hors FullRun (Artist, chercheurs, Arthur, Cato) : plus tard. **FullRun d'abord.**
 
-| Workflow | Agent → canonique | Étape |
-| --- | --- | --- |
-| `fr-plan-vera.yml` | `vera` → **Algorithm** | 2 |
-| `fr-plan-serena.yml` | `serena` → **Architect** | 3 |
-| `fr-build-aditi-ui.yml` | `aditi-ui` → **Designer** | 4 UI |
-| `fr-build-engineer.yml` | `engineer` → **Engineer** | 4 code |
-| `fr-build-anvil.yml` | `anvil` → **Anvil** | 4 code |
-| `fr-build-forge-code.yml` | `forge-code` → **Forge** BUILD | 4 code |
-| `fr-verify-code-review.yml` | `code-review` → **code-reviewer** | 5 |
-| `fr-verify-forge-audit.yml` | `forge-audit` → **Forge** AUDIT | 5 |
-| `fr-verify-silas.yml` | `silas` → **Silas** | 5 |
-| `fr-close-max.yml` | `max` → **Max** | 6 |
-
-## Vagues
-
-- Vague 0 : `vera` (Algorithm). Vague 1 : `serena` (Architect), dépend de Vera.
-- Vague 2 (build) : `aditi-ui`, `engineer`, `anvil`, `forge-code` — un job par agent, parallèle si scopes `[scope:…]` disjoints et branches séparées.
-- Vague 3 (verify) : **séquentielle** — `code-reviewer` → `forge-audit` → `silas`, un saut sans
-  PASS frais échoue ; `bugbot` optionnel (le skill dit « any order », le code impose l'ordre).
-- Vague 4 : `max` (6), puis `close` (7) par Nix après le PASS de Max. `Nix/LifeOS` orchestre
-  (0, 1, 7, 8) et ne se lance pas dans les vagues.
-
-## Questions tranchées par lifeos
-
-- **Vera/Serena : agent ou phase ?** Les deux : `vera`/`serena` = clés des étapes 2/3 ; les agents
-  sont **Algorithm**/**Architect**, alias `Vera`/`Serena` (`AGENT_ALIASES`, `opencode/agent/{Vera,Serena}.md`).
-- **`close` : son propre agent ou dans Max ?** Ni l'un ni l'autre : étape 7 `nixOnly`,
-  `agents: []` — Nix exécute `CheckCompleteness` + `phase: complete` après le PASS de Max (6).
-- **`bugbot`** : audit optionnel, « jamais bloquant pour l'étape » (`FullRunPipeline.ts`).
-- **Hors FullRun** : `Cato` → alias Forge ; `BrowserAgent`/`QATester`/`UIReviewer` DEPRECATED
-  (Interceptor) ; chercheurs = étape `research` (-1) ; `Artist` = skill Media ; `Arthur` = narrateur.
-
-## Questions ouvertes (non tranchées par lifeos)
-
-- `_agent-run.yml` n'expose pas `stop_after_step`/`target_agent`/`chain_phase` : inputs à ajouter.
-- Parallélisme build : lifeos ne fixe pas la stratégie branches/PR (branches séparées nécessaires).
-- Périmètre CI hors FullRun : créer des workflows pour Artist, chercheurs, Arthur, Cato ?
+But : un mini-workflow court par étape et par agent, qui committe tout de suite ; le FullRun
+enchaîne et **repart de l'étape échouée** au lieu de tout recommencer.
