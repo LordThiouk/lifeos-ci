@@ -25,4 +25,4 @@ la sandbox) : analyse par lecture des workflows, `actionlint`, `shellcheck` et t
 ## Validation (continuation)
 - `actionlint 1.7.12 -ignore SC2129 .github/workflows/*.yml` : OK.
 - `shellcheck -x opencode/*.sh targets/*.sh` : OK ; YAML parsé : OK.
-- 13 tests socle OK ; échecs restants dus à l'environnement (rg/bun/age absents), pas au dépôt.
+- 17 tests socle OK ; échecs upstream restants dus à l'environnement (rg/bun/age absents), pas au dépôt.
