@@ -23,6 +23,8 @@ la sandbox) : analyse par lecture des workflows, `actionlint`, `shellcheck` et t
 - Commit : 0c5cc2d
 
 ## Validation (continuation)
-- `actionlint 1.7.12 -ignore SC2129 .github/workflows/*.yml` : OK.
-- `shellcheck -x opencode/*.sh targets/*.sh` : OK ; YAML parsé : OK.
-- 17 tests socle OK ; échecs upstream restants dus à l'environnement (rg/bun/age absents), pas au dépôt.
+- `actionlint 1.7.12 -ignore SC2129 .github/workflows/*.yml` : OK ; YAML parsé : OK.
+- `shellcheck -x opencode/*.sh targets/*.sh` : OK ; `bash -n` tous scripts : OK.
+- Suite complète `opencode/tests/run-all.sh` : PASS 42/42 (rg/age/bun installés
+  dans la sandbox ; les échecs précédents venaient de ces binaires absents).
+- `gitleaks detect --source .` : aucun leak. Aucun autre échec de script réel.
