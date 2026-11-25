@@ -5,3 +5,5 @@ Forbidden: push, `gh` write commands except `gh run list`/`gh run view --log-fai
 2. Known bug: in .github/workflows/fr-fullrun.yml around line 303, a failing build brick makes downstream steps "skipped" instead of "failure", so the retry loop never triggers. Fix it.
 3. Known bug: the guard fails a job when the agent checks out another branch in an extra repo (read-only). Make the guard compare the extra repos' remote refs (no push happened), not the local HEAD.
 4. Fix each other real script failure found. Validate YAML of every changed workflow. Write FIX-CI.md (30 lines max): failure, cause file:line, fix, commit. Commit "fix(ci): scripts en échec". Stop.
+
+CONTINUATION: a previous run already committed 0c5cc2d, c66261b, 8cb2e96 and FIX-CI.md. Read FIX-CI.md first and only do what is not done yet (especially point 2, fr-fullrun.yml ~303 retry loop). Do not redo finished fixes.
