@@ -67,3 +67,11 @@ le PASS de Max. Pas d'`agent-close`, ni `agent-aditi`, ni doublon `agent-algorit
 - Vague 3 (verify, parallèle) : `code-review`, `silas`, `forge-audit` (+ `bugbot`) — un verdict par agent.
 - Vague 4 : `max` (6), puis `close` (7) par Nix après le PASS de Max.
 - `Nix/LifeOS` orchestre (0, 1, 7) et ne se lance pas dans les vagues.
+
+## Questions ouvertes (non tranchées par lifeos)
+
+- `_agent-run.yml` n'expose pas `stop_after_step`/`target_agent`/`chain_phase` : inputs à ajouter.
+- Parallélisme build : lifeos ne fixe pas la stratégie branches/PR (branches séparées nécessaires).
+- Périmètre CI hors FullRun : workflows pour Artist, chercheurs, Arthur, Cato, dépréciés
+  BrowserAgent/QATester/UIReviewer ? (`Cato` est déjà aliasé vers Forge dans FullRun.)
+- `bugbot`, relecteur externe sans fichier opencode : intégration au verify à décider.
