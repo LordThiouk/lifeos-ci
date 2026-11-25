@@ -557,7 +557,7 @@ jobs:
               GIT_CONFIG_COUNT=1 \
               GIT_CONFIG_KEY_0=protocol.file.allow GIT_CONFIG_VALUE_0=always \
               git -C "$b" fetch -q --no-tags \
-              "file://$dir" "+refs/heads/$branch:refs/heads/$branch" >/dev/null
+              "file://$(cd "$dir" && pwd)" "+refs/heads/$branch:refs/heads/$branch" >/dev/null
             [ "$(git -C "$b" rev-parse "refs/heads/$branch")" = "$h" ] \
               || fail "$r : copie locale incohérente"
             git -C "$b" symbolic-ref HEAD "refs/heads/$branch"
