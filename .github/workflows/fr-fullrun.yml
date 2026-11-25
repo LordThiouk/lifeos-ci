@@ -296,6 +296,8 @@ jobs:
 
   loop:
     needs:
+      - vera
+      - serena
       - aditi_ui
       - engineer
       - anvil
@@ -304,7 +306,7 @@ jobs:
       - forge_audit
       - silas
       - max
-    if: ${{ always() && (needs.aditi_ui.result == 'failure' || needs.engineer.result == 'failure' || needs.anvil.result == 'failure' || needs.forge_code.result == 'failure' || needs.code_review.result == 'failure' || needs.forge_audit.result == 'failure' || needs.silas.result == 'failure' || needs.max.result == 'failure') && fromJSON(inputs.attempt) < fromJSON(inputs.max_attempts) }}
+    if: ${{ always() && contains(needs.*.result, 'failure') && fromJSON(inputs.attempt) < fromJSON(inputs.max_attempts) }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
