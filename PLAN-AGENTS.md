@@ -19,3 +19,19 @@ et `LIFEOS/TOOLS/FullRunPipeline.ts` (`FULLRUN_STEPS`). opencode charge `agents/
 | Silas (Silas Locke) | Sécurité offensive | 5 `verify` | `agents/Silas.md` |
 | Max | Porte finale, lecture seule | 6 `max` | `agents/Max.md` |
 | bugbot | Relecteur externe, sans fichier opencode | 5 `verify` | externe |
+
+## Étapes réelles du skill FullRun (0–7)
+
+| # | Clé | Agent / acteur | Gate |
+| --- | --- | --- | --- |
+| 0 | `scaffold` | Nix | `ISA.md` existe |
+| 1 | `completeness_pre` | Nix, `CheckCompleteness` | `status: pass` |
+| 2 | `vera` | **Algorithm** (Vera) | sections, ISC orphelins, Anti, Test Strategy |
+| 3 | `serena` | **Architect** (Serena) | dispatch + verdict, Plan/`ui\|code` après dispatch |
+| 4 | `build` | **Designer** (UI) / **Engineer**, **Forge**, **Anvil** (code) | claims `[x]` avec preuve outil |
+| 5 | `verify` | **code-reviewer**, **Silas**, **Forge** audit, **bugbot** | PASS frais par agent |
+| 6 | `max` | **Max** | PASS strict JSON |
+| 7 | `close` | Nix, `CheckCompleteness` + `phase: complete` | completeness pass (Max valide en CI) |
+
+Un agent par job (`--stop-after-step <step> --agent <nom>`). Un échec verify redescend au
+build (4), jamais à `vera`/`serena`, sauf si les critères changent.
