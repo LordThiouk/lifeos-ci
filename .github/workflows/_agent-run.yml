@@ -212,9 +212,6 @@ jobs:
           echo "::add-mask::$auth"
           export GIT_CONFIG_GLOBAL=/dev/null
           export GIT_CONFIG_NOSYSTEM=1
-          export GIT_CONFIG_COUNT=1
-          export GIT_CONFIG_KEY_0=http.https://github.com/.extraheader
-          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth"
           mkdir -p extra
           IFS=',' read -r -a repos <<< "$EXTRA_NORM"
           for r in "${repos[@]}"; do
@@ -222,18 +219,23 @@ jobs:
             url="https://github.com/LordThiouk/$r.git"
             rm -rf "extra/$r"
             if ! git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                 -c http.https://github.com/.extraheader="AUTHORIZATION: basic $auth" \
                  clone --branch "$IN_BRANCH" "$url" "extra/$r" >/dev/null 2>&1; then
               git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                -c http.https://github.com/.extraheader="AUTHORIZATION: basic $auth" \
                 clone "$url" "extra/$r" >/dev/null
               git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
                 -C "extra/$r" checkout -B "$IN_BRANCH"
             fi
             # Clone complet : toutes les branches distantes sont récupérées.
+            # Le jeton n'est fourni qu'à cette commande (-c), jamais écrit dans .git/config.
             git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+              -c http.https://github.com/.extraheader="AUTHORIZATION: basic $auth" \
               -C "extra/$r" fetch --prune origin '+refs/heads/*:refs/remotes/origin/*' >/dev/null
             git -C "extra/$r" config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
-            # Identifiants de lecture conservés dans le clone pour les git fetch de l'agent.
-            git -C "extra/$r" config http.https://github.com/.extraheader "AUTHORIZATION: basic $auth"
+            # Aucun identifiant ne doit subsister dans le clone.
+            [ -z "$(git -C "extra/$r" config --get-all http.https://github.com/.extraheader)" ] \
+              || { echo "::error::jeton présent dans extra/$r/.git/config"; exit 1; }
             echo "Checkout $r @ $IN_BRANCH (clone complet, toutes branches)"
           done
 
