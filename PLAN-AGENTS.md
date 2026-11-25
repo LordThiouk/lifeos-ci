@@ -21,21 +21,23 @@ Source vérifiée sur le clone lifeos (lecture seule, `main`) : `skills/FullRunW
 | Max | Porte finale, lecture seule | 6 `max` | `agents/Max.md` |
 | bugbot | Relecteur externe, sans fichier opencode | 5 `verify` (optionnel) | externe |
 
-## Étapes réelles du skill FullRun (0–7)
+## Étapes réelles du skill FullRun (0–7, + deploy)
 
-| # | Clé | Agent / acteur | Gate |
+| # | Clé | Agent / acteur | Gate (`buildStepGuidance`) |
 | --- | --- | --- | --- |
-| 0 | `scaffold` | Nix | `ISA.md` existe |
-| 1 | `completeness_pre` | Nix, `CheckCompleteness` | `status: pass` |
-| 2 | `vera` | **Algorithm** (Vera) | sections, ISC orphelins, Anti, Test Strategy |
-| 3 | `serena` | **Architect** (Serena) | dispatch + verdict, Plan/`ui\|code` après dispatch |
-| 4 | `build` | **Designer** (UI) / **Engineer**, **Forge**, **Anvil** (code) | claims `[x]` avec preuve outil |
-| 5 | `verify` | **code-reviewer**, **Silas**, **Forge** audit, **bugbot** | PASS frais par agent |
-| 6 | `max` | **Max** | PASS strict JSON |
-| 7 | `close` | Nix, `CheckCompleteness` + `phase: complete` | completeness pass (Max valide en CI) |
+| 0 | `scaffold` | Nix seul (`nixOnly`) | `ISA.md` existe |
+| 1 | `completeness_pre` | Nix, `CheckCompleteness` (`skillOnly`) | exit 0 |
+| 2 | `vera` | **Algorithm** (Vera) | `ISAGate.ts --json` → `blocks: false` |
+| 3 | `serena` | **Architect** (Serena) | dispatch + verdict Serena, Plan/`ui\|code` après dispatch |
+| 4 | `build` | **Designer** (UI) / **Engineer**, **Forge**, **Anvil** (code) | `IsaFrontier.ts validate` + claims du scope `[x]` |
+| 5 | `verify` | **code-reviewer** → **Forge** (audit) → **Silas** ; **bugbot** optionnel | PASS frais par agent (`OC_DONE_AGENTS`) |
+| 6 | `max` | **Max** | JSON final `{"verdict":"pass"}` ou `VERDICT: PASS` |
+| 7 | `close` | Nix seul (`nixOnly`), `CheckCompleteness` | exit 0, puis `phase: complete` |
+| 8 | `deploy` | Nix seul, jamais une porte (`start_step` refuse) | drapeau posé explicitement par le principal |
 
-Un agent par job (`--stop-after-step <step> --agent <nom>`). Un échec verify redescend au
-build (4), jamais à `vera`/`serena`, sauf si les critères changent.
+Un agent par job (`unit --stop-after-step <step> --agent <nom>`). L'ordre du verify est imposé :
+`code-reviewer`, `forge`, `silas` (`VERIFY_AGENT_ORDER`), chacun dans son propre job. Un échec
+verify redescend au build (4), jamais à `vera`/`serena`, sauf critères ISC changés (→ 2).
 
 ## Workflows à créer
 
