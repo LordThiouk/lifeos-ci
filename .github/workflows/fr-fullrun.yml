@@ -1,0 +1,344 @@
+name: FullRun assembly (lifeos-ci)
+run-name: FullRun ${{ inputs.job_name }} → ${{ inputs.target_repo }}@${{ inputs.branch }} (depuis ${{ inputs.start_phase }}, tentative ${{ inputs.attempt }})
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_repo:
+        description: "Dépôt cible (liste blanche targets/allowed-repos.sh)"
+        type: choice
+        required: true
+        default: antenly
+        options:
+          - antenly
+          - antenly-ci
+          - galass-ci
+          - Galass_Rider
+          - Galass_Driver
+          - Galass_backend
+          - galass-emu-actions-pub
+          - lifeos
+          - lifeos-ci
+      extra_repos:
+        description: "Dépôts supplémentaires, séparés par des virgules ou espaces (vide = aucun)"
+        type: string
+        required: false
+        default: ""
+      lifeos_write:
+        description: "Autoriser l'écriture vers LordThiouk/lifeos (branche + PR uniquement)"
+        type: boolean
+        required: false
+        default: false
+      branch:
+        description: "Branche de fonctionnalité du dépôt cible, déjà poussée (jamais main/master)"
+        type: string
+        required: true
+      prompt_path:
+        description: "prompts:<chemin sur fullrun-prompts de lifeos-ci> ou target:<chemin sur la branche cible>"
+        type: string
+        required: true
+      isa_path:
+        description: "Chemin optionnel de l'ISA sur la branche cible"
+        type: string
+        required: false
+        default: ""
+      job_name:
+        description: "Nom court du job (lettres, chiffres, - _ .)"
+        type: string
+        required: true
+      lifeos_ref:
+        description: "Réf lifeos cloné en référence"
+        type: string
+        required: false
+        default: "main"
+      timeout_minutes:
+        description: "Durée max d'exécution opencode en minutes (10 à 90)"
+        type: string
+        required: false
+        default: "45"
+      start_phase:
+        description: "Phase de départ du FullRun"
+        type: choice
+        required: false
+        default: plan
+        options:
+          - plan
+          - build
+          - verify
+          - close
+      only:
+        description: "Brick unique à exécuter (vera, serena, aditi-ui, engineer, anvil, forge-code, code-review, forge-audit, silas, max ; vide = tout)"
+        type: string
+        required: false
+        default: ""
+      attempt:
+        description: "Numéro de tentative courante"
+        type: string
+        required: false
+        default: "1"
+      max_attempts:
+        description: "Nombre maximum de tentatives"
+        type: string
+        required: false
+        default: "3"
+
+permissions:
+  contents: read
+
+jobs:
+  vera:
+    if: ${{ (inputs.only == '' || inputs.only == 'vera') && inputs.start_phase == 'plan' }}
+    uses: ./.github/workflows/fr-plan-vera.yml
+    with:
+      target_repo: ${{ inputs.target_repo }}
+      extra_repos: ${{ inputs.extra_repos }}
+      lifeos_write: ${{ inputs.lifeos_write }}
+      branch: ${{ inputs.branch }}
+      prompt_path: ${{ inputs.prompt_path }}
+      isa_path: ${{ inputs.isa_path }}
+      job_name: ${{ inputs.job_name }}
+      lifeos_ref: ${{ inputs.lifeos_ref }}
+      timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: false
+    secrets: inherit
+
+  serena:
+    needs:
+      - vera
+    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'serena') && inputs.start_phase == 'plan' }}
+    uses: ./.github/workflows/fr-plan-serena.yml
+    with:
+      target_repo: ${{ inputs.target_repo }}
+      extra_repos: ${{ inputs.extra_repos }}
+      lifeos_write: ${{ inputs.lifeos_write }}
+      branch: ${{ inputs.branch }}
+      prompt_path: ${{ inputs.prompt_path }}
+      isa_path: ${{ inputs.isa_path }}
+      job_name: ${{ inputs.job_name }}
+      lifeos_ref: ${{ inputs.lifeos_ref }}
+      timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: false
+    secrets: inherit
+
+  aditi_ui:
+    needs:
+      - vera
+      - serena
+    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'aditi-ui') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
+    uses: ./.github/workflows/fr-build-aditi-ui.yml
+    with:
+      target_repo: ${{ inputs.target_repo }}
+      extra_repos: ${{ inputs.extra_repos }}
+      lifeos_write: ${{ inputs.lifeos_write }}
+      branch: ${{ inputs.branch }}
+      prompt_path: ${{ inputs.prompt_path }}
+      isa_path: ${{ inputs.isa_path }}
+      job_name: ${{ inputs.job_name }}
+      lifeos_ref: ${{ inputs.lifeos_ref }}
+      timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: false
+    secrets: inherit
+
+  engineer:
+    needs:
+      - vera
+      - serena
+    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'engineer') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
+    uses: ./.github/workflows/fr-build-engineer.yml
+    with:
+      target_repo: ${{ inputs.target_repo }}
+      extra_repos: ${{ inputs.extra_repos }}
+      lifeos_write: ${{ inputs.lifeos_write }}
+      branch: ${{ inputs.branch }}
+      prompt_path: ${{ inputs.prompt_path }}
+      isa_path: ${{ inputs.isa_path }}
+      job_name: ${{ inputs.job_name }}
+      lifeos_ref: ${{ inputs.lifeos_ref }}
+      timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: false
+    secrets: inherit
+
+  anvil:
+    needs:
+      - vera
+      - serena
+    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'anvil') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
+    uses: ./.github/workflows/fr-build-anvil.yml
+    with:
+      target_repo: ${{ inputs.target_repo }}
+      extra_repos: ${{ inputs.extra_repos }}
+      lifeos_write: ${{ inputs.lifeos_write }}
+      branch: ${{ inputs.branch }}
+      prompt_path: ${{ inputs.prompt_path }}
+      isa_path: ${{ inputs.isa_path }}
+      job_name: ${{ inputs.job_name }}
+      lifeos_ref: ${{ inputs.lifeos_ref }}
+      timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: false
+    secrets: inherit
+
+  forge_code:
+    needs:
+      - vera
+      - serena
+    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'forge-code') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build') }}
+    uses: ./.github/workflows/fr-build-forge-code.yml
+    with:
+      target_repo: ${{ inputs.target_repo }}
+      extra_repos: ${{ inputs.extra_repos }}
+      lifeos_write: ${{ inputs.lifeos_write }}
+      branch: ${{ inputs.branch }}
+      prompt_path: ${{ inputs.prompt_path }}
+      isa_path: ${{ inputs.isa_path }}
+      job_name: ${{ inputs.job_name }}
+      lifeos_ref: ${{ inputs.lifeos_ref }}
+      timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: false
+    secrets: inherit
+
+  code_review:
+    needs:
+      - vera
+      - serena
+      - aditi_ui
+      - engineer
+      - anvil
+      - forge_code
+    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'code-review') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build' || inputs.start_phase == 'verify') }}
+    uses: ./.github/workflows/fr-verify-code-review.yml
+    with:
+      target_repo: ${{ inputs.target_repo }}
+      extra_repos: ${{ inputs.extra_repos }}
+      lifeos_write: ${{ inputs.lifeos_write }}
+      branch: ${{ inputs.branch }}
+      prompt_path: ${{ inputs.prompt_path }}
+      isa_path: ${{ inputs.isa_path }}
+      job_name: ${{ inputs.job_name }}
+      lifeos_ref: ${{ inputs.lifeos_ref }}
+      timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: false
+    secrets: inherit
+
+  forge_audit:
+    needs:
+      - vera
+      - serena
+      - aditi_ui
+      - engineer
+      - anvil
+      - forge_code
+      - code_review
+    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'forge-audit') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build' || inputs.start_phase == 'verify') }}
+    uses: ./.github/workflows/fr-verify-forge-audit.yml
+    with:
+      target_repo: ${{ inputs.target_repo }}
+      extra_repos: ${{ inputs.extra_repos }}
+      lifeos_write: ${{ inputs.lifeos_write }}
+      branch: ${{ inputs.branch }}
+      prompt_path: ${{ inputs.prompt_path }}
+      isa_path: ${{ inputs.isa_path }}
+      job_name: ${{ inputs.job_name }}
+      lifeos_ref: ${{ inputs.lifeos_ref }}
+      timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: false
+    secrets: inherit
+
+  silas:
+    needs:
+      - vera
+      - serena
+      - aditi_ui
+      - engineer
+      - anvil
+      - forge_code
+      - code_review
+      - forge_audit
+    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'silas') && (inputs.start_phase == 'plan' || inputs.start_phase == 'build' || inputs.start_phase == 'verify') }}
+    uses: ./.github/workflows/fr-verify-silas.yml
+    with:
+      target_repo: ${{ inputs.target_repo }}
+      extra_repos: ${{ inputs.extra_repos }}
+      lifeos_write: ${{ inputs.lifeos_write }}
+      branch: ${{ inputs.branch }}
+      prompt_path: ${{ inputs.prompt_path }}
+      isa_path: ${{ inputs.isa_path }}
+      job_name: ${{ inputs.job_name }}
+      lifeos_ref: ${{ inputs.lifeos_ref }}
+      timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: false
+    secrets: inherit
+
+  max:
+    needs:
+      - vera
+      - serena
+      - aditi_ui
+      - engineer
+      - anvil
+      - forge_code
+      - code_review
+      - forge_audit
+      - silas
+    if: ${{ !cancelled() && !failure() && (inputs.only == '' || inputs.only == 'max') }}
+    uses: ./.github/workflows/fr-close-max.yml
+    with:
+      target_repo: ${{ inputs.target_repo }}
+      extra_repos: ${{ inputs.extra_repos }}
+      lifeos_write: ${{ inputs.lifeos_write }}
+      branch: ${{ inputs.branch }}
+      prompt_path: ${{ inputs.prompt_path }}
+      isa_path: ${{ inputs.isa_path }}
+      job_name: ${{ inputs.job_name }}
+      lifeos_ref: ${{ inputs.lifeos_ref }}
+      timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: false
+    secrets: inherit
+
+  loop:
+    needs:
+      - code_review
+      - forge_audit
+      - silas
+      - max
+    if: ${{ always() && (needs.code_review.result == 'failure' || needs.forge_audit.result == 'failure' || needs.silas.result == 'failure' || needs.max.result == 'failure') && fromJSON(inputs.attempt) < fromJSON(inputs.max_attempts) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Relancer le FullRun depuis build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IN_TARGET: ${{ inputs.target_repo }}
+          IN_EXTRA: ${{ inputs.extra_repos }}
+          LIFEOS_WRITE: ${{ inputs.lifeos_write }}
+          IN_BRANCH: ${{ inputs.branch }}
+          IN_PROMPT: ${{ inputs.prompt_path }}
+          IN_ISA: ${{ inputs.isa_path }}
+          IN_JOB: ${{ inputs.job_name }}
+          LIFEOS_REF: ${{ inputs.lifeos_ref }}
+          IN_TIMEOUT_MIN: ${{ inputs.timeout_minutes }}
+          IN_ONLY: ${{ inputs.only }}
+          IN_ATTEMPT: ${{ inputs.attempt }}
+          IN_MAX: ${{ inputs.max_attempts }}
+        run: |
+          set -euo pipefail
+          next=$(( IN_ATTEMPT + 1 ))
+          echo "Échec verify/max — relance depuis build (tentative ${next}/${IN_MAX})"
+          gh workflow run fr-fullrun.yml \
+            --repo "$GITHUB_REPOSITORY" \
+            --ref "$GITHUB_REF_NAME" \
+            -f target_repo="$IN_TARGET" \
+            -f extra_repos="$IN_EXTRA" \
+            -F lifeos_write="$LIFEOS_WRITE" \
+            -f branch="$IN_BRANCH" \
+            -f prompt_path="$IN_PROMPT" \
+            -f isa_path="$IN_ISA" \
+            -f job_name="$IN_JOB" \
+            -f lifeos_ref="$LIFEOS_REF" \
+            -f timeout_minutes="$IN_TIMEOUT_MIN" \
+            -f start_phase=build \
+            -f only="$IN_ONLY" \
+            -f attempt="$next" \
+            -f max_attempts="$IN_MAX"
