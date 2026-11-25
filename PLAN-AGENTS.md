@@ -35,3 +35,25 @@ et `LIFEOS/TOOLS/FullRunPipeline.ts` (`FULLRUN_STEPS`). opencode charge `agents/
 
 Un agent par job (`--stop-after-step <step> --agent <nom>`). Un échec verify redescend au
 build (4), jamais à `vera`/`serena`, sauf si les critères changent.
+
+## Workflows à créer
+
+Un wrapper `fr-<phase>-<agent>.yml` par agent dispatchable, sans duplication :
+`uses: ./.github/workflows/_agent-run.yml` (`agent`, `phase`, `step`, `target_agent`), puis `_next.yml`.
+
+| Workflow | Agent → canonique | Étape |
+| --- | --- | --- |
+| `fr-plan-vera.yml` | `vera` → **Algorithm** | 2 |
+| `fr-plan-serena.yml` | `serena` → **Architect** | 3 |
+| `fr-build-aditi-ui.yml` | `aditi-ui` → **Designer** | 4 UI |
+| `fr-build-engineer.yml` | `engineer` → **Engineer** | 4 code |
+| `fr-build-anvil.yml` | `anvil` → **Anvil** | 4 code |
+| `fr-build-forge-code.yml` | `forge-code` → **Forge** BUILD | 4 code |
+| `fr-verify-code-review.yml` | `code-review` → **code-reviewer** | 5 |
+| `fr-verify-silas.yml` | `silas` → **Silas** | 5 |
+| `fr-verify-forge-audit.yml` | `forge-audit` → **Forge** AUDIT | 5 |
+| `fr-close-max.yml` | `max` → **Max** | 6 |
+
+`close` (7) n'est pas un agent : Nix exécute `CheckCompleteness` + `phase: complete` après
+le PASS de Max. Pas d'`agent-close`, ni `agent-aditi`, ni doublon `agent-algorithm`/`agent-architect`
+(Vera/Serena sont leurs alias).
