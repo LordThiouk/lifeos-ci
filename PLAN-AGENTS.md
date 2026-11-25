@@ -44,3 +44,22 @@ Un agent par job (`unit --stop-after-step <step> --agent <nom>`). Ordre verify i
 
 But : un mini-workflow court par étape et par agent, qui committe tout de suite ; le FullRun
 enchaîne et **repart de l'étape échouée** au lieu de tout recommencer.
+
+## Mini-workflows (une tâche par workflow)
+
+Wrapper `fr-<phase>-<agent>.yml` sans duplication : `uses: ./.github/workflows/_agent-run.yml`
+(`agent`, `phase`, `step`, `target_agent`, `stop_after_step`, `timeout_minutes`), puis `_next.yml`
+si `status == ok`. Granularité : `plan`/`close` = étape, `build` = tâche, `verify` = agent.
+
+| Étape × agent | Workflow | Timeout | Commits | Reprise après échec |
+| --- | --- | --- | --- | --- |
+| 2 Vera | `fr-plan-vera.yml` | 10 min | corrige la structure de l'ISA | état signé, `start_step=2` |
+| 3 Serena | `fr-plan-serena.yml` | 10 min | Plan + dispatch map dans l'ISA | état signé, `start_step=3` |
+| 4 Designer UI | `fr-build-aditi-ui.yml` | 15 min | UI du scope + claims `[x]` (`fr/<run>/aditi-ui`) | branche agent rejouée, fusion au run |
+| 4 Engineer | `fr-build-engineer.yml` | 15 min | code + tests + claims `[x]` (`fr/<run>/engineer`) | branche agent rejouée, fusion au run |
+| 4 Anvil | `fr-build-anvil.yml` | 15 min | code long contexte + claims `[x]` (`fr/<run>/anvil`) | branche agent rejouée, fusion au run |
+| 4 Forge | `fr-build-forge-code.yml` | 15 min | code OpenAI + claims `[x]` (`fr/<run>/forge-code`) | branche agent rejouée, fusion au run |
+| 5 code-reviewer | `fr-verify-code-review.yml` | 10 min | aucun code : PASS/rapport signé | même agent, PASS frais exigé |
+| 5 Forge audit | `fr-verify-forge-audit.yml` | 10 min | aucun code : audit croisé signé | même agent, PASS frais exigé |
+| 5 Silas | `fr-verify-silas.yml` | 10 min | aucun code : verdict sécurité signé | même agent, PASS frais exigé |
+| 6 Max | `fr-close-max.yml` | 10 min | aucun code : verdict final signé | même agent, PASS frais exigé |
