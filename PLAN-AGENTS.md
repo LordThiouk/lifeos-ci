@@ -8,7 +8,7 @@ et `LIFEOS/TOOLS/FullRunPipeline.ts` (`FULLRUN_STEPS`). opencode charge `agents/
 
 | Agent (fichier) | Rôle | Étape(s) | Chemin source |
 | --- | --- | --- | --- |
-| Nix/LifeOS | Orchestrateur, seul écrivain de l'ISA | 0, 1, 7 | `opencode/nix-lifeos.prompt.md` + `opencode/config/opencode.json` |
+| Nix/LifeOS | Orchestrateur, seul écrivain de l'ISA | 0, 1, 7 | `opencode/nix-lifeos.prompt.md` (lifeos) ; enregistré dans `opencode/config/opencode.json` (lifeos-ci) |
 | Algorithm (Vera Sterling) | Audit structure ISA | 2 `vera` | `agents/Algorithm.md` (alias `opencode/agent/Vera.md`) |
 | Architect (Serena Blackwood) | Plan + dispatch map `ui\|code` | 3 `serena` | `agents/Architect.md` (alias `opencode/agent/Serena.md`) |
 | Designer (Aditi Sharma) | Build UI | 4 `build` UI | `agents/Designer.md` |
