@@ -33,3 +33,8 @@ la sandbox) : analyse par lecture des workflows, `actionlint`, `shellcheck` et t
 - Travail partiel : `_agent-run.yml` commite `wip(<job>): partial work (agent stopped)` (`git add -A`, `.fullrun` exclu) avant la rebase.
 - Step push en `if: always() && !cancelled()` : il tourne aussi après un arrêt de l'agent (quota, timeout, erreur).
 - Commit : fix(ci): keep partial work on agent failure
+
+## 4. startup_failure de fr-fullrun (run 45617005249)
+- Cause : `_next.yml` demandait `actions: write`, au-delà du plafond `contents: read` de la chaîne réutilisable fr-fullrun ; GitHub rejette la chaîne au démarrage même si `next` est sauté.
+- Fichier : `.github/workflows/_next.yml:73-75`
+- Fix : permission ramenée à `contents: read` (dispatch via `CI_TOKEN`, donc `actions: write` inutile) ; `loop` utilise `!cancelled() && contains(...)` (`fr-fullrun.yml:309`).

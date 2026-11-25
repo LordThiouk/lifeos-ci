@@ -71,7 +71,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      actions: write
       contents: read
     steps:
       - name: Enchaîner l'agent suivant (si autorisé)
