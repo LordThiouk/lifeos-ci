@@ -58,6 +58,7 @@ on:
         required: false
         default: "15"
       chain:
+        description: "Enchaîner _next.yml si le run est ok (false pour un FullRun orchestré)"
         type: boolean
         required: false
         default: true
@@ -106,6 +107,7 @@ on:
         required: false
         default: "15"
       chain:
+        description: "Enchaîner _next.yml si le run est ok (false pour un FullRun orchestré)"
         type: boolean
         required: false
         default: true

@@ -1,7 +1,7 @@
 name: FullRun close-max (lifeos-ci)
 run-name: FullRun close-max ${{ inputs.job_name }} → ${{ inputs.target_repo }}@${{ inputs.branch }}
 
-# Premier agent FullRun : close-max. Puis enchaînement _next.yml si status == ok.
+# Dernier agent FullRun : close-max. Puis enchaînement _next.yml si status == ok.
 on:
   workflow_dispatch:
     inputs:
@@ -58,6 +58,7 @@ on:
         required: false
         default: "10"
       chain:
+        description: "Enchaîner _next.yml si le run est ok (false pour un FullRun orchestré)"
         type: boolean
         required: false
         default: true
@@ -106,6 +107,7 @@ on:
         required: false
         default: "10"
       chain:
+        description: "Enchaîner _next.yml si le run est ok (false pour un FullRun orchestré)"
         type: boolean
         required: false
         default: true
