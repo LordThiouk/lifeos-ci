@@ -9,6 +9,7 @@ la sandbox) : analyse par lecture des workflows, `actionlint`, `shellcheck` et t
 - Cause : `.github/workflows/fr-fullrun.yml:298-307` (needs/condition limités aux verify + max).
 - Fix : ajout de aditi_ui/engineer/anvil/forge_code aux needs et de leurs `result == 'failure'`.
 - Commit : 41ea55f
+- Complément : `loop` dépend de toute la chaîne et teste `contains(needs.*.result, 'failure')`, donc un échec build n'est plus masqué par les jobs aval `skipped` (b193f47).
 
 ## 2. Garde-fou extra_repos cassé par un changement de branche
 - Échec : l'agent inspecte une autre branche d'un extra (read-only) et le job échoue.
