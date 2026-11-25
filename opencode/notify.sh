@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 # Webhook de fin de run. Toujours non bloquant (sortie 0), jamais de secret affiché.
 # Variables lues : OC_NOTIFY_URL, OC_NOTIFY_KEY, OC_JOB, OC_AGENT, OC_STATUS,
-# OC_TARGET_REPO, OC_BRANCH, OC_MODEL, OC_SHA, OC_RUN_URL, OC_MESSAGE.
+# OC_OPENCODE_STATUS, OC_TARGET_REPO, OC_BRANCH, OC_MODEL, OC_SHA, OC_RUN_URL,
+# OC_MESSAGE. OC_STATUS est le statut final du job ; OC_OPENCODE_STATUS le statut
+# propre à opencode (champ distinct).
 # Le code HTTP est toujours affiché et un ::warning:: est émis hors 2xx.
 set -euo pipefail
 
 notify_main() {
   local url="${OC_NOTIFY_URL:-}" key="${OC_NOTIFY_KEY:-}" payload message
   local job="${OC_JOB:-}" agent="${OC_AGENT:-}" status="${OC_STATUS:-}" target="${OC_TARGET_REPO:-}"
+  local opencode_status="${OC_OPENCODE_STATUS:-}"
   local branch="${OC_BRANCH:-}" model="${OC_MODEL:-}" sha="${OC_SHA:-}" run_url="${OC_RUN_URL:-}"
   local extra="${OC_MESSAGE:-}"
   local tmp code
@@ -21,18 +24,19 @@ notify_main() {
     return 0
   fi
 
-  message="${extra:-${job} (${target}@${branch}) : status=${status} model=${model} sha=${sha} — ${run_url}}"
+  message="${extra:-${job} (${target}@${branch}) : status=${status} opencode=${opencode_status} model=${model} sha=${sha} — ${run_url}}"
   payload=$(jq -cn \
     --arg job "$job" \
     --arg agent "$agent" \
     --arg status "$status" \
+    --arg opencode_status "$opencode_status" \
     --arg target_repo "$target" \
     --arg branch "$branch" \
     --arg model "$model" \
     --arg sha "$sha" \
     --arg run_url "$run_url" \
     --arg message "$message" \
-    '{job:$job, agent:$agent, status:$status, target_repo:$target_repo, branch:$branch, model:$model, sha:$sha, run_url:$run_url, message:$message}') || return 0
+    '{job:$job, agent:$agent, status:$status, opencode_status:$opencode_status, target_repo:$target_repo, branch:$branch, model:$model, sha:$sha, run_url:$run_url, message:$message}') || return 0
 
   tmp=$(mktemp "${TMPDIR:-/tmp}/oc-notify.XXXXXX") || {
     echo "notification ignorée : fichier temporaire impossible"

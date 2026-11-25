@@ -92,7 +92,7 @@ jobs:
     permissions:
       contents: read
     concurrency:
-      group: agent-${{ inputs.target_repo }}-${{ inputs.job_name }}
+      group: agent-${{ inputs.target_repo }}-${{ inputs.branch }}
       cancel-in-progress: false
     outputs:
       status: ${{ steps.oc.outputs.status }}
@@ -544,6 +544,27 @@ jobs:
             h=$(gclean -C "$dir" rev-parse HEAD)
             [ "$(gclean -C "$dir" rev-parse --abbrev-ref HEAD)" = "$branch" ] \
               || fail "$r : branche $branch modifiée par l'agent"
+            # Resynchronisation juste avant le push : si la branche distante existe,
+            # on rebase les commits de l'agent dessus pour rester en fast-forward.
+            if env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$RUNNER_TEMP" \
+                 GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_TERMINAL_PROMPT=0 \
+                 GIT_CONFIG_COUNT=1 \
+                 GIT_CONFIG_KEY_0=http.https://github.com/.extraheader \
+                 GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth" \
+                 git -C "$dir" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+              env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$RUNNER_TEMP" \
+                GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_TERMINAL_PROMPT=0 \
+                GIT_CONFIG_COUNT=1 \
+                GIT_CONFIG_KEY_0=http.https://github.com/.extraheader \
+                GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth" \
+                git -C "$dir" fetch --no-tags origin "$branch" >/dev/null \
+                || fail "$r : fetch origin $branch impossible"
+              if ! gclean -C "$dir" rebase "origin/$branch" >/dev/null; then
+                gclean -C "$dir" rebase --abort >/dev/null 2>&1 || true
+                fail "$r : rebase sur origin/$branch impossible (conflit), push annulé"
+              fi
+              h=$(gclean -C "$dir" rev-parse HEAD)
+            fi
             gclean -C "$dir" merge-base --is-ancestor "$base" "$h" \
               || fail "$r : historique réécrit depuis le SHA de départ"
             bash "$TOOLS_DIR/opencode/lifeos-guard.sh" destination \
@@ -631,26 +652,6 @@ jobs:
 
           echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
 
-      - name: Notification de fin
-        if: always()
-        continue-on-error: true
-        timeout-minutes: 3
-        env:
-          OC_NOTIFY_URL: ${{ secrets.OC_NOTIFY_URL }}
-          OC_NOTIFY_KEY: ${{ secrets.OC_NOTIFY_KEY }}
-          OC_JOB: ${{ inputs.job_name }}
-          OC_AGENT: ${{ inputs.agent }}
-          OC_STATUS: ${{ steps.oc.outputs.status }}
-          OC_TARGET_REPO: ${{ inputs.target_repo }}
-          OC_BRANCH: ${{ inputs.branch }}
-          OC_MODEL: ${{ steps.oc.outputs.model }}
-          OC_SHA: ${{ steps.push.outputs.head_sha }}
-          OC_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: |
-          if [ -x "$TOOLS_DIR/opencode/notify.sh" ]; then
-            bash "$TOOLS_DIR/opencode/notify.sh"
-          fi
-
       - name: Statut final
         if: always()
         env:
@@ -669,3 +670,26 @@ jobs:
               exit 1
               ;;
           esac
+
+      # Envoyée en tout dernier : statut final du job (job.status, donc échec des
+      # étapes précédentes inclus), le statut opencode restant un champ séparé.
+      - name: Notification de fin
+        if: always()
+        continue-on-error: true
+        timeout-minutes: 3
+        env:
+          OC_NOTIFY_URL: ${{ secrets.OC_NOTIFY_URL }}
+          OC_NOTIFY_KEY: ${{ secrets.OC_NOTIFY_KEY }}
+          OC_JOB: ${{ inputs.job_name }}
+          OC_AGENT: ${{ inputs.agent }}
+          OC_STATUS: ${{ job.status }}
+          OC_OPENCODE_STATUS: ${{ steps.oc.outputs.status }}
+          OC_TARGET_REPO: ${{ inputs.target_repo }}
+          OC_BRANCH: ${{ inputs.branch }}
+          OC_MODEL: ${{ steps.oc.outputs.model }}
+          OC_SHA: ${{ steps.push.outputs.head_sha }}
+          OC_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -x "$TOOLS_DIR/opencode/notify.sh" ]; then
+            bash "$TOOLS_DIR/opencode/notify.sh"
+          fi
