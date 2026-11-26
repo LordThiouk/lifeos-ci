@@ -1424,3 +1424,35 @@ Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/CHANGELOG.md
  
 
 
+$ cd /tmp && timeout 40 curl -s "https://developer.android.com/build/releases/past-releases/agp-8-11-0-release-notes" -o agp811.html; python3 - <<'EOF'
+import re
+h=open('/tmp/agp811.html',encoding='utf-8',errors='ignore').read()
+t=re.sub(r'<script.*?</script>','',h,flags=re.S); t=re.sub(r'<[^>]+>',' ',t); t=re.sub(r'\s+',' ',t)
+for kw in ['Gradle 8.13','minimum version of Gradle','Compatibility']:
+    i=t.find(kw)
+    print(kw, '->', t[max(0,i-200):i+300] if i>0 else 'NOT FOUND')
+    print('---')
+EOF
+Gradle 8.13 -> NOT FOUND
+---
+minimum version of Gradle -> NOT FOUND
+---
+Compatibility -> NOT FOUND
+---
+
+$ cd /tmp && for u in \
+ "https://services.gradle.org/distributions/gradle-8.14-all.zip" \
+ "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.11.1/gradle-8.11.1.pom" \
+ "https://repo1.maven.org/maven2/org/jetbrains/kotlin/android/org.jetbrains.kotlin.android.gradle.plugin/2.2.20/org.jetbrains.kotlin.android.gradle.plugin-2.2.20.pom" \
+ "https://dl.google.com/dl/android/maven2/com/google/gms/google-services/4.3.15/google-services-4.3.15.pom" \
+ "https://dl.google.com/dl/android/maven2/com/google/firebase/firebase-crashlytics-gradle/3.0.7/firebase-crashlytics-gradle-3.0.7.pom" ; do printf "%s -> " "$u"; timeout 30 curl -sIL -o /dev/null -w "%{http_code}\n" "$u"; done
+https://services.gradle.org/distributions/gradle-8.14-all.zip -> 200
+https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.11.1/gradle-8.11.1.pom -> 200
+https://repo1.maven.org/maven2/org/jetbrains/kotlin/android/org.jetbrains.kotlin.android.gradle.plugin/2.2.20/org.jetbrains.kotlin.android.gradle.plugin-2.2.20.pom -> 200
+https://dl.google.com/dl/android/maven2/com/google/gms/google-services/4.3.15/google-services-4.3.15.pom -> 200
+https://dl.google.com/dl/android/maven2/com/google/firebase/firebase-crashlytics-gradle/3.0.7/firebase-crashlytics-gradle-3.0.7.pom -> 200
+
+$ cd /tmp && timeout 30 curl -sIL -o /dev/null -w "%{http_code} %{url_effective}\n" "https://developer.android.com/build/releases/past-releases/agp-8-11-0-release-notes"; wc -c agp811.html; grep -o "Gradle [0-9.]*" agp811.html | sort -u | head
+200 https://developer.android.com/build/releases/agp-8-11-0-release-notes
+267 agp811.html
+
