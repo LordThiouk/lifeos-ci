@@ -11226,3 +11226,323 @@ grep: extra/Galass_Driver/lib: No such file or directory
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "image" extra/Galass_Driver/lib/data/repo/auth 2>&1 | head -30
 grep: extra/Galass_Driver/lib/data/repo/auth: No such file or directory
 
+$ find /home/ubuntu/actions-runner/_work -maxdepth 4 -type d -name 'Galass_Rider' -o -name 'Galass_Driver' 2>&1 | head -20
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/Galass_Rider
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver
+
+$ ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target 2>&1 | head -20; echo "==="; find /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci -maxdepth 3 -type d 2>&1 | head -30
+2026_03_17_api_swagger_095dc7898c.json
+AGENTS.md
+CLAUDE.md
+MEMORY
+SECURITY.md
+assets
+core
+docs
+index.php
+om_Pay_Link_Swagger_02e4c3ae33.yml
+prompts
+scripts
+===
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/upgrade
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/creative-claude-design
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/ck
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/productivity-document-to-action-items
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/productivity-pdf
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/output-skill
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/creative-comfyui
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/production-audit
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/minimalist-skill
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/context-search
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/brutalist-skill
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/note-taking-obsidian
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/daemon
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/slides
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/firecrawl-market-research
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/executing-plans
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/sales
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/browser-qa
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/subagent-driven-development
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/systematic-debugging
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/media-youtube-content
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/extract-wisdom
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/skill-scout
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/integration-hermes-plugin-porting
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/animate
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/media-songsee
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/trim
+
+$ grep -rn "driver-data-submit\|profile_complete\|profile-setting" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver/lib/core/utils/url_container.dart | head -20
+50:  static const String updateProfileEndPoint = 'driver/profile-setting';
+51:  static const String profileCompleteEndPoint = 'driver/driver-data-submit';
+
+$ grep -rn "image\|photo\|File" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver/lib/data/controller/account/profile_complete_controller.dart | head -40
+126:  String imageUrl = '';
+128:  File? imageFile;
+208:      image: null,
+221:            image: null,
+
+$ grep -rn "driver-data-submit" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver/lib 2>&1 | head -20
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver/lib/core/utils/url_container.dart:51:  static const String profileCompleteEndPoint = 'driver/driver-data-submit';
+
+$ sed -n '150,260p' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver/lib/data/controller/account/profile_complete_controller.dart
+phoneData = profileResponseModel.data?.driver?.mobile ?? '';
+      } else {
+        isLoading = false;
+        update();
+      }
+    } catch (e) {
+      isLoading = false;
+      update();
+    }
+    isLoading = false;
+    update();
+  }
+
+  TextEditingController searchCountryController = TextEditingController();
+  bool countryLoading = true;
+  List<Countries> countryList = [];
+  List<Countries> filteredCountries = [];
+
+  bool isLoading = true;
+  bool submitLoading = false;
+
+  Future<void> updateProfile() async {
+    if (firstNameController.text.trim().isEmpty) {
+      CustomSnackBar.error(errorList: [MyStrings.kFirstNameNullError.tr]);
+      return;
+    }
+    if (lastNameController.text.trim().isEmpty) {
+      CustomSnackBar.error(errorList: [MyStrings.kLastNameNullError.tr]);
+      return;
+    }
+    if (mobileNoController.text.isEmpty) {
+      CustomSnackBar.error(errorList: [MyStrings.enterYourPhoneNumber.tr]);
+      return;
+    }
+    if (selectedZone.id == '-1') {
+      CustomSnackBar.error(errorList: [MyStrings.selectYourZone]);
+      return;
+    }
+    String username = userNameController.text;
+    String mobileNumber = mobileNoController.text;
+    String address = addressController.text.toString();
+    String city = cityController.text.toString();
+    String zip = zipCodeController.text.toString();
+    String state = stateController.text.toString();
+    String zoneId = selectedZone.id ?? '';
+    submitLoading = true;
+    update();
+
+    ProfileCompletePostModel model = ProfileCompletePostModel(
+      username: username,
+      countryName: selectedCountryData.country ?? '',
+      countryCode: selectedCountryData.countryCode ?? '',
+      mobileNumber: mobileNumber,
+      mobileCode: selectedCountryData.dialCode ?? '',
+      address: address,
+      state: state,
+      zip: zip,
+      city: city,
+      image: null,
+      zone: zoneId,
+    );
+
+    ResponseModel responseModel = await profileRepo.completeProfile(model);
+
+    if (responseModel.statusCode == 200) {
+      ProfileCompleteResponseModel model = ProfileCompleteResponseModel.fromJson((responseModel.responseJson));
+      if (model.status?.toLowerCase() == MyStrings.success.toLowerCase()) {
+        final nameUpdate = await profileRepo.updateProfile(
+          ProfilePostModel(
+            firstname: firstNameController.text.trim(),
+            lastName: lastNameController.text.trim(),
+            image: null,
+            address: address,
+            state: state,
+            zip: zip,
+            city: city,
+          ),
+        );
+        if (nameUpdate.status?.toLowerCase() != MyStrings.success.toLowerCase()) {
+          submitLoading = false;
+          update();
+          return;
+        }
+        RouteHelper.checkUserStatusAndGoToNextStep(model.data?.user);
+      } else {
+        CustomSnackBar.error(
+          errorList: model.message ?? [MyStrings.requestFail],
+        );
+      }
+    } else {
+      CustomSnackBar.error(errorList: [responseModel.message]);
+    }
+
+    submitLoading = false;
+    update();
+  }
+
+  Countries selectedCountryData = Countries();
+  void selectCountryData(Countries value) {
+    selectedCountryData = value;
+    update();
+  }
+
+  bool zoneLoading = false;
+  int page = 0;
+  List<ZoneData> zoneList = [];
+  TextEditingController searchZoneController = TextEditingController();
+
+  Future<void> initZoneData({bool shouldLoad = false}) async {
+    zoneLoading = shouldLoad;
+    page = 0;
+
+$ grep -rn "profileCompleteEndPoint\|completeProfile" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver/lib/data/repo 2>&1 | head -20
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver/lib/data/repo/account/profile_repo.dart:75:  Future<ResponseModel> completeProfile(ProfileCompletePostModel model) async {
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver/lib/data/repo/account/profile_repo.dart:77:    String url = '${UrlContainer.baseUrl}${UrlContainer.profileCompleteEndPoint}';
+
+$ sed -n '1,140p' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver/lib/data/repo/account/profile_repo.dart
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:galass_driver/core/helper/string_format_helper.dart';
+import 'package:galass_driver/core/utils/method.dart';
+import 'package:galass_driver/core/utils/my_strings.dart';
+import 'package:galass_driver/core/utils/url_container.dart';
+import 'package:galass_driver/data/model/authorization/authorization_response_model.dart';
+import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+import 'package:galass_driver/data/model/profile/profile_response_model.dart';
+import 'package:galass_driver/data/services/api_client.dart';
+import 'package:galass_driver/presentation/components/snack_bar/show_custom_snackbar.dart';
+
+import '../../model/profile/profile_post_model.dart';
+import '../../model/profile_complete/profile_complete_post_model.dart';
+
+class ProfileRepo {
+  ApiClient apiClient;
+
+  ProfileRepo({required this.apiClient});
+
+  Future<AuthorizationResponseModel> updateProfile(ProfilePostModel m) async {
+    try {
+      await apiClient.initToken();
+
+      String url = '${UrlContainer.baseUrl}${UrlContainer.updateProfileEndPoint}';
+
+      Map<String, String> finalMap = {
+        'firstname': m.firstname,
+        'lastname': m.lastName,
+        'address': m.address ?? '',
+        'zip': m.zip ?? '',
+        'state': m.state ?? "",
+        'city': m.city ?? '',
+      };
+      printX(finalMap);
+      //Attachments file list
+      Map<String, File> attachmentFiles = {};
+      if (m.image != null) {
+        attachmentFiles = {"image": m.image!};
+      }
+
+      ResponseModel responseModel = await apiClient.multipartRequest(
+        url,
+        Method.postMethod,
+        finalMap,
+        files: attachmentFiles,
+        passHeader: true,
+      );
+
+      AuthorizationResponseModel model = AuthorizationResponseModel.fromJson(
+        (responseModel.responseJson),
+      );
+
+      if (model.status?.toLowerCase() == MyStrings.success.toLowerCase()) {
+        CustomSnackBar.success(
+          successList: model.message ?? [MyStrings.requestSuccess.tr],
+        );
+        return model;
+      } else {
+        CustomSnackBar.error(
+          errorList: model.message ?? [MyStrings.requestFail.tr],
+        );
+        return model;
+      }
+    } catch (e) {
+      return AuthorizationResponseModel(
+        status: "error",
+        message: [MyStrings.somethingWentWrong],
+      );
+    }
+  }
+
+  Future<ResponseModel> completeProfile(ProfileCompletePostModel model) async {
+    dynamic params = model.toMap();
+    String url = '${UrlContainer.baseUrl}${UrlContainer.profileCompleteEndPoint}';
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.postMethod,
+      params,
+      passHeader: true,
+    );
+    return responseModel;
+  }
+
+  Future<dynamic> deleteAccount() async {
+    try {
+      String url = '${UrlContainer.baseUrl}${UrlContainer.userDeleteEndPoint}';
+      ResponseModel response = await apiClient.request(
+        url,
+        Method.postMethod,
+        null,
+        passHeader: true,
+      );
+      return response;
+    } catch (e) {
+      return ResponseModel(false, MyStrings.somethingWentWrong.tr, 300, '');
+    }
+  }
+
+  Future<ProfileResponseModel> loadProfileInfo() async {
+    String url = '${UrlContainer.baseUrl}${UrlContainer.getProfileEndPoint}';
+
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
+
+    if (responseModel.statusCode == 200) {
+      ProfileResponseModel model = ProfileResponseModel.fromJson(
+        (responseModel.responseJson),
+      );
+      if (model.status == 'success') {
+        return model;
+      } else {
+        return ProfileResponseModel();
+      }
+    } else {
+      return ProfileResponseModel();
+    }
+  }
+
+  Future<dynamic> getCountryList() async {
+    String url = '${UrlContainer.baseUrl}${UrlContainer.countryEndPoint}';
+    ResponseModel model = await apiClient.request(url, Method.getMethod, null);
+    return model;
+  }
+
+  Future<dynamic> getZoneList(String page, {String search = ""}) async {
+    String url = '${UrlContainer.baseUrl}${UrlContainer.zones}?page=$page&search=$search';
+    ResponseModel model = await apiClient.request(url, Method.getMethod, null);
+    return model;
+  }
+
+  Future<ResponseModel> logout() async {
+    String url = '${UrlContainer.baseUrl}${UrlContainer.logoutUrl}';
+
