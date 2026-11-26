@@ -3718,3 +3718,21 @@ $ cat .dart_tool/version 2>/dev/null; grep -n -A2 'record_use' pubspec.lock | he
 245-    dependency: transitive
 246-    description:
 
+$ find /opt /usr/local /home -maxdepth 4 -name 'flutter' -type d 2>/dev/null | grep -v '/opt/flutter$' | head; ls /opt/flutter/.. 2>/dev/null | head -30
+/opt/flutter/engine/src/flutter
+/opt/flutter/packages/flutter
+/home/ubuntu/.config/flutter
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+
+`.dart_tool/version` indique **Flutter 3.50.1**. Je cherche ce SDK sur la machine.
+$ find / -maxdepth 4 -name 'flutter_tools' -path '*flutter*' 2>/dev/null | head; find /root /home /opt -maxdepth 3 -name '*3.50*' 2>/dev/null | head
+/opt/flutter/packages/flutter_tools
+/tmp/flutter/packages/flutter_tools
+
