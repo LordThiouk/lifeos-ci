@@ -618,3 +618,287 @@ $ git show origin/fullrun-logs/rider-apk-gradle-45859632833:.fullrun/logs/rider-
 1005:131	45004400552	feat/multistop-rider-close-2026-11-20	2026-11-22T08:46:55Z	failure
 1006:130	44927908295	feat/multistop-rider-close-2026-11-20	2026-11-21T17:03:12Z	failure
 
+$ find /home/ubuntu/actions-runner/_work -maxdepth 6 -name "gradle-wrapper.properties" -not -path "*/lifeos-ci/target/*" -not -path "*/_actions/*" 2>/dev/null | head; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos 2>/dev/null | head -30; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/targets 2>/dev/null
+CLAUDE.md
+ISA.md
+LIFEOS
+MEMORY
+README.md
+Workflows
+agents
+bun.lock
+commands
+hooks
+opencode
+package.json
+rules
+scripts
+secrets
+settings.template.json
+skills
+skills-shared
+allowed-repos.sh
+
+$ git log --all --oneline --grep="align Rider Android toolchain" ; git branch -a --contains c8ffd2e 2>/dev/null; git show c8ffd2e --stat 2>/dev/null | head -30
+(no output)
+
+$ git show origin/fullrun-logs/rider-apk-gradle-45859632833:.fullrun/logs/rider-apk-gradle-45859632833.log | sed -n '900,1100p'
+148	45766646463	feat/multistop-e2e-2026-11-15	0cc7a5ca	2026-11-26T06:12:53Z	completed	failure	workflow_dispatch
+147	45766264029	feat/multistop-e2e-2026-11-15	0cc7a5ca	2026-11-26T06:09:37Z	completed	cancelled	workflow_dispatch
+146	45765968957	fix/e2e-vision-chain	48174500	2026-11-26T06:07:00Z	completed	cancelled	workflow_dispatch
+145	45765834688	main	33f9ab98	2026-11-26T06:05:47Z	completed	cancelled	workflow_dispatch
+144	45765767677	main	33f9ab98	2026-11-26T06:05:13Z	completed	cancelled	workflow_dispatch
+143	45100696324	feat/multistop-rider-close-2026-11-20	da9814d1	2026-11-23T02:31:24Z	completed	failure	workflow_dispatch
+
+$ ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci; echo ---; find / -maxdepth 4 -type d -name 'Galass_Rider' 2>/dev/null | head; find / -maxdepth 4 -type d -name 'Galass_Driver' 2>/dev/null | head
+FIX-CI.md
+FIX-SERENA.md
+FIX-VERA-AUDIT.md
+INVENTAIRE.md
+README.md
+REPORT.md
+REVIEW-AGENTS-LOAD.md
+REVIEW-ASSEMBLE.md
+REVIEW-PR1.md
+REVIEW-PR20.md
+REVIEW.md
+TESTS-DIAG.md
+docs
+models.txt
+opencode
+prompts
+targets
+---
+/agent/repos/Galass_Rider
+/agent/repos/Galass_Driver
+
+$ ls -la /agent/repos/; echo ---; git -C /agent/repos/Galass_Rider log --oneline -3 2>&1; git -C /agent/repos/Galass_Driver log --oneline -3 2>&1
+total 32
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 10:45 .
+drwxr-xr-x  3 root   root   4096 Nov 26 04:55 ..
+drwxr-xr-x 15 ubuntu ubuntu 4096 Nov 26 06:34 Galass_Driver
+drwxr-xr-x 19 ubuntu ubuntu 4096 Nov 26 15:31 Galass_Rider
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 05:12 Galass_backend
+drwxr-xr-x 11 ubuntu ubuntu 4096 Nov 26 06:33 Galass_backend-multistop
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 08:04 antenly
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 10:45 galass-emu-actions-pub
+---
+c8ffd2e fix(build): align Rider Android toolchain to Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.3.0, Crashlytics 3.0.3)
+424957d verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+bd77f91 docs(driver): verdict position voiture temps réel + ISC-F5-19
+7187e3a prompt: driver live location
+9208af6 fix(build): M3 retrait dead code stopsProgressText + import (Driver)
+
+$ curl -s -m 30 "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/jobs" | jq -r '.jobs[] | "\(.name)\t\(.conclusion)\n" + ([.steps[] | "   \(.number). \(.name) -> \(.conclusion)"] | join("\n"))' 2>&1 | head -60
+e2e	failure
+   1. Set up job -> success
+   2. Run actions/checkout@v4 -> success
+   3. Garde staging -> success
+   4. Run actions/checkout@v4 -> success
+   5. Run actions/checkout@v4 -> success
+   6. Libérer disque -> success
+   7. Run actions/setup-java@v4 -> success
+   8. Run subosito/flutter-action@v2 -> success
+   9. Licences Android + NDK -> success
+   10. Keystore debug fixe (JKS, SHA-1 stable pour la clé Maps) -> success
+   11. Tests unitaires Flutter (preuve ISC — avant rm -rf src) -> success
+   12. Build APK (staging, debug, même job, pas d'upload) -> failure
+   13. Vérifier la signature des APK (apksigner) -> skipped
+   14. Activer KVM (règle udev officielle) -> skipped
+   15. Run actions/setup-node@v4 -> skipped
+   16. Installer opencode (version de la box) -> skipped
+   17. Valider le modèle (opencode/*-free) -> skipped
+   18. Tests du harnais (syntaxe + contrats) -> skipped
+   19. E2E multistop (opencode + API fallback) -> skipped
+   20. Publier le diagnostic texte (non chiffré, sans captures) -> success
+   21. Chiffrer les preuves -> success
+   22. Run actions/upload-artifact@v4 -> success
+   23. Publier le smoke log (masqué) -> success
+   24. Résumé (PASS/FAIL seulement) -> success
+   44. Post Run subosito/flutter-action@v2 -> success
+   45. Post Run actions/setup-java@v4 -> success
+   46. Post Run actions/checkout@v4 -> success
+   47. Post Run actions/checkout@v4 -> success
+   48. Post Run actions/checkout@v4 -> success
+   49. Complete job -> success
+
+$ curl -s -m 30 "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/artifacts" | jq -r '.artifacts[] | "\(.id)\t\(.name)\t\(.size_in_bytes)"' 2>&1
+15107422110	staging-e2e-evidence-encrypted	337
+
+$ for p in 1 2 3; do curl -s -m 30 "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/workflows/artemis-staging-e2e.yml/runs?per_page=100&page=$p" | jq -r '.workflow_runs[] | "\(.run_number)\t\(.id)\t\(.head_branch)\t\(.created_at)\t\(.conclusion)"'; done 2>&1 | sort -rn | head -40
+152	45801376130	feat/multistop-e2e-2026-11-15	2026-11-26T10:26:37Z	failure
+151	45782061889	feat/multistop-e2e-2026-11-15	2026-11-26T08:18:31Z	failure
+150	45778554984	feat/multistop-e2e-2026-11-15	2026-11-26T07:52:21Z	failure
+149	45768119261	feat/multistop-e2e-2026-11-15	2026-11-26T06:25:42Z	failure
+148	45766646463	feat/multistop-e2e-2026-11-15	2026-11-26T06:12:53Z	failure
+147	45766264029	feat/multistop-e2e-2026-11-15	2026-11-26T06:09:37Z	cancelled
+146	45765968957	fix/e2e-vision-chain	2026-11-26T06:07:00Z	cancelled
+145	45765834688	main	2026-11-26T06:05:47Z	cancelled
+144	45765767677	main	2026-11-26T06:05:13Z	cancelled
+143	45100696324	feat/multistop-rider-close-2026-11-20	2026-11-23T02:31:24Z	failure
+142	45093391102	feat/multistop-rider-close-2026-11-20	2026-11-23T01:14:06Z	failure
+141	45083876294	feat/multistop-rider-close-2026-11-20	2026-11-22T23:33:17Z	failure
+140	45071828941	feat/multistop-rider-close-2026-11-20	2026-11-22T21:23:20Z	cancelled
+139	45065480752	feat/multistop-rider-close-2026-11-20	2026-11-22T20:16:18Z	failure
+138	45059405073	main	2026-11-22T19:12:09Z	failure
+137	45058950773	feat/multistop-rider-close-2026-11-20	2026-11-22T19:07:30Z	failure
+136	45058861163	main	2026-11-22T19:06:36Z	failure
+135	45051973500	feat/multistop-rider-close-2026-11-20	2026-11-22T17:53:37Z	failure
+134	45046315983	feat/multistop-rider-close-2026-11-20	2026-11-22T16:53:15Z	failure
+133	45038707024	feat/multistop-rider-close-2026-11-20	2026-11-22T15:30:42Z	failure
+132	45015029022	feat/multistop-rider-close-2026-11-20	2026-11-22T10:58:58Z	failure
+131	45004400552	feat/multistop-rider-close-2026-11-20	2026-11-22T08:46:55Z	failure
+130	44927908295	feat/multistop-rider-close-2026-11-20	2026-11-21T17:03:12Z	failure
+129	44923374283	feat/multistop-rider-close-2026-11-20	2026-11-21T16:13:25Z	failure
+128	44918419310	feat/multistop-rider-close-2026-11-20	2026-11-21T15:17:53Z	failure
+127	44912533775	feat/multistop-rider-close-2026-11-20	2026-11-21T14:10:17Z	failure
+126	44892375725	feat/multistop-rider-close-2026-11-20	2026-11-21T10:02:09Z	failure
+125	44887614661	feat/multistop-rider-close-2026-11-20	2026-11-21T09:01:50Z	failure
+124	44882204874	feat/multistop-rider-close-2026-11-20	2026-11-21T07:52:02Z	failure
+123	44877615938	feat/multistop-rider-close-2026-11-20	2026-11-21T06:52:47Z	cancelled
+122	44872883866	feat/multistop-rider-close-2026-11-20	2026-11-21T05:52:27Z	failure
+121	44854550555	feat/multistop-rider-close-2026-11-20	2026-11-21T02:12:07Z	failure
+120	44850472063	feat/multistop-rider-close-2026-11-20	2026-11-21T01:29:31Z	cancelled
+119	44847216269	feat/multistop-rider-close-2026-11-20	2026-11-21T00:57:47Z	cancelled
+118	44845156244	feat/multistop-rider-close-2026-11-20	2026-11-21T00:38:24Z	cancelled
+117	44832994441	main	2026-11-20T22:56:35Z	failure
+116	44824339856	main	2026-11-20T21:53:58Z	failure
+115	44815323242	main	2026-11-20T20:52:55Z	failure
+114	44796823364	fix/real-places	2026-11-20T18:52:16Z	failure
+113	44775318762	fix/real-places	2026-11-20T16:38:00Z	failure
+
+$ cd /agent/repos/galass-emu-actions-pub && git log --oneline -5 && git status --short | head && git branch -a | head -20
+33f9ab9 Merge fix/real-places : harnais e2e multistop déterministe (F19) (#6)
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+
+$ curl -s -m 30 -o /tmp/joblog.txt -w '%{http_code}\n' "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/jobs/$(curl -s -m 30 'https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/jobs' | jq -r '.jobs[0].id')/logs"; wc -c /tmp/joblog.txt; head -5 /tmp/joblog.txt
+403
+190 /tmp/joblog.txt
+{
+  "message": "Must have admin rights to Repository.",
+  "documentation_url": "https://docs.github.com/rest/actions/workflow-jobs#download-job-logs-for-a-workflow-run",
+  "status": "403"
+}
+
+$ curl -s -m 30 "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/commits/81d149d4/check-runs" -H 'Accept: application/vnd.github+json' | jq -r '.check_runs[]? | "\(.name)\t\(.status)\t\(.conclusion)\n\(.output.title // "")\n\(.output.summary // "")"' 2>&1 | head -40
+e2e	completed	failure
+
+
+e2e	completed	failure
+
+
+e2e	completed	failure
+
+
+GitGuardian Security Checks	completed	success
+No secrets detected ✅
+**3** commits were scanned without uncovering any secrets.
+
+$ cd /agent/repos/galass-emu-actions-pub && timeout 60 git fetch origin feat/multistop-e2e-2026-11-15 2>&1 | tail -3; git log --oneline -3 FETCH_HEAD 2>&1
+From https://github.com/LordThiouk/galass-emu-actions-pub
+ * branch            feat/multistop-e2e-2026-11-15 -> FETCH_HEAD
+81d149d fix(ci): aligner Flutter sur 3.50.1 (goldens Driver, Dart 3.14.0)
+0cc7a5c chore: refresh harness artifact stamp
+308decf wip: vera - porter ISA harnais + fixer contrat ISC-EMU-1 content-desc
+
+$ cd /agent/repos/galass-emu-actions-pub && git show FETCH_HEAD:.github/workflows/artemis-staging-e2e.yml | sed -n '1,140p'
+name: artemis-staging-e2e
+
+on:
+  workflow_dispatch:
+    inputs:
+      rider_ref:
+        description: "Branche Galass_Rider"
+        default: "fix/multistop-close"
+        type: string
+      driver_ref:
+        description: "Branche Galass_Driver"
+        default: "fix/multistop-close"
+        type: string
+      model:
+        description: "Modèle CLI opencode (opencode/*-free, sans clé API)"
+        default: "opencode/deepseek-v4.1-flash-free"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: artemis-staging-e2e
+  cancel-in-progress: false
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      BASE: ${{ secrets.GALASS_STAGING_URL }}
+      RIDER_ID: "106"
+      DRIVER_ID: "23"
+      OUT: e2e-out
+      # Chaîne des échéances (vérifiée par e2e/tests) : watchdog 90 < step 100 < job 150.
+      # Le harnais rend son verdict partiel AVANT que le step soit coupé, et le step
+      # coupe AVANT que le job meure — les étapes `if: always()` (preuves) survivent.
+      RUN_DEADLINE_MIN: "90"
+      APK_RIDER: apk/rider/app-debug.apk
+
+$ cd /agent/repos/Galass_Rider && git status --short | head; git branch -a | head -20; git log --oneline -6; echo ====; git show c8ffd2e
+?? Galass_Rider-merge/
+* build/rider-apk-gradle
+  feat/multistop-e2e-2026-11-15
+  remotes/origin/build/rider-f429
+  remotes/origin/close/rider-f434b-max
+  remotes/origin/feat/multistop-e2e-2026-11-15
+c8ffd2e fix(build): align Rider Android toolchain to Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.3.0, Crashlytics 3.0.3)
+424957d verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+====
+commit c8ffd2e82470e7bfcfa1df301138e022dfdc5788
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 16:06:35 2026 +0000
+
+    fix(build): align Rider Android toolchain to Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.3.0, Crashlytics 3.0.3)
+    
+    Rider was on Gradle 9.1.0 / AGP 9.0.1 / Kotlin 2.2.20 / Crashlytics 3.0.7,
+    which Flutter 3.50.1 rejects (Artemis rider-apk-gradle red, unitaires verts).
+    Aligned to Driver's working toolchain (Gradle 8.14 + AGP 8.11.1 + Kotlin 2.3.0
+    + Crashlytics 3.0.3), google-services 4.3.15 unchanged, Firebase/Crashlytics kept.
+    No lib/ changes. No flutter build/gradlew run on box.
+
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..92992c4 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,12 +18,12 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+-    id("com.google.firebase.crashlytics") version("3.0.7") apply false
++    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+     // END: FlutterFire Configuration
+-    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
++    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+ }
+ 
+ include(":app")
+
