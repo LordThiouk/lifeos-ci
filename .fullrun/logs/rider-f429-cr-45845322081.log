@@ -2833,3 +2833,57 @@ done
 95-    Get.reset();
 96-  });
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_CACHE=/home/ubuntu/.pub-cache; export PATH=/tmp/flutter_sdk/flutter/bin:$PATH; timeout 120 flutter test test/unit/ride_map_live_location_test.dart 2>&1 | tail -30
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +3: ISC-F5-19 live driver location in ride no tracking or ping outside RIDE_ACTIVE/RIDE_RUNNING
+00:00 +4: ISC-F5-19 live driver location in ride stops tracking once the ride leaves ACTIVE/RUNNING
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   printX (package:galass_driver/core/helper/string_format_helper.dart:224:7)
+│ #1   RideDetailsController.startLiveLocationTracking (package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart:167:7)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 [ride] live location tracking started (ride=ride-live-19)
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   printX (package:galass_driver/core/helper/string_format_helper.dart:224:7)
+│ #1   RideDetailsController.pingRideLocation (package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart:217:7)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 [ride] location ping HTTP=200 ride=ride-live-19
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +5: ISC-F5-19 live driver location in ride location ping is throttled then sent after the interval
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   printX (package:galass_driver/core/helper/string_format_helper.dart:224:7)
+│ #1   RideDetailsController.pingRideLocation (package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart:217:7)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 [ride] location ping HTTP=200 ride=ride-live-19
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   printX (package:galass_driver/core/helper/string_format_helper.dart:224:7)
+│ #1   RideDetailsController.pingRideLocation (package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart:217:7)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 [ride] location ping HTTP=200 ride=ride-live-19
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:00 +6: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset
+00:00 +7: All tests passed!
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git status --short && echo "---" && git log --oneline -- test/unit/ride_map_live_location_test.dart | head
+M test/unit/ride_map_live_location_test.dart
+?? test/unit/diag_live_test.dart
+?? test/unit/min_live_test.dart
+?? test/unit/min_stream_test.dart
+---
+e741e31 wip(autosave): arbre de travail
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && rm -f test/unit/diag_live_test.dart test/unit/min_live_test.dart test/unit/min_stream_test.dart test/unit/tmp_probe_test.dart && git status --short
+M test/unit/ride_map_live_location_test.dart
+ D test/unit/tmp_probe_test.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git rm test/unit/tmp_probe_test.dart 2>&1 | tail -3
+rm 'test/unit/tmp_probe_test.dart'
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_CACHE=/home/ubuntu/.pub-cache; export PATH=/tmp/flutter_sdk/flutter/bin:$PATH; flutter analyze lib/data/controller/map/ride_map_controller.dart lib/data/controller/ride/ride_details/ride_details_controller.dart 2>&1 | tail -20
+Analyzing 2 items...                                            
+
+   info • 'package:flutter/material.dart' is deprecated and shouldn't be used. Use package:material_ui/material_ui.dart instead. This feature was deprecated after v3.47.0-0.0.pre. Try replacing the use of the deprecated member with the replacement • lib/data/controller/ride/ride_details/ride_details_controller.dart:3:1 • deprecated_member_use
+
+1 issue found. (ran in 10.5s)
+
