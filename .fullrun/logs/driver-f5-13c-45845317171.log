@@ -3830,3 +3830,38 @@ $ grep -n 'marker_car\|assets/icon' pubspec.yaml | head
 80:  image_path: "assets/icon/app_icon.png"
 94:    - assets/icon/
 
+$ bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts verify /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md; echo "verify exit=$?"
+✅ provenance ok
+verify exit=0
+
+$ grep -n "function tick\|already\|\[x\]" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts | head -30
+168:    lines[idx] = `${m[1]}[x]${m[3]}`;
+
+$ grep -n "tick" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts | head -40
+64:// ── human-tick : coche d'une claim `[scope:human — raison]` par le principal, signée ─────────────────────────
+65:// Une claim humaine (ratification, acte de Papa) n'est jamais cochée par un agent : `tick` la laisserait passer
+66:// pour une preuve outil. `human-tick` exige la clé ISA_STAMP_KEY dans l'ENVIRONNEMENT (secret du principal ou de
+93:export interface HumanTickPayload { v: 1; op: "human-tick"; isa: string; isc: string; claim: string; evidence: string; by: string; at: string }
+105:  const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(text, isaPath), isc, claim: lines[idx]!.trim(), evidence: m[1]!, by: m[2]!, at: m[3]! };
+118:  if (!cmd || !path) { console.log(`usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+121:  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+122:  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+127:  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+139:  } else if (cmd === "tick" || cmd === "untick") {
+142:    const optName = cmd === "tick" ? "evidence" : "reason";
+145:    t = t.replace(re, `$1[${cmd === "tick" ? "x" : " "}]$2`);
+148:    const sha = cmd === "tick" ? headShort(path) : null;
+149:    const line = cmd === "tick" ? `- ${isc}: ${note}${sha ? ` [@${sha}]` : ""}` : `- ${isc}: NON VALIDÉ — ${note}`;
+150:    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`; save(path, t, `${cmd === "tick" ? "evidence" : "reason"}:${isc}`);
+151:  } else if (cmd === "human-tick" || cmd === "human-verify") {
+165:    if (!isHumanScoped(lines, idx)) { console.error(`human-tick refusé : ${isc} n'est pas marquée [scope:human — raison] (sur sa ligne ou le titre ### de son bloc). Une claim de build se coche avec \`tick\` sur preuve outil.`); process.exit(HUMAN_TICK_EXIT.NOT_HUMAN); }
+170:    const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(t, path), isc, claim: lines[idx]!.trim(), evidence, by, at };
+174:    save(path, t, `human-tick:${isc}`);
+
+✱ Grep "mapController" in lib/data/controller/map/ride_map_controller.dart · 14 matches
+→ Read lib/data/controller/ride/ride_details/ride_details_controller.dart [offset=379, limit=80]
+
+$ grep -n 'RIDE_ACTIVE\|RIDE_RUNNING' lib/core/utils/app_status.dart
+19:  static const String RIDE_ACTIVE = '2';
+20:  static const String RIDE_RUNNING = '3';
+
