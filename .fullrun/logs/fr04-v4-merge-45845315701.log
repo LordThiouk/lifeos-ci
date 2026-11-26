@@ -2035,3 +2035,7 @@ plugins {
 include(":app")
 
 → Read android/app/build.gradle.kts
+
+← Write /tmp/check_toolchain.py
+Wrote file successfully.
+
