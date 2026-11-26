@@ -1947,3 +1947,7 @@ rc=0
 
 --stderr--
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && grep -rln "Run the application tests" vendor/ | head; echo ===; grep -rn "WarningsPrinter\|display-warnings\|NoOutput" vendor/nunomaduro/collision/src | head
+vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php
+===
+
