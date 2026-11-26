@@ -484,9 +484,13 @@ jobs:
           # Le bloc "agent" vient de la config opencode de référence (Silas,
           # Engineer, ForgeContext, ...), jamais de la config éphémère ci-dessus.
           # Seul ".agent" est remplacé : les permissions CI restent inchangées.
+          # Agents FullRun (TARGET_AGENT des fr-* + alias Vera/Serena) : mode
+          # "primary" forcé ; les entrées absentes sont créées depuis leur fiche.
+          fullrun_agents=(Silas Forge Engineer Designer Architect Anvil Max code-reviewer Vera Serena)
           bash "$TOOLS_DIR/opencode/merge-agents.sh" \
             "$TOOLS_DIR/opencode/config/opencode.json" \
-            "$RUNNER_TEMP/oc/opencode.json"
+            "$RUNNER_TEMP/oc/opencode.json" \
+            "${fullrun_agents[@]}"
           git -C target config user.name "Papa Diop"
           git -C target config user.email "76528706+LordThiouk@users.noreply.github.com"
           IFS=',' read -r -a repos <<< "$EXTRA_NORM"
