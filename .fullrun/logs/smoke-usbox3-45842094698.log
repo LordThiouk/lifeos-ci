@@ -3293,3 +3293,123 @@ dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-vps-startup-storm-710203
 dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-webview-payment-482910
 dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 hybrid-smoke-20260728
 
+$ date; echo "=====PS====="; ps aux | grep -i -E "opencode|claude|forge|flutter|gradle|codex" | grep -v grep | head -20; echo "=====OC PID====="; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc.pid 2>/dev/null; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/attempt.start 2>/dev/null; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc-tail 2>/dev/null
+Thu Nov 26 18:45:55 UTC 2026
+=====PS=====
+ubuntu      1577  0.6  1.1 11918432 181668 ?     Ssl  06:25   4:30 /exec-daemon/node /exec-daemon/index.js serve --port 26053 --pty-websocket-port 26054 --auth-token [REDACTED:hex64] --rg-path /exec-daemon/rg --pty-auth-token [REDACTED:hex64] --cloud-rules-enabled --computer-use-enabled --computer-use-lazy-init --mcp-apps-ui-disabled --agent-store-fuse-liveness-kill --agent-store-fuse-liveness-kill-hung-only --agent-store-fuse-liveness-relaunch-grace --agent-store-fuse-liveness-kill-chain-cap --fuse-dispatch-stats --fuse-dispatch-stats-interval-ms 15000 --trace-endpoint https://api2.cursor.sh --trace-auth-token [REDACTED:jwt] --trace-attributes runner_cluster=us4,anyrun_cluster=us4,tenant_id=df6ddb72a76281f10b4c,pod_name=exec-daemon,bc_id=bc-01a21635-25cb-7ae8-b0a3-c6995247e410 --ghost-mode false --browser-enabled --computer-use-enabled --record-screen-enabled --generate-image-enabled --origin-cli-enabled --mcp-meta-tool-enabled --mcp-meta-tool-slim-descriptors --mcp-input-schema-json --link-shared-payment-token-log-redaction --strip-agent-skill-content --filter-model-disabled-skills --tmux-service-enabled --nested-claude-hook-output-normalization-enabled --command-hook-stdin-transport-enabled --git-auth-include-file --batched-remote-cleanup --mcp-config {"mcpServers":{"Aikido":{"command":"npx","args":["-y","@aikidosec/mcp"],"env":{"AIKIDO_API_KEY":"your-api-key-here"}},"Github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github@2025.4.8"]},"Context7":{"command":"npx","args":["-y","@upstash/context7-mcp@2.1.4"]},"Memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory@2026.1.26"]},"Playwright":{"command":"npx","args":["-y","@playwright/mcp@0.0.69","--extension"]},"Sequential-thinking":{"command":"npx","args":["-y","@modelcontextprotocol/server-sequential-thinking@2025.12.18"]},"Claude-mem-local":{"command":"npx","args":["-y","claude-mem","mcp"]},"lifeos":{"command":"bash","args":["-c","exec npx -y mcp-remote https://lifeos-mcp.pirlothiouk.workers.dev/mcp --transport http-only --header \"Authorization:Bearer $(cat /home/box/.secrets/lifeos_mcp_token)\""]},"Firebase":{"command":"npx","args":["-y","firebase-tools@latest","mcp"]},"Laravel-boost":{"command":"php","args":["artisan","boost:mcp"]},"rea":{"command":"/opt/node22/bin/rea","args":["--mcp"],"env":{"PATH":"/opt/node22/bin:/usr/local/bin:/usr/bin:/bin","GHIDRA_INSTALL_DIR":"/opt/ghidra","JAVA_HOME":"/usr/lib/jvm/java-21-openjdk-amd64"}},"Shadcn":{"command":"npx","args":["shadcn@latest","mcp"]},"Firebase (plugin 3777)":{"command":"npx","args":["-y","firebase-tools@latest","mcp","--dir","."],"env":{"IS_FIREBASE_MCP":"true"}},"Context7 (plugin 247344)":{"command":"npx","args":["-y","@upstash/context7-mcp"]}}} --gh-api-forwarder-on-demand --agent-store-fuse-liveness-kill --agent-store-fuse-liveness-kill-hung-only --agent-store-fuse-liveness-relaunch-grace --agent-store-fuse-liveness-kill-chain-cap
+ubuntu      4259  0.0  1.0 1449908 172128 ?      Sl   06:33   0:06 npm exec claude-mem mcp
+ubuntu      4299  0.0  0.0   2804  1940 ?        S    06:33   0:00 sh -c 'claude-mem' mcp
+ubuntu      4300  0.0  0.1 1024852 31352 ?       Sl   06:33   0:00 node /home/ubuntu/.npm/_npx/2fdb3b6849710270/node_modules/.bin/claude-mem mcp
+ubuntu      4307  0.0  0.2 11586564 46284 ?      Sl   06:33   0:01 /exec-daemon/node /home/ubuntu/.npm/_npx/2fdb3b6849710270/node_modules/claude-mem/plugin/scripts/mcp-server.cjs
+ubuntu     57172  0.1  0.7 6901836 117776 ?      Ssl  15:04   0:24 /home/ubuntu/.bun/bin/bun --no-install /home/ubuntu/.npm/_npx/2fdb3b6849710270/node_modules/claude-mem/plugin/scripts/worker-service.cjs --daemon
+ubuntu    280477  0.0  0.0   7480  3840 ?        S    18:42   0:00 bash /opt/lifeos-ci-tools/opencode/silence-watch.sh --log /home/ubuntu/actions-runner/_work/_temp/oc-agent/run-flint-40b-free.log --pid-file /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc.pid --flag /home/ubuntu/actions-runner/_work/_temp/oc-agent/silence.flag --live-log /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log --sec 180 --poll 15 --grace 30
+ubuntu    280478  0.0  0.0   6124  2128 ?        S    18:42   0:00 timeout 2857 opencode run --model opencode/flint-40b-free --agent Forge Lis /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md et exécute-le complètement.
+ubuntu    280479  0.0  0.0   5700  2104 ?        S    18:42   0:00 tee -a /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log
+ubuntu    280482  8.3  2.7 11718736 456828 ?     Sl   18:42   0:15 opencode run --model opencode/flint-40b-free --agent Forge Lis /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md et exécute-le complètement.
+=====OC PID=====
+280478
+
+$ tail -60 /home/ubuntu/actions-runner/_work/_temp/oc-agent/run-flint-40b-free.log; echo "=====OPENCODE LOG TAIL====="; tail -40 /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log
+| `android/gradle/wrapper/gradle-wrapper.properties` | Gradle 9.1.0 | Gradle 8.14 |
+| `android/settings.gradle.kts` | AGP 9.0.1, Kotlin 2.2.20, Crashlytics 3.0.7 | AGP 8.11.1, Kotlin 2.3.0, Crashlytics 3.0.3 |
+| `android/gradle.properties` | jvmargs 6g/1g, daemon/parallel/configureondemand off, jetifier off, r8.proguard disallowed | Driver-stable flags: jvmargs 8G/4G/512m+UTF-8, caching/parallel/daemon/configureondemand/vfs.watch on, `android.enableJetifier=false` conservé |
+
+Non modifié : `android/app/build.gradle.kts`, `android/build.gradle.kts`, `lib/`, `.fullrun`, goldens.
+
+## Vérification
+
+- `git diff --stat`: 3 files changed, 16 insertions(+), 11 deletions(-).
+- **Build/test local non exécuté** : `flutter build` / `gradlew` interdits sur la box (politique build). Validation attendue côté CI Artemis (Build APK Rider).
+
+## Risques / notes
+
+- Downgrade AGP 9.x -> 8.11.1 + Gradle 9.1 -> 8.14 : attendu compatible Flutter 3.50.1 (réf Driver). À confirmer par CI.
+- `android.enableJetifier=false` conservé (était déjà false sur Rider) ; Driver est à `true` mais le changement n'est pas nécessaire ici.
+=====FULLRUN LOGS IN REPO=====
+
+$ cat /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ 2>/dev/null | head; ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/ 2>/dev/null; echo "====="; ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ 2>/dev/null | tail -20
+total 12
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 18:20 .
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 18:20 ..
+dr-xr-xr-x 46 ubuntu ubuntu 4096 Nov 26 18:20 WORK
+=====
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 20261006-galass-regression-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 20261006-galass-rider-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 amber-ledger-wire-inputs
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 conveyor-p3-stage-runner
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 conveyor-p4-approve
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 cursor-algo-follow-test-20260728
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-auth-login-register-gate-110701
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-dashboard-499-loop-710204
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-francisation-sn-840301
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-ios-recaptcha-crash-507205
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 18:20 galass-phone-auth-876543
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-push-notifications-619402
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-ride-payment-post-739201
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-rider-security-complete-120712
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-rider-stable-final-110711
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-rider-store-submission-20260703
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-version-release-docs-180716
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-vps-startup-storm-710203
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-webview-payment-482910
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 hybrid-smoke-20260728
+
+$ date; echo "=====PS====="; ps aux | grep -i -E "opencode|claude|forge|flutter|gradle|codex" | grep -v grep | head -20; echo "=====OC PID====="; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc.pid 2>/dev/null; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/attempt.start 2>/dev/null; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc-tail 2>/dev/null
+Thu Nov 26 18:45:55 UTC 2026
+=====PS=====
+ubuntu      1577  0.6  1.1 11918432 181668 ?     Ssl  06:25   4:30 /exec-daemon/node /exec-daemon/index.js serve --port 26053 --pty-websocket-port 26054 --auth-token [REDACTED:hex64] --rg-path /exec-daemon/rg --pty-auth-token [REDACTED:hex64] --cloud-rules-enabled --computer-use-enabled --computer-use-lazy-init --mcp-apps-ui-disabled --agent-store-fuse-liveness-kill --agent-store-fuse-liveness-kill-hung-only --agent-store-fuse-liveness-relaunch-grace --agent-store-fuse-liveness-kill-chain-cap --fuse-dispatch-stats --fuse-dispatch-stats-interval-ms 15000 --trace-endpoint https://api2.cursor.sh --trace-auth-token [REDACTED:jwt] --trace-attributes runner_cluster=us4,anyrun_cluster=us4,tenant_id=df6ddb72a76281f10b4c,pod_name=exec-daemon,bc_id=bc-01a21635-25cb-7ae8-b0a3-c6995247e410 --ghost-mode false --browser-enabled --computer-use-enabled --record-screen-enabled --generate-image-enabled --origin-cli-enabled --mcp-meta-tool-enabled --mcp-meta-tool-slim-descriptors --mcp-input-schema-json --link-shared-payment-token-log-redaction --strip-agent-skill-content --filter-model-disabled-skills --tmux-service-enabled --nested-claude-hook-output-normalization-enabled --command-hook-stdin-transport-enabled --git-auth-include-file --batched-remote-cleanup --mcp-config {"mcpServers":{"Aikido":{"command":"npx","args":["-y","@aikidosec/mcp"],"env":{"AIKIDO_API_KEY":"your-api-key-here"}},"Github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github@2025.4.8"]},"Context7":{"command":"npx","args":["-y","@upstash/context7-mcp@2.1.4"]},"Memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory@2026.1.26"]},"Playwright":{"command":"npx","args":["-y","@playwright/mcp@0.0.69","--extension"]},"Sequential-thinking":{"command":"npx","args":["-y","@modelcontextprotocol/server-sequential-thinking@2025.12.18"]},"Claude-mem-local":{"command":"npx","args":["-y","claude-mem","mcp"]},"lifeos":{"command":"bash","args":["-c","exec npx -y mcp-remote https://lifeos-mcp.pirlothiouk.workers.dev/mcp --transport http-only --header \"Authorization:Bearer $(cat /home/box/.secrets/lifeos_mcp_token)\""]},"Firebase":{"command":"npx","args":["-y","firebase-tools@latest","mcp"]},"Laravel-boost":{"command":"php","args":["artisan","boost:mcp"]},"rea":{"command":"/opt/node22/bin/rea","args":["--mcp"],"env":{"PATH":"/opt/node22/bin:/usr/local/bin:/usr/bin:/bin","GHIDRA_INSTALL_DIR":"/opt/ghidra","JAVA_HOME":"/usr/lib/jvm/java-21-openjdk-amd64"}},"Shadcn":{"command":"npx","args":["shadcn@latest","mcp"]},"Firebase (plugin 3777)":{"command":"npx","args":["-y","firebase-tools@latest","mcp","--dir","."],"env":{"IS_FIREBASE_MCP":"true"}},"Context7 (plugin 247344)":{"command":"npx","args":["-y","@upstash/context7-mcp"]}}} --gh-api-forwarder-on-demand --agent-store-fuse-liveness-kill --agent-store-fuse-liveness-kill-hung-only --agent-store-fuse-liveness-relaunch-grace --agent-store-fuse-liveness-kill-chain-cap
+ubuntu      4259  0.0  1.0 1449908 172128 ?      Sl   06:33   0:06 npm exec claude-mem mcp
+ubuntu      4299  0.0  0.0   2804  1940 ?        S    06:33   0:00 sh -c 'claude-mem' mcp
+ubuntu      4300  0.0  0.1 1024852 31352 ?       Sl   06:33   0:00 node /home/ubuntu/.npm/_npx/2fdb3b6849710270/node_modules/.bin/claude-mem mcp
+ubuntu      4307  0.0  0.2 11586564 46284 ?      Sl   06:33   0:01 /exec-daemon/node /home/ubuntu/.npm/_npx/2fdb3b6849710270/node_modules/claude-mem/plugin/scripts/mcp-server.cjs
+ubuntu     57172  0.1  0.7 6901836 117776 ?      Ssl  15:04   0:24 /home/ubuntu/.bun/bin/bun --no-install /home/ubuntu/.npm/_npx/2fdb3b6849710270/node_modules/claude-mem/plugin/scripts/worker-service.cjs --daemon
+ubuntu    280477  0.0  0.0   7480  3840 ?        S    18:42   0:00 bash /opt/lifeos-ci-tools/opencode/silence-watch.sh --log /home/ubuntu/actions-runner/_work/_temp/oc-agent/run-flint-40b-free.log --pid-file /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc.pid --flag /home/ubuntu/actions-runner/_work/_temp/oc-agent/silence.flag --live-log /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log --sec 180 --poll 15 --grace 30
+ubuntu    280478  0.0  0.0   6124  2128 ?        S    18:42   0:00 timeout 2857 opencode run --model opencode/flint-40b-free --agent Forge Lis /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md et exécute-le complètement.
+ubuntu    280479  0.0  0.0   5700  2104 ?        S    18:42   0:00 tee -a /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log
+ubuntu    280482  8.3  2.7 11718736 456828 ?     Sl   18:42   0:15 opencode run --model opencode/flint-40b-free --agent Forge Lis /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md et exécute-le complètement.
+=====OC PID=====
+280478
+
+=====OPENCODE LOG TAIL=====
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 18:20 ..
+dr-xr-xr-x 46 ubuntu ubuntu 4096 Nov 26 18:20 WORK
+=====
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 20261006-galass-regression-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 20261006-galass-rider-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 amber-ledger-wire-inputs
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 conveyor-p3-stage-runner
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 conveyor-p4-approve
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 cursor-algo-follow-test-20260728
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-auth-login-register-gate-110701
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-dashboard-499-loop-710204
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-francisation-sn-840301
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-ios-recaptcha-crash-507205
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 18:20 galass-phone-auth-876543
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-push-notifications-619402
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-ride-payment-post-739201
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-rider-security-complete-120712
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-rider-stable-final-110711
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-rider-store-submission-20260703
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-version-release-docs-180716
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-vps-startup-storm-710203
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-webview-payment-482910
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 hybrid-smoke-20260728
+
+$ date; echo "=====PS====="; ps aux | grep -i -E "opencode|claude|forge|flutter|gradle|codex" | grep -v grep | head -20; echo "=====OC PID====="; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc.pid 2>/dev/null; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/attempt.start 2>/dev/null; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc-tail 2>/dev/null
+Thu Nov 26 18:45:55 UTC 2026
+=====PS=====
+ubuntu      1577  0.6  1.1 11918432 181668 ?     Ssl  06:25   4:30 /exec-daemon/node /exec-daemon/index.js serve --port 26053 --pty-websocket-port 26054 --auth-token [REDACTED:hex64] --rg-path /exec-daemon/rg --pty-auth-token [REDACTED:hex64] --cloud-rules-enabled --computer-use-enabled --computer-use-lazy-init --mcp-apps-ui-disabled --agent-store-fuse-liveness-kill --agent-store-fuse-liveness-kill-hung-only --agent-store-fuse-liveness-relaunch-grace --agent-store-fuse-liveness-kill-chain-cap --fuse-dispatch-stats --fuse-dispatch-stats-interval-ms 15000 --trace-endpoint https://api2.cursor.sh --trace-auth-token [REDACTED:jwt] --trace-attributes runner_cluster=us4,anyrun_cluster=us4,tenant_id=df6ddb72a76281f10b4c,pod_name=exec-daemon,bc_id=bc-01a21635-25cb-7ae8-b0a3-c6995247e410 --ghost-mode false --browser-enabled --computer-use-enabled --record-screen-enabled --generate-image-enabled --origin-cli-enabled --mcp-meta-tool-enabled --mcp-meta-tool-slim-descriptors --mcp-input-schema-json --link-shared-payment-token-log-redaction --strip-agent-skill-content --filter-model-disabled-skills --tmux-service-enabled --nested-claude-hook-output-normalization-enabled --command-hook-stdin-transport-enabled --git-auth-include-file --batched-remote-cleanup --mcp-config {"mcpServers":{"Aikido":{"command":"npx","args":["-y","@aikidosec/mcp"],"env":{"AIKIDO_API_KEY":"your-api-key-here"}},"Github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github@2025.4.8"]},"Context7":{"command":"npx","args":["-y","@upstash/context7-mcp@2.1.4"]},"Memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory@2026.1.26"]},"Playwright":{"command":"npx","args":["-y","@playwright/mcp@0.0.69","--extension"]},"Sequential-thinking":{"command":"npx","args":["-y","@modelcontextprotocol/server-sequential-thinking@2025.12.18"]},"Claude-mem-local":{"command":"npx","args":["-y","claude-mem","mcp"]},"lifeos":{"command":"bash","args":["-c","exec npx -y mcp-remote https://lifeos-mcp.pirlothiouk.workers.dev/mcp --transport http-only --header \"Authorization:Bearer $(cat /home/box/.secrets/lifeos_mcp_token)\""]},"Firebase":{"command":"npx","args":["-y","firebase-tools@latest","mcp"]},"Laravel-boost":{"command":"php","args":["artisan","boost:mcp"]},"rea":{"command":"/opt/node22/bin/rea","args":["--mcp"],"env":{"PATH":"/opt/node22/bin:/usr/local/bin:/usr/bin:/bin","GHIDRA_INSTALL_DIR":"/opt/ghidra","JAVA_HOME":"/usr/lib/jvm/java-21-openjdk-amd64"}},"Shadcn":{"command":"npx","args":["shadcn@latest","mcp"]},"Firebase (plugin 3777)":{"command":"npx","args":["-y","firebase-tools@latest","mcp","--dir","."],"env":{"IS_FIREBASE_MCP":"true"}},"Context7 (plugin 247344)":{"command":"npx","args":["-y","@upstash/context7-mcp"]}}} --gh-api-forwarder-on-demand --agent-store-fuse-liveness-kill --agent-store-fuse-liveness-kill-hung-only --agent-store-fuse-liveness-relaunch-grace --agent-store-fuse-liveness-kill-chain-cap
+ubuntu      4259  0.0  1.0 1449908 172128 ?      Sl   06:33   0:06 npm exec claude-mem mcp
+ubuntu      4299  0.0  0.0   2804  1940 ?        S    06:33   0:00 sh -c 'claude-mem' mcp
+ubuntu      4300  0.0  0.1 1024852 31352 ?       Sl   06:33   0:00 node /home/ubuntu/.npm/_npx/2fdb3b6849710270/node_modules/.bin/claude-mem mcp
+ubuntu      4307  0.0  0.2 11586564 46284 ?      Sl   06:33   0:01 /exec-daemon/node /home/ubuntu/.npm/_npx/2fdb3b6849710270/node_modules/claude-mem/plugin/scripts/mcp-server.cjs
+ubuntu     57172  0.1  0.7 6901836 117776 ?      Ssl  15:04   0:24 /home/ubuntu/.bun/bin/bun --no-install /home/ubuntu/.npm/_npx/2fdb3b6849710270/node_modules/claude-mem/plugin/scripts/worker-service.cjs --daemon
+ubuntu    280477  0.0  0.0   7480  3840 ?        S    18:42   0:00 bash /opt/lifeos-ci-tools/opencode/silence-watch.sh --log /home/ubuntu/actions-runner/_work/_temp/oc-agent/run-flint-40b-free.log --pid-file /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc.pid --flag /home/ubuntu/actions-runner/_work/_temp/oc-agent/silence.flag --live-log /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log --sec 180 --poll 15 --grace 30
+ubuntu    280478  0.0  0.0   6124  2128 ?        S    18:42   0:00 timeout 2857 opencode run --model opencode/flint-40b-free --agent Forge Lis /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md et exécute-le complètement.
+ubuntu    280479  0.0  0.0   5700  2104 ?        S    18:42   0:00 tee -a /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log
+ubuntu    280482  8.3  2.7 11718736 456828 ?     Sl   18:42   0:15 opencode run --model opencode/flint-40b-free --agent Forge Lis /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md et exécute-le complètement.
+=====OC PID=====
+280478
+
+
+`/tmp/task_done.md` existe déjà et documente le fix committé à 18:42. Je vérifie l'état actuel : temps, processus en cours, et logs de run.
