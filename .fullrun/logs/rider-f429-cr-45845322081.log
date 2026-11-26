@@ -3736,3 +3736,23 @@ $ find / -maxdepth 4 -name 'flutter_tools' -path '*flutter*' 2>/dev/null | head;
 /opt/flutter/packages/flutter_tools
 /tmp/flutter/packages/flutter_tools
 
+$ /tmp/flutter/bin/flutter --version 2>&1 | head -3; ls /tmp/flutter/bin | head
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ae9b586f34 (8 days ago) • 2026-11-18 17:01:07 -0800
+Engine • hash 51379e6df48ea8ee7205623b90fe66491cad8df3 (revision 4d35714800) (8 days ago) • 2026-11-18 01:50:07.000Z
+cache
+dart
+dart.bat
+flutter
+flutter-dev
+flutter-dev.bat
+flutter.bat
+internal
+
+$ git status --short && echo CLEAN_CHECK_DONE
+CLEAN_CHECK_DONE
+
+$ /tmp/flutter/bin/dart --version
+Dart SDK version: 3.14.0 (stable) (Wed Nov 4 16:28:39 2026 -0800) on "linux_x64"
+
+**Flutter 3.50.1** trouvé dans `/tmp/flutter`. Je vérifie l'état du dépôt puis relance le test avec ce SDK.
