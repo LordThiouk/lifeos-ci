@@ -1618,3 +1618,202 @@ lib/data/controller/ride/ride_details/ride_details_controller.dart:150:  /// `dr
 lib/data/controller/ride/ride_details/ride_details_controller.dart:197:  /// Sends `driver/location-update` for the current ride, throttled by
 lib/core/utils/url_container.dart:74:  static const String driverLocationUpdate = 'driver/location-update';
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git diff --stat -- lib/data/controller/map/ride_map_controller.dart lib/data/controller/ride/ride_details/ride_details_controller.dart test/unit/ride_map_live_location_test.dart
+lib/data/controller/map/ride_map_controller.dart   | 109 +++++++++------------
+ .../ride/ride_details/ride_details_controller.dart |  41 +++++---
+ test/unit/ride_map_live_location_test.dart         |  38 +++----
+ 3 files changed, 96 insertions(+), 92 deletions(-)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git diff --unified=0 -- lib/data/controller/map/ride_map_controller.dart lib/data/controller/ride/ride_details/ride_details_controller.dart test/unit/ride_map_live_location_test.dart | head -120
+diff --git a/lib/data/controller/map/ride_map_controller.dart b/lib/data/controller/map/ride_map_controller.dart
+index f6839f9..faef662 100644
+--- a/lib/data/controller/map/ride_map_controller.dart
++++ b/lib/data/controller/map/ride_map_controller.dart
+@@ -113,4 +113,2 @@ class RideMapController extends GetxController {
+-          (stop) => RideStopModel.isValidCoordinates(
+-            stop.latitude,
+-            stop.longitude,
+-          ),
++          (stop) =>
++              RideStopModel.isValidCoordinates(stop.latitude, stop.longitude),
+@@ -162 +160,5 @@ class RideMapController extends GetxController {
+-    if ([AppStatus.RIDE_RUNNING, AppStatus.RIDE_ACTIVE, AppStatus.RIDE_COMPLETED].contains(rideStatus)) {
++    if ([
++      AppStatus.RIDE_RUNNING,
++      AppStatus.RIDE_ACTIVE,
++      AppStatus.RIDE_COMPLETED,
++    ].contains(rideStatus)) {
+@@ -228,3 +230 @@ class RideMapController extends GetxController {
+-    PolylinePoints polylinePoints = PolylinePoints(
+-      networkClient: polylineRepo,
+-    );
++    PolylinePoints polylinePoints = PolylinePoints(networkClient: polylineRepo);
+@@ -254 +254,2 @@ class RideMapController extends GetxController {
+-    RoutesApiResponse response = await polylinePoints.getRouteBetweenCoordinatesV2(request: request);
++    RoutesApiResponse response = await polylinePoints
++        .getRouteBetweenCoordinatesV2(request: request);
+@@ -317,23 +318,20 @@ class RideMapController extends GetxController {
+-              (entry) => Marker(
+-                markerId: MarkerId('stop_${entry.key}_${entry.value.latitude}'),
+-                position: entry.value,
+-                icon: destinationIcon == null
+-                    ? BitmapDescriptor.defaultMarker
+-                    : BitmapDescriptor.bytes(
+-                        destinationIcon!,
+-                        height: 40,
+-                        width: 40,
+-                        bitmapScaling: MapBitmapScaling.auto,
+-                      ),
+-                onTap: () {
+-                  mapController?.animateCamera(
+-                    CameraUpdate.newCameraPosition(
+-                      CameraPosition(
+-                        target: entry.value,
+-                        zoom: 20,
+-                      ),
+-                    ),
+-                  );
+-                },
+-              ),
+-            ),
++          (entry) => Marker(
++            markerId: MarkerId('stop_${entry.key}_${entry.value.latitude}'),
++            position: entry.value,
++            icon: destinationIcon == null
++                ? BitmapDescriptor.defaultMarker
++                : BitmapDescriptor.bytes(
++                    destinationIcon!,
++                    height: 40,
++                    width: 40,
++                    bitmapScaling: MapBitmapScaling.auto,
++                  ),
++            onTap: () {
++              mapController?.animateCamera(
++                CameraUpdate.newCameraPosition(
++                  CameraPosition(target: entry.value, zoom: 20),
++                ),
++              );
++            },
++          ),
++        ),
+@@ -397,4 +395 @@ class RideMapController extends GetxController {
+-  static bool _hasStopMarkerAt(
+-    List<RideStopProgress> stops,
+-    LatLng position,
+-  ) {
++  static bool _hasStopMarkerAt(List<RideStopProgress> stops, LatLng position) {
+@@ -410,5 +405 @@ class RideMapController extends GetxController {
+-    return [
+-      pickupLatLng,
+-      ...intermediateStopLatLngs,
+-      destinationLatLng,
+-    ];
++    return [pickupLatLng, ...intermediateStopLatLngs, destinationLatLng];
+@@ -455,10 +446,2 @@ class RideMapController extends GetxController {
+-      canvas.drawCircle(
+-        center,
+-        46,
+-        ui.Paint()..color = MyColor.colorWhite,
+-      );
+-      canvas.drawCircle(
+-        center,
+-        40,
+-        ui.Paint()..color = fillColor,
+-      );
++      canvas.drawCircle(center, 46, ui.Paint()..color = MyColor.colorWhite);
++      canvas.drawCircle(center, 40, ui.Paint()..color = fillColor);
+@@ -480,4 +463 @@ class RideMapController extends GetxController {
+-      final image = await picture.toImage(
+-        dimension.toInt(),
+-        dimension.toInt(),
+-      );
++      final image = await picture.toImage(dimension.toInt(), dimension.toInt());
+@@ -537 +517,2 @@ class RideMapController extends GetxController {
+-    return details.ride.status == AppStatus.RIDE_RUNNING && !details.isRideStart;
++    return details.ride.status == AppStatus.RIDE_RUNNING &&
++        !details.isRideStart;
+@@ -555,4 +536,12 @@ class RideMapController extends GetxController {
+-      final swLat = driver.latitude < pickupLatLng.latitude ? driver.latitude : pickupLatLng.latitude;
+-      final neLat = driver.latitude > pickupLatLng.latitude ? driver.latitude : pickupLatLng.latitude;
+-      final swLng = driver.longitude < pickupLatLng.longitude ? driver.longitude : pickupLatLng.longitude;
+-      final neLng = driver.longitude > pickupLatLng.longitude ? driver.longitude : pickupLatLng.longitude;
++      final swLat = driver.latitude < pickupLatLng.latitude
++          ? driver.latitude
++          : pickupLatLng.latitude;
++      final neLat = driver.latitude > pickupLatLng.latitude
++          ? driver.latitude
++          : pickupLatLng.latitude;
++      final swLng = driver.longitude < pickupLatLng.longitude
++          ? driver.longitude
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git diff --unified=3 -- test/unit/ride_map_live_location_test.dart | tail -120
+diff --git a/test/unit/ride_map_live_location_test.dart b/test/unit/ride_map_live_location_test.dart
+index 341f13d..3a851ef 100644
+--- a/test/unit/ride_map_live_location_test.dart
++++ b/test/unit/ride_map_live_location_test.dart
+@@ -122,23 +122,27 @@ void main() {
+       expect(carMarkers.single.position, second);
+     });
+ 
+-    test('RIDE_ACTIVE: emits driver/location-update from the ride context',
+-        () async {
+-      details.ride = _ride(AppStatus.RIDE_ACTIVE);
+-      details.startLiveLocationTracking();
+-
+-      const first = LatLng(14.7000, -17.4500);
+-      positions.add(first);
+-      await pumpEventQueue();
+-
+-      final pings = apiClient.locationPings;
+-      expect(pings, hasLength(1));
+-      expect(pings.single.uri,
+-          '${UrlContainer.baseUrl}${UrlContainer.driverLocationUpdate}');
+-      expect(pings.single.params, isNotNull);
+-      expect(pings.single.params!['current_lat'], '${first.latitude}');
+-      expect(pings.single.params!['current_lot'], '${first.longitude}');
+-    });
++    test(
++      'RIDE_ACTIVE: emits driver/location-update from the ride context',
++      () async {
++        details.ride = _ride(AppStatus.RIDE_ACTIVE);
++        details.startLiveLocationTracking();
++
++        const first = LatLng(14.7000, -17.4500);
++        positions.add(first);
++        await pumpEventQueue();
++
++        final pings = apiClient.locationPings;
++        expect(pings, hasLength(1));
++        expect(
++          pings.single.uri,
++          '${UrlContainer.baseUrl}${UrlContainer.driverLocationUpdate}',
++        );
++        expect(pings.single.params, isNotNull);
++        expect(pings.single.params!['current_lat'], '${first.latitude}');
++        expect(pings.single.params!['current_lot'], '${first.longitude}');
++      },
++    );
+ 
+     test('RIDE_RUNNING: camera follows the live driver position', () async {
+       final cameraUpdates = <CameraUpdate>[];
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && python3 - <<'PY'
+# simulate ISATool tick regex
+import re, sys
+path='MEMORY/WORK/20261006-galass-driver-multistop/ISA.md'
+text=open(path).read()
+isc='ISC-F5-19'
+re_pat = re.compile(r'^(\s*- )\[[ xX]\]( (?:\*\*)?' + re.escape(isc) + r'\b)', re.M)
+m=re_pat.search(text)
+print('found', bool(m))
+if m:
+    print(m.group(0)[:120])
+PY
+
+found True
+
+- [ ] ISC-F5-19
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && bun /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts tick MEMORY/WORK/20261006-galass-driver-multistop/ISA.md --isc ISC-F5-19 --evidence "probe" 2>&1 | tail -20
+--evidence trop faible (5 car.) : cite la commande et sa sortie pour une coche, la constatation de revue pour un décochage.
+
