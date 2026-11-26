@@ -12,11 +12,13 @@ TESTS=(
   agent-run-wippush-test.sh
   agent-run-silence-test.sh
   silence-watch-test.sh
+  wstunnel-up-test.sh
   agents-load-test.sh
   allowed-repos-test.sh
   allowed-repos-lifeos-test.sh
   autosave-test.sh
   critical-state-isolation-test.sh
+  runner-slot-test.sh
   critical-frozen-tools-test.sh
   critical-git-isolation-test.sh
   internals-test.sh

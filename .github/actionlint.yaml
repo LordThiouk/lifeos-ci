@@ -1,0 +1,4 @@
+# Labels custom du runner US (self-hosted) — sinon actionlint refuse us-box.
+self-hosted-runner:
+  labels:
+    - us-box

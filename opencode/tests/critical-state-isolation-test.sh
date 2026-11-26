@@ -68,7 +68,24 @@ assert "lifeos-base.txt" not in raw, "ancien état modifiable lifeos-base.txt en
 assert job["outputs"]["status"] == "${{ steps.oc.outputs.status }}"
 assert job["outputs"]["model"] == "${{ steps.oc.outputs.model }}"
 assert job["outputs"]["head_sha"] == "${{ steps.push.outputs.head_sha }}"
-print("OK   opencode isolé ; statut, modèle, SHA et dépôts recalculés hors de sa portée")
+
+# Isolation multi-runner (jusqu'à 3) : STATE/TOOLS/fullrun dérivés de RUNNER_NAME,
+# pas de chemins /opt partagés ni /tmp/task_done.md global.
+assert 'export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"' in raw, \
+    "STATE_DIR non isolé par RUNNER_SLOT"
+assert 'export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"' in raw, \
+    "TOOLS_DIR non isolé par RUNNER_SLOT"
+assert 'export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"' in raw, \
+    "FULLRUN_TOOLS non isolé par RUNNER_SLOT"
+assert "/tmp/task_done.md" not in raw, "task_done encore sur /tmp partagé"
+assert 'RUNNER_TEMP/task_done.md' in raw, "task_done doit vivre sous RUNNER_TEMP"
+assert "GITHUB_WORKSPACE/ci/opencode/runner-slot.sh" not in raw, \
+    "ne pas sourcer runner-slot depuis ci/ (modifiable par l'agent)"
+# Pas de défauts job-level absolus partagés (remplacés par le slot).
+job_env = job.get("env") or {}
+assert job_env.get("STATE_DIR") in (None, ""), "STATE_DIR job-level partagé interdit"
+assert job_env.get("TOOLS_DIR") in (None, ""), "TOOLS_DIR job-level partagé interdit"
+print("OK   opencode isolé ; statut, modèle, SHA et dépôts recalculés hors de sa portée ; slots runner")
 PY
 
 # Preuve fonctionnelle : un enfant lancé avec env -i ne voit aucun fichier de
