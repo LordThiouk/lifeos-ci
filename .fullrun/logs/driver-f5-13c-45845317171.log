@@ -1408,3 +1408,12 @@ $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '90,
   void didPushNext() {
     // Another route covers this screen; stop heavy animations.
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && rm -f test/unit/tmp_probe_test.dart && git status --short
+D test/unit/tmp_probe_test.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "driver_location" lib/data/controller/map/ride_map_controller.dart | head -10
+279:          markerId: const MarkerId('driver_location'),
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "marker_car.png\|markerCar" lib/core/utils/my_icons.dart | head -5
+5:  static const String markerCar = "assets/icon/marker_car.png"; // marker_car.png
+
