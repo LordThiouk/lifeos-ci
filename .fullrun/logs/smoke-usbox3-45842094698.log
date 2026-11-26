@@ -14930,3 +14930,168 @@ count fillable:
 total models:
 48
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && find database/migrations -iname "*admin*" -o -iname "*create_admins*" | head; echo "---"; grep -rl "Schema::create('admins'" database/ 2>/dev/null
+---
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && grep -rl "admins" database/ 2>/dev/null | head; echo "---sql---"; find . -path ./vendor -prune -o -name "*.sql" -print 2>/dev/null | xargs grep -l "CREATE TABLE.*admins" 2>/dev/null | head
+---sql---
+
+$ cat /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Admin/HiddenServiceRideTest.php
+<?php
+
+namespace Tests\Feature\Admin;
+
+use App\Constants\Status;
+use App\Models\Service;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Tests\TestCase;
+
+/**
+ * ISA 2026-11-22-galass-lot-client — ISC-43, ISC-44.
+ */
+class HiddenServiceRideTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config([
+            'database.default'                     => 'sqlite',
+            'database.connections.sqlite.database' => ':memory:',
+        ]);
+        DB::purge('sqlite');
+        DB::reconnect('sqlite');
+
+        Schema::create('services', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger('sort_order')->default(0);
+            $table->boolean('is_visible')->default(true);
+            $table->string('name')->nullable();
+            $table->tinyInteger('status')->default(1);
+            $table->timestamps();
+        });
+        Schema::create('rides', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('service_id')->nullable();
+            $table->integer('status')->default(Status::RIDE_COMPLETED);
+            $table->double('amount')->default(0);
+            $table->timestamps();
+        });
+    }
+
+    public function test_hidden_service_still_readable_for_existing_ride(): void
+    {
+        $service = Service::create(['name' => 'Hidden', 'status' => Status::ENABLE, 'is_visible' => false, 'sort_order' => 1]);
+        DB::table('rides')->insert(['id' => 1, 'user_id' => 1, 'service_id' => $service->id, 'status' => Status::RIDE_COMPLETED, 'amount' => 1000, 'created_at' => now(), 'updated_at' => now()]);
+
+        $ride = DB::table('rides')->where('id', 1)->first();
+        $found = Service::find($ride->service_id);
+        $this->assertNotNull($found);
+        $this->assertFalse((bool) $found->is_visible);
+    }
+
+    public function test_hidden_service_cannot_be_used_for_new_ride(): void
+    {
+        $service = Service::create(['name' => 'Hidden', 'status' => Status::ENABLE, 'is_visible' => false, 'sort_order' => 1]);
+
+        $visible = Service::active()->visible()->find($service->id);
+        $this->assertNull($visible);
+    }
+}
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && \
+python3 - <<'PY'
+import re
+for path, needle in [("app/Models/Admin.php","class Admin extends Authenticatable\n{\n    use GlobalStatus, HasRoles;"),("app/Models/Vehicle.php","class Vehicle extends Model\n{\n"),("app/Models/Service.php","class Service extends Model\n{\n    use  GlobalStatus;")]:
+    pass
+PY
+echo "manual edits via python"
+manual edits via python
+
+← Edit core/app/Models/Admin.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Admin.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Admin.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Admin.php
+@@ -9,8 +9,10 @@
+ 
+ class Admin extends Authenticatable
+ {
+     use GlobalStatus, HasRoles;
++
++    protected $guarded = [];
+     /**
+      * The attributes that should be hidden for arrays.
+      *
+      * @var array
+
+
+← Edit core/app/Models/Vehicle.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Vehicle.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Vehicle.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Vehicle.php
+@@ -6,8 +6,9 @@
+ use Illuminate\Database\Eloquent\Model;
+ 
+ class Vehicle extends Model
+ {
++    protected $guarded = [];
+ 
+     protected $casts = [
+         'form_data'  => 'object',
+         'driver_id'  => 'integer',
+
+
+← Edit core/app/Models/Service.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Service.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Service.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Service.php
+@@ -8,8 +8,10 @@
+ class Service extends Model
+ {
+     use  GlobalStatus;
+ 
++    protected $guarded = [];
++
+     protected $casts = [
+         'city_min_fare'             => 'double',
+         'city_max_fare'             => 'double',
+         'city_recommend_fare'       => 'double',
+
+
+$ export PATH="/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH"; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php artisan test --filter=DriverOneStepApprovalTest 2>&1 | tail -20
+FAILED  Tests\Feature\Admin\DriverOneStepApprov…  InvalidArgumentException   
+  getMessage() cannot be mocked as it is a protected method and mocking protected methods is not enabled for the currently used mock object. Use shouldAllowMockingProtectedMethods() to enable mocking of protected methods.
+
+  at tests/Feature/Admin/DriverOneStepApprovalTest.php:135
+    131▕     private function mockSmsSend()
+    132▕     {
+    133▕         $mock = \Mockery::mock(Sms::class)->makePartial();
+    134▕         $mock->shouldReceive('prevConfiguration')->andReturnNull();
+  ➜ 135▕         $mock->shouldReceive('getMessage')->andReturn('Votre compte chauffeur Galass a été validé.');
+    136▕         $this->app->instance(Sms::class, $mock);
+    137▕         return $mock;
+    138▕     }
+    139▕
+
+  1   tests/Feature/Admin/DriverOneStepApprovalTest.php:66
+
+
+  Tests:    2 failed, 1 passed (4 assertions)
+  Duration: 0.25s
+
+$ grep -n "function getMessage\|function prevConfiguration\|function send" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Notify/Sms.php
+40:    public function send()
+72:    public function prevConfiguration()
+
+$ grep -rn "function getMessage" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Notify/ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Contracts/ 2>/dev/null | head
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Notify/NotifyProcess.php:158:    protected function getMessage()
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Notify/Textmagic/Services/Models/Sessions.php:24:    public function getMessages($id) {
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Contracts/Support/MessageBag.php:80:    public function getMessages();
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Contracts/Support/MessageProvider.php:12:    public function getMessageBag();
+
