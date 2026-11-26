@@ -3823,3 +3823,10 @@ assets/icon/marker_car.png: PNG image data, 84 x 144, 8-bit colormap, non-interl
 
 ✱ Grep "setCustomMarkerIcon" in . · 8 matches
 7/7 verts. Je vérifie que l'asset `marker_car.png` existe réellement, que `driverIcon` est chargé (`setCustomMarkerIcon`), et le `loadMap`.
+→ Read lib/data/controller/map/ride_map_controller.dart [offset=140, limit=30]
+→ Read lib/data/controller/map/ride_map_controller.dart [offset=410, limit=150]
+
+$ grep -n 'marker_car\|assets/icon' pubspec.yaml | head
+80:  image_path: "assets/icon/app_icon.png"
+94:    - assets/icon/
+
