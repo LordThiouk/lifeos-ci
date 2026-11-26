@@ -3645,3 +3645,9 @@ wippush.sh
 
 ✱ Grep "llvm-ar" in /opt · 19 matches
 → Read /opt/flutter/packages/flutter_tools/lib/src/isolated/native_assets/linux/native_assets.dart
+
+$ ls -la /usr/bin/clang /usr/bin/clang++ /usr/bin/clang-18; ls /usr/lib/llvm-18/bin/ | grep -E 'lld|ar' ; which ld.lld; ls /usr/bin/*lld* 2>/dev/null
+lrwxrwxrwx. 1 root root 24 Mar 30  2024 /usr/bin/clang -> ../lib/llvm-18/bin/clang
+lrwxrwxrwx. 1 root root 26 Mar 30  2024 /usr/bin/clang++ -> ../lib/llvm-18/bin/clang++
+lrwxrwxrwx. 1 root root 24 May 27  2024 /usr/bin/clang-18 -> ../lib/llvm-18/bin/clang
+
