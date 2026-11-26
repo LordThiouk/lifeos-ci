@@ -234,3 +234,169 @@ android {
                 keyPassword = props["keyPassword"] as? String ?: ""
             }
 
+$ cat android/app/build.gradle.kts | sed -n '60,200p'; echo ===; cat android/gradle.properties
+}
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+dependencies {
+  coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+  // Jetpack Security for Android Keystore-backed encryption
+  implementation("androidx.security:security-crypto:1.1.0-alpha06")
+}
+
+flutter {
+    source = "../.."
+}
+===
+org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+org.gradle.daemon=false
+org.gradle.parallel=false
+org.gradle.configureondemand=false
+android.enableJetifier=false
+android.useAndroidX=true
+android.newDsl=false
+android.builtInKotlin=false
+android.r8.proguardAndroidTxt.disallowed=false
+
+$ ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci; echo ---; ls /home/ubuntu/actions-runner/_work/ ; echo ---; which flutter dart; flutter --version 2>/dev/null | head -5
+FIX-CI.md
+FIX-SERENA.md
+FIX-VERA-AUDIT.md
+INVENTAIRE.md
+README.md
+REPORT.md
+REVIEW-AGENTS-LOAD.md
+REVIEW-ASSEMBLE.md
+REVIEW-PR1.md
+REVIEW-PR20.md
+REVIEW.md
+TESTS-DIAG.md
+docs
+models.txt
+opencode
+prompts
+targets
+---
+_PipelineMapping
+_actions
+_temp
+_tool
+lifeos-ci
+---
+/usr/local/bin/flutter
+/usr/local/bin/dart
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
+$ ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/targets; echo ---; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts | head; echo ---; find /home/ubuntu/actions-runner/_work -maxdepth 4 -iname "*driver*" -not -path "*/node_modules/*" 2>/dev/null | head
+allowed-repos.sh
+---
+agent-run-inputs.md
+allow-acr.md
+assemble.md
+brick-build-aditi-ui.md
+brick-build-anvil.md
+brick-build-engineer.md
+brick-build-forge-code.md
+brick-close-max.md
+brick-fullrun.md
+brick-plan-serena.md
+---
+
+$ cat /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/FIX-CI.md 2>/dev/null | head -60; echo ====; cat /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/REVIEW-ASSEMBLE.md 2>/dev/null | head -80
+# FIX-CI
+
+Continuation : les 3 correctifs sont présents sur la branche ; aucun nouveau
+correctif de script nécessaire. Logs de runs non consultables (`gh` interdit dans
+la sandbox) : analyse par lecture des workflows, `actionlint`, `shellcheck` et tests.
+
+## 1. Boucle de relance jamais déclenchée
+- Échec : un build brick en échec laisse les jobs aval `skipped` ; la boucle ne voit aucun `failure`.
+- Cause : `.github/workflows/fr-fullrun.yml:298-307` (needs/condition limités aux verify + max).
+- Fix : ajout de aditi_ui/engineer/anvil/forge_code aux needs et de leurs `result == 'failure'`.
+- Commit : 41ea55f
+- Complément : `loop` dépend de toute la chaîne et teste `contains(needs.*.result, 'failure')`, donc un échec build n'est plus masqué par les jobs aval `skipped` (b193f47).
+
+## 2. Garde-fou extra_repos cassé par un changement de branche
+- Échec : l'agent inspecte une autre branche d'un extra (read-only) et le job échoue.
+- Cause : `.github/workflows/_agent-run.yml:668-675` comparait le HEAD local au SHA de départ.
+- Fix : `remote_sha` (ligne 579) via `git ls-remote` compare la ref distante ; HEAD ignoré.
+- Commits : f1e91c4, c66261b, 8cb2e96
+
+## 3. Actionlint en échec (job CI)
+- Échec : `actionlint` rc=1 sur un `default` posé sur un input `workflow_call` requis.
+- Cause : `fr-*.yml:70-71` (plan/build/verify/close).
+- Fix : suppression de `default: antenly` sous `workflow_call`.
+- Commit : 0c5cc2d
+
+## Validation (continuation)
+- `actionlint 1.7.12 -ignore SC2129 .github/workflows/*.yml` : OK ; YAML parsé : OK.
+- `shellcheck -x opencode/*.sh targets/*.sh` : OK ; `bash -n` tous scripts : OK.
+- Suite complète `opencode/tests/run-all.sh` : PASS 42/42 (rg/age/bun installés
+  dans la sandbox ; les échecs précédents venaient de ces binaires absents).
+- `gitleaks detect --source .` : aucun leak. Aucun autre échec de script réel.
+
+- Travail partiel : `_agent-run.yml` commite `wip(<job>): partial work (agent stopped)` (`git add -A`, `.fullrun` exclu) avant la rebase.
+- Step push en `if: always() && !cancelled()` : il tourne aussi après un arrêt de l'agent (quota, timeout, erreur).
+- Commit : fix(ci): keep partial work on agent failure
+
+## 4. startup_failure de fr-fullrun (run 45617005249)
+- Cause : `_next.yml` demandait `actions: write`, au-delà du plafond `contents: read` de la chaîne réutilisable fr-fullrun ; GitHub rejette la chaîne au démarrage même si `next` est sauté.
+- Fichier : `.github/workflows/_next.yml:73-75`
+- Fix : permission ramenée à `contents: read` (dispatch via `CI_TOKEN`, donc `actions: write` inutile) ; `loop` utilise `!cancelled() && contains(...)` (`fr-fullrun.yml:309`).
+
+## 5. Timeout, porte d'étape et modèle (run 45628583677)
+- `_agent-run.yml` : opencode borné par `timeout (timeout_minutes - 5)` sous le `timeout-minutes` du step ; le commit partiel et le push tournent encore après un arrêt.
+- `fr-fullrun.yml` : étape suivante conditionnée à `success + status ok + head_sha` (ou `skipped` pour une phase/`only` non exécutée, sinon la relance `start_phase=build` s'arrêterait) ; job `gate` en échec si une étape réussit sans commit.
+- Relance `loop` réessayée 3× avec 30 s d'attente sur HTTP 5xx ; nouvel input `model` propagé jusqu'à opencode (repli `models.txt`) ; `actionlint` OK.
+====
+# REVIEW-ASSEMBLE
+
+Verdict : **MERGE OK**
+
+- YAML valide : 11 fichiers `fr-*.yml` + `_agent-run.yml` + `_next.yml` parsés sans erreur.
+- Bricks appelées par `fr-fullrun.yml` toutes présentes : vera, serena, aditi-ui, engineer, anvil, forge-code, code-review, forge-audit, silas, max.
+- Chaque brique déclare `workflow_call` et l'entrée `chain` (`fr-*.yml` lignes 64-65 / 108-113).
+- Entrées transmises à `_agent-run.yml` (agent, target_repo, extra_repos, lifeos_write, branch, prompt_path, isa_path, job_name, lifeos_ref, timeout_minutes, target_agent, stop_after_step, chain_phase) toutes déclarées (`_agent-run.yml:7-55`).
+- Ordre `fr-fullrun` correct via `needs` : vera → serena → builds → code-review → forge-audit → silas → max.
+- Boucle : échec de code-review/forge-audit/silas/max relance `start_phase=build` si `attempt < max_attempts` (`fr-fullrun.yml:297-344`).
+- Aucun marqueur de conflit (`<<<<<<<`) ; aucun secret en dur (`secrets: inherit`).
+- Note non bloquante : un échec d'une brique build ne déclenche pas `loop` (les 4 dépendances sont `skipped`, pas `failure`) — `fr-fullrun.yml:303`.
+- Note non bloquante : ordre de chaînage `_next.yml` (forge-audit → silas → code-review) diffère de `fr-fullrun` (`_next.yml:101`), sans effet car `chain: false` dans le FullRun.
+
+$ grep -rn "3\.50\.1\|9\.0\.1\|8\.14\|8\.11" --include="*.md" --include="*.yaml" --include="*.yml" --include="*.kts" --include="*.properties" . 2>/dev/null | grep -v "^./build/" | head -40
+./CHANGELOG.md:30:- Android Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1.0 for Flutter Codemagic CI
+./CHANGELOG.md:46:- Android CI : Gradle wrapper 8.14 (minimum Flutter 8.14.0) pour `bundleRelease` Codemagic
+./.fullrun/multistop-ui-gaps-serena-2026-11-24-r6_DONE.md:86:- **Bloquants Papa** (à trancher avant clôture) : (a) SOS en `RIDE_ACTIVE` — `ISC-F4-28`/`F4-31` ; (b) CTA « prise en charge » Rider inexistant → amender en `cancelRide` ? ; (c) F4-21 : accepter preuve unit + e2e (golden impossible) ? ; (d) autoriser la régénération des goldens (Rider 412×915 DPR2 / Flutter 3.44.8 ; Driver golden_toolkit 390×844 DPR1 / Flutter 3.50.1 — ne pas normaliser) ; (e) F5-12 : invariant structurel (recommandé) plutôt que palette désactivée globale.
+./MEMORY/WORK/20261006-galass-rider-multistop/ISA.md:323:- **2026-11-23 — Les deux planches ne sont pas comparables telles quelles (contrainte pour la porte CI).** Rider : harnais maison, surface 412×915 DPR 2.0, Flutter 3.44.8, sans `golden_toolkit`. Driver : `golden_toolkit 0.15.0`, surface 390×844 DPR 1.0, Flutter 3.50.1. Une porte unique (`ISC-EMU-2/3`) doit donc fixer outil + version + surface **par app**, sinon un « écart » ne sera qu'un changement d'outil.
+./MEMORY/WORK/20261006-galass-rider-multistop/ISA.md:476:- ISC-F4-29: flutter test test/widget/course_en_cours_contract_test.dart: 9/9 passed sous Flutter 3.50.1 — a-b (avatar, nom, note chauffeur) vert après chargement des fonts golden en `setUpAll` (le `fontsChange` du 1er test laissait un frame callback pendant au teardown, signalé « animation still running ») ; c-h verts, aucun golden régénéré. Commit fb2b0ff. [@fb2b0ff]
+./MEMORY/WORK/20261006-galass-rider-multistop/ISA.md:497:- [ ] **Porte CI : outil/version/surface par app** — Rider (harnais maison, 412×915, Flutter 3.44.8) et Driver (`golden_toolkit 0.15.0`, 390×844, Flutter 3.50.1) ne sont pas comparables tels quels ; à figer explicitement dans la porte golden-diff.
+./android/app/build.gradle.kts:19:    ndkVersion = "29.0.14033849"
+./android/settings.gradle.kts:21:    id("com.android.application") version "9.0.1" apply false
+
+$ ls -la .fullrun; ls .github/workflows 2>/dev/null | head -30
+total 76
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 16:32 .
+drwxr-xr-x 18 ubuntu ubuntu  4096 Nov 26 16:32 ..
+-rw-r--r--  1 ubuntu ubuntu 13696 Nov 26 16:32 multistop-ui-gaps-serena-2026-11-23_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  5537 Nov 26 16:32 multistop-ui-gaps-serena-2026-11-24-r3_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  1238 Nov 26 16:32 multistop-ui-gaps-serena-2026-11-24-r3_checkpoint.json
+-rw-r--r--  1 ubuntu ubuntu  7949 Nov 26 16:32 multistop-ui-gaps-serena-2026-11-24-r5_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  2877 Nov 26 16:32 multistop-ui-gaps-serena-2026-11-24-r5_checkpoint.json
+-rw-r--r--  1 ubuntu ubuntu  8931 Nov 26 16:32 multistop-ui-gaps-serena-2026-11-24-r6_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  1513 Nov 26 16:32 multistop-ui-gaps-serena-2026-11-24-r6_checkpoint.json
+-rw-r--r--  1 ubuntu ubuntu  6846 Nov 26 16:32 multistop-ui-gaps-vera-2026-11-23_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  1223 Nov 26 16:32 multistop-ui-gaps-vera-2026-11-23_checkpoint.json
+
