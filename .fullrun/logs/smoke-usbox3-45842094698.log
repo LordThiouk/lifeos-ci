@@ -8409,3 +8409,71 @@ android.enableJetifier=false
 android.useAndroidX=true
 
 `/tmp/task_done.md` existe déjà (créé à 17:15). Je le lis, ainsi que l'état du diff par rapport à la base.
+→ Read /tmp/task_done.md
+
+$ cat /tmp/task_done.md; echo "=====CHANGELOG HEAD====="; head -30 CHANGELOG.md
+# task_done — Rider APK Gradle/AGP alignment (Flutter 3.50.1)
+
+## Contexte
+- Dépôt: `LordThiouk/Galass_Rider` (workspace `target/`)
+- Branche: `build/rider-apk-gradle` (HEAD ahead 1 vs `origin/build/rider-apk-gradle`)
+- Demande: corriger l'échec Artemis `45801376130` "Build APK Rider" sous Flutter 3.50.1 (toolchain Android refusé: Gradle 9.1.0 / AGP 9.0.1). Aligner sur Gradle 8.14 + AGP/Kotlin compatibles, sans casser Firebase/Crashlytics, sans changement `lib/`, sans `flutter build`/`gradlew`, sans push.
+
+## État constaté
+Le travail demandé est déjà présent au HEAD, aucun changement supplémentaire nécessaire.
+
+- SHA: `8c28139ebea952d47e713aa8ed074d81df4d3da5`
+- Auteur: `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`
+- Message: `fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)`
+
+## Fichiers modifiés (commit 8c28139)
+- `android/gradle/wrapper/gradle-wrapper.properties` — `gradle-9.1.0-all` -> `gradle-8.14-all`
+- `android/settings.gradle.kts` — AGP `9.0.1` -> `8.11.1`; Kotlin `2.2.20` conservé; google-services `4.3.15` et Crashlytics `3.0.7` inchangés
+- `android/gradle.properties` — retrait des options réservées AGP 9: `android.newDsl`, `android.builtInKotlin`, `android.r8.proguardAndroidTxt.disallowed`
+- `CHANGELOG.md` — note de traçabilité
+
+## Vérifications effectuées (box, lecture seule)
+- `git status` : working tree clean, rien à committer.
+- `git log --oneline -5` : HEAD = 8c28139 sur `build/rider-apk-gradle`.
+- Inspection des fichiers Android: wrapper=8.14, AGP=8.11.1, Kotlin=2.2.20, Firebase plugins inchangés, propriétés AGP9 absentes.
+- Aucun changement `lib/`, aucun golden régénéré, `.fullrun` non touché.
+
+## Non exécuté (politique/interdits)
+- `flutter build`, `./gradlew`, `gradle`, `assemble*` — interdit sur la box.
+- `git push`, `git merge`, `gh/ssh/scp` — interdit.
+
+## Résultat
+Alignement toolchain Android Rider pour Flutter 3.50.1 déjà commité sur la branche courante. Prêt pour validation CI Artemis (Build APK Rider).
+=====CHANGELOG HEAD=====
+# Changelog
+
+All notable changes to Galass Rider are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Fixed
+
+- Android : toolchain aligné sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.2.20) ; AGP 9.0.1 / Gradle 9.1.0 refusés par la validation CI
+
+## [1.0.13] - 2026-10-08
+
+### Fixed
+
+- file_picker 12 AGP9/Kotlin + FilePicker API
+
+### Added
+
+- Fastlane android build
+
+## [1.0.12] - 2026-10-08
+
+### Fixed
+
+- AGP9 allow legacy proguard-android.txt for flutter_inappwebview
+
+## [1.0.11] - 2026-10-08
+
+Retry de la lecture de `/tmp/task_done.md` et vérification du CHANGELOG :
