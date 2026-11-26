@@ -7373,3 +7373,69 @@ $ echo "=== search forbidden commands in my run ==="; echo '(aucune commande flu
 NO SECRET-LIKE STRING IN DIFF
 
 Local Flutter is 3.35.6 (CI uses 3.50.1), and the change is Android-only, so re-running Dart tests locally wouldn't validate this fix. I'll do byte-level config comparison instead.
+# Todos
+[✓] Explorer l'environnement : dépôts, branche courante, état git
+[✓] Lire lifeos (lecture seule) pour le contexte de référence
+[✓] Comparer toolchain Android Rider vs Driver (Gradle/AGP/Kotlin)
+[✓] Aligner Rider sur Gradle 8.14 + AGP/Kotlin compatibles (sans toucher lib/)
+[✓] Vérifier (sans flutter build/gradlew) + committer avec auteur Papa Diop
+[•] Écrire /tmp/task_done.md (SHA, tests, résultats)
+
+← Write /tmp/task_done.md
+Wrote file successfully.
+
+← Edit /tmp/task_done.md
+Index: /tmp/task_done.md
+===================================================================
+--- /tmp/task_done.md
++++ /tmp/task_done.md
+@@ -20,5 +20,5 @@
+ - Aucun `git push`, merge, `gh`, `ssh` ou `scp`.
+ 
+ ## Tests / build
+ - `flutter build` et `gradlew` : **non exécutés** (interdits sur la box ; note dans le message de commit). Validation APK attendue côté Artemis.
+-- Tests Dart : **non relancés localement** — changement Android uniquement, aucun fichier Dart modifié ; Flutter local = 3.35.6 alors que l'Artemis utilise 3.50.1 (les goldens ont été rebases sous 3.50.1). L'étape unitaires Artemis était déjà VERTE selon leprompt.
++- Tests Dart : **non relancés localement** — changement Android uniquement, aucun fichier Dart modifié ; Flutter local = 3.35.6 alors que l'Artemis utilise 3.50.1 (les goldens ont été rebases sous 3.50.1). L'étape unitaires Artemis était déjà VERTE selon le prompt.
+
+
+# Todos
+[✓] Explorer l'environnement : dépôts, branche courante, état git
+[✓] Lire lifeos (lecture seule) pour le contexte de référence
+[✓] Comparer toolchain Android Rider vs Driver (Gradle/AGP/Kotlin)
+[✓] Aligner Rider sur Gradle 8.14 + AGP/Kotlin compatibles (sans toucher lib/)
+[✓] Vérifier (sans flutter build/gradlew) + committer avec auteur Papa Diop
+[✓] Écrire /tmp/task_done.md (SHA, tests, résultats)
+
+$ git status --short --branch && git log -1 --format='HEAD=%H%nAUTHOR=%an <%ae>%nSUBJECT=%s' && echo "=== task_done ===" && wc -l /tmp/task_done.md
+## build/rider-apk-gradle
+HEAD=207d752e79f22d194e48ab53daefcd377e2fedf2
+AUTHOR=Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+SUBJECT=build(android): align Rider toolchain with Flutter 3.50.1
+=== task_done ===
+24 /tmp/task_done.md
+
+Exécution terminée. État final :
+
+**Constat important** : le travail demandé avait déjà été committé dans ce conteneur lors d'une session antérieure (`207d752`). Je n'ai donc pas créé de second commit (qui aurait été vide), mais j'ai vérifié en profondeur que le résultat est complet et correct.
+
+**Commit validé** : `207d752` — *build(android): align Rider toolchain with Flutter 3.50.1*, auteur `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`, sur `build/rider-apk-gradle` (base `fcdd581`).
+
+**Alignement (3 fichiers, `android/` seulement)** :
+- Gradle wrapper `9.1.0 → 8.14`
+- AGP `9.0.1 → 8.11.1`, Crashlytics `3.0.7 → 3.0.3`, Kotlin `2.2.20 → 2.3.0` (google-services `4.3.15` conservé)
+- `gradle.properties` aligné sur les flags Driver, Jetifier conservé à `false` côté Rider
+
+**Vérification** : comparaison byte-level avec `/agent/repos/Galass_Driver` (vert sous le même Artemis/Flutter 3.50.1) — wrapper et `settings.gradle.kts` **identiques**, `gradle.properties` identique sauf 2 réglages Rider intentionnels. Aucun changement `lib/`, aucun golden régénéré, `.fullrun` intact, aucun secret dans le diff, aucun push/merge/`gh`/`ssh`/`scp`.
+
+**Tests/build** : `flutter build` et `gradlew` non exécutés (interdits, et notés dans le message de commit) ; tests Dart non relancés (Flutter local 3.35.6 ≠ CI 3.50.1, aucun fichier Dart modifié ; étape unitaires Artemis déjà verte). La validation APK reste à la charge du workflow.
+
+Le résumé factuel est dans `/tmp/task_done.md`.
+
+> Forge · nemotron-3.5-lightning-free
+
+✗ Read /home/ubuntu/actions-runner/_temp/oc/prompt.md failed
+Error: File not found: /home/ubuntu/actions-runner/_temp/oc/prompt.md
+✱ Glob "**/prompt.md" in /home/ubuntu/actions-runner · 1 match
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+• Explore Rider repo structure Explore Agent
+Let me explore the repository structure to understand what needs to be aligned.
