@@ -15973,3 +15973,10 @@ echo '=== DriverRegisterPhotoTest ==='; php artisan test --filter=DriverRegister
 
 ✱ Grep "function setPasswordAttribute|protected \$hidden|\$fillable" in core/app/Models/Driver.php · 13 matches
 → Read core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core; php artisan test --filter=DriverRegisterPhotoTest::test_registration_stores_photo -vvv 2>&1 | head -25
+#!/usr/bin/env php
+PHPUnit 10.5.63 by Sebastian Bergmann and contributors.
+
+Unknown option "-v"
+
