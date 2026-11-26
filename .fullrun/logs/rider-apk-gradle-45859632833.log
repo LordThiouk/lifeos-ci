@@ -8328,3 +8328,84 @@ f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
 8243 /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log
 
 Le fix semble déjà commité (`8c28139`). Je vérifie l'état complet : diff vs branche de base, contenu de `/tmp/task_done.md`, et contexte de la session.
+✗ Read  failed [path=/tmp/task_done.md]
+Error: The read tool was called with invalid arguments: SchemaError(Missing key
+  at ["filePath"]).
+Please rewrite the input so it satisfies the expected schema.
+
+$ git diff feat/multistop-e2e-2026-11-15..HEAD -- VERIFY-F434B.md | head -80; echo "=====LOCALPROPS====="; cat android/local.properties 2>&1; echo "=====GRADLE PROPS====="; cat android/gradle.properties
+diff --git a/VERIFY-F434B.md b/VERIFY-F434B.md
+deleted file mode 100644
+index fe2a480..0000000
+--- a/VERIFY-F434B.md
++++ /dev/null
+@@ -1,58 +0,0 @@
+-VERDICT: PASS
+-
+-# Vérification F4-34 (rebuild) — porte one-shot, dédup Pusher↔FCM, chemin iOS foreground
+-
+-Date : 2026-11-26
+-Branche : `verify/rider-f434b-forge`
+-Périmètre audité : `dcb4bf0` (lib) + `2ec49c8` (tests) + note ISA `3a399e8`.
+-Rôle : audit de vérification uniquement. Aucun code modifié, aucun golden régénéré, ISA et `.fullrun` non touchés.
+-
+-## Points vérifiés
+-
+-- **Porte one-shot liée au `ride_id`** — `RideAlertOnce.shouldAlert` clé `ride_id::type` ; un couple déjà émis est un no-op, un nouveau `ride_id` ré-alerte. Clé vide (ride_id ou type inconnu) n'est pas dédupliquée. `lib/core/helper/ride_alert_once.dart:21-28`.
+-- **Porte survivante à la recréation** — `RideAlertOnce.shared` est `static final` (process-wide), et `resetRideScopedControllers()` ne le réinitialise pas ; `PusherRideController` la référence à `lib/data/controller/pusher/pusher_ride_controller.dart:42`. Test dédié « the one-shot gate survives PusherRideController recreation » vert.
+-- **Dédup Pusher↔FCM partagée** — `PushNotificationService` et `PusherRideController` utilisent la même `RideAlertOnce.shared` (`lib/data/services/push_notification_service.dart:28`, `lib/data/controller/pusher/pusher_ride_controller.dart:42`). La dédup FCM passe par `shouldPresentMessage` (`push_notification_service.dart:221-226`) avant tout `show`. Tests cross-canal (Pusher→FCM et FCM→Pusher) verts.
+-- **Deux alertes distinctes qui coexistent** — la clé inclut le type (`pick_up` / `arriving_soon`) : B puis C produisent deux alertes, un doublon du même type est supprimé, un nouveau ride ré-alerte. Tests verts.
+-- **Chemin iOS foreground** — `setForegroundNotificationPresentationOptions(alert/badge/sound: false)` (`push_notification_service.dart:297-307`) supprime l'auto-présentation FCM non déduplicable ; le `onMessage` présente la bannière via le `show` local partagé-gated, y compris pour les payloads `notification` (`push_notification_service.dart:196-213`). Recherche `setForegroundNotificationPresentationOptions` : un seul site d'appel dans `lib/`.
+-
+-## Points bloquants
+-
+-Aucun.
+-
+-## Notes non bloquantes
+-
+-- La dédup FCM dépend du payload backend contenant `ride_id` et un type (`type`/`act`/`event`) ; si ces clés manquent, `shouldAlert` autorise la bannière (pas de dédup). Hors dépôt Flutter (backend/Pusher).
+-- La dédup client ne couvre que le chemin foreground ; les doublons de push en arrière-plan restent de la responsabilité backend.
+-- `RideAlertOnce.shared` n'est jamais purgé ; l'ensemble grandit avec le nombre de courses du process (mémoire négligeable, aucun impact fonctionnel).
+-
+-## Commandes exécutées
+-
+-Environnement : Flutter 3.44.8 stable (Dart 3.12.2), `flutter pub get` OK.
+-
+-```
+-$ flutter test test/unit/multistop_pusher_test.dart test/data/services/push_notification_service_test.dart
+-00:00 +21: All tests passed!
+-```
+-
+-```
+-$ flutter test test/unit/multistop_pusher_test.dart
+-00:00 +12: All tests passed!
+-
+-$ flutter test test/data/services/push_notification_service_test.dart
+-00:00 +9: All tests passed!
+-```
+-
+-```
+-$ flutter test
+-00:29 +311 ~2: All tests passed!
+-```
+-
+-```
+-$ flutter analyze lib/core/helper/ride_alert_once.dart lib/data/controller/pusher/pusher_ride_controller.dart lib/data/services/push_notification_service.dart test/unit/multistop_pusher_test.dart test/data/services/push_notification_service_test.dart
+-Analyzing 5 items...
+-No issues found! (ran in 16.2s)
+-```
+-
+-## Conclusion
+-
+-Les trois points du périmètre F4-34 (porte one-shot liée au `ride_id`, dédup Pusher↔FCM partagée, chemin iOS foreground) sont implémentés, couverts par les tests unit des commits `dcb4bf0` / `2ec49c8`, et la suite complète ainsi que l'analyse statique sont vertes. **PASS**.
+=====LOCALPROPS=====
+cat: android/local.properties: No such file or directory
+=====GRADLE PROPS=====
+org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+org.gradle.daemon=false
+org.gradle.parallel=false
+org.gradle.configureondemand=false
+android.enableJetifier=false
+android.useAndroidX=true
+
+`/tmp/task_done.md` existe déjà (créé à 17:15). Je le lis, ainsi que l'état du diff par rapport à la base.
