@@ -2179,3 +2179,20 @@ Engine • hash 51379e6df48ea8ee7205623b90fe66491cad8df3 (revision 4d35714800) (
 15M	/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.pub-cache
 pub.dev
 
+$ cd /tmp/flutter_sdk && tar -xJf flutter3501.tar.xz 2>&1 | tail -5; ls /tmp/flutter_sdk/flutter/bin | head; echo "---pub cache---"; find / -path "*pub-cache*" -name "pubspec.lock" 2>/dev/null | head; ls /home/ubuntu/.pub-cache 2>/dev/null; echo "PUB_CACHE env"; env | grep -i pub
+cache
+dart
+dart.bat
+flutter
+flutter-dev
+flutter-dev.bat
+flutter.bat
+internal
+---pub cache---
+README.md
+_temp
+active_roots
+hosted
+hosted-hashes
+PUB_CACHE env
+
