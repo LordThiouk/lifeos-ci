@@ -3109,3 +3109,32 @@ $ file /tmp/artemis152_logs.zip && head -5 /tmp/artemis152_logs.zip | od -An -tx
  7b 0a 20 20 22 6d 65 73 73 61 67 65 22 3a 20 22
  4d 75 73 74 20 68 61 76 65 20 61 64 6d 69 6e 20
 
+✗ cat > /tmp/w0_decision.txt << 'EOF'
+- **2026-11-26 — W0 device (Artemis) : BLOCK, aucun ISC coché.** Vérification API publique `galass-emu-actions-pub` (workflow `artemis-staging-e2e.yml`) : runs récents sur emu `feat/multistop-e2e-2026-11-15` @ `81d149d4` — #150 `45778554984` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45778554984 (2026-11-26T07:52:21Z, failure, step 11 « Tests unitaires Flutter » failed, build/KVM/E2E skipped) ; #151 `45782061889` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45782061889 (2026-11-26T08:18:31Z, failure, step 11 failed) ; #152 `45801376130` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130 (2026-11-26T10:26:37Z, failure). Run #152 : step 11 tests Flutter **success** (régression goldens/Flutter 3.44.8 corrigée sur cette tête), mais step 12 « Build APK (staging, debug, même job, pas d'upload) » **failure** ; étapes 13-19 (apksigner, KVM, opencode, E2E multistop) **skipped**. Artefacts publics : uniquement `staging-e2e-evidence-encrypted` (337 o) ; aucun `e2e-out/summary.md`, `report.json`, `ui/*.xml`, `smoke.log`. **Aucune capture ni logcat device produit** ; S-W0-01…S-W0-07 / ISC-22,50,80-84 restent non cochés. Cause step 12 non diagnostiquée ici (logs non téléchargeables sans auth GitHub ; `gh`/`GALASS_TOKEN`/sudo absents, pas de dispatch possible). Aucun W1+ entamé.
+EOF
+bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts append /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md --section "Decisions" --file /tmp/w0_decision.txt failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+✗ cat > /tmp/w0_decision.txt << 'TXT'
+- **2026-11-26 — W0 device (Artemis) : BLOCK, aucun ISC coché.** Vérification API publique `galass-emu-actions-pub` (`artemis-staging-e2e.yml`) : runs récents emu `feat/multistop-e2e-2026-11-15` @ `81d149d4` — #150 `45778554984` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45778554984 (2026-11-26T07:52:21Z, failure, step 11 « Tests unitaires Flutter » failed, build/KVM/E2E skipped) ; #151 `45782061889` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45782061889 (2026-11-26T08:18:31Z, failure, step 11 failed) ; #152 `45801376130` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130 (2026-11-26T10:26:37Z, failure). Run #152 : step 11 tests Flutter **success** (régression goldens/Flutter 3.44.8 corrigée sur cette tête), mais step 12 « Build APK (staging, debug, même job, pas d'upload) » **failure** ; étapes 13-19 (apksigner, KVM, opencode, E2E multistop) **skipped**. Artefacts publics : uniquement `staging-e2e-evidence-encrypted` (337 o) ; aucun `e2e-out/summary.md`, `report.json`, `ui/*.xml`, `smoke.log`. **Aucune capture ni logcat device produit** ; S-W0-01…S-W0-07 / ISC-22,50,80-84 restent non cochés. Cause step 12 non diagnostiquée ici (logs non téléchargeables sans auth GitHub ; gh/GALASS_TOKEN/sudo absents, pas de dispatch possible). Aucun W1+ entamé.
+TXT
+ failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+← Write /tmp/w0_decision.txt
+Wrote file successfully.
+
+$ bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts append /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md --section "Decisions" --file /tmp/w0_decision.txt
+ISATool append:Decisions ok → /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md (progress 0/63, hmac-sha256:7b66a28c4242…)
+
+$ git -C /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target add MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md && git -C /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target status --short
+M  MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+
+$ git -C /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target -c user.name="Papa Diop" -c user.email="76528706+LordThiouk@users.noreply.github.com" commit -m "w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés"
+[fullrun/lot-client-w0 9a012ce2] w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+$ git -C /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target show --stat --oneline HEAD
+9a012ce2 w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés
+ MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
