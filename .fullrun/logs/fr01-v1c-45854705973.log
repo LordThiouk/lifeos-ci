@@ -1,0 +1,147 @@
+
+> Forge · deepseek-v4.1-flash-free
+
+Silence 180s sans nouvelle sortie (journal=46 o) : coupure opencode pid=155829
+
+> Forge · mimo-v2.6-flash-free
+
+→ Read /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md
+
+$ pwd && ls -la
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target
+total 88
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 16:22 .
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 16:22 ..
+-rw-r--r--  1 ubuntu ubuntu 1364 Nov 26 16:22 .env.example
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 16:24 .git
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 .github
+-rw-r--r--  1 ubuntu ubuntu  615 Nov 26 16:22 .gitignore
+-rw-r--r--  1 ubuntu ubuntu 1352 Nov 26 16:22 .gitleaks.toml
+-rw-r--r--  1 ubuntu ubuntu  578 Nov 26 16:22 CLEANROOM.md
+-rw-r--r--  1 ubuntu ubuntu  255 Nov 26 16:22 LICENSE
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 MEMORY
+-rw-r--r--  1 ubuntu ubuntu 1000 Nov 26 16:22 Makefile
+-rw-r--r--  1 ubuntu ubuntu 1181 Nov 26 16:22 README.md
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 16:22 api
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 16:22 data
+-rw-r--r--  1 ubuntu ubuntu 2737 Nov 26 16:22 docker-compose.override.yml
+-rw-r--r--  1 ubuntu ubuntu 3714 Nov 26 16:22 docker-compose.yml
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 16:22 docs
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 engine
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 16:22 migrations
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 prompts
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 16:22 scripts
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 tools
+
+$ ls -la /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ 2>/dev/null | head -50
+total 24
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 16:22 .
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 ..
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 15:06 ci
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 16:22 extra
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 16:22 lifeos
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 16:22 target
+
+✗ git status && git log --oneline -5 && git branch -a | head -30 && git remote -v failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ ls -la /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ 2>/dev/null; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/2026-11-02-fr-01-ingestion-live/ 2>/dev/null
+total 184
+dr-xr-xr-x 46 ubuntu ubuntu 4096 Nov 26 16:22 .
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 ..
+dr-xr-xr-x  5 ubuntu ubuntu 4096 Nov 26 16:22 .archive
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 20260729-galass-seclists-offensive-pentest
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260730-galassdriver-kyc-submit-spinner
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260730-galassdriver-vehicle-verification-submit
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260815-archstudio-lego-catalog
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260815-archstudio-lego-implementation
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260815-archstudio-services-catalog
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260816-archstudio-lego-flow-scope-integration
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260817-archstudio-add-toolkit
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260817-archstudio-brick-metadata
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260823-030234_vision-m3-health-score
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260824-001216_catalog-health-cms
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260824-181748_templates-flows-enrich
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260824-215500_add-health-flows
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260825-012317_drizzle-content-sot
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260915-whatsappbotsop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260917-fiitsa-benchmark
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260918-jaayalma-solutions-benchmark
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 20260919-jaayalma-positionnement
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20261002-1138_loopdetector-single-failure
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 20261002-galass-auto-dispatch
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 20261002-galass-driver-dispatch-f4
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 20261002-galass-rider-dispatch-f3
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20261006-galass-driver-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20261006-galass-regression-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20261006-galass-rider-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 amber-ledger-wire-inputs
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 conveyor-p3-stage-runner
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 conveyor-p4-approve
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 cursor-algo-follow-test-20260728
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-auth-login-register-gate-110701
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-dashboard-499-loop-710204
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-francisation-sn-840301
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-ios-recaptcha-crash-507205
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 galass-phone-auth-876543
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-push-notifications-619402
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-ride-payment-post-739201
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-rider-security-complete-120712
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-rider-stable-final-110711
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-rider-store-submission-20260703
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-version-release-docs-180716
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-vps-startup-storm-710203
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-webview-payment-482910
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 hybrid-smoke-20260728
+
+$ git status && git log --oneline -5 && git branch -a | head -40
+On branch isa/fr-01-vera-2026-11-26
+Your branch is up to date with 'origin/isa/fr-01-vera-2026-11-26'.
+
+nothing to commit, working tree clean
+1bbf95b docs(isa): fr-01 — V1 schéma et migrations, ISC-22/12/13 cochés
+f5a46c8 feat(ingest): S1.3 — fenêtres d'état et couverture horaire (ISC-13)
+ddfe5c5 feat(ingest): S1.2 — origine et client du pool d'URL (ISC-12)
+b4d7fcc feat(ingest): S1.1 — schéma chaîne du catalogue ouvert (ISC-22)
+aaa637f wip(fr01-v1): partial work (agent stopped)
+* isa/fr-01-vera-2026-11-26
+  remotes/origin/annotation/pilot100-2026-11-14
+  remotes/origin/annotation/pilot100-agreement
+  remotes/origin/build/fr01-v1c
+  remotes/origin/build/fr04-l2
+  remotes/origin/build/fr04-l3
+  remotes/origin/build/fr04-l4
+  remotes/origin/build/fr04-l5
+  remotes/origin/build/fr04-l6
+  remotes/origin/build/fr04-l7
+  remotes/origin/build/fr04-l8
+  remotes/origin/build/fr04-l9
+  remotes/origin/chore/isa-annotation-isc43-ratif-2026-11-24
+  remotes/origin/close/fr04-v3-max
+  remotes/origin/close/fr04-v4-pending
+  remotes/origin/cursor/language-pass-slice-resume-b609
+  remotes/origin/docs/isa-cloture-2026-11-18
+  remotes/origin/eval/compare-engines-2026-11-25
+  remotes/origin/feat/fingerprint-engine-maison-2026-11-15
+  remotes/origin/feat/inventory-mytuner
+  remotes/origin/feat/mytuner-stream-scrape
+  remotes/origin/feat/relecture-2-overlay-2026-11-16
+  remotes/origin/fix/csv-import-and-no-media-test
+  remotes/origin/fix/inventory-allowlist-names
+  remotes/origin/fix/isc15-replay-speech-rule-2026-11-16
+  remotes/origin/fix/mytuner-discover
+  remotes/origin/fix/mytuner-names-only
+  remotes/origin/fix/orb-pagination-skip-stream-tests
+  remotes/origin/fullrun-logs/annotation-build-solo-45072495775
+  remotes/origin/fullrun-logs/annotation-build-solo2-45082420751
+  remotes/origin/fullrun-logs/annotation-build-solo3-45089775991
+  remotes/origin/fullrun-logs/annotation-cloture-build-45065572679
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44861841409
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44872185689
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44879646038
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44882169767
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44901760509
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44904821337
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44921694898
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44924244371
+
