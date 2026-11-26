@@ -2959,3 +2959,10 @@ bd77f91 docs(driver): verdict position voiture temps réel + ISC-F5-19
 7187e3a prompt: driver live location
 
 Le dépôt est en retard d'1 commit par rapport à `origin/feat/multistop-e2e-2026-11-15`. Je lis l'ISA et le diff complet pour comprendre la situation.
+Contexte riche. L'ISA est en `phase: complete` avec un F6 en cours (revue UI). Le claim **ISC-F5-13** est précisément la tâche : « Annuler la course » reste visuellement distinct (danger) du CTA principal, tout état.
+
+Mon local est **en retard d'1 commit** par rapport à `origin/feat/multistop-e2e-2026-11-15` (le fix ISC-F5-12 est dessus). Je me synchronise d'abord :
+$ git fetch origin feat/multistop-e2e-2026-11-15 && git pull --ff-only origin feat/multistop-e2e-2026-11-15 && git status && git log --oneline -3
+remote: Invalid username or token. Password authentication is not supported for Git operations.
+fatal: Authentication failed for 'https://github.com/LordThiouk/Galass_Driver.git/'
+
