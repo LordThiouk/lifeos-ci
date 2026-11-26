@@ -15468,3 +15468,106 @@ dr-xr-xr-x 236 ubuntu ubuntu 12288 Nov 26 19:11 skills-shared
 L'ISA est canonique dans `target/MEMORY/WORK/2026-11-22-galass-lot-client/`. Il faut trouver le **plan Serena W1** (tâches S-W1-01…S-W1-18) et les outils (`ISATool.ts`). Cherchons.
 → Read MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md [offset=338, limit=160]
 Le plan Serena est intégré dans l'ISA (lignes ~380+). Lisons la section W1 complète.
+
+$ command -v php bun rg composer; php -v 2>/dev/null | head -2; ls core/vendor >/dev/null 2>&1 && echo VENDOR_OK || echo NO_VENDOR
+/usr/local/bin/bun
+/usr/bin/rg
+VENDOR_OK
+
+$ ls docs/ && head -60 docs/BUGS.md
+API_MULTI_STOP.md
+APP_FLOW_END_TO_END.md
+ARCHITECTURE.md
+BUGS.md
+DEPLOY_RUNBOOK.md
+nginx-galass-admin-harden.conf
+nginx-galass-security-headers.conf
+nginx-galass-security.conf
+# Galass — bugs found (test runs 1–5, 2026-10-18/19, Android 14 emulators, debug builds)
+
+Severity: P0 = blocks core flow / safety · P1 = major · P2 = visible defect · P3 = cosmetic/minor.
+"Cause" for run4 driver items: **PERM** = artefact of missing permission/config in the test, **REAL** = genuine app bug, **ENV** = emulator/test-environment.
+Screenshots are in `/workspace/galass/`. Times UTC.
+
+## État au 2026-11-22
+
+Tri sans aucun correctif de code. Preuves : Galass_backend `main` (682f235d), Galass_Rider et Galass_Driver sur leurs branches par défaut, plus les branches multistop en cours (Driver `feat/multistop-e2e-2026-11-15`, Rider `feat/multistop-rider-close-2026-11-20`). Les colonnes « Triage 2026-11-22 » et « Preuve triage » ont été ajoutées aux tableaux ; le contenu d'origine est inchangé.
+
+| Statut | Nombre |
+|---|---|
+| OUVERT | 17 (P0 : 0 · P1 : 1 · P2 : 16) |
+| CORRIGÉ | 25 |
+| OBSOLÈTE | 9 |
+| À REVÉRIFIER | 20 |
+| **Total** | **71** (70 lignes de tableaux + « NEW R-5 » du run6) |
+
+Les entrées « E-1 » du run6/run7 et les deux blocs « N-11 » sont des notes sans ligne de tableau : annotées, non comptées.
+
+**OUVERTS P0** : aucun établi par preuve (voir réserve ci-dessous).
+
+**OUVERTS P1** :
+- CFG-1 — Driver : `route.dart:7` importe `Profile/` sur `main` (build Linux/CI cassé). Correctif prêt sur la branche multistop (c9c65ff), non fusionné.
+
+**OUVERTS P2** : CFG-4, R-2 (= R8-8), R-4, R-5 (« NEW R-5 », run6), R-11, D-3, D-6, D-12, D-13, D-15, N-4, N-6, N-7, MS-5, R8-5 (corrigé sur la branche Rider multistop, absent de `main`), R8-8.
+
+**Lecture des statuts**
+- Le statut reflète la branche par défaut : un correctif présent seulement sur une branche multistop non fusionnée reste OUVERT (CFG-1, R8-5), avec le SHA du correctif.
+- OBSOLÈTE est aussi utilisé, par écart à la définition stricte, pour les entrées qui ne sont pas des bugs du code : environnement de test (ENV : D-4, D-8, E-2, R8-11), décision produit voulue (E-4, E-5), comportement correct (D-5), information (E-3, N-9). Elles sont repérées « Hors bug » dans la colonne preuve.
+- Aucune entrée n'est classée P0 faute de preuve : un P0 peut se cacher parmi les À REVÉRIFIER (D-1 démarrage auto en ligne, D-9, D-12, R-6, R-7), qui demandent un test sur appareil.
+
+**ID en double** : R-5, R-6, R-7, D-9, D-10, D-11, D-12, D-13 (tableau Rider/Driver et tableau Run7), E-1 (tableau run5, Run6, Run7). Doublons de fond : D-7 = CFG-3, D-14 = R-7, R8-8 = R-2, R8-6 = D-10 (run7), MS-2 ≈ N-1, MS-6 ≈ D-11, R8-3 ≈ D-11.
+
+**Demandes de fonctionnalité / hors bug** : MS-5 (facturation de l'attente par arrêt, V2.1), N-6 (canaux Android séparés), N-9 (boîte de réception), N-11 (spécification des textes, déjà implémentée), E-4 et E-5 (décisions produit), R-12 (donnée de test), MS-3 et MS-4 (documentation / exploitation).
+
+## Setup / build / config
+| ID | Area | Sev | Issue | Expected vs actual | Evidence | Suspected file / fix | Triage 2026-11-22 | Preuve triage |
+|---|---|---|---|---|---|---| --- | --- |
+| CFG-1 | Driver build | P1 | Linux/CI build fails: `route.dart` imports `screens/Profile/profile_screen.dart` but the folder is `profile/` (works only on case-insensitive macOS). | Builds on any OS; actual: compile error "Error when reading … No such file". Worked around with a local symlink (uncommitted). | `driver-build.log` (run1) | `Galass_Driver/lib/core/route/route.dart:7` → fix import case | **OUVERT P1** | DR origin/main `lib/core/route/route.dart:7` importe toujours `Profile/` (casse sur Linux/CI). Correctif prêt sur DR feat/multistop-e2e-2026-11-15 (`route.dart:7` → `profile/`, c9c65ff, 2026-11-16), **non fusionné** : à merger. |
+| CFG-2 | Firebase / GCP | P0 (debug/CI only) | Phone auth blocked for non-registered signing keys: `17499 Requests from this Android client application … are blocked` (403 GetAuthDomainTask). | Two separate places needed the debug SHA-1 `6D:97:52:…:11:A9`: Firebase app fingerprints **and** GCP "Android key (auto created by Firebase)" restrictions. **Fixed by Papa 00:00** (run4 OK). | `run3-driver-01-blocked.png`, logcat run3 | Document in SECURE_CREDENTIALS_SETUP.md | **CORRIGÉ** | Config externe (Firebase + GCP), corrigée par Papa selon l'entrée ; run4 puis le run7 E2E complet passent l'auth téléphone. Pas de code à prouver. |
+| CFG-3 | Google Maps key | P1 (debug/CI) | Maps SDK `Authorization failure` → **blank maps** (driver home, rider ride map). Maps key in `AndroidManifest.xml` (`com.google.android.geo.API_KEY`) does not allow the box debug SHA-1. | Map tiles render; actual: beige empty map with Google logo. Same fix as CFG-2 but on the **Maps** key (and check "Maps SDK for Android" enabled). | `run5-driver-03-home.png`, `run4-driver-04-home.png`, `run4-rider-05-where.png` | GCP Credentials → Maps key → add `sn.galass.galassdriver` / `sn.galass.galassrider` + SHA-1 | **CORRIGÉ** | Section « Maps fix — RESOLVED » (run6, 2026-10-19) : cartes rendues sur les deux apps après ajout du SHA-1 à la clé. Config externe. |
+| CFG-4 | Builds | P3 | Repo gradle `jvmargs` −Xmx6–8G: OOM-kills the daemon on 15 GB/no-swap CI box; NDK 29 install race when building both in parallel. | — | run1 build logs | `android/gradle.properties` | **OUVERT P2** | DR `android/gradle.properties:1` `-Xmx8G` ; RI `android/gradle.properties:1` `-Xmx6g` toujours en place (main). CI : les APK se compilent sur GitHub Actions, risque limité à la box locale. |
+
+## Rider
+| ID | Sev | Issue | Steps | Expected vs actual | Evidence | Suspected file | Triage 2026-11-22 | Preuve triage |
+|---|---|---|---|---|---|---| --- | --- |
+| R-1 | P1 | Login failure is silent | Login with blocked/failed phone auth (run3) | Error message; actual: Connexion does nothing, error only in logcat | `run2-rider-after-connexion.png` | `lib/services/AuthService.dart` (`verificationFailed` → no UI) | **CORRIGÉ** | RI `lib/data/controller/auth/login_controller.dart:135-138` : `FirebaseAuthException` → `CustomSnackBar.error`. (`AuthService.dart:125-132` propage l'erreur via le completer.) |
+| R-2 | P1 | Address autocomplete not restricted to Senegal (biased by device location only) | Device GPS outside SN, search "Place de l'Independance Dakar" | SN results; actual: only US places (Moses Lake WA, Newark DE). With Dakar GPS (run5) results are correct → add `components=country:sn` | `run4-rider-06-pickup-search.png`, `run4-rider-07-search-us-results.png`, OK: `run5-e2e-02-dest-search.png` | places autocomplete call (select location controller) | **OUVERT P2** | RI `lib/data/repo/location/location_search_repo.dart:93-98` : `components=country:` vient du pays de la **position de l'appareil**, jamais forcé à `sn`. Hors Sénégal → résultats étrangers. N'affecte pas un usage réel à Dakar. Voir aussi R8-8 (doublon). |
+| R-3 | P1 | No service-area / max distance check on fares | Pickup + destination 4 360 km apart (US) | Refuse / out of zone; actual: quote 1 744 230 CFA Economie, 4 360 585 CFA luxe, "Trouver un chauffeur" enabled | `run4-rider-08-after-confirm-location.png`, `run4-rider-09-pre-confirm.png` | fare endpoint + rider validation | **CORRIGÉ** | BE `core/app/Services/Rider/RideService.php:466-478` `detectZones()` : refuse un départ ou une destination hors zone et deux pays différents (`not_found`), avant tout tarif (`getFareAndRouteData` l.25-31). |
+| R-4 | P1 | Google Directions API called on every ride-detail poll (~every 4 s) while searching | Request a ride, stay on search screen | Route fetched once; actual: `maps/api/directions` + `ride/details` every ~4 s (cost + battery) | logcat run5 01:12:39–01:14 | `ride_details_controller.dart:396+`, `flutter_polyline_points/network_util.dart:82` | **OUVERT P2** | RI `ride_details_controller.dart:410` appelle `mapController.loadMap` à chaque rafraîchissement des détails → `ride_map_controller.dart:176` `getPolyLinePoints()` sans cache de route (seul `_numberedStopIconCache` existe, l.34). |
+| R-5 | P2 | Cancelled-by-system ride shows "Par moi" + raw code `NO_DRIVER_AVAILABLE` (no space) | Ride gets no driver | "Annulée : aucun chauffeur disponible"; actual: "Par moiNO_DRIVER_AVAILABLE" | `run5-e2e-10-rider-cancelled-tab.png` | ride list card cancel-reason widget | **À REVÉRIFIER** | Chaîne FR existe (`my_strings.dart:95` « Aucun chauffeur disponible ») mais le widget de raison d'annulation de la liste n'a pas été localisé en 2 recherches. **DOUBLON d'ID** avec « NEW R-5 » (run6). |
+| R-6 | P2 | Searching screen never tells the user the ride was cancelled (app died; on relaunch ride silently gone from active list) | — | Clear "aucun chauffeur" state | `run5-e2e-05-rider-searching.png` → `run5-e2e-09-rider-new-rides.png` | dispatch search UI | **À REVÉRIFIER** | Écran de recherche non relu. Côté serveur, push « aucun chauffeur » ajouté : BE `DispatchOrchestrator.php:352` `RidePushNotifier->noDriver`. **DOUBLON d'ID** avec R-6 (run7, crash). |
+| R-7 | P2 | OTP screen number mask wrong: "+2217******7777777" | Login | "+221 7•• ••• •77"; actual: more digits than number | `run4-rider-01-after-connexion.png` | OTP screen mask helper (also Driver) | **À REVÉRIFIER** | Aucun code de masque du numéro OTP trouvé côté Rider (`AuthService._maskPhone` l.58 ne sert qu'aux logs). **DOUBLON d'ID** avec R-7 (run7) ; même défaut que D-14. |
+| R-8 | P2 | Home location stuck "Chargement…" when position unavailable; ride map spinner forever | Run4 (no fix) | Fallback/error; actual: infinite loading. With GPS (run5) the address resolves → partly ENV | `run4-rider-04-home.png`, `run4-rider-05-where.png` | home header / location controller | **À REVÉRIFIER** | Dépend de l'absence de position (run4 sans GPS), en partie ENV selon l'entrée ; non reproductible par lecture du code. |
+| R-9 | P2 | Debug "Test Crashlytics" button visible on login screen | Open login | Hidden outside debug; verify release build | `artemis-rider-login.png` | login screen | **CORRIGÉ** | RI `lib/presentation/screens/auth/login/login_screen.dart:~213` bouton « Test Crashlytics » sous `if (kDebugMode)`. |
+| R-10 | P3 | Internal slug "voiture/economie" shown as Economie subtitle | Home | Human label | `run4-rider-04-home.png` | service model display | **À REVÉRIFIER** | Aucun `voiture/economie` / slug dans `lib/` du Rider en 2 recherches : le sous-titre vient probablement de la réponse backend. |
+| R-11 | P3 | Copy: placeholder "Destination de prise en charge"; "les Confidentialité et conditions"; "Livraison par  2 roues" (double space); "/kilomètres" plural; mixed "CFA1230" vs "1230 XOF", no thousands separators | — | — | `run4-rider-05-where.png`, `artemis-rider-signup.png`, `run4-rider-09-pre-confirm.png` | `fr` strings / formatters | **OUVERT P2** | RI `lib/core/utils/my_strings.dart:42` `pickUpDestination = "Destination de prise en charge"` toujours là. Autres libellés de l'entrée non revérifiés. |
+| R-12 | P3 | Test account name junk "hejjjdb jjejjdb" | — | Test data | `run4-rider-04-home.png` | backend test data | **À REVÉRIFIER** | Donnée de test backend (compte de test), pas de code. **Hors bug.** |
+
+$ git show aa2adb39 --stat
+commit aa2adb39b9b70823c1d9b9dd10183b9411eaa0c7
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 19:40:01 2026 +0000
+
+    docs(bugs): porter triage c40c30de (PR #8) pour S-W1-02/ISC-4
+    
+    Prerequis W1: docs/BUGS.md trié porté depuis c40c30de.
+    php artisan test --filter ... : php non disponible dans ce runner; vérification statique uniquement.
+
+ docs/BUGS.md | 214 +++++++++++++++++++++++++++++++++++------------------------
+ 1 file changed, 128 insertions(+), 86 deletions(-)
+
+$ bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts --help 2>&1 | head -60
+usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+  scaffold --slug s --goal "…" [--title t]      crée l'ISA (sections Problem…Decisions)
+  append   --section "Claims" --text "…"|--file f  ajoute sous une section (créée si absente)
+  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+  set      --field phase --value build          frontmatter
+  replace  --old "…" --new "…"                  remplacement exact unique (corrections)
+  adopt                                          tamponne un ISA hérité (après relecture)
+  verify                                         contrôle l'empreinte (exit 2 si KO)
+  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)
+
+J'ai le plan W1 complet (S-W1-01…S-W1-18). L'environnement contient déjà des commits W1 locaux + 4 modifications non commitées. Vérifions l'outillage (php, bun, vendor), `docs/BUGS.md`, l'usage d'`ISATool.ts`, et l'état réel avant d'agir.
