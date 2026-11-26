@@ -3978,3 +3978,35 @@ $ sed -n '78,116p' /tmp/dvc_3501.kt; echo "=== grep whole fs for the run id ==="
 /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
 /tmp/cursor/cloud-agent-transcripts/2026-11-26T15-19-41Z-69df/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
 
+$ grep -rln "Gradle version\|gradle-wrapper.properties" /tmp/cursor/cloud-agent-transcripts 2>/dev/null | head; ls -la /tmp/cursor/cloud-agent-transcripts/2026-11-26T15-19-41Z-69df/ 2>/dev/null
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T15-19-41Z-69df/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T11-29-27Z-2566/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T13-20-24Z-b126/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+total 16
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 15:19 .
+drwxr-xr-x 5 ubuntu ubuntu 4096 Nov 26 15:19 ..
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 15:19 bc-01a21635-25cb-7ae8-b0a3-c6995247e410
+-rw-r--r-- 1 ubuntu ubuntu  788 Nov 26 15:19 index.json
+
+$ grep -rln "DependencyValidation\|minimum supported version of\|DependencyVersionChecker" /tmp /home/ubuntu/actions-runner/_work/_temp 2>/dev/null | head -20
+/tmp/dvc_3501.kt
+/tmp/gu_3501.dart
+/tmp/flutter/docs/platforms/android/Update-Android-MinSdk-Version.md
+/tmp/flutter/docs/contributing/Android-API-And-Related-Versions.md
+/tmp/flutter/.git/index
+/tmp/flutter/bin/cache/flutter_tools.snapshot
+/tmp/flutter/packages/flutter_tools/test/general.shard/runner/options/option_descriptor_test.dart
+/tmp/flutter/packages/flutter_tools/test/general.shard/runner/flutter_command_test.dart
+/tmp/flutter/packages/flutter_tools/test/general.shard/android/gradle_errors_test.dart
+/tmp/flutter/packages/flutter_tools/test/general.shard/android/android_gradle_builder_test.dart
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/tasks/BaseFlutterTaskHelperTest.kt
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginTest.kt
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/FlutterPlugin.kt
+/tmp/flutter/packages/flutter_tools/gradle/AGENTS.md
+/tmp/flutter/packages/flutter_tools/gradle/build.gradle.kts
+/tmp/flutter/packages/flutter_tools/lib/src/build_info.dart
+/tmp/flutter/packages/flutter_tools/lib/src/runner/options/common_options.dart
+/tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart
+
