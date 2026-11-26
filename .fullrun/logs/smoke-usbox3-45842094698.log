@@ -7757,3 +7757,562 @@ drwxr-xr-x 9 ubuntu ubuntu   4096 Nov 26 18:20 ..
 
 ✗ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md failed
 Error: File not found: /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+✱ Glob "**/prompt.md" in /home/ubuntu/actions-runner/_work/_temp · 0 matches
+Le chemin indiqué n'existe pas. Je cherche le fichier.
+
+$ ls -la /home/ubuntu/actions-runner/_work/_temp/
+total 13232
+drwxr-xr-x 9 ubuntu ubuntu    4096 Nov 26 18:20 .
+drwxr-xr-x 7 ubuntu ubuntu    4096 Nov 26 18:20 ..
+-rw-r--r-- 1 ubuntu ubuntu    3074 Nov 26 18:20 0927ba96-6a24-4fbc-88b0-7f162ebcf95a.sh
+-rw-r--r-- 1 ubuntu ubuntu     375 Nov 26 18:20 0f2d1aac-f856-495c-991d-85d8b609318a.sh
+-rw-r--r-- 1 ubuntu ubuntu     106 Nov 26 18:20 123de9ee-c41a-4c93-9f33-628d81fa411d.sh
+-rw-r--r-- 1 ubuntu ubuntu     828 Nov 26 18:20 1dd3df03-64b8-4c7e-bac4-08b622674606.sh
+-rw-r--r-- 1 ubuntu ubuntu    1615 Nov 26 18:20 2086c064-e55e-4a0f-af66-2886a97512e5.sh
+-rw-r--r-- 1 ubuntu ubuntu    2106 Nov 26 18:20 46b57790-58e0-4bcd-ba61-7220141d1406.sh
+-rw-r--r-- 1 ubuntu ubuntu    2338 Nov 26 18:20 5ab1986e-4389-48ce-9a5c-b3893a90687d.sh
+-rw-r--r-- 1 ubuntu ubuntu     429 Nov 26 18:20 73ffd2c5-b81f-44f5-89a8-3df06206c483.sh
+-rw-r--r-- 1 ubuntu ubuntu    1345 Nov 26 18:20 7fc57a83-cb2a-495a-9a37-98b7e4b8f446.sh
+-rw-r--r-- 1 ubuntu ubuntu    2007 Nov 26 18:20 877d323a-390c-4590-b206-3556ad720eaa.sh
+-rw-r--r-- 1 ubuntu ubuntu    2016 Nov 26 18:20 8afffe5d-fc36-4c5b-9a94-b08cfcb4baff.sh
+-rw-r--r-- 1 ubuntu ubuntu    8663 Nov 26 18:20 9b7b47a0-4449-49d0-b413-82944d929184.sh
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:20 _github_workflow
+drwxr-xr-x 2 ubuntu ubuntu   12288 Nov 26 18:20 _runner_file_commands
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:20 age
+-rw-r--r-- 1 ubuntu ubuntu 5194720 Nov 26 18:20 age.tgz
+-rw-r--r-- 1 ubuntu ubuntu    2553 Nov 26 18:20 db855c49-d1d1-4f61-99b1-3ab73c97e27f.sh
+-rw-r--r-- 1 ubuntu ubuntu    2915 Nov 26 18:20 dc05f5b7-4aea-4535-8e97-271bc8437d07.sh
+-rw-r--r-- 1 ubuntu ubuntu 8230402 Nov 26 18:20 gitleaks.tgz
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:20 gl
+-rw-r--r-- 1 ubuntu ubuntu    2244 Nov 26 19:04 live.out
+drwxr-xr-x 4 ubuntu ubuntu    4096 Nov 26 18:20 npm-global
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:58 oc
+drwxr-xr-x 4 ubuntu ubuntu    4096 Nov 26 19:05 oc-agent
+-rw-r--r-- 1 ubuntu ubuntu     444 Nov 26 18:52 wip.out
+
+$ ls -la /home/ubuntu/actions-runner/_work/_temp/oc/ /home/ubuntu/actions-runner/_work/_temp/oc-agent/
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/:
+total 13540
+drwxr-xr-x 4 ubuntu ubuntu     4096 Nov 26 19:05 .
+drwxr-xr-x 9 ubuntu ubuntu     4096 Nov 26 18:20 ..
+-rw------- 1 ubuntu ubuntu   514960 Nov 26 18:20 .bun-1000-71b650bef1b3e52c.node
+-rw------- 1 ubuntu ubuntu 12846400 Nov 26 18:20 .bun-1000-89812e6e6a68aaeb.so
+-rw-r--r-- 1 ubuntu ubuntu        0 Nov 26 19:05 attempt.start
+drwxr-xr-x 8 ubuntu ubuntu     4096 Nov 26 18:52 home
+-rw-r--r-- 1 ubuntu ubuntu        0 Nov 26 19:05 oc-tail
+-rw-r--r-- 1 ubuntu ubuntu        7 Nov 26 19:05 oc.pid
+drwxr-xr-x 2 ubuntu ubuntu     4096 Nov 26 18:20 opencode
+-rw-r--r-- 1 ubuntu ubuntu     6201 Nov 26 19:05 redacted.log
+-rw-r--r-- 1 ubuntu ubuntu   124152 Nov 26 18:55 run-beam-free.log
+-rw-r--r-- 1 ubuntu ubuntu     2399 Nov 26 19:05 run-big-pickle.log
+-rw-r--r-- 1 ubuntu ubuntu       46 Nov 26 18:20 run-deepseek-v4.1-flash-free.log
+-rw-r--r-- 1 ubuntu ubuntu    77512 Nov 26 18:51 run-flint-40b-free.log
+-rw-r--r-- 1 ubuntu ubuntu    78961 Nov 26 18:57 run-hy4-flash-free.log
+-rw-r--r-- 1 ubuntu ubuntu    25749 Nov 26 18:42 run-iceman-free.log
+-rw-r--r-- 1 ubuntu ubuntu   108696 Nov 26 18:37 run-mimo-v2.6-flash-free.log
+-rw-r--r-- 1 ubuntu ubuntu     8456 Nov 26 18:58 run-nemotron-3.5-lightning-free.log
+-rw-r--r-- 1 ubuntu ubuntu       48 Nov 26 18:58 run-nemotron-3.5-super-vl-free.log
+-rw-r--r-- 1 ubuntu ubuntu     6417 Nov 26 19:04 run-seaglass-alpha-free.log
+
+/home/ubuntu/actions-runner/_work/_temp/oc/:
+total 448
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 18:58 .
+drwxr-xr-x 9 ubuntu ubuntu   4096 Nov 26 18:20 ..
+-rw------- 1 ubuntu ubuntu   9680 Nov 26 18:20 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu 432677 Nov 26 19:05 opencode.log
+
+✱ Glob "**/*prompt*" in . · 0 matches
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc-agent/run-big-pickle.log
+→ Read /home/ubuntu/actions-runner/_work/_temp/live.out
+✱ Grep "prompt\.md" in /home/ubuntu/actions-runner/_work/_temp · 100 matches
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc-agent/redacted.log
+
+$ git status --short && git log --oneline -5 && ls -la
+207d752 build(android): align Rider toolchain with Flutter 3.50.1
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+total 268
+drwxr-xr-x 18 ubuntu ubuntu  4096 Nov 26 18:55 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 18:20 ..
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 18:20 .claude
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 18:20 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 19:05 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 18:20 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1046 Nov 26 18:20 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  1188 Nov 26 18:20 .mcp.json
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 18:20 .omc
+-rw-r--r--  1 ubuntu ubuntu  8995 Nov 26 18:20 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu  3781 Nov 26 18:20 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu  5284 Nov 26 18:20 CLAUDE.md
+-rw-r--r--  1 ubuntu ubuntu  1411 Nov 26 18:20 FIX_SUMMARY.md
+-rw-r--r--  1 ubuntu ubuntu  3977 Nov 26 18:20 GALASS_CONTEXT.md
+-rw-r--r--  1 ubuntu ubuntu   100 Nov 26 18:20 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 16647 Nov 26 18:20 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 18:20 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  8465 Nov 26 18:20 NIMBALYST_DEV_SETUP.md
+-rw-r--r--  1 ubuntu ubuntu    13 Nov 26 18:20 README.md
+-rw-r--r--  1 ubuntu ubuntu  8175 Nov 26 18:20 RIDER-MULTISTOP.md
+-rw-r--r--  1 ubuntu ubuntu  6602 Nov 26 18:20 SECURE_CREDENTIALS_SETUP.md
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 18:20 _ephemeral
+-rw-r--r--  1 ubuntu ubuntu  1580 Nov 26 18:20 analysis_options.yaml
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 18:55 android
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 18:20 assets
+-rw-r--r--  1 ubuntu ubuntu  4837 Nov 26 18:20 codemagic.yaml.deprecated
+-rw-r--r--  1 ubuntu ubuntu   265 Nov 26 18:20 devtools_options.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 18:20 diag
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 18:20 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 18:20 fastlane
+-rw-r--r--  1 ubuntu ubuntu   363 Nov 26 18:20 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 18:20 ios
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 18:20 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 18:20 prompts
+-rw-r--r--  1 ubuntu ubuntu 68546 Nov 26 18:20 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  3366 Nov 26 18:20 pubspec.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 18:20 scripts
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 18:20 test
+-rw-r--r--  1 ubuntu ubuntu   441 Nov 26 18:20 test_result.txt
+
+$ ls -la /tmp/tmp.rYsFqYqu6a/oc/ 2>&1; echo "---"; stat -c '%y %s %n' /tmp/tmp.rYsFqYqu6a/oc/prompt.md 2>&1
+total 20
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 13:55 .
+drwx------ 6 ubuntu ubuntu 4096 Nov 26 13:55 ..
+-rw-r--r-- 1 ubuntu ubuntu  568 Nov 26 13:55 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu 5552 Nov 26 13:55 prompt.md
+---
+2026-11-26 13:55:25.789192759 +0000 5552 /tmp/tmp.rYsFqYqu6a/oc/prompt.md
+
+→ Read /home/ubuntu/actions-runner/_work/_temp/dc05f5b7-4aea-4535-8e97-271bc8437d07.sh
+→ Read /home/ubuntu/actions-runner/_work/_temp/9b7b47a0-4449-49d0-b413-82944d929184.sh
+
+$ sed -n '1960,2110p' /home/ubuntu/actions-runner/_work/_temp/oc-agent/run-iceman-free.log
+(no output)
+
+$ sed -n '1960,2060p' /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log
+### General
+- Added `PlatformFile.extension`, restoring the pre-12.0 convenience getter that was dropped during the federated rewrite. Returns the file extension of `name` without the leading dot, or `null` if there is none.
+
+### iOS
+- Fixed a crash (`FileSystemException`/`OSError: Is a directory`) when picking a Live Photo from the gallery. Live Photos are saved by iOS as `.pvt` packages (directories); the still image contained in the package is now extracted instead of returning the package itself.
+
+Silence 180s sans nouvelle sortie (journal=108696 o) : coupure opencode pid=267349
+
+> Forge · iceman-free
+
+$ cat /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+# Contexte d exécution lifeos-ci
+
+- Job : rider-apk-gradle
+- Agent : forge-code
+- Dépôt cible : LordThiouk/Galass_Rider
+- Branche : feat/multistop-e2e-2026-11-15
+- lifeos_write : false
+- lifeos de référence : main
+
+## Règles
+
+- Travaille uniquement dans les dépôts fournis ; committe ton travail validé sur la branche courante.
+- Jamais de push, jamais de merge, jamais gh/ssh/scp ; le workflow pousse et ouvre la PR.
+- Jamais de secret ni de clé en dur. Ne modifie pas main/master.
+- Écris un court résumé factuel (SHA, tests, résultats) dans /tmp/task_done.md.
+- lifeos de référence : lifeos/ (lecture seule si lifeos_write=false).
+- lifeos est en lecture seule : ne tente jamais de le modifier.
+
+## Prompt
+
+# Rider — APK Artemis FAIL sous Flutter 3.50.1 (Gradle/AGP trop récents)
+
+Dépôt **Galass_Rider**, branche **build/rider-apk-gradle** (depuis feat/multistop-e2e-2026-11-15 @ tip F4-29).
+
+Artemis `45801376130` : étape unitaires VERTES ; **Build APK Rider** ROUGE — validation dépendances Android Flutter 3.50.1 refuse le toolchain Rider actuel :
+- `android/gradle/wrapper/gradle-wrapper.properties` → **Gradle 9.1.0**
+- `android/settings.gradle.kts` → **AGP 9.0.1**
+
+Driver (vert APK sous le même Artemis/Flutter 3.50.1) utilise **Gradle 8.14** (+ AGP ~8.11).
+
+Fais UNIQUEMENT : aligner le toolchain Android Rider sur ce que **Flutter 3.50.1** accepte (cible : Gradle **8.14** + AGP/Kotlin compatibles, calqués sur Driver si possible, sans casser Firebase/Crashlytics). Pas de changement `lib/`. **Interdit** `flutter build` / `gradlew` sur la box — commits + note dans message. Auteur Papa Diop <76528706+LordThiouk@users.noreply.github.com>. Pas de git push. Ne touche pas `.fullrun`. Ne régénère aucun golden.
+
+$ ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+AGENTS.md
+CHANGELOG.md
+CLAUDE.md
+FIX_SUMMARY.md
+GALASS_CONTEXT.md
+Gemfile
+Gemfile.lock
+MEMORY
+NIMBALYST_DEV_SETUP.md
+README.md
+RIDER-MULTISTOP.md
+SECURE_CREDENTIALS_SETUP.md
+VERIFY-F434B.md
+_ephemeral
+analysis_options.yaml
+android
+assets
+codemagic.yaml.deprecated
+devtools_options.yaml
+diag
+docs
+fastlane
+firebase.json
+ios
+lib
+prompts
+pubspec.lock
+pubspec.yaml
+scripts
+test
+test_result.txt
+
+$ pwd && git branch --show-current && git log --oneline -3
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+feat/multistop-e2e-2026-11-15
+424957d verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+
+$ find . -maxdepth 3 -name 'gradle-wrapper.properties' -o -name 'settings.gradle.kts' -o -name 'build.gradle.kts' -o -name 'build.gradle' | head -30
+./android/app/build.gradle.kts
+./android/settings.gradle.kts
+./android/build.gradle.kts
+
+$ cat android/gradle/wrapper/gradle-wrapper.properties
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+
+$ git checkout -B build/rider-apk-gradle feat/multistop-e2e-2026-11-15
+Switched to a new branch 'build/rider-apk-gradle'
+
+$ cat android/settings.gradle.kts
+pluginManagement {
+    val flutterSdkPath = run {
+
+Le fichier a été supprimé par une autre session. Je le reconstruis depuis les journaux et le script de génération.
+$ git branch --show-current; echo "---STATUS---"; git status --short; echo "---HEAD---"; git show --stat --oneline HEAD; echo "---DIFF HEAD---"; git show --format=fuller --no-ext-diff HEAD -- android/ | head -300
+build/rider-apk-gradle
+---STATUS---
+---HEAD---
+207d752 build(android): align Rider toolchain with Flutter 3.50.1
+ android/gradle.properties                        | 19 ++++++++++++-------
+ android/gradle/wrapper/gradle-wrapper.properties |  2 +-
+ android/settings.gradle.kts                      |  6 +++---
+ 3 files changed, 16 insertions(+), 11 deletions(-)
+---DIFF HEAD---
+commit 207d752e79f22d194e48ab53daefcd377e2fedf2
+Author:     Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+AuthorDate: Thu Nov 26 18:55:13 2026 +0000
+Commit:     Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+CommitDate: Thu Nov 26 18:55:13 2026 +0000
+
+    build(android): align Rider toolchain with Flutter 3.50.1
+    
+    - Downgrade Gradle wrapper 9.1.0 -> 8.14 (match Driver, accepted by Flutter 3.50.1)
+    - Downgrade AGP 9.0.1 -> 8.11.1
+    - Align Kotlin 2.2.20 -> 2.3.0 and Crashlytics plugin 3.0.7 -> 3.0.3
+    - Align gradle.properties with Driver-stable flags (keep android.enableJetifier=false)
+    
+    No lib/ changes. Not built locally (flutter build/gradlew forbidden on box).
+
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 0e4397f..bb6acb3 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -1,9 +1,14 @@
+-org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+-org.gradle.daemon=false
+-org.gradle.parallel=false
+-org.gradle.configureondemand=false
+-android.enableJetifier=false
++org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+ android.useAndroidX=true
+-android.newDsl=false
++android.enableJetifier=false
++# This builtInKotlin flag was added automatically by Flutter migrator
+ android.builtInKotlin=false
+-android.r8.proguardAndroidTxt.disallowed=false
++# This newDsl flag was added automatically by Flutter migrator
++android.newDsl=false
++
++# Build speed (local Fastlane / incremental)
++org.gradle.caching=true
++org.gradle.parallel=true
++org.gradle.daemon=true
++org.gradle.configureondemand=true
++org.gradle.vfs.watch=true
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..92992c4 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,12 +18,12 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+-    id("com.google.firebase.crashlytics") version("3.0.7") apply false
++    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+     // END: FlutterFire Configuration
+-    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
++    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+ }
+ 
+ include(":app")
+
+$ cat android/gradle/wrapper/gradle-wrapper.properties; echo "---SETTINGS---"; cat android/settings.gradle.kts; echo "---BUILD ROOT---"; cat android/build.gradle.kts; echo "---APP---"; cat android/app/build.gradle.kts
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+---SETTINGS---
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "8.11.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+}
+
+include(":app")
+---BUILD ROOT---
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
+rootProject.layout.buildDirectory.value(newBuildDir)
+
+subprojects {
+    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
+    project.layout.buildDirectory.value(newSubprojectBuildDir)
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register<Delete>("clean") {
+    delete(rootProject.layout.buildDirectory)
+}
+---APP---
+import java.util.Properties
+import java.io.FileInputStream
+
+
+plugins {
+    id("com.android.application")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    // END: FlutterFire Configuration
+    id("kotlin-android")
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+android {
+    namespace = "sn.galass.galassrider"
+    compileSdk = 36
+    ndkVersion = "29.0.14033849"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true  
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId = "sn.galass.galassrider"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        minSdk = flutter.minSdkVersion
+        targetSdk = 36
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    signingConfigs {
+        create("release") {
+            val keystorePath = System.getenv("CM_KEYSTORE_PATH")
+            if (keystorePath != null) {
+                // Codemagic CI
+                storeFile = file(keystorePath)
+                storePassword = System.getenv("CM_KEYSTORE_PASSWORD") ?: ""
+                keyAlias = System.getenv("CM_KEY_ALIAS") ?: ""
+                keyPassword = System.getenv("CM_KEY_PASSWORD") ?: ""
+            } else {
+                // Local — lire key.properties
+                val props = Properties()
+                val propsFile = rootProject.file("key.properties")
+                if (propsFile.exists()) props.load(FileInputStream(propsFile))
+                storeFile = props["storeFile"]?.let { file(it as String) }
+                storePassword = props["storePassword"] as? String ?: ""
+                keyAlias = props["keyAlias"] as? String ?: ""
+                keyPassword = props["keyPassword"] as? String ?: ""
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+dependencies {
+  coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+  // Jetpack Security for Android Keystore-backed encryption
+  implementation("androidx.security:security-crypto:1.1.0-alpha06")
+}
+
+flutter {
+    source = "../.."
+}
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/; echo "---"; ls -la /tmp/task_done.md 2>&1; echo "---"; cat /tmp/task_done.md 2>&1
+total 20
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 18:20 .
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 14:26 ..
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 14:26 ci
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 18:20 lifeos
+drwxr-xr-x 18 ubuntu ubuntu 4096 Nov 26 18:55 target
+---
+-rw-r--r-- 1 ubuntu ubuntu 957 Nov 26 18:58 /tmp/task_done.md
+---
+# Rider APK Toolchain Alignment — Task Complete
+
+- **SHA**: 207d752 — "build(android): align Rider toolchain with Flutter 3.50.1"
+- **Branch**: build/rider-apk-gradle (tip F4-29)
+- **Changes made** (all committed in 207d752):
+  - Gradle wrapper: 9.1.0 → 8.14-all.zip
+  - AGP: 9.0.1 → 8.11.1
+  - Kotlin: 2.2.20 → 2.3.0
+  - Crashlytics plugin: 3.0.7 → 3.0.3
+  - android/gradle.properties: flags aligned with Driver-stable (enableJetifier=false, builtInKotlin=false, newDsl=false) + caching/parallel flags
+- **No lib/ changes** — only Android toolchain configuration
+- **Verification**: working tree clean, all changes committed, no further edits needed
+- **Constraints respected**: no `flutter build`, no `gradlew` on box, no golden regen, no `.fullrun` touch
+- **Summary**: Rider APK Android toolchain now matches Driver (Gradle 8.14 + AGP 8.11.1 + Kotlin 2.3.0), compatible with Flutter 3.50.1. Build should proceed past dependency validation.
+
+J'ai reconstruit le prompt. Je vérifie maintenant l'état du dépôt et ce qui a déjà été fait.
+$ ls -d /home/ubuntu/* /opt/* /tmp/* 2>/dev/null | tr '\n' ' '; echo; echo "---FLUTTER---"; ls -d /home/ubuntu/flutter /opt/flutter /usr/local/flutter 2>/dev/null; echo "---SDK SEARCH---"; ls /home/ubuntu/actions-runner/_work/ 2>/dev/null
+/home/ubuntu/actions-runner /home/ubuntu/actions-runner-2 /home/ubuntu/actions-runner-3 /home/ubuntu/go /opt/cursor /opt/flutter /opt/fullrun-live /opt/fullrun-tools /opt/fullrun-wip /opt/google /opt/lifeos-ci-state /opt/lifeos-ci-tools /tmp/LICENSE /tmp/PROMPT-SMOKE.md /tmp/README.md /tmp/actionlint /tmp/actions-runner-2.log /tmp/actions-runner-3.log /tmp/actions-runner.log /tmp/agent-store-fuse.log /tmp/agp.html /tmp/agp811.html /tmp/anyos-xstartup /tmp/artemis-f432-fail /tmp/artemis-golden /tmp/artemis-r3.gz /tmp/artemis-r3.log /tmp/artemis-wf.yml /tmp/artemis152_logs.zip /tmp/artemis_152_job.log /tmp/artemis_152_logs.zip /tmp/artemis_workflow_81d149d4.yml /tmp/bore /tmp/bore-proxy.log /tmp/bore-ws-pong.err /tmp/bore-ws-pong.out /tmp/bore-wstunnel.log /tmp/bore.tgz /tmp/bs.bak /tmp/capture-vnc-user-env /tmp/capture-vnc-user-env.hash /tmp/capture-vnc-user-env.version /tmp/cf-tcp.log /tmp/cf-ws.log /tmp/check_mount.py /tmp/check_mount2.py /tmp/check_toolchain.py /tmp/chisel /tmp/chisel.tgz /tmp/ci-logs /tmp/cienv-pong.err /tmp/cienv-pong.out /tmp/cloudflared /tmp/cloudflared-proxy.log /tmp/clr-debug-pipe-182123-3941873-in /tmp/clr-debug-pipe-182123-3941873-out /tmp/clr-debug-pipe-183552-3944899-in /tmp/clr-debug-pipe-183552-3944899-out /tmp/clr-debug-pipe-263925-4286451-in /tmp/clr-debug-pipe-263925-4286451-out /tmp/clr-debug-pipe-286739-4479516-in /tmp/clr-debug-pipe-286739-4479516-out /tmp/clr-debug-pipe-286755-4479518-in /tmp/clr-debug-pipe-286755-4479518-out /tmp/clr-debug-pipe-48993-2879107-in /tmp/clr-debug-pipe-48993-2879107-out /tmp/container-init.log /tmp/coverage_gap.jsonl /tmp/coverage_out.jsonl /tmp/coverage_windows.jsonl /tmp/cr_f429_green.log /tmp/cr_f429_redbefore.log /tmp/cr_f429_restore_green.log /tmp/cursor /tmp/cursor-exec-daemon-artifacts-8ac725f6-a207-4cb6-bf1c-3ec0b5ffa7bd.json /tmp/cursor-exec-daemon-cgroup-rooms.1.env /tmp/cursor-mcp-browser-opens /tmp/d2.json /tmp/dbus-1lqGfk8t5A /tmp/dbus-7BA9TBOxcZ /tmp/dbus-C3UA0356PK /tmp/dbus-EjNjiuUOgI /tmp/dbus-FDwWAryv0S /tmp/dbus-GKTgyH7sIV /tmp/dbus-SEczAi8rVz /tmp/dbus-SHmRFYr6nc /tmp/dbus-VHZkRQkDkQ /tmp/dbus-VYdr4YRjqW /tmp/dbus-Zn9KcvvaLj /tmp/dbus-bYZQ5hWntL /tmp/dbus-daemon-system.log /tmp/dbus-kbcZikGnkT /tmp/dbus-tPzmPXHAl6 /tmp/dbus-trNjiytnK5 /tmp/dbus-ul09wl9jlC /tmp/dbus-uy8rhuyaOU /tmp/dbus-xDOlPVVGvO /tmp/dbus-zXzvmkdepZ /tmp/decision.txt /tmp/diag.zip /tmp/diag143.zip /tmp/dispatch.json /tmp/dotnet-diagnostic-182123-3941873-socket /tmp/dotnet-diagnostic-183552-3944899-socket /tmp/dotnet-diagnostic-263925-4286451-socket /tmp/dotnet-diagnostic-286739-4479516-socket /tmp/dotnet-diagnostic-286755-4479518-socket /tmp/dotnet-diagnostic-48993-2879107-socket /tmp/dvc_3.44.8.kt /tmp/dvc_3.50.0.kt /tmp/dvc_3501.kt /tmp/encrypted_proxy_secret.txt /tmp/env-i-probe.txt /tmp/envi-direct.err /tmp/envi-direct.out /tmp/envi-pong.err /tmp/envi-pong.out /tmp/exact-gh-sim.txt /tmp/f429_contract_test.dart.orig /tmp/f429_contract_test.log /tmp/f429_green.log /tmp/f429_redbefore.log /tmp/f5_13_test.txt /tmp/fake-llvm-bin /tmp/fat-pong.err /tmp/fat-pong.out /tmp/fat-prompt.txt /tmp/fix_patch.txt /tmp/flutter /tmp/flutter_3.50.1.tar.xz /tmp/fp /tmp/fr01_coverage.jsonl /tmp/fr01_windows.jsonl /tmp/gd_3501.dart /tmp/ghlogs /tmp/gp_FlutterExtension.kt /tmp/gp_FlutterGradlePlugin.kt /tmp/gp_FlutterPlugin.kt /tmp/gp_FlutterPluginUtils.kt /tmp/gp_VersionFetcher.kt /tmp/gu_3448.dart /tmp/gu_3501.dart /tmp/hsperfdata_root /tmp/hsperfdata_ubuntu /tmp/joblog.bin /tmp/joblog.err /tmp/joblog.txt /tmp/joblogs /tmp/kgp.html /tmp/l7_seg.py /tmp/lifeos-ci-agents /tmp/livelog-smoke.txt /tmp/livelogs /tmp/ll-lot /tmp/ll-meta.json /tmp/ll.json /tmp/ll.size /tmp/ll2.txt /tmp/localhost-run.log /tmp/m_2c73957.py /tmp/m_6002480.py /tmp/m_885009e.py /tmp/merge_l7.sh /tmp/merge_l9.sh /tmp/my_block.txt /tmp/ngrok.tgz /tmp/node-compile-cache /tmp/oc-bin /tmp/oc-models-all.txt /tmp/oc-models-verbose.txt /tmp/oc-npm-test /tmp/oc-probe /tmp/oc-probe-iceman.txt /tmp/oc-probes /tmp/oc-probes2 /tmp/oci-home /tmp/oci-home2 /tmp/oci-tmp /tmp/oci-tmp2 /tmp/opencode /tmp/pg.sh /tmp/pinggy.log /tmp/piptest /tmp/pong-bore.txt /tmp/pong-cf-ws.txt /tmp/pong-ci-sim.txt /tmp/pong-direct.txt /tmp/pong-proxy.txt /tmp/pong-smoke-prompt.txt /tmp/pong-while-gh.txt /tmp/pong-wstunnel.txt /tmp/proxy-oc-test.txt /tmp/pubget.log /tmp/pubget3448.log /tmp/pubget3501.log /tmp/pubspec.yaml.dirty-backup /tmp/releases.json /tmp/releases_linux.json /tmp/report_block.txt /tmp/rider_apk_log.txt /tmp/run152_logs.zip /tmp/run_migrate.py /tmp/run_migrate2.py /tmp/runner2.log /tmp/serveo.log /tmp/short-pong.err /tmp/short-pong.out /tmp/smoke-err.txt /tmp/smoke-full.log /tmp/smoke-proxy1-complete.log /tmp/smoke-proxy1-job.err /tmp/smoke-proxy1-job.log /tmp/smoke-run.log /tmp/smoke143.zip /tmp/smoke27b.log /tmp/socks-pong.err /tmp/socks-pong.out /tmp/ssh-5OPjORDtv1HA /tmp/staging-e2e-diag-text.zip /tmp/staging-e2e-diag-text_diag_dbg-stop1-a1-ok.logcat /tmp/staging-e2e-diag-text_diag_dbg-stop1-a1-ok.xml /tmp/staging-e2e-diag-text_diag_dbg-stop2-a1-ok.logcat /tmp/staging-e2e-diag-text_diag_dbg-stop2-a1-ok.xml /tmp/staging-e2e-diag-text_report.json /tmp/staging-e2e-diag-text_summary.md /tmp/staging-e2e-diag-text_ui_14-rider-home-loaded.xml /tmp/staging-e2e-diag-text_ui_15-rider-destination-selected.xml /tmp/staging-e2e-diag-text_ui_16-rider-stop-picker.xml /tmp/staging-e2e-diag-text_ui_19-rider-driver-assigned.xml /tmp/staging-e2e-diag-text_ui_21-rider-running-start.xml /tmp/staging-e2e-diag-text_ui_22-rider-stop1-active.xml /tmp/staging-e2e-diag-text_ui_23-rider-stop1-done.xml /tmp/staging-e2e-diag-text_ui_24-rider-stop2-done.xml /tmp/staging-e2e-diag-text_ui_25-rider-destination-arrived.xml /tmp/staging-e2e-diag-text_ui_26-rider-cash-methods.xml /tmp/staging-e2e-diag-text_ui_27-rider-cash-waiting.xml /tmp/staging-e2e-diag-text_ui_29-rider-final-itinerary.xml /tmp/staging-e2e-diag-text_ui_30-rider-rating.xml /tmp/staging-e2e-diag-text_ui_31-rider-home-after.xml /tmp/staging-e2e-diag-text_ui_33-driver-home-online.xml /tmp/staging-e2e-diag-text_ui_34-driver-offer-with-stops.xml /tmp/staging-e2e-diag-text_ui_35-driver-accepted-details.xml /tmp/staging-e2e-diag-text_ui_36-driver-pickup-arrived.xml /tmp/staging-e2e-diag-text_ui_37-driver-running-stop1.xml /tmp/staging-e2e-diag-text_ui_38-driver-stop1-done.xml /tmp/staging-e2e-diag-text_ui_39-driver-stop2-done.xml /tmp/staging-e2e-diag-text_ui_41-driver-cash-request.xml /tmp/staging-e2e-diag-text_ui_42-driver-cash-confirmed.xml /tmp/staging-e2e-diag-text_ui_43-driver-summary.xml /tmp/staging-e2e-smoke-log.zip /tmp/staging-e2e-smoke-log_smoke.log /tmp/stations_check.tsv /tmp/stop-extra-runners-when-idle.sh /tmp/stop-extras.log /tmp/task_done.md /tmp/task_summary.md /tmp/test3448_ab.log /tmp/test3448_full.log /tmp/test3501_ab.log /tmp/test3501_full.log /tmp/test_boundary_p95.py /tmp/test_per_station.py /tmp/test_threshold_state.py /tmp/tigervnc.TupX1m /tmp/tmp.D8Us5rvQrl /tmp/tmp.WdpYtHwz3p /tmp/tmp.gAHArEBKh8 /tmp/tmp.jx6kYKfv3F /tmp/tmp.rYsFqYqu6a /tmp/tmp.uk3of7DoVL /tmp/tmux-1000 /tmp/toolchain.patch /tmp/verify_f429_green.log /tmp/verify_f429_redbefore.log /tmp/verify_f429_run.log /tmp/vnc-desktop-user-env /tmp/w.jsonl /tmp/w0-stamp.diff /tmp/w0_decision.txt /tmp/wstunnel /tmp/wstunnel-bore-client.log /tmp/wstunnel-ci-pong.err /tmp/wstunnel-ci-pong.out /tmp/wstunnel-ci-pong2.err /tmp/wstunnel-ci-pong2.out /tmp/wstunnel-ci-pong3.err /tmp/wstunnel-ci-pong3.out /tmp/wstunnel-ci-test /tmp/wstunnel-ci-test2 /tmp/wstunnel-client-cf.log /tmp/wstunnel-client.log /tmp/wstunnel-server.log /tmp/wstunnel-socks-cf.log /tmp/wstunnel.tar.gz 
+---FLUTTER---
+/opt/flutter
+---SDK SEARCH---
+_PipelineMapping
+_actions
+_temp
+_tool
+lifeos-ci
+
+$ git -C /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci branch -a 2>/dev/null; echo "---"; git -C /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target log --oneline -12
+* cursor/wstunnel-proxy-e410
+  remotes/origin/cursor/driver-f6-prompts-e410
+  remotes/origin/cursor/restore-preflight-model-e410
+  remotes/origin/cursor/silence-switch-e410
+  remotes/origin/cursor/task-model-deepseek-e410
+  remotes/origin/cursor/wire-livelog-e410
+  remotes/origin/cursor/wstunnel-proxy-e410
+  remotes/origin/fix/agents-load-2026-11-26
+  remotes/origin/fix/extra-repos-full
+  remotes/origin/fix/wire-livelog-2026-11-26
+  remotes/origin/fr/agent-run-inputs
+  remotes/origin/fr/assemble
+  remotes/origin/fr/brick-build-aditi-ui
+  remotes/origin/fr/brick-build-anvil
+  remotes/origin/fr/brick-build-engineer
+  remotes/origin/fr/brick-build-forge-code
+  remotes/origin/fr/brick-close-max
+  remotes/origin/fr/brick-fullrun
+  remotes/origin/fr/brick-plan-serena
+  remotes/origin/fr/brick-verify-code-review
+  remotes/origin/fr/brick-verify-forge-audit
+  remotes/origin/fr/brick-verify-silas
+  remotes/origin/fr/brick-wire-inputs
+  remotes/origin/fr/fix-push
+  remotes/origin/fr/pipeline
+  remotes/origin/fullrun-logs/pipe-smoke-main2-45815967855
+  remotes/origin/fullrun-logs/pipe-smoke-t10-retest-45832427158
+  remotes/origin/fullrun-logs/smoke-direct1-45837936884
+  remotes/origin/fullrun-logs/smoke-old-0813-45839494834
+  remotes/origin/fullrun-logs/smoke-post27-45824600816
+  remotes/origin/fullrun-logs/smoke-post27b-45826380621
+  remotes/origin/fullrun-logs/smoke-proxy1-45828288794
+  remotes/origin/fullrun-logs/smoke-proxy2-45832536724
+  remotes/origin/fullrun-logs/smoke-usbox3-45842094698
+  remotes/origin/fullrun-logs/smoke-wstunnel2-45835867455
+  remotes/origin/fullrun-logs/smoke-wstunnel3-45837074924
+  remotes/origin/fullrun-prompts
+  remotes/origin/main
+  remotes/origin/pipe-smoke-main
+  remotes/origin/plan/agents-2026-11-25
+  remotes/origin/review/bricks
+  remotes/origin/review/bricks-a
+  remotes/origin/review/bricks-c
+  remotes/origin/seed/socle-2026-11-25
+  remotes/origin/test/ci-old-0813
+  remotes/origin/verify/agents-load-cr
+  remotes/origin/verify/agents-load-forge
+  remotes/origin/verify/agents-load-silas
+---
+207d752 build(android): align Rider toolchain with Flutter 3.50.1
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+b83aba6 test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+3a399e8 docs(isa): F4-34 rebuild evidence after Verify BLOCK
+2ec49c8 test(rider): F4-34 controller recreation, FCM dedup, cross-channel
+dcb4bf0 fix(rider): F4-34 share one-shot gate across controller and FCM
+69e248d docs(isa): tick ISC-F4-21 with map test evidence
+43e28ba fix(rider): F4-21 keep PENDING stops numbered, active leg only in ACTIVE/RUNNING
+3798ba2 docs(isa): consigner la décision Papa ISC-F5-16 (Rider carte jambe active)
+
