@@ -2039,3 +2039,45 @@ include(":app")
 ← Write /tmp/check_toolchain.py
 Wrote file successfully.
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && python3 /tmp/check_toolchain.py; echo "exit=$?"; git diff --check && echo "whitespace OK"; grep -rn "9\.0\.1\|9\.1\.0\|gradle-9" android/ || echo "no AGP9/Gradle9 refs in android/"
+detected: gradle=8.14 agp=8.11.1 kgp=2.2.20 gms=4.3.15 crashlytics=3.0.7
+PASS - validateGradleAndAgp (AGP 8.11 -> Gradle >=8.13) | AGP 8.11.1 / Gradle 8.14
+PASS - validateGradleAndKGP (KGP 2.2.20 -> Gradle 7.6.3..<8.14.99) | KGP 2.2.20 / Gradle 8.14
+PASS - validateAgpAndKgp (KGP 2.2.20 -> AGP 7.3.1..<8.12) | KGP 2.2.20 / AGP 8.11.1
+PASS - AGP 8.11 min Gradle 8.13 | Gradle 8.14
+PASS - AGP 8.11 max API 36 >= compileSdk | compileSdk 36
+PASS - Firebase plugins unchanged | gms 4.3.15 / crashlytics 3.0.7
+PASS - no AGP9-only gradle.properties flags | leftover=[]
+exit=0
+whitespace OK
+android/app/build.gradle.kts:19:    ndkVersion = "29.0.14033849"
+
+$ env | grep -i "^GIT_" || echo "no GIT_ env"; git config user.name; git config user.email
+no GIT_ env
+Papa Diop
+76528706+LordThiouk@users.noreply.github.com
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git add CHANGELOG.md android/gradle.properties android/gradle/wrapper/gradle-wrapper.properties android/settings.gradle.kts && git -c user.name="Papa Diop" -c user.email="76528706+LordThiouk@users.noreply.github.com" commit --author="Papa Diop <76528706+LordThiouk@users.noreply.github.com>" -F - <<'EOF'
+fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+
+Artemis 45801376130 — Build APK Rider ROUGE : la validation des dépendances
+Android de Flutter 3.50.1 refuse Gradle 9.1.0 / AGP 9.0.1.
+
+- gradle-wrapper.properties : gradle-9.1.0-all -> gradle-8.14-all
+- settings.gradle.kts : AGP 9.0.1 -> 8.11.1 (Kotlin 2.2.20 conservé)
+- gradle.properties : retrait des options réservées à AGP 9
+  (android.newDsl, android.builtInKotlin, android.r8.proguardAndroidTxt.disallowed)
+
+KGP 2.2.20 est pleinement supporté avec Gradle <= 8.14 et AGP <= 8.11.1
+(matrice JetBrains) ; AGP 8.11 exige Gradle >= 8.13 et plafonne à l'API 36.
+Firebase google-services 4.3.15 et Crashlytics 3.0.7 inchangés.
+Aucun changement lib/, aucun golden régénéré, .fullrun intact.
+flutter build / gradlew non exécutés sur la box (politique CI).
+EOF
+git log --format='%H%n%an <%ae>%n%s' -1; git status --short
+[build/rider-apk-gradle 8c28139] fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+ 4 files changed, 6 insertions(+), 5 deletions(-)
+8c28139ebea952d47e713aa8ed074d81df4d3da5
+Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+
