@@ -3980,3 +3980,13 @@ Date:   Thu Nov 26 22:37:31 2026 +0000
  MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
+$ git rev-parse HEAD
+96e6bd32b05711b78658f27516e167a7be513a39
+
+$ git diff --quiet && echo "tree clean" ; test -d .fullrun && echo ".fullrun present" ; ls .fullrun | head -3
+tree clean
+.fullrun present
+ui-goldens-gate-driver-2026-11-23-r2_DONE.md
+ui-goldens-gate-driver-2026-11-23-r2_checkpoint.json
+ui-goldens-gate-driver-2026-11-23_DONE.md
+
