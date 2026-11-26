@@ -5722,3 +5722,37 @@ Commit: Papa Diop <pirlothiouk@gmail.com>
  android/gradle.properties | 1 +
  1 file changed, 1 insertion(+)
 
+$ git show origin/fullrun-logs/rider-apk-gradle-45847515781:.fullrun/logs/rider-apk-gradle-45847515781.log > /tmp/rider_apk_log.txt 2>/dev/null; wc -l /tmp/rider_apk_log.txt; grep -niE "gradle|agp|apk|flutter build|4580" /tmp/rider_apk_log.txt | head -40; echo "=== head ==="; head -30 /tmp/rider_apk_log.txt
+760 /tmp/rider_apk_log.txt
+=== head ===
+
+> Forge · deepseek-v4.1-flash-free
+
+Silence 180s sans nouvelle sortie (journal=46 o) : coupure opencode pid=155829
+
+> Forge · mimo-v2.6-flash-free
+
+→ Read /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md
+
+$ pwd && ls -la
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target
+total 88
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 16:22 .
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 16:22 ..
+-rw-r--r--  1 ubuntu ubuntu 1364 Nov 26 16:22 .env.example
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 16:24 .git
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 .github
+-rw-r--r--  1 ubuntu ubuntu  615 Nov 26 16:22 .gitignore
+-rw-r--r--  1 ubuntu ubuntu 1352 Nov 26 16:22 .gitleaks.toml
+-rw-r--r--  1 ubuntu ubuntu  578 Nov 26 16:22 CLEANROOM.md
+-rw-r--r--  1 ubuntu ubuntu  255 Nov 26 16:22 LICENSE
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 MEMORY
+-rw-r--r--  1 ubuntu ubuntu 1000 Nov 26 16:22 Makefile
+-rw-r--r--  1 ubuntu ubuntu 1181 Nov 26 16:22 README.md
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 16:22 api
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 16:22 data
+-rw-r--r--  1 ubuntu ubuntu 2737 Nov 26 16:22 docker-compose.override.yml
+-rw-r--r--  1 ubuntu ubuntu 3714 Nov 26 16:22 docker-compose.yml
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 16:22 docs
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 engine
+
