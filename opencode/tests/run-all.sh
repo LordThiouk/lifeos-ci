@@ -18,6 +18,7 @@ TESTS=(
   allowed-repos-lifeos-test.sh
   autosave-test.sh
   critical-state-isolation-test.sh
+  runner-slot-test.sh
   critical-frozen-tools-test.sh
   critical-git-isolation-test.sh
   internals-test.sh
