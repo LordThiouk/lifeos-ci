@@ -9612,3 +9612,144 @@ GITHUB_REPOSITORY_ID=1470914271
 GITHUB_ACTIONS=true
 ---PID 218829 ubuntu
 
+$ grep -rlE "ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|x-access-token:[REDACTED] ]{10,}" /opt /tmp /etc /var /home /root /usr/local /run /var/tmp /dev/shm 2>/dev/null | head -20
+/opt/fullrun-tools/redact-log.sh
+/opt/lifeos-ci-tools/opencode/redact-log.sh
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T15-19-41Z-69df/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T11-29-27Z-2566/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T13-20-24Z-b126/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+/tmp/lifeos-ci-agents/opencode/redact-log.sh
+/tmp/oc-npm-test/lib/node_modules/opencode-ai/node_modules/opencode-linux-x64-baseline/bin/opencode
+/tmp/oc-npm-test/lib/node_modules/opencode-ai/node_modules/opencode-linux-x64/bin/opencode
+/tmp/oc-npm-test/lib/node_modules/opencode-ai/bin/opencode.exe
+/tmp/oc-bin/node_modules/opencode-ai/bin/opencode.exe
+/tmp/oc-bin/node_modules/opencode-linux-x64-baseline/bin/opencode
+/tmp/oc-bin/node_modules/opencode-linux-x64/bin/opencode
+/home/ubuntu/actions-runner-3/_work/_actions/actions/checkout/v4/src/git-auth-helper.ts
+/home/ubuntu/actions-runner-3/_work/_actions/actions/checkout/v4/__test__/git-auth-helper.test.ts
+/home/ubuntu/actions-runner-3/_work/_actions/actions/checkout/v4/dist/index.js
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/autonomous-ai-agents-hermes-agent/references/native-mcp.md
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills/autonomous-ai-agents/hermes-agent/references/native-mcp.md
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/redact-log.sh
+/home/ubuntu/.cursor/projects/workspace/agent-tools/9541ff75-e585-4136-bb7b-26dd94b09569.txt
+/home/ubuntu/.cursor/projects/workspace/agent-tools/c74beb12-aa3e-497c-b179-3e8fa6c0e455.txt
+
+$ ls -la /home/ubuntu/.config/gh/; echo "=====HOSTS====="; cat /home/ubuntu/.config/gh/hosts.yml; echo "=====GH VARIANT FILES====="; ls -la /home/ubuntu/.local/share/gh 2>&1; ls -la /home/ubuntu/.cache/gh 2>&1; echo "=====MCP REMOTE DIR====="; ls -la /home/ubuntu/.mcp-auth/mcp-remote-v1/ 2>&1 | head
+total 16
+drwxr-xr-x   2 ubuntu ubuntu 4096 Nov 26 17:30 .
+drwxr-xr-x. 13 ubuntu ubuntu 4096 Nov 26 14:25 ..
+-rw-------   1 ubuntu ubuntu   33 Nov 26 04:55 config.yml
+-rw-------   1 ubuntu ubuntu  904 Nov 26 17:30 hosts.yml
+=====HOSTS=====
+github.com:
+    user: cursor
+    git_protocol: https
+    oauth_token: ghs_1210556_eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRobmQiLCJjdHgiOiJyanZBR09hVkMzUDAweTVOOHlzUlBnWGtyU0lERTVNQkVOdWxIaVNSemNhYVYwR1RDUFcxcTFYWVNSTjgwX3MiLCJleHAiOjE3OTU3MTc4MjgsImlhdCI6MTc5NTcxNDIyOCwiaXNzIjoiZ2l0aHViIiwianRpIjoiM2NjNjI3MjYtNmM4NC00MDlhLThiY2YtNTliYTQ2NDliMzk2IiwidmVyIjozfQ.GMxJr2_-eGyOsxrzWAlmfv2dLyWzC6HKL1ih8eTYz8EwfdLczuAMxjWTxZT94Lh6gBXWHVcEqxPo5Z4n9dkTIA
+    users:
+        cursor:
+            oauth_token: ghs_1210556_eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRobmQiLCJjdHgiOiJyanZBR09hVkMzUDAweTVOOHlzUlBnWGtyU0lERTVNQkVOdWxIaVNSemNhYVYwR1RDUFcxcTFYWVNSTjgwX3MiLCJleHAiOjE3OTU3MTc4MjgsImlhdCI6MTc5NTcxNDIyOCwiaXNzIjoiZ2l0aHViIiwianRpIjoiM2NjNjI3MjYtNmM4NC00MDlhLThiY2YtNTliYTQ2NDliMzk2IiwidmVyIjozfQ.GMxJr2_-eGyOsxrzWAlmfv2dLyWzC6HKL1ih8eTYz8EwfdLczuAMxjWTxZT94Lh6gBXWHVcEqxPo5Z4n9dkTIA
+=====GH VARIANT FILES=====
+ls: cannot access '/home/ubuntu/.local/share/gh': No such file or directory
+total 3788
+drwxr-xr-x  12 ubuntu ubuntu   4096 Nov 26 17:30 .
+drwxr-xr-x. 34 ubuntu ubuntu   4096 Nov 26 14:06 ..
+drwxr-xr-x   3 ubuntu ubuntu   4096 Nov 26 12:22 08
+drwxr-xr-x   3 ubuntu ubuntu   4096 Nov 26 15:20 2a
+drwxr-xr-x   3 ubuntu ubuntu   4096 Nov 26 12:22 2b
+drwxr-xr-x   3 ubuntu ubuntu   4096 Nov 26 12:45 52
+drwxr-xr-x   3 ubuntu ubuntu   4096 Nov 26 12:45 64
+drwxr-xr-x   3 ubuntu ubuntu   4096 Nov 26 07:00 67
+drwxr-xr-x   3 ubuntu ubuntu   4096 Nov 26 11:00 7e
+drwxr-xr-x   3 ubuntu ubuntu   4096 Nov 26 06:29 90
+drwxr-xr-x   3 ubuntu ubuntu   4096 Nov 26 07:00 bf
+drwxr-xr-x   3 ubuntu ubuntu   4096 Nov 26 11:00 f5
+-rw-r--r--   1 ubuntu ubuntu 149395 Nov 26 06:06 run-log-45100696324-1795401084.zip
+-rw-r--r--   1 ubuntu ubuntu  77287 Nov 26 05:12 run-log-45756107003-1795667686.zip
+-rw-r--r--   1 ubuntu ubuntu  75900 Nov 26 05:14 run-log-45758129709-1795668861.zip
+-rw-r--r--   1 ubuntu ubuntu  38475 Nov 26 05:01 run-log-45758564216-1795669120.zip
+-rw-r--r--   1 ubuntu ubuntu  75175 Nov 26 05:07 run-log-45758579367-1795669129.zip
+-rw-r--r--   1 ubuntu ubuntu  75353 Nov 26 06:15 run-log-45762426932-1795671235.zip
+-rw-r--r--   1 ubuntu ubuntu 179242 Nov 26 06:20 run-log-45766646463-1795673573.zip
+-rw-r--r--   1 ubuntu ubuntu  75112 Nov 26 07:06 run-log-45767992174-1795674277.zip
+-rw-r--r--   1 ubuntu ubuntu 181160 Nov 26 06:41 run-log-45768119261-1795674342.zip
+-rw-r--r--   1 ubuntu ubuntu  78853 Nov 26 07:26 run-log-45768119516-1795674342.zip
+-rw-r--r--   1 ubuntu ubuntu  76315 Nov 26 07:36 run-log-45775741203-1795678191.zip
+-rw-r--r--   1 ubuntu ubuntu  96152 Nov 26 08:13 run-log-45778554984-1795679541.zip
+-rw-r--r--   1 ubuntu ubuntu  38850 Nov 26 10:10 run-log-45782061889-1795681111.zip
+-rw-r--r--   1 ubuntu ubuntu  67225 Nov 26 10:44 run-log-45797926986-1795687490.zip
+-rw-r--r--   1 ubuntu ubuntu  73301 Nov 26 10:32 run-log-45799407853-1795688048.zip
+-rw-r--r--   1 ubuntu ubuntu  76130 Nov 26 11:12 run-log-45799408133-1795688048.zip
+-rw-r--r--   1 ubuntu ubuntu  71937 Nov 26 10:56 run-log-45799408492-1795688048.zip
+-rw-r--r--   1 ubuntu ubuntu  71962 Nov 26 11:12 run-log-45799412857-1795688049.zip
+-rw-r--r--   1 ubuntu ubuntu  73233 Nov 26 11:03 run-log-45801375526-1795688797.zip
+-rw-r--r--   1 ubuntu ubuntu  73704 Nov 26 11:03 run-log-45801375579-1795688797.zip
+-rw-r--r--   1 ubuntu ubuntu  73472 Nov 26 11:03 run-log-45801376043-1795688797.zip
+-rw-r--r--   1 ubuntu ubuntu 177696 Nov 26 10:40 run-log-45801376130-1795688797.zip
+-rw-r--r--   1 ubuntu ubuntu  74208 Nov 26 11:32 run-log-45803775870-1795689732.zip
+-rw-r--r--   1 ubuntu ubuntu  28184 Nov 26 15:03 run-log-45806002684-1795690607.zip
+-rw-r--r--   1 ubuntu ubuntu  68780 Nov 26 11:59 run-log-45814549139-1795693984.zip
+-rw-r--r--   1 ubuntu ubuntu  82646 Nov 26 12:08 run-log-45815967855-1795694554.zip
+-rw-r--r--   1 ubuntu ubuntu  84263 Nov 26 13:09 run-log-45824600816-1795697893.zip
+-rw-r--r--   1 ubuntu ubuntu  84505 Nov 26 13:32 run-log-45828288794-1795699266.zip
+-rw-r--r--   1 ubuntu ubuntu  84843 Nov 26 13:59 run-log-45832536724-1795700835.zip
+-rw-r--r--   1 ubuntu ubuntu  32714 Nov 26 14:07 run-log-45835741556-1795702016.zip
+-rw-r--r--   1 ubuntu ubuntu  74343 Nov 26 14:35 run-log-45838983757-1795703171.zip
+-rw-r--r--   1 ubuntu ubuntu  48440 Nov 26 14:31 run-log-45838987020-1795703172.zip
+-rw-r--r--   1 ubuntu ubuntu  76954 Nov 26 14:41 run-log-45839494834-1795703356.zip
+-rw-r--r--   1 ubuntu ubuntu 283621 Nov 26 14:44 run-log-45841929730-1795704229.zip
+-rw-r--r--   1 ubuntu ubuntu  81730 Nov 26 15:15 run-log-45845315701-1795705448.zip
+-rw-r--r--   1 ubuntu ubuntu  84576 Nov 26 16:00 run-log-45845316040-1795705448.zip
+-rw-r--r--   1 ubuntu ubuntu  44386 Nov 26 15:15 run-log-45845316555-1795705448.zip
+-rw-r--r--   1 ubuntu ubuntu  79112 Nov 26 16:30 run-log-45845317171-1795705449.zip
+-rw-r--r--   1 ubuntu ubuntu  80329 Nov 26 15:45 run-log-45845322081-1795705450.zip
+-rw-r--r--   1 ubuntu ubuntu  76552 Nov 26 15:24 run-log-45845322242-1795705451.zip
+-rw-r--r--   1 ubuntu ubuntu  79209 Nov 26 16:30 run-log-45847515212-1795706220.zip
+-rw-r--r--   1 ubuntu ubuntu  78873 Nov 26 16:30 run-log-45847515781-1795706220.zip
+-rw-r--r--   1 ubuntu ubuntu  67888 Nov 26 16:30 run-log-45849144333-1795706798.zip
+-rw-r--r--   1 ubuntu ubuntu  81328 Nov 26 17:30 run-log-45859632833-1795710718.zip
+=====MCP REMOTE DIR=====
+total 8
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 05:02 .
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 05:02 ..
+
+$ ls -la /home/ubuntu/actions-runner-2/_work/lifeos-ci/ /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/ 2>&1 | head -30; echo "=====2 _temp oc====="; ls -la /home/ubuntu/actions-runner-2/_work/_temp/oc/ /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/ 2>&1 | head -40
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/:
+total 12
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 15:06 .
+drwxr-xr-x 7 ubuntu ubuntu 4096 Nov 26 17:23 ..
+drwxr-xr-x 5 ubuntu ubuntu 4096 Nov 26 17:23 lifeos-ci
+
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/:
+total 20
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 17:23 .
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 ..
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 15:06 ci
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 17:23 lifeos
+drwxr-xr-x 17 ubuntu ubuntu 4096 Nov 26 17:24 target
+=====2 _temp oc=====
+/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/:
+total 13888
+drwxr-xr-x  4 ubuntu ubuntu    12288 Nov 26 17:51 .
+drwxr-xr-x  9 ubuntu ubuntu     4096 Nov 26 17:23 ..
+-rw-------  1 ubuntu ubuntu   514960 Nov 26 17:23 .bun-1000-71b650bef1b3e52c.node
+-rw-------  1 ubuntu ubuntu 12846400 Nov 26 17:23 .bun-1000-89812e6e6a68aaeb.so
+-rw-r--r--  1 ubuntu ubuntu        0 Nov 26 17:51 attempt.start
+drwxr-xr-x 11 ubuntu ubuntu     4096 Nov 26 17:29 home
+-rw-r--r--  1 ubuntu ubuntu        0 Nov 26 17:51 oc-tail
+-rw-r--r--  1 ubuntu ubuntu        7 Nov 26 17:51 oc.pid
+drwxr-xr-x  2 ubuntu ubuntu     4096 Nov 26 17:23 opencode
+-rw-r--r--  1 ubuntu ubuntu   313756 Nov 26 17:51 redacted.log
+-rw-r--r--  1 ubuntu ubuntu    27046 Nov 26 17:54 run-beam-free.log
+-rw-r--r--  1 ubuntu ubuntu    42596 Nov 26 17:26 run-deepseek-v4.1-flash-free.log
+-rw-r--r--  1 ubuntu ubuntu   315718 Nov 26 17:51 run-flint-40b-free.log
+-rw-r--r--  1 ubuntu ubuntu   105805 Nov 26 17:34 run-iceman-free.log
+-rw-r--r--  1 ubuntu ubuntu       42 Nov 26 17:26 run-mimo-v2.6-flash-free.log
+
+/home/ubuntu/actions-runner-2/_work/_temp/oc/:
+total 508
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 17:23 .
+drwxr-xr-x 9 ubuntu ubuntu   4096 Nov 26 17:23 ..
+-rw------- 1 ubuntu ubuntu   9680 Nov 26 17:23 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu 491207 Nov 26 17:54 opencode.log
+-rw-r--r-- 1 ubuntu ubuntu   1370 Nov 26 17:23 prompt.md
+
