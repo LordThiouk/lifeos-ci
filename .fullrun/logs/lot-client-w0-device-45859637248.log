@@ -7322,3 +7322,40 @@ drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 17:27 ..
 -rw------- 1 ubuntu ubuntu   64 Nov 26 17:39 .isa-stamp-key
 -rw-r--r-- 1 ubuntu ubuntu  290 Nov 26 17:39 isa-provenance.jsonl
 
+$ cat /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/MEMORY/WORK/2026-11-22-galass-lot-client/fullrun-carry.json 2>/dev/null | head -60; echo "=====LIFEOS WORK DIR====="; ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/MEMORY/WORK/ | head -30
+=====LIFEOS WORK DIR=====
+ls: cannot access '/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/MEMORY/WORK/': No such file or directory
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/ | head -40; echo "=====MEMORY====="; ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/MEMORY/ | head; echo "=====WORK====="; ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/MEMORY/WORK/ 2>&1 | head -30
+total 852
+dr-xr-xr-x 14 ubuntu ubuntu   4096 Nov 26 17:27 .
+dr-xr-xr-x 16 ubuntu ubuntu   4096 Nov 26 17:27 ..
+-r--r--r--  1 ubuntu ubuntu   8196 Nov 26 17:27 .DS_Store
+dr-xr-xr-x  2 ubuntu ubuntu   4096 Nov 26 17:27 .codex
+dr-xr-xr-x  2 ubuntu ubuntu   4096 Nov 26 17:27 .stfolder
+-r--r--r--  1 ubuntu ubuntu     67 Nov 26 17:27 .stignore
+dr-xr-xr-x  4 ubuntu ubuntu   4096 Nov 26 17:27 ALGORITHM
+dr-xr-xr-x  3 ubuntu ubuntu   4096 Nov 26 17:27 ATLAS
+-r--r--r--  1 ubuntu ubuntu     75 Nov 26 17:27 CORTEX_INDEX_POLICY.json
+dr-xr-xr-x 35 ubuntu ubuntu   4096 Nov 26 17:27 DOCUMENTATION
+dr-xr-xr-x  4 ubuntu ubuntu   4096 Nov 26 17:27 HERMES
+-r--r--r--  1 ubuntu ubuntu  25584 Nov 26 17:27 LIFEOS_SYSTEM_PROMPT.md
+-r-xr-xr-x  1 ubuntu ubuntu 153444 Nov 26 17:27 LIFEOS_StatusLine.sh
+dr-xr-xr-x  3 ubuntu ubuntu   4096 Nov 26 17:27 PULSE
+dr-xr-xr-x  2 ubuntu ubuntu   4096 Nov 26 17:27 RULES
+dr-xr-xr-x 10 ubuntu ubuntu  12288 Nov 26 17:27 TOOLS
+dr-xr-xr-x 14 ubuntu ubuntu   4096 Nov 26 17:27 USER
+dr-xr-xr-x  2 ubuntu ubuntu   4096 Nov 26 17:27 USER_TEMPLATES
+-r--r--r--  1 ubuntu ubuntu      7 Nov 26 17:27 VERSION
+dr-xr-xr-x  2 ubuntu ubuntu   4096 Nov 26 17:27 Workflows
+-r--r--r--  1 ubuntu ubuntu 595890 Nov 26 17:27 freellmapi_models.json
+=====MEMORY=====
+=====WORK=====
+ls: cannot access '/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/MEMORY/': No such file or directory
+ls: cannot access '/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/MEMORY/WORK/': No such file or directory
+
+$ cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/MEMORY/STATE/isa-provenance.jsonl; echo "=====STAMP KEY (hex)====="; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/MEMORY/STATE/.isa-stamp-key
+{"ts":"2026-11-26T17:39:46.638Z","op":"append:Decisions","path":"/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md","stamp":"hmac-sha256:[REDACTED:hex64]","by":"claude","session":""}
+=====STAMP KEY (hex)=====
+[REDACTED:hex64]
+
