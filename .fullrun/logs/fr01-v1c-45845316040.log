@@ -1,0 +1,2251 @@
+
+> Forge · deepseek-v4.1-flash-free
+
+I'll read the prompt file first.
+→ Read /home/ubuntu/actions-runner-2/_work/_temp/oc/prompt.md
+
+$ pwd; ls -la; git status --short | head -50; git branch --show-current; git log --oneline -8
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target
+total 204
+drwxr-xr-x 15 ubuntu ubuntu  4096 Nov 26 17:23 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 17:23 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 17:23 .archive
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 17:23 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 17:23 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 17:23 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1079 Nov 26 17:23 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  7714 Nov 26 17:23 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu 14109 Nov 26 17:23 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu    70 Nov 26 17:23 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 15826 Nov 26 17:23 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 17:23 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  2970 Nov 26 17:23 README.md
+-rw-r--r--  1 ubuntu ubuntu  1662 Nov 26 17:23 analysis_options.yaml
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 17:23 android
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 17:23 assets
+-rw-r--r--  1 ubuntu ubuntu   392 Nov 26 17:23 dart_test.yaml
+-rw-r--r--  1 ubuntu ubuntu   184 Nov 26 17:23 devtools_options.yaml
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 17:23 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 17:23 fastlane
+-rw-r--r--  1 ubuntu ubuntu   639 Nov 26 17:23 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 17:23 ios
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 17:23 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 17:23 prompts
+-rw-r--r--  1 ubuntu ubuntu 68359 Nov 26 17:23 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  2849 Nov 26 17:23 pubspec.yaml
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 17:23 test
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 17:23 tool
+feat/multistop-e2e-2026-11-15
+32607ee test(goldens): rebase ride_details sous Flutter 3.50.1 (regen F6)
+119fb0c feat(driver): ISC-F5-16 arrêt actif distinct + arrêts estompés numérotés
+505637e fix(driver): ISC-F5-12 CTA unique par état (confirm stop / terminer)
+bd77f91 docs(driver): verdict position voiture temps réel + ISC-F5-19
+7187e3a prompt: driver live location
+9208af6 fix(build): M3 retrait dead code stopsProgressText + import (Driver)
+fc2b822 wip(build): F5-14 Semantics content-desc galass.driver.stops
+ffa4ac9 wip(autosave): arbre de travail
+
+$ git branch -a | head -30; ls MEMORY/WORK | head; ls /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/
+* feat/multistop-e2e-2026-11-15
+  remotes/origin/build/driver-f5-13c
+  remotes/origin/cursor/fix-kyc-multipart-submit-9f2e
+  remotes/origin/feat/multistop-e2e-2026-11-15
+  remotes/origin/feat/multistop-rider-close-2026-11-20
+  remotes/origin/fix/multistop-close
+  remotes/origin/fullrun-logs/driver-f5-13c-45845317171
+  remotes/origin/fullrun-logs/driver-f5-13c-ll-45808527591
+  remotes/origin/fullrun-logs/ui-goldens-gate-driver-2026-11-23-45197868438
+  remotes/origin/fullrun-logs/ui-goldens-gate-driver-2026-11-23-r2-45227259073
+  remotes/origin/fullrun-prompts
+  remotes/origin/main
+  remotes/origin/ovo-customizations
+  remotes/origin/release/1.1.1+60
+  remotes/origin/test/confirm-stop
+  remotes/origin/upgrade/ovoride-v2
+  remotes/origin/v2
+20260613-galassdriver-firebase-phone-auth
+20260709-galassdriver-fcm-push
+20260709-galassdriver-french-localization
+20260710-galassdriver-ride-message-display
+20260713-galassdriver-ride-message-getx-reuse
+20260715-galassdriver-fcm-apns-retry
+20260715-galassdriver-ride-message-definitive-fix
+20260715-galassdriver-ride-message-realign-initial
+20260716-galassdriver-store-release-ready
+20260718-galassdriver-apple-511-location-preprompt
+ci
+lifeos
+target
+
+$ git log --oneline -3 origin/build/driver-f5-13c; echo ---; git rev-list --count origin/build/driver-f5-13c..HEAD; git rev-list --count HEAD..origin/build/driver-f5-13c
+32607ee test(goldens): rebase ride_details sous Flutter 3.50.1 (regen F6)
+119fb0c feat(driver): ISC-F5-16 arrêt actif distinct + arrêts estompés numérotés
+505637e fix(driver): ISC-F5-12 CTA unique par état (confirm stop / terminer)
+---
+0
+0
+
+$ ls MEMORY/WORK/20261006-galass-driver-multistop/; wc -l MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+ISA.html
+ISA.md
+333 MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+
+→ Read MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+
+$ ls test/unit/multistop_end_gate_test.dart; wc -l test/unit/multistop_end_gate_test.dart lib/ui/*/ride_details_bottom_sheet_widget.dart 2>/dev/null; find lib -name 'ride_details_bottom_sheet_widget.dart' -o -name 'rounded_button.dart' | head
+test/unit/multistop_end_gate_test.dart
+ 216 test/unit/multistop_end_gate_test.dart
+ 216 total
+lib/presentation/components/buttons/rounded_button.dart
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+
+→ Read test/unit/multistop_end_gate_test.dart
+→ Read lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+
+$ grep -rn "redCancelTextColor" lib/ | head -30; echo ---; grep -rn "cancelRide" lib/ | head -30
+lib/data/controller/deposit/deposit_history_controller.dart:184:              ? MyColor.redCancelTextColor
+lib/data/controller/withdraw/withdraw_history_controller.dart:121:                ? MyColor.redCancelTextColor
+lib/data/controller/support/ticket_details_controller.dart:221:                  ? MyColor.redCancelTextColor
+lib/data/controller/support/ticket_details_controller.dart:229:                  ? MyColor.redCancelTextColor
+lib/core/utils/util.dart:126:      return MyColor.redCancelTextColor;
+lib/core/utils/ticket_helper.dart:15:                ? MyColor.redCancelTextColor
+lib/core/utils/ticket_helper.dart:29:                ? MyColor.redCancelTextColor
+lib/core/utils/my_color.dart:83:  static const Color redCancelTextColor = Color(0xFFF93E2C);
+lib/presentation/components/dialog/app_dialog.dart:242:                            bgColor: MyColor.redCancelTextColor,
+lib/presentation/components/snack_bar/show_custom_snackbar.dart:57:        primaryColor: MyColor.redCancelTextColor,
+lib/presentation/components/column_widget/label_column.dart:44:                  color: MyColor.redCancelTextColor,
+lib/presentation/components/column_widget/bottom_sheet_column.dart:36:          style: isCharge ? regularDefault.copyWith(color: MyColor.redCancelTextColor) : regularDefault,
+lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:271:                              inactiveTrackColor: MyColor.redCancelTextColor,
+lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:355:                        color: MyColor.redCancelTextColor.withValues(
+lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:363:                        imgColor: MyColor.redCancelTextColor,
+lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:364:                        textColor: MyColor.redCancelTextColor,
+lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:367:                          color: MyColor.redCancelTextColor,
+lib/presentation/screens/support_ticket/ticket_details/ticket_details_screen.dart:84:                              color: MyColor.redCancelTextColor,
+lib/presentation/screens/support_ticket/ticket_details/ticket_details_screen.dart:90:                            color: MyColor.redCancelTextColor,
+lib/presentation/screens/support_ticket/ticket_details/widget/attachment_preview.dart:118:                  backgroundColor: MyColor.redCancelTextColor,
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:206:                            bgColor: MyColor.redCancelTextColor,
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:289:                      color: (ride.status == AppStatus.RIDE_CANCELED) ? MyColor.redCancelTextColor.withValues(alpha: 0.2) : MyColor.getPrimaryColor().withValues(alpha: 0.1),
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:305:                            color: (ride.status == AppStatus.RIDE_CANCELED) ? MyColor.redCancelTextColor : MyColor.getPrimaryColor(),
+lib/presentation/screens/ride_details/widgets/user_details_widget.dart:145:                  backgroundColor: MyColor.redCancelTextColor,
+lib/presentation/screens/ride_history/widget/ride_info_card.dart:347:                    backgroundColor: MyColor.redCancelTextColor.withValues(alpha: 0.1),
+lib/presentation/screens/ride_history/widget/ride_info_card.dart:354:                              color: MyColor.redCancelTextColor,
+lib/presentation/screens/ride_history/widget/ride_info_card.dart:362:                                color: MyColor.redCancelTextColor,
+lib/presentation/screens/ride_history/widget/ride_info_card.dart:369:                              color: MyColor.redCancelTextColor,
+lib/presentation/screens/account/change-password/change_password_screen.dart:101:                        color: MyColor.redCancelTextColor,
+lib/presentation/screens/dashboard/widgets/vahicle_kyc_warning_section.dart:65:                                    color: controller.isVehicleVerificationPending ? MyColor.pendingColor : MyColor.redCancelTextColor,
+---
+lib/data/controller/ride/ride_details/ride_details_controller.dart:395:  Future<void> cancelRide(String rideId) async {
+lib/data/controller/ride/ride_details/ride_details_controller.dart:400:      ResponseModel responseModel = await repo.cancelRide(
+lib/data/repo/ride/ride_repo.dart:180:  Future<ResponseModel> cancelRide({
+lib/core/utils/my_strings.dart:176:  static const String cancelRide = "Annuler la course";
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:200:                            text: MyStrings.cancelRide.tr,
+lib/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart:41:                  controller.cancelRide(ride.id ?? '-1');
+
+→ Read lib/presentation/components/buttons/rounded_button.dart
+
+$ grep -n "showsActiveRideCtas" -A 8 -B 4 lib/data/controller/ride/ride_details/ride_details_controller.dart; grep -n "getPrimaryColor\|primaryButtonColor" -A 4 lib/core/utils/my_color.dart | head -30
+29-  RideMapController mapController;
+30-  RideDetailsController({required this.repo, required this.mapController});
+31-
+32-  /// Sticky/list ACTIVE CTAs — exact status only (null/empty must not flash).
+33:  static bool showsActiveRideCtas(String? status) =>
+34-      status == AppStatus.RIDE_ACTIVE;
+35-
+36-  /// CallKit / re-open must not reuse a stale singleton with wrong status/map.
+37-  static RideDetailsController putFresh({
+38-    required RideRepo repo,
+39-    required RideMapController mapController,
+40-  }) {
+41-    if (Get.isRegistered<RideDetailsController>()) {
+59:  static const Color primaryButtonColor = primaryColor;
+60-  static const Color primaryButtonTextColor = colorWhite;
+61-  static const Color secondaryButtonColor = colorWhite;
+62-  static const Color secondaryButtonTextColor = colorBlack;
+63-
+--
+92:  static Color getPrimaryColor() {
+93-    return primaryColor;
+94-  }
+95-
+96-  static Color getHeaderBGColor() {
+--
+161:    return primaryButtonColor;
+162-  }
+163-
+164-  static Color getPrimaryButtonTextColor() {
+165-    return primaryButtonTextColor;
+
+$ grep -rn "Cancel\|cancel" lib/presentation/screens/ride_details/ | head -20; echo ---; grep -n "RIDE_" lib/core/utils/app_status.dart | head -30
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:25:import 'package:galass_driver/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart';
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:200:                            text: MyStrings.cancelRide.tr,
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:203:                                child: RideCancelBottomSheet(ride: controller.ride),
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:206:                            bgColor: MyColor.redCancelTextColor,
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:289:                      color: (ride.status == AppStatus.RIDE_CANCELED) ? MyColor.redCancelTextColor.withValues(alpha: 0.2) : MyColor.getPrimaryColor().withValues(alpha: 0.1),
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:302:                                  ? MyStrings.rideCanceled.tr
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:305:                            color: (ride.status == AppStatus.RIDE_CANCELED) ? MyColor.redCancelTextColor : MyColor.getPrimaryColor(),
+lib/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart:14:class RideCancelBottomSheet extends StatelessWidget {
+lib/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart:16:  const RideCancelBottomSheet({super.key, required this.ride});
+lib/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart:28:              hintText: MyStrings.cancelationReason.tr,
+lib/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart:29:              labelText: MyStrings.cancelReason.tr,
+lib/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart:31:              controller: controller.cancelReasonController,
+lib/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart:38:              isLoading: controller.isCancelBtnLoading,
+lib/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart:40:                if (controller.cancelReasonController.text.isNotEmpty) {
+lib/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart:41:                  controller.cancelRide(ride.id ?? '-1');
+lib/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart:43:                  CustomSnackBar.error(errorList: [MyStrings.rideCancelMsg.tr]);
+lib/presentation/screens/ride_details/widgets/user_details_widget.dart:145:                  backgroundColor: MyColor.redCancelTextColor,
+---
+13:  static const String RIDE_TYPE_CITY = '1';
+14:  static const String RIDE_TYPE_INTERCITY = '2';
+16:  static const String RIDE_ALL = '';
+17:  static const String RIDE_PENDING = '0';
+18:  static const String RIDE_COMPLETED = '1';
+19:  static const String RIDE_ACTIVE = '2';
+20:  static const String RIDE_RUNNING = '3';
+21:  static const String RIDE_CANCELED = '9';
+22:  static const String RIDE_PAYMENT_REQUESTED = '4';
+
+$ flutter --version 2>&1 | head -3; flutter test test/unit/multistop_end_gate_test.dart 2>&1 | tail -15
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because galass_driver depends on timezone 0.11.0 which requires SDK version ^3.10.0, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try using the Flutter SDK version: 3.50.1. 
+Failed to update packages.
+
+$ ls /opt 2>/dev/null; ls ~/ | head; which -a flutter dart; ls ~/flutter* /opt/flutter* 2>/dev/null | head
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+/usr/local/bin/flutter
+/usr/local/bin/dart
+/opt/flutter:
+AUTHORS
+CHANGELOG.md
+CODEOWNERS
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+DEPS
+LICENSE
+PATENT_GRANT
+README.md
+
+$ /opt/flutter/bin/flutter --version 2>&1 | head -3; ls ~/flutter 2>/dev/null | head; ls ~/fullrun-tools 2>/dev/null | head
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+
+$ ls ~/fullrun-live ~/lifeos-ci-tools 2>/dev/null | head -20; find / -maxdepth 4 -name "flutter" -type d 2>/dev/null | grep -v "^/proc" | head -20
+/opt/flutter
+/opt/flutter/packages/flutter
+/tmp/flutter
+/tmp/flutter/packages/flutter
+/home/ubuntu/.config/flutter
+
+$ /tmp/flutter/bin/flutter --version 2>&1 | head -3; cat /tmp/flutter/version 2>/dev/null; git -C /tmp/flutter log --oneline -1 2>/dev/null
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ae9b586f34 (8 days ago) • 2026-11-18 17:01:07 -0800
+Engine • hash 51379e6df48ea8ee7205623b90fe66491cad8df3 (revision 4d35714800) (8 days ago) • 2026-11-18 01:50:07.000Z
+ae9b586f34a [3.50] Changelog for 3.50.1 (#196936)
+
+$ /tmp/flutter/bin/flutter test test/unit/multistop_end_gate_test.dart 2>&1 | tail -20
+web 1.1.1 (1.1.2 available)
+  webview_flutter 4.13.1 (4.14.1 available)
+  webview_flutter_android 4.12.0 (4.14.1 available)
+  webview_flutter_wkwebview 3.25.1 (3.27.2 available)
+  win32 5.15.0 (6.4.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.6.1 (7.1.0 available)
+  yaml 3.1.3 (3.1.4 available)
+Got dependencies!
+1 package is discontinued.
+167 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+00:00 +0: RideModel multistop end gate canEndRide true when no stops
+00:00 +1: RideModel multistop end gate canEndRide false while a stop is pending
+00:00 +2: RideModel multistop end gate canEndRide true when all stops completed
+00:00 +3: ISC-F5-12 — une seule action principale par état escale(s) pending → « Confirmer l'arrêt » seul
+00:00 +4: ISC-F5-12 — une seule action principale par état dernier arrêt → « Terminer la course » seul, style actif
+00:00 +5: ISC-F5-12 — une seule action principale par état course single-stop (sans stops[]) → « Terminer la course » seul, style legacy
+00:00 +6: All tests passed!
+
+Baseline green (6/6). Now the code + test edits.
+← Edit lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+Index: /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+===================================================================
+--- /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
++++ /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+@@ -179,8 +179,9 @@
+ child: Column(
+   mainAxisSize: MainAxisSize.min,
+   children: [
+     RoundedButton(
++      key: const Key('driver_pickup_passenger_cta'),
+       text: MyStrings.pickupPassenger.tr,
+       press: () {
+         AppDialog().showRideDetailsDialog(
+           context,
+
+
+← Edit lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+Index: /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+===================================================================
+--- /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
++++ /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+@@ -196,9 +196,12 @@
+   },
+   isLoading: controller.isStartBtnLoading,
+ ),
+ spaceDown(Dimensions.space20),
++// ISC-F5-13: action danger, jamais confondue avec le
++// CTA principal quel que soit l'état.
+ RoundedButton(
++  key: const Key('driver_cancel_ride_cta'),
+   text: MyStrings.cancelRide.tr,
+   press: () {
+     CustomBottomSheet(
+       child: RideCancelBottomSheet(ride: controller.ride),
+
+
+$ sed -n 1,60p lib/presentation/screens/ride_details/section/ride_details_payment_section.dart
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:galass_driver/core/utils/dimensions.dart';
+import 'package:galass_driver/core/utils/my_color.dart';
+import 'package:galass_driver/core/utils/my_strings.dart';
+import 'package:galass_driver/core/utils/style.dart';
+import 'package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galass_driver/presentation/components/divider/custom_spacer.dart';
+import 'package:galass_driver/presentation/packages/simple_ripple_animation.dart';
+
+class RideDetailsPaymentSection extends StatelessWidget {
+  const RideDetailsPaymentSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<RideDetailsController>(
+      builder: (controller) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                margin: EdgeInsets.only(top: 0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Column(
+                  children: [
+                    spaceDown(Dimensions.space10),
+                    RippleAnimation(
+                      repeat: true,
+                      color: MyColor.primaryColor,
+                      minRadius: 18,
+                      child: Container(
+                        padding: const EdgeInsets.all(Dimensions.space15),
+                        decoration: BoxDecoration(
+                          color: MyColor.primaryColor.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                    spaceDown(Dimensions.space20),
+                    Text(
+                      MyStrings.waitForUserPayment.tr,
+                      style: boldLarge.copyWith(
+                        fontSize: 15,
+                        color: MyColor.primaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+← Edit test/unit/multistop_end_gate_test.dart
+Index: /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+===================================================================
+--- /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
++++ /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+@@ -1,8 +1,9 @@
+ import 'package:flutter/material.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:galass_driver/core/utils/app_status.dart';
+ import 'package:galass_driver/core/utils/my_color.dart';
++import 'package:galass_driver/core/utils/my_strings.dart';
+ import 'package:galass_driver/data/controller/map/ride_map_controller.dart';
+ import 'package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart';
+ import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+ import 'package:galass_driver/data/model/global/ride/ride_model.dart';
+
+
+← Edit test/unit/multistop_end_gate_test.dart
+Index: /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+===================================================================
+--- /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
++++ /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+@@ -65,11 +65,66 @@
+         );
+       }),
+     );
+ 
++RideModel _rideWithStatus(String status) => RideModel(
++      id: '77',
++      status: status,
++      pickupLocation: 'Plateau, Dakar',
++      destination: 'Aéroport AIBD, Diass',
++      distance: '38.4',
++      duration: '52',
++      amount: '12500',
++    );
++
++Future<RideDetailsController> _createController() async {
++  Get.testMode = true;
++  Get.reset();
++  SharedPreferences.setMockInitialValues(<String, Object>{});
++  final prefs = await SharedPreferences.getInstance();
++  final apiClient = RecordingApiClient(sharedPreferences: prefs);
++  Get.put<ApiClient>(apiClient);
++  final controller = Get.put<RideDetailsController>(
++    RideDetailsController(
++      repo: _NoopRideRepo(apiClient: apiClient),
++      mapController: _NoopMap(
++        polylineRepo: PolylineRepo(apiClient: apiClient),
++      ),
++    ),
++  );
++  controller.currency = 'FCFA';
++  controller.userImageUrl = '';
++  controller.isLoading = false;
++  return controller;
++}
++
+ void main() {
+   TestWidgetsFlutterBinding.ensureInitialized();
+ 
++  late RideDetailsController controller;
++
++  Future<void> pumpSheet(WidgetTester tester, RideModel ride) async {
++    controller.ride = ride;
++    await tester.pumpWidget(
++      GetMaterialApp(
++        home: Scaffold(
++          body: Align(
++            alignment: Alignment.bottomCenter,
++            child: SizedBox(
++              height: 560,
++              child: RideDetailsBottomSheetWidget(
++                scrollController: ScrollController(),
++                draggableScrollableController: DraggableScrollableController(),
++              ),
++            ),
++          ),
++        ),
++      ),
++    );
++    await tester.pump(const Duration(milliseconds: 100));
++    await tester.pump(const Duration(milliseconds: 100));
++  }
++
+   group('RideModel multistop end gate', () {
+     test('canEndRide true when no stops', () {
+       final ride = RideModel(id: '1');
+       expect(ride.canEndRide, isTrue);
+
+
+← Edit test/unit/multistop_end_gate_test.dart
+Index: /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+===================================================================
+--- /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
++++ /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+@@ -166,55 +166,14 @@
+   });
+ });
+ 
+ group('ISC-F5-12 — une seule action principale par état', () {
+-  late RideDetailsController controller;
+-
+   setUp(() async {
+-    Get.testMode = true;
+-    Get.reset();
+-    SharedPreferences.setMockInitialValues(<String, Object>{});
+-    final prefs = await SharedPreferences.getInstance();
+-    final apiClient = RecordingApiClient(sharedPreferences: prefs);
+-    Get.put<ApiClient>(apiClient);
+-    controller = Get.put<RideDetailsController>(
+-      RideDetailsController(
+-        repo: _NoopRideRepo(apiClient: apiClient),
+-        mapController: _NoopMap(
+-          polylineRepo: PolylineRepo(apiClient: apiClient),
+-        ),
+-      ),
+-    );
+-    controller.currency = 'FCFA';
+-    controller.userImageUrl = '';
+-    controller.isLoading = false;
++    controller = await _createController();
+   });
+ 
+   tearDown(Get.reset);
+ 
+-  Future<void> pumpSheet(WidgetTester tester, RideModel ride) async {
+-    controller.ride = ride;
+-    await tester.pumpWidget(
+-      GetMaterialApp(
+-        home: Scaffold(
+-          body: Align(
+-            alignment: Alignment.bottomCenter,
+-            child: SizedBox(
+-              height: 560,
+-              child: RideDetailsBottomSheetWidget(
+-                scrollController: ScrollController(),
+-                draggableScrollableController:
+-                    DraggableScrollableController(),
+-              ),
+-            ),
+-          ),
+-        ),
+-      ),
+-    );
+-    await tester.pump(const Duration(milliseconds: 100));
+-    await tester.pump(const Duration(milliseconds: 100));
+-  }
+-
+   testWidgets('escale(s) pending → « Confirmer l\'arrêt » seul',
+       (tester) async {
+     await pumpSheet(tester, _rideWithStops(completed: 1));
+ 
+
+
+← Edit test/unit/multistop_end_gate_test.dart
+Index: /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+===================================================================
+--- /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
++++ /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+@@ -227,5 +227,61 @@
+       expect(endButton.bgColor, isNull);
+       expect(find.byType(RoundedButton), findsOneWidget);
+     });
+   });
++
++  group('ISC-F5-13 — « Annuler la course » reste une action danger', () {
++    setUp(() async {
++      controller = await _createController();
++    });
++
++    tearDown(Get.reset);
++
++    testWidgets('quel que soit l\'état, un CTA Annuler rendu est en danger',
++        (tester) async {
++      const statuses = <String>[
++        AppStatus.RIDE_PENDING,
++        AppStatus.RIDE_ACTIVE,
++        AppStatus.RIDE_RUNNING,
++        AppStatus.RIDE_PAYMENT_REQUESTED,
++        AppStatus.RIDE_COMPLETED,
++        AppStatus.RIDE_CANCELED,
++      ];
++      final statesWithCancel = <String>[];
++
++      for (final status in statuses) {
++        await pumpSheet(tester, _rideWithStatus(status));
++        final cancel = find.byKey(const Key('driver_cancel_ride_cta'));
++        if (cancel.evaluate().isEmpty) continue;
++        statesWithCancel.add(status);
++        final button = tester.widget<RoundedButton>(cancel);
++        // Falsifier ISC-F5-13: un Annuler rendu dans une autre couleur.
++        expect(button.bgColor, MyColor.redCancelTextColor,
++            reason: 'statut $status');
++        expect(button.text, MyStrings.cancelRide);
++      }
++
++      // Garde-fou: le test doit réellement voir le CTA au moins une fois.
++      expect(statesWithCancel, isNotEmpty);
++      expect(statesWithCancel, contains(AppStatus.RIDE_ACTIVE));
++    });
++
++    testWidgets('RIDE_ACTIVE — danger ≠ couleur du CTA principal',
++        (tester) async {
++      await pumpSheet(tester, _rideWithStatus(AppStatus.RIDE_ACTIVE));
++
++      final cancel = find.byKey(const Key('driver_cancel_ride_cta'));
++      final primary = find.byKey(const Key('driver_pickup_passenger_cta'));
++      expect(cancel, findsOneWidget);
++      expect(primary, findsOneWidget);
++
++      final cancelButton = tester.widget<RoundedButton>(cancel);
++      final primaryButton = tester.widget<RoundedButton>(primary);
++      final cancelBg = cancelButton.bgColor;
++      final primaryBg = primaryButton.bgColor ?? MyColor.primaryButtonColor;
++
++      expect(cancelBg, MyColor.redCancelTextColor);
++      expect(cancelBg, isNot(primaryBg));
++      expect(primaryBg, isNot(MyColor.redCancelTextColor));
++    });
++  });
+ }
+
+
+Now append the ISC-F5-13 group:
+$ /tmp/flutter/bin/flutter test test/unit/multistop_end_gate_test.dart 2>&1 | tail -30
+vibration 3.1.8 (3.2.1 available)
+  video_player 2.11.1 (2.14.1 available)
+  video_player_android 2.9.5 (2.13.0 available)
+  video_player_avfoundation 2.9.7 (2.12.5 available)
+  video_player_platform_interface 6.7.0 (6.9.0 available)
+  vm_service 15.2.0 (15.4.0 available)
+  wakelock_plus 1.5.2 (1.8.2 available)
+  wakelock_plus_platform_interface 1.5.1 (1.7.0 available)
+  web 1.1.1 (1.1.2 available)
+  webview_flutter 4.13.1 (4.14.1 available)
+  webview_flutter_android 4.12.0 (4.14.1 available)
+  webview_flutter_wkwebview 3.25.1 (3.27.2 available)
+  win32 5.15.0 (6.4.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.6.1 (7.1.0 available)
+  yaml 3.1.3 (3.1.4 available)
+Got dependencies!
+1 package is discontinued.
+167 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+00:00 +0: RideModel multistop end gate canEndRide true when no stops
+00:00 +1: RideModel multistop end gate canEndRide false while a stop is pending
+00:00 +2: RideModel multistop end gate canEndRide true when all stops completed
+00:00 +3: ISC-F5-12 — une seule action principale par état escale(s) pending → « Confirmer l'arrêt » seul
+00:00 +4: ISC-F5-12 — une seule action principale par état dernier arrêt → « Terminer la course » seul, style actif
+00:00 +5: ISC-F5-12 — une seule action principale par état course single-stop (sans stops[]) → « Terminer la course » seul, style legacy
+00:00 +6: ISC-F5-13 — « Annuler la course » reste une action danger quel que soit l'état, un CTA Annuler rendu est en danger
+00:00 +7: ISC-F5-13 — « Annuler la course » reste une action danger RIDE_ACTIVE — danger ≠ couleur du CTA principal
+00:00 +8: All tests passed!
+
+$ cp lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart /tmp/bs.bak && python3 - <<'EOF'
+p='lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart'
+s=open(p).read()
+s=s.replace("bgColor: MyColor.redCancelTextColor,\n                          ),","bgColor: MyColor.primaryButtonColor,\n                          ),",1)
+open(p,'w').write(s)
+EOF
+grep -n "driver_cancel_ride_cta" -A 6 lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+203:                            key: const Key('driver_cancel_ride_cta'),
+204-                            text: MyStrings.cancelRide.tr,
+205-                            press: () {
+206-                              CustomBottomSheet(
+207-                                child: RideCancelBottomSheet(ride: controller.ride),
+208-                              ).customBottomSheet(context);
+209-                            },
+
+$ /tmp/flutter/bin/flutter test test/unit/multistop_end_gate_test.dart 2>&1 | tail -12
+The test description was:
+  RIDE_ACTIVE — danger ≠ couleur du CTA principal
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +6 -2: ISC-F5-13 — « Annuler la course » reste une action danger RIDE_ACTIVE — danger ≠ couleur du CTA principal [E]
+  Test failed. See exception logs above.
+  The test description was: RIDE_ACTIVE — danger ≠ couleur du CTA principal
+  
+00:01 +6 -2: Some tests failed.
+
+Failing tests:
+  /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart: ISC-F5-13 — « Annuler la course » reste une action danger RIDE_ACTIVE — danger ≠ couleur du CTA principal
+  /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart: ISC-F5-13 — « Annuler la course » reste une action danger quel que soit l'état, un CTA Annuler rendu est en danger
+
+$ cp /tmp/bs.bak lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart && git diff --stat && /tmp/flutter/bin/flutter test test/unit/multistop_end_gate_test.dart 2>&1 | tail -6
+test/unit/multistop_end_gate_test.dart | 155 ++++++++++++++++++++++++---------
+ 1 file changed, 113 insertions(+), 42 deletions(-)
+00:00 +3: ISC-F5-12 — une seule action principale par état escale(s) pending → « Confirmer l'arrêt » seul
+00:00 +4: ISC-F5-12 — une seule action principale par état dernier arrêt → « Terminer la course » seul, style actif
+00:00 +5: ISC-F5-12 — une seule action principale par état course single-stop (sans stops[]) → « Terminer la course » seul, style legacy
+00:00 +6: ISC-F5-13 — « Annuler la course » reste une action danger quel que soit l'état, un CTA Annuler rendu est en danger
+00:00 +7: ISC-F5-13 — « Annuler la course » reste une action danger RIDE_ACTIVE — danger ≠ couleur du CTA principal
+00:01 +8: All tests passed!
+
+$ grep -n "driver_cancel_ride_cta\|driver_pickup_passenger_cta\|redCancelTextColor" lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart; git status --short
+183:                            key: const Key('driver_pickup_passenger_cta'),
+203:                            key: const Key('driver_cancel_ride_cta'),
+210:                            bgColor: MyColor.redCancelTextColor,
+293:                      color: (ride.status == AppStatus.RIDE_CANCELED) ? MyColor.redCancelTextColor.withValues(alpha: 0.2) : MyColor.getPrimaryColor().withValues(alpha: 0.1),
+309:                            color: (ride.status == AppStatus.RIDE_CANCELED) ? MyColor.redCancelTextColor : MyColor.getPrimaryColor(),
+ M test/unit/multistop_end_gate_test.dart
+
+$ git diff --stat -- lib/; git show HEAD:lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart | grep -n "driver_cancel_ride_cta\|driver_pickup_passenger_cta"; git ls-files -v lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+183:                            key: const Key('driver_pickup_passenger_cta'),
+203:                            key: const Key('driver_cancel_ride_cta'),
+H lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+
+$ git show HEAD:lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart | sed -n 176,215p; echo ===; git log --oneline -3 -- lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+if (showActiveCtas) ...[
+                    ColoredBox(
+                      color: MyColor.colorWhite,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          RoundedButton(
+                            key: const Key('driver_pickup_passenger_cta'),
+                            text: MyStrings.pickupPassenger.tr,
+                            press: () {
+                              AppDialog().showRideDetailsDialog(
+                                context,
+                                title: MyStrings.pickupPassenger.tr,
+                                description: ride.pickupLocation?.trim().isNotEmpty == true
+                                    ? ride.pickupLocation!
+                                    : MyStrings.pickUpLocation.tr,
+                                onTap: () async {
+                                  await controller.startRide(ride.id ?? '-1');
+                                },
+                              );
+                            },
+                            isLoading: controller.isStartBtnLoading,
+                          ),
+                          spaceDown(Dimensions.space20),
+                          // ISC-F5-13: action danger, jamais confondue avec le
+                          // CTA principal quel que soit l'état.
+                          RoundedButton(
+                            key: const Key('driver_cancel_ride_cta'),
+                            text: MyStrings.cancelRide.tr,
+                            press: () {
+                              CustomBottomSheet(
+                                child: RideCancelBottomSheet(ride: controller.ride),
+                              ).customBottomSheet(context);
+                            },
+                            bgColor: MyColor.redCancelTextColor,
+                          ),
+                          spaceDown(Dimensions.space20),
+                        ],
+                      ),
+                    ),
+===
+267c3fa wip(autosave): arbre de travail
+505637e fix(driver): ISC-F5-12 CTA unique par état (confirm stop / terminer)
+9208af6 fix(build): M3 retrait dead code stopsProgressText + import (Driver)
+
+$ git log --oneline -6; echo ---; git show --stat --oneline HEAD | head -20; echo ---; git status
+267c3fa wip(autosave): arbre de travail
+32607ee test(goldens): rebase ride_details sous Flutter 3.50.1 (regen F6)
+119fb0c feat(driver): ISC-F5-16 arrêt actif distinct + arrêts estompés numérotés
+505637e fix(driver): ISC-F5-12 CTA unique par état (confirm stop / terminer)
+bd77f91 docs(driver): verdict position voiture temps réel + ISC-F5-19
+7187e3a prompt: driver live location
+---
+267c3fa wip(autosave): arbre de travail
+ .../ride_details/widgets/ride_details_bottom_sheet_widget.dart        | 4 ++++
+ 1 file changed, 4 insertions(+)
+---
+On branch feat/multistop-e2e-2026-11-15
+Your branch is ahead of 'origin/feat/multistop-e2e-2026-11-15' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   test/unit/multistop_end_gate_test.dart
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+$ git show -s --format='%an <%ae> | %cn <%ce> | %s' HEAD; git config user.name; git config user.email; ps aux | grep -i -E "autosave|inotify|watch" | grep -v grep | head
+Nix <nix@galass.local> | Nix <nix@galass.local> | wip(autosave): arbre de travail
+Papa Diop
+76528706+LordThiouk@users.noreply.github.com
+ubuntu    185034  0.0  0.0   7480  3932 ?        S    17:23   0:00 bash /opt/lifeos-ci-tools/opencode/silence-watch.sh --log /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/run-deepseek-v4.1-flash-free.log --pid-file /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/oc.pid --flag /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/silence.flag --live-log /home/ubuntu/actions-runner-2/_work/_temp/oc/opencode.log --sec 180 --poll 15 --grace 30
+ubuntu    187202  0.0  0.0   7480  3852 ?        S    17:25   0:00 bash /opt/lifeos-ci-tools/opencode/silence-watch.sh --log /home/ubuntu/actions-runner/_work/_temp/oc-agent/run-hy4-flash-free.log --pid-file /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc.pid --flag /home/ubuntu/actions-runner/_work/_temp/oc-agent/silence.flag --live-log /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log --sec 180 --poll 15 --grace 30
+
+
+> Forge · mimo-v2.6-flash-free
+
+
+> Forge · iceman-free
+
+$ cat /home/ubuntu/actions-runner-2/_work/_temp/oc/prompt.md
+# Contexte d exécution lifeos-ci
+
+- Job : driver-f5-13c
+- Agent : forge-code
+- Dépôt cible : LordThiouk/Galass_Driver
+- Branche : feat/multistop-e2e-2026-11-15
+- lifeos_write : false
+- lifeos de référence : main
+
+## Règles
+
+- Travaille uniquement dans les dépôts fournis ; committe ton travail validé sur la branche courante.
+- Jamais de push, jamais de merge, jamais gh/ssh/scp ; le workflow pousse et ouvre la PR.
+- Jamais de secret ni de clé en dur. Ne modifie pas main/master.
+- Écris un court résumé factuel (SHA, tests, résultats) dans /tmp/task_done.md.
+- lifeos de référence : lifeos/ (lecture seule si lifeos_write=false).
+- lifeos est en lecture seule : ne tente jamais de le modifier.
+
+## Prompt
+
+# Driver F6 — ISC-F5-13 Annuler = danger (reprise après cancel file)
+
+Dépôt Galass_Driver, branche **build/driver-f5-13c** (tip feat @ 32607ee goldens 3.50.1). ISA : `MEMORY/WORK/20261006-galass-driver-multistop/ISA.md`.
+
+Fais UNIQUEMENT ISC-F5-13 : « Annuler la course » reste visuellement distinct (couleur danger) du CTA principal, tout état. Preuve : `flutter test test/unit/multistop_end_gate_test.dart` (+ analyze fichiers touchés). Coche ISC-F5-13 via ISATool avec preuve. **Ne régénère aucun golden.** Commits petits, auteur Papa Diop <76528706+LordThiouk@users.noreply.github.com>. Pas de git push. Ne touche pas `.fullrun`.
+
+$ git branch --show-current && echo "---" && git log --oneline -5
+feat/multistop-e2e-2026-11-15
+---
+267c3fa wip(autosave): arbre de travail
+32607ee test(goldens): rebase ride_details sous Flutter 3.50.1 (regen F6)
+119fb0c feat(driver): ISC-F5-16 arrêt actif distinct + arrêts estompés numérotés
+505637e fix(driver): ISC-F5-12 CTA unique par état (confirm stop / terminer)
+bd77f91 docs(driver): verdict position voiture temps réel + ISC-F5-19
+
+$ cat MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | sed -n '1,260p'
+---
+task: "Galass Driver — affichage courses multi-arrêts (F5 enfant)"
+slug: 20261006-galass-driver-multistop
+project: Galass_Driver
+isa_kind: task
+phase: complete
+progress: 16/21
+algorithm: 8.20.2
+isa_spec: 2.19.0
+started: 2026-10-06T02:30:00Z
+updated: 2026-11-26T07:50:27.608Z
+parent: 20261006-galass-regression-multistop
+principal_stated_goal: "Multi-stop driver V2 : CONFIRM STOP par escale, navigation segment courant, END seulement destination finale"
+principal_stated_goal_source: parent
+principal_stated_goal_signal: 4
+principal_stated_goal_locked: 2026-10-06T02:30:00Z
+context_sufficient: true
+interview_invoked: false
+isa_stamp: hmac-sha256:[REDACTED:hex64]
+---
+
+## Problem
+
+L'app **Galass Driver** (`/Users/macbook/Galass_Driver`) affiche pickup + destination uniquement : `RideModel` ne parse pas `stops[]`, les écrans course active / modal `DISPATCH_OFFER` ne listent pas les escales, la carte ne marque pas les arrêts intermédiaires. Le backend (parent F2+F3 **CLOSED**) retourne `ride.stops[]` ordonnés sur `GET /api/ride/details/{id}` et persiste `ride_stops`. Fin de course v1 = **END global** (`POST driver/rides/end/{id}`) — pas d'ack par stop. Sans F5 driver, le chauffeur ne voit pas l'itinéraire multi-escales commandé par le rider.
+
+## Vision
+
+Le chauffeur voit **pickup → arrêt 1 → arrêt 2 → destination**, confirme chaque escale (**CONFIRM STOP**), navigue le **segment courant**, et n'active **END** qu'à la destination finale. Euphoric surprise : parcours multi-stop aussi clair qu'une note de course Uber.
+
+## Out of Scope
+
+- **Galass Rider** (F4 — ISA `20261006-galass-rider-multistop`).
+- Backend Laravel (parent ISA).
+- Navigation turn-by-turn Google Maps in-app refonte.
+- Refonte CallKit UX (nouveau design / Android fullScreenIntent) — **hors scope** ; auto-open post-accept **in scope** (F5).
+- Deploy Play Store — handoff principal.
+
+
+
+## Language
+
+- **stops[]** — escales intermédiaires ordonnées par `sequence` ASC. *Avoid:* traiter comme destinations alternatives.
+- **Confirm stop** — slider/bouton driver « Confirmer l'arrêt » ; appelle `POST complete-stop` ; débloque navigation suivante.
+- **current_leg** — cible navigation active (pickup → stop1 → … → destination).
+- **END course** — autorisé uniquement à la destination finale une fois toutes escales ack.
+- **CallKit accept → foreground** — après Accept sur l'appel entrant, l'app Driver passe au premier plan et ouvre la course (ride details). *Avoid:* confondre avec « CallKit sonne » (déjà OK).
+
+
+
+## Principles
+
+- **Chirurgical** : modèle ride + écrans course active / map / offer modal ; ne pas casser dispatch F4, CallKit, GPS ping, messages.
+- **Parent-first** : schéma JSON = `Galass_backend/docs/API_MULTI_STOP.md` § GET detail.
+- **Backward compatible** : `stops` absent ou `[]` = UI actuelle inchangée.
+- **Evidence** : unit parse JSON + grep ; ARTEMIS manual liste/map.
+
+
+
+## Constraints
+
+- Flutter GetX ; package `sn.galass.galassdriver`.
+- V2 = **ack + navigation segment courant** ; V1 affichage reste base ; single-stop sans complete-stop.
+- Dual-write ISA repo + LifeOS ; doc ISA avant code Dart.
+- Coordination : rider F4 peut ship indépendamment ; E2E Bridge-B4 requiert create multi-stop staging.
+
+
+
+## Dependencies
+
+- requires: 20261006-galass-regression-multistop — F2+F3 CLOSED ; **F7 CLOSED local 2026-10-07**. Prod parent interdite tant que cette app n'appelle pas `complete-stop`.
+- requires: 20261002-galass-driver-dispatch-f4 — flux offer/respond et course active inchangés.
+
+
+
+## Backend contract (parent seam)
+
+
+| Source                                 | Champ               | Rôle driver                                                                     |
+| -------------------------------------- | ------------------- | ------------------------------------------------------------------------------- |
+| `GET ride/details/{id}`                | `data.ride.stops[]` | Liste ordonnée `{ id, sequence, latitude, longitude, location_label, zone_id }` |
+| `POST driver/rides/complete-stop/{id}` | —                   | Ack escale courante ; next leg                                                  |
+| `POST driver/rides/end/{id}`           | —                   | Fin course — **422** si escales pending (multi-stop)                            |
+| `DISPATCH_OFFER` Pusher                | ride embed          | Afficher résumé stops si ride nested inclut stops (sinon fetch detail)          |
+
+
+
+
+## Contexte F7 backend (livré local 2026-10-07)
+
+Parent F7, Max pass. `ride_stops.completed_at` nullable. **Pas en prod.** Deploy parent + app v1 = `POST end` en 422 `stops_incomplete` dès qu'une escale est pending.
+
+`POST /api/driver/rides/complete-stop/{ride_id}` — corps vide, token driver. Auth : sanctum + `driver_token` + `driver.verification`. Course filtrée par `driver_id` (404 si pas assignée).
+
+Réponse 200, `remark: stop_completed` :
+
+- `completed_stop` — stop ack (`id`, `sequence`, coords, `location_label`, `completed_at`)
+- `next_leg` — `{ type, stop_id, sequence, latitude, longitude, location_label }` ; `type` = `stop` ou `destination`
+- `stops_remaining` — entier
+
+Idempotent (tout déjà ack) : `completed_stop: null`, `next_leg.type = destination`, `stops_remaining: 0`, pas de second event.
+
+Erreurs : 404 `not_found` ; 422 `ride_not_running` ; 422 `stops_not_applicable` (aucune ligne `ride_stops`).
+
+`POST end` : 422 `stops_incomplete` + `data.pending_stops` tant qu'un `completed_at` est null ; 200 si tous set, ou s'il n'y a aucune ligne (single-stop).
+
+Pusher `STOP_COMPLETED` sur `rider-driver-{driver_id}` et `rider-user-{user_id}`. Payload `{ ride_id, stop_id, sequence, next_leg }`.
+
+`GET /api/driver/rides/details/{id}` inclut `stops[].completed_at`. La destination n'est pas une ligne `ride_stops` : elle se termine par `end`. Frais d'attente : V2.1, hors scope.
+
+## Goal
+
+À la clôture, le driver **confirme chaque escale**, la carte cible le **segment courant**, END uniquement en destination finale ; single-stop inchangé.
+
+## Bridge Criteria
+
+- [x] Bridge-B4: Bridge: stops affichés driver = ordre API `ride/details` — verify E2E staging (parent rollup ISC-F5-5). *(principal 2026-10-09)*
+- [x] Bridge-B6: Bridge: confirm stop → rider notified ≤5s. *(principal 2026-10-09)*
+
+
+
+## Test Strategy
+
+
+| isc       | type        | check                                            | threshold         | tool                                                     | anchors_to                                |
+| --------- | ----------- | ------------------------------------------------ | ----------------- | -------------------------------------------------------- | ----------------------------------------- |
+| ISC-F0-1  | manual      | dual-write SHA256 repo=LifeOS                    | match             | shasum                                                   | literal                                   |
+| ISC-F0-2  | unit        | flutter test baseline pre-edit                   | exit 0            | flutter test                                             | literal                                   |
+| ISC-F5-1  | unit        | RideModel.fromJson parses stops[]                | count + order     | flutter test test/unit/multistop_ride_model_test.dart    | literal                                   |
+| ISC-F5-2  | unit        | RideModel.fromJson sans stops                    | stops null/empty  | flutter test test/unit/multistop_ride_model_test.dart    | literal                                   |
+| ISC-F5-3  | manual      | active ride screen lists stops                   | ≥2 labels         | ARTEMIS                                                  | literal                                   |
+| ISC-F5-4  | manual      | map shows intermediate markers                   | pins visible      | ARTEMIS                                                  | literal                                   |
+| ISC-F5-5  | manual      | offer modal ou detail fetch shows stop summary   | visible           | ARTEMIS                                                  | literal                                   |
+| Anti-F5-1 | unit        | legacy ride JSON UI path unchanged               | grep + test       | flutter test test/unit/multistop_regression_test.dart    | literal                                   |
+| Anti-F5-2 | unit        | dispatch F4 tests still GREEN                    | exit 0            | flutter test test/unit/dispatch_f4_*                     | cross: 20261002-galass-driver-dispatch-f4 |
+| ISC-F5-6  | unit        | completeStop API client payload                  | POST correct      | flutter test test/unit/multistop_complete_stop_test.dart | literal                                   |
+| ISC-F5-7  | manual      | CONFIRM STOP slider visible at intermediate stop | visible           | ARTEMIS                                                  | literal                                   |
+| ISC-F5-8  | unit        | map loadMap targets current_leg only post-ack    | waypoints segment | flutter test test/unit/ride_map_multistop_test.dart      | ISC-F5-6                                  |
+| ISC-F5-9  | unit        | END blocked UI until all stops completed         | button disabled   | flutter test test/unit/multistop_end_gate_test.dart      | literal                                   |
+| ISC-F5-10 | unit        | STOP_COMPLETED refreshes ride state              | parse+update      | flutter test test/unit/multistop_pusher_test.dart        | literal                                   |
+| ISC-F5-11 | manual      | CallKit Accept → app foreground + ride details   | app visible ≤3s   | device / ARTEMIS                                         | cross: 20261002-galass-driver-dispatch-f4 |
+| Anti-F5-3 | unit        | accept path still calls launchApp / bring-to-fg  | grep ≥1           | grep + unit                                              | derived: ISC-F5-11                        |
+| Bridge-B6 | integration | confirm stop → rider notified                    | ≤5s               | ARTEMIS staging                                          | cross: parent F7                          |
+| ISC-F5-12 | widget      | une seule action principale actionnable par état : escale(s) pending → « Confirmer l'arrêt » visible+actif, « Terminer la course » **masqué** (pas seulement disabled) ; dernier arrêt → « Confirmer l'arrêt » disparaît, « Terminer la course » visible+actif avec un style visuellement distinct de son état désactivé (pas seulement opacité 0.6 sur la même couleur primaire) | 1 seul bouton actionnable rendu par état ; style actif ≠ style désactivé au-delà de l'opacité | flutter test test/unit/multistop_end_gate_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23) | ISC-F5-9 |
+| ISC-F5-13 | widget      | « Annuler la course » reste visuellement distinct (couleur danger) du CTA principal, quel que soit l'état | bgColor danger ≠ bgColor CTA principal | flutter test test/unit/multistop_end_gate_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23) | literal |
+| ISC-F5-14 | widget      | Compteur « x/N arrêt(s) terminé(s) » (`stopsProgressText`) retiré du widget tree Driver, partout (staging et prod) ; repère stable non visible à la place pour le harnais e2e | `find.textContaining('arrêt')` sur le pattern compteur ne matche plus ; clé stable résout | flutter test test/unit/multistop_stops_progress_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23) | supersedes: ISC-F5-3 |
+| ISC-F5-15 | widget      | Après le dernier arrêt, aucun écran course active Driver n'affiche le libellé générique « Point de prise en charge » à la place de la destination réelle | texte rendu == adresse destination réelle, jamais `MyStrings.pickUpLocation` sur le nœud final | flutter test test/unit/multistop_itinerary_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23) | literal |
+| ISC-F5-16 | widget      | Carte course active — l'arrêt actif (prochain non-`completed_at`) a un style distinct ; les autres arrêts intermédiaires sont numérotés et estompés (pas la même icône uniforme qu'aujourd'hui) | icône active ≠ icône estompée-numérotée ; tous les stops non-actifs portent un numéro | flutter test test/unit/ride_map_multistop_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23) | ISC-F5-4 |
+| ISC-F5-17 | widget      | **Contrat d'écran** « Driver en course » (RIDE_RUNNING, dérivé du code actuel 2026-11-23) — présence testée individuellement de : avatar+nom+note (`UserDetailsWidget`), bouton message, bouton appel, un seul CTA principal actionnable (ISC-F5-12), « Annuler la course » distinct-danger (ISC-F5-13), bloc itinéraire pickup→arrêts→destination, repères d'arrêts sur la carte (ISC-F5-16). **Règle « ajouter sans retirer »** : retirer un de ces éléments exige une ligne ISA explicite validée par Papa. | 7 assertions `find.byKey`/`find.text` toutes vertes, une par élément listé | flutter test test/widget/course_en_cours_driver_contract_test.dart (golden) | ISC-F5-12, ISC-F5-13, ISC-F5-16 |
+| ISC-F5-18 | widget      | Les deux références RUNNING « arrêt 1 actif » et « arrêt 2 actif » sont distinctes (sha256 différents) et rendent visiblement l'état complété vs actif pour refléter `completedAt`/progression. **Mesure 2026-11-23** : les deux PNG sont byte-identiques (sha256 `[REDACTED:hex64]`) car `RideItineraryTimeline` n'affiche pas `completedAt` et les CTA `canConfirmStop`/`canEndRide` ont la même valeur à 0/1 arrêt terminé — trou de planche **et** de rendu, non falsifiable aujourd'hui. | sha256(a) ≠ sha256(b) ; style actif/complété distinct | sha256sum test/goldens/driver/goldens/driver_ride_running_multistop_stop_*_active.png + golden widget | ISC-F5-16 |
+| Bridge-B7 | integration | e2e verte couvrant les arrêts ET les points UI (b/c/d/e) avec captures Driver et Rider comparées côte à côte — **étendu 2026-11-23 : zéro écart golden non accepté** (cf. ISA harnais emu) | PASS | ARTEMIS + galass-emu-actions-pub run | cross: 20261006-galass-rider-multistop |
+| ISC-F5-19 | widget + integration | Pendant RIDE_ACTIVE/RUNNING, le marqueur voiture `driver_location` suit un flux GPS (≥2 positions successives) et une requête `POST driver/location-update` est émise depuis l'écran course ; icône = asset partagé `marker_car.png` | marqueur se déplace sur ≥2 positions ; ≥1 ping `driver/location-update` émis en course | flutter test test/unit/ride_map_live_location_test.dart + grep | cross: ISC-F4-32 (Rider) |
+
+## Features
+
+
+
+### F0 · Cross-cutting
+
+Why: baseline avant edits.
+
+- [x] ISC-F0-1: Dual-write ISA enfant — SHA256 repo = LifeOS au close phase.
+- [x] ISC-F0-2: `flutter test` / `flutter analyze` verts avant edits.
+
+
+
+### F1 · Modèle données
+
+Why: parser `stops[]` depuis API.
+
+- [x] ISC-F5-1: `RideModel` (+ `RideStopModel` si needed) — parse `stops[]` ordonné par `sequence`.
+- [x] ISC-F5-2: Legacy ride sans `stops` — champ absent, pas de crash, UI fallback single-stop.
+
+
+
+### F2 · UI course active
+
+Why: le chauffeur lit l'itinéraire complet.
+
+- [x] ISC-F5-3: Écran course active / ride details — **liste ordonnée** pickup → stops → destination.
+- [x] ISC-F5-4: Carte v1 — **markers** arrêts intermédiaires + polyline ou highlight segment courant.
+- [x] ISC-F5-5: Modal offre ou prefetch detail — **résumé** multi-stop (ex. « 2 arrêts » + premier label).
+
+
+
+### F3 · Anti-régression
+
+Why: single-stop et dispatch F4 intacts.
+
+- [x] Anti-F5-1: Anti: Course sans stops — écrans identiques au comportement pré-F5. *(model parse GREEN ; UI device après F2)*
+- [x] Anti-F5-2: Anti: Suite tests dispatch F4 reste GREEN post-F5.
+
+
+
+### F4 · Ack stop-by-stop V2 (driver)
+
+Why: parité Uber — le chauffeur valide chaque escale avant la suivante.
+
+- [x] ISC-F5-6: `RideRepo.completeStop(rideId)` → `POST driver/rides/complete-stop/{id}`.
+- [x] ISC-F5-7: UI **CONFIRM STOP** (slider ou bouton FR) sur course active multi-stop.
+- [x] ISC-F5-8: Carte — polyline/markers **segment courant** après ack (pas tout l'itinéraire en navigation).
+- [x] ISC-F5-9: Bouton END / Complete trip — **disabled** tant qu'escales pending ; actif destination finale seulement.
+- [x] ISC-F5-10: Handler Pusher `STOP_COMPLETED` — resync `RideModel.stops` + `current_leg`.
+
+
+
+### F5 · CallKit accept → course
+
+Why: après Accept CallKit, le chauffeur doit atterrir dans l'app sur la course (stops visibles) sans relancer l'app à la main.
+
+- [x] ISC-F5-11: **CallKit Accept** → app au premier plan + navigation **ride details** (pickup / timeline stops) ≤3 s. *(device principal 2026-10-09: CTAs ACTIVE OK)*
+- [x] Anti-F5-3: Anti: chemin accept conserve un bring-to-foreground explicite (`launchApp` / équivalent) — pas de silent stay-in-background.
+
+
+
+### F6 · Revue UI multistop téléphone (retours Papa, run e2e 45093391102, 2026-11-23)
+
+Why: revue des captures du bundle evidence déchiffré (lu, aucun secret recopié) + retours directs de Papa. Aucun correctif de code dans cette étape — ISC seulement. **Note : cette ISA est `phase: complete` / `18/18` close depuis 2026-10-09 ; cette section ajoute des claims non cochés sans changer `phase` ni cocher/décocher quoi que ce soit, sur instruction explicite. Signalé à Papa : la convention Algorithm (OPERATIONAL_RULES) prévoit normalement qu'un edit de corps ISA sur une tâche `complete` la fait revenir à `learn` — ici volontairement non appliqué.**
+
+- [x] ISC-F5-12: Une seule action principale par état — « Confirmer l'arrêt » quand un arrêt est actif, « Terminer la course » seulement après le dernier arrêt, visuellement distinct et sans avoir l'air désactivé. **Audit code (agent lecture seule, 2026-11-23)** : `ride_details_bottom_sheet_widget.dart` l.231-283 — « Terminer la course » est aujourd'hui **toujours rendu** dans le bloc RUNNING, seulement `isDisabled` (opacité 0.6 via `rounded_button.dart` l.59, même couleur primaire, même texte) ; les deux CTA sont donc visibles simultanément tant qu'une escale reste pending, un seul étant réellement actionnable. Falsifier: 2 CTA actionnables simultanément, ou « Terminer la course » encore visible+actif avant le dernier arrêt.
+- [ ] ISC-F5-13: « Annuler la course » est clairement une action dangereuse, différente de l'action principale. **Audit code** : déjà vrai aujourd'hui (`bgColor: MyColor.redCancelTextColor` = `0xFFF93E2C`, l.217-225, vs couleur primaire par défaut du CTA principal) — ce claim verrouille ce comportement correct en régression plutôt que de supposer un bug.
+- [ ] ISC-F5-14: Les compteurs « x/2 arrêt(s) terminé(s) » sont retirés de l'UI Driver, partout (staging et prod) ; **supersède ISC-F5-3** pour la partie compteur (la liste ordonnée des arrêts elle-même reste). **Audit code** : fonction `stopsProgressText` confirmée `ride_details_bottom_sheet_widget.dart` l.30-46, rendue l.92-98. Le harnais emu reçoit un repère invisible stable à la place — **contrat fixé 2026-11-23** : UN nœud `Semantics` invisible, `content-desc` exact `galass.driver.stops=<done>/<total>`, monté seulement si `ride.stops` non vide (miroir Rider `ISC-F4-22`, consommé par harnais `ISC-EMU-1`). Un `Key` widget seul ne suffit pas (invisible à `uiautomator dump`).
+- [ ] ISC-F5-15: Après le dernier arrêt, le Driver n'affiche plus « Point de prise en charge » mais la vraie destination finale. **Audit code (2026-11-23)** : aucune occurrence de `MyStrings.pickUpLocation` trouvée sur le nœud final dans les écrans course active lus (`ride_destination_widget.dart`, `ride_itinerary_timeline.dart` — le dernier nœud utilise toujours `MyStrings.destination` + l'adresse réelle) ; **non vérifié à 100%** sur d'éventuels autres écrans (notification push, carte plein écran) — ce claim sert de garde-fou si un tel cas existe ou apparaît.
+- [x] ISC-F5-16: Le Driver affiche des repères d'arrêts sur la carte, avec l'arrêt actif mis en avant et les autres estompés+numérotés. **Audit code** : `ride_map_controller.dart` l.245-268 — tous les arrêts intermédiaires partagent aujourd'hui la même icône `destinationIcon` 40×40, **aucune numérotation**, **aucune distinction active/futur** ; `ISC-F5-4` (markers existants) est donc insuffisant tel quel pour ce besoin — ce claim l'étend plutôt que de le dupliquer. **Verrou de régression (méthode anti-régression 2026-11-23, Papa) : preuve golden + capture e2e ajoutées en exigence, jamais affaiblie.**
+- [ ] ISC-F5-17 (2026-11-23, méthode anti-régression Papa) : contrat d'écran « Driver en course » — éléments obligatoires dérivés du code actuel (avatar+nom+note, bouton message, bouton appel, CTA unique par état, Annuler=danger, bloc itinéraire, repères d'arrêts), chacun avec un test widget de présence, règle « ajouter sans retirer » (retrait = ligne ISA explicite validée par Papa). Papa n'a détaillé la liste de référence que pour l'écran Rider (point 3 de la demande) ; la liste Driver ci-dessus est dérivée du code lu, **à confirmer/compléter par Papa** si une référence précise existe pour le Driver aussi. [app: Driver · classe: contrat d'écran · preuve: golden]
+### F8 · Position voiture temps réel en course (Papa 2026-11-25)
+
+Why: Papa demande que la voiture du chauffeur se mette à jour en temps réel sur la carte Driver pendant RIDE_ACTIVE/RIDE_RUNNING et que sa position parte au backend pour que le Rider la voie.
+
+- [ ] ISC-F5-19: **Pendant RIDE_ACTIVE et RIDE_RUNNING, la voiture du chauffeur est mise à jour en temps réel sur la carte Driver (flux GPS → marqueur voiture partagé `marker_car.png` → caméra) ET sa position est envoyée au backend (`POST driver/location-update`, broadcast Pusher côté Rider).** Audit code 2026-11-25 (lecture seule) : affichage **PARTIEL** — `ride_map_controller.dart` l.88/333-340 ne lit la position qu'une fois via `Geolocator.getCurrentPosition` au `loadMap`, le marqueur `driver_location` (l.209-222, icône `MyIcons.markerCar` = `assets/icon/marker_car.png`, l.313) reste figé, et la caméra ne cadre qu'à l'ouverture (`poly_line_map.dart` l.43-46, `ride_map_controller.dart` l.406-412) ; le suivi temps réel de la home (`home_screen.dart` l.376-388) est mis en pause dès l'ouverture de la course (`didPushNext` l.95-99). Envoi backend **PARTIEL** — aucun ping dédié course dans `ride_details_*` ; seul le service foreground envoie `driver/location-update` (`forground_location_service.dart` l.79-114/121-152, `dashboard_repo.dart` l.38-51, `url_container.dart` l.74), uniquement si le chauffeur est online (`forground_location_service.dart` l.34-39, `main.dart` l.121-126) ; `maybePingServerLocation` (`dashboard_controller.dart` l.65-91) est lui aussi coupé avec la home. Falsifier: un test widget/unit montre le marqueur `driver_location` qui change sur un flux GPS pendant RIDE_ACTIVE/RUNNING et une requête `driver/location-update` émise depuis l'écran course, ou une capture device où la voiture avance et la caméra suit. Cross: ISC-F4-32 (Rider). [app: Driver · classe: temps réel carte+backend · preuve: widget + grep]
+
+## Decisions
+
+- **2026-10-09 23:49** — Principal: **tout confirmé** → ISA **CLOSED** `phase: complete` `progress: 18/18` (Features 16 + Bridge-B4/B6). Dual-write LifeOS SHA256 match.
+- **2026-10-09 23:47** — Principal: **tout confirmé device** → claims F2/F3/Bridge fermés ; Remaining Work `[x]`.
+- **2026-10-09 23:41** — Principal device: CallKit Accept → ride ACTIVE + CTA Prise en charge / Annuler **OK**. ISC-F5-11 device **CLOSED** ; Remaining Work Device F5 CallKit **[x]**.
+- **2026-10-09 22:18** — Device CTA absents post-CallKit **CLOSED (code)** Marcus `{"status":"pass","tests":"28/28"}` : root = pending nav armé **avant** accept POST → resume flush ouvre details pré-ACTIVE puis skip reload. Fix: arm **après** accept ; reload si déjà sur route ; `putFresh` + dispose delete ; sheet animateTo retries. Device Accept → pickup/cancel **OPEN**.
+- **2026-10-09 21:03** — Marcus CallKit ACTIVE nav **PASS** `{"status":"pass","tests":"23/23"}` : Accept → settle resumed → **une** `Get.offNamed` ride details (rideId string) ; flush skip si déjà sur le bon ride (`normalizeDispatchRideId`) ; sheet jump 0.4 post-load ; sticky footer inchangé. Device Accept → CTAs ACTIVE **OPEN**.
+- **2026-10-09** — Principal: CTA absents **seulement** post-CallKit (ouverture normale OK) — race nav/stack reset, pas fold seul. Marcus: nav unique resume→ride ACTIVE + sheet settle ; sticky footer garde.
+- **2026-10-09** — Device: Accept ouvre l’app mais CTA pickup/annuler invisibles — timeline multistop remplit sheet 0.4 ; Aditi sticky footer CTA après itinéraire.
+- **2026-10-09** — CallKit iOS GAP-1 fix Marcus: Accept → `setCallConnected` + **defer endCall** (≥1.8s post-nav) ; Android FG→endCall inchangé ; **20/20** tests. Device Accept rebuild OPEN.
+- **2026-10-09** — Device: auto-open encore KO — root cause iOS: `launchApp` **unimplemented** ; `endCall` immédiat post-Accept tue l’activation CallKit. Marcus retry: delay/skip endCall iOS.
+- **2026-10-09** — CallKit FG fix Marcus: `_bringAppToForeground` **avant** `endCall` ; wait paused ≤500ms post-launchApp ; **18/18** CallKit tests GREEN. Device re-verify OPEN. (ISA-level FullRun false-blocked 12/16 paused — hotfix hors lane F5 already complete.)
+- **2026-10-09** — Principal: CallKit auto-open cassé device + spacing itinéraire→CTA — Marcus FG retry ; Aditi `spaceDown` après RideDestination.
+- **2026-10-09** — Principal: CTA ACTIVE+RUNNING **après** itinéraire (pas avant) — revert ordre Aditi ; comportement inchangé.
+- **2026-10-09** — Device: après CallKit, « Prise en charge » / « Annuler » semblaient absents — cause ordre ListView (boutons sous timeline multistop dense), pas suppression. Aditi : CTA ACTIVE+RUNNING **au-dessus** de `RideDestination` ; comportement inchangé.
+- **2026-10-09** — FullRun F5 Max **GO-with-conditions** `{"status":"pass"}` — F5 **code** lane CLOSED ; conditions: device ISC-F5-11 ≤3s OPEN ; unit≠device ; TTL arm early ; Android killed isolate handoff ; clear-on-details vs late wipe. Pipeline F5 **complete**.
+- **2026-10-09** — FullRun F5 verify re-run **PASS** — Silas/code-reviewer/Forge `{"status":"pass"}` ; CK-RACE-01/02/03 CLOSED ; **18/18** CallKit tests ; advance → **Max**.
+- **2026-10-09** — FullRun F5 build retry PASS — Marcus: bg accept→handleCallKitAccept ; retries to 4.5s + clear-on-details ; flush before onWillStart ; 18/18.
+- **2026-10-09** — FullRun F5 verify FAIL — Silas HIGH: bg `_dispatchCallKitHeadlessRespond` bypass FG/pending ; late launchApp wipe after 1.2s retries ; resumed flush gated `onWillStart`. code-reviewer/Forge pass (MEDIUM defer). Retreat → Marcus.
+- **2026-10-09** — FullRun F5 build PASS (Marcus) : Anti-F5-3 lock + FG→lifecycle→respond + pending re-nav/flush ; 9/9+1/1 tests ; ISC-F5-11 device ≤3s OPEN (F5-D).
+- **2026-10-09** — FullRun F5 Serena **PASS** : build F5-A Anti lock → F5-B harden `_bringAppToForeground` → F5-C nav sous FG → F5-D device ≤3s. **Dispatch** : Anti-F5-3+ISC-F5-11 code → **Marcus** ; ISC-F5-11 device → **Aditi**/ARTEMIS (pas redesign CallKit). Risks : launchApp flaky, race stack, RTT vs budget 3s.
+- **2026-10-09** — Principal: **CallKit in ISA** — F5 + ISC-F5-11 / Anti-F5-3 (auto-open post-accept) ; sonnerie CallKit déjà OK device ; cross `20261002-galass-driver-dispatch-f4` GAP-1.
+- **2026-10-09** — Device principal (screenshot) : timeline F2 **OK** (pickup → Colobane → Medina → Yoff) ; labels bug **« Arrêt {number} »** (GetX `trParams` veut `@number`, pas `{number}`) — fix `my_strings` ; CallKit **arrive** ; auto-open post-accept → **ISC-F5-11 OPEN**.
+- **2026-10-07** — Principal: update ISA post-FullRun F4 — progress 9/15 ; Vision alignée V2 ; Learning Pusher ; Verification F5-10 8/8 ; Remaining Work device/bridge only.
+- **2026-10-07** — FullRun feature F4 **COMPLETE** (pipeline `status: complete`) — Max GO-with-conditions ; no ship until F7 prod ; ARTEMIS ISC-F5-7 device OPEN ; F4 code claims CLOSED.
+- **2026-10-07** — FullRun F4 Max **GO-with-conditions** `{"status":"pass"}` — no ship until F7 prod; ARTEMIS ISC-F5-7 device OPEN; F4 code claims CLOSED.
+- **2026-10-07** — FullRun F4 verify re-run PASS — code-reviewer/Silas/Forge `{"status":"pass"}`; Forge concerns defer END client until F7 prod. Advance → Max.
+- **2026-10-07** — FullRun F4 build retry PASS — Marcus: flat STOP_COMPLETED before fromJson; `_isDifferentRide` fail-close; nested stops guard; 8/8 pusher tests. END client-only defer until F7 prod.
+- **2026-10-07** — FullRun F4 verify FAIL — code-reviewer HIGH: flat STOP_COMPLETED never reaches handler (fromJson before unwrap). Silas HIGH: `_isDifferentRide` fail-open on empty ride_id; END client-only until F7 prod (defer deploy). Retreat → build retry Marcus.
+- **2026-10-07** — FullRun F4 build PASS — Marcus ISC-F5-6/8/9/10 + Aditi ISC-F5-7 ; 12/12 unit ; advance → verify.
+
+$ cat test/unit/multistop_end_gate_test.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:galass_driver/core/utils/app_status.dart';
+import 'package:galass_driver/core/utils/my_color.dart';
+import 'package:galass_driver/core/utils/my_strings.dart';
+import 'package:galass_driver/data/controller/map/ride_map_controller.dart';
+import 'package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_stop_model.dart';
+import 'package:galass_driver/data/repo/polyline/polyline_repo.dart';
+import 'package:galass_driver/data/repo/ride/ride_repo.dart';
+import 'package:galass_driver/data/services/api_client.dart';
+import 'package:galass_driver/presentation/components/buttons/rounded_button.dart';
+import 'package:galass_driver/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../helpers/recording_api_client.dart';
+
+/// No HTTP: the CTA contract is the widget tree, never a response.
+class _NoopRideRepo extends RideRepo {
+  _NoopRideRepo({required super.apiClient});
+
+  @override
+  Future<ResponseModel> getRideDetails(String id) async =>
+      ResponseModel(true, 'ok', 200, <String, dynamic>{});
+}
+
+/// No GoogleMap platform view in the test host.
+class _NoopMap extends RideMapController {
+  _NoopMap({required super.polylineRepo});
+
+  @override
+  void loadMap({
+    required LatLng pickup,
+    required LatLng destination,
+    List<LatLng> intermediateStops = const <LatLng>[],
+    LatLng? currentLeg,
+  }) {}
+
+  @override
+  Future<void> setCustomMarkerIcon({bool? isRunning}) async {}
+}
+
+RideModel _rideWithStops({required int completed}) => RideModel(
+      id: '42',
+      status: AppStatus.RIDE_RUNNING,
+      pickupLocation: 'Plateau, Dakar',
+      destination: 'Aéroport AIBD, Diass',
+      distance: '38.4',
+      duration: '52',
+      amount: '12500',
+      stops: List<RideStopModel>.generate(3, (index) {
+        final sequence = index + 1;
+        return RideStopModel(
+          id: '$sequence',
+          sequence: '$sequence',
+          latitude: '14.70$sequence',
+          longitude: '-17.44$sequence',
+          locationLabel: 'Arrêt $sequence',
+          completedAt:
+              index < completed ? '2026-11-23 09:1$sequence:00' : null,
+        );
+      }),
+    );
+
+RideModel _rideWithStatus(String status) => RideModel(
+      id: '77',
+      status: status,
+      pickupLocation: 'Plateau, Dakar',
+      destination: 'Aéroport AIBD, Diass',
+      distance: '38.4',
+      duration: '52',
+      amount: '12500',
+    );
+
+Future<RideDetailsController> _createController() async {
+  Get.testMode = true;
+  Get.reset();
+  SharedPreferences.setMockInitialValues(<String, Object>{});
+  final prefs = await SharedPreferences.getInstance();
+  final apiClient = RecordingApiClient(sharedPreferences: prefs);
+  Get.put<ApiClient>(apiClient);
+  final controller = Get.put<RideDetailsController>(
+    RideDetailsController(
+      repo: _NoopRideRepo(apiClient: apiClient),
+      mapController: _NoopMap(
+        polylineRepo: PolylineRepo(apiClient: apiClient),
+      ),
+    ),
+  );
+  controller.currency = 'FCFA';
+  controller.userImageUrl = '';
+  controller.isLoading = false;
+  return controller;
+}
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  late RideDetailsController controller;
+
+  Future<void> pumpSheet(WidgetTester tester, RideModel ride) async {
+    controller.ride = ride;
+    await tester.pumpWidget(
+      GetMaterialApp(
+        home: Scaffold(
+          body: Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              height: 560,
+              child: RideDetailsBottomSheetWidget(
+                scrollController: ScrollController(),
+                draggableScrollableController: DraggableScrollableController(),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+
+  group('RideModel multistop end gate', () {
+    test('canEndRide true when no stops', () {
+      final ride = RideModel(id: '1');
+      expect(ride.canEndRide, isTrue);
+      expect(ride.canConfirmStop, isFalse);
+    });
+
+    test('canEndRide false while a stop is pending', () {
+      final ride = RideModel(
+        id: '1',
+        stops: [
+          RideStopModel(
+            id: '10',
+            sequence: '1',
+            latitude: '14.7',
+            longitude: '-17.4',
+            completedAt: null,
+          ),
+        ],
+      );
+      expect(ride.canEndRide, isFalse);
+      expect(ride.canConfirmStop, isTrue);
+    });
+
+    test('canEndRide true when all stops completed', () {
+      final ride = RideModel(
+        id: '1',
+        stops: [
+          RideStopModel(
+            id: '10',
+            sequence: '1',
+            latitude: '14.7',
+            longitude: '-17.4',
+            completedAt: '2026-10-07T00:00:00Z',
+          ),
+        ],
+      );
+      expect(ride.canEndRide, isTrue);
+      expect(ride.canConfirmStop, isFalse);
+    });
+  });
+
+  group('ISC-F5-12 — une seule action principale par état', () {
+    setUp(() async {
+      controller = await _createController();
+    });
+
+    tearDown(Get.reset);
+
+    testWidgets('escale(s) pending → « Confirmer l\'arrêt » seul',
+        (tester) async {
+      await pumpSheet(tester, _rideWithStops(completed: 1));
+
+      final confirm = find.byKey(const Key('driver_confirm_stop_cta'));
+      final end = find.byKey(const Key('driver_end_ride_cta'));
+      expect(confirm, findsOneWidget);
+      expect(end, findsNothing);
+      expect(tester.widget<RoundedButton>(confirm).isDisabled, isFalse);
+      // Falsifier ISC-F5-12: deux CTA actionnables simultanément.
+      expect(find.byType(RoundedButton), findsOneWidget);
+    });
+
+    testWidgets('dernier arrêt → « Terminer la course » seul, style actif',
+        (tester) async {
+      await pumpSheet(tester, _rideWithStops(completed: 3));
+
+      final confirm = find.byKey(const Key('driver_confirm_stop_cta'));
+      final end = find.byKey(const Key('driver_end_ride_cta'));
+      expect(confirm, findsNothing);
+      expect(end, findsOneWidget);
+
+      final endButton = tester.widget<RoundedButton>(end);
+      expect(endButton.isDisabled, isFalse);
+      // Style distinct de la couleur primaire (pas seulement l'opacité 0.6).
+      expect(endButton.bgColor, MyColor.greenSuccessColor);
+      expect(endButton.bgColor, isNot(MyColor.getPrimaryColor()));
+      expect(find.byType(RoundedButton), findsOneWidget);
+    });
+
+    testWidgets('course single-stop (sans stops[]) → « Terminer la course » seul, style legacy',
+        (tester) async {
+      await pumpSheet(
+        tester,
+        RideModel(
+          id: '43',
+          status: AppStatus.RIDE_RUNNING,
+          pickupLocation: 'Plateau, Dakar',
+          destination: 'Aéroport AIBD, Diass',
+          distance: '38.4',
+          duration: '52',
+          amount: '12500',
+        ),
+      );
+
+      expect(find.byKey(const Key('driver_confirm_stop_cta')), findsNothing);
+      final end = find.byKey(const Key('driver_end_ride_cta'));
+      expect(end, findsOneWidget);
+      final endButton = tester.widget<RoundedButton>(end);
+      expect(endButton.isDisabled, isFalse);
+      // Backward compatible: sans stops[], le CTA garde sa couleur historique.
+      expect(endButton.bgColor, isNull);
+      expect(find.byType(RoundedButton), findsOneWidget);
+    });
+  });
+
+  group('ISC-F5-13 — « Annuler la course » reste une action danger', () {
+    setUp(() async {
+      controller = await _createController();
+    });
+
+    tearDown(Get.reset);
+
+    testWidgets('quel que soit l\'état, un CTA Annuler rendu est en danger',
+        (tester) async {
+      const statuses = <String>[
+        AppStatus.RIDE_PENDING,
+        AppStatus.RIDE_ACTIVE,
+        AppStatus.RIDE_RUNNING,
+        AppStatus.RIDE_PAYMENT_REQUESTED,
+        AppStatus.RIDE_COMPLETED,
+        AppStatus.RIDE_CANCELED,
+      ];
+      final statesWithCancel = <String>[];
+
+      for (final status in statuses) {
+        await pumpSheet(tester, _rideWithStatus(status));
+        final cancel = find.byKey(const Key('driver_cancel_ride_cta'));
+        if (cancel.evaluate().isEmpty) continue;
+        statesWithCancel.add(status);
+        final button = tester.widget<RoundedButton>(cancel);
+        // Falsifier ISC-F5-13: un Annuler rendu dans une autre couleur.
+        expect(button.bgColor, MyColor.redCancelTextColor,
+            reason: 'statut $status');
+        expect(button.text, MyStrings.cancelRide);
+      }
+
+      // Garde-fou: le test doit réellement voir le CTA au moins une fois.
+      expect(statesWithCancel, isNotEmpty);
+      expect(statesWithCancel, contains(AppStatus.RIDE_ACTIVE));
+    });
+
+    testWidgets('RIDE_ACTIVE — danger ≠ couleur du CTA principal',
+        (tester) async {
+      await pumpSheet(tester, _rideWithStatus(AppStatus.RIDE_ACTIVE));
+
+      final cancel = find.byKey(const Key('driver_cancel_ride_cta'));
+      final primary = find.byKey(const Key('driver_pickup_passenger_cta'));
+      expect(cancel, findsOneWidget);
+      expect(primary, findsOneWidget);
+
+      final cancelButton = tester.widget<RoundedButton>(cancel);
+      final primaryButton = tester.widget<RoundedButton>(primary);
+      final cancelBg = cancelButton.bgColor;
+      final primaryBg = primaryButton.bgColor ?? MyColor.primaryButtonColor;
+
+      expect(cancelBg, MyColor.redCancelTextColor);
+      expect(cancelBg, isNot(primaryBg));
+      expect(primaryBg, isNot(MyColor.redCancelTextColor));
+    });
+  });
+}
+
+✱ Grep "Annuler|annuler la course|cancel.*ride|CancelRide|danger" 63 matches
+
+$ git status --short
+M test/unit/multistop_end_gate_test.dart
+
+$ git diff -- test/unit/multistop_end_gate_test.dart
+diff --git a/test/unit/multistop_end_gate_test.dart b/test/unit/multistop_end_gate_test.dart
+index 4f65bb1..f3e0749 100644
+--- a/test/unit/multistop_end_gate_test.dart
++++ b/test/unit/multistop_end_gate_test.dart
+@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
+ import 'package:flutter_test/flutter_test.dart';
+ import 'package:galass_driver/core/utils/app_status.dart';
+ import 'package:galass_driver/core/utils/my_color.dart';
++import 'package:galass_driver/core/utils/my_strings.dart';
+ import 'package:galass_driver/data/controller/map/ride_map_controller.dart';
+ import 'package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart';
+ import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+@@ -65,9 +66,64 @@ RideModel _rideWithStops({required int completed}) => RideModel(
+       }),
+     );
+ 
++RideModel _rideWithStatus(String status) => RideModel(
++      id: '77',
++      status: status,
++      pickupLocation: 'Plateau, Dakar',
++      destination: 'Aéroport AIBD, Diass',
++      distance: '38.4',
++      duration: '52',
++      amount: '12500',
++    );
++
++Future<RideDetailsController> _createController() async {
++  Get.testMode = true;
++  Get.reset();
++  SharedPreferences.setMockInitialValues(<String, Object>{});
++  final prefs = await SharedPreferences.getInstance();
++  final apiClient = RecordingApiClient(sharedPreferences: prefs);
++  Get.put<ApiClient>(apiClient);
++  final controller = Get.put<RideDetailsController>(
++    RideDetailsController(
++      repo: _NoopRideRepo(apiClient: apiClient),
++      mapController: _NoopMap(
++        polylineRepo: PolylineRepo(apiClient: apiClient),
++      ),
++    ),
++  );
++  controller.currency = 'FCFA';
++  controller.userImageUrl = '';
++  controller.isLoading = false;
++  return controller;
++}
++
+ void main() {
+   TestWidgetsFlutterBinding.ensureInitialized();
+ 
++  late RideDetailsController controller;
++
++  Future<void> pumpSheet(WidgetTester tester, RideModel ride) async {
++    controller.ride = ride;
++    await tester.pumpWidget(
++      GetMaterialApp(
++        home: Scaffold(
++          body: Align(
++            alignment: Alignment.bottomCenter,
++            child: SizedBox(
++              height: 560,
++              child: RideDetailsBottomSheetWidget(
++                scrollController: ScrollController(),
++                draggableScrollableController: DraggableScrollableController(),
++              ),
++            ),
++          ),
++        ),
++      ),
++    );
++    await tester.pump(const Duration(milliseconds: 100));
++    await tester.pump(const Duration(milliseconds: 100));
++  }
++
+   group('RideModel multistop end gate', () {
+     test('canEndRide true when no stops', () {
+       final ride = RideModel(id: '1');
+@@ -111,53 +167,12 @@ void main() {
+   });
+ 
+   group('ISC-F5-12 — une seule action principale par état', () {
+-    late RideDetailsController controller;
+-
+     setUp(() async {
+-      Get.testMode = true;
+-      Get.reset();
+-      SharedPreferences.setMockInitialValues(<String, Object>{});
+-      final prefs = await SharedPreferences.getInstance();
+-      final apiClient = RecordingApiClient(sharedPreferences: prefs);
+-      Get.put<ApiClient>(apiClient);
+-      controller = Get.put<RideDetailsController>(
+-        RideDetailsController(
+-          repo: _NoopRideRepo(apiClient: apiClient),
+-          mapController: _NoopMap(
+-            polylineRepo: PolylineRepo(apiClient: apiClient),
+-          ),
+-        ),
+-      );
+-      controller.currency = 'FCFA';
+-      controller.userImageUrl = '';
+-      controller.isLoading = false;
++      controller = await _createController();
+     });
+ 
+     tearDown(Get.reset);
+ 
+-    Future<void> pumpSheet(WidgetTester tester, RideModel ride) async {
+-      controller.ride = ride;
+-      await tester.pumpWidget(
+-        GetMaterialApp(
+-          home: Scaffold(
+-            body: Align(
+-              alignment: Alignment.bottomCenter,
+-              child: SizedBox(
+-                height: 560,
+-                child: RideDetailsBottomSheetWidget(
+-                  scrollController: ScrollController(),
+-                  draggableScrollableController:
+-                      DraggableScrollableController(),
+-                ),
+-              ),
+-            ),
+-          ),
+-        ),
+-      );
+-      await tester.pump(const Duration(milliseconds: 100));
+-      await tester.pump(const Duration(milliseconds: 100));
+-    }
+-
+     testWidgets('escale(s) pending → « Confirmer l\'arrêt » seul',
+         (tester) async {
+       await pumpSheet(tester, _rideWithStops(completed: 1));
+@@ -213,4 +228,60 @@ void main() {
+       expect(find.byType(RoundedButton), findsOneWidget);
+     });
+   });
++
++  group('ISC-F5-13 — « Annuler la course » reste une action danger', () {
++    setUp(() async {
++      controller = await _createController();
++    });
++
++    tearDown(Get.reset);
++
++    testWidgets('quel que soit l\'état, un CTA Annuler rendu est en danger',
++        (tester) async {
++      const statuses = <String>[
++        AppStatus.RIDE_PENDING,
++        AppStatus.RIDE_ACTIVE,
++        AppStatus.RIDE_RUNNING,
++        AppStatus.RIDE_PAYMENT_REQUESTED,
++        AppStatus.RIDE_COMPLETED,
++        AppStatus.RIDE_CANCELED,
++      ];
++      final statesWithCancel = <String>[];
++
++      for (final status in statuses) {
++        await pumpSheet(tester, _rideWithStatus(status));
++        final cancel = find.byKey(const Key('driver_cancel_ride_cta'));
++        if (cancel.evaluate().isEmpty) continue;
++        statesWithCancel.add(status);
++        final button = tester.widget<RoundedButton>(cancel);
++        // Falsifier ISC-F5-13: un Annuler rendu dans une autre couleur.
++        expect(button.bgColor, MyColor.redCancelTextColor,
++            reason: 'statut $status');
++        expect(button.text, MyStrings.cancelRide);
++      }
++
++      // Garde-fou: le test doit réellement voir le CTA au moins une fois.
++      expect(statesWithCancel, isNotEmpty);
++      expect(statesWithCancel, contains(AppStatus.RIDE_ACTIVE));
++    });
++
++    testWidgets('RIDE_ACTIVE — danger ≠ couleur du CTA principal',
++        (tester) async {
++      await pumpSheet(tester, _rideWithStatus(AppStatus.RIDE_ACTIVE));
++
++      final cancel = find.byKey(const Key('driver_cancel_ride_cta'));
++      final primary = find.byKey(const Key('driver_pickup_passenger_cta'));
++      expect(cancel, findsOneWidget);
++      expect(primary, findsOneWidget);
++
++      final cancelButton = tester.widget<RoundedButton>(cancel);
++      final primaryButton = tester.widget<RoundedButton>(primary);
++      final cancelBg = cancelButton.bgColor;
++      final primaryBg = primaryButton.bgColor ?? MyColor.primaryButtonColor;
++
++      expect(cancelBg, MyColor.redCancelTextColor);
++      expect(cancelBg, isNot(primaryBg));
++      expect(primaryBg, isNot(MyColor.redCancelTextColor));
++    });
++  });
+ }
+
+$ git branch -a | head -20
+* feat/multistop-e2e-2026-11-15
+  remotes/origin/build/driver-f5-13c
+  remotes/origin/cursor/fix-kyc-multipart-submit-9f2e
+  remotes/origin/feat/multistop-e2e-2026-11-15
+  remotes/origin/feat/multistop-rider-close-2026-11-20
+  remotes/origin/fix/multistop-close
+  remotes/origin/fullrun-logs/driver-f5-13c-45845317171
+  remotes/origin/fullrun-logs/driver-f5-13c-ll-45808527591
+  remotes/origin/fullrun-logs/ui-goldens-gate-driver-2026-11-23-45197868438
+  remotes/origin/fullrun-logs/ui-goldens-gate-driver-2026-11-23-r2-45227259073
+  remotes/origin/fullrun-prompts
+  remotes/origin/main
+  remotes/origin/ovo-customizations
+  remotes/origin/release/1.1.1+60
+  remotes/origin/test/confirm-stop
+  remotes/origin/upgrade/ovoride-v2
+  remotes/origin/v2
+
+$ sed -n '170,240p' lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+RideDetailsPaymentSection(),
+                          const SizedBox(height: Dimensions.space25),
+                        ],
+                      ],
+                    ),
+                  ),
+                  if (showActiveCtas) ...[
+                    ColoredBox(
+                      color: MyColor.colorWhite,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          RoundedButton(
+                            key: const Key('driver_pickup_passenger_cta'),
+                            text: MyStrings.pickupPassenger.tr,
+                            press: () {
+                              AppDialog().showRideDetailsDialog(
+                                context,
+                                title: MyStrings.pickupPassenger.tr,
+                                description: ride.pickupLocation?.trim().isNotEmpty == true
+                                    ? ride.pickupLocation!
+                                    : MyStrings.pickUpLocation.tr,
+                                onTap: () async {
+                                  await controller.startRide(ride.id ?? '-1');
+                                },
+                              );
+                            },
+                            isLoading: controller.isStartBtnLoading,
+                          ),
+                          spaceDown(Dimensions.space20),
+                          // ISC-F5-13: action danger, jamais confondue avec le
+                          // CTA principal quel que soit l'état.
+                          RoundedButton(
+                            key: const Key('driver_cancel_ride_cta'),
+                            text: MyStrings.cancelRide.tr,
+                            press: () {
+                              CustomBottomSheet(
+                                child: RideCancelBottomSheet(ride: controller.ride),
+                              ).customBottomSheet(context);
+                            },
+                            bgColor: MyColor.redCancelTextColor,
+                          ),
+                          spaceDown(Dimensions.space20),
+                        ],
+                      ),
+                    ),
+                  ],
+                  if (showRunningCtas) ...[
+                    ColoredBox(
+                      color: MyColor.colorWhite,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // ISC-F5-12: une seule action principale par état.
+                          // Escale(s) pending -> « Confirmer l'arrêt » seul.
+                          // Dernier arrêt -> « Terminer la course » seul, style
+                          // actif distinct (vert succès, pas l'opacité 0.6).
+                          // Legacy single-stop (sans stops[]) garde sa couleur.
+                          if (ride.canConfirmStop)
+                            RoundedButton(
+                              key: const Key('driver_confirm_stop_cta'),
+                              text: MyStrings.confirmStop.tr,
+                              press: () {
+                                final pendingLabel = ride.pendingStops.isEmpty
+                                    ? null
+                                    : ride.pendingStops.first.locationLabel
+                                        ?.trim();
+                                AppDialog().showRideDetailsDialog(
+                                  context,
+                                  title: MyStrings.confirmStop.tr,
+                                  description:
+
+$ find . -name '*isatool*' -o -name '*ISATool*' | head -20
+(no output)
+
+$ ls MEMORY/WORK/20261006-galass-driver-multistop/ | head -30
+ISA.html
+ISA.md
+
+$ git show --name-only --oneline remotes/origin/build/driver-f5-13c | head -10
+32607ee test(goldens): rebase ride_details sous Flutter 3.50.1 (regen F6)
+MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+test/goldens/driver/README.md
+test/goldens/driver/goldens/driver_ride_running_multistop_all_stops_done.png
+test/goldens/driver/goldens/driver_ride_running_multistop_stop_1_active.png
+test/goldens/driver/goldens/driver_ride_running_multistop_stop_2_active.png
+
+$ grep -rn "ISC-F5-13" MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | head -5
+144:| ISC-F5-13 | widget      | « Annuler la course » reste visuellement distinct (couleur danger) du CTA principal, quel que soit l'état | bgColor danger ≠ bgColor CTA principal | flutter test test/unit/multistop_end_gate_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23) | literal |
+148:| ISC-F5-17 | widget      | **Contrat d'écran** « Driver en course » (RIDE_RUNNING, dérivé du code actuel 2026-11-23) — présence testée individuellement de : avatar+nom+note (`UserDetailsWidget`), bouton message, bouton appel, un seul CTA principal actionnable (ISC-F5-12), « Annuler la course » distinct-danger (ISC-F5-13), bloc itinéraire pickup→arrêts→destination, repères d'arrêts sur la carte (ISC-F5-16). **Règle « ajouter sans retirer »** : retirer un de ces éléments exige une ligne ISA explicite validée par Papa. | 7 assertions `find.byKey`/`find.text` toutes vertes, une par élément listé | flutter test test/widget/course_en_cours_driver_contract_test.dart (golden) | ISC-F5-12, ISC-F5-13, ISC-F5-16 |
+220:- [ ] ISC-F5-13: « Annuler la course » est clairement une action dangereuse, différente de l'action principale. **Audit code** : déjà vrai aujourd'hui (`bgColor: MyColor.redCancelTextColor` = `0xFFF93E2C`, l.217-225, vs couleur primaire par défaut du CTA principal) — ce claim verrouille ce comportement correct en régression plutôt que de supposer un bug.
+332:- [ ] **F6 revue UI téléphone** — ISC-F5-12 (CTA unique par état), ISC-F5-13 (Annuler = danger, verrou régression), ISC-F5-14 (retrait compteur, supersède ISC-F5-3 partie compteur, **contrat repère fixé 2026-11-23** : `Semantics` `galass.driver.stops=<done>/<total>`), ISC-F5-15 (pas de libellé générique au dernier arrêt ; **infirmé visuellement** sur `driver_ride_running_multistop_all_stops_done.png`, garde maintenue), ISC-F5-16 (markers actif/estompé+numéroté, étend ISC-F5-4), ISC-F5-17 (contrat d'écran « Driver en course », règle ajouter-sans-retirer), ISC-F5-18 (goldens stop1/stop2 actifs distincts — **mesuré identiques** aujourd'hui). Aucun code tant que ces ISC ne sont pas construits (TDD rouge→vert). Dépend des goldens `test/goldens/driver/` (depuis `main`, worktree séparé) et de la porte CI golden-diff (ISA harnais emu).
+
+$ find /home -name '*isatool*' -not -path '*/proc/*' 2>&1 | head -20
+(no output)
+
+$ git log --oneline remotes/origin/build/driver-f5-13c -5
+32607ee test(goldens): rebase ride_details sous Flutter 3.50.1 (regen F6)
+119fb0c feat(driver): ISC-F5-16 arrêt actif distinct + arrêts estompés numérotés
+505637e fix(driver): ISC-F5-12 CTA unique par état (confirm stop / terminer)
+bd77f91 docs(driver): verdict position voiture temps réel + ISC-F5-19
+7187e3a prompt: driver live location
+
+$ find . -path '*ISA*tool*' -not -path './.git/*' | head -20
+(no output)
+
+$ ls lifeos/ 2>&1 | head -20; echo "==="; find . -name 'ISA*' -not -path './MEMORY/*' -not -path './.git/*' | head -20
+ls: cannot access 'lifeos/': No such file or directory
+===
+./.archive/ISA
+
+$ env | grep -i isa | head -20
+(no output)
+
+$ ls /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/ | head -20
+ci
+lifeos
+target
+
+$ find / -name '*isatool*' -not -path '*/proc/*' 2>&1 | head -30
+find: ‘/proc/tty/driver’: Permission denied
+find: ‘/proc/1/task/1/fd’: Permission denied
+find: ‘/proc/1/task/1/fdinfo’: Permission denied
+find: ‘/proc/1/task/1/ns’: Permission denied
+find: ‘/proc/1/fd’: Permission denied
+find: ‘/proc/1/map_files’: Permission denied
+find: ‘/proc/1/fdinfo’: Permission denied
+find: ‘/proc/1/ns’: Permission denied
+find: ‘/proc/8/task/8/fd’: Permission denied
+find: ‘/proc/8/task/8/fdinfo’: Permission denied
+find: ‘/proc/8/task/8/ns’: Permission denied
+find: ‘/proc/8/task/27/fd’: Permission denied
+find: ‘/proc/8/task/27/fdinfo’: Permission denied
+find: ‘/proc/8/task/27/ns’: Permission denied
+find: ‘/proc/8/task/28/fd’: Permission denied
+find: ‘/proc/8/task/28/fdinfo’: Permission denied
+find: ‘/proc/8/task/28/ns’: Permission denied
+find: ‘/proc/8/task/29/fd’: Permission denied
+find: ‘/proc/8/task/29/fdinfo’: Permission denied
+find: ‘/proc/8/task/29/ns’: Permission denied
+find: ‘/proc/8/task/30/fd’: Permission denied
+find: ‘/proc/8/task/30/fdinfo’: Permission denied
+find: ‘/proc/8/task/30/ns’: Permission denied
+find: ‘/proc/8/task/38/fd’: Permission denied
+find: ‘/proc/8/task/38/fdinfo’: Permission denied
+find: ‘/proc/8/task/38/ns’: Permission denied
+find: ‘/proc/8/task/3552/fd’: Permission denied
+find: ‘/proc/8/task/3552/fdinfo’: Permission denied
+find: ‘/proc/8/task/3552/ns’: Permission denied
+find: ‘/proc/8/task/26562/fd’: Permission denied
+
+$ git worktree list
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target  267c3fa [feat/multistop-e2e-2026-11-15]
+
+$ ls /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/ | head -20
+CLAUDE.md
+ISA.md
+LIFEOS
+MEMORY
+README.md
+Workflows
+agents
+bun.lock
+commands
+hooks
+opencode
+package.json
+rules
+scripts
+secrets
+settings.template.json
+skills
+skills-shared
+
+$ find /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos -iname '*isatool*' -o -iname '*isa*tool*' 2>&1 | head -20
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+
+$ git -C /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos log --oneline -1
+e0d8c74 feat(fullrun): human-tick signé + skill FullRunWorkflow (Lot A — livrables 3 & 4) (#25)
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos && bun LIFEOS/TOOLS/ISATool.ts --help 2>&1 | head -120
+usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+  scaffold --slug s --goal "…" [--title t]      crée l'ISA (sections Problem…Decisions)
+  append   --section "Claims" --text "…"|--file f  ajoute sous une section (créée si absente)
+  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+  set      --field phase --value build          frontmatter
+  replace  --old "…" --new "…"                  remplacement exact unique (corrections)
+  adopt                                          tamponne un ISA hérité (après relecture)
+  verify                                         contrôle l'empreinte (exit 2 si KO)
+  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci && git status --short
+fatal: not a git repository (or any of the parent directories): .git
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git diff --stat
+test/unit/multistop_end_gate_test.dart | 155 ++++++++++++++++++++++++---------
+ 1 file changed, 113 insertions(+), 42 deletions(-)
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git log --oneline --decorate -2 build/driver-f5-13c 2>&1 | head -5; echo "==="; git diff --stat build/driver-f5-13c..HEAD 2>&1 | head -10
+fatal: ambiguous argument 'build/driver-f5-13c': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+===
+fatal: ambiguous argument 'build/driver-f5-13c..HEAD': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos && sed -n '1,220p' LIFEOS/TOOLS/ISATool.ts
+#!/usr/bin/env bun
+// ISATool.ts — l'outil exécutable du skill ISA (Scaffold / Append / Tick / Set / Adopt / Verify).
+// Toute écriture d'un ISA.md passe ici : l'outil recalcule progress M/N puis pose une empreinte
+// HMAC-SHA256 (frontmatter `isa_stamp`) que ISAGate vérifie en HARD. Une édition à la main
+// (Edit/Write/sed) casse l'empreinte → ISAGate `provenance-*`.
+import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync, chmodSync, realpathSync } from "node:fs";
+import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { dirname, join } from "node:path";
+import { headShort } from "./FullRunBuildGuard";
+import { parseScopeTag } from "./IsaFeatures";
+const HOME = process.env.HOME!;
+const STATE = join(HOME, ".claude/LIFEOS/MEMORY/STATE");
+const KEY = join(STATE, ".isa-stamp-key");
+const LEDGER = join(STATE, "isa-provenance.jsonl");
+const SCOPE_LOG = join(STATE, "isa-scope-tags.jsonl");
+const STAMP_RE = /^isa_stamp:.*\n/m;
+
+function key(create = false): Buffer | null {
+  if (!existsSync(KEY)) { if (!create) return null; mkdirSync(STATE, { recursive: true }); writeFileSync(KEY, randomBytes(32).toString("hex")); chmodSync(KEY, 0o600); }
+  const k = Buffer.from(readFileSync(KEY, "utf8").trim(), "hex"); if (k.length < 32) throw new Error("clé d'empreinte ISA invalide (< 32 octets)"); return k;
+}
+// l'empreinte ne vit que dans le frontmatter : une ligne `isa_stamp:` du corps n'est ni retirée ni lue
+const fmSplit = (t: string) => { const m = t.match(/^---\n[\s\S]*?\n---/); return m ? [m[0], t.slice(m[0].length)] : ["", t]; };
+export const unstamped = (t: string) => { const [f, b] = fmSplit(t); return f.replace(STAMP_RE, "") + b; };
+export function computeStamp(text: string, k = key()): string | null {
+  return k ? "hmac-sha256:" + createHmac("sha256", k).update(unstamped(text)).digest("hex") : null;
+}
+export function verifyStamp(text: string): { ok: boolean; code?: string; message?: string } {
+  const m = fmSplit(text)[0].match(/^isa_stamp:\s*(\S+)/m);
+  if (!m) return { ok: false, code: "provenance-missing", message: "no isa_stamp — this ISA was not written by the ISA skill tools (ISATool.ts). Hand edits are forbidden: re-write via `bun ~/.claude/LIFEOS/TOOLS/ISATool.ts`." };
+  const k = key(); if (!k) return { ok: false, code: "provenance-key-missing", message: "stamp key absent — cannot verify provenance." };
+  const want = Buffer.from(computeStamp(text, k)!), got = Buffer.from(m[1]);
+  if (want.length !== got.length || !timingSafeEqual(want, got)) return { ok: false, code: "provenance-mismatch", message: "isa_stamp does not match content — the ISA was edited outside ISATool.ts (hand edit). Revert, or re-apply the change via ISATool.ts." };
+  return { ok: true };
+}
+function fmSet(t: string, f: string, v: string): string {
+  const m = t.match(/^---\n([\s\S]*?)\n---/); if (!m) return `---\n${f}: ${v}\n---\n` + t;
+  const re = new RegExp(`^${f}:.*$`, "m");
+  const body = re.test(m[1]) ? m[1].replace(re, `${f}: ${v}`) : `${m[1]}\n${f}: ${v}`;
+  return t.replace(m[0], `---\n${body}\n---`);
+}
+const progress = (t: string) => { const b = (t.match(/^\s*- \[[ xX]\] (?:\*\*)?ISC-/gm) ?? []).length; const d = (t.match(/^\s*- \[[xX]\] (?:\*\*)?ISC-/gm) ?? []).length; return `${d}/${b}`; };
+// Marqueur de périmètre build `[scope:…]` : il sort des claims de la porte build. Toute écriture qui en pose un
+// (ligne ajoutée/modifiée dans l'ISA, ou argument de la commande) est journalisée — l'agent ne peut pas s'exclure
+// des claims sans laisser de trace relisible par le principal.
+function logScopeTags(path: string, op: string, before: string, after: string) {
+  const had = new Set(before.split("\n").filter((l) => l.includes("[scope:")).map((l) => l.trim()));
+  const added = after.split("\n").map((l) => l.trim()).filter((l) => l.includes("[scope:") && !had.has(l));
+  const inArgs = args.filter((a) => a.includes("[scope:"));
+  if (!added.length && !inArgs.length) return;
+  mkdirSync(STATE, { recursive: true });
+  appendFileSync(SCOPE_LOG, JSON.stringify({ ts: new Date().toISOString(), op, path, by: process.env.LIFEOS_HOST ?? process.env.LIFEOS_SESSION_ID ?? "unknown", added: added.map((l) => l.slice(0, 300)), args: inArgs.map((a) => a.slice(0, 300)) }) + "\n");
+  console.error(`ISATool: marqueur [scope:] écrit (${op}) — journalisé dans ${SCOPE_LOG.replace(HOME, "~")} ; il n'a d'effet sur la porte build que s'il existait à l'ouverture du run.`);
+}
+function save(path: string, text: string, op: string, stampOnly = false) {
+  const k = key(true)!; let t = unstamped(text);
+  if (!stampOnly && /^---\n[\s\S]*?\n---/.test(t)) { t = fmSet(t, "progress", progress(t)); t = fmSet(t, "updated", new Date().toISOString()); }
+  t = fmSet(t, "isa_stamp", "PENDING"); const s = computeStamp(t, k)!; t = t.replace(/^isa_stamp:.*$/m, `isa_stamp: ${s}`);
+  logScopeTags(path, op, unstamped(existsSync(path) ? readFileSync(path, "utf8") : ""), t);
+  mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, t);
+  appendFileSync(LEDGER, JSON.stringify({ ts: new Date().toISOString(), op, path: realpathSync(path), stamp: s, by: process.env.LIFEOS_HOST ?? (process.env.LIFEOS_SESSION_ID?.startsWith("ses_") ? "opencode" : "claude"), session: process.env.LIFEOS_SESSION_ID ?? "" }) + "\n");
+  console.log(`ISATool ${op} ok → ${path} (progress ${progress(t)}, ${s.slice(0, 24)}…)`);
+}
+// ── human-tick : coche d'une claim `[scope:human — raison]` par le principal, signée ─────────────────────────
+// Une claim humaine (ratification, acte de Papa) n'est jamais cochée par un agent : `tick` la laisserait passer
+// pour une preuve outil. `human-tick` exige la clé ISA_STAMP_KEY dans l'ENVIRONNEMENT (secret du principal ou de
+// la CI, jamais lu sur disque) et signe { ISA, claim, justification, auteur, horodatage } en HMAC-SHA256. La ligne
+// de Verification porte la signature : `human-verify` (ou verifyHumanTick) la recontrôle. Codes : 3 clé absente ou
+// invalide, 4 claim non `[scope:human]`, 1 entrée invalide (claim introuvable, déjà cochée, justification faible).
+export const HUMAN_TICK_EXIT = { INPUT: 1, NO_KEY: 3, NOT_HUMAN: 4 } as const;
+const escRe = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/** Clé de signature humaine : hex, au moins 32 octets. `null` si absente, `"invalid"` si mal formée. */
+export function humanKeyFromEnv(env: Record<string, string | undefined> = process.env): Buffer | null | "invalid" {
+  const raw = (env.ISA_STAMP_KEY ?? "").trim();
+  if (!raw) return null;
+  if (!/^(?:[0-9a-fA-F]{2}){32,}$/.test(raw)) return "invalid";
+  return Buffer.from(raw, "hex");
+}
+/** La claim (ligne `idx`) est-elle `[scope:human — raison]`, sur sa ligne ou dans le titre `###` de son bloc ? */
+export function isHumanScoped(lines: string[], idx: number): boolean {
+  const own = parseScopeTag(lines[idx]!);
+  if (own) return "kind" in own && own.kind === "human";
+  for (let i = idx - 1; i >= 0; i--) {
+    const l = lines[i]!.trim();
+    if (/^```|^~~~/.test(l)) return false; // prudence : jamais de marqueur hérité à travers un bloc de code
+    if (/^###\s/.test(l)) { const tag = parseScopeTag(l); return !!tag && "kind" in tag && tag.kind === "human"; }
+    if (/^#{1,2}\s/.test(l)) return false;
+  }
+  return false;
+}
+const isaSlug = (t: string, p: string) =>
+  fmSplit(t)[0].match(/^slug:\s*(\S+)/m)?.[1] ?? fmSplit(t)[0].match(/^task:\s*(.+)$/m)?.[1]?.trim() ?? p.split("/").slice(-2, -1)[0] ?? "";
+export interface HumanTickPayload { v: 1; op: "human-tick"; isa: string; isc: string; claim: string; evidence: string; by: string; at: string }
+export const humanSig = (p: HumanTickPayload, k: Buffer) => "hmac-sha256:" + createHmac("sha256", k).update(JSON.stringify(p)).digest("hex");
+const HUMAN_LINE_RE = (isc: string) =>
+  new RegExp(`^- ${escRe(isc)}: HUMAIN — (.+) \\(par ([^,()\\[\\]\\n]{1,60}), (\\d{4}-\\d{2}-\\d{2}T[0-9:.]+Z)\\) \\[human-sig:(hmac-sha256:[0-9a-f]{64})\\]\\s*$`, "m");
+/** Recontrôle la coche humaine de `isc` : claim cochée, toujours `[scope:human]`, signature valide pour la clé. */
+export function verifyHumanTick(text: string, isc: string, k: Buffer, isaPath = ""): { ok: boolean; reason: string } {
+  const lines = text.split("\n");
+  const idx = lines.findIndex((l) => new RegExp(`^\\s*- \\[[xX]\\] (?:\\*\\*)?${escRe(isc)}\\b`).test(l));
+  if (idx < 0) return { ok: false, reason: `${isc} absente ou non cochée` };
+  if (!isHumanScoped(lines, idx)) return { ok: false, reason: `${isc} n'est pas [scope:human — raison]` };
+  const m = text.match(HUMAN_LINE_RE(isc));
+  if (!m) return { ok: false, reason: `${isc} : aucune ligne de Verification HUMAIN signée` };
+  const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(text, isaPath), isc, claim: lines[idx]!.trim(), evidence: m[1]!, by: m[2]!, at: m[3]! };
+  const want = Buffer.from(humanSig(payload, k)), got = Buffer.from(m[4]!);
+  if (want.length !== got.length || !timingSafeEqual(want, got)) return { ok: false, reason: `${isc} : signature humaine invalide (claim, justification ou clé modifiée)` };
+  return { ok: true, reason: `${isc} : coche humaine signée par ${m[2]} le ${m[3]}` };
+}
+const args = process.argv.slice(2); const [cmd, path] = args;
+const opt = (n: string) => { const i = args.indexOf(`--${n}`); return i >= 0 ? args[i + 1] : undefined; };
+const need = (v: string | undefined, n: string) => { if (v === undefined) { console.error(`--${n} requis`); process.exit(1); } return v; };
+// Une preuve (ou une raison de décochage) tient en une phrase mesurable, pas en un jeton.
+const weakNote = (v: string) => { const s = v.trim(); return s.length < 20 || /^(?:todo|tbd|n\/?a|à faire|a faire|ok|done|passe|test|…)$/i.test(s); };
+const readIsa = () => { if (!existsSync(path)) { console.error(`introuvable: ${path}`); process.exit(1); } return readFileSync(path, "utf8"); };
+const fromFileOrText = () => opt("file") ? readFileSync(opt("file")!, "utf8") : need(opt("text"), "text");
+if (import.meta.main) {
+  if (!cmd || !path) { console.log(`usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+  scaffold --slug s --goal "…" [--title t]      crée l'ISA (sections Problem…Decisions)
+  append   --section "Claims" --text "…"|--file f  ajoute sous une section (créée si absente)
+  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+  set      --field phase --value build          frontmatter
+  replace  --old "…" --new "…"                  remplacement exact unique (corrections)
+  adopt                                          tamponne un ISA hérité (après relecture)
+  verify                                         contrôle l'empreinte (exit 2 si KO)
+  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)`); process.exit(1); }
+  if (cmd === "scaffold") {
+    if (existsSync(path)) { console.error("existe déjà — utilise append/set"); process.exit(1); }
+    const slug = need(opt("slug"), "slug"), goal = need(opt("goal"), "goal");
+    save(path, `---\ntask: ${opt("title") ?? slug}\nslug: ${slug}\nphase: observe\nprogress: 0/0\nprincipal_stated_goal: ${JSON.stringify(goal)}\nstarted: ${new Date().toISOString()}\n---\n\n## Problem\n\n## Vision\n\n## Out of Scope\n\n## Constraints\n\n## Goal\n\n${goal}\n\n## Claims\n\n## Test Strategy\n\n| isc | type | check | threshold | tool | anchors_to |\n|-----|------|-------|-----------|------|------------|\n\n## Features\n\n## Decisions\n\n## Verification\n`, "scaffold");
+  } else if (cmd === "append") {
+    let t = readIsa(); const sec = need(opt("section"), "section"); const add = fromFileOrText().replace(/\n+$/, "");
+    const re = new RegExp(`(^## ${sec.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, "m");
+    t = re.test(t) ? t.replace(re, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${add}\n\n`) : `${t.replace(/\n+$/, "")}\n\n## ${sec}\n\n${add}\n`;
+    save(path, t, `append:${sec}`);
+  } else if (cmd === "tick" || cmd === "untick") {
+    let t = readIsa(); const isc = need(opt("isc"), "isc"); const re = new RegExp(`^(\\s*- )\\[[ xX]\\]( (?:\\*\\*)?${isc}\\b)`, "m");
+    if (!re.test(t)) { console.error(`${isc} introuvable`); process.exit(1); }
+    const optName = cmd === "tick" ? "evidence" : "reason";
+    const note = need(opt(optName), optName);
+    if (weakNote(note)) { console.error(`--${optName} trop faible (${note.trim().length} car.) : cite la commande et sa sortie pour une coche, la constatation de revue pour un décochage.`); process.exit(1); }
+    t = t.replace(re, `$1[${cmd === "tick" ? "x" : " "}]$2`);
+    save(path, t, `${cmd}:${isc}`); t = readFileSync(path, "utf8");
+    const re2 = /(^## Verification\s*$)([\s\S]*?)(?=^## |(?![\s\S]))/m;
+    const sha = cmd === "tick" ? headShort(path) : null;
+    const line = cmd === "tick" ? `- ${isc}: ${note}${sha ? ` [@${sha}]` : ""}` : `- ${isc}: NON VALIDÉ — ${note}`;
+    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`; save(path, t, `${cmd === "tick" ? "evidence" : "reason"}:${isc}`);
+  } else if (cmd === "human-tick" || cmd === "human-verify") {
+    const k = humanKeyFromEnv();
+    if (k === null) { console.error(`${cmd} refusé : ISA_STAMP_KEY absent de l'environnement — une coche humaine n'est jamais posée sans signature.`); process.exit(HUMAN_TICK_EXIT.NO_KEY); }
+    if (k === "invalid") { console.error(`${cmd} refusé : ISA_STAMP_KEY invalide (hexadécimal, au moins 32 octets attendus).`); process.exit(HUMAN_TICK_EXIT.NO_KEY); }
+    const isc = need(opt("isc"), "isc"); const t0 = readIsa();
+    if (cmd === "human-verify") { const r = verifyHumanTick(t0, isc, k, path); console.log(r.ok ? `✅ ${r.reason}` : `❌ ${r.reason}`); process.exit(r.ok ? 0 : 2); }
+    const evidence = need(opt("evidence"), "evidence").trim();
+    if (/[\r\n]/.test(evidence)) { console.error("--evidence tient sur une ligne."); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    if (weakNote(evidence)) { console.error(`--evidence trop faible (${evidence.length} car.) : dis ce que tu as constaté ou décidé, et où (document, réunion, revue).`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    const by = (opt("by") ?? process.env.LIFEOS_PRINCIPAL ?? process.env.USER ?? "principal").trim();
+    if (!/^[^,()[\]\n]{1,60}$/.test(by)) { console.error("--by invalide (1 à 60 caractères, sans virgule, parenthèse ni crochet)."); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    const lines = t0.split("\n"); const re = new RegExp(`^(\\s*- )\\[([ xX])\\]( (?:\\*\\*)?${escRe(isc)}\\b.*)$`);
+    const idx = lines.findIndex((l) => re.test(l));
+    if (idx < 0) { console.error(`${isc} introuvable`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    if (!isHumanScoped(lines, idx)) { console.error(`human-tick refusé : ${isc} n'est pas marquée [scope:human — raison] (sur sa ligne ou le titre ### de son bloc). Une claim de build se coche avec \`tick\` sur preuve outil.`); process.exit(HUMAN_TICK_EXIT.NOT_HUMAN); }
+    const m = lines[idx]!.match(re)!;
+    if (m[2] !== " ") { console.error(`${isc} est déjà cochée — rien à signer.`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    lines[idx] = `${m[1]}[x]${m[3]}`;
+    let t = lines.join("\n"); const at = new Date().toISOString();
+    const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(t, path), isc, claim: lines[idx]!.trim(), evidence, by, at };
+    const line = `- ${isc}: HUMAIN — ${evidence} (par ${by}, ${at}) [human-sig:${humanSig(payload, k)}]`;
+    const re2 = /(^## Verification\s*$)([\s\S]*?)(?=^## |(?![\s\S]))/m;
+    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`;
+    save(path, t, `human-tick:${isc}`);
+  } else if (cmd === "set") { save(path, fmSet(readIsa(), need(opt("field"), "field"), need(opt("value"), "value")), `set:${opt("field")}`);
+  } else if (cmd === "replace") { const t = readIsa(), o = need(opt("old"), "old"); if (t.split(o).length !== 2) { console.error("old doit apparaître exactement une fois"); process.exit(1); } save(path, t.replace(o, need(opt("new"), "new")), "replace");
+  } else if (cmd === "adopt") { save(path, readIsa(), "adopt", true); // empreinte seule : contenu inchangé
+  } else if (cmd === "verify") { const r = verifyStamp(readIsa()); console.log(r.ok ? "✅ provenance ok" : `❌ [${r.code}] ${r.message}`); process.exit(r.ok ? 0 : 2);
+  } else { console.error(`commande inconnue: ${cmd}`); process.exit(1); }
+}
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git status --short
+M test/unit/multistop_end_gate_test.dart
+
+$ which flutter dart 2>&1 | head -5; echo "---"; flutter --version 2>&1 | head -10
+/usr/local/bin/flutter
+/usr/local/bin/dart
+---
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && flutter analyze test/unit/multistop_end_gate_test.dart 2>&1 | tail -30
+Waiting for another flutter command to release the startup lock...
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because galass_driver depends on timezone 0.11.0 which requires SDK version ^3.10.0, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try using the Flutter SDK version: 3.50.1. 
+Failed to update packages.
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && flutter test test/unit/multistop_end_gate_test.dart 2>&1 | tail -40
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because galass_driver depends on timezone 0.11.0 which requires SDK version ^3.10.0, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try using the Flutter SDK version: 3.50.1. 
+Failed to update packages.
+
+$ ls /opt 2>&1 | head -20; echo "==="; echo $FLUTTER_ROOT $FLUTTER_HOME; echo "==="; find / -name 'flutter' -type f 2>&1 | head -30
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+===
+
+===
+/opt/flutter/bin/flutter
+find: ‘/proc/tty/driver’: Permission denied
+find: ‘/proc/1/task/1/fd’: Permission denied
+find: ‘/proc/1/task/1/fdinfo’: Permission denied
+find: ‘/proc/1/task/1/ns’: Permission denied
+find: ‘/proc/1/fd’: Permission denied
+find: ‘/proc/1/map_files’: Permission denied
+find: ‘/proc/1/fdinfo’: Permission denied
+find: ‘/proc/1/ns’: Permission denied
+find: ‘/proc/8/task/8/fd’: Permission denied
+find: ‘/proc/8/task/8/fdinfo’: Permission denied
+find: ‘/proc/8/task/8/ns’: Permission denied
+find: ‘/proc/8/task/27/fd’: Permission denied
+find: ‘/proc/8/task/27/fdinfo’: Permission denied
+find: ‘/proc/8/task/27/ns’: Permission denied
+find: ‘/proc/8/task/28/fd’: Permission denied
+find: ‘/proc/8/task/28/fdinfo’: Permission denied
+find: ‘/proc/8/task/28/ns’: Permission denied
+find: ‘/proc/8/task/29/fd’: Permission denied
+find: ‘/proc/8/task/29/fdinfo’: Permission denied
+find: ‘/proc/8/task/29/ns’: Permission denied
+find: ‘/proc/8/task/30/fd’: Permission denied
+find: ‘/proc/8/task/30/fdinfo’: Permission denied
+find: ‘/proc/8/task/30/ns’: Permission denied
+find: ‘/proc/8/task/38/fd’: Permission denied
+find: ‘/proc/8/task/38/fdinfo’: Permission denied
+find: ‘/proc/8/task/38/ns’: Permission denied
+find: ‘/proc/8/task/3552/fd’: Permission denied
+find: ‘/proc/8/task/3552/fdinfo’: Permission denied
+find: ‘/proc/8/task/3552/ns’: Permission denied
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git status --short
+M test/unit/multistop_end_gate_test.dart
+
+$ ls /opt/flutter/bin 2>&1 | head -10; echo "==="; /opt/flutter/bin/flutter --version 2>&1 | head -10
+cache
+dart
+dart.bat
+flutter
+flutter-dev
+flutter-dev.bat
+flutter.bat
+internal
+===
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
+$ find /usr -name flutter 2>&1 | head -20; echo "==="; find /home -name flutter -type f 2>&1 | head -20
+/usr/local/bin/flutter
+===
+
+$ env | grep -i flutter; echo "==="; echo $PATH | tr ':' '\n' | head -20
+===
+/usr/local/bin
+/usr/bin
+/bin
+
+$ find / -path '*3.50.1*flutter*' -not -path '*/proc/*' 2>&1 | head -30
+find: ‘/proc/tty/driver’: Permission denied
+find: ‘/proc/1/task/1/fd’: Permission denied
+find: ‘/proc/1/task/1/fdinfo’: Permission denied
+find: ‘/proc/1/task/1/ns’: Permission denied
+find: ‘/proc/1/fd’: Permission denied
+find: ‘/proc/1/map_files’: Permission denied
+find: ‘/proc/1/fdinfo’: Permission denied
+find: ‘/proc/1/ns’: Permission denied
+find: ‘/proc/8/task/8/fd’: Permission denied
+find: ‘/proc/8/task/8/fdinfo’: Permission denied
+find: ‘/proc/8/task/8/ns’: Permission denied
+find: ‘/proc/8/task/27/fd’: Permission denied
+find: ‘/proc/8/task/27/fdinfo’: Permission denied
+find: ‘/proc/8/task/27/ns’: Permission denied
+find: ‘/proc/8/task/28/fd’: Permission denied
+find: ‘/proc/8/task/28/fdinfo’: Permission denied
+find: ‘/proc/8/task/28/ns’: Permission denied
+find: ‘/proc/8/task/29/fd’: Permission denied
+find: ‘/proc/8/task/29/fdinfo’: Permission denied
+find: ‘/proc/8/task/29/ns’: Permission denied
+find: ‘/proc/8/task/30/fd’: Permission denied
+find: ‘/proc/8/task/30/fdinfo’: Permission denied
+find: ‘/proc/8/task/30/ns’: Permission denied
+find: ‘/proc/8/task/38/fd’: Permission denied
+find: ‘/proc/8/task/38/fdinfo’: Permission denied
+find: ‘/proc/8/task/38/ns’: Permission denied
+find: ‘/proc/8/task/3552/fd’: Permission denied
+find: ‘/proc/8/task/3552/fdinfo’: Permission denied
+find: ‘/proc/8/task/3552/ns’: Permission denied
+find: ‘/proc/8/task/26562/fd’: Permission denied
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && grep -B2 -A5 'timezone' pubspec.yaml | head -20
+sign_in_with_apple: ^8.0.0
+  timelines_plus: ^2.0.0
+  timezone: 0.11.0
+  toastification: ^3.2.0
+  url_launcher: ^6.3.2
+  vibration: ^3.1.8
+  # N1 (1.1.1+57): Android SDK level for FLAG_INSISTENT gating (already transitive).
+  device_info_plus: ^12.4.0
+
+$ ls /home/ubuntu 2>&1 | head -20; echo "==="; find /home/ubuntu -maxdepth 3 -name 'flutter' -type d 2>&1 | head -20
+actions-runner
+actions-runner-2
+actions-runner-3
+go
+===
+/home/ubuntu/.config/flutter
+
+$ ls /opt/flutter 2>&1 | head -20; echo "==="; cat /opt/flutter/version 2>&1 | head -5
+AUTHORS
+CHANGELOG.md
+CODEOWNERS
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+DEPS
+LICENSE
+PATENT_GRANT
+README.md
+TESTOWNERS
+analysis_options.yaml
+bin
+buildtools
+dartdoc_options.yaml
+dev
+docs
+engine
+examples
+flutter_console.bat
+packages
+===
+3.35.6
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && flutter test --no-pub test/unit/multistop_end_gate_test.dart 2>&1 | tail -40
+Failed to find llvm-ar relative to LocalFile: '/usr/lib/llvm-18/bin/clang': LocalFile: '/usr/lib/llvm-18/bin/llvm-ar' doesn't exist.
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && flutter analyze --no-pub test/unit/multistop_end_gate_test.dart 2>&1 | tail -30
+Analyzing multistop_end_gate_test.dart...                       
+
+   info • 'package:flutter/material.dart' is deprecated and shouldn't be used. Use package:material_ui/material_ui.dart instead. This feature was deprecated after v3.47.0-0.0.pre • test/unit/multistop_end_gate_test.dart:1:1 • deprecated_member_use
+
+1 issue found. (ran in 17.5s)
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && ls .dart_tool 2>&1 | head -10; echo "==="; echo $FLUTTER_ROOT
+flutter_build
+hooks_runner
+package_config.json
+package_graph.json
+version
+===
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && head -5 .dart_tool/version 2>&1; echo "==="; grep '"generatorVersion"' .dart_tool/package_config.json | head -1
+3.50.1===
+  "generatorVersion": "3.14.0",
+
+$ ls /opt/fullrun-tools 2>&1 | head -20; echo "==="; ls /opt/fullrun-wip 2>&1 | head -20
+allowed-repos.sh
+autosave-deny.txt
+autosave.sh
+bench-capped
+checkpoint.sh
+done-check-call.sh
+done_check.sh
+emu-e2e.sh
+gitleaks
+gitleaks.toml
+leaklog.sh
+livelog.sh
+log-recipient.txt
+merge-signed-carry.sh
+progress.sh
+redact-log.sh
+wippush.sh
+===
+autosave.err
+pid
+status
+worker.pid
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && flutter doctor -v 2>&1 | tail -40
+• Dart version 3.9.2
+    • DevTools version 2.48.0
+    • Feature flags: enable-web, enable-linux-desktop, enable-macos-desktop, enable-windows-desktop, enable-android, enable-ios, cli-animations, enable-native-assets, enable-lldb-debugging
+    • If those were intentional, you can disregard the above warnings; however it is recommended to use "git" directly to perform update checks and upgrades.
+
+[✗] Android toolchain - develop for Android devices [17ms]
+    ✗ Unable to locate Android SDK.
+      Install Android Studio from: https://developer.android.com/studio/index.html
+      On first launch it will assist you in installing the Android SDK components.
+      (or visit https://flutter.dev/to/linux-android-setup for detailed instructions).
+      If the Android SDK has been installed to a custom location, please use
+      `flutter config --android-sdk` to update to that location.
+
+
+[✓] Chrome - develop for the web [10ms]
+    • Chrome at google-chrome
+
+[✗] Linux toolchain - develop for Linux desktop [485ms]
+    • Ubuntu clang version 18.1.3 (1ubuntu1)
+    • cmake version 3.28.3
+    ✗ ninja is required for Linux development.
+      It is likely available from your distribution (e.g.: apt install ninja-build), or can be downloaded from https://github.com/ninja-build/ninja/releases
+    • pkg-config version 1.8.1
+    ✗ GTK 3.0 development libraries are required for Linux development.
+      They are likely available from your distribution (e.g.: apt install libgtk-3-dev)
+    ! Unable to access driver information using 'eglinfo'.
+      It is likely available from your distribution (e.g.: apt install mesa-utils)
+
+[!] Android Studio (not installed) [7ms]
+    • Android Studio not found; download from https://developer.android.com/studio/index.html
+      (or visit https://flutter.dev/to/linux-android-setup for detailed instructions).
+
+[✓] Connected device (2 available) [295ms]
+    • Linux (desktop) • linux  • linux-x64      • Ubuntu 24.04.5 LTS 6.12.113+
+    • Chrome (web)    • chrome • web-javascript • Google Chrome 157.0.8103.50
+
+[✓] Network resources [387ms]
+    • All expected network resources are available.
+
+! Doctor found issues in 4 categories.
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && flutter test --no-pub test/unit/multistop_end_gate_test.dart 2>&1 | tail -60; echo "EXIT:$PIPESTATUS"
+Failed to find llvm-ar relative to LocalFile: '/usr/lib/llvm-18/bin/clang': LocalFile: '/usr/lib/llvm-18/bin/llvm-ar' doesn't exist.
+EXIT:1
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && flutter test --no-pub test/unit/multistop_end_gate_test.dart 2>&1; echo "---SEP---"; echo "exit:$?"
+Failed to find llvm-ar relative to LocalFile: '/usr/lib/llvm-18/bin/clang': LocalFile: '/usr/lib/llvm-18/bin/llvm-ar' doesn't exist.
+---SEP---
+exit:0
+
