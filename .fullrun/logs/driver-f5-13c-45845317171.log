@@ -3938,3 +3938,45 @@ $ echo "== driver/location-update endpoint ==" && grep -rn "driverLocationUpdate
 == driver_location marker ==
 279:          markerId: const MarkerId('driver_location'),
 
+$ git status --short
+(no output)
+
+$ git status
+On branch feat/multistop-e2e-2026-11-15
+Your branch is ahead of 'origin/feat/multistop-e2e-2026-11-15' by 4 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+$ git log --oneline -3 && echo ---- && grep -n "function save" -A8 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+96e6bd3 wip(autosave): arbre de travail
+9443d49 fix(driver-f5-19): run ride_map_live_location tests green (teardown hang fix)
+c526ef3 wip(autosave): arbre de travail
+----
+55:function save(path: string, text: string, op: string, stampOnly = false) {
+56-  const k = key(true)!; let t = unstamped(text);
+57-  if (!stampOnly && /^---\n[\s\S]*?\n---/.test(t)) { t = fmSet(t, "progress", progress(t)); t = fmSet(t, "updated", new Date().toISOString()); }
+58-  t = fmSet(t, "isa_stamp", "PENDING"); const s = computeStamp(t, k)!; t = t.replace(/^isa_stamp:.*$/m, `isa_stamp: ${s}`);
+59-  logScopeTags(path, op, unstamped(existsSync(path) ? readFileSync(path, "utf8") : ""), t);
+60-  mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, t);
+61-  appendFileSync(LEDGER, JSON.stringify({ ts: new Date().toISOString(), op, path: realpathSync(path), stamp: s, by: process.env.LIFEOS_HOST ?? (process.env.LIFEOS_SESSION_ID?.startsWith("ses_") ? "opencode" : "claude"), session: process.env.LIFEOS_SESSION_ID ?? "" }) + "\n");
+62-  console.log(`ISATool ${op} ok → ${path} (progress ${progress(t)}, ${s.slice(0, 24)}…)`);
+63-}
+
+$ grep -n 'LEDGER' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts | head -3
+14:const LEDGER = join(STATE, "isa-provenance.jsonl");
+61:  appendFileSync(LEDGER, JSON.stringify({ ts: new Date().toISOString(), op, path: realpathSync(path), stamp: s, by: process.env.LIFEOS_HOST ?? (process.env.LIFEOS_SESSION_ID?.startsWith("ses_") ? "opencode" : "claude"), session: process.env.LIFEOS_SESSION_ID ?? "" }) + "\n");
+
+$ git -C /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos status --short | head; echo "lifeos status done"
+lifeos status done
+
+$ git show --stat 96e6bd3
+commit 96e6bd32b05711b78658f27516e167a7be513a39
+Author: Nix <nix@galass.local>
+Date:   Thu Nov 26 22:37:31 2026 +0000
+
+    wip(autosave): arbre de travail
+
+ MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
