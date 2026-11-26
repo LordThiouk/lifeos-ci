@@ -9946,3 +9946,8 @@ Conséquence : S-W0-01…S-W0-07 (ISC-22, ISC-50, ISC-80 à ISC-84) restent **BL
 - [ ] Miroir Linear de l'ISA, uniquement après finalisation d'OAuth (optionnel).
 - [ ] Prérequis aux preuves device W0 (Artemis) : l'étape 11 du workflow échoue en `468 tests passed, 4 failed` — les 4 goldens `test/goldens/driver/ride_details_golden_test.dart` ont été générés sous Flutter **3.50.1** (`df372db`) alors que `artemis-staging-e2e.yml` épinglit **3.44.8** ; décision Papa hors W0 (aligner `flutter-version` ou régénérer les goldens) avant tout nouveau dispatch.
 
+✗ Edit  failed
+Error: The edit tool was called with invalid arguments: SchemaError(Missing key
+  at ["filePath"]).
+Please rewrite the input so it satisfies the expected schema.
+État confirmé : le tool `emu-e2e.sh` est déployé, mais le jeton `GALASS_TOKEN` est absent (refus : « jeton GALASS_TOKEN inaccessible ») et le download des logs du run #152 est en `403`. Je consigne le nouvel état dans l'ISA.
