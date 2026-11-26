@@ -10355,3 +10355,98 @@ export PATH=/tmp/flutter/bin:$PATH && cd /home/ubuntu/actions-runner-2/_work/lif
 00:00 +0: probe trivial asset expect
 00:00 +1: All tests passed!
 
+Le mock SharedPreferences est OK. J'ajoute maintenant les GetX puts.
+$ cat > /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/tmp_probe_test.dart <<'EOF'
+import 'package:flutter_test/flutter_test.dart';
+import 'package:galass_driver/core/utils/my_icons.dart';
+import 'package:galass_driver/core/utils/url_container.dart';
+import 'package:galass_driver/data/controller/map/ride_map_controller.dart';
+import 'package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_model.dart';
+import 'package:galass_driver/data/repo/dashboard/dashboard_repo.dart';
+import 'package:galass_driver/data/repo/polyline/polyline_repo.dart';
+import 'package:galass_driver/data/repo/ride/ride_repo.dart';
+import 'package:galass_driver/data/services/api_client.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../helpers/recording_api_client.dart';
+
+class _MapRepo extends PolylineRepo {
+  _MapRepo({required super.apiClient});
+}
+
+class _RideRepo extends RideRepo {
+  _RideRepo({required super.apiClient});
+}
+
+class _CountingApiClient extends RecordingApiClient {
+  _CountingApiClient({required super.sharedPreferences});
+
+  final List<({String uri, Map<String, dynamic>? params})> calls = [];
+
+  @override
+  Future<ResponseModel> request(
+    String uri,
+    String method,
+    Map<String, dynamic>? params, {
+    bool passHeader = false,
+    bool isOnlyAcceptType = false,
+    bool skipAuthSideEffects = false,
+    bool redactSensitiveLogs = false,
+  }) {
+    calls.add((uri: uri, params: params));
+    return super.request(
+      uri,
+      method,
+      params,
+      passHeader: passHeader,
+      isOnlyAcceptType: isOnlyAcceptType,
+      skipAuthSideEffects: skipAuthSideEffects,
+      redactSensitiveLogs: redactSensitiveLogs,
+    );
+  }
+}
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  late _CountingApiClient apiClient;
+  late RideMapController mapController;
+  late RideDetailsController details;
+
+  setUp(() async {
+    Get.testMode = true;
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    apiClient = _CountingApiClient(sharedPreferences: prefs);
+    Get.put<ApiClient>(apiClient);
+    mapController = RideMapController(
+      polylineRepo: _MapRepo(apiClient: apiClient),
+    );
+    details = RideDetailsController(
+      repo: _RideRepo(apiClient: apiClient),
+      mapController: mapController,
+      locationRepo: DashBoardRepo(apiClient: apiClient),
+    );
+    Get.put(details);
+  });
+
+  tearDown(() {
+    Get.reset();
+  });
+
+  group('probe', () {
+    test('trivial asset expect', () {
+      expect(MyIcons.markerCar, 'assets/icon/marker_car.png');
+    });
+  });
+}
+EOF
+export PATH=/tmp/flutter/bin:$PATH && cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && timeout 600 flutter test test/unit/tmp_probe_test.dart 2>&1 | tail -8
+00:00 +0: loading /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/unit/tmp_probe_test.dart
+00:00 +0: probe trivial asset expect
+00:00 +1: All tests passed!
+
