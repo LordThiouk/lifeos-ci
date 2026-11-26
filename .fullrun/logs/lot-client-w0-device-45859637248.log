@@ -12156,3 +12156,160 @@ ERR HTTPError HTTP Error 401: Server failed to authenticate the request. Please 
 === step 12 region ===
 grep: /tmp/artemis_152_job.log: No such file or directory
 
+$ python3 - <<'PY'
+import re, subprocess
+s=open('/home/ubuntu/.config/gh/hosts.yml').read()
+tok=re.search(r'oauth_token:\s*(\S+)', s).group(1)
+url='https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/jobs/139845170423/logs'
+cmd=['curl','-sS','-o','/dev/null','-D','-','-H',f'Authorization: Bearer {tok}','-H','Accept: application/vnd.github+json',url]
+p=subprocess.run(cmd, capture_output=True, text=True)
+print(p.stdout[:2000]); print('stderr:',p.stderr[:500])
+PY
+HTTP/2 302 
+date: Thu, 26 Nov 2026 18:06:42 GMT
+content-type: text/html;charset=utf-8
+content-length: 0
+location: https://productionresultssa11.blob.core.windows.net/actions-results/10e6c6db-21fd-4839-a8f1-93ed8aedcefe/workflow-job-run-8ba26065-b3ff-5f24-9fb0-0214ee09d627/logs/job/job-logs.txt?rsct=text%2Fplain&se=2026-11-26T18%3A16%3A42Z&sig=R8v3Z8Cttb2iegmDfB84XqZ%2BbslY7su0l%2Fovxb8Fkos%3D&ske=2026-11-26T21%3A54%3A40Z&skoid=ca7593d4-ee42-46cd-af88-8b886a2f84eb&sks=b&skt=2026-11-26T17%3A54%3A40Z&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skv=2025-11-05&sp=r&spr=https&sr=b&st=2026-11-26T18%3A06%3A37Z&sv=2025-11-05
+x-github-api-version-selected: 2022-11-28
+access-control-expose-headers: ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning
+access-control-allow-origin: *
+strict-transport-security: max-age=31536000; includeSubdomains; preload
+x-frame-options: deny
+x-content-type-options: nosniff
+x-xss-protection: 0
+referrer-policy: origin-when-cross-origin, strict-origin-when-cross-origin
+content-security-policy: default-src 'none'
+vary: Accept-Encoding, Accept, X-Requested-With
+server: github.com
+x-ratelimit-limit: 6800
+x-ratelimit-remaining: 6767
+x-ratelimit-reset: 1795719618
+x-ratelimit-used: 33
+x-ratelimit-resource: core
+x-github-request-id: 7D3C:2D0E52:68D5A:A2325:6B087532
+x-github-edge-region: westus2
+
+
+stderr:
+
+$ python3 - <<'PY'
+import re, subprocess, zipfile, io
+s=open('/home/ubuntu/.config/gh/hosts.yml').read()
+tok=re.search(r'oauth_token:\s*(\S+)', s).group(1)
+api='https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/jobs/139845170423/logs'
+p=subprocess.run(['curl','-sS','-D','-','-o','/dev/null','-H',f'Authorization: Bearer {tok}','-H','Accept: application/vnd.github+json',api],capture_output=True,text=True)
+loc=re.search(r'(?im)^location:\s*(\S+)', p.stdout).group(1).strip()
+print('got redirect location host:', loc.split('/')[2])
+p2=subprocess.run(['curl','-sS','-L','-o','/tmp/artemis_152_logs.zip','-w','%{http_code} %{size_download}',loc],capture_output=True,text=True)
+print('download:',p2.stdout, p2.stderr[:200])
+z=zipfile.ZipFile('/tmp/artemis_152_logs.zip')
+print('entries',z.namelist())
+txt=b''.join(z.read(n) for n in z.namelist()).decode('utf-8','replace')
+open('/tmp/artemis_152_job.log','w').write(txt)
+print('lines',len(txt.splitlines()),'chars',len(txt))
+PY
+echo "=== build failure region ===" && grep -n -i -E 'Build APK|BUILD FAILED|What went wrong|FAILURE:|error:|gradle' /tmp/artemis_152_job.log | tail -60
+got redirect location host: productionresultssa11.blob.core.windows.net
+download: 200 998821 
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 1365, in __init__
+    self._RealGetContents()
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 1432, in _RealGetContents
+    raise BadZipFile("File is not a zip file")
+zipfile.BadZipFile: File is not a zip file
+=== build failure region ===
+grep: /tmp/artemis_152_job.log: No such file or directory
+
+$ python3 - <<'PY'
+p='/tmp/artemis_152_logs.zip'
+b=open(p,'rb').read()
+txt=b.decode('utf-8','replace')
+open('/tmp/artemis_152_job.log','w').write(txt)
+print('lines',len(txt.splitlines()),'chars',len(txt))
+PY
+echo "=== build failure region ===" && grep -n -i -E 'Build APK|BUILD FAILED|What went wrong|FAILURE:|error:|gradle' /tmp/artemis_152_job.log | tail -80
+lines 4750 chars 675959
+=== build failure region ===
+690:2026-11-26T10:28:57.8763606Z mkdir -p ~/.gradle/init.d
+691:2026-11-26T10:28:57.8763826Z cat > ~/.gradle/init.d/zz-debug-signing.gradle <<'GRADLE'
+713:2026-11-26T10:28:57.8769604Z GRADLE
+714:2026-11-26T10:28:57.8770069Z echo "init script: $(wc -l < ~/.gradle/init.d/zz-debug-signing.gradle) lignes"
+2580:2026-11-26T10:30:27.2188114Z │ 💡 DispatchOfferAlertService vibration cancel error: MissingPluginException(No implementation found for method cancel on channel vibration)
+2818:2026-11-26T10:30:33.3409975Z │ 💡 parseRideFromFcmData ride JSON error: FormatException: Unexpected character (at character 2)
+4477:2026-11-26T10:30:57.8068484Z   (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+4507:2026-11-26T10:32:08.6129886Z      Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/android/gradle/wrapper/gradle-wrapper.properties. 
+4508:2026-11-26T10:32:08.6131044Z      For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+4515:2026-11-26T10:32:08.6132995Z > Get more help at https://help.gradle.org.
+4517:2026-11-26T10:32:08.6133294Z BUILD FAILED in 1m 9s
+4518:2026-11-26T10:32:08.6133616Z Running Gradle task 'assembleDebug'...                             69.6s
+4519:2026-11-26T10:32:08.6134074Z Gradle task assembleDebug failed with exit code 1
+
+$ sed -n '4470,4535p' /tmp/artemis_152_job.log | sed 's/\x1b\[[0-9;]*m//g'
+2026-11-26T10:30:57.6338627Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input reject_13_even_though_roundToStep5_would_be_15
+2026-11-26T10:30:57.6352075Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input accepted_input_is_not_silently_rounded
+2026-11-26T10:30:57.6598877Z ##[endgroup]
+2026-11-26T10:30:57.6599010Z 
+2026-11-26T10:30:57.6601548Z 🎉 478 tests passed.
+2026-11-26T10:30:57.8067391Z ##[group]Run for a in rider driver; do
+2026-11-26T10:30:57.8067642Z for a in rider driver; do
+2026-11-26T10:30:57.8068484Z   (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+2026-11-26T10:30:57.8069515Z   mkdir -p apk/$a && cp src/$a/build/app/outputs/flutter-apk/app-debug.apk apk/$a/
+2026-11-26T10:30:57.8069797Z done
+2026-11-26T10:30:57.8069947Z rm -rf src
+2026-11-26T10:30:57.8098275Z shell: /usr/bin/bash -e {0}
+2026-11-26T10:30:57.8098456Z env:
+2026-11-26T10:30:57.8098746Z   BASE: ***
+2026-11-26T10:30:57.8098889Z   RIDER_ID: 106
+2026-11-26T10:30:57.8099038Z   DRIVER_ID: 23
+2026-11-26T10:30:57.8099222Z   OUT: e2e-out
+2026-11-26T10:30:57.8099380Z   RUN_DEADLINE_MIN: 90
+2026-11-26T10:30:57.8099553Z   APK_RIDER: apk/rider/app-debug.apk
+2026-11-26T10:30:57.8099772Z   APK_DRIVER: apk/driver/app-debug.apk
+2026-11-26T10:30:57.8100037Z   RIDER_TOKEN: ***
+2026-11-26T10:30:57.8100268Z   DRIVER_TOKEN: ***
+2026-11-26T10:30:57.8100511Z   DEV_TOKEN: ***
+2026-11-26T10:30:57.8100683Z   OPENCODE_VERSION: 1.19.4
+2026-11-26T10:30:57.8100860Z   OPENCODE_DISABLE_AUTOUPDATE: 1
+2026-11-26T10:30:57.8101040Z   ARTEMIS_DISABLE: 1
+2026-11-26T10:30:57.8101232Z   OC_MODEL: opencode/deepseek-v4.1-flash-free
+2026-11-26T10:30:57.8101918Z   OC_MODEL_CHAIN: opencode/mimo-v2.6-flash-free,opencode/glm-5.3-flash-free,opencode/minimax-m3.1-flash-free,opencode/longcat-2.5-free,opencode/iceman-free,opencode/flint-40b-free,opencode/nemotron-3.5-lightning-free,opencode/beam-free,opencode/inkling-2-small-free
+2026-11-26T10:30:57.8102582Z   STAGING_HOST: ***
+2026-11-26T10:30:57.8102768Z   GALASS_STAGING_URL: ***
+2026-11-26T10:30:57.8103009Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103336Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103648Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+2026-11-26T10:30:57.8103912Z   PUB_CACHE: /home/runner/.pub-cache
+2026-11-26T10:30:57.8104116Z ##[endgroup]
+2026-11-26T10:32:08.6128584Z      Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+2026-11-26T10:32:08.6129077Z 
+2026-11-26T10:32:08.6129886Z      Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/android/gradle/wrapper/gradle-wrapper.properties. 
+2026-11-26T10:32:08.6131044Z      For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+2026-11-26T10:32:08.6131394Z 
+2026-11-26T10:32:08.6131398Z 
+2026-11-26T10:32:08.6131525Z * Try:
+2026-11-26T10:32:08.6131803Z > Run with --stacktrace option to get the stack trace.
+2026-11-26T10:32:08.6132189Z > Run with --info or --debug option to get more log output.
+2026-11-26T10:32:08.6132610Z > Run with --scan to generate a Build Scan (Powered by Develocity).
+2026-11-26T10:32:08.6132995Z > Get more help at https://help.gradle.org.
+2026-11-26T10:32:08.6133197Z 
+2026-11-26T10:32:08.6133294Z BUILD FAILED in 1m 9s
+2026-11-26T10:32:08.6133616Z Running Gradle task 'assembleDebug'...                             69.6s
+2026-11-26T10:32:08.6134074Z Gradle task assembleDebug failed with exit code 1
+2026-11-26T10:32:08.6146570Z ##[error]Process completed with exit code 1.
+2026-11-26T10:32:08.6230509Z ##[group]Run actions/upload-artifact@v4
+2026-11-26T10:32:08.6230799Z with:
+2026-11-26T10:32:08.6231058Z   name: staging-e2e-diag-text
+2026-11-26T10:32:08.6231407Z   path: e2e-out/summary.md
+e2e-out/report.json
+e2e-out/ui/*.xml
+
+2026-11-26T10:32:08.6231742Z   retention-days: 7
+2026-11-26T10:32:08.6231967Z   if-no-files-found: warn
+2026-11-26T10:32:08.6232214Z   compression-level: 6
+2026-11-26T10:32:08.6232456Z   overwrite: false
+2026-11-26T10:32:08.6232725Z   include-hidden-files: false
+2026-11-26T10:32:08.6232995Z env:
+2026-11-26T10:32:08.6233310Z   BASE: ***
+2026-11-26T10:32:08.6233515Z   RIDER_ID: 106
+
