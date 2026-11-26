@@ -3254,3 +3254,37 @@ Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31
 Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
 Tools • Dart 3.9.2 • DevTools 2.48.0
 
+Flutter 3.35.6 disponible. Lancement du test demandé :
+$ flutter test test/unit/multistop_end_gate_test.dart 2>&1 | tail -60
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because galass_driver depends on timezone 0.11.0 which requires SDK version ^3.10.0, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try using the Flutter SDK version: 3.50.1. 
+Failed to update packages.
+
+$ ls -la .dart_tool/ 2>&1 | head; echo "====="; ls ~/.pub-cache 2>&1 | head -5; echo "=====PUBSPEC====="; grep -n "timezone\|flutter:" pubspec.yaml | head
+ls: cannot access '.dart_tool/': No such file or directory
+=====
+hosted
+=====PUBSPEC=====
+22:  flutter:
+37:  google_maps_flutter: ^2.17.0
+51:  pusher_channels_flutter: ^2.6.0
+56:  timezone: 0.11.0
+86:flutter:
+
+Échec de résolution des dépendances (SDK local 3.9.2 vs `timezone 0.11.0` qui exige `^3.10.0`). Vérifions l'état de `.dart_tool`.
+Pas de `.dart_tool` local. Essayons une résolution hors ligne (cache présent) :
+$ ls ~/.pub-cache/hosted/ 2>&1; ls ~/.pub-cache/hosted/*/ 2>/dev/null | grep -i "^timezone" | head; echo "====="; flutter pub get --offline 2>&1 | tail -20
+pub.dev
+=====
+Resolving dependencies...
+Because galass_driver depends on just_audio any which doesn't exist (could not find package just_audio in cache), version solving failed.
+
+Try again without --offline!
+Failed to update packages.
+
