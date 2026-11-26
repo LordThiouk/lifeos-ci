@@ -12520,3 +12520,54 @@ staging-e2e-diag-text 200 31683
    diag/dbg-stop2-a1-ok.xml 10511 -> /tmp/staging-e2e-diag-text_diag_dbg-stop2-a1-ok.xml
 
 → Read /tmp/staging-e2e-diag-text_summary.md
+Let me inspect the Artemis workflow definition to see if any dispatch inputs could bypass the APK build blocker (read-only check).
+
+$ python3 - <<'PY'
+import re, json, subprocess, base64
+s=open('/home/ubuntu/.config/gh/hosts.yml').read()
+tok=re.search(r'oauth_token:\s*(\S+)', s).group(1)
+def api(url):
+    p=subprocess.run(['curl','-sS','-H',f'Authorization: Bearer {tok}','-H','Accept: application/vnd.github+json',url],capture_output=True,text=True)
+    try: return json.loads(p.stdout)
+    except: return {'raw':p.stdout[:300]}
+for ref in ['81d149d4','feat/multistop-e2e-2026-11-15','main']:
+    d=api('https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/contents/.github/workflows/artemis-staging-e2e.yml?ref='+ref)
+    if 'content' in d:
+        txt=base64.b64decode(d['content']).decode('utf-8','replace')
+        open('/tmp/artemis_workflow_'+ref.replace('/','_')+'.yml','w').write(txt)
+        print(ref,'fetched',len(txt),'chars')
+        break
+    else: print(ref,d.get('message'))
+PY
+echo "=== workflow inputs / refs / build steps ===" && grep -n -i -E 'workflow_dispatch|inputs:|rider_ref|driver_ref|flutter-version|flutter_version|build apk|gradle|tail -n' /tmp/artemis_workflow_*.yml | head -60
+81d149d4 fetched 13344 chars
+=== workflow inputs / refs / build steps ===
+4:  workflow_dispatch:
+5:    inputs:
+6:      rider_ref:
+10:      driver_ref:
+60:        with: {repository: LordThiouk/Galass_Rider, ref: "${{ inputs.rider_ref }}", token: "${{ secrets.GALASS_REPO_TOKEN }}", path: src/rider, persist-credentials: false}
+62:        with: {repository: LordThiouk/Galass_Driver, ref: "${{ inputs.driver_ref }}", token: "${{ secrets.GALASS_REPO_TOKEN }}", path: src/driver, persist-credentials: false}
+70:        with: {flutter-version: "3.50.1", channel: stable, cache: true}
+98:          mkdir -p ~/.gradle/init.d
+99:          cat > ~/.gradle/init.d/zz-debug-signing.gradle <<'GRADLE'
+121:          GRADLE
+122:          echo "init script: $(wc -l < ~/.gradle/init.d/zz-debug-signing.gradle) lignes"
+130:      - name: Build APK (staging, debug, même job, pas d'upload)
+133:            (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+165:          # Libérer la RAM: les daemons Gradle (Xmx6g) restent vivants et étouffent l'émulateur (ANR / QEMU hang)
+166:          pkill -f GradleDaemon || true; pkill -f KotlinCompileDaemon || true; sleep 3; free -m
+181:          v=$(opencode --version 2>/dev/null | tail -n1)
+
+→ Read /tmp/artemis_workflow_81d149d4.yml [offset=1, limit=30]
+
+$ date -u '+%Y-%m-%d %H:%MZ'
+2026-11-26 18:08Z
+
+# Todos
+[✓] Load project context (CLAUDE.md, CONTEXT_ROUTING.md, ISA) and inspect workspace repos/branch
+[✓] Read ISA W0 scope (S-W0-01..07 / ISC-22,50,80-84) and determine required device proofs
+[✓] Investigate Artemis (artemis-staging-e2e.yml) device runs — id/URL/captures/logcat, refs Rider+Driver+emu
+[•] Update ISA: check ISCs only where device proof passes; record BLOCK in Decisions otherwise
+[ ] Validate changes, commit on fullrun/lot-client-w0 (no push), write /tmp/task_done.md
+
