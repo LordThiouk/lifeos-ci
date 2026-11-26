@@ -3558,3 +3558,371 @@ $ grep -n "errorGradleVersion\|warnGradleVersion\|errorAGPVersion\|errorKGPVersi
   "flutterVersion": "3.35.6"
 }
 
+$ sed -n '1,90p' /tmp/gp_FlutterPlugin.kt
+// Copyright 2014 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+package com.flutter.gradle
+
+import com.android.build.api.artifact.SingleArtifact
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.variant.AndroidComponentsExtension
+import com.android.build.api.variant.ApplicationVariant
+import com.android.build.api.variant.LibraryVariant
+import com.android.build.api.variant.Variant
+import com.flutter.gradle.FlutterPluginConstants.PLATFORM_ABI_LIST
+import com.flutter.gradle.FlutterPluginUtils.readPropertiesIfExist
+import com.flutter.gradle.plugins.PluginHandler
+import com.flutter.gradle.tasks.CopyFlutterApksTask
+import com.flutter.gradle.tasks.CopyFlutterAssetsTask
+import com.flutter.gradle.tasks.CopyFlutterJniLibsTask
+import com.flutter.gradle.tasks.FlutterTask
+import com.flutter.gradle.tasks.ManifestVersionCodeTaskHelper
+import org.gradle.api.GradleException
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.api.tasks.TaskProvider
+import org.gradle.internal.os.OperatingSystem
+import org.gradle.kotlin.dsl.support.serviceOf
+import org.gradle.process.ExecOperations
+import java.io.File
+import java.nio.charset.StandardCharsets
+import java.nio.file.Paths
+import java.util.Properties
+import com.android.build.api.dsl.BuildType as DslBuildType
+
+class FlutterPlugin : Plugin<Project> {
+    private var project: Project? = null
+    private var flutterRoot: File? = null
+    private var flutterExecutable: File? = null
+    private var localEngine: String? = null
+    private var localEngineHost: String? = null
+    private var localEngineSrcPath: String? = null
+    private var localProperties: Properties? = null
+    private var engineVersion: String? = null
+    private var engineRealm: String? = null
+    private var pluginHandler: PluginHandler? = null
+
+    override fun apply(project: Project) {
+        this.project = project
+
+        FlutterPluginUtils.detectApplyingKotlinGradlePlugin(project)
+
+        // Validate that the provided Gradle, Java, AGP, and KGP versions are all within our
+        // supported range. This runs before any task registration or extension configuration so
+        // that unsupported dependency versions fail with DependencyVersionChecker's diagnostic
+        // rather than a runtime error when calling AGP or Gradle APIs.
+        val shouldSkipDependencyChecks: Boolean =
+            project.hasProperty("skipDependencyChecks") &&
+                project.properties["skipDependencyChecks"]?.toString()?.toBoolean() == true
+        if (!shouldSkipDependencyChecks) {
+            try {
+                DependencyVersionChecker.checkDependencyVersions(project)
+            } catch (e: DependencyValidationException) {
+                throw e
+            } catch (e: Exception) {
+                // Possible bug in dependency checking code - warn and do not block build.
+                project.logger.error(
+                    "Warning: Flutter was unable to detect project Gradle, Java, " +
+                        "AGP, and KGP versions. Skipping dependency version checking. Error was: " +
+                        e
+                )
+            }
+        }
+
+        val rootProject = project.rootProject
+        if (FlutterPluginUtils.isFlutterAppProject(project)) {
+            addTaskForLockfileGeneration(rootProject)
+        }
+
+        val flutterRootSystemVal: String? = System.getenv("FLUTTER_ROOT")
+        val flutterRootPath: String =
+            resolveFlutterSdkProperty(flutterRootSystemVal)
+                ?: throw GradleException(
+                    "Flutter SDK not found. Define location with flutter.sdk in the " +
+                        "local.properties file or with a FLUTTER_ROOT environment variable."
+                )
+
+        flutterRoot = project.file(flutterRootPath)
+        if (!flutterRoot!!.isDirectory) {
+            throw GradleException("flutter.sdk must point to the Flutter SDK directory")
+        }
+
+$ curl -sS -o /tmp/gd_3501.dart -w "%{http_code}\n" https://raw.githubusercontent.com/flutter/flutter/3.50.1/packages/flutter_tools/lib/src/android/gradle.dart; grep -n "validateGradleAndKGP\|validateAgpAndKgp\|validateGradleAndAgp\|validateJavaAndGradle\|validateGradleDependencies\|DependencyVersion" /tmp/gd_3501.dart
+200
+449:  //    the Flutter Gradle Plugin (DependencyVersionChecker) is even applied.
+467:        if (!gradle.validateJavaAndGradle(
+
+$ sed -n '400,540p' /tmp/gd_3501.dart
+kMaxRetryTime.inMilliseconds,
+            );
+            retry += 1;
+            _logger.printStatus('Retrying Gradle Build: #$retry, wait time: ${waitTime}ms');
+            await Future<void>.delayed(Duration(milliseconds: waitTime));
+            exitCode = await _runGradleTask(
+              taskName,
+              options: options,
+              preRunTask: preRunTask,
+              postRunTask: postRunTask,
+              localGradleErrors: localGradleErrors,
+              gradleExecutablePath: gradleExecutablePath,
+              printOutput: printOutput,
+              retry: retry,
+              project: project,
+              maxRetries: maxRetries,
+            );
+            if (exitCode == 0) {
+              final successEventLabel = 'gradle-${detectedGradleError!.eventLabel}-success';
+              _analytics.send(
+                Event.flutterBuildInfo(
+                  label: successEventLabel,
+                  buildType: 'gradle',
+                  settings: 'androidGradlePluginVersion: $agpVersion',
+                ),
+              );
+              return exitCode;
+            }
+          case GradleBuildStatus.exit:
+          // Continue and throw tool exit.
+        }
+      }
+      final usageLabel = 'gradle-${detectedGradleError!.eventLabel}-failure';
+      _analytics.send(
+        Event.flutterBuildInfo(
+          label: usageLabel,
+          buildType: 'gradle',
+          settings: 'androidGradlePluginVersion: $agpVersion',
+        ),
+      );
+    }
+
+    return exitCode;
+  }
+
+  // Validate Java and Gradle compatibility after Gradle fails.
+  // This check is done in Dart after a Gradle crash because:
+  // 1. If Java and Gradle are incompatible, Gradle can crash during build script
+  //    compilation (e.g. Kotlin DSL compilation failing on newer JDKs) before
+  //    the Flutter Gradle Plugin (DependencyVersionChecker) is even applied.
+  //    See https://github.com/flutter/flutter/issues/189780 for context on
+  //    how JDK upgrades lead to cryptic Gradle compilation crashes.
+  // 2. Checking only after Gradle crashes avoids blocking builds that currently
+  //    succeed despite an unsupported Java/Gradle version pair.
+  // 3. This also helps address https://github.com/flutter/flutter/issues/167931
+  //    by providing actionable version recommendations directly in the error.
+  Future<void> _checkJavaAndGradleCompatibility(FlutterProject project, BuildInfo buildInfo) async {
+    if (!buildInfo.androidSkipBuildDependencyValidation) {
+      final Version? javaVersionObj = _java?.version;
+      final String? javaVersion = javaVersionObj != null
+          ? '${javaVersionObj.major}.${javaVersionObj.minor}.${javaVersionObj.patch}'
+          : null;
+      final String? gradleVersion = await getGradleVersionFromFile(
+        project.android.hostAppGradleRoot,
+        _logger,
+      );
+      if (javaVersion != null && gradleVersion != null) {
+        if (!gradle.validateJavaAndGradle(
+          _logger,
+          javaVersion: javaVersion,
+          gradleVersion: gradleVersion,
+        )) {
+          final JavaGradleCompat? compat = gradle.getValidGradleVersionRangeForJavaVersion(
+            _logger,
+            javaV: javaVersion,
+          );
+          final gradleRangeMax = compat != null && compat.gradleMax != null
+              ? ' to ${compat.gradleMax}'
+              : '';
+          final gradleRangeCompatSuggestion = compat != null
+              ? '${compat.gradleMin}$gradleRangeMax or newer'
+              : 'unknown';
+          final gradleRangeInfo =
+              'compatible Gradle versions for Java $javaVersion are $gradleRangeCompatSuggestion';
+          throwToolExit("""
+Gradle build failed due to Java/Gradle incompatibility.
+The Java version used for the build is $javaVersion, which is incompatible with Gradle $gradleVersion.
+To fix this, you can either:
+  1. Upgrade your project's Gradle version (typically in gradle-wrapper.properties to a version matching the range: $gradleRangeInfo).
+  2. Use a different Java version for Flutter by running `flutter config --jdk-dir=<path>`.""");
+        }
+      }
+    }
+  }
+
+  /// Builds an app.
+  ///
+  /// * [project] is typically [FlutterProject.current()].
+  /// * [androidBuildInfo] is the build configuration.
+  /// * [target] is the target dart entry point. Typically, `lib/main.dart`.
+  /// * If [isBuildingBundle] is `true`, then the output artifact is an `*.aab`,
+  ///   otherwise the output artifact is an `*.apk`.
+  /// * [maxRetries] If not `null`, this is the max number of build retries in case a retry is triggered.
+  Future<void> buildGradleApp({
+    required FlutterProject project,
+    required AndroidBuildInfo androidBuildInfo,
+    required String target,
+    required bool isBuildingBundle,
+    required List<GradleHandledError> localGradleErrors,
+    required bool configOnly,
+    bool validateDeferredComponents = true,
+    bool deferredComponentsEnabled = false,
+    int retry = 0,
+    @visibleForTesting int? maxRetries,
+  }) async {
+    if (!project.android.isSupportedVersion) {
+      _exitWithUnsupportedProjectMessage(_logger.terminal, _analytics);
+    }
+
+    final migrators = <ProjectMigrator>[
+      TopLevelGradleBuildFileMigration(project.android, _logger),
+      AndroidStudioJavaGradleConflictMigration(
+        _logger,
+        project: project.android,
+        androidStudio: _androidStudio,
+        java: globals.java,
+      ),
+      MinSdkVersionMigration(project.android, _logger),
+      MultidexRemovalMigration(project.android, _logger),
+      CmakeAndroid16kPagesMigration(project.android, _logger),
+      DisableBuiltInKotlinMigration(project.android, _logger),
+      DisableNewDslMigration(project.android, _logger),
+    ];
+
+    final migration = ProjectMigration(migrators);
+    await migration.run();
+
+    // The default Gradle script reads the version name and number
+    // from the local.properties file.
+    updateLocalProperties(
+      project: project,
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/targets; cat /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/targets/allowed-repos.sh; echo "=== _PipelineMapping ==="; ls /home/ubuntu/actions-runner/_work/_PipelineMapping | head
+total 12
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 14:26 .
+drwxr-xr-x 8 ubuntu ubuntu 4096 Nov 26 14:26 ..
+-rwxr-xr-x 1 ubuntu ubuntu 3206 Nov 26 14:26 allowed-repos.sh
+#!/usr/bin/env bash
+# Liste blanche unique des dépôts LordThiouk acceptés comme target_repo ou
+# extra_repos. Sourcée par les workflows et par les scripts de ce dépôt.
+#   targets/allowed-repos.sh list
+#   targets/allowed-repos.sh check <dépôt>
+#   targets/allowed-repos.sh validate <target_repo> [extra_repos]
+# Ne recopie jamais cette liste ailleurs.
+set -euo pipefail
+
+# Noms exacts, stables, sans espaces. L'ordre est celui des options: du workflow.
+ALLOWED_REPOS='antenly antenly-ci galass-ci Galass_Rider Galass_Driver Galass_backend galass-emu-actions-pub lifeos lifeos-ci'
+
+# Dépôts acceptés uniquement comme extra_repos (jamais comme target_repo).
+EXTRA_ONLY_REPOS='acr-senegal'
+
+allowed_repos_list() {
+  local r
+  # shellcheck disable=SC2086
+  for r in $ALLOWED_REPOS; do
+    printf '%s\n' "$r"
+  done
+}
+
+# Nom de dépôt strict : pas de chemin, pas d'injection, pas de "..".
+valid_repo_name() {
+  local r="${1-}"
+  [ -n "$r" ] || return 1
+  [[ "$r" =~ ^[A-Za-z0-9._-]+$ ]] || return 1
+  case "$r" in
+    *..*) return 1 ;;
+  esac
+  return 0
+}
+
+allowed_repo() {
+  local r="${1-}" a
+  valid_repo_name "$r" || return 1
+  # shellcheck disable=SC2086
+  for a in $ALLOWED_REPOS; do
+    [ "$r" = "$a" ] && return 0
+  done
+  return 1
+}
+
+# Accepté comme extra_repos : liste principale ou liste extra uniquement.
+extra_repo_allowed() {
+  local r="${1-}" a
+  valid_repo_name "$r" || return 1
+  allowed_repo "$r" && return 0
+  # shellcheck disable=SC2086
+  for a in $EXTRA_ONLY_REPOS; do
+    [ "$r" = "$a" ] && return 0
+  done
+  return 1
+}
+
+# Normalise extra_repos (virgules et/ou espaces) en liste séparée par des
+# virgules, sans doublon. Échoue si un élément est invalide ou hors liste.
+# Les dépôts de EXTRA_ONLY_REPOS sont acceptés ici, jamais comme target_repo.
+normalize_extra_repos() {
+  local raw="${1-}" token out=""
+  local IFS=$', \t\n'
+  # shellcheck disable=SC2086
+  for token in $raw; do
+    [ -n "$token" ] || continue
+    valid_repo_name "$token" || return 1
+    extra_repo_allowed "$token" || return 1
+    case ",$out," in
+      *",$token,"*) return 1 ;;
+    esac
+    out="${out:+$out,}$token"
+  done
+  printf '%s\n' "$out"
+}
+
+usage() {
+  cat >&2 <<'USAGE'
+usage: allowed-repos.sh list
+       allowed-repos.sh check <depot>
+       allowed-repos.sh validate <target_repo> [extra_repos]
+USAGE
+}
+
+main() {
+  local cmd="${1:-}" target extra norm
+  case "$cmd" in
+    list)
+      allowed_repos_list
+      ;;
+    check)
+      [ "$#" -eq 2 ] || { usage; return 2; }
+      if ! allowed_repo "$2"; then
+        echo "::error::dépôt non autorisé : $2"
+        return 1
+      fi
+      ;;
+    validate)
+      [ "$#" -ge 2 ] || { usage; return 2; }
+      target="$2"
+      extra="${3-}"
+      if ! allowed_repo "$target"; then
+        echo "::error::target_repo non autorisé : $target"
+        return 1
+      fi
+      if ! norm=$(normalize_extra_repos "$extra"); then
+        echo "::error::extra_repos invalide (dépôt inconnu, doublon ou caractères interdits)"
+        return 1
+      fi
+      printf 'target=%s\n' "$target"
+      printf 'extra=%s\n' "$norm"
+      ;;
+    *)
+      usage
+      return 2
+      ;;
+  esac
+}
+
+if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+  main "$@"
+fi
+=== _PipelineMapping ===
+LordThiouk
+
