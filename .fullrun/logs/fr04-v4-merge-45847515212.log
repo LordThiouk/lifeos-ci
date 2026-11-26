@@ -1,0 +1,185 @@
+
+> Forge · deepseek-v4.1-flash-free
+
+I'll read the prompt file and execute it.
+→ Read /home/ubuntu/actions-runner-2/_work/_temp/oc/prompt.md
+
+$ ls -la /home/ubuntu/actions-runner-2/_work/_temp/oc/ 2>&1
+total 28
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 15:52 .
+drwxr-xr-x 9 ubuntu ubuntu 4096 Nov 26 15:52 ..
+-rw------- 1 ubuntu ubuntu 9680 Nov 26 15:52 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu  160 Nov 26 15:52 opencode.log
+-rw-r--r-- 1 ubuntu ubuntu 1533 Nov 26 15:52 prompt.md
+
+$ pwd && ls -la && git status 2>&1 | head -30
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target
+total 96
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 15:52 .
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 15:52 ..
+-rw-r--r--  1 ubuntu ubuntu 1364 Nov 26 15:06 .env.example
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 15:52 .git
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 .github
+-rw-r--r--  1 ubuntu ubuntu  615 Nov 26 15:06 .gitignore
+-rw-r--r--  1 ubuntu ubuntu 1352 Nov 26 15:06 .gitleaks.toml
+-rw-r--r--  1 ubuntu ubuntu  578 Nov 26 15:06 CLEANROOM.md
+-rw-r--r--  1 ubuntu ubuntu  255 Nov 26 15:06 LICENSE
+-rw-r--r--  1 ubuntu ubuntu 2551 Nov 26 15:52 MAX-FR04-V3.md
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 MEMORY
+-rw-r--r--  1 ubuntu ubuntu 1000 Nov 26 15:06 Makefile
+-rw-r--r--  1 ubuntu ubuntu  999 Nov 26 15:52 README.md
+-rw-r--r--  1 ubuntu ubuntu 3444 Nov 26 15:52 VERIFY-FR04-V3.md
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 15:52 api
+drwxr-xr-x  7 ubuntu ubuntu 4096 Nov 26 15:52 data
+-rw-r--r--  1 ubuntu ubuntu 2737 Nov 26 15:06 docker-compose.override.yml
+-rw-r--r--  1 ubuntu ubuntu 3714 Nov 26 15:06 docker-compose.yml
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 15:06 docs
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 engine
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 15:06 migrations
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 15:52 prompts
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 15:52 scripts
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 tools
+On branch isa/fr-04-vera-2026-11-26
+Your branch is up to date with 'origin/isa/fr-04-vera-2026-11-26'.
+
+nothing to commit, working tree clean
+
+$ git log --oneline -3 origin/build/fr04-l7 2>&1; echo "---L9---"; git log --oneline -3 origin/build/fr04-l9 2>&1
+6002480 feat(segmentation): erreur par classe et par station L7 (T7.1)
+f824102 merge(fr04): Vague 3 L8 into isa
+e795ede merge(fr04): Vague 3 L5 into isa
+---L9---
+2c73957 feat(segmentation): porte de gel des seuils FR-04 L9 (T9.1)
+f824102 merge(fr04): Vague 3 L8 into isa
+e795ede merge(fr04): Vague 3 L5 into isa
+
+$ git log --oneline -5 && echo "---" && git rev-parse HEAD && echo "---" && git branch -a | head -30
+885009e merge(fr04): Vague 4 L6 into isa
+e53feed feat(segmentation): P95 des frontieres sur tous les relus L6 (T6.1)
+87c77d7 docs(fr04): verdict Max Vague 3 (L4+L5+L8) — PASS
+c2f169e docs(fr04): vérifie la Vague 3 (L4+L5+L8) — PASS
+f824102 merge(fr04): Vague 3 L8 into isa
+---
+885009e9c6b380d1e3a83d8916e548593bbe2c13
+---
+* isa/fr-04-vera-2026-11-26
+  remotes/origin/annotation/pilot100-2026-11-14
+  remotes/origin/annotation/pilot100-agreement
+  remotes/origin/build/fr01-v1c
+  remotes/origin/build/fr04-l2
+  remotes/origin/build/fr04-l3
+  remotes/origin/build/fr04-l4
+  remotes/origin/build/fr04-l5
+  remotes/origin/build/fr04-l6
+  remotes/origin/build/fr04-l7
+  remotes/origin/build/fr04-l8
+  remotes/origin/build/fr04-l9
+  remotes/origin/chore/isa-annotation-isc43-ratif-2026-11-24
+  remotes/origin/close/fr04-v3-max
+  remotes/origin/close/fr04-v4-pending
+  remotes/origin/cursor/language-pass-slice-resume-b609
+  remotes/origin/docs/isa-cloture-2026-11-18
+  remotes/origin/eval/compare-engines-2026-11-25
+  remotes/origin/feat/fingerprint-engine-maison-2026-11-15
+  remotes/origin/feat/inventory-mytuner
+  remotes/origin/feat/mytuner-stream-scrape
+  remotes/origin/feat/relecture-2-overlay-2026-11-16
+  remotes/origin/fix/csv-import-and-no-media-test
+  remotes/origin/fix/inventory-allowlist-names
+  remotes/origin/fix/isc15-replay-speech-rule-2026-11-16
+  remotes/origin/fix/mytuner-discover
+  remotes/origin/fix/mytuner-names-only
+  remotes/origin/fix/orb-pagination-skip-stream-tests
+  remotes/origin/fullrun-logs/annotation-build-solo-45072495775
+  remotes/origin/fullrun-logs/annotation-build-solo2-45082420751
+
+$ git config user.name; git config user.email; echo "---"; ls api/src/antenly_api/eval/ 2>&1; echo "---"; ls api/tests/segmentation/ 2>&1
+Papa Diop
+76528706+LordThiouk@users.noreply.github.com
+---
+__init__.py
+boundaries.py
+emission.py
+metrics.py
+segmentation.py
+split.py
+---
+__init__.py
+test_boundary_p95.py
+test_emission.py
+test_eval_split.py
+test_min_duration.py
+test_other.py
+test_overlap_flag.py
+test_per_class.py
+test_schema.py
+test_segment_contract.py
+test_segmenter_baseline.py
+
+$ git diff --stat 885009e..origin/build/fr04-l7 2>&1; echo "===L9==="; git diff --stat 885009e..origin/build/fr04-l9 2>&1
+MAX-FR04-V3.md                              |  34 ---
+ VERIFY-FR04-V3.md                           |  64 -----
+ api/src/antenly_api/eval/__init__.py        |  18 ++
+ api/src/antenly_api/eval/boundaries.py      | 211 ---------------
+ api/src/antenly_api/eval/metrics.py         | 283 ++++++++++++++++++++-
+ api/src/antenly_api/eval/segmentation.py    | 211 +++++++++------
+ api/src/antenly_api/eval/split.py           |  82 ++++++
+ api/tests/segmentation/test_boundary_p95.py | 216 ----------------
+ api/tests/segmentation/test_per_station.py  | 382 ++++++++++++++++++++++++++++
+ 9 files changed, 901 insertions(+), 600 deletions(-)
+===L9===
+ MAX-FR04-V3.md                                 |  34 --
+ VERIFY-FR04-V3.md                              |  64 ---
+ api/src/antenly_api/eval/boundaries.py         | 211 ----------
+ api/src/antenly_api/eval/segmentation.py       |  90 +---
+ api/tests/segmentation/test_boundary_p95.py    | 216 ----------
+ api/tests/segmentation/test_threshold_state.py | 448 ++++++++++++++++++++
+ scripts/check/fr04_threshold_state.py          | 547 +++++++++++++++++++++++++
+ 7 files changed, 1012 insertions(+), 598 deletions(-)
+
+✗ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && echo "MB L7: $(git merge-base HEAD origin/build/fr04-l7)"; echo "MB L9: $(git merge-base HEAD origin/build/fr04-l9)"; echo "---L6 diff 885009e^..885009e---"; git diff --stat 885009e^1..885009e 2>&1 failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git log --oneline --graph --all --decorate | head -40
+* 2e9ac8a (origin/fullrun-logs/fr04-v4-merge-45845315701) chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:51 Dakar, clair — branche à supprimer après lecture
+* c15265f chore(ci): journal en direct du run driver-f5-13c (45845317171), 15:51 Dakar, clair — branche à supprimer après lecture
+* a03efff (origin/fullrun-logs/fr01-v1c-45845316040) chore(ci): journal en direct du run fr01-v1c (45845316040), 15:51 Dakar, clair — branche à supprimer après lecture
+* c414c9c chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:51 Dakar, clair — branche à supprimer après lecture
+* baa0247 chore(ci): journal en direct du run rider-apk-gradle (45847515781), 15:51 Dakar, clair — branche à supprimer après lecture
+* 3139ac3 chore(ci): journal en direct du run rider-f429-cr (45845322081), 15:50 Dakar, clair — branche à supprimer après lecture
+* d4fc3f3 chore(ci): journal en direct du run smoke-usbox3 (45842094698), 15:50 Dakar, clair — branche à supprimer après lecture
+* c6ef8a2 chore(ci): journal en direct du run rider-f434b-max (45845322242), 15:49 Dakar, clair — branche à supprimer après lecture
+* f1d26dc chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:49 Dakar, clair — branche à supprimer après lecture
+* ef320d4 chore(ci): journal en direct du run driver-f5-13c (45845317171), 15:49 Dakar, clair — branche à supprimer après lecture
+* 21a3a1b chore(ci): journal en direct du run fr01-v1c (45845316040), 15:49 Dakar, clair — branche à supprimer après lecture
+* 8c61249 chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:49 Dakar, clair — branche à supprimer après lecture
+* 3b7a24f chore(ci): journal en direct du run rider-apk-gradle (45847515781), 15:49 Dakar, clair — branche à supprimer après lecture
+* 5d895ff chore(ci): journal en direct du run rider-f429-cr (45845322081), 15:48 Dakar, clair — branche à supprimer après lecture
+* ee65a04 chore(ci): journal en direct du run smoke-usbox3 (45842094698), 15:48 Dakar, clair — branche à supprimer après lecture
+* bc727e6 chore(ci): journal en direct du run rider-f434b-max (45845322242), 15:47 Dakar, clair — branche à supprimer après lecture
+* 7af8b56 chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:47 Dakar, clair — branche à supprimer après lecture
+* 67a5af1 chore(ci): journal en direct du run driver-f5-13c (45845317171), 15:47 Dakar, clair — branche à supprimer après lecture
+* ba52255 chore(ci): journal en direct du run fr01-v1c (45845316040), 15:47 Dakar, clair — branche à supprimer après lecture
+* 17fb192 chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:47 Dakar, clair — branche à supprimer après lecture
+* d14c153 chore(ci): journal en direct du run rider-apk-gradle (45847515781), 15:47 Dakar, clair — branche à supprimer après lecture
+* 2f99d33 chore(ci): journal en direct du run rider-f429-cr (45845322081), 15:46 Dakar, clair — branche à supprimer après lecture
+* 3eed533 chore(ci): journal en direct du run smoke-usbox3 (45842094698), 15:46 Dakar, clair — branche à supprimer après lecture
+* 6a67c69 chore(ci): journal en direct du run rider-f434b-max (45845322242), 15:45 Dakar, clair — branche à supprimer après lecture
+* 2cfb80a chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:45 Dakar, clair — branche à supprimer après lecture
+* 24dec63 chore(ci): journal en direct du run driver-f5-13c (45845317171), 15:45 Dakar, clair — branche à supprimer après lecture
+* 0e87bb3 chore(ci): journal en direct du run fr01-v1c (45845316040), 15:45 Dakar, clair — branche à supprimer après lecture
+* 04ba30f chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:45 Dakar, clair — branche à supprimer après lecture
+* 556f763 chore(ci): journal en direct du run rider-f429-cr (45845322081), 15:44 Dakar, clair — branche à supprimer après lecture
+* 58755f5 chore(ci): journal en direct du run smoke-usbox3 (45842094698), 15:44 Dakar, clair — branche à supprimer après lecture
+* 6ad74d5 chore(ci): journal en direct du run rider-f434b-max (45845322242), 15:43 Dakar, clair — branche à supprimer après lecture
+* 034debd chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:43 Dakar, clair — branche à supprimer après lecture
+* e2b919c chore(ci): journal en direct du run fr01-v1c (45845316040), 15:43 Dakar, clair — branche à supprimer après lecture
+* 1f46175 chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:42 Dakar, clair — branche à supprimer après lecture
+* f95b947 chore(ci): journal en direct du run rider-f429-cr (45845322081), 15:42 Dakar, clair — branche à supprimer après lecture
+* dd61c3e chore(ci): journal en direct du run smoke-usbox3 (45842094698), 15:42 Dakar, clair — branche à supprimer après lecture
+* 2ffd737 chore(ci): journal en direct du run rider-f434b-max (45845322242), 15:41 Dakar, clair — branche à supprimer après lecture
+* c98fcdd chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:41 Dakar, clair — branche à supprimer après lecture
+* 8d0763b chore(ci): journal en direct du run fr01-v1c (45845316040), 15:41 Dakar, clair — branche à supprimer après lecture
+* 5aa1f05 chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:40 Dakar, clair — branche à supprimer après lecture
+
+→ Read /home/ubuntu/actions-runner-2/_work/_temp/oc/opencode.json
