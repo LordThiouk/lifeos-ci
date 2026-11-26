@@ -1331,3 +1331,80 @@ error • The function 'expect' isn't defined • test/unit/ride_map_live_locati
 
 570 issues found. (ran in 1.2s)
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && bun /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts --help 2>&1 | head -80
+usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+  scaffold --slug s --goal "…" [--title t]      crée l'ISA (sections Problem…Decisions)
+  append   --section "Claims" --text "…"|--file f  ajoute sous une section (créée si absente)
+  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+  set      --field phase --value build          frontmatter
+  replace  --old "…" --new "…"                  remplacement exact unique (corrections)
+  adopt                                          tamponne un ISA hérité (après relecture)
+  verify                                         contrôle l'empreinte (exit 2 si KO)
+  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && flutter analyze --no-pub lib/data/controller/map/ride_map_controller.dart lib/data/controller/ride/ride_details/ride_details_controller.dart 2>&1 | tail -20
+error • Undefined name 'visibleForTesting' used as an annotation • lib/data/controller/ride/ride_details/ride_details_controller.dart:820:3 • undefined_annotation
+  error • The method 'printX' isn't defined for the type 'RideDetailsController' • lib/data/controller/ride/ride_details/ride_details_controller.dart:825:7 • undefined_method
+  error • Undefined name 'ModalRoute' • lib/data/controller/ride/ride_details/ride_details_controller.dart:828:19 • undefined_identifier
+  error • The method 'printX' isn't defined for the type 'RideDetailsController' • lib/data/controller/ride/ride_details/ride_details_controller.dart:830:7 • undefined_method
+  error • Undefined name 'Navigator' • lib/data/controller/ride/ride_details/ride_details_controller.dart:836:5 • undefined_identifier
+  error • Undefined name 'RideMessageController' • lib/data/controller/ride/ride_details/ride_details_controller.dart:856:9 • undefined_identifier
+  error • The method 'printX' isn't defined for the type 'RideDetailsController' • lib/data/controller/ride/ride_details/ride_details_controller.dart:860:7 • undefined_method
+  error • Undefined name 'AppStatus' • lib/data/controller/ride/ride_details/ride_details_controller.dart:867:41 • undefined_identifier
+  error • Undefined name 'AppStatus' • lib/data/controller/ride/ride_details/ride_details_controller.dart:868:24 • undefined_identifier
+  error • The method 'printX' isn't defined for the type 'RideDetailsController' • lib/data/controller/ride/ride_details/ride_details_controller.dart:871:7 • undefined_method
+  error • Undefined name 'Get' • lib/data/controller/ride/ride_details/ride_details_controller.dart:877:25 • undefined_identifier
+  error • The method 'update' isn't defined for the type 'RideDetailsController' • lib/data/controller/ride/ride_details/ride_details_controller.dart:882:5 • undefined_method
+  error • Undefined name 'AppStatus' • lib/data/controller/ride/ride_details/ride_details_controller.dart:893:24 • undefined_identifier
+  error • Undefined class 'Position' • lib/data/controller/ride/ride_details/ride_details_controller.dart:895:7 • undefined_class
+  error • Undefined name 'MyUtils' • lib/data/controller/ride/ride_details/ride_details_controller.dart:895:33 • undefined_identifier
+  error • The method 'canLaunchUrl' isn't defined for the type 'RideDetailsController' • lib/data/controller/ride/ride_details/ride_details_controller.dart:909:15 • undefined_method
+  error • The method 'launchUrl' isn't defined for the type 'RideDetailsController' • lib/data/controller/ride/ride_details/ride_details_controller.dart:910:13 • undefined_method
+  error • Undefined name 'LaunchMode' • lib/data/controller/ride/ride_details/ride_details_controller.dart:910:34 • undefined_identifier
+
+452 issues found. (ran in 0.7s)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show --unified=0 HEAD -- test/unit/tmp_probe_test.dart
+(no output)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '90,125p' lib/presentation/screens/ride_details/ride_details_screen.dart
+@override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (!_routeObserverSubscribed && route is PageRoute) {
+      appRouteObserver.subscribe(this, route);
+      _routeObserverSubscribed = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_routeObserverSubscribed) {
+      appRouteObserver.unsubscribe(this);
+    }
+    WidgetsBinding.instance.removeObserver(this);
+    // ISC-F5-19: stop the GPS stream before the map controller it feeds.
+    if (Get.isRegistered<RideDetailsController>()) {
+      Get.find<RideDetailsController>().stopLiveLocationTracking();
+    }
+    if (Get.isRegistered<RideMapController>()) {
+      Get.find<RideMapController>().stopPolylineAnimation();
+      Get.delete<RideMapController>(force: true);
+    }
+    if (Get.isRegistered<PusherRideController>()) {
+      Get.delete<PusherRideController>(force: true);
+    }
+    if (Get.isRegistered<RideDetailsController>()) {
+      Get.delete<RideDetailsController>(force: true);
+    }
+    super.dispose();
+  }
+
+  @override
+  void didPushNext() {
+    // Another route covers this screen; stop heavy animations.
+
