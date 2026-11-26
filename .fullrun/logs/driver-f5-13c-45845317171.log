@@ -10255,3 +10255,418 @@ aaa637f wip(fr01-v1): partial work (agent stopped)
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "9.0.1\|9.1.0\|newDsl\|builtInKotlin\|proguardAndroidTxt" android/ 2>/dev/null
 android/app/build.gradle.kts:19:    ndkVersion = "29.0.14033849"
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log -1 --format='%H%n%an <%ae>%n%s' && echo "---" && git status --short && echo "---lib touched in last commit?---" && git show --stat HEAD | grep -i "lib/" || echo "no lib/ changes"
+8c28139ebea952d47e713aa8ed074d81df4d3da5
+Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+---
+---lib touched in last commit?---
+    Aucun changement lib/, aucun golden régénéré, .fullrun intact.
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show --name-only --format='' HEAD
+CHANGELOG.md
+android/gradle.properties
+android/gradle/wrapper/gradle-wrapper.properties
+android/settings.gradle.kts
+
+← Write /tmp/task_done.md
+Wrote file successfully.
+
+Travail terminé et validé.
+
+**Résumé**
+- Branche `build/rider-apk-gradle` — commit `8c28139ebea952d47e713aa8ed074d81df4d3da5` (auteur Papa Diop).
+- Toolchain Android aligné sur Flutter 3.50.1 : Gradle **8.14**, AGP **8.11.1**, Kotlin 2.2.20 conservé, Firebase google-services 4.3.15 + Crashlytics 3.0.7 inchangés.
+- Suppression des options AGP9-only dans `gradle.properties`.
+- Aucun changement `lib/`, aucun golden régénéré, `.fullrun` intact, pas de push/merge, pas de build exécuté (politique CI).
+- Résumé factuel écrit dans `/tmp/task_done.md`.
+
+> Forge · hy4-flash-free
+
+I'll read the prompt file first.
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+I'll start by inspecting the repository state and the Android toolchain files.
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ && ls -la /home/ubuntu/actions-runner/_work/_temp/oc/
+total 20
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 16:32 .
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 14:26 ..
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 14:26 ci
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 16:32 lifeos
+drwxr-xr-x 18 ubuntu ubuntu 4096 Nov 26 16:34 target
+total 588
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 16:32 .
+drwxr-xr-x 9 ubuntu ubuntu   4096 Nov 26 16:32 ..
+-rw------- 1 ubuntu ubuntu   9680 Nov 26 16:32 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu 573181 Nov 26 17:25 opencode.log
+-rw-r--r-- 1 ubuntu ubuntu   1757 Nov 26 16:32 prompt.md
+
+$ pwd && git status && git branch --show-current && git log --oneline -8
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+On branch build/rider-apk-gradle
+Your branch is ahead of 'origin/build/rider-apk-gradle' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+build/rider-apk-gradle
+8c28139 fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+b83aba6 test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+3a399e8 docs(isa): F4-34 rebuild evidence after Verify BLOCK
+2ec49c8 test(rider): F4-34 controller recreation, FCM dedup, cross-channel
+
+$ git show --stat --format=fuller 8c28139 && echo "=== DIFF ===" && git show --format= 8c28139
+commit 8c28139ebea952d47e713aa8ed074d81df4d3da5
+Author:     Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+AuthorDate: Thu Nov 26 16:36:53 2026 +0000
+Commit:     Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+CommitDate: Thu Nov 26 16:36:53 2026 +0000
+
+    fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+    
+    Artemis 45801376130 — Build APK Rider ROUGE : la validation des dépendances
+    Android de Flutter 3.50.1 refuse Gradle 9.1.0 / AGP 9.0.1.
+    
+    - gradle-wrapper.properties : gradle-9.1.0-all -> gradle-8.14-all
+    - settings.gradle.kts : AGP 9.0.1 -> 8.11.1 (Kotlin 2.2.20 conservé)
+    - gradle.properties : retrait des options réservées à AGP 9
+      (android.newDsl, android.builtInKotlin, android.r8.proguardAndroidTxt.disallowed)
+    
+    KGP 2.2.20 est pleinement supporté avec Gradle <= 8.14 et AGP <= 8.11.1
+    (matrice JetBrains) ; AGP 8.11 exige Gradle >= 8.13 et plafonne à l'API 36.
+    Firebase google-services 4.3.15 et Crashlytics 3.0.7 inchangés.
+    Aucun changement lib/, aucun golden régénéré, .fullrun intact.
+    flutter build / gradlew non exécutés sur la box (politique CI).
+
+ CHANGELOG.md                                     | 4 ++++
+ android/gradle.properties                        | 3 ---
+ android/gradle/wrapper/gradle-wrapper.properties | 2 +-
+ android/settings.gradle.kts                      | 2 +-
+ 4 files changed, 6 insertions(+), 5 deletions(-)
+=== DIFF ===
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index a7db2f3..810ca47 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
+ 
+ ## [Unreleased]
+ 
++### Fixed
++
++- Android : toolchain aligné sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.2.20) ; AGP 9.0.1 / Gradle 9.1.0 refusés par la validation CI
++
+ ## [1.0.13] - 2026-10-08
+ 
+ ### Fixed
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 0e4397f..4c72eeb 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -4,6 +4,3 @@ org.gradle.parallel=false
+ org.gradle.configureondemand=false
+ android.enableJetifier=false
+ android.useAndroidX=true
+-android.newDsl=false
+-android.builtInKotlin=false
+-android.r8.proguardAndroidTxt.disallowed=false
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..bfebd0b 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,7 +18,7 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+     id("com.google.firebase.crashlytics") version("3.0.7") apply false
+
+$ echo "=== wrapper ===" && cat android/gradle/wrapper/gradle-wrapper.properties && echo "=== settings ===" && cat android/settings.gradle.kts && echo "=== app build ===" && cat android/app/build.gradle.kts && echo "=== root build ===" && cat android/build.gradle.kts 2>/dev/null || true
+=== wrapper ===
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+=== settings ===
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "8.11.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.7") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+}
+
+include(":app")
+=== app build ===
+import java.util.Properties
+import java.io.FileInputStream
+
+
+plugins {
+    id("com.android.application")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    // END: FlutterFire Configuration
+    id("kotlin-android")
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+android {
+    namespace = "sn.galass.galassrider"
+    compileSdk = 36
+    ndkVersion = "29.0.14033849"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true  
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId = "sn.galass.galassrider"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        minSdk = flutter.minSdkVersion
+        targetSdk = 36
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    signingConfigs {
+        create("release") {
+            val keystorePath = System.getenv("CM_KEYSTORE_PATH")
+            if (keystorePath != null) {
+                // Codemagic CI
+                storeFile = file(keystorePath)
+                storePassword = System.getenv("CM_KEYSTORE_PASSWORD") ?: ""
+                keyAlias = System.getenv("CM_KEY_ALIAS") ?: ""
+                keyPassword = System.getenv("CM_KEY_PASSWORD") ?: ""
+            } else {
+                // Local — lire key.properties
+                val props = Properties()
+                val propsFile = rootProject.file("key.properties")
+                if (propsFile.exists()) props.load(FileInputStream(propsFile))
+                storeFile = props["storeFile"]?.let { file(it as String) }
+                storePassword = props["storePassword"] as? String ?: ""
+                keyAlias = props["keyAlias"] as? String ?: ""
+                keyPassword = props["keyPassword"] as? String ?: ""
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+dependencies {
+  coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+  // Jetpack Security for Android Keystore-backed encryption
+  implementation("androidx.security:security-crypto:1.1.0-alpha06")
+}
+
+flutter {
+    source = "../.."
+}
+=== root build ===
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
+rootProject.layout.buildDirectory.value(newBuildDir)
+
+subprojects {
+    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
+    project.layout.buildDirectory.value(newSubprojectBuildDir)
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register<Delete>("clean") {
+    delete(rootProject.layout.buildDirectory)
+}
+
+A prior commit already appears on this branch. Let me examine it and the actual toolchain files before deciding what remains.
+$ echo "=== ci dir ===" && ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci && echo "=== work dirs ===" && ls -la /home/ubuntu/actions-runner/_work/ && echo "=== driver search ===" && ls -d /home/ubuntu/actions-runner/_work/*/* 2>/dev/null
+=== ci dir ===
+total 316
+drwxr-xr-x 8 ubuntu ubuntu   4096 Nov 26 14:26 .
+drwxr-xr-x 5 ubuntu ubuntu   4096 Nov 26 16:32 ..
+drwxr-xr-x 8 ubuntu ubuntu   4096 Nov 26 16:32 .git
+drwxr-xr-x 3 ubuntu ubuntu   4096 Nov 26 14:43 .github
+-rw-r--r-- 1 ubuntu ubuntu   3308 Nov 26 14:26 FIX-CI.md
+-rw-r--r-- 1 ubuntu ubuntu   1046 Nov 26 14:26 FIX-SERENA.md
+-rw-r--r-- 1 ubuntu ubuntu   5457 Nov 26 14:26 FIX-VERA-AUDIT.md
+-rw-r--r-- 1 ubuntu ubuntu  36081 Nov 26 14:26 INVENTAIRE.md
+-rw-r--r-- 1 ubuntu ubuntu   8699 Nov 26 14:26 README.md
+-rw-r--r-- 1 ubuntu ubuntu 145083 Nov 26 14:26 REPORT.md
+-rw-r--r-- 1 ubuntu ubuntu   4880 Nov 26 14:26 REVIEW-AGENTS-LOAD.md
+-rw-r--r-- 1 ubuntu ubuntu   1317 Nov 26 14:26 REVIEW-ASSEMBLE.md
+-rw-r--r-- 1 ubuntu ubuntu  12386 Nov 26 14:26 REVIEW-PR1.md
+-rw-r--r-- 1 ubuntu ubuntu   4480 Nov 26 14:26 REVIEW-PR20.md
+-rw-r--r-- 1 ubuntu ubuntu  26243 Nov 26 14:26 REVIEW.md
+-rw-r--r-- 1 ubuntu ubuntu   5457 Nov 26 14:26 TESTS-DIAG.md
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 14:26 docs
+-rw-r--r-- 1 ubuntu ubuntu    863 Nov 26 14:26 models.txt
+drwxr-xr-x 4 ubuntu ubuntu   4096 Nov 26 14:26 opencode
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 14:26 prompts
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 14:26 targets
+=== work dirs ===
+total 28
+drwxr-xr-x 7 ubuntu ubuntu 4096 Nov 26 16:32 .
+drwxr-xr-x 6 ubuntu ubuntu 4096 Nov 26 14:25 ..
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 14:26 _PipelineMapping
+drwxr-xr-x 4 ubuntu ubuntu 4096 Nov 26 16:32 _actions
+drwxr-xr-x 9 ubuntu ubuntu 4096 Nov 26 16:32 _temp
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 14:26 _tool
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 14:26 lifeos-ci
+=== driver search ===
+/home/ubuntu/actions-runner/_work/_PipelineMapping/LordThiouk
+/home/ubuntu/actions-runner/_work/_actions/actions
+/home/ubuntu/actions-runner/_work/_actions/oven-sh
+/home/ubuntu/actions-runner/_work/_temp/0453876b-c563-4a58-972b-ac63466d7ac5.sh
+/home/ubuntu/actions-runner/_work/_temp/0c44260b-9d2c-4d75-889e-03d7d6d3368d.sh
+/home/ubuntu/actions-runner/_work/_temp/0ed9999a-d824-4655-bd10-fe566c5383e1.sh
+/home/ubuntu/actions-runner/_work/_temp/3048caed-fce4-47ec-9b5c-5bbdbc4fb3a9.sh
+/home/ubuntu/actions-runner/_work/_temp/3100892a-8b1c-4bc3-89d5-9d854f89b441.sh
+/home/ubuntu/actions-runner/_work/_temp/36e886cd-7dce-43f9-a5f9-a4de7f1cc14b.sh
+/home/ubuntu/actions-runner/_work/_temp/71480579-3bed-4a37-bd3a-45b55b0294f8.sh
+/home/ubuntu/actions-runner/_work/_temp/790cd033-0752-45f0-ac1c-97f6e95998a1.sh
+/home/ubuntu/actions-runner/_work/_temp/7f8cde5d-fdbf-4741-b5c8-829ecc4f2bd0.sh
+/home/ubuntu/actions-runner/_work/_temp/8e5b58d0-02c7-483d-903f-b03663f1a3c9.sh
+/home/ubuntu/actions-runner/_work/_temp/_github_workflow
+/home/ubuntu/actions-runner/_work/_temp/_runner_file_commands
+/home/ubuntu/actions-runner/_work/_temp/age
+/home/ubuntu/actions-runner/_work/_temp/age.tgz
+/home/ubuntu/actions-runner/_work/_temp/de660bc1-de1d-45a0-8ffb-e95d3d63e01a.sh
+/home/ubuntu/actions-runner/_work/_temp/e9f63410-c5c1-420e-808d-655a1a141033.sh
+/home/ubuntu/actions-runner/_work/_temp/efb48258-301d-431a-a8dd-8be0702d9470.sh
+/home/ubuntu/actions-runner/_work/_temp/f3fd96e1-281a-4925-943c-c9e716b2d203.sh
+/home/ubuntu/actions-runner/_work/_temp/gitleaks.tgz
+/home/ubuntu/actions-runner/_work/_temp/gl
+/home/ubuntu/actions-runner/_work/_temp/live.out
+/home/ubuntu/actions-runner/_work/_temp/npm-global
+/home/ubuntu/actions-runner/_work/_temp/oc
+/home/ubuntu/actions-runner/_work/_temp/oc-agent
+/home/ubuntu/actions-runner/_work/_temp/wip.out
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci
+
+$ echo "=== flutter ===" && which flutter || true; flutter --version 2>/dev/null || true; echo "=== skill router ===" && ls -la ~/.claude/LIFEOS/TOOLS/AgentSkillRouter.ts 2>/dev/null || true
+=== flutter ===
+/usr/local/bin/flutter
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+=== skill router ===
+-rw-r--r-- 1 ubuntu ubuntu 31077 Nov 26 16:32 /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/AgentSkillRouter.ts
+
+The requested fix appears to be already committed on this branch by an earlier pass. I won't assume it's correct — let me verify it against the Driver reference, Flutter 3.50.1's own validation rules, and CI checks.
+$ echo "=== fullrun ===" && git status --porcelain --ignored | grep -i fullrun || true; echo "=== tracked fullrun ===" && git ls-files | grep -i fullrun || true; echo "=== pubspec flutter sdk ===" && grep -n -A3 -B2 'flutter:' pubspec.yaml | head -30
+=== fullrun ===
+=== tracked fullrun ===
+.fullrun/multistop-ui-gaps-serena-2026-11-23_DONE.md
+.fullrun/multistop-ui-gaps-serena-2026-11-24-r3_DONE.md
+.fullrun/multistop-ui-gaps-serena-2026-11-24-r3_checkpoint.json
+.fullrun/multistop-ui-gaps-serena-2026-11-24-r5_DONE.md
+.fullrun/multistop-ui-gaps-serena-2026-11-24-r5_checkpoint.json
+.fullrun/multistop-ui-gaps-serena-2026-11-24-r6_DONE.md
+.fullrun/multistop-ui-gaps-serena-2026-11-24-r6_checkpoint.json
+.fullrun/multistop-ui-gaps-vera-2026-11-23_DONE.md
+.fullrun/multistop-ui-gaps-vera-2026-11-23_checkpoint.json
+MEMORY/WORK/20261006-galass-rider-multistop/fullrun-carry.json
+=== pubspec flutter sdk ===
+21-  firebase_auth: ^6.5.0
+22-  firebase_messaging: ^16.0.4
+23:  flutter:
+24-    sdk: flutter
+25-  flutter_animate: ^4.5.2
+26-  flutter_inappwebview: ^6.1.5
+--
+33-  geolocator: ^14.0.2
+34-  get: ^4.7.2
+35:  google_maps_flutter: ^2.14.0
+36-  google_sign_in: ^7.2.0
+37-  image_picker: ^1.2.1
+38-  in_app_review: ^2.0.11
+--
+46-  permission_handler: ^12.0.1
+47-  pinput: ^5.0.2
+48:  pusher_channels_flutter: ^2.5.0
+49-  share_plus: ^13.3.1
+50-  shared_preferences: ^2.5.3
+51-  sheet: ^1.0.0
+--
+83-  just_audio: any
+84-
+85:flutter:
+86-  config:
+87-    disable-swift-package-manager: true
+88-  uses-material-design: true
+
+✗ echo "=== mapping ===" && ls -laR /home/ubuntu/actions-runner/_work/_PipelineMapping/LordThiouk | head -80; echo "=== target workflows ===" && ls -la .github/workflows/ && echo "=== target remotes ===" && git remote -v failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ grep -rn -E 'flutter-version|3\.50\.1|validat|gradle' .github/workflows/ 2>/dev/null | head -80
+(no output)
+
+The box has Flutter 3.35.6 (CI uses 3.50.1), so I can't reproduce the CI build locally — and it's forbidden anyway. Let me find the authoritative Driver toolchain reference and CI validation logic.
+$ echo "=== grep gradle version in lifeos ref ===" && grep -rn --include='*.md' --include='*.kts' --include='*.properties' --include='*.yaml' --include='*.yml' -E 'gradle-8\.14|gradle-9\.1|AGP 8\.11|9\.0\.1|8\.11\.1' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos 2>/dev/null | head -60
+=== grep gradle version in lifeos ref ===
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/USER/PRINCIPAL/PRINCIPAL_MEMORY.md:32:RULE: Galass Rider (Flutter app) build fix: AGP 9.0.1+, Kotlin 2.2.20+, Gradle 9.1.0+; file_picker pinned to 12.3.0 for AGP9 compat/Proguard R8 fix ~explicit
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/USER/CONFIG/OPERATIONAL_RULES.md:182:- **Flutter Build Requirements** — AGP 9.0.1+, Kotlin 2.2.20+ required for releases; auto-upgrade during release flow <!-- applied: 2026-10-08T02:30:54.428Z -->
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/USER/DIGITAL_ASSISTANT/DA_MEMORY.md:44:RULE: Galass Rider (Flutter) Android build requires AGP 9.0.1+, Kotlin 2.2.20+, Gradle 9.1.0+; file_picker pinned 12.3.0 to resolve Proguard R8 conflicts ~explicit
+
