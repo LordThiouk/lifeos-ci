@@ -2224,3 +2224,35 @@ You can try one of the following suggestions to make the pubspec resolve:
 * Consider downgrading your constraint on device_info_plus: flutter pub add device_info_plus:^12.4.0
 Failed to update packages.
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "file_picker\|device_info_plus" pubspec.yaml
+17:  file_picker: ^11.0.2
+61:  # ^13 for win32 ^6 — required by file_picker ^13.4.1 (AGP 9 / Artemis Flutter 3.50.1).
+62:  device_info_plus: ^13.3.0
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_CACHE=/home/ubuntu/.pub-cache; export PATH=/tmp/flutter_sdk/flutter/bin:$PATH; flutter pub get --offline 2>&1 | tail -25
+Resolving dependencies...
+Because galass_driver depends on file_picker ^11.0.2 which doesn't match any versions, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try upgrading your constraint on file_picker: flutter pub add file_picker:^13.4.1
+Failed to update packages.
+
+$ ls /home/ubuntu/.pub-cache/hosted/pub.dev | grep -i file_picker; echo "---"; ls /home/ubuntu/.pub-cache/hosted/pub.dev | grep -i device_info
+android_file_picker-2.2.1
+file_picker-13.4.1
+file_picker_darwin-2.5.2
+file_picker_linux-2.0.5
+file_picker_platform_interface-4.3.0
+file_picker_web-4.2.2
+windows_file_picker-2.0.2
+---
+device_info_plus-13.3.0
+device_info_plus_platform_interface-8.1.0
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show main:pubspec.yaml | grep -n "file_picker\|device_info_plus"
+fatal: invalid object name 'main'.
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show origin/main:pubspec.yaml 2>/dev/null | grep -n "file_picker\|device_info_plus"
+17:  file_picker: ^11.0.2
+
