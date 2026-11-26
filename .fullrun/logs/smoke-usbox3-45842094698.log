@@ -17290,3 +17290,16 @@ Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/F
      ->assertRedirect();
 
 
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core
+for m in DriverApprovedSmsTest DriverApprovedSmsTest::noSms DriverApprovedSmsTest::text DriverApprovedSmsTest::gatewayDown DriverOneStepApprovalTest::incomplete; do echo "== $m"; php artisan test --filter="$m" 2>&1 | grep -E 'Tests:|No tests'; done
+== DriverApprovedSmsTest
+  Tests:    4 passed (19 assertions)
+== DriverApprovedSmsTest::noSms
+  Tests:    1 passed (3 assertions)
+== DriverApprovedSmsTest::text
+  Tests:    1 passed (8 assertions)
+== DriverApprovedSmsTest::gatewayDown
+  Tests:    1 passed (5 assertions)
+== DriverOneStepApprovalTest::incomplete
+  Tests:    1 passed (4 assertions)
+
