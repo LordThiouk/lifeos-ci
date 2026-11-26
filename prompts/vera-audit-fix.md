@@ -7,4 +7,4 @@ Runs lifeos-ci 45727313456 (16 min puis OC_STATUS erreur, aucun commit) et 45729
 Commits petits, auteur Papa Diop <76528706+LordThiouk@users.noreply.github.com>. Pas de git push. Ne touche pas main.
 
 ## Reprise (2026-11-26 01:36 Dakar)
-Le run précédent s'est arrêté sur quota après le commit wip 5f42b95 (_agent-run.yml : BUN_VERSION, nom court du modèle, SIGPIPE grep -q). Reprends à partir de là : vérifie ce commit, termine la correction . Ne touche PAS au job `next` : pas de passage automatique, chaque mini workflow reste à son étape. Petits commits, pas de git push.
+Le run précédent s'est arrêté sur quota après le commit wip 5f42b95 (_agent-run.yml : BUN_VERSION, nom court du modèle, SIGPIPE grep -q). Reprends à partir de là : vérifie ce commit, termine la correction, et corrige aussi le job `next` (enchaînement, utilisé seulement pour l'assemblage FullRun complet ; les mini workflows restent à leur étape) qui plante en HTTP 422 « Unexpected inputs provided: ["model"] » : ne transmettre `model` qu'aux workflows qui le déclarent. Petits commits, pas de git push.
