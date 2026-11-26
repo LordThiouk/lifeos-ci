@@ -1456,3 +1456,97 @@ Failed to resolve package URI "package:flutter_lints/flutter.yaml" in include.
 Changed test/unit/ride_map_live_location_test.dart
 Formatted 3 files (3 changed) in 0.33 seconds.
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '100,180p' /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts
+const idx = lines.findIndex((l) => new RegExp(`^\\s*- \\[[xX]\\] (?:\\*\\*)?${escRe(isc)}\\b`).test(l));
+  if (idx < 0) return { ok: false, reason: `${isc} absente ou non cochée` };
+  if (!isHumanScoped(lines, idx)) return { ok: false, reason: `${isc} n'est pas [scope:human — raison]` };
+  const m = text.match(HUMAN_LINE_RE(isc));
+  if (!m) return { ok: false, reason: `${isc} : aucune ligne de Verification HUMAIN signée` };
+  const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(text, isaPath), isc, claim: lines[idx]!.trim(), evidence: m[1]!, by: m[2]!, at: m[3]! };
+  const want = Buffer.from(humanSig(payload, k)), got = Buffer.from(m[4]!);
+  if (want.length !== got.length || !timingSafeEqual(want, got)) return { ok: false, reason: `${isc} : signature humaine invalide (claim, justification ou clé modifiée)` };
+  return { ok: true, reason: `${isc} : coche humaine signée par ${m[2]} le ${m[3]}` };
+}
+const args = process.argv.slice(2); const [cmd, path] = args;
+const opt = (n: string) => { const i = args.indexOf(`--${n}`); return i >= 0 ? args[i + 1] : undefined; };
+const need = (v: string | undefined, n: string) => { if (v === undefined) { console.error(`--${n} requis`); process.exit(1); } return v; };
+// Une preuve (ou une raison de décochage) tient en une phrase mesurable, pas en un jeton.
+const weakNote = (v: string) => { const s = v.trim(); return s.length < 20 || /^(?:todo|tbd|n\/?a|à faire|a faire|ok|done|passe|test|…)$/i.test(s); };
+const readIsa = () => { if (!existsSync(path)) { console.error(`introuvable: ${path}`); process.exit(1); } return readFileSync(path, "utf8"); };
+const fromFileOrText = () => opt("file") ? readFileSync(opt("file")!, "utf8") : need(opt("text"), "text");
+if (import.meta.main) {
+  if (!cmd || !path) { console.log(`usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+  scaffold --slug s --goal "…" [--title t]      crée l'ISA (sections Problem…Decisions)
+  append   --section "Claims" --text "…"|--file f  ajoute sous une section (créée si absente)
+  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+  set      --field phase --value build          frontmatter
+  replace  --old "…" --new "…"                  remplacement exact unique (corrections)
+  adopt                                          tamponne un ISA hérité (après relecture)
+  verify                                         contrôle l'empreinte (exit 2 si KO)
+  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)`); process.exit(1); }
+  if (cmd === "scaffold") {
+    if (existsSync(path)) { console.error("existe déjà — utilise append/set"); process.exit(1); }
+    const slug = need(opt("slug"), "slug"), goal = need(opt("goal"), "goal");
+    save(path, `---\ntask: ${opt("title") ?? slug}\nslug: ${slug}\nphase: observe\nprogress: 0/0\nprincipal_stated_goal: ${JSON.stringify(goal)}\nstarted: ${new Date().toISOString()}\n---\n\n## Problem\n\n## Vision\n\n## Out of Scope\n\n## Constraints\n\n## Goal\n\n${goal}\n\n## Claims\n\n## Test Strategy\n\n| isc | type | check | threshold | tool | anchors_to |\n|-----|------|-------|-----------|------|------------|\n\n## Features\n\n## Decisions\n\n## Verification\n`, "scaffold");
+  } else if (cmd === "append") {
+    let t = readIsa(); const sec = need(opt("section"), "section"); const add = fromFileOrText().replace(/\n+$/, "");
+    const re = new RegExp(`(^## ${sec.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, "m");
+    t = re.test(t) ? t.replace(re, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${add}\n\n`) : `${t.replace(/\n+$/, "")}\n\n## ${sec}\n\n${add}\n`;
+    save(path, t, `append:${sec}`);
+  } else if (cmd === "tick" || cmd === "untick") {
+    let t = readIsa(); const isc = need(opt("isc"), "isc"); const re = new RegExp(`^(\\s*- )\\[[ xX]\\]( (?:\\*\\*)?${isc}\\b)`, "m");
+    if (!re.test(t)) { console.error(`${isc} introuvable`); process.exit(1); }
+    const optName = cmd === "tick" ? "evidence" : "reason";
+    const note = need(opt(optName), optName);
+    if (weakNote(note)) { console.error(`--${optName} trop faible (${note.trim().length} car.) : cite la commande et sa sortie pour une coche, la constatation de revue pour un décochage.`); process.exit(1); }
+    t = t.replace(re, `$1[${cmd === "tick" ? "x" : " "}]$2`);
+    save(path, t, `${cmd}:${isc}`); t = readFileSync(path, "utf8");
+    const re2 = /(^## Verification\s*$)([\s\S]*?)(?=^## |(?![\s\S]))/m;
+    const sha = cmd === "tick" ? headShort(path) : null;
+    const line = cmd === "tick" ? `- ${isc}: ${note}${sha ? ` [@${sha}]` : ""}` : `- ${isc}: NON VALIDÉ — ${note}`;
+    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`; save(path, t, `${cmd === "tick" ? "evidence" : "reason"}:${isc}`);
+  } else if (cmd === "human-tick" || cmd === "human-verify") {
+    const k = humanKeyFromEnv();
+    if (k === null) { console.error(`${cmd} refusé : ISA_STAMP_KEY absent de l'environnement — une coche humaine n'est jamais posée sans signature.`); process.exit(HUMAN_TICK_EXIT.NO_KEY); }
+    if (k === "invalid") { console.error(`${cmd} refusé : ISA_STAMP_KEY invalide (hexadécimal, au moins 32 octets attendus).`); process.exit(HUMAN_TICK_EXIT.NO_KEY); }
+    const isc = need(opt("isc"), "isc"); const t0 = readIsa();
+    if (cmd === "human-verify") { const r = verifyHumanTick(t0, isc, k, path); console.log(r.ok ? `✅ ${r.reason}` : `❌ ${r.reason}`); process.exit(r.ok ? 0 : 2); }
+    const evidence = need(opt("evidence"), "evidence").trim();
+    if (/[\r\n]/.test(evidence)) { console.error("--evidence tient sur une ligne."); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    if (weakNote(evidence)) { console.error(`--evidence trop faible (${evidence.length} car.) : dis ce que tu as constaté ou décidé, et où (document, réunion, revue).`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    const by = (opt("by") ?? process.env.LIFEOS_PRINCIPAL ?? process.env.USER ?? "principal").trim();
+    if (!/^[^,()[\]\n]{1,60}$/.test(by)) { console.error("--by invalide (1 à 60 caractères, sans virgule, parenthèse ni crochet)."); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    const lines = t0.split("\n"); const re = new RegExp(`^(\\s*- )\\[([ xX])\\]( (?:\\*\\*)?${escRe(isc)}\\b.*)$`);
+    const idx = lines.findIndex((l) => re.test(l));
+    if (idx < 0) { console.error(`${isc} introuvable`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    if (!isHumanScoped(lines, idx)) { console.error(`human-tick refusé : ${isc} n'est pas marquée [scope:human — raison] (sur sa ligne ou le titre ### de son bloc). Une claim de build se coche avec \`tick\` sur preuve outil.`); process.exit(HUMAN_TICK_EXIT.NOT_HUMAN); }
+    const m = lines[idx]!.match(re)!;
+    if (m[2] !== " ") { console.error(`${isc} est déjà cochée — rien à signer.`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    lines[idx] = `${m[1]}[x]${m[3]}`;
+    let t = lines.join("\n"); const at = new Date().toISOString();
+    const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(t, path), isc, claim: lines[idx]!.trim(), evidence, by, at };
+    const line = `- ${isc}: HUMAIN — ${evidence} (par ${by}, ${at}) [human-sig:${humanSig(payload, k)}]`;
+    const re2 = /(^## Verification\s*$)([\s\S]*?)(?=^## |(?![\s\S]))/m;
+    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`;
+    save(path, t, `human-tick:${isc}`);
+  } else if (cmd === "set") { save(path, fmSet(readIsa(), need(opt("field"), "field"), need(opt("value"), "value")), `set:${opt("field")}`);
+  } else if (cmd === "replace") { const t = readIsa(), o = need(opt("old"), "old"); if (t.split(o).length !== 2) { console.error("old doit apparaître exactement une fois"); process.exit(1); } save(path, t.replace(o, need(opt("new"), "new")), "replace");
+  } else if (cmd === "adopt") { save(path, readIsa(), "adopt", true); // empreinte seule : contenu inchangé
+  } else if (cmd === "verify") { const r = verifyStamp(readIsa()); console.log(r.ok ? "✅ provenance ok" : `❌ [${r.code}] ${r.message}`); process.exit(r.ok ? 0 : 2);
+  } else { console.error(`commande inconnue: ${cmd}`); process.exit(1); }
+}
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "save(" /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts | head -5
+55:function save(path: string, text: string, op: string, stampOnly = false) {
+133:    save(path, `---\ntask: ${opt("title") ?? slug}\nslug: ${slug}\nphase: observe\nprogress: 0/0\nprincipal_stated_goal: ${JSON.stringify(goal)}\nstarted: ${new Date().toISOString()}\n---\n\n## Problem\n\n## Vision\n\n## Out of Scope\n\n## Constraints\n\n## Goal\n\n${goal}\n\n## Claims\n\n## Test Strategy\n\n| isc | type | check | threshold | tool | anchors_to |\n|-----|------|-------|-----------|------|------------|\n\n## Features\n\n## Decisions\n\n## Verification\n`, "scaffold");
+138:    save(path, t, `append:${sec}`);
+146:    save(path, t, `${cmd}:${isc}`); t = readFileSync(path, "utf8");
+150:    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`; save(path, t, `${cmd === "tick" ? "evidence" : "reason"}:${isc}`);
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git diff --stat
+test/unit/tmp_probe_test.dart | 93 -------------------------------------------
+ 1 file changed, 93 deletions(-)
+
