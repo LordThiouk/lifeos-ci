@@ -3171,3 +3171,36 @@ Error: The user has specified a rule which prevents you from using this specific
 ← Write /tmp/task_done.md
 Wrote file successfully.
 
+## Résultat W0 (Artemis device) — BLOCK
+
+**Périmètre exécuté :** uniquement W0 ouvert (S-W0-01…S-W0-07 / ISC-22,50,80-84). Aucun W1+. Aucun bug multistop touché. Aucun push/merge/gh/ssh/scp/sudo. Aucun `.fullrun` modifié. Aucun secret.
+
+### Runs Artemis vérifiés (API publique `LordThiouk/galass-emu-actions-pub`, workflow `artemis-staging-e2e.yml`)
+
+| Run | URL | Créé | Emu ref/head | Conclusion | Step 11 Flutter tests | Step 12 Build APK | Steps 13-19 (apksigner/KVM/opencode/E2E) | Artefacts device |
+|---:|---|---|---|---|---|---|---|---|
+| 150 / 45778554984 | https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45778554984 | 2026-11-26T07:52:21Z | `feat/multistop-e2e-2026-11-15` @ `81d149d4` | failure | **failure** | skipped | skipped | aucun (`staging-e2e-evidence-encrypted` 337 o seulement) |
+| 151 / 45782061889 | https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45782061889 | 2026-11-26T08:18:31Z | `feat/multistop-e2e-2026-11-15` @ `81d149d4` | failure | **failure** | skipped | skipped | aucun |
+| 152 / 45801376130 | https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130 | 2026-11-26T10:26:37Z | `feat/multistop-e2e-2026-11-15` @ `81d149d4` | failure | **success** | **failure** | skipped | aucun (`staging-e2e-evidence-encrypted` 337 o seulement) |
+
+**Constat :** aucun run n’a atteint KVM/émulateur/E2E multistop. Aucun `e2e-out/summary.md`, `report.json`, `ui/*.xml`, ni `smoke.log` disponible publiquement. **Aucune capture ni logcat device produit** pour S-W0-01…S-W0-07.  
+Le run 152 confirme que la régression goldens/Flutter 3.44.8 est corrigée sur cette tête (step 11 OK), mais il bloque au build APK (step 12). Cause step 12 non diagnostiquable depuis ce runner : logs Actions non téléchargeables sans authentification API ; pas de `GALASS_TOKEN`/outil `emu-e2e.sh` utilisable, pas de dispatch possible.
+
+### Décision ISC
+
+- **ISC-22, ISC-50, ISC-80, ISC-81, ISC-82, ISC-83, ISC-84 : NON cochés** (preuve device exigée non obtenue).
+- Preuves backend partielles déjà consignées dans l’ISA conservées, non refaites.
+- BLOCK consigné dans `MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md` via `ISATool.ts append`.
+
+### Changements / validation
+
+- Commit: `9a012ce2` — `w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés`
+- Auteur: `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`
+- Fichier modifié: `MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md`
+- Tests exécutés: aucun test applicatif ajouté/exécuté (tâche W0 = vérification preuves device Artemis uniquement ; aucun passage E2E device disponible).
+- Résumé factuel écrit: `/tmp/task_done.md`
+
+**Blocage à lever pour reprendre W0 device :** obtenir un run Artemis réussi jusqu’à l’E2E (step 19) avec artefacts device/captures/logcat, notamment corriger/diagnostiquer l’échec step 12 build APK du run 45801376130.
+
+> Engineer · flint-40b-free
+
