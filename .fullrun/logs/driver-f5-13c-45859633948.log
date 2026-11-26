@@ -6506,3 +6506,20 @@ Index: /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/lib/data/c
    center - ui.Offset(painter.width / 2, painter.height / 2),
 
 
+← Edit lib/data/controller/map/ride_map_controller.dart
+Index: /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/map/ride_map_controller.dart
+===================================================================
+--- /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/map/ride_map_controller.dart
++++ /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/map/ride_map_controller.dart
+@@ -470,9 +470,8 @@
+       fontSize: 42,
+       fontWeight: ui.FontWeight.w700,
+     ),
+   ),
+-  textDirection: ui.TextDirection.ltr,
+ )..layout();
+ painter.paint(
+   canvas,
+   center - ui.Offset(painter.width / 2, painter.height / 2),
+
+
