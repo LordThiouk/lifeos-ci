@@ -6644,3 +6644,630 @@ Try `flutter pub outdated` for more information.
 00:04 +9: (tearDownAll)                                                                                                                                                                                
 00:04 +9: All tests passed!
 
+$ git status --short && echo "===DIFF STAT===" && git diff --stat
+M lib/data/controller/account/profile_controller.dart
+ M lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
+ M lib/data/controller/support/new_ticket_controller.dart
+ M lib/data/controller/support/ticket_details_controller.dart
+ M lib/presentation/screens/edit_profile/widget/profile_image.dart
+ M pubspec.lock
+ M pubspec.yaml
+===DIFF STAT===
+ .../controller/account/profile_controller.dart     |   6 +-
+ .../ride_meassage/ride_meassage_controller.dart    |   6 +-
+ .../controller/support/new_ticket_controller.dart  |   8 +-
+ .../support/ticket_details_controller.dart         |   6 +-
+ .../screens/edit_profile/widget/profile_image.dart |   6 +-
+ pubspec.lock                                       | 244 +++++++--------------
+ pubspec.yaml                                       |   4 +-
+ 7 files changed, 96 insertions(+), 184 deletions(-)
+
+Tous les tests sont passés (+9). Maintenant, je vais rédiger `VERIFY-F429.md` avec le verdict PASS et préparer le commit. Vérifions d'abord l'état des modifications (le `flutter test` a pu toucher `pubspec.lock`).
+$ git diff pubspec.yaml pubspec.lock
+diff --git a/pubspec.lock b/pubspec.lock
+index 97bda7d..3457e7a 100644
+--- a/pubspec.lock
++++ b/pubspec.lock
+@@ -25,14 +25,6 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "10.0.1"
+-  android_file_picker:
+-    dependency: transitive
+-    description:
+-      name: android_file_picker
+-      sha256: "[REDACTED:hex64]"
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "1.1.1"
+   archive:
+     dependency: transitive
+     description:
+@@ -125,10 +117,10 @@ packages:
+     dependency: transitive
+     description:
+       name: characters
+-      sha256: [REDACTED:hex64]
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "1.4.1"
++    version: "1.4.0"
+   checked_yaml:
+     dependency: transitive
+     description:
+@@ -161,14 +153,6 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "1.1.2"
+-  code_assets:
+-    dependency: transitive
+-    description:
+-      name: code_assets
+-      sha256: "[REDACTED:hex64]"
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "1.0.0"
+   code_builder:
+     dependency: transitive
+     description:
+@@ -221,10 +205,10 @@ packages:
+     dependency: transitive
+     description:
+       name: cross_file
+-      sha256: [REDACTED:hex64]
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "0.3.5+5"
++    version: "0.3.5+2"
+   crypto:
+     dependency: transitive
+     description:
+@@ -261,10 +245,10 @@ packages:
+     dependency: transitive
+     description:
+       name: dart_style
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "3.1.7"
++    version: "3.1.5"
+   dbus:
+     dependency: transitive
+     description:
+@@ -277,18 +261,18 @@ packages:
+     dependency: transitive
+     description:
+       name: device_info_plus
+-      sha256: [REDACTED:hex64]
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "13.3.0"
++    version: "12.4.0"
+   device_info_plus_platform_interface:
+     dependency: transitive
+     description:
+       name: device_info_plus_platform_interface
+-      sha256: "[REDACTED:hex64]"
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "8.1.0"
++    version: "7.0.3"
+   dio:
+     dependency: "direct main"
+     description:
+@@ -337,14 +321,6 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "2.2.0"
+-  ffi_leak_tracker:
+-    dependency: transitive
+-    description:
+-      name: ffi_leak_tracker
+-      sha256: "[REDACTED:hex64]"
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "0.1.2"
+   file:
+     dependency: transitive
+     description:
+@@ -357,42 +333,10 @@ packages:
+     dependency: "direct main"
+     description:
+       name: file_picker
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "12.3.0"
+-  file_picker_darwin:
+-    dependency: transitive
+-    description:
+-      name: file_picker_darwin
+-      sha256: "[REDACTED:hex64]"
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "1.2.0"
+-  file_picker_linux:
+-    dependency: transitive
+-    description:
+-      name: file_picker_linux
+-      sha256: [REDACTED:hex64]
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "1.1.0"
+-  file_picker_platform_interface:
+-    dependency: transitive
+-    description:
+-      name: file_picker_platform_interface
+-      sha256: "[REDACTED:hex64]"
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "3.4.0"
+-  file_picker_web:
+-    dependency: transitive
+-    description:
+-      name: file_picker_web
+-      sha256: "[REDACTED:hex64]"
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "3.1.0"
++    version: "11.0.3"
+   file_selector_linux:
+     dependency: transitive
+     description:
+@@ -738,10 +682,10 @@ packages:
+     dependency: transitive
+     description:
+       name: flutter_secure_storage_windows
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "4.2.2"
++    version: "4.1.0"
+   flutter_shaders:
+     dependency: transitive
+     description:
+@@ -908,10 +852,10 @@ packages:
+     dependency: transitive
+     description:
+       name: geolocator_linux
+-      sha256: "[REDACTED:hex64]"
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "0.2.6"
++    version: "0.2.4"
+   geolocator_platform_interface:
+     dependency: transitive
+     description:
+@@ -988,10 +932,10 @@ packages:
+     dependency: transitive
+     description:
+       name: google_maps_flutter_ios
+-      sha256: "[REDACTED:hex64]"
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "2.18.1"
++    version: "2.17.4"
+   google_maps_flutter_platform_interface:
+     dependency: transitive
+     description:
+@@ -1028,10 +972,10 @@ packages:
+     dependency: transitive
+     description:
+       name: google_sign_in_ios
+-      sha256: [REDACTED:hex64]
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "6.3.0"
++    version: "6.2.5"
+   google_sign_in_platform_interface:
+     dependency: transitive
+     description:
+@@ -1056,14 +1000,6 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "0.2.8"
+-  hooks:
+-    dependency: transitive
+-    description:
+-      name: hooks
+-      sha256: "[REDACTED:hex64]"
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "1.0.3"
+   html:
+     dependency: transitive
+     description:
+@@ -1088,6 +1024,14 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "4.1.2"
++  iconsax_flutter:
++    dependency: transitive
++    description:
++      name: iconsax_flutter
++      sha256: [REDACTED:hex64]
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.0.1"
+   image:
+     dependency: transitive
+     description:
+@@ -1124,10 +1068,10 @@ packages:
+     dependency: transitive
+     description:
+       name: image_picker_ios
+-      sha256: [REDACTED:hex64]
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "0.8.13+6"
++    version: "0.8.13+3"
+   image_picker_linux:
+     dependency: transitive
+     description:
+@@ -1308,26 +1252,26 @@ packages:
+     dependency: transitive
+     description:
+       name: matcher
+-      sha256: [REDACTED:hex64]
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "0.12.19"
++    version: "0.12.17"
+   material_color_utilities:
+     dependency: transitive
+     description:
+       name: material_color_utilities
+-      sha256: "[REDACTED:hex64]"
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "0.13.0"
++    version: "0.11.1"
+   meta:
+     dependency: transitive
+     description:
+       name: meta
+-      sha256: "[REDACTED:hex64]"
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "1.18.0"
++    version: "1.16.0"
+   mime:
+     dependency: transitive
+     description:
+@@ -1344,14 +1288,6 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "5.6.4"
+-  native_toolchain_c:
+-    dependency: transitive
+-    description:
+-      name: native_toolchain_c
+-      sha256: "[REDACTED:hex64]"
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "0.17.6"
+   nested:
+     dependency: transitive
+     description:
+@@ -1368,14 +1304,6 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "0.5.0"
+-  objective_c:
+-    dependency: transitive
+-    description:
+-      name: objective_c
+-      sha256: "[REDACTED:hex64]"
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "9.3.0"
+   octo_image:
+     dependency: transitive
+     description:
+@@ -1460,18 +1388,18 @@ packages:
+     dependency: transitive
+     description:
+       name: package_info_plus
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "10.2.2"
++    version: "9.0.1"
+   package_info_plus_platform_interface:
+     dependency: transitive
+     description:
+       name: package_info_plus_platform_interface
+-      sha256: [REDACTED:hex64]
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "4.1.0"
++    version: "3.2.1"
+   path:
+     dependency: transitive
+     description:
+@@ -1508,10 +1436,10 @@ packages:
+     dependency: transitive
+     description:
+       name: path_provider_foundation
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "2.6.0"
++    version: "2.5.1"
+   path_provider_linux:
+     dependency: transitive
+     description:
+@@ -1656,14 +1584,6 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "2.6.0"
+-  record_use:
+-    dependency: transitive
+-    description:
+-      name: record_use
+-      sha256: "[REDACTED:hex64]"
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "0.6.0"
+   rxdart:
+     dependency: transitive
+     description:
+@@ -1684,18 +1604,18 @@ packages:
+     dependency: "direct main"
+     description:
+       name: share_plus
+-      sha256: [REDACTED:hex64]
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "13.3.1"
++    version: "12.0.2"
+   share_plus_platform_interface:
+     dependency: transitive
+     description:
+       name: share_plus_platform_interface
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "7.2.0"
++    version: "6.1.0"
+   shared_preferences:
+     dependency: "direct main"
+     description:
+@@ -1817,26 +1737,26 @@ packages:
+     dependency: transitive
+     description:
+       name: sqflite
+-      sha256: "[REDACTED:hex64]"
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "2.4.2+1"
++    version: "2.4.2"
+   sqflite_android:
+     dependency: transitive
+     description:
+       name: sqflite_android
+-      sha256: "[REDACTED:hex64]"
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "2.4.2+3"
++    version: "2.4.2+2"
+   sqflite_common:
+     dependency: transitive
+     description:
+       name: sqflite_common
+-      sha256: [REDACTED:hex64]
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "2.5.7"
++    version: "2.5.6"
+   sqflite_darwin:
+     dependency: transitive
+     description:
+@@ -1889,10 +1809,10 @@ packages:
+     dependency: transitive
+     description:
+       name: synchronized
+-      sha256: "[REDACTED:hex64]"
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "3.4.0+1"
++    version: "3.4.0"
+   term_glyph:
+     dependency: transitive
+     description:
+@@ -1905,10 +1825,10 @@ packages:
+     dependency: transitive
+     description:
+       name: test_api
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "0.7.11"
++    version: "0.7.6"
+   timelines_plus:
+     dependency: "direct main"
+     description:
+@@ -1929,10 +1849,10 @@ packages:
+     dependency: "direct main"
+     description:
+       name: toastification
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "3.2.0"
++    version: "3.0.3"
+   typed_data:
+     dependency: transitive
+     description:
+@@ -1969,10 +1889,10 @@ packages:
+     dependency: transitive
+     description:
+       name: url_launcher_ios
+-      sha256: "[REDACTED:hex64]"
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "6.4.1"
++    version: "6.3.6"
+   url_launcher_linux:
+     dependency: transitive
+     description:
+@@ -2001,10 +1921,10 @@ packages:
+     dependency: transitive
+     description:
+       name: url_launcher_web
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "2.4.3"
++    version: "2.4.1"
+   url_launcher_windows:
+     dependency: transitive
+     description:
+@@ -2073,10 +1993,10 @@ packages:
+     dependency: transitive
+     description:
+       name: video_player
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "2.11.1"
++    version: "2.10.1"
+   video_player_android:
+     dependency: transitive
+     description:
+@@ -2089,10 +2009,10 @@ packages:
+     dependency: transitive
+     description:
+       name: video_player_avfoundation
+-      sha256: [REDACTED:hex64]
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "2.9.6"
++    version: "2.8.9"
+   video_player_platform_interface:
+     dependency: transitive
+     description:
+@@ -2121,18 +2041,18 @@ packages:
+     dependency: transitive
+     description:
+       name: wakelock_plus
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "1.8.0"
++    version: "1.4.0"
+   wakelock_plus_platform_interface:
+     dependency: transitive
+     description:
+       name: wakelock_plus_platform_interface
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "1.7.0"
++    version: "1.3.0"
+   watcher:
+     dependency: transitive
+     description:
+@@ -2177,34 +2097,26 @@ packages:
+     dependency: transitive
+     description:
+       name: webview_flutter_wkwebview
+-      sha256: "[REDACTED:hex64]"
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "3.25.1"
++    version: "3.25.0"
+   win32:
+     dependency: transitive
+     description:
+       name: win32
+-      sha256: [REDACTED:hex64]
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "6.4.0"
++    version: "5.15.0"
+   win32_registry:
+     dependency: transitive
+     description:
+       name: win32_registry
+-      sha256: "[REDACTED:hex64]"
+-      url: "https://pub.dev"
+-    source: hosted
+-    version: "3.0.3"
+-  windows_file_picker:
+-    dependency: transitive
+-    description:
+-      name: windows_file_picker
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "1.3.0"
++    version: "2.1.0"
+   xdg_directories:
+     dependency: transitive
+     description:
+@@ -2238,5 +2150,5 @@ packages:
+     source: hosted
+     version: "1.1.0"
+ sdks:
+-  dart: ">=3.12.0 <4.0.0"
+-  flutter: ">=3.44.0"
++  dart: ">=3.9.0 <4.0.0"
++  flutter: ">=3.35.6"
+diff --git a/pubspec.yaml b/pubspec.yaml
+index f3f1067..8683a56 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -16,7 +16,7 @@ dependencies:
+   custom_marker_builder: ^0.0.4
+   dio: ^5.9.0
+   dotted_border: ^3.1.0
+-  file_picker: ^12.0.0
++  file_picker: ^11.0.0
+   firebase_core: ^4.2.1
+   firebase_auth: ^6.5.0
+   firebase_messaging: ^16.0.4
+@@ -46,7 +46,7 @@ dependencies:
+   permission_handler: ^12.0.1
+   pinput: ^5.0.2
+   pusher_channels_flutter: ^2.5.0
+-  share_plus: ^13.3.1
++  share_plus: ^12.0.0
+   shared_preferences: ^2.5.3
+   sheet: ^1.0.0
+   shimmer: ^3.0.0
+
