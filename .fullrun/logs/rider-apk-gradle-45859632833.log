@@ -6180,3 +6180,122 @@ $ grep -an "lower than Flutter\|minimum supported version\|Gradle version (\|AGP
 2026-11-26T10:26:42.0121978Z ##[endgroup]
 2026-11-26T10:26:42.
 
+$ grep -an "Run .*build apk\|flutter-version\|3\.50\|3\.44\|lower than\|minimum supported\|Dependency\|gradle-wrapper\|##\[error\]" /tmp/artemis-r3.gz | head -60
+445:2026-11-26T10:27:35.5570975Z   flutter-version: 3.50.1
+504:2026-11-26T10:27:35.5819331Z   -n '3.50.1' \
+539:2026-11-26T10:27:35.8561820Z   path: /opt/hostedtoolcache/flutter/stable-3.50.1-x64
+540:2026-11-26T10:27:35.8562119Z   key: flutter-linux-stable-3.50.1-x64-ae9b586f34a8443573f82ef57c3bf914a908cbf7
+566:2026-11-26T10:27:36.0939333Z Cache not found for input keys: flutter-linux-stable-3.50.1-x64-ae9b586f34a8443573f82ef57c3bf914a908cbf7
+572:2026-11-26T10:27:36.2661014Z   key: flutter-pub-linux-stable-3.50.1-x64-ae9b586f34a8443573f82ef57c3bf914a908cbf7-[REDACTED:hex64]
+598:2026-11-26T10:27:36.4919597Z Cache not found for input keys: flutter-pub-linux-stable-3.50.1-x64-ae9b586f34a8443573f82ef57c3bf914a908cbf7-[REDACTED:hex64]
+603:2026-11-26T10:27:36.5020579Z   -n '3.50.1' \
+605:2026-11-26T10:27:36.5020944Z   -c '/opt/hostedtoolcache/flutter/stable-3.50.1-x64' \
+667:2026-11-26T10:28:01.8202849Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+736:2026-11-26T10:28:57.8815914Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+778:2026-11-26T10:28:58.6010225Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+4502:2026-11-26T10:30:57.8103648Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+4507:2026-11-26T10:32:08.6129886Z      Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/android/gradle/wrapper/gradle-wrapper.properties. 
+4520:2026-11-26T10:32:08.6146570Z ##[error]Process completed with exit code 1.
+4553:2026-11-26T10:32:08.6240646Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+4588:2026-11-26T10:32:08.7733533Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+4623:2026-11-26T10:32:09.7450424Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+4669:2026-11-26T10:32:10.7835188Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+4702:2026-11-26T10:32:10.9329558Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+
+$ sed -n '4480,4530p' /tmp/artemis-r3.gz
+2026-11-26T10:30:57.8069947Z rm -rf src
+2026-11-26T10:30:57.8098275Z shell: /usr/bin/bash -e {0}
+2026-11-26T10:30:57.8098456Z env:
+2026-11-26T10:30:57.8098746Z   BASE: ***
+2026-11-26T10:30:57.8098889Z   RIDER_ID: 106
+2026-11-26T10:30:57.8099038Z   DRIVER_ID: 23
+2026-11-26T10:30:57.8099222Z   OUT: e2e-out
+2026-11-26T10:30:57.8099380Z   RUN_DEADLINE_MIN: 90
+2026-11-26T10:30:57.8099553Z   APK_RIDER: apk/rider/app-debug.apk
+2026-11-26T10:30:57.8099772Z   APK_DRIVER: apk/driver/app-debug.apk
+2026-11-26T10:30:57.8100037Z   RIDER_TOKEN: ***
+2026-11-26T10:30:57.8100268Z   DRIVER_TOKEN: ***
+2026-11-26T10:30:57.8100511Z   DEV_TOKEN: ***
+2026-11-26T10:30:57.8100683Z   OPENCODE_VERSION: 1.19.4
+2026-11-26T10:30:57.8100860Z   OPENCODE_DISABLE_AUTOUPDATE: 1
+2026-11-26T10:30:57.8101040Z   ARTEMIS_DISABLE: 1
+2026-11-26T10:30:57.8101232Z   OC_MODEL: opencode/deepseek-v4.1-flash-free
+2026-11-26T10:30:57.8101918Z   OC_MODEL_CHAIN: opencode/mimo-v2.6-flash-free,opencode/glm-5.3-flash-free,opencode/minimax-m3.1-flash-free,opencode/longcat-2.5-free,opencode/iceman-free,opencode/flint-40b-free,opencode/nemotron-3.5-lightning-free,opencode/beam-free,opencode/inkling-2-small-free
+2026-11-26T10:30:57.8102582Z   STAGING_HOST: ***
+2026-11-26T10:30:57.8102768Z   GALASS_STAGING_URL: ***
+2026-11-26T10:30:57.8103009Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103336Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103648Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+2026-11-26T10:30:57.8103912Z   PUB_CACHE: /home/runner/.pub-cache
+2026-11-26T10:30:57.8104116Z ##[endgroup]
+2026-11-26T10:32:08.6128584Z      Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+2026-11-26T10:32:08.6129077Z 
+2026-11-26T10:32:08.6129886Z      Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/android/gradle/wrapper/gradle-wrapper.properties. 
+2026-11-26T10:32:08.6131044Z      For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+2026-11-26T10:32:08.6131394Z 
+2026-11-26T10:32:08.6131398Z 
+2026-11-26T10:32:08.6131525Z * Try:
+2026-11-26T10:32:08.6131803Z > Run with --stacktrace option to get the stack trace.
+2026-11-26T10:32:08.6132189Z > Run with --info or --debug option to get more log output.
+2026-11-26T10:32:08.6132610Z > Run with --scan to generate a Build Scan (Powered by Develocity).
+2026-11-26T10:32:08.6132995Z > Get more help at https://help.gradle.org.
+2026-11-26T10:32:08.6133197Z 
+2026-11-26T10:32:08.6133294Z BUILD FAILED in 1m 9s
+2026-11-26T10:32:08.6133616Z Running Gradle task 'assembleDebug'...                             69.6s
+2026-11-26T10:32:08.6134074Z Gradle task assembleDebug failed with exit code 1
+2026-11-26T10:32:08.6146570Z ##[error]Process completed with exit code 1.
+2026-11-26T10:32:08.6230509Z ##[group]Run actions/upload-artifact@v4
+2026-11-26T10:32:08.6230799Z with:
+2026-11-26T10:32:08.6231058Z   name: staging-e2e-diag-text
+2026-11-26T10:32:08.6231407Z   path: e2e-out/summary.md
+e2e-out/report.json
+e2e-out/ui/*.xml
+
+2026-11-26T10:32:08.6231742Z   retention-days: 7
+2026-11-26T10:32:08.6231967Z   if-no-files-found: warn
+2026-11-26T10:32:08.6232214Z   compression-level: 6
+
+$ grep -an "Error: Your project's\|is lower\|FAILURE: Build failed\|What went wrong" /tmp/artemis-r3.gz | head -20; echo "=== context ==="; awk 'NR>=4440 && NR<=4480' /tmp/artemis-r3.gz
+=== context ===
+2026-11-26T10:30:56.2539168Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/xof_money_helper_test.dart: ISC-9 bid prefill uses integer step-5 text formatBidPrefillAmount_rounds_recommend_to_step5_before_display
+2026-11-26T10:30:56.2555429Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/xof_money_helper_test.dart: ISC-10/11 formatXofMoneyDisplay empty_becomes_zero
+2026-11-26T10:30:56.2568582Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/xof_money_helper_test.dart: ISC-10/11 formatXofMoneyDisplay preserves_unlimited_sentinel_minus_one
+2026-11-26T10:30:56.2596663Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/xof_money_helper_test.dart: ISC-10/11 formatXofMoneyDisplay rounds_api_amount_to_step5_integer_string
+2026-11-26T10:30:56.2612517Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/xof_money_helper_test.dart: ISC-5 moneyInputRejectMessage maps_reasons_to_my_strings_keys
+2026-11-26T10:30:56.7747246Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: resolveLocationPingSendOutcome (ISC-F7-7 sticky GPS) HTTP 200 → success
+2026-11-26T10:30:56.7763935Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: resolveLocationPingSendOutcome (ISC-F7-7 sticky GPS) HTTP 200 + unauthenticated remark → fatalFailure
+2026-11-26T10:30:56.7777840Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: resolveLocationPingSendOutcome (ISC-F7-7 sticky GPS) HTTP 401 → fatalFailure
+2026-11-26T10:30:56.7789654Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: resolveLocationPingSendOutcome (ISC-F7-7 sticky GPS) HTTP 500 → transientFailure (sticky service)
+2026-11-26T10:30:56.7801322Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: resolveLocationPingSendOutcome (ISC-F7-7 sticky GPS) network error → transientFailure (sticky service)
+2026-11-26T10:30:56.7814417Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: foreground sticky helpers only fatalFailure stops foreground service
+2026-11-26T10:30:56.7825383Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: foreground sticky helpers only success advances ping clock
+2026-11-26T10:30:57.2219736Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/last_ping_store_test.dart: LastPingStore read is null before any ping
+2026-11-26T10:30:57.2253102Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/last_ping_store_test.dart: LastPingStore record then read round-trips position and time
+2026-11-26T10:30:57.2296472Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/last_ping_store_test.dart: completeStopRequestLine reports the distance the server will measure (>500 m is stop_too_far)
+2026-11-26T10:30:57.2311575Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/last_ping_store_test.dart: completeStopRequestLine unknown stop position and no ping are explicit, never silent
+2026-11-26T10:30:57.6171682Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-6 bid money submit gate rejects_7_not_multiple_of_5
+2026-11-26T10:30:57.6192318Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-6 bid money submit gate accepts_1500_multiple_of_5
+2026-11-26T10:30:57.6205027Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-7 deposit money submit gate rejects_7_not_multiple_of_5
+2026-11-26T10:30:57.6215730Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-7 deposit money submit gate accepts_1500_multiple_of_5
+2026-11-26T10:30:57.6226672Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-8 withdraw money submit gate rejects_7_not_multiple_of_5
+2026-11-26T10:30:57.6238130Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-8 withdraw money submit gate accepts_1500_multiple_of_5
+2026-11-26T10:30:57.6248957Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-14 empty and non-numeric inputs blocked before API rejects_empty_string
+2026-11-26T10:30:57.6259686Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-14 empty and non-numeric inputs blocked before API rejects_whitespace_only
+2026-11-26T10:30:57.6270770Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-14 empty and non-numeric inputs blocked before API rejects_non_numeric_alpha
+2026-11-26T10:30:57.6281614Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-14 empty and non-numeric inputs blocked before API rejects_mixed_alphanumeric
+2026-11-26T10:30:57.6292253Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-14 empty and non-numeric inputs blocked before API rejects_fractional_money_input
+2026-11-26T10:30:57.6303941Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input reject_7_even_though_roundToStep5_would_be_5
+2026-11-26T10:30:57.6315241Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input reject_8_even_though_roundToStep5_would_be_10
+2026-11-26T10:30:57.6326869Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input reject_12_even_though_roundToStep5_would_be_10
+2026-11-26T10:30:57.6338627Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input reject_13_even_though_roundToStep5_would_be_15
+2026-11-26T10:30:57.6352075Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input accepted_input_is_not_silently_rounded
+2026-11-26T10:30:57.6598877Z ##[endgroup]
+2026-11-26T10:30:57.6599010Z 
+2026-11-26T10:30:57.6601548Z 🎉 478 tests passed.
+2026-11-26T10:30:57.8067391Z ##[group]Run for a in rider driver; do
+2026-11-26T10:30:57.8067642Z for a in rider driver; do
+2026-11-26T10:30:57.8068484Z   (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+2026-11-26T10:30:57.8069515Z   mkdir -p apk/$a && cp src/$a/build/app/outputs/flutter-apk/app-debug.apk apk/$a/
+2026-11-26T10:30:57.8069797Z done
+2026-11-26T10:30:57.8069947Z rm -rf src
+
