@@ -2992,3 +2992,531 @@ $ grep -n "^bool \|^String\|Version\|gradle-\|8\.1\|9\.\|2\.2\." /tmp/gu_3501.da
 633:    return isWithinVersionRange(gradleV, min: '6.8.3', max: '7.6.0');
 635:  // Documented max is 1.8.11.
 
+$ sed -n '640,820p' /tmp/gu_3501.dart
+if (isWithinVersionRange(kgpV, min: '1.7.20', max: '1.8.0', inclusiveMax: false)) {
+    return isWithinVersionRange(gradleV, min: '6.7.1', max: '7.1.1');
+  }
+  // Documented max is 1.7.10.
+  if (isWithinVersionRange(kgpV, min: '1.7.0', max: '1.7.20', inclusiveMax: false)) {
+    return isWithinVersionRange(gradleV, min: '6.7.1', max: '7.0.2');
+  }
+  // Documented max is 1.6.21.
+  if (isWithinVersionRange(
+    kgpV,
+    min: oldestDocumentedKgpCompatabilityVersion,
+    max: '1.7.0',
+    inclusiveMax: false,
+  )) {
+    return isWithinVersionRange(gradleV, min: '6.1.1', max: '7.0.2');
+  }
+
+  logger.printTrace('Unknown KGP-Gradle compatibility, KGP: $kgpV, Gradle: $gradleV');
+  return false;
+}
+
+// Validate that KGP and AGP are compatible with each other.
+//
+// Returns true if versions are compatible.
+// Null or empty KGP or AGP version returns false.
+// If compatibility cannot be evaluated returns false.
+// If versions are newer than the max known version a warning is logged and true
+// returned.
+//
+// Source of truth found here:
+// https://kotlinlang.org/docs/gradle-configure-project.html#apply-the-plugin
+bool validateAgpAndKgp(Logger logger, {required String? kgpV, required String? agpV}) {
+  if (agpV == null || kgpV == null || agpV.isEmpty || kgpV.isEmpty) {
+    logger.printTrace('KGP or AGP version unknown ($kgpV, $agpV).');
+    return false;
+  }
+
+  if (isWithinVersionRange(agpV, min: '0.0', max: oldestConsideredAgpVersion)) {
+    logger.printTrace(
+      'AGP version ($agpV) older than oldest supported $oldestConsideredAgpVersion.',
+    );
+  }
+
+  if (isWithinVersionRange(
+        kgpV,
+        min: maxKnownAndSupportedKgpVersion,
+        max: '100.100',
+        inclusiveMin: false,
+      ) ||
+      isWithinVersionRange(
+        agpV,
+        min: maxKnownAgpVersionWithFullKotlinSupport,
+        max: '100.100',
+        inclusiveMin: false,
+      )) {
+    logger.printTrace(
+      'Newer than known KGP version ($kgpV), AGP ($agpV).'
+      '\n Treating as valid configuration.',
+    );
+    return true;
+  }
+
+  // https://kotlinlang.org/docs/gradle-configure-project.html#apply-the-plugin
+  // Documentation is non continuous, past versions are known to the
+  // publishers of KGP. When covering version ranges beyond what is documented
+  // add a comment with the documented value.
+  // Continuous KGP version handling is preferred in case an emergency patch to a
+  // past release is shipped this code will assume the version range that is closest.
+
+  // Documented max is 2.4.20.
+  if (isWithinVersionRange(kgpV, min: '2.4.20', max: '2.4.29')) {
+    // Documented max is 9.3.1
+    return isWithinVersionRange(agpV, min: '8.2.2', max: '9.3.99', inclusiveMax: false);
+  }
+  // Documented max is 2.4.10, using 2.4.19 covers patch versions.
+  if (isWithinVersionRange(kgpV, min: '2.4.0', max: '2.4.19')) {
+    // Documented max is 9.2.0
+    return isWithinVersionRange(agpV, min: '8.2.2', max: '9.2.99', inclusiveMax: false);
+  }
+  // Documented max is 2.3.10
+  if (isWithinVersionRange(kgpV, min: '2.3.10', max: '2.3.29')) {
+    // Documented max is 9.2.0
+    return isWithinVersionRange(agpV, min: '8.2.2', max: '9.2.99', inclusiveMax: false);
+  }
+  // Documented max is 2.3.0
+  if (isWithinVersionRange(kgpV, min: '2.3.0', max: '2.3.10', inclusiveMax: false)) {
+    // Documented max is 8.13.0
+    return isWithinVersionRange(agpV, min: '8.2.2', max: '8.14', inclusiveMax: false);
+  }
+  // Documented max is 2.2.20
+  if (isWithinVersionRange(kgpV, min: '2.2.20', max: '2.3.0', inclusiveMax: false)) {
+    // Documented max is 8.11.1
+    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.12', inclusiveMax: false);
+  }
+  // Documented max is 2.2.10
+  if (isWithinVersionRange(kgpV, min: '2.2.0', max: '2.2.19')) {
+    // Documented max is 8.10.0
+    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.11', inclusiveMax: false);
+  }
+  // Documented max is 2.1.21
+  if (isWithinVersionRange(kgpV, min: '2.1.0', max: '2.1.21')) {
+    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.7.2');
+  }
+  // Documented max is 2.0.21
+  if (isWithinVersionRange(kgpV, min: '2.0.20', max: '2.1.0', inclusiveMax: false)) {
+    // Documented max is 8.5.
+    return isWithinVersionRange(agpV, min: '7.1.3', max: '8.6', inclusiveMax: false);
+  }
+  // Documented max is 2.0.0.
+  if (isWithinVersionRange(kgpV, min: '2.0.0', max: '2.0.20', inclusiveMax: false)) {
+    return isWithinVersionRange(agpV, min: '7.1.3', max: '8.3.1');
+  }
+  // Documented max is 1.9.25
+  if (isWithinVersionRange(kgpV, min: '1.9.20', max: '2.0.0', inclusiveMax: false)) {
+    return isWithinVersionRange(agpV, min: '4.2.2', max: '8.1.0');
+  }
+  // Documented max is 1.9.10
+  if (isWithinVersionRange(kgpV, min: '1.9.0', max: '1.9.20', inclusiveMax: false)) {
+    return isWithinVersionRange(agpV, min: '4.2.2', max: '7.4.0');
+  }
+  // Documented max is 1.8.22
+  if (isWithinVersionRange(kgpV, min: '1.8.20', max: '1.9', inclusiveMax: false)) {
+    return isWithinVersionRange(agpV, min: '4.1.3', max: '7.4.0');
+  }
+  // Documented max is 1.8.11
+  if (isWithinVersionRange(kgpV, min: '1.8.0', max: '1.8.20', inclusiveMax: false)) {
+    return isWithinVersionRange(agpV, min: '4.1.3', max: '7.2.1');
+  }
+  // Documented max is 1.7.22
+  if (isWithinVersionRange(kgpV, min: '1.7.20', max: '1.8.0', inclusiveMax: false)) {
+    return isWithinVersionRange(agpV, min: '3.6.4', max: '7.0.4');
+  }
+  // Documented max is 1.7.10
+  // Documented gap between 1.6.21 and 1.7.0.
+  if (isWithinVersionRange(kgpV, min: '1.6.20', max: '1.7.20', inclusiveMax: false)) {
+    return isWithinVersionRange(agpV, min: '3.4.3', max: '7.0.2');
+  }
+
+  logger.printTrace('Unknown KGP-Gradle compatibility, KGP: $kgpV, AGP: $agpV');
+  return false;
+}
+
+// Validate that Gradle version and AGP are compatible with each other.
+//
+// Returns true if versions are compatible.
+// Null Gradle version or AGP version returns false.
+// If compatibility cannot be evaluated returns false.
+// If versions are newer than the max known version a warning is logged and true
+// returned.
+//
+// Source of truth found here:
+// https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
+// AGP has a minimum version of gradle required but no max starting at
+// AGP version 2.3.0+.
+bool validateGradleAndAgp(Logger logger, {required String? gradleV, required String? agpV}) {
+  if (gradleV == null || agpV == null) {
+    logger.printTrace('Gradle version or AGP version unknown ($gradleV, $agpV).');
+    return false;
+  }
+
+  // First check if versions are too old.
+  if (isWithinVersionRange(
+    agpV,
+    min: '0.0',
+    max: oldestConsideredAgpVersion,
+    inclusiveMax: false,
+  )) {
+    logger.printTrace('AGP Version: $agpV is too old.');
+    return false;
+  }
+  if (isWithinVersionRange(
+    gradleV,
+    min: '0.0',
+    max: oldestConsideredGradleVersion,
+    inclusiveMax: false,
+  )) {
+    logger.printTrace('Gradle Version: $gradleV is too old.');
+    return false;
+  }
+
+  // Check highest supported version before checking unknown versions.
+
+$ sed -n '820,960p' /tmp/gu_3501.dart
+// Check highest supported version before checking unknown versions.
+  // https://developer.android.com/build/releases/agp-preview#android-gradle-plugin-compatibility
+  if (isWithinVersionRange(agpV, min: '9.0', max: '9.0.99')) {
+    return isWithinVersionRange(gradleV, min: '9.0', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '9.1.0', max: '9.1.99')) {
+    return isWithinVersionRange(gradleV, min: '9.3.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '9.2.0', max: '9.2.99')) {
+    return isWithinVersionRange(gradleV, min: '9.4.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '9.3.0', max: '9.3.99')) {
+    return isWithinVersionRange(gradleV, min: '9.5.0', max: maxKnownAndSupportedGradleVersion);
+  }
+  // Check if versions are newer than the max known versions.
+  if (isWithinVersionRange(agpV, min: maxKnownAndSupportedAgpVersion, max: '100.100')) {
+    // Assume versions we do not know about are valid but log.
+    final bool validGradle = isWithinVersionRange(gradleV, min: '9.5.0', max: '100.00');
+    logger.printTrace(
+      'Newer than known AGP version ($agpV), gradle ($gradleV).'
+      '\n Treating as valid configuration.',
+    );
+    return validGradle;
+  }
+
+  // Begin Known Gradle <-> AGP validation.
+  if (isWithinVersionRange(agpV, min: '8.13.0', max: '8.13.99')) {
+    return isWithinVersionRange(gradleV, min: '8.13', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.12.0', max: '8.12.99')) {
+    return isWithinVersionRange(gradleV, min: '8.13', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.11.0', max: '8.11.99')) {
+    return isWithinVersionRange(gradleV, min: '8.13', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.10.0', max: '8.10.99')) {
+    return isWithinVersionRange(gradleV, min: '8.11.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.9.0', max: '8.9.99')) {
+    return isWithinVersionRange(gradleV, min: '8.11.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.8.0', max: '8.8.99')) {
+    return isWithinVersionRange(gradleV, min: '8.10.2', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.7.0', max: '8.7.99')) {
+    return isWithinVersionRange(gradleV, min: '8.9', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.6.0', max: '8.6.99')) {
+    return isWithinVersionRange(gradleV, min: '8.7', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.5.0', max: '8.5.99')) {
+    return isWithinVersionRange(gradleV, min: '8.7', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.4.0', max: '8.4.99')) {
+    return isWithinVersionRange(gradleV, min: '8.6', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.3.0', max: '8.3.99')) {
+    return isWithinVersionRange(gradleV, min: '8.4', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.2.0', max: '8.2.99')) {
+    return isWithinVersionRange(gradleV, min: '8.2', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.0.0', max: '8.1.99')) {
+    return isWithinVersionRange(gradleV, min: '8.0', max: maxKnownAndSupportedGradleVersion);
+  }
+  // Max agp here is a made up version to contain all 7.4 changes.
+  if (isWithinVersionRange(agpV, min: '7.4', max: '7.5')) {
+    return isWithinVersionRange(gradleV, min: '7.5', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '7.3', max: '7.4', inclusiveMax: false)) {
+    return isWithinVersionRange(gradleV, min: '7.4', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '7.2', max: '7.3', inclusiveMax: false)) {
+    return isWithinVersionRange(gradleV, min: '7.3.3', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '7.1', max: '7.2', inclusiveMax: false)) {
+    return isWithinVersionRange(gradleV, min: '7.2', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '7.0', max: '7.1', inclusiveMax: false)) {
+    return isWithinVersionRange(gradleV, min: '7.0', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '4.2.0', max: '7.0', inclusiveMax: false)) {
+    return isWithinVersionRange(gradleV, min: '6.7.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '4.1.0', max: '4.2.0', inclusiveMax: false)) {
+    return isWithinVersionRange(gradleV, min: '6.5', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '4.0.0', max: '4.1.0', inclusiveMax: false)) {
+    return isWithinVersionRange(gradleV, min: '6.1.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '3.6.0', max: '3.6.4')) {
+    return isWithinVersionRange(gradleV, min: '5.6.4', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '3.5.0', max: '3.5.4')) {
+    return isWithinVersionRange(gradleV, min: '5.4.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '3.4.0', max: '3.4.3')) {
+    return isWithinVersionRange(gradleV, min: '5.1.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '3.3.0', max: '3.3.3')) {
+    return isWithinVersionRange(gradleV, min: '4.10.1', max: maxKnownAndSupportedGradleVersion);
+  }
+
+  logger.printTrace('Unknown Gradle-AGP compatibility, Gradle: $gradleV, AGP: $agpV');
+  return false;
+}
+
+/// Validate that the [javaVersion] and [gradleVersion] are compatible with
+/// each other.
+///
+/// Source of truth:
+/// https://docs.gradle.org/current/userguide/compatibility.html#java
+bool validateJavaAndGradle(
+  Logger logger, {
+  required String? javaVersion,
+  required String? gradleVersion,
+}) {
+  // https://docs.gradle.org/current/userguide/compatibility.html#java
+  const oldestConsideredJavaVersion = '1.8';
+  const oldestDocumentedJavaGradleCompatibility = '2.0';
+
+  // Begin Java <-> Gradle validation.
+
+  if (javaVersion == null || gradleVersion == null) {
+    logger.printTrace('Java version or Gradle version unknown ($javaVersion, $gradleVersion).');
+    return false;
+  }
+
+  // First check if versions are too old.
+  if (isWithinVersionRange(
+    javaVersion,
+    min: '1.1',
+    max: oldestConsideredJavaVersion,
+    inclusiveMax: false,
+  )) {
+    logger.printTrace('Java Version: $javaVersion is too old.');
+    return false;
+  }
+  if (isWithinVersionRange(
+    gradleVersion,
+    min: '0.0',
+
+$ curl -sS -o /tmp/dvc_3501.kt -w "%{http_code}\n" https://raw.githubusercontent.com/flutter/flutter/3.50.1/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt; grep -n "min\|Version\|Gradle\|Kgp\|Agp\|throw\|Exception\|Warning\|error" /tmp/dvc_3501.kt | head -60
+200
+8:import com.android.build.api.AndroidPluginVersion
+11:import org.gradle.api.JavaVersion
+16: * Warns or errors on version ranges of dependencies required to build a Flutter Android app.
+21:object DependencyVersionChecker {
+23:    @VisibleForTesting internal const val GRADLE_NAME: String = "Gradle"
+27:    @VisibleForTesting internal const val AGP_NAME: String = "Android Gradle Plugin"
+31:    @VisibleForTesting internal const val MIN_SDK_NAME: String = "minimum Android SDK"
+37:    // The task postfix to use when checking the minimum SDK version for each flavor.
+43:    @VisibleForTesting internal fun getPotentialGradleFix(projectDirectory: String): String =
+77:        "Your project's minimum Android SDK version is typically " +
+81:    // The following versions define our support policy for Gradle, Java, AGP, and KGP.
+82:    // Before updating any "error" version, ensure that you have updated the corresponding
+88:    @VisibleForTesting internal val warnGradleVersion: Version = Version(9, 5, 0)
+90:    @VisibleForTesting internal val errorGradleVersion: Version = Version(9, 3, 1)
+92:    // Java error and warn should align with packages/flutter_tools/lib/src/android/gradle_utils.dart.
+93:    @VisibleForTesting internal val warnJavaVersion: JavaVersion = JavaVersion.VERSION_17
+95:    @VisibleForTesting internal val errorJavaVersion: JavaVersion = JavaVersion.VERSION_17
+97:    @VisibleForTesting internal val warnAGPVersion: AndroidPluginVersion = AndroidPluginVersion(9, 3, 1)
+99:    @VisibleForTesting internal val errorAGPVersion: AndroidPluginVersion = AndroidPluginVersion(9, 1, 1)
+101:    @VisibleForTesting internal val firstUnsupportedAGPMajorVersion: Int = 10
+103:    @VisibleForTesting internal val warnKGPVersion: Version = Version(2, 4, 20)
+105:    @VisibleForTesting internal val errorKGPVersion: Version = Version(2, 4, 10)
+110:    internal val warnMinSdkVersion: Int = 24
+113:    internal val errorMinSdkVersion: Int = 23
+120:    @JvmStatic fun checkDependencyVersions(project: Project) {
+121:        checkGradleVersion(VersionFetcher.getGradleVersion(project), project)
+122:        checkJavaVersion(VersionFetcher.getJavaVersion(), project)
+126:        val agpVersion: AndroidPluginVersion? = VersionFetcher.getAGPVersion(project)
+127:        if (agpVersion != null) {
+128:            checkAGPVersion(agpVersion, project)
+130:            project.logger.error(
+131:                "Warning: unable to detect project AGP version. Skipping " +
+132:                    "version checking. \nThis may be because you have applied AGP after the Flutter Gradle Plugin."
+136:        val kgpVersion: Version? = VersionFetcher.getKGPVersion(project)
+137:        val usesBuiltInKotlin = FlutterPluginUtils.isBuiltInKotlinEnabled(project, agpVersion)
+139:        if (kgpVersion != null && !usesBuiltInKotlin) {
+140:            checkKGPVersion(kgpVersion, project)
+143:                "Skipping Kotlin min-version enforcement because the project uses " +
+158:            val minSdkVersion = getMinSdkVersion(it)
+159:            val minSdkCheckTask =
+162:                        checkMinSdkVersion(minSdkVersion, rootDirPath, logger)
+167:                // Make assemble task depend on minSdkCheckTask for this variant.
+171:                        dependsOn(minSdkCheckTask)
+181:    private fun getMinSdkVersion(it: Variant): MinSdkVersion = MinSdkVersion(it.name, it.minSdk.apiLevel)
+186:        errorVersion: String,
+190:            "than Flutter's minimum supported version of $errorVersion. Please upgrade " +
+198:        warnVersion: String,
+201:        "Warning: Flutter support for your project's $dependencyName version " +
+203:            "version to a version of at least $warnVersion soon." +
+207:    @VisibleForTesting internal fun getFutureUnsupportedMajorVersionErrorMessage(
+210:        unsupportedMajorVersion: Int,
+214:            "supported. Flutter does not support $dependencyName $unsupportedMajorVersion, " +
+216:            "$dependencyName version to a version below $unsupportedMajorVersion.0.0 to " +
+227:    @VisibleForTesting internal fun checkGradleVersion(
+228:        version: Version,
+231:        if (version < errorGradleVersion) {
+232:            val errorMessage: String =
+236:                    errorGradleVersion.toString(),
+237:                    getPotentialGradleFix(project.rootDir.path)
+239:            throw DependencyValidationException(errorMessage)
+
+$ sed -n '115,145p;225,330p' /tmp/dvc_3501.kt
+/**
+     * Checks if the project's Android build time dependencies are each within the respective
+     * version range that we support. When we can't find a version for a given dependency
+     * we treat it as within the range for the purpose of this check.
+     */
+    @JvmStatic fun checkDependencyVersions(project: Project) {
+        checkGradleVersion(VersionFetcher.getGradleVersion(project), project)
+        checkJavaVersion(VersionFetcher.getJavaVersion(), project)
+
+        configureMinSdkCheck(project)
+
+        val agpVersion: AndroidPluginVersion? = VersionFetcher.getAGPVersion(project)
+        if (agpVersion != null) {
+            checkAGPVersion(agpVersion, project)
+        } else {
+            project.logger.error(
+                "Warning: unable to detect project AGP version. Skipping " +
+                    "version checking. \nThis may be because you have applied AGP after the Flutter Gradle Plugin."
+            )
+        }
+
+        val kgpVersion: Version? = VersionFetcher.getKGPVersion(project)
+        val usesBuiltInKotlin = FlutterPluginUtils.isBuiltInKotlinEnabled(project, agpVersion)
+
+        if (kgpVersion != null && !usesBuiltInKotlin) {
+            checkKGPVersion(kgpVersion, project)
+        } else {
+            project.logger.debug(
+                "Skipping Kotlin min-version enforcement because the project uses " +
+                    "AGP built-in Kotlin or does not apply KGP."
+            )
+    ): String = dependencyName + (if (flavorName != null) " (flavor='$flavorName')" else "")
+
+    @VisibleForTesting internal fun checkGradleVersion(
+        version: Version,
+        project: Project
+    ) {
+        if (version < errorGradleVersion) {
+            val errorMessage: String =
+                getErrorMessage(
+                    GRADLE_NAME,
+                    version.toString(),
+                    errorGradleVersion.toString(),
+                    getPotentialGradleFix(project.rootDir.path)
+                )
+            throw DependencyValidationException(errorMessage)
+        } else if (version < warnGradleVersion) {
+            val warnMessage: String =
+                getWarnMessage(
+                    GRADLE_NAME,
+                    version.toString(),
+                    warnGradleVersion.toString(),
+                    getPotentialGradleFix(project.rootDir.path)
+                )
+            project.logger.error(warnMessage)
+        }
+    }
+
+    @VisibleForTesting internal fun checkJavaVersion(
+        version: JavaVersion,
+        project: Project
+    ) {
+        if (version < errorJavaVersion) {
+            val errorMessage: String =
+                getErrorMessage(
+                    JAVA_NAME,
+                    version.toString(),
+                    errorJavaVersion.toString(),
+                    POTENTIAL_JAVA_FIX
+                )
+            throw DependencyValidationException(errorMessage)
+        } else if (version < warnJavaVersion) {
+            val warnMessage: String =
+                getWarnMessage(
+                    JAVA_NAME,
+                    version.toString(),
+                    warnJavaVersion.toString(),
+                    POTENTIAL_JAVA_FIX
+                )
+            project.logger.error(warnMessage)
+        }
+    }
+
+    @VisibleForTesting internal fun checkAGPVersion(
+        androidPluginVersion: AndroidPluginVersion,
+        project: Project
+    ) {
+        if (androidPluginVersion.major >= firstUnsupportedAGPMajorVersion) {
+            val errorMessage: String =
+                getFutureUnsupportedMajorVersionErrorMessage(
+                    AGP_NAME,
+                    "${androidPluginVersion.major}.${androidPluginVersion.minor}.${androidPluginVersion.micro}",
+                    firstUnsupportedAGPMajorVersion,
+                    getPotentialAGPFix(project.rootDir.path)
+                )
+            throw DependencyValidationException(errorMessage)
+        }
+        if (androidPluginVersion < errorAGPVersion) {
+            val errorMessage: String =
+                getErrorMessage(
+                    AGP_NAME,
+                    androidPluginVersion.toString(),
+                    errorAGPVersion.toString(),
+                    getPotentialAGPFix(project.rootDir.path)
+                )
+            throw DependencyValidationException(errorMessage)
+        } else if (androidPluginVersion < warnAGPVersion) {
+            val warnMessage: String =
+                getWarnMessage(
+                    AGP_NAME,
+                    androidPluginVersion.toString(),
+                    warnAGPVersion.toString(),
+                    getPotentialAGPFix(project.rootDir.path)
+                )
+            project.logger.error(warnMessage)
+        }
+    }
+
+    @VisibleForTesting internal fun checkKGPVersion(
+        version: Version,
+        project: Project
+    ) {
+        if (version < errorKGPVersion) {
+            val errorMessage: String =
+                getErrorMessage(
+                    KGP_NAME,
+                    version.toString(),
+                    errorKGPVersion.toString(),
+                    getPotentialKGPFix(project.rootDir.path)
+                )
+            throw DependencyValidationException(errorMessage)
+        } else if (version < warnKGPVersion) {
+            val warnMessage: String =
+                getWarnMessage(
+                    KGP_NAME,
+                    version.toString(),
+                    warnKGPVersion.toString(),
+
