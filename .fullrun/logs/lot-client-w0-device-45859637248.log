@@ -11579,3 +11579,6 @@ if (import.meta.main) {
   } else { console.error(`commande inconnue: ${cmd}`); process.exit(1); }
 }
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts verify MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+❌ [provenance-mismatch] isa_stamp does not match content — the ISA was edited outside ISATool.ts (hand edit). Revert, or re-apply the change via ISATool.ts.
+
