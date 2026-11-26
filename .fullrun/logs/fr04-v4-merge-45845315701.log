@@ -10483,3 +10483,6 @@ Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Htt
      $driver->save();
 
 
+$ cd core && grep -n "verification.approve" routes/admin.php | head -5
+164:        Route::post('verification-approve/{id}', 'verificationApprove')->name('verification.approve');
+
