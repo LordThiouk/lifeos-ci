@@ -27,7 +27,12 @@ bad() { echo "FAIL $1" >&2; exit 1; }
 bash "$quota" validate "$models" >/dev/null || bad "models.txt valide refusé"
 ok
 
-# models.txt avec un modèle non -free : refus.
+# big-pickle (cost=0 sans suffixe -free) admis.
+printf 'opencode/big-pickle\n' > "$tmp/pickle.txt"
+bash "$quota" validate "$tmp/pickle.txt" >/dev/null || bad "big-pickle refusé"
+ok
+
+# models.txt avec un modèle non free : refus.
 badmodels="$tmp/bad.txt"
 cat > "$badmodels" <<'M'
 opencode/deepseek-v4.1-flash-free

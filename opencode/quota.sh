@@ -41,8 +41,9 @@ q_models() {
     case "$line" in
       \#*) continue ;;
     esac
-    if ! [[ "$line" =~ ^opencode/[a-z0-9.-]+-free$ ]]; then
-      q_error "modèle refusé (seuls les opencode/*-free sont admis) : $line"
+    # *-free + big-pickle (cost=0, nom historique sans suffixe -free).
+    if ! [[ "$line" =~ ^opencode/[a-z0-9.-]+-free$ || "$line" == "opencode/big-pickle" ]]; then
+      q_error "modèle refusé (opencode/*-free ou opencode/big-pickle) : $line"
       return 3
     fi
     printf '%s\n' "$line"

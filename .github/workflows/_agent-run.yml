@@ -69,6 +69,9 @@ on:
         required: false
       HF_TOKEN:
         required: false
+      # Proxy optionnel (http(s)|socks5) si l'IP du runner est géo-bloquée pour opencode.ai.
+      OPENCODE_HTTPS_PROXY:
+        required: false
     outputs:
       status:
         description: "ok, quota, timeout, vide ou erreur"
@@ -739,6 +742,9 @@ jobs:
         timeout-minutes: ${{ fromJSON(inputs.timeout_minutes) }}
         env:
           HF_TOKEN: ${{ (inputs.target_repo == 'antenly' || inputs.target_repo == 'antenly-ci') && secrets.HF_TOKEN || '' }}
+          # Proxy optionnel (http(s):// ou socks5://) pour joindre opencode.ai si l'IP
+          # du runner / du poste est géo-bloquée. Ne multiplie pas le quota free.
+          OPENCODE_HTTPS_PROXY: ${{ secrets.OPENCODE_HTTPS_PROXY }}
           MODEL_NORM: ${{ steps.validate.outputs.model_norm }}
           LIVE_BRANCH: ${{ steps.live.outputs.branch }}
         run: |
@@ -757,6 +763,25 @@ jobs:
           hf_env=()
           if [ -n "${HF_TOKEN:-}" ]; then
             hf_env+=(HF_TOKEN="$HF_TOKEN" HUGGING_FACE_HUB_TOKEN="$HF_TOKEN")
+          fi
+          proxy_env=()
+          if [ -n "${OPENCODE_HTTPS_PROXY:-}" ]; then
+            case "$OPENCODE_HTTPS_PROXY" in
+              http://*|https://*|socks5://*|socks5h://*) ;;
+              *)
+                echo "::error::OPENCODE_HTTPS_PROXY invalide (http(s):// ou socks5(h):// attendu)"
+                exit 1
+                ;;
+            esac
+            proxy_env+=(
+              HTTPS_PROXY="$OPENCODE_HTTPS_PROXY"
+              HTTP_PROXY="$OPENCODE_HTTPS_PROXY"
+              ALL_PROXY="$OPENCODE_HTTPS_PROXY"
+              https_proxy="$OPENCODE_HTTPS_PROXY"
+              http_proxy="$OPENCODE_HTTPS_PROXY"
+              all_proxy="$OPENCODE_HTTPS_PROXY"
+            )
+            echo "Proxy opencode activé (schéma $(printf '%s' "$OPENCODE_HTTPS_PROXY" | cut -d: -f1))"
           fi
           mapfile -t models < <(bash "$TOOLS_DIR/opencode/quota.sh" list "$TOOLS_DIR/models.txt")
           [ "${#models[@]}" -gt 0 ] || { echo "::error::models.txt vide"; exit 1; }
@@ -803,8 +828,13 @@ jobs:
           /opt/fullrun-tools/progress.sh loop & progress_mon=$!
           status="erreur"
           used=""
-          switched=0
-          error_switches=0
+          # Silence sans sortie → bascule (défaut 180 s). Ne pas brûler le plafond
+          # entier sur un modèle muet (quota free qui se tait sans erreur).
+          # Quota / erreur / unavailable : on enchaîne TOUTE la liste models.txt
+          # tant qu'il reste du temps.
+          SILENCE_SEC="${OC_SILENCE_SEC:-180}"
+          SILENCE_POLL="${OC_SILENCE_POLL:-15}"
+          SILENCE_GRACE="${OC_SILENCE_GRACE:-30}"
           rc=""
           for m in "${models[@]}"; do
             used="$m"
@@ -817,22 +847,48 @@ jobs:
             fi
             log="$agent_tmp/run-${m##*/}.log"
             marker="$agent_tmp/attempt.start"
+            pid_file="$agent_tmp/oc.pid"
+            silence_flag="$agent_tmp/silence.flag"
             : > "$agent_tmp/oc-tail"
+            : > "$log"
+            rm -f "$pid_file" "$silence_flag"
             touch "$marker"
             set +e
+            # Watchdog silence en parallèle : kill + flag si le journal stagne.
+            bash "$TOOLS_DIR/opencode/silence-watch.sh" \
+              --log "$log" \
+              --pid-file "$pid_file" \
+              --flag "$silence_flag" \
+              --live-log "$live_log" \
+              --sec "$SILENCE_SEC" \
+              --poll "$SILENCE_POLL" \
+              --grace "$SILENCE_GRACE" &
+            watch_pid=$!
+            # oc-wrap.sh (figé dans TOOLS_DIR) enregistre le PID puis exec timeout :
+            # évite bash -c '…$1…' (SC2016 actionlint).
             (cd target && env -i \
               PATH="/usr/local/bin:/usr/bin:/bin" \
               HOME="$agent_home" TMPDIR="$agent_tmp" LANG=C.UTF-8 \
               CHAIN_PHASE="$CHAIN_PHASE" \
               "${agent_env[@]}" \
               "${hf_env[@]}" \
+              "${proxy_env[@]}" \
               OPENCODE_CONFIG="$RUNNER_TEMP/oc/opencode.json" \
-              timeout "$remaining" opencode run --model "$m" \
+              bash "$TOOLS_DIR/opencode/oc-wrap.sh" "$pid_file" "$remaining" \
+              opencode run --model "$m" \
               "${agent_args[@]}" \
               "Lis $RUNNER_TEMP/oc/prompt.md et exécute-le complètement.") 2>&1 | \
               tee -a "$live_log" > "$log"
             rc=${PIPESTATUS[0]}
+            kill "$watch_pid" 2>/dev/null || true
+            wait "$watch_pid" 2>/dev/null || true
             set -e
+            # Silence : bascule immédiate vers le modèle suivant (temps restant conservé).
+            if [ -f "$silence_flag" ]; then
+              status="timeout"
+              echo "Silence ${SILENCE_SEC}s sans sortie sur $m : bascule vers le modèle suivant"
+              continue
+            fi
             # Conserve une trace masquée : le brut reste dans RUNNER_TEMP (agent),
             # la copie root-owned est publiée plus bas pour le statut.
             if [ -s "$log" ]; then
@@ -847,16 +903,13 @@ jobs:
             bash "$TOOLS_DIR/opencode/quota.sh" next "$TOOLS_DIR/models.txt" "$m" \
               --output "$log" --internal-log-dir "$logdir" --since-file "$marker" >/dev/null || qrc=$?
             if [ "$qrc" -eq 10 ]; then
-              if [ "$switched" -eq 1 ]; then
-                status="quota"
-                break
-              fi
-              switched=1
-              echo "Quota atteint sur $m : bascule unique vers le modèle suivant"
+              echo "Quota atteint sur $m : bascule vers le modèle suivant"
+              status="quota"
               continue
             fi
             if [ "$qrc" -eq 20 ]; then
               status="quota"
+              echo "Quota atteint sur $m : plus aucun modèle dans models.txt"
               break
             fi
             if [ "$qrc" -ne 0 ]; then
@@ -869,15 +922,9 @@ jobs:
               break
             fi
             if [ "$rc" -ne 0 ]; then
-              # Erreur fournisseur/opencode : une seule bascule, avec le temps
-              # restant, au lieu de rendre la main sans diagnostic.
+              # Erreur fournisseur (unavailable, IP/geo, etc.) : enchaîner la liste.
               status="erreur"
-              if [ "$error_switches" -ge 1 ]; then
-                echo "opencode a échoué sur $m (rc=$rc) : plus de bascule"
-                break
-              fi
-              error_switches=$((error_switches + 1))
-              echo "opencode a échoué sur $m (rc=$rc) : bascule unique vers le modèle suivant"
+              echo "opencode a échoué sur $m (rc=$rc) : bascule vers le modèle suivant"
               continue
             fi
             new_commits=0
