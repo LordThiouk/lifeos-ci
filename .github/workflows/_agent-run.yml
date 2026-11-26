@@ -50,6 +50,11 @@ on:
         required: false
         type: string
         default: "45"
+      model:
+        description: "Modèle opencode à essayer en premier (vide = ordre de models.txt)"
+        required: false
+        type: string
+        default: ""
       stop_after_step: {type: string, required: false, default: ""}
       target_agent: {type: string, required: false, default: ""}
       chain_phase: {type: string, required: false, default: ""}
@@ -80,6 +85,7 @@ permissions:
 
 env:
   OPENCODE_VERSION: "1.19.4"
+  BUN_VERSION: "1.4.4"
   GITLEAKS_VERSION: "8.30.1"
   GITLEAKS_SHA256: "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
   # Copies root-owned, hors de l'espace de travail de l'agent (C1).
@@ -112,6 +118,7 @@ jobs:
       IN_JOB: ${{ inputs.job_name }}
       LIFEOS_REF: ${{ inputs.lifeos_ref }}
       IN_TIMEOUT_MIN: ${{ inputs.timeout_minutes }}
+      IN_MODEL: ${{ inputs.model }}
       STOP_AFTER_STEP: ${{ inputs.stop_after_step }}
       TARGET_AGENT: ${{ inputs.target_agent }}
       CHAIN_PHASE: ${{ inputs.chain_phase }}
@@ -180,6 +187,26 @@ jobs:
           esac
           [[ "$IN_TIMEOUT_MIN" =~ ^[0-9]+$ ]] && [ "$IN_TIMEOUT_MIN" -ge 10 ] && [ "$IN_TIMEOUT_MIN" -le 90 ] \
             || fail "timeout_minutes doit être entre 10 et 90"
+          model_norm=""
+          if [ -n "$IN_MODEL" ]; then
+            # Le modèle vient d'un input YAML : on retire les espaces/retours parasites
+            # et on accepte le nom court (sans préfixe opencode/).
+            model=$(printf '%s' "$IN_MODEL" | tr -d '[:space:]')
+            case "$model" in
+              opencode/*) ;;
+              *) model="opencode/$model" ;;
+            esac
+            [[ "$model" =~ ^opencode/[a-z0-9.-]+-free$ ]] \
+              || fail "model invalide : '$IN_MODEL' (attendu opencode/<nom>-free)"
+            list=$(bash "$TOOLS_DIR/opencode/quota.sh" list "$TOOLS_DIR/models.txt" | tr '\n' ' ')
+            # Pas de `grep -q` ici : sous `pipefail`, grep -q ferme le tube dès la
+            # première correspondance, quota.sh reçoit SIGPIPE et le pipeline échoue
+            # alors que le modèle est bien présent (cause du run 45729541863).
+            bash "$TOOLS_DIR/opencode/quota.sh" list "$TOOLS_DIR/models.txt" \
+              | grep -xF -- "$model" >/dev/null \
+              || fail "model absent de models.txt : '$model' (reçu '$IN_MODEL' ; modèles : $list)"
+            model_norm="$model"
+          fi
           out=$(bash "$TOOLS_DIR/targets/allowed-repos.sh" validate "$TARGET_REPO" "$IN_EXTRA") \
             || fail "target_repo ou extra_repos invalide"
           norm=$(printf '%s\n' "$out" | sed -n 's/^extra=//p')
@@ -189,6 +216,7 @@ jobs:
             || fail "models.txt invalide"
           # Output immuable (géré par Actions) : plus de GITHUB_ENV réutilisé après opencode.
           echo "extra_norm=$norm" >> "$GITHUB_OUTPUT"
+          echo "model_norm=$model_norm" >> "$GITHUB_OUTPUT"
           echo "Entrées valides : $TARGET_REPO@$IN_BRANCH (extra=${norm:-aucun}, lifeos_write=$LIFEOS_WRITE)"
 
       - name: Checkout du dépôt cible
@@ -212,9 +240,6 @@ jobs:
           echo "::add-mask::$auth"
           export GIT_CONFIG_GLOBAL=/dev/null
           export GIT_CONFIG_NOSYSTEM=1
-          export GIT_CONFIG_COUNT=1
-          export GIT_CONFIG_KEY_0=http.https://github.com/.extraheader
-          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth"
           mkdir -p extra
           IFS=',' read -r -a repos <<< "$EXTRA_NORM"
           for r in "${repos[@]}"; do
@@ -222,13 +247,24 @@ jobs:
             url="https://github.com/LordThiouk/$r.git"
             rm -rf "extra/$r"
             if ! git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
-                 clone --depth 1 --branch "$IN_BRANCH" "$url" "extra/$r" >/dev/null 2>&1; then
+                 -c http.https://github.com/.extraheader="AUTHORIZATION: basic $auth" \
+                 clone --branch "$IN_BRANCH" "$url" "extra/$r" >/dev/null 2>&1; then
               git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
-                clone --depth 1 "$url" "extra/$r" >/dev/null
+                -c http.https://github.com/.extraheader="AUTHORIZATION: basic $auth" \
+                clone "$url" "extra/$r" >/dev/null
               git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
                 -C "extra/$r" checkout -B "$IN_BRANCH"
             fi
-            echo "Checkout $r @ $IN_BRANCH"
+            # Clone complet : toutes les branches distantes sont récupérées.
+            # Le jeton n'est fourni qu'à cette commande (-c), jamais écrit dans .git/config.
+            git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+              -c http.https://github.com/.extraheader="AUTHORIZATION: basic $auth" \
+              -C "extra/$r" fetch --prune origin '+refs/heads/*:refs/remotes/origin/*' >/dev/null
+            git -C "extra/$r" config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+            # Aucun identifiant ne doit subsister dans le clone.
+            [ -z "$(git -C "extra/$r" config --get-all http.https://github.com/.extraheader)" ] \
+              || { echo "::error::jeton présent dans extra/$r/.git/config"; exit 1; }
+            echo "Checkout $r @ $IN_BRANCH (clone complet, toutes branches)"
           done
 
       - name: Clone lifeos (lecture seule ou non selon lifeos_write)
@@ -349,6 +385,8 @@ jobs:
             printf '\n\n## ISA\n\n' >> "$pfile"
             git -C target show "HEAD:$IN_ISA" >> "$pfile" \
               || { echo "::error::ISA introuvable : $IN_ISA"; exit 1; }
+          elif grep -q 'MEMORY/WORK/' "$pfile"; then
+            echo "::warning::le prompt référence un dossier ISA mais isa_path est vide"
           fi
 
       - name: Installer opencode et gitleaks
@@ -365,6 +403,36 @@ jobs:
           # Copie figée utilisée par la porte post-opencode (jamais le PATH de l'agent).
           sudo install -o root -g root -m 0755 "$RUNNER_TEMP/gl/gitleaks" "$TOOLS_DIR/opencode/gitleaks"
           gitleaks version
+
+      - name: Installer bun (agents FullRun)
+        if: ${{ inputs.agent != 'task' }}
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Préparer le socle ISA inscriptible (agents FullRun)
+        if: ${{ inputs.agent != 'task' }}
+        run: |
+          set -euo pipefail
+          command -v bun >/dev/null || { echo "::error::bun absent après installation"; exit 1; }
+          # L'étape opencode tourne avec `env -i PATH=/usr/local/bin:/usr/bin:/bin` :
+          # le bun du tool cache n'y est pas visible, on l'installe dans /usr/local/bin.
+          bun_bin=$(readlink -f "$(command -v bun)")
+          sudo install -o root -g root -m 0755 "$bun_bin" /usr/local/bin/bun
+          /usr/local/bin/bun --version
+          agent_home="$RUNNER_TEMP/oc-agent/home"
+          rm -rf "$agent_home/.claude/LIFEOS" "$agent_home/.claude/hooks"
+          mkdir -p "$agent_home/.claude"
+          # Copie inscriptible du socle LifeOS : ISATool écrit sa clé d'empreinte
+          # dans ~/.claude/LIFEOS/MEMORY/STATE, impossible dans lifeos/ (lecture seule).
+          cp -a lifeos/LIFEOS "$agent_home/.claude/LIFEOS"
+          cp -a lifeos/hooks "$agent_home/.claude/hooks"
+          chmod -R u+w "$agent_home/.claude"
+          mkdir -p "$agent_home/.claude/LIFEOS/MEMORY/STATE"
+          if [ ! -e /home/box ] && [ ! -L /home/box ]; then
+            sudo ln -s "$agent_home" /home/box
+          fi
+          echo "Socle ISA prêt : bun $(/usr/local/bin/bun --version), ~/.claude/LIFEOS/TOOLS"
 
       - name: Configurer opencode et git
         env:
@@ -412,46 +480,104 @@ jobs:
             git -C lifeos config user.email "76528706+LordThiouk@users.noreply.github.com"
           fi
 
+      - name: Installer ffmpeg
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          ffmpeg -version | head -1
+
       # C3 : opencode tourne avec un environnement vidé (env -i) et un HOME/TMPDIR
       # dédiés. Il n'hérite ni de GITHUB_ENV, ni de GITHUB_OUTPUT, ni de
       # GITHUB_PATH, ni de $RUNNER_TEMP. Son résultat est déposé en root dans
       # STATE_DIR ; le statut est publié par l'étape suivante, hors de sa portée.
-      - name: Exécuter opencode (quota et bascule unique)
+      - name: Exécuter opencode (quota/erreur, bascule bornée)
+        # Le plafond interne (timeout_minutes - 5) expire AVANT ce timeout-minutes :
+        # opencode est arrêté proprement (rc=124) au lieu de faire annuler le job, donc
+        # le commit du travail partiel et le push s'exécutent encore.
+        timeout-minutes: ${{ fromJSON(inputs.timeout_minutes) }}
+        env:
+          HF_TOKEN: ${{ (inputs.target_repo == 'antenly' || inputs.target_repo == 'antenly-ci') && secrets.HF_TOKEN || '' }}
+          MODEL_NORM: ${{ steps.validate.outputs.model_norm }}
         run: |
           set -euo pipefail
           agent_tmp="$RUNNER_TEMP/oc-agent"
           agent_home="$agent_tmp/home"
           mkdir -p "$agent_tmp" "$agent_home"
+          hf_env=()
+          if [ -n "${HF_TOKEN:-}" ]; then
+            hf_env+=(HF_TOKEN="$HF_TOKEN" HUGGING_FACE_HUB_TOKEN="$HF_TOKEN")
+          fi
           mapfile -t models < <(bash "$TOOLS_DIR/opencode/quota.sh" list "$TOOLS_DIR/models.txt")
           [ "${#models[@]}" -gt 0 ] || { echo "::error::models.txt vide"; exit 1; }
-          secs=$(( IN_TIMEOUT_MIN * 60 ))
+          # Modèle imposé : il passe en tête, les autres restent en repli.
+          model_input="${MODEL_NORM:-$IN_MODEL}"
+          if [ -n "$model_input" ]; then
+            ordered=("$model_input")
+            for m in "${models[@]}"; do
+              [ "$m" = "$model_input" ] || ordered+=("$m")
+            done
+            models=("${ordered[@]}")
+          fi
+          # Marge de 5 min sous le timeout-minutes du step : le kill vient de `timeout`,
+          # pas de GitHub, ce qui laisse le temps du commit partiel et du push.
+          secs=$(( (IN_TIMEOUT_MIN - 5) * 60 ))
+          deadline=$(( $(date +%s) + secs ))
           agent_args=()
           if [ -n "$TARGET_AGENT" ]; then
             agent_args+=(--agent "$TARGET_AGENT")
           fi
+          # `opencode run` n'a pas d'option --stop-after-step : cette consigne est lue
+          # par LifeOS via l'environnement (FULLRUN_STOP_AFTER_STEP), comme dans
+          # opencode/run-fullrun.sh. La passer en argument fait échouer opencode en < 1 s.
+          agent_env=()
           if [ -n "$STOP_AFTER_STEP" ]; then
-            agent_args+=(--stop-after-step "$STOP_AFTER_STEP")
+            agent_env+=(FULLRUN_STOP_AFTER_STEP="$STOP_AFTER_STEP")
+          fi
+          if [ -n "$TARGET_AGENT" ]; then
+            agent_env+=(FULLRUN_TARGET_AGENT="$TARGET_AGENT")
           fi
           logdir="$agent_home/.local/share/opencode/log"
           status="erreur"
           used=""
           switched=0
+          error_switches=0
+          rc=""
           for m in "${models[@]}"; do
             used="$m"
+            now=$(date +%s)
+            remaining=$(( deadline - now ))
+            if [ "$remaining" -lt 60 ]; then
+              status="timeout"
+              echo "Temps restant insuffisant ($remaining s) : arrêt avant $m"
+              break
+            fi
             log="$agent_tmp/run-${m##*/}.log"
             marker="$agent_tmp/attempt.start"
+            : > "$agent_tmp/oc-tail"
             touch "$marker"
             set +e
             (cd target && env -i \
               PATH="/usr/local/bin:/usr/bin:/bin" \
               HOME="$agent_home" TMPDIR="$agent_tmp" LANG=C.UTF-8 \
               CHAIN_PHASE="$CHAIN_PHASE" \
+              "${agent_env[@]}" \
+              "${hf_env[@]}" \
               OPENCODE_CONFIG="$RUNNER_TEMP/oc/opencode.json" \
-              timeout "$secs" opencode run --model "$m" \
+              timeout "$remaining" opencode run --model "$m" \
               "${agent_args[@]}" \
               "Lis $RUNNER_TEMP/oc/prompt.md et exécute-le complètement.") > "$log" 2>&1
             rc=$?
             set -e
+            # Conserve une trace masquée : le brut reste dans RUNNER_TEMP (agent),
+            # la copie root-owned est publiée plus bas pour le statut.
+            if [ -s "$log" ]; then
+              if OC_ISA_KEY_FILE="$agent_home/.claude/LIFEOS/MEMORY/STATE/.isa-stamp-key" \
+                 bash "$TOOLS_DIR/opencode/redact-log.sh" "$log" "$agent_tmp/redacted.log"; then
+                tail -n 200 "$agent_tmp/redacted.log" > "$agent_tmp/oc-tail"
+              else
+                echo "::warning::redaction du journal opencode impossible"
+              fi
+            fi
             qrc=0
             bash "$TOOLS_DIR/opencode/quota.sh" next "$TOOLS_DIR/models.txt" "$m" \
               --output "$log" --internal-log-dir "$logdir" --since-file "$marker" >/dev/null || qrc=$?
@@ -470,11 +596,24 @@ jobs:
             fi
             if [ "$qrc" -ne 0 ]; then
               status="erreur"
+              echo "quota.sh next a échoué (qrc=$qrc) : arrêt"
               break
             fi
             if [ "$rc" -eq 124 ]; then
               status="timeout"
               break
+            fi
+            if [ "$rc" -ne 0 ]; then
+              # Erreur fournisseur/opencode : une seule bascule, avec le temps
+              # restant, au lieu de rendre la main sans diagnostic.
+              status="erreur"
+              if [ "$error_switches" -ge 1 ]; then
+                echo "opencode a échoué sur $m (rc=$rc) : plus de bascule"
+                break
+              fi
+              error_switches=$((error_switches + 1))
+              echo "opencode a échoué sur $m (rc=$rc) : bascule unique vers le modèle suivant"
+              continue
             fi
             new_commits=0
             while IFS=$'\t' read -r r dir base; do
@@ -492,7 +631,7 @@ jobs:
                 new_commits=$((new_commits + 1))
               fi
             fi
-            if [ "$rc" -eq 0 ] && { [ "$new_commits" -gt 0 ] || [ -f /tmp/task_done.md ]; }; then
+            if [ "$new_commits" -gt 0 ] || [ -f /tmp/task_done.md ]; then
               status="ok"
             elif [ ! -s "$log" ]; then
               status="vide"
@@ -503,11 +642,16 @@ jobs:
           done
           # Filet : opencode encore vivant ne doit plus écrire pendant les contrôles.
           pkill -KILL -f '(^|[ /])opencode run ' 2>/dev/null || true
+          if [ -s "$agent_tmp/oc-tail" ]; then
+            sudo install -o root -g root -m 0644 "$agent_tmp/oc-tail" "$STATE_DIR/oc-tail"
+          else
+            sudo rm -f "$STATE_DIR/oc-tail"
+          fi
           res="$RUNNER_TEMP/oc-result.$$"
-          printf 'status=%s\nmodel=%s\n' "$status" "$used" > "$res"
+          printf 'status=%s\nmodel=%s\nrc=%s\n' "$status" "$used" "${rc:-}" > "$res"
           sudo install -o root -g root -m 0644 "$res" "$STATE_DIR/oc-result"
           rm -f "$res"
-          echo "opencode : status=$status model=$used"
+          echo "opencode : status=$status model=$used rc=${rc:-}"
 
       - name: Statut opencode (publié hors de portée de l'agent)
         id: oc
@@ -516,23 +660,35 @@ jobs:
           set -euo pipefail
           status="erreur"
           model=""
+          rc=""
           if res=$(sudo cat "$STATE_DIR/oc-result" 2>/dev/null); then
             s=$(printf '%s\n' "$res" | sed -n 's/^status=//p' | tail -1)
             model=$(printf '%s\n' "$res" | sed -n 's/^model=//p' | tail -1)
+            rc=$(printf '%s\n' "$res" | sed -n 's/^rc=//p' | tail -1)
             case "$s" in
               ok|quota|timeout|vide|erreur) status="$s" ;;
             esac
           fi
           printf 'status=%s\n' "$status" >> "$GITHUB_OUTPUT"
           printf 'model=%s\n' "$model" >> "$GITHUB_OUTPUT"
-          echo "Statut recalculé depuis l'état root : status=$status model=$model"
+          printf 'rc=%s\n' "$rc" >> "$GITHUB_OUTPUT"
+          echo "Statut recalculé depuis l'état root : status=$status model=$model rc=${rc:-?}"
+          if [ "$status" = "erreur" ]; then
+            if [ -s "$STATE_DIR/oc-tail" ]; then
+              echo "::group::Dernières lignes opencode (masquées)"
+              sudo cat "$STATE_DIR/oc-tail" || true
+              echo "::endgroup::"
+            else
+              echo "::warning::Aucune sortie opencode conservée pour ce run"
+            fi
+          fi
 
       # C1/C2 : garde-fou, quota, gitleaks, push et PR s'appuient sur les copies
       # root-owned (TOOLS_DIR) et poussent depuis une copie nue isolée. Aucun hook,
       # filtre, include ou alias du dépôt de l'agent n'est exécuté avec CI_TOKEN.
       - name: Porte gitleaks, garde-fou, push fast-forward et PR brouillon
         id: push
-        if: always()
+        if: always() && !cancelled()
         env:
           CI_TOKEN: ${{ secrets.CI_TOKEN }}
           GH_TOKEN: ${{ secrets.CI_TOKEN }}
@@ -552,13 +708,55 @@ jobs:
           fail() { echo "::error::$1"; exit 1; }
           gclean() { git -c core.hooksPath=/dev/null -c core.fsmonitor=false "$@"; }
 
+          # Conserve le travail partiel de l'agent avant toute rebase : sans commit,
+          # `git rebase` refuse un arbre non propre (« cannot rebase: You have unstaged
+          # changes ») et le runner effacé perd tout. `git add -A` respecte .gitignore ;
+          # .fullrun (checkpoints, journaux, secrets) n'est jamais ajouté.
+          wipgit() {
+            env -i PATH=/usr/local/bin:/usr/bin:/bin HOME=/nonexistent \
+              GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_TERMINAL_PROMPT=0 \
+              GIT_ASKPASS=/bin/false \
+              git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                  -c commit.gpgsign=false "$@"
+          }
+          wip_commit() {
+            local r="$1" dir="$2" branch="$3"
+            [ -d "$dir/.git" ] || return 0
+            [ "$(wipgit -C "$dir" rev-parse --abbrev-ref HEAD)" = "$branch" ] || return 0
+            [ -n "$(wipgit -C "$dir" status --porcelain)" ] || return 0
+            wipgit -C "$dir" add -A
+            wipgit -C "$dir" reset -q -- .fullrun 2>/dev/null || true
+            if ! wipgit -C "$dir" diff --cached --quiet; then
+              wipgit -C "$dir" -c user.name="Papa Diop" \
+                -c user.email="76528706+LordThiouk@users.noreply.github.com" \
+                commit --no-verify -q -m "wip(${IN_JOB}): partial work (agent stopped)" \
+                || fail "$r : commit du travail partiel impossible"
+              echo "$r : travail partiel conservé dans wip(${IN_JOB})"
+            fi
+          }
+
+          # Référence distante réelle d'une branche (vide si absente). Sert aux
+          # dépôts extra en lecture seule : on compare le remote, jamais le HEAD
+          # local que l'agent peut déplacer en changeant de branche.
+          remote_sha() {
+            local dir="$1" branch="$2"
+            env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$RUNNER_TEMP" \
+              GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_TERMINAL_PROMPT=0 \
+              GIT_CONFIG_COUNT=1 \
+              GIT_CONFIG_KEY_0=http.https://github.com/.extraheader \
+              GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth" \
+              git -C "$dir" ls-remote --heads origin "refs/heads/$branch" 2>/dev/null \
+              | awk 'NR==1{print $1}'
+          }
+
           push_branch() {
             local r="$1" dir="$2" base="$3" branch="$4" refspec="${5:-HEAD:refs/heads/$4}"
             local h b
             [ -d "$dir/.git" ] || fail "$r : dépôt absent"
-            h=$(gclean -C "$dir" rev-parse HEAD)
             [ "$(gclean -C "$dir" rev-parse --abbrev-ref HEAD)" = "$branch" ] \
               || fail "$r : branche $branch modifiée par l'agent"
+            wip_commit "$r" "$dir" "$branch"
+            h=$(gclean -C "$dir" rev-parse HEAD)
             # Resynchronisation juste avant le push : si la branche distante existe,
             # on rebase les commits de l'agent dessus pour rester en fast-forward.
             if env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$RUNNER_TEMP" \
@@ -629,8 +827,21 @@ jobs:
           while IFS=$'\t' read -r r dir base; do
             [ -n "$r" ] || continue
             [ -d "$dir/.git" ] || continue
+            if [ "$r" != "$TARGET_REPO" ]; then
+              # extra_repos en lecture seule : seul compte le fait qu'aucun push
+              # n'a eu lieu (référence distante inchangée). Le HEAD local est
+              # ignoré, l'agent peut changer de branche pour inspecter le dépôt.
+              remote=$(remote_sha "$dir" "$IN_BRANCH") \
+                || fail "$r : lecture de la référence distante $IN_BRANCH impossible"
+              if [ -n "$remote" ] && [ "$remote" != "$base" ]; then
+                fail "$r : référence distante $IN_BRANCH modifiée (extra en lecture seule)"
+              fi
+              echo "$r : extra en lecture seule, aucun push (HEAD local ignoré)"
+              continue
+            fi
+            wip_commit "$r" "$dir" "$IN_BRANCH"
             h=$(gclean -C "$dir" rev-parse HEAD)
-            [ "$r" = "$TARGET_REPO" ] && head_sha="$h"
+            head_sha="$h"
             count=$(gclean -C "$dir" rev-list --count "$base..$h")
             if [ "$count" -eq 0 ]; then
               echo "$r : aucun nouveau commit"
@@ -646,12 +857,7 @@ jobs:
             lifeos_branch="lifeos-ci/$(printf '%s' "$IN_JOB" | tr -c 'A-Za-z0-9_-' '-')"
             base=$(cat "$STATE_DIR/lifeos-base")
             gclean -C lifeos checkout -B "$lifeos_branch" >/dev/null 2>&1
-            if [ -n "$(gclean -C lifeos status --porcelain)" ]; then
-              gclean -C lifeos add -A
-              gclean -C lifeos -c user.name="Papa Diop" \
-                -c user.email="76528706+LordThiouk@users.noreply.github.com" \
-                commit --no-verify -m "lifeos-ci ${IN_AGENT} ${IN_JOB}" >/dev/null
-            fi
+            wip_commit "lifeos" "lifeos" "$lifeos_branch"
             lh=$(gclean -C lifeos rev-parse HEAD)
             lcount=$(gclean -C lifeos rev-list --count "$base..$lh")
             if [ "$lcount" -eq 0 ]; then

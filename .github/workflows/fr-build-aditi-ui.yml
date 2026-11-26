@@ -57,11 +57,16 @@ on:
         type: string
         required: false
         default: "15"
+      model:
+        description: "Modèle opencode à essayer en premier (vide = ordre de models.txt)"
+        type: string
+        required: false
+        default: ""
       chain:
         description: "Enchaîner le job next si status == ok"
         type: boolean
         required: false
-        default: true
+        default: false
   workflow_call:
     inputs:
       target_repo:
@@ -105,11 +110,27 @@ on:
         type: string
         required: false
         default: "15"
+      model:
+        description: "Modèle opencode à essayer en premier (vide = ordre de models.txt)"
+        type: string
+        required: false
+        default: ""
       chain:
         description: "Enchaîner le job next si status == ok"
         type: boolean
         required: false
-        default: true
+        default: false
+
+    outputs:
+      status:
+        description: "Statut opencode du run"
+        value: ${{ jobs.run.outputs.status }}
+      model:
+        description: "Modèle opencode utilisé"
+        value: ${{ jobs.run.outputs.model }}
+      head_sha:
+        description: "SHA poussé par le run"
+        value: ${{ jobs.run.outputs.head_sha }}
 
 permissions:
   contents: read
@@ -131,6 +152,7 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      model: ${{ inputs.model }}
     secrets: inherit
 
   next:
@@ -151,4 +173,5 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: ${{ inputs.chain }}
     secrets: inherit
