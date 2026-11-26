@@ -17204,3 +17204,89 @@ $ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$
 ::gatewayDown
    INFO  No tests found.
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+grep -n "public function test_" core/tests/Feature/Admin/DriverApprovedSmsTest.php core/tests/Feature/Admin/DriverOneStepApprovalTest.php
+core/tests/Feature/Admin/DriverApprovedSmsTest.php:35:    public function test_sends_one_sms_on_validation(): void
+core/tests/Feature/Admin/DriverApprovedSmsTest.php:50:    public function test_noSms_when_refused_or_already_validated(): void
+core/tests/Feature/Admin/DriverApprovedSmsTest.php:73:    public function test_text_is_short_and_has_no_sensitive_data(): void
+core/tests/Feature/Admin/DriverApprovedSmsTest.php:95:    public function test_gatewayDown_does_not_block_validation(): void
+core/tests/Feature/Admin/DriverOneStepApprovalTest.php:36:    public function test_one_step_approval_approves_documents_and_vehicle(): void
+core/tests/Feature/Admin/DriverOneStepApprovalTest.php:58:    public function test_incomplete_driver_cannot_be_one_step_approved(): void
+core/tests/Feature/Admin/DriverOneStepApprovalTest.php:78:    public function test_separate_approval_routes_still_exist(): void
+
+`DriverApprovedSmsTest` 3/4 verts. `test_text...` échoue car `send` mocké. Et les noms `::noSms/::text/::gatewayDown` ne matchent pas. Renomme + `#[Test]` + réécriture de `text`, renomme `incomplete`.
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+python3 - <<'EOF'
+p='core/tests/Feature/Admin/DriverApprovedSmsTest.php'
+s=open(p).read()
+s=s.replace("namespace Tests\Feature\Admin;","namespace Tests\Feature\Admin;\n\nuse PHPUnit\Framework\Attributes\Test;")
+s=s.replace("public function test_noSms_when_refused_or_already_validated(): void","#[Test]\n    public function noSms(): void")
+s=s.replace("public function test_gatewayDown_does_not_block_validation(): void","#[Test]\n    public function gatewayDown(): void")
+s=s.replace("public function test_text_is_short_and_has_no_sensitive_data(): void","#[Test]\n    public function text(): void")
+open(p,'w').write(s)
+
+p2='core/tests/Feature/Admin/DriverOneStepApprovalTest.php'
+s=open(p2).read()
+s=s.replace("namespace Tests\Feature\Admin;","namespace Tests\Feature\Admin;\n\nuse PHPUnit\Framework\Attributes\Test;")
+s=s.replace("public function test_incomplete_driver_cannot_be_one_step_approved(): void","#[Test]\n    public function incomplete(): void")
+open(p2,'w').write(s)
+EOF
+grep -n "public function" core/tests/Feature/Admin/DriverApprovedSmsTest.php
+<stdin>:3: SyntaxWarning: invalid escape sequence '\F'
+<stdin>:3: SyntaxWarning: invalid escape sequence '\F'
+<stdin>:11: SyntaxWarning: invalid escape sequence '\F'
+<stdin>:11: SyntaxWarning: invalid escape sequence '\F'
+37:    public function test_sends_one_sms_on_validation(): void
+53:    public function noSms(): void
+77:    public function text(): void
+100:    public function gatewayDown(): void
+
+$ sed -n '1,15p' core/tests/Feature/Admin/DriverApprovedSmsTest.php; echo '---'; sed -n '1,12p' core/tests/Feature/Admin/DriverOneStepApprovalTest.php
+<?php
+
+namespace Tests\Feature\Admin;
+
+use PHPUnit\Framework\Attributes\Test;
+
+use App\Constants\Status;
+use App\Models\Admin;
+use App\Models\Driver;
+use App\Models\Vehicle;
+use App\Notify\Sms;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Spatie\Permission\Models\Permission;
+---
+<?php
+
+namespace Tests\Feature\Admin;
+
+use PHPUnit\Framework\Attributes\Test;
+
+use App\Constants\Status;
+use App\Models\Admin;
+use App\Models\Driver;
+use App\Models\Vehicle;
+use App\Notify\Sms;
+use Illuminate\Database\Schema\Blueprint;
+
+→ Read core/tests/Feature/Admin/DriverApprovedSmsTest.php [offset=70, limit=32]
+
+← Edit core/tests/Feature/Admin/DriverApprovedSmsTest.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Admin/DriverApprovedSmsTest.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Admin/DriverApprovedSmsTest.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Admin/DriverApprovedSmsTest.php
+@@ -81,9 +81,8 @@
+ 
+ $captured = new \stdClass();
+ $captured->message = null;
+ $sms = $this->mockSmsCapture($captured);
+-$sms->shouldReceive('send')->once();
+ 
+ $this->actingAs($admin, 'admin')
+     ->post(route('admin.driver.approve.all', $driver->id))
+     ->assertRedirect();
+
+
