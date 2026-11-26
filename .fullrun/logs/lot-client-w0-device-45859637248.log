@@ -3109,3 +3109,5 @@ eb3b8d8 isa(driver): tick ISC-F5-19 live car location in ride
  1 file changed, 93 insertions(+)
 
 A prior agent made partial commits. Let me inspect what was already done before deciding my approach.
+• Explore ride map + location code Explore Agent
+No production code was implemented — only ISA ticks and a deleted probe test. Let me examine the relevant code in depth.
