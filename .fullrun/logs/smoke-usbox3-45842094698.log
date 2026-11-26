@@ -2471,3 +2471,36 @@ redis.ini
 redis.ini
 [PHP Modules] Core date filter hash json libxml openssl pcntl pcre random Reflection session sodium SPL standard zlib  [Zend Modules]
 
+$ R=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83; find $R -name "*.ini" | head -30; echo "=== dpkg -L php8.3-common conf"; dpkg -L php8.3-common 2>/dev/null | grep ini | head
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/etc/php/8.3/mods-available/redis.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/etc/php/8.3/cli/conf.d/redis.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/sysvmsg.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/ffi.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/gettext.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/tokenizer.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/ctype.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/exif.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/fileinfo.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/pdo.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/sockets.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/posix.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/shmop.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/ftp.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/sysvshm.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/phar.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/sysvsem.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/iconv.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-common/common/calendar.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-xml/xml/xmlreader.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-xml/xml/xsl.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-xml/xml/xmlwriter.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-xml/xml/dom.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-xml/xml/simplexml.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-xml/xml/xml.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-gd/gd/gd.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-sqlite3/sqlite3/pdo_sqlite.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-sqlite3/sqlite3/sqlite3.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-bcmath/bcmath/bcmath.ini
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/share/php8.3-readline/readline/readline.ini
+=== dpkg -L php8.3-common conf
+
