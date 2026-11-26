@@ -58,6 +58,11 @@ on:
         required: false
         type: string
         default: "45"
+      chain:
+        description: "Propager l'enchaînement au lien suivant (défaut false)"
+        required: false
+        type: boolean
+        default: false
     secrets:
       CI_TOKEN:
         required: true
@@ -88,8 +93,15 @@ jobs:
           LIFEOS_REF: ${{ inputs.lifeos_ref }}
           IN_TIMEOUT_MIN: ${{ inputs.timeout_minutes }}
           IN_MODEL: ${{ inputs.model }}
+          IN_CHAIN: ${{ inputs.chain }}
         run: |
           set -euo pipefail
+          # Le passage automatique n'est actif que si l'appelant l'a explicitement
+          # demandé (assemblage FullRun complet). Un mini workflow reste à son étape.
+          if [ "${IN_CHAIN:-false}" != "true" ]; then
+            echo "chaîne désactivée (chain=${IN_CHAIN:-false}) : aucun lien suivant"
+            exit 0
+          fi
           if [ "${STATUS:-}" != "ok" ]; then
             if [ "${STATUS:-}" = "quota" ]; then
               echo "fin de chaîne : statut quota, aucun lien suivant"
@@ -124,23 +136,34 @@ jobs:
             echo "fin de chaîne : workflow suivant absent ($next_wf)"
             exit 0
           fi
-          # `gh workflow run` sans --ref valide les entrées contre la branche par défaut.
-          # On ne transmet `model` que si le workflow y déclare cette entrée, sinon
-          # l'API répond 422 « Unexpected inputs provided: ["model"] ».
-          default_branch=$(gh api "repos/${GITHUB_REPOSITORY}" --jq .default_branch 2>/dev/null || echo main)
-          wf_src=$(gh api "repos/${GITHUB_REPOSITORY}/contents/.github/workflows/${next_wf}?ref=${default_branch}" \
+          # On dispatche le lien suivant sur la MÊME réf que le run courant. Sans
+          # --ref, `gh workflow run` retombe sur la branche par défaut (main), dont
+          # la version de _next.yml exige `actions: write` : le job `next` du lien
+          # (contenu à `contents: read`) échouait alors en startup_failure
+          # (run fr-plan-serena 45747836096).
+          dispatch_ref="${GITHUB_REF_NAME:-}"
+          if [ -z "$dispatch_ref" ]; then
+            echo "::error::réf de dispatch introuvable"
+            exit 1
+          fi
+          wf_src=$(gh api "repos/${GITHUB_REPOSITORY}/contents/.github/workflows/${next_wf}?ref=${dispatch_ref}" \
             -H "Accept: application/vnd.github.raw" 2>/dev/null || true)
-          declares_model=0
-          if printf '%s\n' "$wf_src" | awk '
+          # N'envoyer une entrée que si le workflow visé la déclare, sinon
+          # l'API répond 422 « Unexpected inputs provided ».
+          wf_declares() {
+            printf '%s\n' "$wf_src" | awk -v key="$1" '
               /^  workflow_dispatch:[[:space:]]*(#.*)?$/ { wd=1; ini=0; next }
               wd && /^  [^[:space:]]/ { wd=0; ini=0 }
               wd && /^    inputs:[[:space:]]*(#.*)?$/ { ini=1; next }
               wd && ini && /^    [^[:space:]]/ { ini=0 }
-              wd && ini && /^      model:[[:space:]]*(#.*)?$/ { found=1 }
+              wd && ini && $0 ~ ("^      " key ":") { found=1 }
               END { exit(found ? 0 : 1) }
-            '; then
-            declares_model=1
-          fi
+            '
+          }
+          declares_model=0
+          wf_declares model && declares_model=1
+          declares_chain=0
+          wf_declares chain && declares_chain=1
           dispatch_args=(
             -f target_repo="$IN_TARGET"
             -f extra_repos="$IN_EXTRA"
@@ -153,9 +176,14 @@ jobs:
             -f timeout_minutes="$IN_TIMEOUT_MIN"
           )
           if [ "$declares_model" -ne 1 ]; then
-            echo "model non transmis à $next_wf (entrée absente sur $default_branch)"
+            echo "model non transmis à $next_wf (entrée absente sur $dispatch_ref)"
           elif [ -n "$IN_MODEL" ]; then
             dispatch_args+=(-f model="$IN_MODEL")
           fi
-          gh workflow run "$next_wf" --repo "$GITHUB_REPOSITORY" "${dispatch_args[@]}"
-          echo "lien suivant dispatché : $next_wf ($next_agent, phase $phase)"
+          if [ "$declares_chain" -eq 1 ]; then
+            dispatch_args+=(-F chain=true)
+          else
+            echo "::warning::chain non déclaré par $next_wf sur $dispatch_ref : le lien suivant ne se propagera pas"
+          fi
+          gh workflow run "$next_wf" --repo "$GITHUB_REPOSITORY" --ref "$dispatch_ref" "${dispatch_args[@]}"
+          echo "lien suivant dispatché : $next_wf ($next_agent, phase $phase) sur $dispatch_ref"

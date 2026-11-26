@@ -90,6 +90,10 @@ on:
 permissions:
   contents: read
 
+# fr-fullrun EST l'assemblage FullRun complet : il orchestre lui-même toutes les
+# briques (needs/gate/loop). Chaque brique est donc appelée avec `chain: false`
+# pour que son job `next` ne double pas l'assemblage. Le chaînage `_next.yml`
+# (`chain=true`) est réservé à un lancement manuel d'une chaîne complète.
 jobs:
   vera:
     if: ${{ (inputs.only == '' || inputs.only == 'vera') && inputs.start_phase == 'plan' }}
