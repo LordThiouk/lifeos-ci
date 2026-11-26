@@ -8477,3 +8477,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.11] - 2026-10-08
 
 Retry de la lecture de `/tmp/task_done.md` et vérification du CHANGELOG :
+✗ git config user.name; git config user.email; echo "=====WHOAMI====="; git log -1 --format='%an <%ae> | committer: %cn <%ce>'; echo "=====BRANCH-RELATIONSHIP====="; git merge-base --is-ancestor feat/multistop-e2e-2026-11-15 HEAD && echo "feat IS ancestor of HEAD"; git merge-base --is-ancestor HEAD feat/multistop-e2e-2026-11-15 && echo "HEAD IS ancestor of feat"; echo "=====FULLRUN LOG BRANCH====="; git log --oneline -5 origin/fullrun-logs/rider-apk-gradle-45847515781 2>&1 | head failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ ls -la .github/workflows/ 2>/dev/null; echo "=====GREP rider-apk====="; grep -ril "rider-apk-gradle" .github/ 2>/dev/null; echo "=====TEMP ACTIONS====="; ls -la /home/ubuntu/actions-runner/_work/_actions/ /home/ubuntu/actions-runner/_work/_github_workflow/ 2>/dev/null | head -40
+=====GREP rider-apk=====
+=====TEMP ACTIONS=====
+/home/ubuntu/actions-runner/_work/_actions/:
+total 16
+drwxr-xr-x 4 ubuntu ubuntu 4096 Nov 26 16:32 .
+drwxr-xr-x 7 ubuntu ubuntu 4096 Nov 26 16:32 ..
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 16:32 actions
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 16:32 oven-sh
+
+Le fix semble déjà en place. Je vérifie l'identité git, le workflow concerné, et l'état exact du dépôt pour confirmer ce qui reste à faire.
+$ git config user.name; echo "---"; git config user.email; echo "---"; git log -1 --format=%an%3C%ae
+Papa Diop
+---
+76528706+LordThiouk@users.noreply.github.com
+---
+Papa Diop%3C76528706+LordThiouk@users.noreply.github.com
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/ ; echo "=====TEMP ACTIONS ACTIONS====="; ls -la /home/ubuntu/actions-runner/_work/_actions/actions/ /home/ubuntu/actions-runner/_work/_actions/oven-sh/
+total 12
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 14:26 .
+drwxr-xr-x 7 ubuntu ubuntu 4096 Nov 26 16:32 ..
+drwxr-xr-x 5 ubuntu ubuntu 4096 Nov 26 16:32 lifeos-ci
+=====TEMP ACTIONS ACTIONS=====
+/home/ubuntu/actions-runner/_work/_actions/actions/:
+total 12
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 16:32 .
+drwxr-xr-x 4 ubuntu ubuntu 4096 Nov 26 16:32 ..
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 16:32 checkout
+
+/home/ubuntu/actions-runner/_work/_actions/oven-sh/:
+total 12
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 16:32 .
+drwxr-xr-x 4 ubuntu ubuntu 4096 Nov 26 16:32 ..
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 16:32 setup-bun
+
+La première commande a été bloquée par le système de permissions. Je refais les vérifications avec des commandes plus simples.
