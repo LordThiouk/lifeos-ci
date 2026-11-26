@@ -12521,3 +12521,42 @@ Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Mod
  }
 
 
+← Edit core/app/Http/Controllers/Admin/ServiceController.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Controllers/Admin/ServiceController.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Controllers/Admin/ServiceController.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Controllers/Admin/ServiceController.php
+@@ -9,9 +9,9 @@
+ 
+ class ServiceController extends Controller {
+     public function index() {
+         $pageTitle = 'All Services';
+-        $services  = Service::searchable(['name'])->orderBy('id', getOrderBy())->paginate(getPaginate());
++        $services  = Service::searchable(['name'])->ordered()->paginate(getPaginate());
+         return view('admin.services.index', compact('pageTitle', 'services'));
+     }
+ 
+     public function store(Request $request, $id = 0) {
+@@ -26,16 +26,20 @@
+             'intercity_min_fare'        => 'required|numeric|gt:0',
+             'intercity_max_fare'        => 'required|numeric|gt:intercity_min_fare',
+             'intercity_recommend_fare'  => 'required|numeric|gte:intercity_min_fare|lte:intercity_max_fare',
+             'intercity_fare_commission' => 'required|numeric|gt:0|lt:100',
++            'sort_order'                => 'nullable|integer|min:0',
++            'is_visible'                => 'nullable|boolean',
+         ]);
+ 
+         if ($id) {
+             $service      = Service::findOrFail($id);
+             $notification = 'Service updated successfully';
+         } else {
+             $service      = new Service();
+             $notification = 'Service added successfully';
++            $service->sort_order = (int) (Service::max('sort_order') ?? 0) + 1;
++            $service->is_visible = true;
+         }
+ 
+         if ($request->hasFile('image')) {
+             try {
+
+
