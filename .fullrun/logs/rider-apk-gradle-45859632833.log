@@ -3872,3 +3872,12 @@ $ grep -n 'apiClient' lib/data/repo/ride/ride_repo.dart | head -5
 30:    ResponseModel responseModel = await apiClient.request(
 41:    ResponseModel responseModel = await apiClient.request(
 
+$ /tmp/flutter/bin/flutter analyze --no-pub lib/data/controller/map/ride_map_controller.dart lib/data/controller/ride/ride_details/ride_details_controller.dart lib/presentation/screens/ride_details/ride_details_screen.dart lib/data/repo/dashboard/dashboard_repo.dart test/unit/ride_map_live_location_test.dart 2>&1 | tail -15
+Analyzing 5 items...                                            
+
+   info • 'package:flutter/material.dart' is deprecated and shouldn't be used. Use package:material_ui/material_ui.dart instead. This feature was deprecated after v3.47.0-0.0.pre. Try replacing the use of the deprecated member with the replacement • lib/data/controller/ride/ride_details/ride_details_controller.dart:3:1 • deprecated_member_use
+   info • 'package:flutter/cupertino.dart' is deprecated and shouldn't be used. Use package:cupertino_ui/cupertino_ui.dart instead. This feature was deprecated after v3.47.0-0.0.pre. Try replacing the use of the deprecated member with the replacement • lib/presentation/screens/ride_details/ride_details_screen.dart:2:1 • deprecated_member_use
+   info • 'package:flutter/material.dart' is deprecated and shouldn't be used. Use package:material_ui/material_ui.dart instead. This feature was deprecated after v3.47.0-0.0.pre. Try replacing the use of the deprecated member with the replacement • lib/presentation/screens/ride_details/ride_details_screen.dart:3:1 • deprecated_member_use
+
+3 issues found. (ran in 11.2s)
+
