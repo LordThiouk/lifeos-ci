@@ -14135,3 +14135,9 @@ a5c15f5e w0(isc-84): S-W0-07 R-7 repro device bloquée ; lecture backend faite
 ad1ee65e w0(isc-83): S-W0-06 R-6 repro device bloquée
 
 Je trouve un problème réel : l'empreinte de provenance de l'ISA est invalide. Je vais diagnostiquer avant de la corriger.
+$ for h in /home/ubuntu/actions-runner/_work/_temp/oc-agent/home /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home; do echo "== $h"; HOME="$h" bun /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts verify /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md || true; done
+== /home/ubuntu/actions-runner/_work/_temp/oc-agent/home
+❌ [provenance-mismatch] isa_stamp does not match content — the ISA was edited outside ISATool.ts (hand edit). Revert, or re-apply the change via ISATool.ts.
+== /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home
+❌ [provenance-mismatch] isa_stamp does not match content — the ISA was edited outside ISATool.ts (hand edit). Revert, or re-apply the change via ISATool.ts.
+
