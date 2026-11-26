@@ -16512,3 +16512,6 @@ php-cli:
   Version table:
      2:8.3+93ubuntu2 500
 
+$ command -v docker podman; ls ~/.local/bin 2>/dev/null | head; id
+uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev)
+
