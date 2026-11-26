@@ -124,15 +124,38 @@ jobs:
             echo "fin de chaîne : workflow suivant absent ($next_wf)"
             exit 0
           fi
-          gh workflow run "$next_wf" --repo "$GITHUB_REPOSITORY" \
-            -f target_repo="$IN_TARGET" \
-            -f extra_repos="$IN_EXTRA" \
-            -F lifeos_write="$LIFEOS_WRITE" \
-            -f branch="$IN_BRANCH" \
-            -f prompt_path="$IN_PROMPT" \
-            -f isa_path="$IN_ISA" \
-            -f job_name="$IN_JOB" \
-            -f lifeos_ref="$LIFEOS_REF" \
-            -f timeout_minutes="$IN_TIMEOUT_MIN" \
-            -f model="$IN_MODEL"
+          # `gh workflow run` sans --ref valide les entrées contre la branche par défaut.
+          # On ne transmet `model` que si le workflow y déclare cette entrée, sinon
+          # l'API répond 422 « Unexpected inputs provided: ["model"] ».
+          default_branch=$(gh api "repos/${GITHUB_REPOSITORY}" --jq .default_branch 2>/dev/null || echo main)
+          wf_src=$(gh api "repos/${GITHUB_REPOSITORY}/contents/.github/workflows/${next_wf}?ref=${default_branch}" \
+            -H "Accept: application/vnd.github.raw" 2>/dev/null || true)
+          declares_model=0
+          if printf '%s\n' "$wf_src" | awk '
+              /^  workflow_dispatch:[[:space:]]*(#.*)?$/ { wd=1; ini=0; next }
+              wd && /^  [^[:space:]]/ { wd=0; ini=0 }
+              wd && /^    inputs:[[:space:]]*(#.*)?$/ { ini=1; next }
+              wd && ini && /^    [^[:space:]]/ { ini=0 }
+              wd && ini && /^      model:[[:space:]]*(#.*)?$/ { found=1 }
+              END { exit(found ? 0 : 1) }
+            '; then
+            declares_model=1
+          fi
+          dispatch_args=(
+            -f target_repo="$IN_TARGET"
+            -f extra_repos="$IN_EXTRA"
+            -F lifeos_write="$LIFEOS_WRITE"
+            -f branch="$IN_BRANCH"
+            -f prompt_path="$IN_PROMPT"
+            -f isa_path="$IN_ISA"
+            -f job_name="$IN_JOB"
+            -f lifeos_ref="$LIFEOS_REF"
+            -f timeout_minutes="$IN_TIMEOUT_MIN"
+          )
+          if [ "$declares_model" -ne 1 ]; then
+            echo "model non transmis à $next_wf (entrée absente sur $default_branch)"
+          elif [ -n "$IN_MODEL" ]; then
+            dispatch_args+=(-f model="$IN_MODEL")
+          fi
+          gh workflow run "$next_wf" --repo "$GITHUB_REPOSITORY" "${dispatch_args[@]}"
           echo "lien suivant dispatché : $next_wf ($next_agent, phase $phase)"
