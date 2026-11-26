@@ -16515,3 +16515,12 @@ php-cli:
 $ command -v docker podman; ls ~/.local/bin 2>/dev/null | head; id
 uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev)
 
+$ curl -sI https://github.com -m 10 | head -3; echo ---; curl -sI https://dl.static-php.dev -m 10 | head -3
+HTTP/2 200 
+date: Thu, 26 Nov 2026 21:38:33 GMT
+content-type: text/html; charset=utf-8
+---
+HTTP/2 200 
+date: Thu, 26 Nov 2026 21:38:43 GMT
+content-type: text/html; charset=UTF-8
+
