@@ -26,18 +26,25 @@ for needle in (
     'Silence ${SILENCE_SEC}s sans sortie',
     'bascule vers le modèle suivant',
     'echo $$ > "$1"',
+    'OPENCODE_HTTPS_PROXY',
+    'proxy_env',
+    'Quota atteint sur $m : bascule vers le modèle suivant',
 ):
-    assert needle in run, "garde-fou silence incomplet : %r absent" % needle
+    assert needle in run, "garde-fou silence/proxy/chaîne incomplet : %r absent" % needle
+
+# Plus de limite à une seule bascule quota/erreur.
+assert "bascule unique vers le modèle suivant" not in run, \
+    "bascule encore limitée à un seul modèle suivant"
 
 # La bascule silence doit précéder le traitement quota (sinon on brûle le plafond).
 i_silence = run.index("silence.flag")
 i_quota = run.index('quota.sh" next')
 assert i_silence < i_quota, "contrôle silence doit précéder quota.sh next"
 
-print("OK   silence-watch branché avant quota dans Exécuter opencode")
+print("OK   silence-watch + proxy + chaîne models branchés dans Exécuter opencode")
 PY
 
-# models.txt : au moins un secours après deepseek + mimo
+# models.txt : catalogue free complet (probe 2026-11-26)
 models="$here/../models.txt"
 [ -f "$models" ] || ko "models.txt manquant"
 python3 - "$models" <<'PY' || exit 1
@@ -48,11 +55,22 @@ for raw in open(sys.argv[1]):
     if not s or s.startswith("#"):
         continue
     lines.append(s)
-assert len(lines) >= 3, "models.txt doit lister au moins 3 modèles (secours)"
-assert lines[0].startswith("opencode/") and lines[0].endswith("-free")
-assert "iceman" in " ".join(lines) or "nemotron" in " ".join(lines) or "beam" in " ".join(lines), \
-    "aucun secours (iceman/nemotron/beam) dans models.txt"
-print("OK   models.txt a des secours après les free saturables")
+need = {
+    "opencode/deepseek-v4.1-flash-free",
+    "opencode/mimo-v2.6-flash-free",
+    "opencode/iceman-free",
+    "opencode/flint-40b-free",
+    "opencode/beam-free",
+    "opencode/hy4-flash-free",
+    "opencode/nemotron-3.5-lightning-free",
+    "opencode/nemotron-3.5-super-vl-free",
+    "opencode/seaglass-alpha-free",
+    "opencode/big-pickle",
+}
+missing = sorted(need - set(lines))
+assert not missing, "models.txt incomplet : %s" % missing
+assert len(lines) >= 10, "models.txt trop court (%d)" % len(lines)
+print("OK   models.txt catalogue free (%d modèles)" % len(lines))
 PY
 
-echo "PASS agent-run-silence : garde-fou silence + secours models.txt"
+echo "PASS agent-run-silence : garde-fou silence + catalogue free + proxy"
