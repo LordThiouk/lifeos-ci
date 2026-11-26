@@ -13395,3 +13395,48 @@ $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --o
 [✓] Check multistop bugs and ensure W0 compliance
 [✓] Generate task_done.md summary
 
+## Exécution complète du prompt W0 — Galass lot-client
+
+### État des lieux
+
+**W0 wave (S-W0-01…S-W0-07 / ISC-22, ISC-50, ISC-80 à ISC-84) : TOUT BLOQUÉ côté device.**
+
+Aucune preuve device n'a été produite dans ce runner. La raison principale est l'indisponibilité de l'infrastructure d'émulationrequired (`adb`, `flutter`, `GALASS_TOKEN`, `/opt/fullrun-tools/emu-e2e.sh`).
+
+### Preuves Artemis documentées (run #152 la plus récente)
+
+| Run | ID | Tête | Conclusion | Step 11 | Step 12 | Artéfacts |
+|-----|----|------|------------|---------|---------|-----------|
+| #152 | 45801376130 | `feat/multistop-e2e-2026-11-15` @ `81d149d4` | **failure** | **success** (478 tests) | **failure** (Build APK, Gradle 3.50.1 vs projet 3.44.8) | Uniquement `staging-e2e-evidence-encrypted` (337 o) — **aucune capture/logcat** |
+
+### Causes racines du blocage
+
+1. **Flutter version mismatch** : workflow épingle Flutter **3.44.8**, goldens baselines sous **3.50.1** (`df372db`) — 4 golden tests driver échouent sous 3.44.8
+2. **GALASS_TOKEN absent** : seul token lecture seule (`push=false`) disponible, pas de dispatch Artemis possible
+3. **Outils runner absents** : `adb`, `flutter`, `emu-e2e.sh` non installés dans ce runner
+
+### Décisions respectées
+
+- **Aucun ISC W0 n'est coché** — `progress` reste 0/63
+- **Preuves backend conservées** — ISC-84 partiel (horodatage `CASH_PAYMENT_RECEIVED`) non réfait
+- **W1+ non entamé** — verrou par vague respecté
+- **Bugs multistop exclus** — renvoyés vers `20261006-galass-regression-multistop`
+- **Point 7 (Wave/OM) décis Papa** — option A appliquée, ISC-30.2 seulement
+
+### Fichier créé
+
+`/tmp/task_done.md` — résumé factuel avec SHA, runs Artemis, causes de blocage, décisions W0.
+
+### Aucune modification code
+
+Arborant propre (`git diff --stat HEAD` = rien). Aucun commit, push, merge effectué. Le workflow pousse et ouvre la PR selon les règles.
+$ cat /tmp/task_done.md | head -5
+# W0 device (Artemis) — résultat final
+
+- Branche : `fullrun/lot-client-w0` (pas de push, pas de merge, pas de gh push).
+- Commit : `5fbbcfade38a1313e6c575538b1d6bced2ae1a7c` — « w0(artemis): etat final BLOCK — run 152 sans captures/logcat ; ISC 22/50/80-84 non cochés » (auteur Papa Diop).
+- Fichier modifié : `MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md` (1 ligne ajoutée en Decisions).
+
+← Write /tmp/task_summary.md
+Wrote file successfully.
+
