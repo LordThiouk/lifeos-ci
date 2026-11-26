@@ -11094,3 +11094,191 @@ M-oM-;M-?2026-11-26T10:26:42.0075949Z Current runner version: '2.338.2'
 2026-11-26T10:26:42.0121124Z Region: centralus
 2026
 
+$ cd /tmp/ghlogs && grep -n -i "error\|failure\|BUILD FAILED\|exception" joblogs.zip | tail -40
+867:2026-11-26T10:29:28.5483987Z │ 💡 Error in getting position: Null check operator used on a null value
+879:2026-11-26T10:29:28.5500681Z │ 💡 Error in getting position: Null check operator used on a null value
+1188:2026-11-26T10:29:38.1504769Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/test/unit/registration_controller_test.dart: PhoneAuthHelper toE164 throws FormatException for invalid input
+1986:2026-11-26T10:29:50.6683378Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/test/services/auth_service_test.dart: AuthService.sendOTP propagates FirebaseAuthException when verification fails
+2226:2026-11-26T10:30:04.3042414Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/tool/export_version_test.dart: formatExport (RED until EXECUTE) unknown format throws ArgumentError
+2231:2026-11-26T10:30:11.7282544Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/data/repo/vehicle_verification/vehicle_verification_repo_test.dart: VehicleVerificationRepo.submitVehicleVerificationKycData (ISC-1) empty responseJson returns error model without throwing
+2232:2026-11-26T10:30:11.8459600Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/data/repo/vehicle_verification/vehicle_verification_repo_test.dart: VehicleVerificationRepo.submitVehicleVerificationKycData (ISC-1) null responseJson returns error model without throwing
+2235:2026-11-26T10:30:12.8873006Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/data/repo/driver_profile_verification/driver_kyc_repo_test.dart: DriverVerificationKycRepo.submitDriverVerificationKycData (ISC-3) empty responseJson returns error model without throwing
+2236:2026-11-26T10:30:12.8907546Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/data/repo/driver_profile_verification/driver_kyc_repo_test.dart: DriverVerificationKycRepo.submitDriverVerificationKycData (ISC-3) null responseJson returns error model without throwing
+2272:2026-11-26T10:30:17.7621315Z │ 💡 Exception: network boom
+2325:2026-11-26T10:30:21.1507838Z [dispatch] callkit endCall failed rideId=194: MissingPluginException(No implementation found for method endCall on channel flutter_callkit_incoming)
+2330:2026-11-26T10:30:21.5876906Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/data/controller/dashboard/offer_respond_gone_test.dart: offerRespondErrorMessages parses backend message list on non-200
+2361:2026-11-26T10:30:21.6258869Z │ 💡 [dispatch] respond HTTP=403 status=error remark=not_authorized message=[Offre expirée]
+2463:2026-11-26T10:30:22.7298768Z [dispatch] callkit endCall failed rideId=42: MissingPluginException(No implementation found for method endCall on channel flutter_callkit_incoming)
+2580:2026-11-26T10:30:27.2188114Z │ 💡 DispatchOfferAlertService vibration cancel error: MissingPluginException(No implementation found for method cancel on channel vibration)
+2790:2026-11-26T10:30:32.9187202Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/data/services/dispatch_offer_headless_respond_test.dart: dispatchOfferHeadlessRespond returns false when HTTP 200 but status error
+2801:2026-11-26T10:30:32.9196347Z │ 💡 [dispatch] headless respond HTTP=200 status=error success=false
+2818:2026-11-26T10:30:33.3409975Z │ 💡 parseRideFromFcmData ride JSON error: FormatException: Unexpected character (at character 2)
+2832:2026-11-26T10:30:34.3522226Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/data/services/dispatch_callkit_background_handler_test.dart: dispatchCallKitBackgroundHandler (F8-5) ignores non-action events without error
+2845:2026-11-26T10:30:34.3732298Z │ 💡 [dispatch] handled offers persist failed: MissingPluginException(No implementation found for method getAll on channel plugins.flutter.io/shared_preferences)
+2860:2026-11-26T10:30:34.3796152Z │ 💡 [dispatch] handled offers persist failed: MissingPluginException(No implementation found for method getAll on channel plugins.flutter.io/shared_preferences)
+3501:2026-11-26T10:30:40.0175767Z │ 💡 CASH_PAYMENT_REQUEST data is not JSON: FormatException: Unexpected character (at character 1)
+4321:2026-11-26T10:30:43.4930879Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/unit/multistop_chat_ride_id_test.dart: sendMessage with missing id → snackbar error + zero network calls
+4376:2026-11-26T10:30:51.9492466Z │ 💡 [dispatch] offer reload failed rideId=902: Exception: offline
+4382:2026-11-26T10:30:51.9497010Z │ 💡 [dispatch] offer reload failed rideId=902: Exception: offline
+4388:2026-11-26T10:30:51.9501328Z │ 💡 [dispatch] offer reload failed rideId=902: Exception: offline
+4446:2026-11-26T10:30:56.7763935Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: resolveLocationPingSendOutcome (ISC-F7-7 sticky GPS) HTTP 200 + unauthenticated remark → fatalFailure
+4447:2026-11-26T10:30:56.7777840Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: resolveLocationPingSendOutcome (ISC-F7-7 sticky GPS) HTTP 401 → fatalFailure
+4448:2026-11-26T10:30:56.7789654Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: resolveLocationPingSendOutcome (ISC-F7-7 sticky GPS) HTTP 500 → transientFailure (sticky service)
+4449:2026-11-26T10:30:56.7801322Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: resolveLocationPingSendOutcome (ISC-F7-7 sticky GPS) network error → transientFailure (sticky service)
+4450:2026-11-26T10:30:56.7814417Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/location_ping_send_outcome_test.dart: foreground sticky helpers only fatalFailure stops foreground service
+4517:2026-11-26T10:32:08.6133294Z BUILD FAILED in 1m 9s
+4520:2026-11-26T10:32:08.6146570Z ##[error]Process completed with exit code 1.
+4632:2026-11-26T10:32:10.1888308Z (node:4888) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+
+$ cd /tmp/ghlogs && sed -n '4490,4520p' joblogs.zip
+2026-11-26T10:30:57.8100037Z   RIDER_TOKEN: ***
+2026-11-26T10:30:57.8100268Z   DRIVER_TOKEN: ***
+2026-11-26T10:30:57.8100511Z   DEV_TOKEN: ***
+2026-11-26T10:30:57.8100683Z   OPENCODE_VERSION: 1.19.4
+2026-11-26T10:30:57.8100860Z   OPENCODE_DISABLE_AUTOUPDATE: 1
+2026-11-26T10:30:57.8101040Z   ARTEMIS_DISABLE: 1
+2026-11-26T10:30:57.8101232Z   OC_MODEL: opencode/deepseek-v4.1-flash-free
+2026-11-26T10:30:57.8101918Z   OC_MODEL_CHAIN: opencode/mimo-v2.6-flash-free,opencode/glm-5.3-flash-free,opencode/minimax-m3.1-flash-free,opencode/longcat-2.5-free,opencode/iceman-free,opencode/flint-40b-free,opencode/nemotron-3.5-lightning-free,opencode/beam-free,opencode/inkling-2-small-free
+2026-11-26T10:30:57.8102582Z   STAGING_HOST: ***
+2026-11-26T10:30:57.8102768Z   GALASS_STAGING_URL: ***
+2026-11-26T10:30:57.8103009Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103336Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103648Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+2026-11-26T10:30:57.8103912Z   PUB_CACHE: /home/runner/.pub-cache
+2026-11-26T10:30:57.8104116Z ##[endgroup]
+2026-11-26T10:32:08.6128584Z      Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+2026-11-26T10:32:08.6129077Z 
+2026-11-26T10:32:08.6129886Z      Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/android/gradle/wrapper/gradle-wrapper.properties. 
+2026-11-26T10:32:08.6131044Z      For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+2026-11-26T10:32:08.6131394Z 
+2026-11-26T10:32:08.6131398Z 
+2026-11-26T10:32:08.6131525Z * Try:
+2026-11-26T10:32:08.6131803Z > Run with --stacktrace option to get the stack trace.
+2026-11-26T10:32:08.6132189Z > Run with --info or --debug option to get more log output.
+2026-11-26T10:32:08.6132610Z > Run with --scan to generate a Build Scan (Powered by Develocity).
+2026-11-26T10:32:08.6132995Z > Get more help at https://help.gradle.org.
+2026-11-26T10:32:08.6133197Z 
+2026-11-26T10:32:08.6133294Z BUILD FAILED in 1m 9s
+2026-11-26T10:32:08.6133616Z Running Gradle task 'assembleDebug'...                             69.6s
+2026-11-26T10:32:08.6134074Z Gradle task assembleDebug failed with exit code 1
+2026-11-26T10:32:08.6146570Z ##[error]Process completed with exit code 1.
+
+$ cd /tmp/ghlogs && grep -n "Could not\|Unsupported\|incompatible\|gradle.*version\|minimum.*gradle\|requires Gradle" joblogs.zip | head -30
+2191:2026-11-26T10:29:55.4413932Z 167 packages have newer versions incompatible with dependency constraints.
+4132:2026-11-26T10:30:41.2895084Z │ 💡 Could not present cash payment dialog: This BuildContext is no longer valid.
+4507:2026-11-26T10:32:08.6129886Z      Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/android/gradle/wrapper/gradle-wrapper.properties.
+
+$ cd /tmp/ghlogs && sed -n '4480,4510p' joblogs.zip
+2026-11-26T10:30:57.8069947Z rm -rf src
+2026-11-26T10:30:57.8098275Z shell: /usr/bin/bash -e {0}
+2026-11-26T10:30:57.8098456Z env:
+2026-11-26T10:30:57.8098746Z   BASE: ***
+2026-11-26T10:30:57.8098889Z   RIDER_ID: 106
+2026-11-26T10:30:57.8099038Z   DRIVER_ID: 23
+2026-11-26T10:30:57.8099222Z   OUT: e2e-out
+2026-11-26T10:30:57.8099380Z   RUN_DEADLINE_MIN: 90
+2026-11-26T10:30:57.8099553Z   APK_RIDER: apk/rider/app-debug.apk
+2026-11-26T10:30:57.8099772Z   APK_DRIVER: apk/driver/app-debug.apk
+2026-11-26T10:30:57.8100037Z   RIDER_TOKEN: ***
+2026-11-26T10:30:57.8100268Z   DRIVER_TOKEN: ***
+2026-11-26T10:30:57.8100511Z   DEV_TOKEN: ***
+2026-11-26T10:30:57.8100683Z   OPENCODE_VERSION: 1.19.4
+2026-11-26T10:30:57.8100860Z   OPENCODE_DISABLE_AUTOUPDATE: 1
+2026-11-26T10:30:57.8101040Z   ARTEMIS_DISABLE: 1
+2026-11-26T10:30:57.8101232Z   OC_MODEL: opencode/deepseek-v4.1-flash-free
+2026-11-26T10:30:57.8101918Z   OC_MODEL_CHAIN: opencode/mimo-v2.6-flash-free,opencode/glm-5.3-flash-free,opencode/minimax-m3.1-flash-free,opencode/longcat-2.5-free,opencode/iceman-free,opencode/flint-40b-free,opencode/nemotron-3.5-lightning-free,opencode/beam-free,opencode/inkling-2-small-free
+2026-11-26T10:30:57.8102582Z   STAGING_HOST: ***
+2026-11-26T10:30:57.8102768Z   GALASS_STAGING_URL: ***
+2026-11-26T10:30:57.8103009Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103336Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103648Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+2026-11-26T10:30:57.8103912Z   PUB_CACHE: /home/runner/.pub-cache
+2026-11-26T10:30:57.8104116Z ##[endgroup]
+2026-11-26T10:32:08.6128584Z      Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+2026-11-26T10:32:08.6129077Z 
+2026-11-26T10:32:08.6129886Z      Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/android/gradle/wrapper/gradle-wrapper.properties. 
+2026-11-26T10:32:08.6131044Z      For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+2026-11-26T10:32:08.6131394Z 
+2026-11-26T10:32:08.6131398Z
+
+$ cd /tmp/ghlogs && awk 'NR>=4455 && NR<=4482{print NR": "$0}' joblogs.zip | grep -v "2026-11-26T10:30:57" | head -40
+(no output)
+
+$ cd /tmp/ghlogs && sed -n '4455,4482p' joblogs.zip
+2026-11-26T10:30:57.2311575Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/last_ping_store_test.dart: completeStopRequestLine unknown stop position and no ping are explicit, never silent
+2026-11-26T10:30:57.6171682Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-6 bid money submit gate rejects_7_not_multiple_of_5
+2026-11-26T10:30:57.6192318Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-6 bid money submit gate accepts_1500_multiple_of_5
+2026-11-26T10:30:57.6205027Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-7 deposit money submit gate rejects_7_not_multiple_of_5
+2026-11-26T10:30:57.6215730Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-7 deposit money submit gate accepts_1500_multiple_of_5
+2026-11-26T10:30:57.6226672Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-8 withdraw money submit gate rejects_7_not_multiple_of_5
+2026-11-26T10:30:57.6238130Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-8 withdraw money submit gate accepts_1500_multiple_of_5
+2026-11-26T10:30:57.6248957Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-14 empty and non-numeric inputs blocked before API rejects_empty_string
+2026-11-26T10:30:57.6259686Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-14 empty and non-numeric inputs blocked before API rejects_whitespace_only
+2026-11-26T10:30:57.6270770Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-14 empty and non-numeric inputs blocked before API rejects_non_numeric_alpha
+2026-11-26T10:30:57.6281614Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-14 empty and non-numeric inputs blocked before API rejects_mixed_alphanumeric
+2026-11-26T10:30:57.6292253Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: ISC-14 empty and non-numeric inputs blocked before API rejects_fractional_money_input
+2026-11-26T10:30:57.6303941Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input reject_7_even_though_roundToStep5_would_be_5
+2026-11-26T10:30:57.6315241Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input reject_8_even_though_roundToStep5_would_be_10
+2026-11-26T10:30:57.6326869Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input reject_12_even_though_roundToStep5_would_be_10
+2026-11-26T10:30:57.6338627Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input reject_13_even_though_roundToStep5_would_be_15
+2026-11-26T10:30:57.6352075Z ✅ /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/driver/test/core/helper/money_submit_gate_test.dart: Anti-5 reject strict — no silent round on free input accepted_input_is_not_silently_rounded
+2026-11-26T10:30:57.6598877Z ##[endgroup]
+2026-11-26T10:30:57.6599010Z 
+2026-11-26T10:30:57.6601548Z 🎉 478 tests passed.
+2026-11-26T10:30:57.8067391Z ##[group]Run for a in rider driver; do
+2026-11-26T10:30:57.8067642Z for a in rider driver; do
+2026-11-26T10:30:57.8068484Z   (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+2026-11-26T10:30:57.8069515Z   mkdir -p apk/$a && cp src/$a/build/app/outputs/flutter-apk/app-debug.apk apk/$a/
+2026-11-26T10:30:57.8069797Z done
+2026-11-26T10:30:57.8069947Z rm -rf src
+2026-11-26T10:30:57.8098275Z shell: /usr/bin/bash -e {0}
+2026-11-26T10:30:57.8098456Z env:
+
+$ cd /tmp/ghlogs && awk '/10:30:57.8067391Z ##\[endgroup\]/{f=1;next} /10:32:08.6133294Z BUILD FAILED/{f=0} f' joblogs.zip | grep -i "error\|could not\|exception\|failed\|warning" | head -40
+(no output)
+
+$ cd /tmp/ghlogs && sed -n '4483,4517p' joblogs.zip
+2026-11-26T10:30:57.8098746Z   BASE: ***
+2026-11-26T10:30:57.8098889Z   RIDER_ID: 106
+2026-11-26T10:30:57.8099038Z   DRIVER_ID: 23
+2026-11-26T10:30:57.8099222Z   OUT: e2e-out
+2026-11-26T10:30:57.8099380Z   RUN_DEADLINE_MIN: 90
+2026-11-26T10:30:57.8099553Z   APK_RIDER: apk/rider/app-debug.apk
+2026-11-26T10:30:57.8099772Z   APK_DRIVER: apk/driver/app-debug.apk
+2026-11-26T10:30:57.8100037Z   RIDER_TOKEN: ***
+2026-11-26T10:30:57.8100268Z   DRIVER_TOKEN: ***
+2026-11-26T10:30:57.8100511Z   DEV_TOKEN: ***
+2026-11-26T10:30:57.8100683Z   OPENCODE_VERSION: 1.19.4
+2026-11-26T10:30:57.8100860Z   OPENCODE_DISABLE_AUTOUPDATE: 1
+2026-11-26T10:30:57.8101040Z   ARTEMIS_DISABLE: 1
+2026-11-26T10:30:57.8101232Z   OC_MODEL: opencode/deepseek-v4.1-flash-free
+2026-11-26T10:30:57.8101918Z   OC_MODEL_CHAIN: opencode/mimo-v2.6-flash-free,opencode/glm-5.3-flash-free,opencode/minimax-m3.1-flash-free,opencode/longcat-2.5-free,opencode/iceman-free,opencode/flint-40b-free,opencode/nemotron-3.5-lightning-free,opencode/beam-free,opencode/inkling-2-small-free
+2026-11-26T10:30:57.8102582Z   STAGING_HOST: ***
+2026-11-26T10:30:57.8102768Z   GALASS_STAGING_URL: ***
+2026-11-26T10:30:57.8103009Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103336Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103648Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+2026-11-26T10:30:57.8103912Z   PUB_CACHE: /home/runner/.pub-cache
+2026-11-26T10:30:57.8104116Z ##[endgroup]
+2026-11-26T10:32:08.6128584Z      Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+2026-11-26T10:32:08.6129077Z 
+2026-11-26T10:32:08.6129886Z      Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/android/gradle/wrapper/gradle-wrapper.properties. 
+2026-11-26T10:32:08.6131044Z      For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+2026-11-26T10:32:08.6131394Z 
+2026-11-26T10:32:08.6131398Z 
+2026-11-26T10:32:08.6131525Z * Try:
+2026-11-26T10:32:08.6131803Z > Run with --stacktrace option to get the stack trace.
+2026-11-26T10:32:08.6132189Z > Run with --info or --debug option to get more log output.
+2026-11-26T10:32:08.6132610Z > Run with --scan to generate a Build Scan (Powered by Develocity).
+2026-11-26T10:32:08.6132995Z > Get more help at https://help.gradle.org.
+2026-11-26T10:32:08.6133197Z 
+2026-11-26T10:32:08.6133294Z BUILD FAILED in 1m 9s
+
+$ TOKEN=$(sed -n 's/.*oauth_token: //p' /home/ubuntu/.config/gh/hosts.yml | head -1)
+curl -s -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130" | python3 -c "import sys,json; d=json.load(sys.stdin); print('event:',d.get('event')); print('head_branch:',d.get('head_branch')); print('inputs:',d.get('inputs')); print('name:',d.get('name')); print('status:',d.get('status'),'conclusion:',d.get('conclusion'))"
+event: workflow_dispatch
+head_branch: feat/multistop-e2e-2026-11-15
+inputs: None
+name: artemis-staging-e2e
+status: completed conclusion: failure
+
