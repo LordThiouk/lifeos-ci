@@ -9323,3 +9323,130 @@ Silence 180s sans nouvelle sortie (journal=48 o) : coupure opencode pid=437633
 > Forge · seaglass-alpha-free
 
 → Read /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md
+
+$ pwd && ls -la
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target
+total 252
+drwxr-xr-x 17 ubuntu ubuntu  4096 Nov 26 20:26 .
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 20:05 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 19:09 .archive
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 20:26 .dart_tool
+-rw-r--r--  1 ubuntu ubuntu 40701 Nov 26 20:26 .flutter-plugins-dependencies
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 19:09 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 20:38 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 19:09 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1079 Nov 26 19:09 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  7714 Nov 26 19:09 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu 14109 Nov 26 19:09 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu    70 Nov 26 19:09 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 15826 Nov 26 19:09 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 19:09 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  2970 Nov 26 19:09 README.md
+-rw-r--r--  1 ubuntu ubuntu  1662 Nov 26 19:09 analysis_options.yaml
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 20:26 android
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 19:09 assets
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 20:34 build
+-rw-r--r--  1 ubuntu ubuntu   392 Nov 26 19:09 dart_test.yaml
+-rw-r--r--  1 ubuntu ubuntu   184 Nov 26 19:09 devtools_options.yaml
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 19:09 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 19:09 fastlane
+-rw-r--r--  1 ubuntu ubuntu   639 Nov 26 19:09 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 19:09 ios
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 19:09 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 19:09 prompts
+-rw-r--r--  1 ubuntu ubuntu 68359 Nov 26 20:26 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  2849 Nov 26 19:55 pubspec.yaml
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 19:09 test
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 19:09 tool
+
+$ git status && git branch --show-current && git log --oneline -5
+On branch feat/multistop-e2e-2026-11-15
+Your branch is ahead of 'origin/feat/multistop-e2e-2026-11-15' by 2 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+feat/multistop-e2e-2026-11-15
+71381b8 isa(driver): coche ISC-F5-15 (preuve flutter test 1/1 + goldens 5/5)
+bbcf104 wip(autosave): arbre de travail
+9b05994 feat(driver): ISC-F5-14 retire compteur stopsProgressText, Semantics galass.driver.stops=<done>/<total>
+33a43b8 wip(autosave): arbre de travail
+f22279a test(driver): ISC-F5-14 verrouille retrait compteur stops et Semantics e2e
+
+Je vais explorer l'environnement de travail, vérifier la branche, puis analyser le code autour de ISC-F5-15.
+$ git show --stat 71381b8 && git show --stat bbcf104
+commit 71381b8412c2b40c46f6543d373d853c12ed3e80
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 20:32:56 2026 +0000
+
+    isa(driver): coche ISC-F5-15 (preuve flutter test 1/1 + goldens 5/5)
+
+ MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+commit bbcf104e638d76248b1aa4c8877417fb4f23874b
+Author: Nix <nix@galass.local>
+Date:   Thu Nov 26 20:23:13 2026 +0000
+
+    wip(autosave): arbre de travail
+
+ test/unit/multistop_itinerary_test.dart | 114 ++++++++++++++++++++++++++++++++
+ 1 file changed, 114 insertions(+)
+
+$ ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci && ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY
+ci
+extra
+lifeos
+target
+WORK
+
+→ Read test/unit/multistop_itinerary_test.dart
+
+$ ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos
+CLAUDE.md
+ISA.md
+LIFEOS
+MEMORY
+README.md
+Workflows
+agents
+bun.lock
+commands
+hooks
+opencode
+package.json
+rules
+scripts
+secrets
+settings.template.json
+skills
+skills-shared
+
+✱ Grep "pickUpLocation" in . · 13 matches
+
+$ find /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos -maxdepth 3 -iname '*ISA*' | head -50
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/ISA.md
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/isa
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/cmux/ISA.md
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/IsaReconcile.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/IsaFeatures.test.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/IsaFeatures.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISARender
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/IsaFrontier.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAGate.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISARender.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/DOCUMENTATION/Isa
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/galass-francisation-sn-840301
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/hooks/ISARenderOnStop.hook.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/hooks/ISACloseGate.hook.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/hooks/ISAStaleWriteGuard.hook.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/hooks/lib/isa-template.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/hooks/lib/isa-utils.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/hooks/ISAGate.hook.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/hooks/ISASync.hook.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/hooks/ISAFoldGate.hook.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills/CMUX/ISA.md
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills/ISA
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/opencode/tests/isa-guard.test.ts
+
