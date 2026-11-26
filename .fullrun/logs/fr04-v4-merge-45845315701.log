@@ -8302,3 +8302,150 @@ $ sed -n '600,769p' /opt/fullrun-live/status
 [journal en direct] 17:46 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
 [journal en direct] 17:46 Dakar · envoyé (clair) sur fullrun-logs/smoke-usbox3-45842094698
 
+$ tail -60 /home/ubuntu/actions-runner/_work/_temp/oc-agent/run-flint-40b-free.log; echo "=====OC-TAIL (last lines)==="; tail -40 /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc-tail; echo "=====ATTEMPT START====="; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/attempt.start; echo; cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/oc.pid
+[journal en direct] 17:38 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:38 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+[journal en direct] 17:38 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45847515212
+[journal en direct] 17:38 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45859633948
+[journal en direct] 17:38 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45859632833
+[journal en direct] 17:38 Dakar · envoyé (clair) sur fullrun-logs/smoke-usbox3-45842094698
+[journal en direct] 17:38 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:38 Dakar · envoyé (clair) sur fullrun-logs/fr01-v1c-45845316040
+[journal en direct] 17:39 Dakar · envoyé (clair) sur fullrun-logs/rider-f429-cr-45845322081
+[journal en direct] 17:39 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:39 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:40 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:40 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45845317171
+[journal en direct] 17:40 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45845315701
+[journal en direct] 17:40 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+[journal en direct] 17:40 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45847515212
+[journal en direct] 17:40 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45859632833
+[journal en direct] 17:40 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45859633948
+[journal en direct] 17:40 Dakar · envoyé (clair) sur fullrun-logs/smoke-usbox3-45842094698
+[journal en direct] 17:40 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:40 Dakar · envoyé (clair) sur fullrun-logs/fr01-v1c-45845316040
+[journal en direct] 17:41 Dakar · envoyé (clair) sur fullrun-logs/rider-f429-cr-45845322081
+[journal en direct] 17:41 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:41 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:42 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:42 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45845315701
+[journal en direct] 17:42 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45845317171
+[journal en direct] 17:42 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+[journal en direct] 17:42 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45847515212
+[journal en direct] 17:42 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45859633948
+[journal en direct] 17:42 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45859632833
+[journal en direct] 17:42 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:42 Dakar · envoyé (clair) sur fullrun-logs/smoke-usbox3-45842094698
+[journal en direct] 17:43 Dakar · envoyé (clair) sur fullrun-logs/fr01-v1c-45845316040
+[journal en direct] 17:43 Dakar · envoyé (clair) sur fullrun-logs/rider-f429-cr-45845322081
+[journal en direct] 17:43 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:43 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:44 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:44 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45845315701
+[journal en direct] 17:44 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45845317171
+[journal en direct] 17:44 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+[journal en direct] 17:44 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45847515212
+[journal en direct] 17:44 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45859632833
+[journal en direct] 17:44 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45859633948
+[journal en direct] 17:44 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:44 Dakar · envoyé (clair) sur fullrun-logs/smoke-usbox3-45842094698
+[journal en direct] 17:45 Dakar · envoyé (clair) sur fullrun-logs/fr01-v1c-45845316040
+[journal en direct] 17:45 Dakar · envoyé (clair) sur fullrun-logs/rider-f429-cr-45845322081
+[journal en direct] 17:45 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:45 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:46 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:46 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45845315701
+[journal en direct] 17:46 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45845317171
+[journal en direct] 17:46 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+[journal en direct] 17:46 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45847515212
+[journal en direct] 17:46 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45859633948
+[journal en direct] 17:46 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45859632833
+[journal en direct] 17:46 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 17:46 Dakar · envoyé (clair) sur fullrun-logs/smoke-usbox3-45842094698
+
+=====OC-TAIL (last lines)===
+=====ATTEMPT START=====
+
+205236
+
+$ cat /opt/lifeos-ci-tools/opencode/oc-wrap.sh; echo "=====CHECK-AGENT====="; cat /opt/lifeos-ci-tools/opencode/check-agent.sh; echo "=====AGENT DIR====="; ls -la /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/agents/
+#!/usr/bin/env bash
+# Lance `timeout …` en enregistrant le PID dans $1 (pour silence-watch).
+# Usage : oc-wrap.sh <pid-file> <secs> <cmd> [args…]
+set -euo pipefail
+echo $$ > "$1"
+shift
+exec timeout "$@"
+=====CHECK-AGENT=====
+#!/usr/bin/env bash
+# Vérifie qu'un agent FullRun existe dans la config opencode fusionnée et que sa
+# fiche <agent>.md est présente. Affiche agent, fiche et mode ; échoue sinon.
+#   check-agent.sh <config-fusionnée> <dossier-agents> <agent>
+# Un agent vide (task, run sans TARGET_AGENT) est accepté sans contrôle.
+set -euo pipefail
+
+cfg=${1:-}
+dir=${2:-}
+agent=${3:-}
+[ -n "$cfg" ] && [ -n "$dir" ] \
+  || { echo "usage: check-agent.sh <config> <agents-dir> <agent>" >&2; exit 2; }
+[ -n "$agent" ] || exit 0
+[ -f "$cfg" ] || { echo "::error::config opencode fusionnée absente : $cfg" >&2; exit 1; }
+command -v jq >/dev/null 2>&1 || { echo "::error::jq est requis" >&2; exit 1; }
+
+if ! jq -e --arg a "$agent" '.agent[$a] // empty' "$cfg" >/dev/null 2>&1; then
+  echo "::error::agent '$agent' absent de la config opencode fusionnée ($cfg)" >&2
+  exit 1
+fi
+mode=$(jq -r --arg a "$agent" '.agent[$a].mode // "default"' "$cfg")
+fiche="$dir/$agent.md"
+if [ ! -f "$fiche" ]; then
+  echo "::error::fiche absente pour l'agent '$agent' : $fiche" >&2
+  exit 1
+fi
+echo "Agent FullRun : $agent"
+echo "Fiche : $fiche"
+echo "Mode : $mode"
+=====AGENT DIR=====
+total 416
+drwxr-xr-x 2 ubuntu ubuntu  4096 Nov 26 17:27 .
+drwxr-xr-x 5 ubuntu ubuntu  4096 Nov 26 17:27 ..
+-rw-r--r-- 1 ubuntu ubuntu 17355 Nov 26 17:27 Algorithm.md
+-rw-r--r-- 1 ubuntu ubuntu  9074 Nov 26 17:27 Anvil.md
+-rw-r--r-- 1 ubuntu ubuntu 13867 Nov 26 17:27 Architect.md
+-rw-r--r-- 1 ubuntu ubuntu  7656 Nov 26 17:27 Arthur.md
+-rw-r--r-- 1 ubuntu ubuntu 14477 Nov 26 17:27 Artist.md
+-rw-r--r-- 1 ubuntu ubuntu  2717 Nov 26 17:27 BrowserAgent.md
+-rw-r--r-- 1 ubuntu ubuntu  6640 Nov 26 17:27 Cato.md
+-rwxr-xr-x 1 ubuntu ubuntu  9004 Nov 26 17:27 ClaudeResearcher.md
+-rw-r--r-- 1 ubuntu ubuntu  3825 Nov 26 17:27 ClaudeResearcherContext.md
+-rwxr-xr-x 1 ubuntu ubuntu 13039 Nov 26 17:27 CodexResearcher.md
+-rw-r--r-- 1 ubuntu ubuntu  4892 Nov 26 17:27 CodexResearcherContext.md
+-rw-r--r-- 1 ubuntu ubuntu 13600 Nov 26 17:27 Designer.md
+-rw-r--r-- 1 ubuntu ubuntu 16981 Nov 26 17:27 Engineer.md
+-rw-r--r-- 1 ubuntu ubuntu 27314 Nov 26 17:27 Forge.md
+-rw-r--r-- 1 ubuntu ubuntu 11718 Nov 26 17:27 ForgeContext.md
+-rw-r--r-- 1 ubuntu ubuntu  5468 Nov 26 17:27 Gemini.md
+-rwxr-xr-x 1 ubuntu ubuntu  9548 Nov 26 17:27 GeminiResearcher.md
+-rw-r--r-- 1 ubuntu ubuntu  4272 Nov 26 17:27 GeminiResearcherContext.md
+-rw-r--r-- 1 ubuntu ubuntu  8080 Nov 26 17:27 Grok.md
+-rwxr-xr-x 1 ubuntu ubuntu 10481 Nov 26 17:27 GrokResearcher.md
+-rw-r--r-- 1 ubuntu ubuntu  5021 Nov 26 17:27 GrokResearcherContext.md
+-rw-r--r-- 1 ubuntu ubuntu 16249 Nov 26 17:27 Max.md
+-rw-r--r-- 1 ubuntu ubuntu  8674 Nov 26 17:27 PerplexityResearcher.md
+-rw-r--r-- 1 ubuntu ubuntu  4550 Nov 26 17:27 PerplexityResearcherContext.md
+-rw-r--r-- 1 ubuntu ubuntu  3618 Nov 26 17:27 QATester.md
+-rw-r--r-- 1 ubuntu ubuntu 13315 Nov 26 17:27 Serena.md
+-rw-r--r-- 1 ubuntu ubuntu 15882 Nov 26 17:27 Silas.md
+-rw-r--r-- 1 ubuntu ubuntu  2695 Nov 26 17:27 UIReviewer.md
+-rw-r--r-- 1 ubuntu ubuntu 17559 Nov 26 17:27 Vera.md
+-rw-r--r-- 1 ubuntu ubuntu  2295 Nov 26 17:27 code-architect.md
+-rw-r--r-- 1 ubuntu ubuntu  2148 Nov 26 17:27 code-explorer.md
+-rw-r--r-- 1 ubuntu ubuntu  3796 Nov 26 17:27 code-reviewer.md
+-rw-r--r-- 1 ubuntu ubuntu  4137 Nov 26 17:27 code-simplifier.md
+-rw-r--r-- 1 ubuntu ubuntu  5069 Nov 26 17:27 comment-analyzer.md
+-rw-r--r-- 1 ubuntu ubuntu  4705 Nov 26 17:27 pr-test-analyzer.md
+-rw-r--r-- 1 ubuntu ubuntu   396 Nov 26 17:27 rea.md
+-rw-r--r-- 1 ubuntu ubuntu  7558 Nov 26 17:27 silent-failure-hunter.md
+-rw-r--r-- 1 ubuntu ubuntu  5146 Nov 26 17:27 type-design-analyzer.md
+
