@@ -1127,3 +1127,28 @@ Papa Diop
 ← Write VERIFY-F429.md
 Wrote file successfully.
 
+$ git status --short; echo ---; git status --short -- .fullrun test/goldens; echo "fullrun+goldens clean if empty above"
+?? VERIFY-F429.md
+---
+fullrun+goldens clean if empty above
+
+$ git add VERIFY-F429.md && git -c user.name="Papa Diop" -c user.email="76528706+LordThiouk@users.noreply.github.com" commit --author="Papa Diop <76528706+LordThiouk@users.noreply.github.com>" -m "verify(rider): F4-29 a-b PASS — contract 9/9, red-before reproduced
+
+ISC-F4-29 a-b verified on verify/rider-f429-cr @ fcdd581 with Flutter
+3.50.1: flutter test test/widget/course_en_cours_contract_test.dart
+9/9 green. Removing setUpAll(loadGoldenFonts) reproduces the documented
+\"An animation is still running\" failure on the a-b test; restored then
+green. No golden regenerated, .fullrun untouched." 2>&1 | tail -8
+[verify/rider-f429-cr de565ae] verify(rider): F4-29 a-b PASS — contract 9/9, red-before reproduced
+ 1 file changed, 88 insertions(+)
+ create mode 100644 VERIFY-F429.md
+
+$ git log -1 --format='%H%n%an <%ae>%n%s'; echo ---; git status --short --branch; echo ---; head -1 VERIFY-F429.md
+de565ae52723df6f258a0475a42034cee202ac0b
+Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+verify(rider): F4-29 a-b PASS — contract 9/9, red-before reproduced
+---
+## verify/rider-f429-cr...origin/verify/rider-f429-cr [ahead 1]
+---
+VERDICT: PASS
+
