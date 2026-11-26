@@ -227,8 +227,10 @@ jobs:
               opencode/*) ;;
               *) model="opencode/$model" ;;
             esac
-            [[ "$model" =~ ^opencode/[a-z0-9.-]+-free$ ]] \
-              || fail "model invalide : '$IN_MODEL' (attendu opencode/<nom>-free)"
+            # Aligné sur quota.sh : *-free + big-pickle (cost=0, nom historique).
+            if ! [[ "$model" =~ ^opencode/[a-z0-9.-]+-free$ || "$model" == "opencode/big-pickle" ]]; then
+              fail "model invalide : '$IN_MODEL' (attendu opencode/<nom>-free ou opencode/big-pickle)"
+            fi
             list=$(bash "$TOOLS_DIR/opencode/quota.sh" list "$TOOLS_DIR/models.txt" | tr '\n' ' ')
             # Pas de `grep -q` ici : sous `pipefail`, grep -q ferme le tube dès la
             # première correspondance, quota.sh reçoit SIGPIPE et le pipeline échoue
