@@ -38,8 +38,8 @@ bascule sur erreur ni journal de sortie, donc l'étape 16 échoue avec
 `OC_STATUS=erreur`. Le prompt impose l'édition de l'ISA via `ISATool.ts` ; or
 l'environnement FullRun ne fournissait ni `bun` (absent du `PATH` de
 `env -i` : /usr/local/bin, /usr/bin, /bin) ni le socle ISA inscriptible
-`~/.claude/LIFEOS` (`lifeos/` est monté lecture seule et `ISATool.ts` écrit
-`~/.claude/LIFEOS/MEMORY/STATE/.isa-stamp-key`). Vera ne pouvait donc pas
+`~/.claude/LIFEOS` (`lifeos/` est rendu lecture seule par `chmod -R a-w` et
+`ISATool.ts` écrit `~/.claude/LIFEOS/MEMORY/STATE/.isa-stamp-key`). Vera ne pouvait donc pas
 exécuter l'outil ni committer l'ISA.
 
 **Preuve** :
