@@ -16502,3 +16502,13 @@ actions-runner-2
 actions-runner-3
 go
 
+$ command -v curl wget; ls /usr/local/bin | grep -iE 'php|nix' ; echo ---; apt-cache policy php-cli 2>/dev/null | head -5
+/usr/bin/curl
+/usr/bin/wget
+---
+php-cli:
+  Installed: (none)
+  Candidate: 2:8.3+93ubuntu2
+  Version table:
+     2:8.3+93ubuntu2 500
+
