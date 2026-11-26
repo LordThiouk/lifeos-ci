@@ -8316,3 +8316,710 @@ dcb4bf0 fix(rider): F4-34 share one-shot gate across controller and FCM
 43e28ba fix(rider): F4-21 keep PENDING stops numbered, active leg only in ACTIVE/RUNNING
 3798ba2 docs(isa): consigner la décision Papa ISC-F5-16 (Rider carte jambe active)
 
+$ git reflog --date=iso -15; echo "---ALL---"; git log --all --oneline -8; echo "---424957d---"; git show --stat --oneline 424957d 2>&1 | head -30
+207d752 HEAD@{2026-11-26 18:55:13 +0000}: commit: build(android): align Rider toolchain with Flutter 3.50.1
+fcdd581 HEAD@{2026-11-26 18:55:07 +0000}: reset: moving to fcdd581
+ec07f3e HEAD@{2026-11-26 18:42:24 +0000}: commit: build(android): align Rider toolchain with Flutter 3.50.1
+424957d HEAD@{2026-11-26 18:40:31 +0000}: checkout: moving from feat/multistop-e2e-2026-11-15 to build/rider-apk-gradle
+424957d HEAD@{2026-11-26 18:20:15 +0000}: checkout: moving from master to feat/multistop-e2e-2026-11-15
+---ALL---
+207d752 build(android): align Rider toolchain with Flutter 3.50.1
+238a181 chore(ci): journal en direct du run rider-apk-gradle (45859632833), 18:19 Dakar, clair — branche à supprimer après lecture
+7d496eb chore(ci): journal en direct du run fr04-v4-merge (45847515212), 18:19 Dakar, clair — branche à supprimer après lecture
+0fa155f chore(ci): journal en direct du run lot-client-w0-device (45859637248), 18:19 Dakar, clair — branche à supprimer après lecture
+67c9bfc chore(ci): journal en direct du run driver-f5-13c (45859633948), 18:19 Dakar, clair — branche à supprimer après lecture
+5ad4f30 chore(ci): journal en direct du run fr04-v4-merge (45845315701), 18:19 Dakar, clair — branche à supprimer après lecture
+787bacc chore(ci): journal en direct du run driver-f5-13c (45845317171), 18:19 Dakar, clair — branche à supprimer après lecture
+d972070 chore(ci): journal en direct du run rider-f429-cr (45845322081), 18:18 Dakar, clair — branche à supprimer après lecture
+---424957d---
+424957d verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+ VERIFY-F434B.md | 58 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+
+$ echo "===toolchain.patch==="; cat /tmp/toolchain.patch 2>&1; echo "===check_toolchain.py==="; cat /tmp/check_toolchain.py 2>&1; echo "===fix_patch.txt==="; cat /tmp/fix_patch.txt 2>&1
+===toolchain.patch===
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 0e4397f..bb6acb3 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -1,9 +1,14 @@
+-org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+-org.gradle.daemon=false
+-org.gradle.parallel=false
+-org.gradle.configureondemand=false
+-android.enableJetifier=false
++org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+ android.useAndroidX=true
+-android.newDsl=false
++android.enableJetifier=false
++# This builtInKotlin flag was added automatically by Flutter migrator
+ android.builtInKotlin=false
+-android.r8.proguardAndroidTxt.disallowed=false
++# This newDsl flag was added automatically by Flutter migrator
++android.newDsl=false
++
++# Build speed (local Fastlane / incremental)
++org.gradle.caching=true
++org.gradle.parallel=true
++org.gradle.daemon=true
++org.gradle.configureondemand=true
++org.gradle.vfs.watch=true
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..92992c4 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,12 +18,12 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+-    id("com.google.firebase.crashlytics") version("3.0.7") apply false
++    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+     // END: FlutterFire Configuration
+-    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
++    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+ }
+ 
+ include(":app")
+===check_toolchain.py===
+#!/usr/bin/env python3
+"""Static check of the Rider Android toolchain against the compatibility windows
+read from flutter_tools/lib/src/android/gradle_utils.dart (local Flutter 3.35.6)
+plus the official AGP/KGP matrices."""
+import re, sys
+
+def v(s):
+    return tuple(int(x) for x in s.split('.'))
+
+def within(x, lo, hi, inclusive_max=False):
+    x, lo, hi = v(x), v(lo), v(hi)
+    return lo <= x <= hi if inclusive_max else lo <= x < hi
+
+ok = True
+def check(label, cond, detail):
+    global ok
+    print(('PASS' if cond else 'FAIL'), '-', label, '|', detail)
+    ok = ok and cond
+
+wrap = open('android/gradle/wrapper/gradle-wrapper.properties').read()
+m = re.search(r'gradle-([0-9.]+)-all\.zip', wrap)
+gradle = m.group(1) if m else None
+settings = open('android/settings.gradle.kts').read()
+agp = re.search(r'com\.android\.application"\) version "([0-9.]+)"', settings).group(1)
+kgp = re.search(r'org\.jetbrains\.kotlin\.android"\) version "([0-9.]+)"', settings).group(1)
+gms = re.search(r'google-services"\) version\("([0-9.]+)"\)', settings).group(1)
+crash = re.search(r'crashlytics"\) version\("([0-9.]+)"\)', settings).group(1)
+
+print(f'detected: gradle={gradle} agp={agp} kgp={kgp} gms={gms} crashlytics={crash}')
+
+# flutter validateGradleAndAgp: AGP 8.11.0-8.11.99 -> Gradle >= 8.13 (max = maxKnown)
+check('validateGradleAndAgp (AGP 8.11 -> Gradle >=8.13)',
+      within(agp, '8.11.0', '8.11.99', True) and within(gradle, '8.13', '100.0', True),
+      f'AGP {agp} / Gradle {gradle}')
+
+# flutter validateGradleAndKGP: KGP 2.2.20-2.2.29 -> 7.6.3 <= Gradle < 8.14.99
+check('validateGradleAndKGP (KGP 2.2.20 -> Gradle 7.6.3..<8.14.99)',
+      within(kgp, '2.2.20', '2.2.29', True) and within(gradle, '7.6.3', '8.14.99'),
+      f'KGP {kgp} / Gradle {gradle}')
+
+# flutter validateAgpAndKgp: KGP 2.2.20-2.2.29 -> 7.3.1 <= AGP < 8.12
+check('validateAgpAndKgp (KGP 2.2.20 -> AGP 7.3.1..<8.12)',
+      within(kgp, '2.2.20', '2.2.29', True) and within(agp, '7.3.1', '8.12'),
+      f'KGP {kgp} / AGP {agp}')
+
+# official AGP 8.11 matrix: min Gradle 8.13, max API 36
+check('AGP 8.11 min Gradle 8.13', within(gradle, '8.13', '100.0', True), f'Gradle {gradle}')
+app = open('android/app/build.gradle.kts').read()
+compile_sdk = re.search(r'compileSdk = (\d+)', app).group(1)
+check('AGP 8.11 max API 36 >= compileSdk', int(compile_sdk) <= 36, f'compileSdk {compile_sdk}')
+
+# Firebase/Crashlytics plugins unchanged
+check('Firebase plugins unchanged', gms == '4.3.15' and crash == '3.0.7', f'gms {gms} / crashlytics {crash}')
+
+# no AGP9-only flags left
+props = open('android/gradle.properties').read()
+leftover = [k for k in ('newDsl', 'builtInKotlin', 'proguardAndroidTxt') if k in props]
+check('no AGP9-only gradle.properties flags', not leftover, f'leftover={leftover}')
+
+sys.exit(0 if ok else 1)
+===fix_patch.txt===
+
+$ cat /opt/flutter/version 2>/dev/null; echo "---"; grep -n -A 60 -B 5 'validateGradleAndAgp\|validateGradleAndKGP\|validateAgpAndKgp\|maxKnownAgpVersion\|minKnownAgpVersion\|AGP_VERSION' /opt/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart 2>&1 | head -250
+3.35.6---
+80-// compatibility.
+81-@visibleForTesting
+82-const maxKnownAndSupportedAgpVersion = '9.0';
+83-
+84-// Update this when new versions of AGP come out.
+85:const maxKnownAgpVersion = '9.0';
+86-
+87-// Supported here means tooling is aware of this versions
+88-// Java <-> AGP compatibility and does not imply broader flutter support.
+89-// For use in flutter see the code in:
+90-// flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt
+91-@visibleForTesting
+92-const oldestConsideredAgpVersion = '3.3.0';
+93-
+94-// Supported here means tooling is aware of this versions
+95-// gradle compatibility and does not imply broader flutter support.
+96-@visibleForTesting
+97-const oldestConsideredGradleVersion = '4.10.1';
+98-
+99-// Supported here means tooling is aware of this versions
+100-// gradle/AGP compatibility and does not imply broader flutter support.
+101-@visibleForTesting
+102-const oldestDocumentedKgpCompatabilityVersion = '1.6.20';
+103-
+104-// Oldest documented version of AGP that has a listed minimum
+105-// compatible Java version.
+106-const oldestDocumentedJavaAgpCompatibilityVersion = '4.2';
+107-
+108-// Constant used in [_buildAndroidGradlePluginRegExp] and
+109-// [_settingsAndroidGradlePluginRegExp] and [_kotlinGradlePluginRegExpFromId]
+110-// to identify the version section.
+111-const _versionGroupName = 'version';
+112-
+113-// AGP can be defined in the dependencies block of [build.gradle] or [build.gradle.kts].
+114-// Expected content (covers both classpath and compileOnly cases):
+115-// Groovy DSL with single quotes - 'com.android.tools.build:gradle:{{agpVersion}}'
+116-// Groovy DSL with double quotes - "com.android.tools.build:gradle:{{agpVersion}}"
+117-// Kotlin DSL - ("com.android.tools.build.gradle:{{agpVersion}}")
+118-// ?<version> is used to name the version group which helps with extraction.
+119-final _androidGradlePluginRegExpFromDependencies = RegExp(
+120-  r"""[^\/]*\s*((\bclasspath\b)|(\bcompileOnly\b))\s*\(?['"]com\.android\.tools\.build:gradle:(?<version>\d+(\.\d+){1,2})\)?""",
+121-  multiLine: true,
+122-);
+123-
+124-// AGP can be defined in the plugins block of [build.gradle],
+125-// [build.gradle.kts], [settings.gradle], or [settings.gradle.kts].
+126-// Expected content:
+127-// Groovy DSL with single quotes - id 'com.android.application' version '{{agpVersion}}'
+128-// Groovy DSL with double quotes - id "com.android.application" version "{{agpVersion}}"
+129-// Kotlin DSL - id("com.android.application") version "{{agpVersion}}"
+130-// ?<version> is used to name the version group which helps with extraction.
+131-final _androidGradlePluginRegExpFromId = RegExp(
+132-  r"""[^\/]*s*id\s*\(?['"]com\.android\.application['"]\)?\s+version\s+['"](?<version>\d+(\.\d+){1,2})\)?""",
+133-  multiLine: true,
+134-);
+135-
+136-// KGP is defined in several places this code only checks in plugins block
+137-// of [settings.gradle] and [settings.gradle.kts].
+138-// Expected content:
+139-// Groovy DSL - id "org.jetbrains.kotlin.android" version "{{kgpVersion}}"
+140-// Kotlin DSL - id("org.jetbrains.kotlin.android") version "{{kgpVersion}}"
+141-// ?<version> is used to name the version group which helps with extraction.
+142-final _kotlinGradlePluginRegExpFromId = RegExp(
+143-  r"""[^\/]*s*id\s*\(?['"]org\.jetbrains\.kotlin\.android['"]\)?\s+version\s+['"](?<version>\d+(\.\d+){1,2})\)?""",
+144-  multiLine: true,
+145-);
+--
+520-// If versions are newer than the max known version a warning is logged and true
+521-// returned.
+522-//
+523-// Source of truth found here:
+524-// https://kotlinlang.org/docs/gradle-configure-project.html#apply-the-plugin
+525:bool validateGradleAndKGP(Logger logger, {required String? kgpV, required String? gradleV}) {
+526-  if (gradleV == null || kgpV == null || gradleV.isEmpty || kgpV.isEmpty) {
+527-    logger.printTrace('Gradle or KGP version unknown ($gradleV, $kgpV).');
+528-    return false;
+529-  }
+530-
+531-  if (isWithinVersionRange(gradleV, min: '0.0', max: oldestConsideredGradleVersion)) {
+532-    logger.printTrace(
+533-      'Gradle version $gradleV older than oldest considered $oldestConsideredGradleVersion',
+534-    );
+535-    return false;
+536-  }
+537-
+538-  if (isWithinVersionRange(
+539-    kgpV,
+540-    min: maxKnownAndSupportedKgpVersion,
+541-    max: '100.100',
+542-    inclusiveMin: false,
+543-  )) {
+544-    logger.printTrace(
+545-      'Newer than known KGP version ($kgpV), gradle ($gradleV).'
+546-      '\n Treating as valid configuration.',
+547-    );
+548-    return true;
+549-  }
+550-
+551-  // https://kotlinlang.org/docs/gradle-configure-project.html#apply-the-plugin
+552-  // Documenation is non continuous, past versions are known to the
+553-  // publishers of KGP. When covering version ranges beyond what is documented
+554-  // add a comment with the documented value.
+555-  // Continuous KGP version handling is prefered in case an emergency patch to a
+556-  // past release is shipped this code will assume the version range that is closest.
+557-
+558-  // Documented max is 2.20, using 2.2.29 covers patch versions.
+559-  if (isWithinVersionRange(kgpV, min: '2.2.20', max: '2.2.29')) {
+560-    // Documented max is 8.14, using 8.14.99 non inclusive covers patch versions.
+561-    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.14.99', inclusiveMax: false);
+562-  }
+563-  if (isWithinVersionRange(kgpV, min: '2.2.0', max: '2.2.10')) {
+564-    // Documented max is 8.14, using 8.14.99 non inclusive covers patch versions.
+565-    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.14.99', inclusiveMax: false);
+566-  }
+567-  if (isWithinVersionRange(kgpV, min: '2.1.20', max: '2.1.21')) {
+568-    // Documented max is 8.12.1, using 8.12.99 non inclusive covers patch versions.
+569-    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.12.99', inclusiveMax: false);
+570-  }
+571-  if (isWithinVersionRange(kgpV, min: '2.1.0', max: '2.1.10')) {
+572-    // Documented max is 8.10, using 8.11 non inclusive covers patch versions.
+573-    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.11', inclusiveMax: false);
+574-  }
+575-  // Documented max is 2.0.21.
+576-  if (isWithinVersionRange(kgpV, min: '2.0.20', max: '2.1', inclusiveMax: false)) {
+577-    // Documented max is 8.5, using 8.9 non inclusive covers patch versions.
+578-    // Kotlin Multiplatform can throw warnings on 8.8.
+579-    return isWithinVersionRange(gradleV, min: '6.8.3', max: '8.9', inclusiveMax: false);
+580-  }
+581-  if (isWithinVersionRange(kgpV, min: '2.0', max: '2.0.20', inclusiveMax: false)) {
+582-    // Documented max is 8.5, using 8.6 non inclusive covers patch versions.
+583-    return isWithinVersionRange(gradleV, min: '6.8.3', max: '8.6', inclusiveMax: false);
+584-  }
+585-  // Documented max is 1.9.25.
+--
+624-// If versions are newer than the max known version a warning is logged and true
+625-// returned.
+626-//
+627-// Source of truth found here:
+628-// https://kotlinlang.org/docs/gradle-configure-project.html#apply-the-plugin
+629:bool validateAgpAndKgp(Logger logger, {required String? kgpV, required String? agpV}) {
+630-  if (agpV == null || kgpV == null || agpV.isEmpty || kgpV.isEmpty) {
+631-    logger.printTrace('KGP or AGP version unknown ($kgpV, $agpV).');
+632-    return false;
+633-  }
+634-
+635-  if (isWithinVersionRange(agpV, min: '0.0', max: oldestConsideredAgpVersion)) {
+636-    logger.printTrace(
+637-      'AGP version ($agpV) older than oldest supported $oldestConsideredAgpVersion.',
+638-    );
+639-  }
+640:  const maxKnownAgpVersionWithFullKotinSupport = '8.7.2';
+641-
+642-  if (isWithinVersionRange(
+643-        kgpV,
+644-        min: maxKnownAndSupportedKgpVersion,
+645-        max: '100.100',
+646-        inclusiveMin: false,
+647-      ) ||
+648-      isWithinVersionRange(
+649-        agpV,
+650:        min: maxKnownAgpVersionWithFullKotinSupport,
+651-        max: '100.100',
+652-        inclusiveMin: false,
+653-      )) {
+654-    logger.printTrace(
+655-      'Newer than known KGP version ($kgpV), AGP ($agpV).'
+656-      '\n Treating as valid configuration.',
+657-    );
+658-    return true;
+659-  }
+660-
+661-  // https://kotlinlang.org/docs/gradle-configure-project.html#apply-the-plugin
+662-  // Documenation is non continuous, past versions are known to the
+663-  // publishers of KGP. When covering version ranges beyond what is documented
+664-  // add a comment with the documented value.
+665-  // Continuous KGP version handling is prefered in case an emergency patch to a
+666-  // past release is shipped this code will assume the version range that is closest.
+667-
+668-  // Documented max is 2.2.20
+669-  if (isWithinVersionRange(kgpV, min: '2.2.20', max: '2.2.29')) {
+670-    // Documented max is 8.11.1
+671-    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.12', inclusiveMax: false);
+672-  }
+673-  // Documented max is 2.2.10
+674-  if (isWithinVersionRange(kgpV, min: '2.2.0', max: '2.2.19')) {
+675-    // Documented max is 8.10.0
+676-    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.11', inclusiveMax: false);
+677-  }
+678-  // Documented max is 2.1.21
+679-  if (isWithinVersionRange(kgpV, min: '2.1.0', max: '2.1.21')) {
+680-    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.7.2');
+681-  }
+682-  // Documented max is 2.0.21
+683-  if (isWithinVersionRange(kgpV, min: '2.0.20', max: '2.1.0', inclusiveMax: false)) {
+684-    // Documented max is 8.5.
+685-    return isWithinVersionRange(agpV, min: '7.1.3', max: '8.6', inclusiveMax: false);
+686-  }
+687-  // Documented max is 2.0.0.
+688-  if (isWithinVersionRange(kgpV, min: '2.0.0', max: '2.0.20', inclusiveMax: false)) {
+689-    return isWithinVersionRange(agpV, min: '7.1.3', max: '8.3.1');
+690-  }
+691-  // Documented max is 1.9.25
+692-  if (isWithinVersionRange(kgpV, min: '1.9.20', max: '2.0.0', inclusiveMax: false)) {
+693-    return isWithinVersionRange(agpV, min: '4.2.2', max: '8.1.0');
+694-  }
+695-  // Documented max is 1.9.10
+696-  if (isWithinVersionRange(kgpV, min: '1.9.0', max: '1.9.20', inclusiveMax: false)) {
+697-    return isWithinVersionRange(agpV, min: '4.2.2', max: '7.4.0');
+698-  }
+699-  // Documented max is 1.8.22
+700-  if (isWithinVersionRange(kgpV, min: '1.8.20', max: '1.9', inclusiveMax: false)) {
+701-    return isWithinVersionRange(agpV, min: '4.1.3', max: '7.4.0');
+702-  }
+703-  // Documented max is 1.8.11
+704-  if (isWithinVersionRange(kgpV, min: '1.8.0', max: '1.8.20', inclusiveMax: false)) {
+705-    return isWithinVersionRange(agpV, min: '4.1.3', max: '7.2.1');
+706-  }
+707-  // Documented max is 1.7.22
+708-  if (isWithinVersionRange(kgpV, min: '1.7.20', max: '1.8.0', inclusiveMax: false)) {
+709-    return isWithinVersionRange(agpV, min: '3.6.4', max: '7.0.4');
+710-  }
+--
+728-//
+729-// Source of truth found here:
+730-// https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
+731-// AGP has a minimum version of gradle required but no max starting at
+732-// AGP version 2.3.0+.
+733:bool validateGradleAndAgp(Logger logger, {required String? gradleV, required String? agpV}) {
+734-  if (gradleV == null || agpV == null) {
+735-    logger.printTrace('Gradle version or AGP version unknown ($gradleV, $agpV).');
+736-    return false;
+737-  }
+738-
+739-  // First check if versions are too old.
+740-  if (isWithinVersionRange(
+741-    agpV,
+742-    min: '0.0',
+743-    max: oldestConsideredAgpVersion,
+744-    inclusiveMax: false,
+745-  )) {
+746-    logger.printTrace('AGP Version: $agpV is too old.');
+747-    return false;
+748-  }
+749-  if (isWithinVersionRange(
+750-    gradleV,
+751-    min: '0.0',
+752-    max: oldestConsideredGradleVersion,
+753-    inclusiveMax: false,
+754-  )) {
+755-    logger.printTrace('Gradle Version: $gradleV is too old.');
+
+$ cat /tmp/rider_apk_log.txt 2>&1 | head -200; echo "===dvc_3501==="; head -80 /tmp/dvc_3501.kt 2>&1
+> Forge · deepseek-v4.1-flash-free
+
+Silence 180s sans nouvelle sortie (journal=46 o) : coupure opencode pid=155829
+
+> Forge · mimo-v2.6-flash-free
+
+→ Read /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md
+
+$ pwd && ls -la
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target
+total 88
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 16:22 .
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 16:22 ..
+-rw-r--r--  1 ubuntu ubuntu 1364 Nov 26 16:22 .env.example
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 16:24 .git
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 .github
+-rw-r--r--  1 ubuntu ubuntu  615 Nov 26 16:22 .gitignore
+-rw-r--r--  1 ubuntu ubuntu 1352 Nov 26 16:22 .gitleaks.toml
+-rw-r--r--  1 ubuntu ubuntu  578 Nov 26 16:22 CLEANROOM.md
+-rw-r--r--  1 ubuntu ubuntu  255 Nov 26 16:22 LICENSE
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 MEMORY
+-rw-r--r--  1 ubuntu ubuntu 1000 Nov 26 16:22 Makefile
+-rw-r--r--  1 ubuntu ubuntu 1181 Nov 26 16:22 README.md
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 16:22 api
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 16:22 data
+-rw-r--r--  1 ubuntu ubuntu 2737 Nov 26 16:22 docker-compose.override.yml
+-rw-r--r--  1 ubuntu ubuntu 3714 Nov 26 16:22 docker-compose.yml
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 16:22 docs
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 engine
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 16:22 migrations
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 prompts
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 16:22 scripts
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 tools
+
+$ ls -la /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ 2>/dev/null | head -50
+total 24
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 16:22 .
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 ..
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 15:06 ci
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 16:22 extra
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 16:22 lifeos
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 16:22 target
+
+✗ git status && git log --oneline -5 && git branch -a | head -30 && git remote -v failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ ls -la /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ 2>/dev/null; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/2026-11-02-fr-01-ingestion-live/ 2>/dev/null
+total 184
+dr-xr-xr-x 46 ubuntu ubuntu 4096 Nov 26 16:22 .
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 ..
+dr-xr-xr-x  5 ubuntu ubuntu 4096 Nov 26 16:22 .archive
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 20260729-galass-seclists-offensive-pentest
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260730-galassdriver-kyc-submit-spinner
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260730-galassdriver-vehicle-verification-submit
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260815-archstudio-lego-catalog
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260815-archstudio-lego-implementation
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260815-archstudio-services-catalog
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260816-archstudio-lego-flow-scope-integration
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260817-archstudio-add-toolkit
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260817-archstudio-brick-metadata
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260823-030234_vision-m3-health-score
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260824-001216_catalog-health-cms
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260824-181748_templates-flows-enrich
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260824-215500_add-health-flows
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260825-012317_drizzle-content-sot
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260915-whatsappbotsop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260917-fiitsa-benchmark
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20260918-jaayalma-solutions-benchmark
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 20260919-jaayalma-positionnement
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20261002-1138_loopdetector-single-failure
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 20261002-galass-auto-dispatch
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 20261002-galass-driver-dispatch-f4
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 20261002-galass-rider-dispatch-f3
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20261006-galass-driver-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20261006-galass-regression-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 20261006-galass-rider-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 amber-ledger-wire-inputs
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 conveyor-p3-stage-runner
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 conveyor-p4-approve
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 cursor-algo-follow-test-20260728
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-auth-login-register-gate-110701
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-dashboard-499-loop-710204
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-francisation-sn-840301
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-ios-recaptcha-crash-507205
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 galass-phone-auth-876543
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-push-notifications-619402
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-ride-payment-post-739201
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-rider-security-complete-120712
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-rider-stable-final-110711
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-rider-store-submission-20260703
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-version-release-docs-180716
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-vps-startup-storm-710203
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 galass-webview-payment-482910
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:22 hybrid-smoke-20260728
+
+$ git status && git log --oneline -5 && git branch -a | head -40
+On branch isa/fr-01-vera-2026-11-26
+Your branch is up to date with 'origin/isa/fr-01-vera-2026-11-26'.
+
+nothing to commit, working tree clean
+1bbf95b docs(isa): fr-01 — V1 schéma et migrations, ISC-22/12/13 cochés
+f5a46c8 feat(ingest): S1.3 — fenêtres d'état et couverture horaire (ISC-13)
+ddfe5c5 feat(ingest): S1.2 — origine et client du pool d'URL (ISC-12)
+b4d7fcc feat(ingest): S1.1 — schéma chaîne du catalogue ouvert (ISC-22)
+aaa637f wip(fr01-v1): partial work (agent stopped)
+* isa/fr-01-vera-2026-11-26
+  remotes/origin/annotation/pilot100-2026-11-14
+  remotes/origin/annotation/pilot100-agreement
+  remotes/origin/build/fr01-v1c
+  remotes/origin/build/fr04-l2
+  remotes/origin/build/fr04-l3
+  remotes/origin/build/fr04-l4
+  remotes/origin/build/fr04-l5
+  remotes/origin/build/fr04-l6
+  remotes/origin/build/fr04-l7
+  remotes/origin/build/fr04-l8
+  remotes/origin/build/fr04-l9
+  remotes/origin/chore/isa-annotation-isc43-ratif-2026-11-24
+  remotes/origin/close/fr04-v3-max
+  remotes/origin/close/fr04-v4-pending
+  remotes/origin/cursor/language-pass-slice-resume-b609
+  remotes/origin/docs/isa-cloture-2026-11-18
+  remotes/origin/eval/compare-engines-2026-11-25
+  remotes/origin/feat/fingerprint-engine-maison-2026-11-15
+  remotes/origin/feat/inventory-mytuner
+  remotes/origin/feat/mytuner-stream-scrape
+  remotes/origin/feat/relecture-2-overlay-2026-11-16
+  remotes/origin/fix/csv-import-and-no-media-test
+  remotes/origin/fix/inventory-allowlist-names
+  remotes/origin/fix/isc15-replay-speech-rule-2026-11-16
+  remotes/origin/fix/mytuner-discover
+  remotes/origin/fix/mytuner-names-only
+  remotes/origin/fix/orb-pagination-skip-stream-tests
+  remotes/origin/fullrun-logs/annotation-build-solo-45072495775
+  remotes/origin/fullrun-logs/annotation-build-solo2-45082420751
+  remotes/origin/fullrun-logs/annotation-build-solo3-45089775991
+  remotes/origin/fullrun-logs/annotation-cloture-build-45065572679
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44861841409
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44872185689
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44879646038
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44882169767
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44901760509
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44904821337
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44921694898
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44924244371
+
+$ ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ | grep -i fr-01; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/2026-11-02-fr-01-ingestion-live/ 2>/dev/null || echo "DIR NOT FOUND"
+DIR NOT FOUND
+
+$ git log --oneline -3 origin/build/fr01-v1c 2>/dev/null; echo "---"; git rev-parse HEAD; echo "---"; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ | grep 2026-11
+1bbf95b docs(isa): fr-01 — V1 schéma et migrations, ISC-22/12/13 cochés
+f5a46c8 feat(ingest): S1.3 — fenêtres d'état et couverture horaire (ISC-13)
+ddfe5c5 feat(ingest): S1.2 — origine et client du pool d'URL (ISC-12)
+---
+1bbf95b097089c053d32f9923ee74b80990dd021
+---
+
+✱ Glob "**/2026-11-02-fr-01-ingestion-live/**" in /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci · 1 match
+
+$ ls -R /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci 2>/dev/null | head -60; echo ===; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/.github/workflows 2>/dev/null; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/.github/workflows 2>/dev/null
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci:
+FIX-CI.md
+FIX-SERENA.md
+FIX-VERA-AUDIT.md
+INVENTAIRE.md
+README.md
+REPORT.md
+REVIEW-AGENTS-LOAD.md
+REVIEW-ASSEMBLE.md
+REVIEW-PR1.md
+REVIEW-PR20.md
+REVIEW.md
+TESTS-DIAG.md
+docs
+models.txt
+opencode
+prompts
+targets
+
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/docs:
+galass-bugs-isa-locate-2026-11-25.md
+
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode:
+allowed-repos.sh
+autosave-deny.txt
+autosave.sh
+bench-capped
+check-agent.sh
+checkpoint.sh
+ci-preamble.md
+config
+done-check-call.sh
+done_check.sh
+emu-e2e.sh
+extra-repos.sh
+install-hook-profile.sh
+leaklog.sh
+lifeos-guard.sh
+livelog.sh
+===dvc_3501===
+// Copyright 2014 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+package com.flutter.gradle
+
+import androidx.annotation.VisibleForTesting
+import com.android.build.api.AndroidPluginVersion
+import com.android.build.api.variant.AndroidComponentsExtension
+import com.android.build.api.variant.Variant
+import org.gradle.api.JavaVersion
+import org.gradle.api.Project
+import org.gradle.api.logging.Logger
+
+/**
+ * Warns or errors on version ranges of dependencies required to build a Flutter Android app.
+ *
+ * For code that evaluates if dependencies are compatible with each other see
+ * packages/flutter_tools/lib/src/android/gradle_utils.dart.
+ */
+object DependencyVersionChecker {
+    // Logging constants.
+    @VisibleForTesting internal const val GRADLE_NAME: String = "Gradle"
+
+    @VisibleForTesting internal const val JAVA_NAME: String = "Java"
+
+    @VisibleForTesting internal const val AGP_NAME: String = "Android Gradle Plugin"
+
+    @VisibleForTesting internal const val KGP_NAME: String = "Kotlin"
+
+    @VisibleForTesting internal const val MIN_SDK_NAME: String = "minimum Android SDK"
+
+    // The task prefix for assemble builds.
+    @VisibleForTesting
+    internal const val ASSEMBLE_PREFIX = "assemble"
+
+    // The task postfix to use when checking the minimum SDK version for each flavor.
+    internal const val MIN_SDK_CHECK_TASK_POSTFIX = "MinSdkCheck"
+
+    // The following messages represent best effort guesses at where a Flutter developer should
+    // look to upgrade a dependency that is below the corresponding threshold. Developers can
+    // change some of these locations, so they are not guaranteed to be accurate.
+    @VisibleForTesting internal fun getPotentialGradleFix(projectDirectory: String): String =
+        "Your project's gradle version is typically " +
+            "defined in the gradle wrapper file. By default, this can be found at " +
+            "$projectDirectory/gradle/wrapper/gradle-wrapper.properties. \n" +
+            "For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.\n"
+
+    // The potential java fix does not make use of the project directory,
+    // so it left as a constant.
+    @VisibleForTesting internal const val POTENTIAL_JAVA_FIX: String =
+        "The Java version used by Flutter can be " +
+            "set with `flutter config --jdk-dir=<path>`. \nFor more information about how Flutter " +
+            "chooses which version of Java to use, see the --jdk-dir section of the " +
+            "output of `flutter config -h`.\n"
+
+    @VisibleForTesting internal fun getPotentialAGPFix(projectDirectory: String): String =
+        "Your project's AGP version is typically " +
+            "defined in the plugins block of the `settings.gradle` file " +
+            "($projectDirectory/settings.gradle), by a plugin with the id of " +
+            "com.android.application. \nIf you don't see a plugins block, your project " +
+            "was likely created with an older template version. In this case it is most " +
+            "likely defined in the top-level build.gradle file " +
+            "($projectDirectory/build.gradle) by the following line in the dependencies" +
+            " block of the buildscript: \"classpath 'com.android.tools.build:gradle:<version>'\".\n"
+
+    @VisibleForTesting internal fun getPotentialKGPFix(projectDirectory: String): String =
+        "Your project's KGP version is typically " +
+            "defined in the plugins block of the `settings.gradle` file " +
+            "($projectDirectory/settings.gradle), by a plugin with the id of " +
+            "org.jetbrains.kotlin.android. \nIf you don't see a plugins block, your project " +
+            "was likely created with an older template version, in which case it is most " +
+            "likely defined in the top-level build.gradle file " +
+            "($projectDirectory/build.gradle) by the ext.kotlin_version property.\n"
+
+    @VisibleForTesting internal fun getPotentialSDKFix(projectDirectory: String): String =
+        "Your project's minimum Android SDK version is typically " +
+            "defined in the android block of the app-level `build.gradle(.kts)` file " +
+            "($projectDirectory/app/build.gradle(.kts))."
+
+$ cat /tmp/flutter/version 2>/dev/null; echo "---"; grep -n 'maxKnownAndSupportedAgpVersion\|maxKnownAgpVersion\|maxKnownAndSupportedKgpVersion\|minSupported\|SUPPORTED_AGP\|MINIMUM_GRADLE' /tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart 2>/dev/null | head -40; echo "===DVC 3501 checks==="; grep -n 'MIN_.*VERSION\|maxSupported\|AGP_VERSION\|KGP_VERSION\|Gradle' /tmp/dvc_3501.kt 2>/dev/null | head -80
+---
+86:const maxKnownAndSupportedKgpVersion = '2.4.20';
+93:const maxKnownAndSupportedAgpVersion = '9.4';
+99:const maxKnownAgpVersionWithFullKotlinSupport = '9.3.1';
+102:const maxKnownAgpVersion = '9.4';
+573:    min: maxKnownAndSupportedKgpVersion,
+685:        min: maxKnownAndSupportedKgpVersion,
+691:        min: maxKnownAgpVersionWithFullKotlinSupport,
+835:  if (isWithinVersionRange(agpV, min: maxKnownAndSupportedAgpVersion, max: '100.100')) {
+1053:    min: maxKnownAndSupportedAgpVersion,
+1152:      agpMin: maxKnownAgpVersion,
+1153:      agpMax: maxKnownAgpVersion,
+1162:  if (isWithinVersionRange(agpV, min: maxKnownAgpVersion, max: '100.100')) {
+1423:    agpMax: maxKnownAndSupportedAgpVersion,
+===DVC 3501 checks===
+23:    @VisibleForTesting internal const val GRADLE_NAME: String = "Gradle"
+27:    @VisibleForTesting internal const val AGP_NAME: String = "Android Gradle Plugin"
+43:    @VisibleForTesting internal fun getPotentialGradleFix(projectDirectory: String): String =
+81:    // The following versions define our support policy for Gradle, Java, AGP, and KGP.
+88:    @VisibleForTesting internal val warnGradleVersion: Version = Version(9, 5, 0)
+90:    @VisibleForTesting internal val errorGradleVersion: Version = Version(9, 3, 1)
+121:        checkGradleVersion(VersionFetcher.getGradleVersion(project), project)
+132:                    "version checking. \nThis may be because you have applied AGP after the Flutter Gradle Plugin."
+227:    @VisibleForTesting internal fun checkGradleVersion(
+231:        if (version < errorGradleVersion) {
+236:                    errorGradleVersion.toString(),
+237:                    getPotentialGradleFix(project.rootDir.path)
+240:        } else if (version < warnGradleVersion) {
+245:                    warnGradleVersion.toString(),
+246:                    getPotentialGradleFix(project.rootDir.path)
+
