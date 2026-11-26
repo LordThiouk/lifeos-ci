@@ -16079,3 +16079,100 @@ $ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$
     148▕         $mock->shouldReceive('prevConfiguration')->andReturnUsing(function () use ($mock, $captured) {
 
 → Read core/app/Notify/Sms.php
+
+$ grep -n "approveAll\|approve.all\|function approve" core/app/Http/Controllers/Admin/ManageDriversController.php
+183:    public function approveAll($id) {
+
+$ sed -n '150,240p' core/app/Http/Controllers/Admin/ManageDriversController.php
+$services  = Service::get();
+
+        $widget['total_deposit']  = Deposit::where('driver_id', $driver->id)->successful()->sum('amount');
+        $widget['total_payment']  = RidePayment::where('driver_id', $driver->id)->sum('amount');
+        $widget['total_withdraw'] = Withdrawal::where('driver_id', $driver->id)->approved()->sum('amount');
+        $countries                = json_decode(file_get_contents(resource_path('views/partials/country.json')));
+
+        $rideQuery = Ride::where('driver_id', $driver->id);
+
+        $widget['total_ride']     = (clone $rideQuery)->count();
+        $widget['completed_ride'] = (clone $rideQuery)->completed()->count();
+        $widget['canceled_ride']  = (clone $rideQuery)->canceled()->count();
+        $widget['running_ride']   = (clone $rideQuery)->running()->count();
+
+        return view('admin.driver.detail', compact('pageTitle', 'driver', 'widget', 'countries', 'loginLogs', 'services'));
+    }
+    public function location($id) {
+        $driver    = Driver::findOrFail($id);
+        $pageTitle = "Driver Location";
+
+        return view('admin.driver.location', compact('pageTitle', 'driver'));
+    }
+
+    public function verificationApprove($id) {
+        $driver     = Driver::findOrFail($id);
+        $driver->dv = Status::VERIFIED;
+        $driver->save();
+
+        notify($driver, 'DRIVER_DOCUMENT_APPROVE', []);
+        $notify[] = ['success', 'Driver verification approved successfully'];
+        return back()->withNotify($notify);
+    }
+
+    public function approveAll($id) {
+        $driver = Driver::with('vehicle')->findOrFail($id);
+
+        $hasDocument = !empty($driver->driver_data);
+        $hasVehicle  = $driver->vehicle && !blank($driver->vehicle->form_data);
+
+        if (!$hasDocument || !$hasVehicle) {
+            $notify[] = ['error', 'Driver document and vehicle information must be complete before one-step approval'];
+            return back()->withNotify($notify);
+        }
+
+        $alreadyVerified = $driver->dv == Status::VERIFIED && $driver->vv == Status::VERIFIED;
+
+        $driver->dv = Status::VERIFIED;
+        $driver->vv = Status::VERIFIED;
+        $driver->save();
+
+        if (!$alreadyVerified) {
+            $this->sendDriverApprovedSms($driver);
+        }
+
+        $notify[] = ['success', 'Driver approved successfully'];
+        return back()->withNotify($notify);
+    }
+
+    private function sendDriverApprovedSms(Driver $driver): void
+    {
+        try {
+            $this->ensureDriverApprovedSmsTemplate();
+            notify($driver, 'DRIVER_APPROVE_ALL', [
+                'fullname' => $driver->fullname,
+            ], ['sms'], false);
+        } catch (\Throwable $e) {
+            logger()->error('Driver approval SMS failed', [
+                'driver_id' => $driver->id,
+                'error'     => $e->getMessage(),
+            ]);
+        }
+    }
+
+    private function ensureDriverApprovedSmsTemplate(): void
+    {
+        $template = \App\Models\NotificationTemplate::where('act', 'DRIVER_APPROVE_ALL')->first();
+        if ($template) {
+            return;
+        }
+
+        \App\Models\NotificationTemplate::create([
+            'act'          => 'DRIVER_APPROVE_ALL',
+            'name'         => 'Driver Approved',
+            'subject'      => 'Validation chauffeur',
+            'email_body'   => 'Bonjour {{fullname}}, votre compte chauffeur Galass a ete valide. Vous pouvez accepter des courses.',
+            'sms_body'     => 'Votre compte chauffeur Galass a ete valide. Vous pouvez accepter des courses.',
+            'push_body'    => 'Votre compte chauffeur Galass a ete valide.',
+            'shortcodes'   => json_encode(['fullname' => 'Driver name']),
+            'email_status' => Status::ENABLE,
+            'sms_status'   => Status::ENABLE,
+            'push_status'  => Status::ENABLE,
+
