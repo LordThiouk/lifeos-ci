@@ -145,3 +145,15 @@ aaa637f wip(fr01-v1): partial work (agent stopped)
   remotes/origin/fullrun-logs/annotation-cloture-review-v1-44921694898
   remotes/origin/fullrun-logs/annotation-cloture-review-v1-44924244371
 
+$ ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ | grep -i fr-01; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/2026-11-02-fr-01-ingestion-live/ 2>/dev/null || echo "DIR NOT FOUND"
+DIR NOT FOUND
+
+$ git log --oneline -3 origin/build/fr01-v1c 2>/dev/null; echo "---"; git rev-parse HEAD; echo "---"; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ | grep 2026-11
+1bbf95b docs(isa): fr-01 — V1 schéma et migrations, ISC-22/12/13 cochés
+f5a46c8 feat(ingest): S1.3 — fenêtres d'état et couverture horaire (ISC-13)
+ddfe5c5 feat(ingest): S1.2 — origine et client du pool d'URL (ISC-12)
+---
+1bbf95b097089c053d32f9923ee74b80990dd021
+---
+
+✱ Glob "**/2026-11-02-fr-01-ingestion-live/**" in /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci · 1 match
