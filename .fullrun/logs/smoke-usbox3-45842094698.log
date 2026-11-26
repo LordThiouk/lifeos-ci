@@ -13003,3 +13003,395 @@ drwxr-xr-x 11 ubuntu ubuntu   4096 Nov 26 17:27 ..
 -rw-r--r--  1 ubuntu ubuntu 107113 Nov 26 18:08 ISA.md
 -rw-r--r--  1 ubuntu ubuntu   3270 Nov 26 17:27 fullrun-carry.json
 
+→ Read MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+→ Read MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md [offset=340]
+→ Read MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md [offset=503]
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/ 2>/dev/null | head -30
+total 520
+drwxr-xr-x 11 ubuntu ubuntu   4096 Nov 26 17:27 .
+drwxr-xr-x 13 ubuntu ubuntu   4096 Nov 26 17:27 ..
+-rw-r--r--  1 ubuntu ubuntu   1444 Nov 26 17:27 .env.example
+-rw-r--r--  1 ubuntu ubuntu      8 Nov 26 17:27 .graphifyignore
+drwxr-xr-x 15 ubuntu ubuntu   4096 Nov 26 17:27 app
+-rw-r--r--  1 ubuntu ubuntu    353 Nov 26 17:27 artisan
+drwxr-xr-x  3 ubuntu ubuntu   4096 Nov 26 17:27 bootstrap
+-rwxr-xr-x  1 ubuntu ubuntu   3113 Nov 26 17:27 composer.json
+-rwxr-xr-x  1 ubuntu ubuntu 464401 Nov 26 17:27 composer.lock
+drwxr-xr-x  2 ubuntu ubuntu   4096 Nov 26 17:27 config
+drwxr-xr-x  4 ubuntu ubuntu   4096 Nov 26 17:27 database
+-rw-r--r--  1 ubuntu ubuntu   1224 Nov 26 17:27 phpunit.xml
+drwxr-xr-x  4 ubuntu ubuntu   4096 Nov 26 17:27 resources
+drwxr-xr-x  2 ubuntu ubuntu   4096 Nov 26 17:27 routes
+drwxr-xr-x  3 ubuntu ubuntu   4096 Nov 26 17:27 storage
+drwxr-xr-x  8 ubuntu ubuntu   4096 Nov 26 17:27 tests
+drwxr-xr-x 74 ubuntu ubuntu   4096 Nov 26 17:27 vendor
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/docs/ 2>/dev/null
+total 120
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 17:27 .
+drwxr-xr-x 13 ubuntu ubuntu  4096 Nov 26 17:27 ..
+-rw-r--r--  1 ubuntu ubuntu  6919 Nov 26 17:27 API_MULTI_STOP.md
+-rw-r--r--  1 ubuntu ubuntu 26017 Nov 26 17:27 APP_FLOW_END_TO_END.md
+-rw-r--r--  1 ubuntu ubuntu 20025 Nov 26 17:27 ARCHITECTURE.md
+-rw-r--r--  1 ubuntu ubuntu 34870 Nov 26 17:27 BUGS.md
+-rw-r--r--  1 ubuntu ubuntu  7044 Nov 26 17:27 DEPLOY_RUNBOOK.md
+-rw-r--r--  1 ubuntu ubuntu  1506 Nov 26 17:27 nginx-galass-admin-harden.conf
+-rw-r--r--  1 ubuntu ubuntu  1070 Nov 26 17:27 nginx-galass-security-headers.conf
+-rw-r--r--  1 ubuntu ubuntu  1624 Nov 26 17:27 nginx-galass-security.conf
+
+→ Read docs/BUGS.md
+
+# Todos
+[✓] Explore repository structure and understand codebase
+[✓] Review existing ISA and W0 wave status
+[✓] Check Artemis E2E workflow and device proof requirements
+[•] Implement any missing W0 device proofs (document block status)
+[✓] Verify backend proofs already done (ISC-84 etc.)
+[✓] Check multistop bugs and ensure W0 compliance
+[ ] Generate task_done.md summary
+
+Now I'll create the task summary. Based on my analysis of the ISA.md, BUGS.md, and the Artemis run history, here's the current state:
+
+**W0 Wave Status**: All S-W0-01 through S-W0-07 are **BLOQUÉS** (blocked) - no device proofs can be executed in this environment.
+
+**Root Causes**:
+- Missing runner tools: `adb`, `flutter`, `emu-e2e.sh`, `GALASS_TOKEN` all absent
+- Artemis workflow `artemis-staging-e2e.yml` pinned to Flutter **3.44.8** but goldens baseline at **3.50.1** (`df372db`) - causes 4 golden test failures
+- Build APK step (step 12) fails with Gradle compatibility issues
+- No emulator can start, no APK can be installed, no logcat/captures produced
+
+**Artemis Runs Documented**:
+- Run #152 (most recent): step 11 Flutter tests **success** (478 passed) but step 12 Build APK **failure**; steps 13-19 skipped
+- Earlier runs (#139-#151): all failed at step 11 with 468/4 golden failures or step 12 build failures
+- Runs #139-#143 on `feat/multistop-rider-close-2026-11-20` contain captures/logcat but are on excluded multistop branches
+
+**Backend Proofs**: Already consigned and valid - ISC-84 partial backend proof (CASH_PAYMENT_RECEIVED timestamp) remains; must NOT be re-done per instructions.
+
+**Decisions**: Per 2026-11-25 Papa decision, point 7 (Wave/OM deposit) is resolved option A - no app changes needed. ISC-30.2 only.
+
+**No W1+ commencement**: Per ISA restriction, W0 must remain blocked; no backend/mobile waves start.
+
+Let me create the task_done.md file:
+$ ls /tmp/ 2>/dev/null || echo "no /tmp"
+LICENSE
+PROMPT-SMOKE.md
+README.md
+actionlint
+actions-runner-2.log
+actions-runner-3.log
+actions-runner.log
+agent-store-fuse.log
+agp.html
+agp811.html
+anyos-xstartup
+artemis-f432-fail
+artemis-golden
+artemis-r3.gz
+artemis-r3.log
+artemis-wf.yml
+artemis152_logs.zip
+artemis_152_job.log
+artemis_152_logs.zip
+artemis_workflow_81d149d4.yml
+bore
+bore-proxy.log
+bore-ws-pong.err
+bore-ws-pong.out
+bore-wstunnel.log
+bore.tgz
+bs.bak
+capture-vnc-user-env
+capture-vnc-user-env.hash
+capture-vnc-user-env.version
+cf-tcp.log
+cf-ws.log
+check_mount.py
+check_mount2.py
+check_toolchain.py
+chisel
+chisel.tgz
+ci-logs
+cienv-pong.err
+cienv-pong.out
+cloudflared
+cloudflared-proxy.log
+clr-debug-pipe-182123-3941873-in
+clr-debug-pipe-182123-3941873-out
+clr-debug-pipe-183552-3944899-in
+clr-debug-pipe-183552-3944899-out
+clr-debug-pipe-189764-3967193-in
+clr-debug-pipe-189764-3967193-out
+clr-debug-pipe-48993-2879107-in
+clr-debug-pipe-48993-2879107-out
+container-init.log
+coverage_gap.jsonl
+coverage_out.jsonl
+coverage_windows.jsonl
+cr_f429_green.log
+cr_f429_redbefore.log
+cr_f429_restore_green.log
+cursor
+cursor-exec-daemon-artifacts-8ac725f6-a207-4cb6-bf1c-3ec0b5ffa7bd.json
+cursor-exec-daemon-cgroup-rooms.1.env
+cursor-mcp-browser-opens
+d2.json
+dbus-1lqGfk8t5A
+dbus-7BA9TBOxcZ
+dbus-C3UA0356PK
+dbus-EjNjiuUOgI
+dbus-FDwWAryv0S
+dbus-GKTgyH7sIV
+dbus-SEczAi8rVz
+dbus-SHmRFYr6nc
+dbus-VHZkRQkDkQ
+dbus-VYdr4YRjqW
+dbus-Zn9KcvvaLj
+dbus-bYZQ5hWntL
+dbus-daemon-system.log
+dbus-kbcZikGnkT
+dbus-tPzmPXHAl6
+dbus-trNjiytnK5
+dbus-ul09wl9jlC
+dbus-uy8rhuyaOU
+dbus-xDOlPVVGvO
+dbus-zXzvmkdepZ
+decision.txt
+diag.zip
+diag143.zip
+dispatch.json
+dotnet-diagnostic-182123-3941873-socket
+dotnet-diagnostic-183552-3944899-socket
+dotnet-diagnostic-189764-3967193-socket
+dotnet-diagnostic-48993-2879107-socket
+dvc_3.44.8.kt
+dvc_3.50.0.kt
+dvc_3501.kt
+encrypted_proxy_secret.txt
+env-i-probe.txt
+envi-direct.err
+envi-direct.out
+envi-pong.err
+envi-pong.out
+exact-gh-sim.txt
+f429_contract_test.dart.orig
+f429_contract_test.log
+f429_green.log
+f429_redbefore.log
+f5_13_test.txt
+fake-llvm-bin
+fat-pong.err
+fat-pong.out
+fat-prompt.txt
+fix_patch.txt
+flutter
+flutter_3.50.1.tar.xz
+fp
+fr01_coverage.jsonl
+fr01_windows.jsonl
+gd_3501.dart
+ghlogs
+gp_FlutterExtension.kt
+gp_FlutterGradlePlugin.kt
+gp_FlutterPlugin.kt
+gp_FlutterPluginUtils.kt
+gp_VersionFetcher.kt
+gu_3448.dart
+gu_3501.dart
+hsperfdata_root
+hsperfdata_ubuntu
+joblog.bin
+joblog.err
+joblog.txt
+joblogs
+kgp.html
+l7_seg.py
+lifeos-ci-agents
+livelog-smoke.txt
+livelogs
+ll-meta.json
+ll.json
+ll.size
+ll2.txt
+localhost-run.log
+m_2c73957.py
+m_6002480.py
+m_885009e.py
+merge_l7.sh
+merge_l9.sh
+my_block.txt
+ngrok.tgz
+node-compile-cache
+oc-bin
+oc-models-all.txt
+oc-models-verbose.txt
+oc-npm-test
+oc-probe
+oc-probe-iceman.txt
+oc-probes
+oc-probes2
+oci-home
+oci-home2
+oci-tmp
+oci-tmp2
+opencode
+pg.sh
+pinggy.log
+piptest
+pong-bore.txt
+pong-cf-ws.txt
+pong-ci-sim.txt
+pong-direct.txt
+pong-proxy.txt
+pong-smoke-prompt.txt
+pong-while-gh.txt
+pong-wstunnel.txt
+proxy-oc-test.txt
+pubget.log
+pubget3448.log
+pubget3501.log
+pubspec.yaml.dirty-backup
+releases.json
+releases_linux.json
+report_block.txt
+rider_apk_log.txt
+run152_logs.zip
+run_migrate.py
+run_migrate2.py
+runner2.log
+serveo.log
+short-pong.err
+short-pong.out
+smoke-err.txt
+smoke-full.log
+smoke-proxy1-complete.log
+smoke-proxy1-job.err
+smoke-proxy1-job.log
+smoke-run.log
+smoke143.zip
+smoke27b.log
+socks-pong.err
+socks-pong.out
+ssh-5OPjORDtv1HA
+staging-e2e-diag-text.zip
+staging-e2e-diag-text_diag_dbg-stop1-a1-ok.logcat
+staging-e2e-diag-text_diag_dbg-stop1-a1-ok.xml
+staging-e2e-diag-text_diag_dbg-stop2-a1-ok.logcat
+staging-e2e-diag-text_diag_dbg-stop2-a1-ok.xml
+staging-e2e-diag-text_report.json
+staging-e2e-diag-text_summary.md
+staging-e2e-diag-text_ui_14-rider-home-loaded.xml
+staging-e2e-diag-text_ui_15-rider-destination-selected.xml
+staging-e2e-diag-text_ui_16-rider-stop-picker.xml
+staging-e2e-diag-text_ui_19-rider-driver-assigned.xml
+staging-e2e-diag-text_ui_21-rider-running-start.xml
+staging-e2e-diag-text_ui_22-rider-stop1-active.xml
+staging-e2e-diag-text_ui_23-rider-stop1-done.xml
+staging-e2e-diag-text_ui_24-rider-stop2-done.xml
+staging-e2e-diag-text_ui_25-rider-destination-arrived.xml
+staging-e2e-diag-text_ui_26-rider-cash-methods.xml
+staging-e2e-diag-text_ui_27-rider-cash-waiting.xml
+staging-e2e-diag-text_ui_29-rider-final-itinerary.xml
+staging-e2e-diag-text_ui_30-rider-rating.xml
+staging-e2e-diag-text_ui_31-rider-home-after.xml
+staging-e2e-diag-text_ui_33-driver-home-online.xml
+staging-e2e-diag-text_ui_34-driver-offer-with-stops.xml
+staging-e2e-diag-text_ui_35-driver-accepted-details.xml
+staging-e2e-diag-text_ui_36-driver-pickup-arrived.xml
+staging-e2e-diag-text_ui_37-driver-running-stop1.xml
+staging-e2e-diag-text_ui_38-driver-stop1-done.xml
+staging-e2e-diag-text_ui_39-driver-stop2-done.xml
+staging-e2e-diag-text_ui_41-driver-cash-request.xml
+staging-e2e-diag-text_ui_42-driver-cash-confirmed.xml
+staging-e2e-diag-text_ui_43-driver-summary.xml
+staging-e2e-smoke-log.zip
+staging-e2e-smoke-log_smoke.log
+stations_check.tsv
+stop-extra-runners-when-idle.sh
+stop-extras.log
+task_done.md
+test3448_ab.log
+test3448_full.log
+test3501_ab.log
+test3501_full.log
+test_boundary_p95.py
+test_per_station.py
+test_threshold_state.py
+tigervnc.TupX1m
+tmp.gAHArEBKh8
+tmp.jx6kYKfv3F
+tmp.rYsFqYqu6a
+tmp.uk3of7DoVL
+tmux-1000
+verify_f429_green.log
+verify_f429_redbefore.log
+verify_f429_run.log
+vnc-desktop-user-env
+w.jsonl
+w0_decision.txt
+wstunnel
+wstunnel-bore-client.log
+wstunnel-ci-pong.err
+wstunnel-ci-pong.out
+wstunnel-ci-pong2.err
+wstunnel-ci-pong2.out
+wstunnel-ci-pong3.err
+wstunnel-ci-pong3.out
+wstunnel-ci-test
+wstunnel-ci-test2
+wstunnel-client-cf.log
+wstunnel-client.log
+wstunnel-server.log
+wstunnel-socks-cf.log
+wstunnel.tar.gz
+
+$ cat /tmp/task_done.md 2>/dev/null || echo "File not found or empty"
+# W0 device (Artemis) — résultat
+
+- Branche : `fullrun/lot-client-w0` (pas de push, pas de merge).
+- Commit : `5fbbcfade38a1313e6c575538b1d6bced2ae1a7c` — « w0(artemis): etat final BLOCK — run 152 sans captures/logcat ; ISC 22/50/80-84 non cochés » (auteur Papa Diop).
+- Fichier modifié : `MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md` (1 ligne ajoutée en Decisions).
+
+## Preuve Artemis
+
+- Dernier run `artemis-staging-e2e.yml` : #152 `45801376130` — https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130 (emu `feat/multistop-e2e-2026-11-15` @ `81d149d4`, `failure`). Aucun run plus récent (152 au total).
+- Journal job `139845170423` téléchargé via API (302 → blob) : step 11 Flutter **success** (478 tests), step 12 « Build APK » **failure** (`BUILD FAILED in 1m 9s`, `assembleDebug exit 1`, cause tronquée par `tail -n 15`), steps 13–19 skipped.
+- Artefacts #152 : uniquement `staging-e2e-evidence-encrypted` (337 o). Aucun `e2e-out/summary.md`, `report.json`, `ui/*.xml` ni `smoke.log` : **aucune capture ni logcat device**.
+- Runs #139/#141/#142/#143 ont des captures/logcat mais sur `feat/multistop-rider-close-2026-11-20`, verdict FAIL, points multistop : refs hors consigne, non réutilisés.
+- Dispatch impossible : jeton lecture seule (`push=false`), `/opt/fullrun-live/emu-e2e.token` absent, `gh`/`sudo`/`push` interdits.
+
+## Décision
+
+- S-W0-01…S-W0-07 / ISC-22, 50, 80–84 : **BLOCK device**, laissés `[ ]` (ISATool.ts non utilisé). `progress` 0/63 inchangé.
+- Preuves backend déjà consignées conservées, non refaites. Aucun W1+, aucun bug multistop traité.
+- Vérifications : 0 ISC coché, 7 ISC W0 non cochés, gitleaks sur le diff = « no leaks found », sections ISA intactes.
+
+← Write /tmp/task_done.md
+Wrote file successfully.
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git status 2>/dev/null | head -30
+On branch fullrun/lot-client-w0
+Your branch is ahead of 'origin/fullrun/lot-client-w0' by 4 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git diff --stat HEAD 2>/dev/null
+(no output)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline -5 2>/dev/null
+5fbbcfad w0(artemis): etat final BLOCK — run 152 sans captures/logcat ; ISC 22/50/80-84 non cochés
+3f67bd85 w0(artemis): préciser cause step 12 via logs API authentifiés ; ISC 22/50/80-84 non cochés
+23e1ec12 wip(autosave): arbre de travail
+9a012ce2 w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés
+3a071572 w0(artemis): BLOCK confirmé runs 148/149 — goldens Driver 4/4 sous 3.44.8 (baselines 3.50.1) ; ISC 22/50/80-84 non cochés
+
+# Todos
+[✓] Explore repository structure and understand codebase
+[✓] Review existing ISA and W0 wave status
+[✓] Check Artemis E2E workflow and device proof requirements
+[✓] Implement any missing W0 device proofs (document block status)
+[✓] Verify backend proofs already done (ISC-84 etc.)
+[✓] Check multistop bugs and ensure W0 compliance
+[✓] Generate task_done.md summary
+
