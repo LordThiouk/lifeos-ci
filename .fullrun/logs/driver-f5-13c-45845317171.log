@@ -3209,3 +3209,377 @@ Error: The read tool was called with invalid arguments: SchemaError(Missing key
   at ["filePath"]).
 Please rewrite the input so it satisfies the expected schema.
 → Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+✗ git status && echo "---BRANCHES---" && git branch -a && echo "---LOG---" && git log --oneline -10 && echo "---REMOTE---" && git remote -v failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+J'ai lu le prompt. Il s'agit d'un brief d'exécution CI (`lifeos-ci`) pour la vague **W0** du lot-client Galass — preuves **device** via Artemis. Je commence par explorer l'état du workspace.
+
+$ ls -la && echo "---MEMORY---" && ls -la MEMORY/ 2>/dev/null && echo "---WORK---" && ls -la MEMORY/WORK/ 2>/dev/null | head -50
+total 192
+drwxr-xr-x 13 ubuntu ubuntu  4096 Nov 26 17:27 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 17:27 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 17:27 .archive
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 17:27 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 17:39 .git
+-rw-r--r--  1 ubuntu ubuntu    68 Nov 26 17:27 .gitattributes
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 17:27 .github
+-rw-r--r--  1 ubuntu ubuntu   480 Nov 26 17:27 .gitignore
+-rw-r--r--  1 ubuntu ubuntu    32 Nov 26 17:27 .graphifyignore
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 17:27 .history
+-rwxr-xr-x  1 ubuntu ubuntu  1325 Nov 26 17:27 .htaccess
+-rw-r--r--  1 ubuntu ubuntu 89305 Nov 26 17:27 2026_03_17_api_swagger_095dc7898c.json
+-rw-r--r--  1 ubuntu ubuntu  5714 Nov 26 17:27 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu  2384 Nov 26 17:27 CLAUDE.md
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 17:27 MEMORY
+-rw-r--r--  1 ubuntu ubuntu   619 Nov 26 17:27 SECURITY.md
+drwxr-xr-x  9 ubuntu ubuntu  4096 Nov 26 17:27 assets
+drwxr-xr-x 11 ubuntu ubuntu  4096 Nov 26 17:27 core
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 17:27 docs
+-rwxr-xr-x  1 ubuntu ubuntu   478 Nov 26 17:27 index.php
+-rw-r--r--  1 ubuntu ubuntu 12489 Nov 26 17:27 om_Pay_Link_Swagger_02e4c3ae33.yml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 17:27 prompts
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 17:27 scripts
+---MEMORY---
+total 12
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 17:27 .
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 17:27 ..
+drwxr-xr-x 11 ubuntu ubuntu 4096 Nov 26 17:27 WORK
+---WORK---
+total 44
+drwxr-xr-x 11 ubuntu ubuntu 4096 Nov 26 17:27 .
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 17:27 ..
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 17:27 2026-11-22-galass-lot-client
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 17:27 20260618-galass-wave-orange-money-payments
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 17:27 20260619-galass-driver-runtime-fixes
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 17:27 20260729-galass-seclists-offensive-pentest
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 17:27 20260801-galass-vehicle-image-pdf-doc
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 17:27 20261002-galass-auto-dispatch
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 17:27 20261006-galass-regression-multistop
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 17:27 20261013-galass-fcm-service-account-outside-webroot
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 17:27 20261013-galass-security-general-setting-messages
+
+✗ git status --short --branch; echo "---BRANCHES---"; git branch -a; echo "---LOG---"; git log --oneline -10; echo "---REMOTE---"; git remote -v failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ ls -la MEMORY/WORK/2026-11-22-galass-lot-client/ && echo "---ARCHIVE---" && ls -la .archive/ && echo "---FULLRUN---" && ls -la .fullrun/
+total 120
+drwxr-xr-x  2 ubuntu ubuntu   4096 Nov 26 17:27 .
+drwxr-xr-x 11 ubuntu ubuntu   4096 Nov 26 17:27 ..
+-rw-r--r--  1 ubuntu ubuntu    288 Nov 26 17:27 COMPLETENESS.yml
+-rw-r--r--  1 ubuntu ubuntu 102413 Nov 26 17:39 ISA.md
+-rw-r--r--  1 ubuntu ubuntu   3270 Nov 26 17:27 fullrun-carry.json
+---ARCHIVE---
+total 12
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 17:27 .
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 17:27 ..
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 17:27 ISA
+---FULLRUN---
+total 12
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 17:27 .
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 17:27 ..
+-rw-r--r--  1 ubuntu ubuntu 1155 Nov 26 17:27 galass-lot-client-w0_DONE.md
+
+$ pwd && git status 2>&1 | head -30
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+On branch fullrun/lot-client-w0
+Your branch is ahead of 'origin/fullrun/lot-client-w0' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+$ cat .fullrun/galass-lot-client-w0_DONE.md; echo "=====COMPLETENESS====="; cat MEMORY/WORK/2026-11-22-galass-lot-client/COMPLETENESS.yml; echo "=====CARRY====="; cat MEMORY/WORK/2026-11-22-galass-lot-client/fullrun-carry.json
+# Run CI galass-lot-client-w0
+
+- run : https://github.com/LordThiouk/galass-ci/actions/runs/45058681462
+- fin : 2026-11-22 19:13 (Dakar)
+- branche : fullrun/lot-client-w0 ; base `2aa0dcd1f4bf24c70d3929c180d498a5ac2fa7ff`
+- push des wip : 1 pendant le run (dernier SHA 34b6e5c)
+- arrêt : run annulé
+- opencode : cancelled ; agent_idle=Forge:2400 arret=annulation 
+- modèles : main/Forge opencode/deepseek-v4.1-flash-free, Max opencode/mimo-v2.6-flash-free, chaîne de secours opencode/minimax-m3.1-flash-free,opencode/mimo-v2.6-flash-free,opencode/longcat-2.5-free,opencode/iceman-free,opencode/flint-40b-free,opencode/nemotron-3.5-lightning-free,opencode/beam-free,opencode/inkling-2-small-free
+- journal complet : branche `fullrun-logs/galass-lot-client-w0-45058681462` (à part, jamais fusionnée ; absente si retirée par le contrôle anti-secrets ; à supprimer après lecture)
+
+## Commits du run
+- 4b8e6ed6 wip(ci): état non commité à la fin du run galass-lot-client-w0
+- 34b6e5cc wip(autosave): arbre de travail
+- 1dbe6564 wip(carry): reprise du run
+
+## Rapport de l'agent
+(aucun rapport écrit : relancer avec le même prompt pour reprendre)
+=====COMPLETENESS=====
+status: pass
+substance: substantial
+required_sections:
+  Problem: present
+  Vision: present
+  Out of Scope: present
+  Constraints: present
+  Goal: present
+  Claims: present
+  Test Strategy: present
+  Features: present
+gaps:
+isc_quality:
+  total: 63
+  checked: 0
+  anti_criteria_count: 15
+=====CARRY=====
+{
+  "payload": {
+    "v": 1,
+    "isa": "2026-11-22-galass-lot-client",
+    "head": "2aa0dcd1f4bf24c70d3929c180d498a5ac2fa7ff",
+    "steps": {
+      "1": {
+        "status": "pass",
+        "at": "2026-11-22T19:06:08Z",
+        "fp": "[REDACTED:hex64]",
+        "sha": "2aa0dcd1f4bf24c70d3929c180d498a5ac2fa7ff"
+      },
+      "2": {
+        "status": "pass",
+        "at": "2026-11-22T19:09:00Z",
+        "fp": "[REDACTED:hex64]",
+        "sha": "34b6e5ccbe2f8f55f722725e3285dc126e8c4117",
+        "criteriaIds": [
+          "Ajouter l'ISC enfant `ISC-N.1` dans l'IS\u000088a0cb85",
+          "Bridge-1\u0000a14776c5",
+          "Bridge-2\u0000b1fd2ee3",
+          "Bridge-4\u000086ea784e",
+          "Exécuter CheckCompleteness et l'audit Ve\u0000c961301b",
+          "ISC-1\u0000ff0488ab",
+          "ISC-10\u00003199ebfd",
+          "ISC-10\u00003d6f855b",
+          "ISC-10\u0000ac50bd76",
+          "ISC-10\u0000ba6f1be8",
+          "ISC-11\u0000385d9809",
+          "ISC-11\u0000424f2e8a",
+          "ISC-11\u000046a1e04c",
+          "ISC-11\u00005aa9508f",
+          "ISC-2\u0000c702f97b",
+          "ISC-20\u0000192535d6",
+          "ISC-20\u00005ea88e9f",
+          "ISC-20\u0000eed149ab",
+          "ISC-21\u0000303e1b9a",
+          "ISC-21\u00004099ac62",
+          "ISC-21\u00004aeb60a4",
+          "ISC-21\u00006dc7b287",
+          "ISC-21\u00007810b8c8",
+          "ISC-22\u0000631b566b",
+          "ISC-22\u00009568fc84",
+          "ISC-23\u000045016d95",
+          "ISC-23\u0000de5833cc",
+          "ISC-3\u0000e5b8a970",
+          "ISC-30\u00007424b311",
+          "ISC-4\u00002417faaa",
+          "ISC-40\u0000e17e6915",
+          "ISC-41\u00004348f5eb",
+          "ISC-42\u0000dbd5445f",
+          "ISC-43\u00000ed200bf",
+          "ISC-44\u0000ceffcc3d",
+          "ISC-5\u0000f3da2db0",
+          "ISC-50\u00004c04fa65",
+          "ISC-51\u00007ac349b3",
+          "ISC-52\u00001763b68e",
+          "ISC-53\u0000bfb9e94a",
+          "ISC-6\u0000311a5e2a",
+          "ISC-60\u000021f98366",
+          "ISC-61\u0000cc10c5b4",
+          "ISC-62\u00006f0dabe1",
+          "ISC-63\u00006381fa56",
+          "ISC-64\u000023a2beaa",
+          "ISC-65\u00001ce9a110",
+          "ISC-66\u000081cf834e",
+          "ISC-67\u0000d4a9ffea",
+          "ISC-68\u0000e6beb37a",
+          "ISC-69\u00001bd1e746",
+          "ISC-70\u0000105d467e",
+          "ISC-71\u000038750332",
+          "ISC-72\u0000b53eb02c",
+          "ISC-73\u0000db0faf0e",
+          "ISC-74\u00008fa33b12",
+          "ISC-75\u000016c2f59b",
+          "ISC-76\u00005c859cd5",
+          "ISC-80\u0000168ab501",
+          "ISC-80\u0000d8389405",
+          "ISC-81\u000008d8cc22",
+          "ISC-81\u00003d3bdaa7",
+          "ISC-82\u0000a2f1323d",
+          "ISC-82\u0000d0c991a8",
+          "ISC-83\u0000163e5ee9",
+          "ISC-83\u00003a67346a",
+          "ISC-83\u0000db672d51",
+          "ISC-84\u000010a56ca3",
+          "ISC-84\u0000e18f73c8",
+          "Miroir Linear de l'ISA, uniquement après\u0000086d550b",
+          "Scaffolder les ISAs enfants Rider et Dri\u00000dda3d80"
+        ]
+      }
+    }
+  },
+  "sig": "[REDACTED:hex64]"
+}
+
+Le premier bloc semble masquer une erreur. Je relance des commandes simples pour isoler.
+$ git log --oneline -10; echo "---STATUS---"; git status --short --branch; echo "---GITHUB---"; find .github -type f | head -50; echo "---SCRIPTS---"; ls -la scripts/; echo "---PROMPTS---"; ls -la prompts/
+9a012ce2 w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés
+3a071572 w0(artemis): BLOCK confirmé runs 148/149 — goldens Driver 4/4 sous 3.44.8 (baselines 3.50.1) ; ISC 22/50/80-84 non cochés
+5b62a92b w0(artemis): run 45768119261 échoue aux tests Flutter ; W0 device BLOQUÉ, ISC non cochés
+691864eb w0(isc-84): S-W0-07 preuve backend partielle CASH_PAYMENT_RECEIVED horodaté ; ISC-84 non coché
+8a07570d w0(isc-83): S-W0-06 ancre R-6 vérifiée ; repro device/logcat bloquée
+142ec782 w0(isc-82): S-W0-05 ancres D-12 vérifiées ; tests single-offer verts ; e2e device bloqué
+a95aed47 w0(isc-81): S-W0-04 ancres D-9 vérifiées ; DispatchAdminSettingsTest vert ; repro device bloquée
+57d3cf05 w0(isc-80): S-W0-03 ancres D-1 vérifiées ; preuve backend online_status ; repro device bloquée
+313ce45e w0(isc-50): S-W0-02 ancres OTP Rider+Driver vérifiées ; PhoneAuthUniquenessTest vert
+9b2873f4 w0(isc-22): S-W0-01 ancres mobile revérifiées ; route:list backend OK ; repro device bloquée
+---STATUS---
+## fullrun/lot-client-w0...origin/fullrun/lot-client-w0 [ahead 1]
+---GITHUB---
+.github/workflows/deploy.yml
+.github/workflows/deploy-staging-branch.yml
+.github/workflows/deploy-staging.yml
+.github/workflows/deploy-prod.yml
+.github/workflows/test.yml
+---SCRIPTS---
+total 20
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 17:27 .
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 17:27 ..
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 17:27 ci
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 17:27 ops
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 17:27 probes
+---PROMPTS---
+total 12
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 17:27 .
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 17:27 ..
+-rw-r--r--  1 ubuntu ubuntu  795 Nov 26 17:27 lc-dec.md
+
+$ find / -name "ISATool.ts" -not -path "*/node_modules/*" 2>/dev/null | head; echo "---ARTEMIS WF---"; find / -name "*artemis*" -not -path "*/node_modules/*" -not -path "/proc/*" -not -path "/sys/*" 2>/dev/null | head -30
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts
+---ARTEMIS WF---
+/cursor/stores/user/artemis-evidence-passphrase.txt
+/tmp/artemis-golden
+/tmp/artemis152_logs.zip
+/tmp/artemis-f432-fail
+/tmp/artemis-wf.yml
+/tmp/artemis-r3.log
+/tmp/artemis-r3.gz
+/agent/repos/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml
+/agent/repos/galass-emu-actions-pub/vendor/artemis
+/agent/repos/galass-emu-actions-pub/vendor/artemis/config/artemis.jsonc
+/agent/repos/galass-emu-actions-pub/vendor/artemis/artemis
+/agent/repos/galass-emu-actions-pub/vendor/artemis/artemis/resources/config/artemis.jsonc
+/agent/repos/galass-emu-actions-pub/vendor/artemis/packages/artemis-accessibility-helper
+/agent/repos/galass-emu-actions-pub/vendor/artemis/packages/artemis-accessibility-helper/app/src/main/java/com/artemis
+/agent/repos/galass-emu-actions-pub/vendor/artemis/packages/artemis-client
+/agent/repos/galass-emu-actions-pub/vendor/artemis/packages/artemis-client/src/artemis_client
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/rules/artemis.md
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/galass-emu-actions-pub/vendor/artemis
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/galass-emu-actions-pub/vendor/artemis/config/artemis.jsonc
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/galass-emu-actions-pub/vendor/artemis/artemis
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/galass-emu-actions-pub/vendor/artemis/artemis/resources/config/artemis.jsonc
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/galass-emu-actions-pub/vendor/artemis/packages/artemis-accessibility-helper
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/galass-emu-actions-pub/vendor/artemis/packages/artemis-accessibility-helper/app/src/main/java/com/artemis
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/galass-emu-actions-pub/vendor/artemis/packages/artemis-client
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/galass-emu-actions-pub/vendor/artemis/packages/artemis-client/src/artemis_client
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/rules/artemis.md
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/rules/artemis.md
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ && echo "=====EXTRA=====" && ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/ && echo "=====SCRIPTS TREE=====" && find /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/scripts -type f | head -40
+total 20
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 17:27 .
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 14:26 ..
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 14:26 ci
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 17:27 lifeos
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 17:27 target
+=====EXTRA=====
+ls: cannot access '/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra/': No such file or directory
+
+L'environnement est riche. Je mappe la structure complète avant de lire l'ISA.
+$ ls -la /agent/ 2>/dev/null; echo "=====REPOS====="; ls -la /agent/repos/ 2>/dev/null; echo "=====TMP ARTIFACTS====="; ls -la /tmp/ | grep -i artemis; echo "=====WF====="; cat /tmp/artemis-wf.yml 2>/dev/null | head -60
+total 12
+drwxr-xr-x   3 root   root   4096 Nov 26 04:55 .
+drwxr-xr-x. 25 root   root   4096 Nov 26 04:55 ..
+drwxr-xr-x   8 ubuntu ubuntu 4096 Nov 26 10:45 repos
+=====REPOS=====
+total 32
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 10:45 .
+drwxr-xr-x  3 root   root   4096 Nov 26 04:55 ..
+drwxr-xr-x 15 ubuntu ubuntu 4096 Nov 26 06:34 Galass_Driver
+drwxr-xr-x 19 ubuntu ubuntu 4096 Nov 26 15:31 Galass_Rider
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 05:12 Galass_backend
+drwxr-xr-x 11 ubuntu ubuntu 4096 Nov 26 06:33 Galass_backend-multistop
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 08:04 antenly
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 10:45 galass-emu-actions-pub
+=====TMP ARTIFACTS=====
+drwxr-xr-x   3 ubuntu ubuntu       4096 Nov 26 06:21 artemis-f432-fail
+drwxr-xr-x   4 ubuntu ubuntu       4096 Nov 26 07:03 artemis-golden
+-rw-r--r--   1 ubuntu ubuntu     998821 Nov 26 10:41 artemis-r3.gz
+-rw-r--r--   1 ubuntu ubuntu          0 Nov 26 10:41 artemis-r3.log
+-rw-r--r--   1 ubuntu ubuntu      13383 Nov 26 07:03 artemis-wf.yml
+-rw-r--r--   1 ubuntu ubuntu        180 Nov 26 17:38 artemis152_logs.zip
+=====WF=====
+name: artemis-staging-e2e
+
+on:
+  workflow_dispatch:
+    inputs:
+      rider_ref:
+        description: "Branche Galass_Rider"
+        default: "fix/multistop-close"
+        type: string
+      driver_ref:
+        description: "Branche Galass_Driver"
+        default: "fix/multistop-close"
+        type: string
+      model:
+        description: "Modèle CLI opencode (opencode/*-free, sans clé API)"
+        default: "opencode/deepseek-v4.1-flash-free"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: artemis-staging-e2e
+  cancel-in-progress: false
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      BASE: ${{ secrets.GALASS_STAGING_URL }}
+      RIDER_ID: "106"
+      DRIVER_ID: "23"
+      OUT: e2e-out
+      # Chaîne des échéances (vérifiée par e2e/tests) : watchdog 90 < step 100 < job 150.
+      # Le harnais rend son verdict partiel AVANT que le step soit coupé, et le step
+      # coupe AVANT que le job meure — les étapes `if: always()` (preuves) survivent.
+      RUN_DEADLINE_MIN: "90"
+      APK_RIDER: apk/rider/app-debug.apk
+      APK_DRIVER: apk/driver/app-debug.apk
+      RIDER_TOKEN: ${{ secrets.GALASS_E2E_RIDER_TOKEN }}
+      DRIVER_TOKEN: ${{ secrets.GALASS_E2E_DRIVER_TOKEN }}
+      DEV_TOKEN: ${{ secrets.GALASS_E2E_DEV_TOKEN }}
+      OPENCODE_VERSION: "1.19.4"
+      OPENCODE_DISABLE_AUTOUPDATE: "1"
+      ARTEMIS_DISABLE: "1"
+      OC_MODEL: ${{ inputs.model }}
+      OC_MODEL_CHAIN: "opencode/mimo-v2.6-flash-free,opencode/glm-5.3-flash-free,opencode/minimax-m3.1-flash-free,opencode/longcat-2.5-free,opencode/iceman-free,opencode/flint-40b-free,opencode/nemotron-3.5-lightning-free,opencode/beam-free,opencode/inkling-2-small-free"
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - name: Garde staging
+        run: |
+          python3 e2e/base_guard.py "$BASE"
+          case "$BASE" in *galassapp.com*) echo "BASE ne doit pas être la prod"; exit 1;; esac
+          h="${BASE#*://}"; h="${h%%[:/]*}"; echo "::add-mask::$h"
+          echo "STAGING_HOST=$h" >> "$GITHUB_ENV"
+          echo "GALASS_STAGING_URL=$BASE" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with: {repository: LordThiouk/Galass_Rider, ref: "${{ inputs.rider_ref }}", token: "${{ secrets.GALASS_REPO_TOKEN }}", path: src/rider, persist-credentials: false}
+
