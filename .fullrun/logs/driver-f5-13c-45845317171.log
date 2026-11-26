@@ -6644,3 +6644,85 @@ $vehicle            = new Vehicle();
 $ sed -n '1,140p' core/app/Services/Rider/RideService.php | sed -n '170,230p'
 (no output)
 
+$ grep -rn "active()\|visible\|sort_order\|order" core/app/Repositories/RideRepo.php core/app/Http/Controllers/Api/User/UserController.php core/app/Models/Service.php | head -30
+core/app/Repositories/RideRepo.php:25:        return Zone::active()->get();
+core/app/Repositories/RideRepo.php:30:        return Service::active()->orderBy('name')->get();
+core/app/Repositories/RideRepo.php:40:        return Service::active()->find($serviceId);
+core/app/Repositories/RideRepo.php:85:        $rideQueue->ordering    = time();
+core/app/Repositories/RideRepo.php:174:        return GatewayCurrency::whereHas('method', fn($q) => $q->active()->automatic())->with('method')->orderBy('method_code')->get();
+core/app/Repositories/RideRepo.php:179:        return Coupon::active()->latest()->get();
+core/app/Repositories/RideRepo.php:254:        return GatewayCurrency::whereHas('method', fn($q) => $q->active()->automatic())
+core/app/Repositories/RideRepo.php:286:            ->orderByRaw('FIELD(status, ' . Status::RIDE_END . ', ' . Status::RIDE_RUNNING . ', ' . Status::RIDE_ACTIVE . ', ' . Status::RIDE_PENDING . ', ' . Status::RIDE_COMPLETED . ', ' . Status::RIDE_CANCELED . ')')
+core/app/Repositories/RideRepo.php:287:            ->orderBy('id', 'desc')
+core/app/Http/Controllers/Api/User/UserController.php:30:        $services    = Service::active()->orderBy('name')->get();
+core/app/Http/Controllers/Api/User/UserController.php:35:            $gate->active()->automatic();
+core/app/Http/Controllers/Api/User/UserController.php:36:        })->with('method')->orderby('method_code')->get();
+core/app/Http/Controllers/Api/User/UserController.php:106:        $payments = RidePayment::where('rider_id', auth()->id())->orderBy('id', 'desc')->with('rider', 'ride', 'driver')->paginate(getPaginate());
+core/app/Http/Controllers/Api/User/UserController.php:131:        $transactions = $transactions->orderBy('id', 'desc')->paginate(getPaginate());
+core/app/Http/Controllers/Api/User/UserController.php:242:        $notifications = NotificationLog::where('user_id', auth()->id())->where('sender', 'firebase')->orderBy('id', 'desc')->paginate(getPaginate());
+
+$ ls core/database/migrations | tail -20
+2026_06_09_000001_add_firebase_uid_to_users_table.php
+2026_06_09_000002_add_firebase_uid_to_drivers_table.php
+2026_06_10_000003_extend_email_column_users_drivers.php
+2026_07_11_000001_unique_dial_mobile_users_drivers.php
+2026_10_02_000001_add_location_updated_at_to_drivers.php
+2026_10_02_000002_create_dispatch_attempts_table.php
+2026_10_02_000003_localize_homepage_fr.php
+2026_10_05_000001_add_dispatch_settings_to_general_settings.php
+2026_10_06_000001_create_ride_stops_table.php
+2026_10_06_000002_add_completed_at_to_ride_stops.php
+2026_10_19_000001_upsert_rider_push_templates.php
+2026_10_19_000002_update_rider_push_texts_w5_w8.php
+
+$ cat core/database/sql 2>&1 | head -20; echo "==="; find core/database -name '*.sql' | head -20
+cat: core/database/sql: Is a directory
+===
+core/database/sql/2026_06_10_extend_email_column.sql
+core/database/sql/2026_07_11_xof_precision_dakar.sql
+core/database/sql/2026_10_05_general_settings_dispatch.sql
+core/database/sql/2026_06_09_add_firebase_uid.sql
+core/database/sql/2026_06_18_seed_orange_money_gateway.sql
+core/database/sql/2026_10_02_drivers_location_updated_at.sql
+core/database/sql/2026_07_29_om_callback_api_key.sql
+core/database/sql/2026_10_02_dispatch_prod_bundle.sql
+core/database/sql/2026_10_02_localize_homepage_fr.sql
+core/database/sql/2026_10_06_ride_stops.sql
+core/database/sql/2026_10_02_dispatch_attempts.sql
+core/database/sql/2026_07_11_unique_dial_mobile_users_drivers.sql
+core/database/sql/2026_10_06_ride_stops_completed_at.sql
+core/database/sql/2026_06_18_seed_wave_gateway.sql
+
+$ sed -n '1,260p' core/app/Services/Rider/RideService.php | sed -n '250,340p'
+}
+
+        $message = $penaltyApplied
+            ? trans('You’ve been charged :amount for ride cancellation', ['amount' => showAmount(gs('user_cancellation_penalty'))])
+            : trans('Ride canceled successfully');
+
+        return serviceSuccess('canceled_ride', $message);
+    }
+
+    public function acceptBid(int $bidId, User $user): array
+    {
+
+$ grep -rn "service.*visible\|is_visible\|hidden" core/app/Services/Rider/RideService.php core/app/Http/Controllers/Api/User/RideController.php core/app/Repositories/RideRepo.php core/app/Models/Service.php | head -30
+(no output)
+
+$ cat core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php | sed -n '140,220p'
+}
+
+        $driverAgent            = osBrowser();
+        $driverLogin->driver_id = $driver->id;
+        $driverLogin->user_ip   = $ip;
+
+        $driverLogin->browser = @$driverAgent['browser'];
+        $driverLogin->os      = @$driverAgent['os_platform'];
+        $driverLogin->save();
+
+        $driver = Driver::find($driver->id);
+
+        return $driver;
+    }
+}
+
