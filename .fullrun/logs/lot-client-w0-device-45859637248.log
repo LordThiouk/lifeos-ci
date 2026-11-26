@@ -12155,3 +12155,29 @@ Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Htt
  }
 
 
+← Edit core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php
+@@ -108,8 +108,18 @@
+ $driver->sv        = gs('sv') ? Status::UNVERIFIED : Status::VERIFIED;
+ $driver->ts        = Status::DISABLE;
+ $driver->tv        = Status::VERIFIED;
+ 
++if (isset($data['image']) && $data['image']) {
++    try {
++        $driver->image = fileUploader($data['image'], getFilePath('driver'), getFileSize('driver'));
++    } catch (\Exception $exp) {
++        throw \Illuminate\Validation\ValidationException::withMessages([
++            'image' => ['Couldn\'t upload your image'],
++        ]);
++    }
++}
++
+ $driver->save();
+ 
+ 
+ $adminNotification            = new AdminNotification();
+
+
