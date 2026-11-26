@@ -9450,3 +9450,8 @@ $ find /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos -maxdepth 
 /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills/ISA
 /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/opencode/tests/isa-guard.test.ts
 
+→ Read lib/presentation/components/timeline/ride_itinerary_timeline.dart
+→ Read lib/presentation/screens/ride_details/widgets/ride_destination_widget.dart
+→ Read lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+✱ Grep "Point de prise en charge" in . · 9 matches
+✱ Grep "MyStrings\.destination" in lib · 5 matches
