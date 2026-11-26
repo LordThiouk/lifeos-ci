@@ -442,6 +442,12 @@ jobs:
               [ -e "$dest" ] || cp -a "$f" "$dest"
             done
           fi
+          # La config de référence charge aussi Nix/LifeOS depuis ce chemin :
+          # sans ce fichier, opencode refuse la config fusionnée (file ref).
+          mkdir -p "$agent_home/.local/share/opencode-lifeos"
+          cp -a lifeos/opencode/nix-lifeos.prompt.md \
+            "$agent_home/.local/share/opencode-lifeos/"
+          chmod u+w "$agent_home/.local/share/opencode-lifeos/nix-lifeos.prompt.md"
           chmod -R u+w "$agent_home/.claude"
           mkdir -p "$agent_home/.claude/LIFEOS/MEMORY/STATE"
           if [ ! -e /home/box ] && [ ! -L /home/box ]; then
