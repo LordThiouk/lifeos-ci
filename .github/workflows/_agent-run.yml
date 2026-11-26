@@ -546,6 +546,53 @@ jobs:
             git -C lifeos config user.email "76528706+LordThiouk@users.noreply.github.com"
           fi
 
+      # Préflight du lien (lecture seule) : AVANT ffmpeg/livelog/opencode. Évite de brûler
+      # 20–90 min quand la porte ne démarrera pas comme le brick le suppose (incident
+      # 22 nov. 2026 / opencode-fullrun). start_step effectif = chain_phase (build|verify|close).
+      # Codes : 0 ok ; 2/3/4/5/64 → stop avant opencode ; CLI absent/panne → annotation, porte jugera.
+      - name: Préflight du lien (porte de départ, agent imposé)
+        id: preflight
+        if: env.IN_ISA != '' && (env.CHAIN_PHASE != '' || env.STOP_AFTER_STEP != '' || env.TARGET_AGENT != '')
+        shell: bash
+        run: |
+          set -euo pipefail
+          agent_home="$RUNNER_TEMP/oc-agent/home"
+          pf="$agent_home/.claude/LIFEOS/TOOLS/FullRunPreflight.ts"
+          if [ ! -f "$pf" ]; then
+            echo "::error::PRÉFLIGHT NON ÉVALUÉ : lifeos_ref sans FullRunPreflight.ts, la porte de départ n'est pas prédite"
+            { echo "### Préflight du lien"; echo "**NON ÉVALUÉ** : lifeos_ref sans FullRunPreflight.ts."; } >> "$GITHUB_STEP_SUMMARY" || true
+            exit 0
+          fi
+          eff_step="${CHAIN_PHASE:-$STOP_AFTER_STEP}"
+          if [ -z "$eff_step" ]; then
+            echo "::warning::préflight : ni chain_phase ni stop_after_step — contrôle sauté"
+            exit 0
+          fi
+          args=(--isa "$GITHUB_WORKSPACE/target/$IN_ISA" --start-step "$eff_step")
+          if [ -n "${TARGET_AGENT:-}" ]; then
+            args+=(--next "$TARGET_AGENT")
+          fi
+          if [ -n "${CHAIN_PHASE:-}" ]; then
+            args+=(--chain-phase "$CHAIN_PHASE")
+          fi
+          rc=0
+          HOME="$agent_home" \
+            bun "$pf" "${args[@]}" >"$RUNNER_TEMP/preflight.json" 2>"$RUNNER_TEMP/preflight.err" || rc=$?
+          { echo "### Préflight du lien (code $rc)"; echo '```'; cat "$RUNNER_TEMP/preflight.err"; echo '```'; } >> "$GITHUB_STEP_SUMMARY" || true
+          cat "$RUNNER_TEMP/preflight.err" || true
+          case "$rc" in
+            0) ;;
+            2|3|4|5)
+              echo "::error::préflight code $rc : la porte ne démarrera pas comme ce brick le suppose ; corriger et relancer, aucune minute opencode dépensée"
+              exit 1 ;;
+            64)
+              echo "::error::préflight code 64 : entrée invalide (ISA, start_step ou chain_phase)"
+              exit 1 ;;
+            *)
+              echo "::error::PRÉFLIGHT EN PANNE (code $rc) : contrôle non effectué ; la porte jugera seule"
+              { echo ""; echo "**PRÉFLIGHT EN PANNE (code $rc).**"; } >> "$GITHUB_STEP_SUMMARY" || true ;;
+          esac
+
       - name: Installer ffmpeg
         run: |
           set -euo pipefail
