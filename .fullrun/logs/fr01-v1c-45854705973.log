@@ -16728,3 +16728,8 @@ $ cat phpunit.xml
     </php>
 </phpunit>
 
+$ export PATH="$HOME/bin/php83:$PATH" && php artisan test --group=security 2>&1 | tail -15
+#!/usr/bin/env php
+
+   INFO  No tests found.
+
