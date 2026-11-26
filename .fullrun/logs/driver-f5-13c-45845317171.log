@@ -4026,3 +4026,36 @@ ae9b586f34a [3.50] Changelog for 3.50.1 (#196936)
 316:        if (version < errorKGPVersion) {
 321:                    errorKGPVersion.toString(),
 
+$ grep -rn "skipDependencyChecks\|skip-build-dependency-validation" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci --include=* -l 2>/dev/null | head -20; echo "=== target .github ==="; ls -a /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target | grep -i github; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.github/workflows 2>/dev/null
+=== target .github ===
+
+$ for f in gradle/wrapper/gradle-wrapper.properties settings.gradle.kts gradle.properties; do echo "--- $f"; curl -sS -w "\n[%{http_code}]\n" "https://raw.githubusercontent.com/LordThiouk/Galass_Driver/main/android/$f"; done
+--- gradle/wrapper/gradle-wrapper.properties
+404: Not Found
+[404]
+--- settings.gradle.kts
+404: Not Found
+[404]
+--- gradle.properties
+404: Not Found
+[404]
+
+$ curl -sS "https://api.github.com/repos/LordThiouk/Galass_Driver" | head -40
+{
+  "message": "Not Found",
+  "documentation_url": "https://docs.github.com/rest/repos/repos#get-a-repository",
+  "status": "404"
+}
+
+$ grep -rn "skipDependencyChecks\|skip-build-dependency-validation\|android-skip" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci 2>/dev/null | head -20; echo "=== workflows ==="; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/Workflows
+=== workflows ===
+Interview.md
+Setup.md
+Uninstall.md
+Update.md
+
+$ grep -rn "validateGradleAndKGP\|validateAgpAndKgp\|validateGradleAndAgp\|validateGradleDep" /tmp/flutter/packages/flutter_tools/lib --include=*.dart | grep -v "gradle_utils.dart:"
+/tmp/flutter/packages/flutter_tools/lib/src/project.dart:1006:    final bool compatibleGradleAgp = gradle.validateGradleAndAgp(
+/tmp/flutter/packages/flutter_tools/lib/src/project.dart:1018:    final bool compatibleKgpGradle = gradle.validateGradleAndKGP(
+/tmp/flutter/packages/flutter_tools/lib/src/project.dart:1024:    final bool compatibleAgpKgp = gradle.validateAgpAndKgp(
+
