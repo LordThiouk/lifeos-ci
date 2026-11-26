@@ -1,0 +1,4 @@
+# Galass Rider multistop — étape Serena seule (Papa 2026-11-26 00:05 Dakar)
+
+Dépôt Galass_Rider, branche feat/multistop-e2e-2026-11-15. ISA : dossier MEMORY/WORK/20261006-galass-rider-multistop/.
+Ton rôle : Serena seule (architecture / plan de build). Pour les ISC ouverts, notamment F4-28 et F4-31 (cochées mais non vérifiées) et la section F13 (F4-32 voiture visible via live_location, F4-33 pin personne et marker_car.png comme le Driver, F4-34 une seule alerte au premier entre arrivée et prise en charge) : fichier:ligne réels, découpage en tâches de build, dépendances, preuve attendue. Mets à jour l'ISA via ISATool.ts uniquement. AUCUN code. Éléments multistop uniquement. Commits tôt et petits, auteur Papa Diop <76528706+LordThiouk@users.noreply.github.com>. Pas de git push. Ne touche pas .fullrun.
