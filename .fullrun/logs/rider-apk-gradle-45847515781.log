@@ -9723,3 +9723,36 @@ Failed to update packages.
 $ flutter test --no-pub test/unit/multistop_itinerary_test.dart 2>&1 | tail -15
 Failed to find llvm-ar relative to LocalFile: '/usr/lib/llvm-18/bin/clang': LocalFile: '/usr/lib/llvm-18/bin/llvm-ar' doesn't exist.
 
+$ ls /home/ubuntu; ls /home/ubuntu/fvm 2>/dev/null; find / -maxdepth 4 -name "flutter" -type d 2>/dev/null | grep -v proc | head -20
+actions-runner
+actions-runner-2
+actions-runner-3
+go
+/opt/flutter
+/opt/flutter/packages/flutter
+/tmp/flutter_sdk/flutter
+/tmp/flutter
+/tmp/flutter/packages/flutter
+/home/ubuntu/.config/flutter
+
+$ /tmp/flutter_sdk/flutter/bin/flutter --version 2>/dev/null | head -2; /tmp/flutter/bin/flutter --version 2>/dev/null | head -2
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ae9b586f34 (8 days ago) • 2026-11-18 17:01:07 -0800
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ae9b586f34 (8 days ago) • 2026-11-18 17:01:07 -0800
+
+$ /tmp/flutter/bin/flutter test test/unit/multistop_itinerary_test.dart 2>&1 | tail -15
+00:00 +0: loading /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_itinerary_test.dart
+00:00 +0: ISC-F5-15 — after last stop, destination is never labeled pickup detailed itinerary shows destination label and address, never pickup label on final node
+00:00 +1: All tests passed!
+
+$ /tmp/flutter/bin/flutter test test/goldens/driver/ride_details_golden_test.dart 2>&1 | tail -8
+00:00 +0: course en cours — single stop (legacy shape, no stops[])
+00:00 +1: course multistop — arrêt 1 actif (aucun arrêt terminé)
+00:00 +2: course multistop — arrêt 2 actif (arrêt 1 terminé)
+00:01 +3: course multistop — tous les arrêts terminés (destination finale)
+00:01 +4: fin de course — RIDE_COMPLETED
+00:01 +5: golden fixture statuses are the ones the sheet branches on
+00:01 +6: (tearDownAll)
+00:01 +6: All tests passed!
+
