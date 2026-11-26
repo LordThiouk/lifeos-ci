@@ -2057,3 +2057,18 @@ FAILED  Tests\Feature\Security\FcmServiceAccountOutsideWebrootTest…  Error
 
 rc=2
 
+$ P=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php; mkdir -p $P/ini.d; printf '%s\n' '<?php if (!defined("GLOB_BRACE")) { define("GLOB_BRACE", 4096); }' > $P/shim.php; printf '%s\n' "auto_prepend_file=$P/shim.php" > $P/ini.d/99-shim.ini; export PATH=$P:$PATH; export PHP_INI_SCAN_DIR=$P/ini.d; php -r 'var_dump(GLOB_BRACE);'; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php artisan test tests/Feature/Security 2>&1 | tail -8; echo "rc=${PIPESTATUS[0]}"
+Fatal error: Uncaught Error: Undefined constant "GLOB_BRACE" in Command line code:1
+Stack trace:
+#0 {main}
+  thrown in Command line code on line 1
+     37▕         }
+     38▕         foreach (array_reverse(glob($this->tmpDir . '/*', GLOB_ONLYDIR) ?: []) as $d) {
+     39▕             @rmdir($d);
+
+
+  Tests:    12 failed, 25 passed (757 assertions)
+  Duration: 0.79s
+
+rc=2
+
