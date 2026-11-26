@@ -3295,3 +3295,6 @@ $ wc -l lib/data/controller/map/ride_map_controller.dart lib/data/controller/rid
 
 → Read lib/data/controller/map/ride_map_controller.dart [limit=140]
 ✱ Grep "driverLatLng|Geolocator\.getCurrentPosition|markerCar|driver_location" in lib · 15 matches
+→ Read lib/data/controller/map/ride_map_controller.dart [offset=240, limit=110]
+→ Read lib/data/controller/ride/ride_details/ride_details_controller.dart [limit=240]
+✱ Grep "updateLiveLocation" in . · 9 matches
