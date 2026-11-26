@@ -2366,3 +2366,161 @@ $ sed -n '1,200p' /home/ubuntu/.pub-cache/hosted/pub.dev/google_maps_flutter_pla
 $ grep -rn "class CameraUpdate" /home/ubuntu/.pub-cache/hosted/pub.dev/google_maps_flutter*/lib 2>/dev/null | head; ls /home/ubuntu/.pub-cache/hosted/pub.dev | grep google_maps
 (no output)
 
+$ grep -o '"rootUri": "[^"]*google_maps_flutter_platform_interface[^"]*"' .dart_tool/package_config.json | head; grep -o '"rootUri": "[^"]*geolocator-14[^"]*"' .dart_tool/package_config.json | head
+"rootUri": "file:///home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0"
+"rootUri": "file:///home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/geolocator-14.0.2"
+
+$ grep -n "class CameraUpdate\|CameraUpdate.newLatLng\|Map<String, dynamic> toJson\|newCameraPosition" /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0/lib/src/types/camera.dart | head -30
+63:  /// Mainly for internal use when calling [CameraUpdate.newCameraPosition].
+116:  newCameraPosition,
+145:abstract class CameraUpdate {
+152:  static CameraUpdate newCameraPosition(CameraPosition cameraPosition) {
+158:  static CameraUpdate newLatLng(LatLng latLng) {
+166:  static CameraUpdate newLatLngBounds(LatLngBounds bounds, double padding) {
+172:  static CameraUpdate newLatLngZoom(LatLng latLng, double zoom) {
+219:class CameraUpdateNewCameraPosition extends CameraUpdate {
+222:    : super._(CameraUpdateType.newCameraPosition);
+227:  Object toJson() => <Object>['newCameraPosition', cameraPosition.toMap()];
+231:class CameraUpdateNewLatLng extends CameraUpdate {
+243:class CameraUpdateNewLatLngBounds extends CameraUpdate {
+258:class CameraUpdateNewLatLngZoom extends CameraUpdate {
+273:class CameraUpdateScrollBy extends CameraUpdate {
+288:class CameraUpdateZoomBy extends CameraUpdate {
+309:class CameraUpdateZoomIn extends CameraUpdate {
+317:class CameraUpdateZoomOut extends CameraUpdate {
+325:class CameraUpdateZoomTo extends CameraUpdate {
+337:class CameraUpdateAnimationConfiguration {
+
+$ sed -n '140,270p' /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0/lib/src/types/camera.dart
+zoomOut,
+}
+
+/// Defines a camera move, supporting absolute moves as well as moves relative
+/// the current position.
+abstract class CameraUpdate {
+  const CameraUpdate._(this.updateType);
+
+  /// Indicates which type of camera update this instance represents.
+  final CameraUpdateType updateType;
+
+  /// Returns a camera update that moves the camera to the specified position.
+  static CameraUpdate newCameraPosition(CameraPosition cameraPosition) {
+    return CameraUpdateNewCameraPosition(cameraPosition);
+  }
+
+  /// Returns a camera update that moves the camera target to the specified
+  /// geographical location.
+  static CameraUpdate newLatLng(LatLng latLng) {
+    return CameraUpdateNewLatLng(latLng);
+  }
+
+  /// Returns a camera update that transforms the camera so that the specified
+  /// geographical bounding box is centered in the map view at the greatest
+  /// possible zoom level. A non-zero [padding] insets the bounding box from the
+  /// map view's edges. The camera's new tilt and bearing will both be 0.0.
+  static CameraUpdate newLatLngBounds(LatLngBounds bounds, double padding) {
+    return CameraUpdateNewLatLngBounds(bounds, padding);
+  }
+
+  /// Returns a camera update that moves the camera target to the specified
+  /// geographical location and zoom level.
+  static CameraUpdate newLatLngZoom(LatLng latLng, double zoom) {
+    return CameraUpdateNewLatLngZoom(latLng, zoom);
+  }
+
+  /// Returns a camera update that moves the camera target the specified screen
+  /// distance.
+  ///
+  /// For a camera with bearing 0.0 (pointing north), scrolling by 50,75 moves
+  /// the camera's target to a geographical location that is 50 to the east and
+  /// 75 to the south of the current location, measured in screen coordinates.
+  static CameraUpdate scrollBy(double dx, double dy) {
+    return CameraUpdateScrollBy(dx, dy);
+  }
+
+  /// Returns a camera update that modifies the camera zoom level by the
+  /// specified amount. The optional [focus] is a screen point whose underlying
+  /// geographical location should be invariant, if possible, by the movement.
+  static CameraUpdate zoomBy(double amount, [Offset? focus]) {
+    return CameraUpdateZoomBy(amount, focus);
+  }
+
+  /// Returns a camera update that zooms the camera in, bringing the camera
+  /// closer to the surface of the Earth.
+  ///
+  /// Equivalent to the result of calling `zoomBy(1.0)`.
+  static CameraUpdate zoomIn() {
+    return const CameraUpdateZoomIn();
+  }
+
+  /// Returns a camera update that zooms the camera out, bringing the camera
+  /// further away from the surface of the Earth.
+  ///
+  /// Equivalent to the result of calling `zoomBy(-1.0)`.
+  static CameraUpdate zoomOut() {
+    return const CameraUpdateZoomOut();
+  }
+
+  /// Returns a camera update that sets the camera zoom level.
+  static CameraUpdate zoomTo(double zoom) {
+    return CameraUpdateZoomTo(zoom);
+  }
+
+  /// Converts this object to something serializable in JSON.
+  Object toJson();
+}
+
+/// Defines a camera move to a new position.
+class CameraUpdateNewCameraPosition extends CameraUpdate {
+  /// Creates a camera move.
+  const CameraUpdateNewCameraPosition(this.cameraPosition)
+    : super._(CameraUpdateType.newCameraPosition);
+
+  /// The new camera position.
+  final CameraPosition cameraPosition;
+  @override
+  Object toJson() => <Object>['newCameraPosition', cameraPosition.toMap()];
+}
+
+/// Defines a camera move to a latitude and longitude.
+class CameraUpdateNewLatLng extends CameraUpdate {
+  /// Creates a camera move to latitude and longitude.
+  const CameraUpdateNewLatLng(this.latLng)
+    : super._(CameraUpdateType.newLatLng);
+
+  /// New latitude and longitude of the camera..
+  final LatLng latLng;
+  @override
+  Object toJson() => <Object>['newLatLng', latLng.toJson()];
+}
+
+/// Defines a camera move to a new bounding latitude and longitude range.
+class CameraUpdateNewLatLngBounds extends CameraUpdate {
+  /// Creates a camera move to a bounding range.
+  const CameraUpdateNewLatLngBounds(this.bounds, this.padding)
+    : super._(CameraUpdateType.newLatLngBounds);
+
+  /// The northeast and southwest bounding coordinates.
+  final LatLngBounds bounds;
+
+  /// The amount of padding by which the view is inset.
+  final double padding;
+  @override
+  Object toJson() => <Object>['newLatLngBounds', bounds.toJson(), padding];
+}
+
+/// Defines a camera move to new coordinates with a zoom level.
+class CameraUpdateNewLatLngZoom extends CameraUpdate {
+  /// Creates a camera move with coordinates and zoom level.
+  const CameraUpdateNewLatLngZoom(this.latLng, this.zoom)
+    : super._(CameraUpdateType.newLatLngZoom);
+
+  /// New coordinates of the camera.
+  final LatLng latLng;
+
+  /// New zoom level of the camera.
+  final double zoom;
+  @override
+  Object toJson() => <Object>['newLatLngZoom', latLng.toJson(), zoom];
+}
+
