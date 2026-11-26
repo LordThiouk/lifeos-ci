@@ -17714,3 +17714,65 @@ class ServiceController extends Controller {
     }
 }
 
+← Edit core/tests/Feature/Admin/ServiceOrderVisibilityTest.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Admin/ServiceOrderVisibilityTest.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Admin/ServiceOrderVisibilityTest.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Admin/ServiceOrderVisibilityTest.php
+@@ -131,8 +131,16 @@
+ Schema::create('roles', function (Blueprint $table) { $table->bigIncrements('id'); $table->string('name'); $table->string('guard_name'); $table->timestamps(); $table->unique(['name','guard_name']); });
+ Schema::create('model_has_permissions', function (Blueprint $table) { $table->unsignedBigInteger('permission_id'); $table->string('model_type'); $table->unsignedBigInteger('model_id'); $table->index(['model_id','model_type']); $table->primary(['permission_id','model_id','model_type']); });
+ Schema::create('model_has_roles', function (Blueprint $table) { $table->unsignedBigInteger('role_id'); $table->string('model_type'); $table->unsignedBigInteger('model_id'); $table->index(['model_id','model_type']); $table->primary(['role_id','model_id','model_type']); });
+ Schema::create('role_has_permissions', function (Blueprint $table) { $table->unsignedBigInteger('permission_id'); $table->unsignedBigInteger('role_id'); $table->primary(['permission_id','role_id']); });
++Schema::create('languages', function (Blueprint $table) {
++    $table->id(); $table->string('code', 10)->default('en'); $table->unsignedTinyInteger('is_default')->default(0); $table->timestamps();
++});
++Schema::create('general_settings', function (Blueprint $table) {
++    $table->id(); $table->string('site_name')->default('Galass'); $table->string('cur_text')->default('XOF'); $table->string('cur_sym')->default('F');
++    $table->unsignedTinyInteger('sn')->default(1); $table->unsignedTinyInteger('paginate_number')->default(10); $table->timestamps();
++});
++DB::table('general_settings')->insert(['id'=>1,'site_name'=>'Galass','cur_text'=>'XOF','cur_sym'=>'F','sn'=>1,'paginate_number'=>10,'created_at'=>now(),'updated_at'=>now()]);
+ Schema::create('services', function (Blueprint $table) {
+     $table->id();
+     $table->unsignedInteger('sort_order')->default(0);
+     $table->boolean('is_visible')->default(true);
+
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core; php artisan test --filter=ServiceOrderVisibilityTest 2>&1 | tail -8
+PASS  Tests\Feature\Admin\ServiceOrderVisibilityTest
+  ✓ migration adds sort order and visibility with initial order          0.09s  
+  ✓ admin can reorder and toggle visibility                              0.05s  
+  ✓ rider service api returns admin order and excludes hidden            0.01s  
+
+  Tests:    3 passed (9 assertions)
+  Duration: 0.20s
+
+← Write core/tests/Feature/Admin/ServiceOrderMigrationTest.php
+Wrote file successfully.
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core; php artisan test --filter=ServiceOrderMigrationTest 2>&1 | tail -10
+#!/usr/bin/env php
+
+   PASS  Tests\Feature\Admin\ServiceOrderMigrationTest
+  ✓ migration adds order and visible and initial order matches current   0.11s  
+
+  Tests:    1 passed (4 assertions)
+  Duration: 0.17s
+
+$ grep -n "Service::active" core/app/Http/Controllers/Api/User/UserController.php core/app/Repositories/*.php core/app/Services/Rider/*.php | head; sed -n '25,35p' core/app/Http/Controllers/Api/User/UserController.php
+core/app/Http/Controllers/Api/User/UserController.php:30:        $services    = Service::active()->visible()->ordered()->get();
+core/app/Repositories/RideRepo.php:30:        return Service::active()->visible()->ordered()->get();
+core/app/Repositories/RideRepo.php:40:        $query = Service::active();
+core/app/Repositories/ServiceRepo.php:9:        return Service::active()->visible()->ordered()->get();
+{
+
+    public function dashboard()
+    {
+        $notify[]    = 'User Dashboard';
+        $services    = Service::active()->visible()->ordered()->get();
+        $user        = auth()->user();
+        $runningRide = Ride::running()->where('user_id', $user->id)->with(['user', 'driver.vehicle', 'driver.vehicle.model', 'driver.vehicle.color', 'driver.vehicle.year'])->first();
+
+        $paymentMethod = GatewayCurrency::whereHas('method', function ($gate) {
+            $gate->active()->automatic();
+
