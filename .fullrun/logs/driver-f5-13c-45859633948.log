@@ -7366,3 +7366,16 @@ index 4f65bb1..94009d8 100644
 +      );
 
 `dart format` a réécrit les fichiers. Je vérifie que le diff reste propre (pas de reformat global inutile) :
+Le diff est propre et uniquement additif. Je relance la preuve (test + analyse) pour constater l'état :
+$ flutter test test/unit/multistop_end_gate_test.dart 2>&1 | tail -25; echo "EXIT=${PIPESTATUS[0]}"
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because galass_driver depends on timezone 0.11.0 which requires SDK version ^3.10.0, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try using the Flutter SDK version: 3.50.1. 
+Failed to update packages.
+EXIT=1
+
