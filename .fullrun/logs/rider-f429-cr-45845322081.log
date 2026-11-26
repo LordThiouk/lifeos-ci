@@ -3928,3 +3928,40 @@ verify(rider): F4-29 a-b PASS — contract 9/9, red-before reproduced
 ← Write VERIFY-F429.md
 Wrote file successfully.
 
+$ git diff --stat && echo "---FIRST LINE---" && git diff -- VERIFY-F429.md | head -5 && echo "---CONFIG---" && git config --get commit.gpgsign; git config --get user.name; git config --get user.email
+VERIFY-F429.md | 90 +++++++++++++++++++++++++++++++---------------------------
+ 1 file changed, 48 insertions(+), 42 deletions(-)
+---FIRST LINE---
+diff --git a/VERIFY-F429.md b/VERIFY-F429.md
+index f36d26e..7cf6f08 100644
+--- a/VERIFY-F429.md
++++ b/VERIFY-F429.md
+@@ -1,23 +1,34 @@
+---CONFIG---
+Papa Diop
+76528706+LordThiouk@users.noreply.github.com
+
+$ git add -- VERIFY-F429.md && git commit --author="Papa Diop <76528706+LordThiouk@users.noreply.github.com>" -m "verify(rider): F4-29 a-b PASS — re-run Verify×3 (9/9, red-before)" && echo "---HEAD---" && git rev-parse HEAD && echo "---STATUS---" && git status --short && echo "---AUTHOR---" && git log -1 --format='%an <%ae>%n%s'
+[verify/rider-f429-cr 36a928b] verify(rider): F4-29 a-b PASS — re-run Verify×3 (9/9, red-before)
+ 1 file changed, 48 insertions(+), 42 deletions(-)
+---HEAD---
+36a928b3d693bbf60300b7e83fc2348026b8563f
+---STATUS---
+---AUTHOR---
+Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+verify(rider): F4-29 a-b PASS — re-run Verify×3 (9/9, red-before)
+
+← Write /tmp/task_done.md
+Wrote file successfully.
+
+$ git status --porcelain=v1 && echo "---COMMIT FILES---" && git show --stat --format='%H %an' HEAD && echo "---HEAD LINE---" && git show HEAD:VERIFY-F429.md | head -1 && echo "---TASK DONE---" && ls -l /tmp/task_done.md
+---COMMIT FILES---
+36a928b3d693bbf60300b7e83fc2348026b8563f Papa Diop
+
+ VERIFY-F429.md | 90 +++++++++++++++++++++++++++++++---------------------------
+ 1 file changed, 48 insertions(+), 42 deletions(-)
+---HEAD LINE---
+VERDICT: PASS
+---TASK DONE---
+-rw-r--r-- 1 ubuntu ubuntu 1019 Nov 26 15:26 /tmp/task_done.md
+
