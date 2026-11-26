@@ -9990,3 +9990,69 @@ google
 lifeos-ci-state
 lifeos-ci-tools
 
+$ ls -la /opt/fullrun-tools /opt/fullrun-live /opt/fullrun-wip 2>/dev/null; echo "---"; find / -name "phpunit" -type f 2>/dev/null | head; echo "---php binaries---"; find / -name "php" 2>/dev/null | grep -v vendor | head
+/opt/fullrun-live:
+total 11124
+drwxr-xr-x   6 root root     4096 Nov 26 21:21 .
+drwxr-xr-x. 10 root root     4096 Nov 26 18:20 ..
+-rw-------   1 root root       64 Nov 26 18:20 isa.key
+-rw-r--r--   1 root root 11120217 Nov 26 21:21 live.bundle
+-rw-r--r--   1 root root        7 Nov 26 18:20 pid
+drwxr-xr-x   7 root root     4096 Nov 26 14:45 repo.git
+-rw-r--r--   1 root root   221932 Nov 26 21:21 status
+-rw-r--r--   1 root root       41 Nov 26 21:21 tip
+drwxr-xr-x   3 root root     4096 Nov 26 21:21 us-box-cursor
+drwxr-xr-x   3 root root     4096 Nov 26 21:20 us-box-cursor-2
+drwxr-xr-x   3 root root     4096 Nov 26 21:20 us-box-cursor-3
+-rw-r--r--   1 root root        7 Nov 26 21:21 worker.pid
+
+/opt/fullrun-tools:
+total 21624
+drwxr-xr-x   5 root root     4096 Nov 26 20:53 .
+drwxr-xr-x. 10 root root     4096 Nov 26 18:20 ..
+-rwxr-xr-x   1 root root     3206 Nov 26 18:20 allowed-repos.sh
+-rw-r--r--   1 root root     1200 Nov 26 18:20 autosave-deny.txt
+-rwxr-xr-x   1 root root    11165 Nov 26 18:20 autosave.sh
+-rwxr-xr-x   1 root root     6310 Nov 26 18:20 bench-capped
+-rwxr-xr-x   1 root root     9449 Nov 26 18:20 checkpoint.sh
+-rwxr-xr-x   1 root root      823 Nov 26 18:20 done-check-call.sh
+-rwxr-xr-x   1 root root    17498 Nov 26 18:20 done_check.sh
+-rwxr-xr-x   1 root root    27597 Nov 26 18:20 emu-e2e.sh
+-rwxr-xr-x   1 root root 21958840 Nov 26 18:20 gitleaks
+-rw-r--r--   1 root root     1352 Nov 26 16:22 gitleaks.toml
+-rwxr-xr-x   1 root root     2870 Nov 26 18:20 leaklog.sh
+-rwxr-xr-x   1 root root    11227 Nov 26 18:20 livelog.sh
+-rw-r--r--   1 root root       63 Nov 26 18:20 log-recipient.txt
+-rwxr-xr-x   1 root root    10970 Nov 26 18:20 merge-signed-carry.sh
+-rwxr-xr-x   1 root root     6436 Nov 26 18:20 progress.sh
+-rwxr-xr-x   1 root root     4087 Nov 26 18:20 redact-log.sh
+drwxr-xr-x   2 root root     4096 Nov 26 19:11 us-box-cursor
+drwxr-xr-x   2 root root     4096 Nov 26 20:53 us-box-cursor-2
+drwxr-xr-x   2 root root     4096 Nov 26 20:53 us-box-cursor-3
+-rwxr-xr-x   1 root root    14226 Nov 26 18:20 wippush.sh
+
+/opt/fullrun-wip:
+total 88
+drwxr-xr-x   5 root root  4096 Nov 26 21:21 .
+drwxr-xr-x. 10 root root  4096 Nov 26 18:20 ..
+-rw-r--r--   1 root root     0 Nov 26 21:21 autosave.err
+-rw-r--r--   1 root root     7 Nov 26 18:20 pid
+-rw-r--r--   1 root root 56963 Nov 26 21:21 status
+drwxr-xr-x   2 root root  4096 Nov 26 21:13 us-box-cursor
+drwxr-xr-x   2 root root  4096 Nov 26 21:10 us-box-cursor-2
+drwxr-xr-x   2 root root  4096 Nov 26 21:11 us-box-cursor-3
+-rw-r--r--   1 root root     7 Nov 26 21:21 worker.pid
+---
+/agent/repos/Galass_backend-multistop/core/vendor/phpunit/phpunit/phpunit
+/agent/repos/Galass_backend-multistop/core/vendor/bin/phpunit
+/agent/repos/Galass_backend/core/vendor/phpunit/phpunit/phpunit
+/agent/repos/Galass_backend/core/vendor/bin/phpunit
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/vendor/phpunit/phpunit/phpunit
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/vendor/bin/phpunit
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/phpunit/phpunit/phpunit
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/bin/phpunit
+---php binaries---
+/home/ubuntu/.cursor/plugins/cache/ecc/18467905/0f84c0e2796703fbda87d577b2636351418c7442/docs/ja-JP/rules/php
+/home/ubuntu/.cursor/plugins/cache/ecc/18467905/0f84c0e2796703fbda87d577b2636351418c7442/docs/zh-CN/rules/php
+/home/ubuntu/.cursor/plugins/cache/ecc/18467905/0f84c0e2796703fbda87d577b2636351418c7442/rules/php
+
