@@ -7611,3 +7611,71 @@ Silence 180s sans nouvelle sortie (journal=48 o) : coupure opencode pid=294296
 
 ✗ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md failed
 Error: File not found: /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+$ ls -la /home/ubuntu/actions-runner/_work/_temp/ 2>&1; echo "---"; ls -la /home/ubuntu/actions-runner/_work/_temp/oc 2>&1
+total 13232
+drwxr-xr-x 9 ubuntu ubuntu    4096 Nov 26 18:20 .
+drwxr-xr-x 7 ubuntu ubuntu    4096 Nov 26 18:20 ..
+-rw-r--r-- 1 ubuntu ubuntu    3074 Nov 26 18:20 0927ba96-6a24-4fbc-88b0-7f162ebcf95a.sh
+-rw-r--r-- 1 ubuntu ubuntu     375 Nov 26 18:20 0f2d1aac-f856-495c-991d-85d8b609318a.sh
+-rw-r--r-- 1 ubuntu ubuntu     106 Nov 26 18:20 123de9ee-c41a-4c93-9f33-628d81fa411d.sh
+-rw-r--r-- 1 ubuntu ubuntu     828 Nov 26 18:20 1dd3df03-64b8-4c7e-bac4-08b622674606.sh
+-rw-r--r-- 1 ubuntu ubuntu    1615 Nov 26 18:20 2086c064-e55e-4a0f-af66-2886a97512e5.sh
+-rw-r--r-- 1 ubuntu ubuntu    2106 Nov 26 18:20 46b57790-58e0-4bcd-ba61-7220141d1406.sh
+-rw-r--r-- 1 ubuntu ubuntu    2338 Nov 26 18:20 5ab1986e-4389-48ce-9a5c-b3893a90687d.sh
+-rw-r--r-- 1 ubuntu ubuntu     429 Nov 26 18:20 73ffd2c5-b81f-44f5-89a8-3df06206c483.sh
+-rw-r--r-- 1 ubuntu ubuntu    1345 Nov 26 18:20 7fc57a83-cb2a-495a-9a37-98b7e4b8f446.sh
+-rw-r--r-- 1 ubuntu ubuntu    2007 Nov 26 18:20 877d323a-390c-4590-b206-3556ad720eaa.sh
+-rw-r--r-- 1 ubuntu ubuntu    2016 Nov 26 18:20 8afffe5d-fc36-4c5b-9a94-b08cfcb4baff.sh
+-rw-r--r-- 1 ubuntu ubuntu    8663 Nov 26 18:20 9b7b47a0-4449-49d0-b413-82944d929184.sh
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:20 _github_workflow
+drwxr-xr-x 2 ubuntu ubuntu   12288 Nov 26 18:20 _runner_file_commands
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:20 age
+-rw-r--r-- 1 ubuntu ubuntu 5194720 Nov 26 18:20 age.tgz
+-rw-r--r-- 1 ubuntu ubuntu    2553 Nov 26 18:20 db855c49-d1d1-4f61-99b1-3ab73c97e27f.sh
+-rw-r--r-- 1 ubuntu ubuntu    2915 Nov 26 18:20 dc05f5b7-4aea-4535-8e97-271bc8437d07.sh
+-rw-r--r-- 1 ubuntu ubuntu 8230402 Nov 26 18:20 gitleaks.tgz
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:20 gl
+-rw-r--r-- 1 ubuntu ubuntu    2147 Nov 26 19:02 live.out
+drwxr-xr-x 4 ubuntu ubuntu    4096 Nov 26 18:20 npm-global
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:58 oc
+drwxr-xr-x 4 ubuntu ubuntu    4096 Nov 26 19:02 oc-agent
+-rw-r--r-- 1 ubuntu ubuntu     444 Nov 26 18:52 wip.out
+---
+total 440
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 18:58 .
+drwxr-xr-x 9 ubuntu ubuntu   4096 Nov 26 18:20 ..
+-rw------- 1 ubuntu ubuntu   9680 Nov 26 18:20 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu 424068 Nov 26 19:03 opencode.log
+
+✱ Glob "**/prompt.md" in /home/ubuntu/actions-runner/_work/_temp · 0 matches
+✱ Glob "**/prompt.md" in /home/ubuntu/actions-runner/_work/lifeos-ci · 0 matches
+
+$ ls -la /home/ubuntu/actions-runner/_work/_temp/oc-agent/ /home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode 2>&1
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/:
+total 13532
+drwxr-xr-x 4 ubuntu ubuntu     4096 Nov 26 19:02 .
+drwxr-xr-x 9 ubuntu ubuntu     4096 Nov 26 18:20 ..
+-rw------- 1 ubuntu ubuntu   514960 Nov 26 18:20 .bun-1000-71b650bef1b3e52c.node
+-rw------- 1 ubuntu ubuntu 12846400 Nov 26 18:20 .bun-1000-89812e6e6a68aaeb.so
+-rw-r--r-- 1 ubuntu ubuntu        0 Nov 26 19:02 attempt.start
+drwxr-xr-x 8 ubuntu ubuntu     4096 Nov 26 18:52 home
+-rw-r--r-- 1 ubuntu ubuntu        0 Nov 26 19:02 oc-tail
+-rw-r--r-- 1 ubuntu ubuntu        7 Nov 26 19:02 oc.pid
+drwxr-xr-x 2 ubuntu ubuntu     4096 Nov 26 18:20 opencode
+-rw-r--r-- 1 ubuntu ubuntu     8190 Nov 26 18:58 redacted.log
+-rw-r--r-- 1 ubuntu ubuntu   124152 Nov 26 18:55 run-beam-free.log
+-rw-r--r-- 1 ubuntu ubuntu       46 Nov 26 18:20 run-deepseek-v4.1-flash-free.log
+-rw-r--r-- 1 ubuntu ubuntu    77512 Nov 26 18:51 run-flint-40b-free.log
+-rw-r--r-- 1 ubuntu ubuntu    78961 Nov 26 18:57 run-hy4-flash-free.log
+-rw-r--r-- 1 ubuntu ubuntu    25749 Nov 26 18:42 run-iceman-free.log
+-rw-r--r-- 1 ubuntu ubuntu   108696 Nov 26 18:37 run-mimo-v2.6-flash-free.log
+-rw-r--r-- 1 ubuntu ubuntu     8456 Nov 26 18:58 run-nemotron-3.5-lightning-free.log
+-rw-r--r-- 1 ubuntu ubuntu       48 Nov 26 18:58 run-nemotron-3.5-super-vl-free.log
+-rw-r--r-- 1 ubuntu ubuntu     2760 Nov 26 19:03 run-seaglass-alpha-free.log
+
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode:
+total 8
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 18:20 .
+drwxr-xr-x 4 ubuntu ubuntu 4096 Nov 26 19:02 ..
+
