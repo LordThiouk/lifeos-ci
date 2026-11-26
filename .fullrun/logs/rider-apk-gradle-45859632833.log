@@ -6771,3 +6771,295 @@ $ find /home/ubuntu/actions-runner/_work -maxdepth 6 \( -name 'gradle-wrapper.pr
 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/android/settings.gradle.kts
 
 Now let me find the Driver reference toolchain and read the lifeos context (read-only).
+✱ Grep "8\.14|9\.1\.0|9\.0\.1|3\.50\.1|45801376130|AGP|crashlytics|Crashlytics" in /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY · 21 matches
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/targets && echo "=====prompts=====" && ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts
+total 12
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 14:26 .
+drwxr-xr-x 8 ubuntu ubuntu 4096 Nov 26 14:26 ..
+-rwxr-xr-x 1 ubuntu ubuntu 3206 Nov 26 14:26 allowed-repos.sh
+=====prompts=====
+total 132
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 14:26 .
+drwxr-xr-x 8 ubuntu ubuntu 4096 Nov 26 14:26 ..
+-rw-r--r-- 1 ubuntu ubuntu  943 Nov 26 14:26 agent-run-inputs.md
+-rw-r--r-- 1 ubuntu ubuntu  585 Nov 26 14:26 allow-acr.md
+-rw-r--r-- 1 ubuntu ubuntu 1494 Nov 26 14:26 assemble.md
+-rw-r--r-- 1 ubuntu ubuntu 1159 Nov 26 14:26 brick-build-aditi-ui.md
+-rw-r--r-- 1 ubuntu ubuntu 1135 Nov 26 14:26 brick-build-anvil.md
+-rw-r--r-- 1 ubuntu ubuntu 1159 Nov 26 14:26 brick-build-engineer.md
+-rw-r--r-- 1 ubuntu ubuntu 1170 Nov 26 14:26 brick-build-forge-code.md
+-rw-r--r-- 1 ubuntu ubuntu 1119 Nov 26 14:26 brick-close-max.md
+-rw-r--r-- 1 ubuntu ubuntu 1727 Nov 26 14:26 brick-fullrun.md
+-rw-r--r-- 1 ubuntu ubuntu 1139 Nov 26 14:26 brick-plan-serena.md
+-rw-r--r-- 1 ubuntu ubuntu 1192 Nov 26 14:26 brick-verify-code-review.md
+-rw-r--r-- 1 ubuntu ubuntu 1184 Nov 26 14:26 brick-verify-forge-audit.md
+-rw-r--r-- 1 ubuntu ubuntu 1142 Nov 26 14:26 brick-verify-silas.md
+-rw-r--r-- 1 ubuntu ubuntu  788 Nov 26 14:26 chain-inputs.md
+-rw-r--r-- 1 ubuntu ubuntu 1435 Nov 26 14:26 extra-fetch.md
+-rw-r--r-- 1 ubuntu ubuntu 1067 Nov 26 14:26 extra-fetch2.md
+-rw-r--r-- 1 ubuntu ubuntu 1027 Nov 26 14:26 find-bugs-isa.md
+-rw-r--r-- 1 ubuntu ubuntu 1257 Nov 26 14:26 fix-ci.md
+-rw-r--r-- 1 ubuntu ubuntu  984 Nov 26 14:26 fix-push.md
+-rw-r--r-- 1 ubuntu ubuntu  984 Nov 26 14:26 fr303.md
+-rw-r--r-- 1 ubuntu ubuntu 1041 Nov 26 14:26 hf-ffmpeg.md
+-rw-r--r-- 1 ubuntu ubuntu 1041 Nov 26 14:26 no-auto-next.md
+-rw-r--r-- 1 ubuntu ubuntu 1287 Nov 26 14:26 pipeline.md
+-rw-r--r-- 1 ubuntu ubuntu  779 Nov 26 14:26 pr20-review.md
+-rw-r--r-- 1 ubuntu ubuntu  915 Nov 26 14:26 pushfix.md
+-rw-r--r-- 1 ubuntu ubuntu  881 Nov 26 14:26 review-assemble.md
+-rw-r--r-- 1 ubuntu ubuntu  866 Nov 26 14:26 review20.md
+-rw-r--r-- 1 ubuntu ubuntu  769 Nov 26 14:26 serena-fix.md
+-rw-r--r-- 1 ubuntu ubuntu 1043 Nov 26 14:26 startup.md
+-rw-r--r-- 1 ubuntu ubuntu 1265 Nov 26 14:26 timeout-fix.md
+-rw-r--r-- 1 ubuntu ubuntu 1468 Nov 26 14:26 vera-audit-fix.md
+
+$ git reflog -15 && echo "=====BRANCHES=====" && git branch -avv && echo "=====FULLRUN=====" && ls -la .fullrun
+207d752 HEAD@{0}: commit: build(android): align Rider toolchain with Flutter 3.50.1
+fcdd581 HEAD@{1}: reset: moving to fcdd581
+ec07f3e HEAD@{2}: commit: build(android): align Rider toolchain with Flutter 3.50.1
+424957d HEAD@{3}: checkout: moving from feat/multistop-e2e-2026-11-15 to build/rider-apk-gradle
+424957d HEAD@{4}: checkout: moving from master to feat/multistop-e2e-2026-11-15
+=====BRANCHES=====
+* build/rider-apk-gradle                                                         207d752 build(android): align Rider toolchain with Flutter 3.50.1
+  feat/multistop-e2e-2026-11-15                                                  424957d [origin/feat/multistop-e2e-2026-11-15] verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+  remotes/origin/build/rider-apk-gradle                                          fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+  remotes/origin/build/rider-f429                                                f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+  remotes/origin/close/rider-f434b-max                                           e89027a verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+  remotes/origin/diag/arret-etape-galass-ci-2026-11-24                           e6bcfb0 docs(diag): rapport accès opencode aux dépôts publics
+  remotes/origin/diag/multistop-serena-porte-2026-11-23                          05ec6af docs(diag): rapport porte serena après vera PASS
+  remotes/origin/diag/porte-build-2026-11-24                                     a5b085d diag(porte): préciser bun absent et provenance du snapshot lifeos
+  remotes/origin/feat/multistop-e2e-2026-11-15                                   424957d verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+  remotes/origin/feat/multistop-rider-close-2026-11-20                           bf9dcb6 chore(ci): rapport du run ui-goldens-gate-rider-2026-11-23
+  remotes/origin/feat/patrol-pilot                                               15b5eec fix(e2e): rider_multistop_test logs in only if login screen shows
+  remotes/origin/feat/phone-number-login                                         8f6d7ad feat(auth): remove password field from login UI for phone-only authentication
+  remotes/origin/feat/rider-f434-2026-11-26                                      adf56e8 docs(isa): tick F4-34 with pick_up alert proof
+  remotes/origin/feature/accessibility-plan                                      71c0db7 feat: add plan for accessibility and french layout verification
+  remotes/origin/feature/firebase-laravel-bridge                                 0e38bfc test(auth): add AuthService unit tests for ISC-12
+  remotes/origin/fix/multistop-close                                             5b2533f docs: resync work artifact mirror (byte-identical) + dual-write proof
+  remotes/origin/fix/profile-bugs                                                f00a3d8 fix(auth): profile bugs — names, E.164, phone picker, email UI
+  remotes/origin/fix/profile-complete-prefill                                    679f1fd fix(auth): prefill ProfileComplete phone from session
+  remotes/origin/fix/rider-multistop-wip                                         4e550ec WIP fix(rider): multi-stop détail, itinéraire et tests (Anvil, travail partiel en pause)
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-23-45290781492    cddbf61 chore(ci): journal opencode du run multistop-ui-gaps-serena-2026-11-23 (45290781492) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r3-45305125203 b953984 chore(ci): journal opencode du run multistop-ui-gaps-serena-2026-11-24-r3 (45305125203) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r5-45320422961 5c03310 chore(ci): journal opencode du run multistop-ui-gaps-serena-2026-11-24-r5 (45320422961) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r6-45334725976 6ff225d chore(ci): journal opencode du run multistop-ui-gaps-serena-2026-11-24-r6 (45334725976) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/multistop-ui-gaps-vera-2026-11-23-45268880692      642cd97 chore(ci): journal opencode du run multistop-ui-gaps-vera-2026-11-23 (45268880692) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-apk-gradle-45847515781                       c52aacb chore(ci): journal en direct du run rider-apk-gradle (45847515781), 16:29 Dakar, clair — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-apk-gradle-45859632833                       238a181 chore(ci): journal en direct du run rider-apk-gradle (45859632833), 18:19 Dakar, clair — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-f429-cr-45845322081                          d972070 chore(ci): journal en direct du run rider-f429-cr (45845322081), 18:18 Dakar, clair — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-f429-cr-ll-45807711954                       8330c8c chore(ci): journal en direct du run rider-f429-cr-ll (45807711954), 11:29 Dakar, clair — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-f429-forge-45845322748                       46deb9c chore(ci): journal en direct du run rider-f429-forge (45845322748), 16:30 Dakar, clair — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-f429-forge-ll-45807712042                    3a89f8f chore(ci): journal en direct du run rider-f429-forge-ll (45807712042), 11:29 Dakar, clair — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-f429-silas-ll-45807712379                    847142b chore(ci): journal en direct du run rider-f429-silas-ll (45807712379), 11:29 Dakar, clair — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-f434b-max-45845322242                        082c995 chore(ci): journal en direct du run rider-f434b-max (45845322242), 16:30 Dakar, clair — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-f434b-max-ll-45808727484                     a53082c chore(ci): journal en direct du run rider-f434b-max-ll (45808727484), 11:26 Dakar, clair — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-multistop-close-2-44832871010                4354901 chore(ci): journal opencode du run rider-multistop-close-2 (44832871010) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-multistop-close-3-44847122033                3ce9a4e chore(ci): journal opencode du run rider-multistop-close-3 (44847122033) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-multistop-close-4-44854453615                33a8e18 chore(ci): journal opencode du run rider-multistop-close-4 (44854453615) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-multistop-close-44814973592                  0fc663e chore(ci): journal opencode du run rider-multistop-close (44814973592) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-multistop-close-5-44865549101                a5c41b7 chore(ci): journal opencode du run rider-multistop-close-5 (44865549101) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-multistop-close-6-44878329849                0d61f32 chore(ci): journal opencode du run rider-multistop-close-6 (44878329849) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44901958343                7c687bd chore(ci): journal opencode du run rider-multistop-close-7 (44901958343) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44912440632                2c9f372 chore(ci): journal opencode du run rider-multistop-close-7 (44912440632) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44926692223                06802f9 chore(ci): journal opencode du run rider-multistop-close-7 (44926692223) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/ui-goldens-gate-rider-2026-11-23-45113355828       5882c25 chore(ci): journal opencode du run ui-goldens-gate-rider-2026-11-23 (45113355828) — branche à supprimer après lecture
+  remotes/origin/fullrun-logs/ui-goldens-gate-rider-2026-11-23-45122523186       3b120fc chore(ci): journal opencode du run ui-goldens-gate-rider-2026-11-23 (45122523186) — branche à supprimer après lecture
+  remotes/origin/fullrun-prompts                                                 9311ed2 prompt: diag accès dépôts
+  remotes/origin/main                                                            7984da7 fix(rider): F8 post-accept détail and Debug device signing
+  remotes/origin/ovo-customizations                                              f768f38 rider fare modification functionality removal fix.
+  remotes/origin/test/service-option                                             5cc5d25 test(e2e): Semantics(identifier) service_option_N sur les cartes de service (aucun changement de comportement)
+  remotes/origin/verify/rider-f429-cr                                            1f679bc wip(autosave): arbre de travail
+  remotes/origin/verify/rider-f429-forge                                         fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+  remotes/origin/verify/rider-f429-silas                                         fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+  remotes/origin/verify/rider-f432-cr                                            dc05eae docs(rider): verify F4-32 (a1-a5) — PASS
+  remotes/origin/verify/rider-f432-emu-cr                                        963fa82 test(rider): F4-32 fix pump before duration in live_location marker test
+  remotes/origin/verify/rider-f432-emu-forge                                     44a61e1 docs(verify): F4-32 BLOCK — unit 30/30 & 184/184 green, emu proof missing (harness has no car/live_location marker)
+  remotes/origin/verify/rider-f432-emu-silas                                     963fa82 test(rider): F4-32 fix pump before duration in live_location marker test
+  remotes/origin/verify/rider-f432-forge                                         97d9c32 docs(verify): F4-32 PASS — a1-a5, multistop_map 30/30, suite 184/184
+  remotes/origin/verify/rider-f432-silas                                         ef257d8 verify(rider): F4-32 PASS — car marker seed + live_location tests green
+  remotes/origin/verify/rider-f434-cr                                            f827a7f docs(verify): F4-34 BLOCK — device unproven, iOS FCM dedup gap
+  remotes/origin/verify/rider-f434-forge                                         f3328fb docs(verify): F4-34 audit — BLOCK device half, unit green
+  remotes/origin/verify/rider-f434-silas                                         d0f71f7 docs(verify): F4-34 BLOCK — unit PASS, device ARTEMIS absent, contrat B+C non amendé
+  remotes/origin/verify/rider-f434b-cr                                           90aceb9 verify(rider): F4-34 PASS after rebuild (gate shared, Pusher/FCM dedup, iOS FG)
+  remotes/origin/verify/rider-f434b-forge                                        e89027a verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+  remotes/origin/verify/rider-f434b-silas                                        bc486ed docs(verify): F4-34 rebuild VERDICT PASS (one-shot gate, Pusher/FCM dedup, iOS foreground)
+=====FULLRUN=====
+total 76
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 18:20 .
+drwxr-xr-x 18 ubuntu ubuntu  4096 Nov 26 18:55 ..
+-rw-r--r--  1 ubuntu ubuntu 13696 Nov 26 18:20 multistop-ui-gaps-serena-2026-11-23_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  5537 Nov 26 18:20 multistop-ui-gaps-serena-2026-11-24-r3_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  1238 Nov 26 18:20 multistop-ui-gaps-serena-2026-11-24-r3_checkpoint.json
+-rw-r--r--  1 ubuntu ubuntu  7949 Nov 26 18:20 multistop-ui-gaps-serena-2026-11-24-r5_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  2877 Nov 26 18:20 multistop-ui-gaps-serena-2026-11-24-r5_checkpoint.json
+-rw-r--r--  1 ubuntu ubuntu  8931 Nov 26 18:20 multistop-ui-gaps-serena-2026-11-24-r6_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  1513 Nov 26 18:20 multistop-ui-gaps-serena-2026-11-24-r6_checkpoint.json
+-rw-r--r--  1 ubuntu ubuntu  6846 Nov 26 18:20 multistop-ui-gaps-vera-2026-11-23_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  1223 Nov 26 18:20 multistop-ui-gaps-vera-2026-11-23_checkpoint.json
+
+$ echo "=== forge-code prompt ===" && cat /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-build-forge-code.md && echo "=== agent inputs ===" && cat /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/agent-run-inputs.md
+=== forge-code prompt ===
+# One task only: create `.github/workflows/fr-build-forge-code.yml`. Commit RIGHT AWAY.
+
+Forbidden: push, `gh`, editing any other file. Author: `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`.
+
+1. Copy `.github/workflows/fr-plan-vera.yml` to `.github/workflows/fr-build-forge-code.yml`, then change only:
+   - `name:` to "FullRun build-forge-code (lifeos-ci)", and `run-name:` with "build-forge-code" instead of "Vera";
+   - the `timeout_minutes` input default to "15";
+   - job `vera` renamed to `run` (and `needs: run`, `needs.run.outputs.*` in `next`);
+   - in both jobs: `agent: forge-code`;
+   - in the `run` job's `with:`, add `target_agent: Forge`, `stop_after_step: "4"`, `chain_phase: build`.
+   - add a `workflow_call:` trigger with the same inputs (the `choice` type becomes `string`), plus the input `chain: {type: boolean, required: false, default: true}` in both triggers;
+   - in the `next` job: `if: inputs.chain && needs.run.outputs.status == 'ok'`.
+2. Check the YAML with `python3 -c "import yaml;yaml.safe_load(open('.github/workflows/fr-build-forge-code.yml'))"`, then commit with the message "feat(fr): brique fr-build-forge-code". Stop.
+=== agent inputs ===
+# One task only: 3 inputs in `.github/workflows/_agent-run.yml`. Commit RIGHT AWAY.
+
+Forbidden: push, `gh`, reading other files. Author: `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`.
+
+1. In `.github/workflows/_agent-run.yml`, under `on.workflow_call.inputs` (and `on.workflow_dispatch.inputs` if it exists), add:
+```yaml
+      stop_after_step: {type: string, required: false, default: ""}
+      target_agent: {type: string, required: false, default: ""}
+      chain_phase: {type: string, required: false, default: ""}
+```
+2. In the job's top-level `env:` block, add:
+```yaml
+  STOP_AFTER_STEP: ${{ inputs.stop_after_step }}
+  TARGET_AGENT: ${{ inputs.target_agent }}
+  CHAIN_PHASE: ${{ inputs.chain_phase }}
+```
+3. Check the YAML with `python3 -c "import yaml;yaml.safe_load(open('.github/workflows/_agent-run.yml'))"`, then commit everything with the message "feat(agent-run): stop_after_step, target_agent, chain_phase". Stop.
+
+$ echo "=== ec07f3e vs 207d752 ===" && git diff ec07f3e 207d752 && echo "=== ec07f3e stat ===" && git show --stat --format=fuller ec07f3e && echo "=== log graph ===" && git log --oneline --graph -6
+=== ec07f3e vs 207d752 ===
+diff --git a/VERIFY-F434B.md b/VERIFY-F434B.md
+deleted file mode 100644
+index fe2a480..0000000
+--- a/VERIFY-F434B.md
++++ /dev/null
+@@ -1,58 +0,0 @@
+-VERDICT: PASS
+-
+-# Vérification F4-34 (rebuild) — porte one-shot, dédup Pusher↔FCM, chemin iOS foreground
+-
+-Date : 2026-11-26
+-Branche : `verify/rider-f434b-forge`
+-Périmètre audité : `dcb4bf0` (lib) + `2ec49c8` (tests) + note ISA `3a399e8`.
+-Rôle : audit de vérification uniquement. Aucun code modifié, aucun golden régénéré, ISA et `.fullrun` non touchés.
+-
+-## Points vérifiés
+-
+-- **Porte one-shot liée au `ride_id`** — `RideAlertOnce.shouldAlert` clé `ride_id::type` ; un couple déjà émis est un no-op, un nouveau `ride_id` ré-alerte. Clé vide (ride_id ou type inconnu) n'est pas dédupliquée. `lib/core/helper/ride_alert_once.dart:21-28`.
+-- **Porte survivante à la recréation** — `RideAlertOnce.shared` est `static final` (process-wide), et `resetRideScopedControllers()` ne le réinitialise pas ; `PusherRideController` la référence à `lib/data/controller/pusher/pusher_ride_controller.dart:42`. Test dédié « the one-shot gate survives PusherRideController recreation » vert.
+-- **Dédup Pusher↔FCM partagée** — `PushNotificationService` et `PusherRideController` utilisent la même `RideAlertOnce.shared` (`lib/data/services/push_notification_service.dart:28`, `lib/data/controller/pusher/pusher_ride_controller.dart:42`). La dédup FCM passe par `shouldPresentMessage` (`push_notification_service.dart:221-226`) avant tout `show`. Tests cross-canal (Pusher→FCM et FCM→Pusher) verts.
+-- **Deux alertes distinctes qui coexistent** — la clé inclut le type (`pick_up` / `arriving_soon`) : B puis C produisent deux alertes, un doublon du même type est supprimé, un nouveau ride ré-alerte. Tests verts.
+-- **Chemin iOS foreground** — `setForegroundNotificationPresentationOptions(alert/badge/sound: false)` (`push_notification_service.dart:297-307`) supprime l'auto-présentation FCM non déduplicable ; le `onMessage` présente la bannière via le `show` local partagé-gated, y compris pour les payloads `notification` (`push_notification_service.dart:196-213`). Recherche `setForegroundNotificationPresentationOptions` : un seul site d'appel dans `lib/`.
+-
+-## Points bloquants
+-
+-Aucun.
+-
+-## Notes non bloquantes
+-
+-- La dédup FCM dépend du payload backend contenant `ride_id` et un type (`type`/`act`/`event`) ; si ces clés manquent, `shouldAlert` autorise la bannière (pas de dédup). Hors dépôt Flutter (backend/Pusher).
+-- La dédup client ne couvre que le chemin foreground ; les doublons de push en arrière-plan restent de la responsabilité backend.
+-- `RideAlertOnce.shared` n'est jamais purgé ; l'ensemble grandit avec le nombre de courses du process (mémoire négligeable, aucun impact fonctionnel).
+-
+-## Commandes exécutées
+-
+-Environnement : Flutter 3.44.8 stable (Dart 3.12.2), `flutter pub get` OK.
+-
+-```
+-$ flutter test test/unit/multistop_pusher_test.dart test/data/services/push_notification_service_test.dart
+-00:00 +21: All tests passed!
+-```
+-
+-```
+-$ flutter test test/unit/multistop_pusher_test.dart
+-00:00 +12: All tests passed!
+-
+-$ flutter test test/data/services/push_notification_service_test.dart
+-00:00 +9: All tests passed!
+-```
+-
+-```
+-$ flutter test
+-00:29 +311 ~2: All tests passed!
+-```
+-
+-```
+-$ flutter analyze lib/core/helper/ride_alert_once.dart lib/data/controller/pusher/pusher_ride_controller.dart lib/data/services/push_notification_service.dart test/unit/multistop_pusher_test.dart test/data/services/push_notification_service_test.dart
+-Analyzing 5 items...
+-No issues found! (ran in 16.2s)
+-```
+-
+-## Conclusion
+-
+-Les trois points du périmètre F4-34 (porte one-shot liée au `ride_id`, dédup Pusher↔FCM partagée, chemin iOS foreground) sont implémentés, couverts par les tests unit des commits `dcb4bf0` / `2ec49c8`, et la suite complète ainsi que l'analyse statique sont vertes. **PASS**.
+=== ec07f3e stat ===
+commit ec07f3edef1b8c96ac7b65113d12271bf2c89f91
+Author:     Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+AuthorDate: Thu Nov 26 18:42:24 2026 +0000
+Commit:     Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+CommitDate: Thu Nov 26 18:42:24 2026 +0000
+
+    build(android): align Rider toolchain with Flutter 3.50.1
+    
+    - Downgrade Gradle wrapper 9.1.0 -> 8.14 (match Driver, accepted by Flutter 3.50.1)
+    - Downgrade AGP 9.0.1 -> 8.11.1
+    - Align Kotlin 2.2.20 -> 2.3.0 and Crashlytics plugin 3.0.7 -> 3.0.3
+    - Align gradle.properties with Driver-stable flags (keep android.enableJetifier=false)
+    
+    No lib/ changes. Not built locally (flutter build/gradlew forbidden on box).
+
+ android/gradle.properties                        | 19 ++++++++++++-------
+ android/gradle/wrapper/gradle-wrapper.properties |  2 +-
+ android/settings.gradle.kts                      |  6 +++---
+ 3 files changed, 16 insertions(+), 11 deletions(-)
+=== log graph ===
+* 207d752 build(android): align Rider toolchain with Flutter 3.50.1
+*   fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+|\  
+| * f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+| * 35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+| * fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+|/  
+* b83aba6 test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+
+$ git grep -n -E 'gradle-8\.14|gradle-9\.1\.0|com\.android\.application" version|firebase\.crashlytics" version|kotlin\.android" version' $(git for-each-ref --format='%(refname)' refs/remotes refs/heads | tr '\n' ' ') -- 'android/settings.gradle.kts' 'android/gradle/wrapper/gradle-wrapper.properties' 2>/dev/null | sort -u | head -100
+refs/heads/build/rider-apk-gradle:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+refs/heads/feat/multistop-e2e-2026-11-15:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/build/rider-apk-gradle:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/build/rider-f429:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/close/rider-f434b-max:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/diag/arret-etape-galass-ci-2026-11-24:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/diag/multistop-serena-porte-2026-11-23:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/diag/porte-build-2026-11-24:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/feat/multistop-e2e-2026-11-15:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/feat/multistop-rider-close-2026-11-20:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/feat/patrol-pilot:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/feat/rider-f434-2026-11-26:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/fix/multistop-close:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/fix/rider-multistop-wip:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/main:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/test/service-option:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f429-cr:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f429-forge:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f429-silas:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f432-cr:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f432-emu-cr:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f432-emu-forge:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f432-emu-silas:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f432-forge:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f432-silas:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f434-cr:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f434-forge:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f434-silas:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f434b-cr:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f434b-forge:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+refs/remotes/origin/verify/rider-f434b-silas:android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+
+✱ Grep "8\.11\.1|8\.14|3\.0\.3|2\.3\.0|rider-apk-gradle|45801376130" in /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci · 0 matches
+The work appears already committed (twice historically). Let me verify correctness by checking references for Driver's toolchain and Flutter 3.50.1 compatibility.
