@@ -1,0 +1,428 @@
+
+> Forge · deepseek-v4.1-flash-free
+
+I'll read the prompt file first.
+→ Read /home/ubuntu/actions-runner-2/_work/_temp/oc/prompt.md
+
+$ ls /home/ubuntu/actions-runner-2/_work/_temp/ && ls /home/ubuntu/actions-runner-2/_work/_temp/oc/
+02834e47-ec5c-4ebf-b8d8-291bee7b81b3.sh
+1a794973-0612-43ff-9268-468370d63360.sh
+1b588518-0be0-4ca5-b8cc-2ee69acfdbcf.sh
+30f45a7c-4cf1-4368-8226-8553151af016.sh
+3d886da1-0f74-4c19-9dd3-e08dd45db736.sh
+4b2e4ed8-d9cb-46b6-b2ef-013ded9d08ed.sh
+649a7517-05fc-4ac8-92f1-ada8cfa9e8cd.sh
+734ad39e-a47c-4e1d-99b4-6d72b884de0f.sh
+816bbe7f-6efb-492f-bb6e-95199742e6e2.sh
+9d500282-437c-49a9-9e01-fde9b174816b.sh
+_github_workflow
+_runner_file_commands
+aceec95e-bef3-4d12-bbdf-df6ffc59e55f.sh
+age
+age.tgz
+b24123ba-4fde-4452-8b92-441da7084efa.sh
+bdfa5ccd-c798-4f25-960d-8a92fde033d0.sh
+dcf3e2a7-1ee8-4bbb-819c-e25da04b8a15.sh
+ed60f0cb-e0f1-497f-9ead-f57bbe99a395.sh
+gitleaks.tgz
+gl
+live.out
+npm-global
+oc
+oc-agent
+preflight.err
+preflight.json
+wip.out
+opencode.json
+opencode.log
+prompt.md
+
+$ pwd && ls -la && git status --short && git log --oneline -5 && git branch --show-current
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target
+total 204
+drwxr-xr-x 15 ubuntu ubuntu  4096 Nov 26 20:53 .
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 20:53 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:53 .archive
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 20:53 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 20:53 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 20:53 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1079 Nov 26 20:53 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  7714 Nov 26 20:53 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu 14109 Nov 26 20:53 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu    70 Nov 26 20:53 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 15826 Nov 26 20:53 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:53 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  2970 Nov 26 20:53 README.md
+-rw-r--r--  1 ubuntu ubuntu  1662 Nov 26 20:53 analysis_options.yaml
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 20:53 android
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 20:53 assets
+-rw-r--r--  1 ubuntu ubuntu   392 Nov 26 20:53 dart_test.yaml
+-rw-r--r--  1 ubuntu ubuntu   184 Nov 26 20:53 devtools_options.yaml
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:53 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:53 fastlane
+-rw-r--r--  1 ubuntu ubuntu   639 Nov 26 20:53 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 20:53 ios
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 20:53 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 20:53 prompts
+-rw-r--r--  1 ubuntu ubuntu 68359 Nov 26 20:53 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  2856 Nov 26 20:53 pubspec.yaml
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 20:53 test
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:53 tool
+81e7be9 fix(build): file_picker ^13.4.1 pour AGP 9 (FilePickerPlugin)
+590fe53 isa(driver): coche ISC-F5-15 (preuve flutter test 1/1 + goldens 5/5)
+3f120b4 wip(autosave): arbre de travail
+dbfd2ee fix(build): flutter_inappwebview 6.2.0-beta.3 (AGP 9 stack)
+7baf7d9 fix(build): override flutter_inappwebview_android 1.2.0-beta.3 (AGP 9)
+feat/multistop-e2e-2026-11-15
+
+$ ls test && echo "---" && find test -name "*.dart" | sort | head -80
+core
+data
+fixtures
+goldens
+helpers
+presentation
+tool
+unit
+---
+test/core/helper/dispatch_ride_id_test.dart
+test/core/helper/last_ping_store_test.dart
+test/core/helper/location_ping_policy_test.dart
+test/core/helper/location_ping_send_outcome_test.dart
+test/core/helper/money_submit_gate_test.dart
+test/core/helper/string_converter_xof_test.dart
+test/core/helper/xof_money_helper_test.dart
+test/data/controller/dashboard/dispatch_accept_navigation_test.dart
+test/data/controller/dashboard/dispatch_offer_implicit_decline_test.dart
+test/data/controller/dashboard/offer_respond_gone_test.dart
+test/data/controller/dashboard/pending_dispatch_poll_test.dart
+test/data/controller/driver_kyc_controller/driver_kyc_controller_test.dart
+test/data/controller/map/ride_map_driver_pickup_bounds_test.dart
+test/data/controller/map/ride_map_multistop_test.dart
+test/data/controller/pusher/global_pusher_debug_smoke_test.dart
+test/data/controller/ride/ride_details/ride_details_complete_stop_test.dart
+test/data/controller/ride/ride_details/ride_details_controller_lifecycle_test.dart
+test/data/controller/ride/ride_details/ride_details_start_ride_test.dart
+test/data/controller/ride/ride_meassage/ride_meassage_controller_test.dart
+test/data/controller/ride/ride_meassage/ride_message_getx_freshness_test.dart
+test/data/controller/vehicle_verification/vehicle_verification_controller_test.dart
+test/data/model/auth/firebase_auth/driver_firebase_auth_response_model_test.dart
+test/data/model/dashboard/dashboard_response_model_test.dart
+test/data/model/global/app/ride_meassage_model_test.dart
+test/data/model/global/user/global_user_model_test.dart
+test/data/model/ride/ride_meassage_response_list_test.dart
+test/data/repo/auth/firebase_auth_repo_test.dart
+test/data/repo/dashboard/dashboard_repo_offer_test.dart
+test/data/repo/driver_profile_verification/driver_kyc_repo_test.dart
+test/data/repo/ride/ride_repo_start_ride_test.dart
+test/data/repo/vehicle_verification/vehicle_verification_repo_test.dart
+test/data/services/android_dispatch_offer_test.dart
+test/data/services/api_client_multipart_test.dart
+test/data/services/api_client_session_test.dart
+test/data/services/dispatch_attempt_registry_test.dart
+test/data/services/dispatch_callkit_accept_regression_test.dart
+test/data/services/dispatch_callkit_background_handler_test.dart
+test/data/services/dispatch_callkit_params_test.dart
+test/data/services/dispatch_offer_56_test.dart
+test/data/services/dispatch_offer_57_test.dart
+test/data/services/dispatch_offer_58_test.dart
+test/data/services/dispatch_offer_59_security_test.dart
+test/data/services/dispatch_offer_60_fare_test.dart
+test/data/services/dispatch_offer_alert_service_test.dart
+test/data/services/dispatch_offer_headless_respond_test.dart
+test/data/services/dispatch_offer_ingress_test.dart
+test/data/services/dispatch_offer_notification_tap_test.dart
+test/data/services/dispatch_offer_presenter_test.dart
+test/data/services/fcm_navigation_non_blocking_test.dart
+test/data/services/parse_ride_from_fcm_test.dart
+test/data/services/push_notification_service_test.dart
+test/goldens/driver/fixtures/golden_fixtures.dart
+test/goldens/driver/harness/golden_harness.dart
+test/goldens/driver/home_golden_test.dart
+test/goldens/driver/review_golden_test.dart
+test/goldens/driver/ride_details_golden_test.dart
+test/helpers/recording_api_client.dart
+test/presentation/components/rounded_button_semantics_test.dart
+test/presentation/dispatch_lock_screen_guard_test.dart
+test/presentation/dispatch_offer_fare_modal_60_test.dart
+test/presentation/dispatch_offer_modal_alert_test.dart
+test/presentation/screens/auth/login/login_crashlytics_debug_panel_test.dart
+test/presentation/screens/inbox/ride_message_loader_logic_test.dart
+test/tool/bump_version_cli_test.dart
+test/tool/export_version_test.dart
+test/tool/hygiene_anti_test.dart
+test/tool/pubspec_version_test.dart
+test/tool/release_cli_test.dart
+test/unit/multistop_chat_ride_id_test.dart
+test/unit/multistop_complete_stop_test.dart
+test/unit/multistop_end_gate_test.dart
+test/unit/multistop_itinerary_test.dart
+test/unit/multistop_offer_summary_test.dart
+test/unit/multistop_pusher_test.dart
+test/unit/multistop_regression_test.dart
+test/unit/multistop_ride_model_test.dart
+test/unit/multistop_stops_progress_test.dart
+test/unit/multistop_strings_sweep_test.dart
+test/unit/pusher_cash_payment_request_test.dart
+
+$ find lib -name "*.dart" | sort | head -100 && echo "---" && find lib -name "*ride_map*" -o -name "*forground*" -o -name "*dashboard*" | sort
+lib/core/di_service/di_services.dart
+lib/core/firebase/crashlytics_debug.dart
+lib/core/firebase/firebase_bootstrap.dart
+lib/core/helper/date_converter.dart
+lib/core/helper/last_ping_store.dart
+lib/core/helper/location_ping_policy.dart
+lib/core/helper/server_rejection.dart
+lib/core/helper/shared_preference_helper.dart
+lib/core/helper/string_format_helper.dart
+lib/core/helper/xof_money_helper.dart
+lib/core/route/route.dart
+lib/core/theme/light/light.dart
+lib/core/utils/app_route_observer.dart
+lib/core/utils/app_status.dart
+lib/core/utils/audio_utils.dart
+lib/core/utils/debouncer.dart
+lib/core/utils/dimensions.dart
+lib/core/utils/helper.dart
+lib/core/utils/localization/localization_loader.dart
+lib/core/utils/localization/localization_merge.dart
+lib/core/utils/messages.dart
+lib/core/utils/method.dart
+lib/core/utils/my_animation.dart
+lib/core/utils/my_color.dart
+lib/core/utils/my_enums.dart
+lib/core/utils/my_icons.dart
+lib/core/utils/my_images.dart
+lib/core/utils/my_strings.dart
+lib/core/utils/style.dart
+lib/core/utils/ticket_helper.dart
+lib/core/utils/url_container.dart
+lib/core/utils/util.dart
+lib/data/controller/account/change_password_controller.dart
+lib/data/controller/account/profile_complete_controller.dart
+lib/data/controller/account/profile_controller.dart
+lib/data/controller/auth/auth/email_verification_controler.dart
+lib/data/controller/auth/auth/registration_controller.dart
+lib/data/controller/auth/auth/sms_verification_controler.dart
+lib/data/controller/auth/firebase_phone_auth_controller.dart
+lib/data/controller/auth/forget_password/forget_password_controller.dart
+lib/data/controller/auth/forget_password/reset_password_controller.dart
+lib/data/controller/auth/forget_password/verify_password_controller.dart
+lib/data/controller/auth/login_controller.dart
+lib/data/controller/auth/social_auth_controller.dart
+lib/data/controller/auth/two_factor_controller.dart
+lib/data/controller/common/theme_controller.dart
+lib/data/controller/dashboard/dashboard_controller.dart
+lib/data/controller/dashboard/ride_queue_manager.dart
+lib/data/controller/deposit/add_new_deposit_controller.dart
+lib/data/controller/deposit/deposit_history_controller.dart
+lib/data/controller/driver_and_vehicle_info/driver_and_vehicle_info_controller.dart
+lib/data/controller/driver_kyc_controller/driver_kyc_controller.dart
+lib/data/controller/faq_controller/faq_controller.dart
+lib/data/controller/localization/localization_controller.dart
+lib/data/controller/map/ride_map_controller.dart
+lib/data/controller/my_language_controller/my_language_controller.dart
+lib/data/controller/payment_history/payment_history_controller.dart
+lib/data/controller/privacy/privacy_controller.dart
+lib/data/controller/pusher/global_pusher_controller.dart
+lib/data/controller/pusher/pusher_ride_controller.dart
+lib/data/controller/review/review_controller.dart
+lib/data/controller/ride/all_ride/all_ride_controller.dart
+lib/data/controller/ride/ride_action/ride_action_controller.dart
+lib/data/controller/ride/ride_details/ride_details_controller.dart
+lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
+lib/data/controller/splash/splash_controller.dart
+lib/data/controller/support/new_ticket_controller.dart
+lib/data/controller/support/support_controller.dart
+lib/data/controller/support/ticket_details_controller.dart
+lib/data/controller/transaction/transactions_controller.dart
+lib/data/controller/vehicle_verification/vehicle_verification_controller.dart
+lib/data/controller/withdraw/add_new_withdraw_controller.dart
+lib/data/controller/withdraw/withdraw_confirm_controller.dart
+lib/data/controller/withdraw/withdraw_history_controller.dart
+lib/data/model/about/privacy_response_model.dart
+lib/data/model/auth/firebase_auth/driver_firebase_auth_response_model.dart
+lib/data/model/auth/login/login_response_model.dart
+lib/data/model/auth/sign_up_model/registration_response_model.dart
+lib/data/model/auth/sign_up_model/sign_up_model.dart
+lib/data/model/auth/verification/email_verification_model.dart
+lib/data/model/authorization/authorization_response_model.dart
+lib/data/model/country_model/country_model.dart
+lib/data/model/dashboard/dashboard_response_model.dart
+lib/data/model/deposit/deposit_history_response_model.dart
+lib/data/model/deposit/deposit_insert_response_model.dart
+lib/data/model/deposit/deposit_method_response_model.dart
+lib/data/model/dispatch/dispatch_offer_ingress_event.dart
+lib/data/model/faq_response_model.dart
+lib/data/model/general_setting/general_setting_response_model.dart
+lib/data/model/global/app/ride_meassage_model.dart
+lib/data/model/global/formdata/global_kyc_form_data.dart
+lib/data/model/global/meassage_model.dart
+lib/data/model/global/payment_method/app_payment_gateway.dart
+lib/data/model/global/payment_method/app_payment_method.dart
+lib/data/model/global/pusher/pusher_event_response_model.dart
+lib/data/model/global/response_model/response_model.dart
+lib/data/model/global/response_model/unverified_response_model.dart
+lib/data/model/global/ride/app_service_model.dart
+lib/data/model/global/ride/multistop_stop_sync.dart
+lib/data/model/global/ride/ride_event_merge.dart
+---
+lib/data/controller/dashboard
+lib/data/controller/dashboard/dashboard_controller.dart
+lib/data/controller/map/ride_map_controller.dart
+lib/data/model/dashboard
+lib/data/model/dashboard/dashboard_response_model.dart
+lib/data/repo/dashboard
+lib/data/repo/dashboard/dashboard_repo.dart
+lib/data/services/forground_location_service.dart
+lib/presentation/screens/dashboard
+lib/presentation/screens/dashboard/dashboard_background.dart
+lib/presentation/screens/dashboard/dashboard_screen.dart
+lib/presentation/screens/dashboard/forground_task_widget.dart
+
+→ Read lib/data/controller/map/ride_map_controller.dart
+
+$ which flutter dart; flutter --version 2>/dev/null | head -5
+/usr/local/bin/flutter
+/usr/local/bin/dart
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
+→ Read lib/data/services/forground_location_service.dart
+→ Read lib/core/helper/location_ping_policy.dart
+→ Read lib/core/helper/last_ping_store.dart
+→ Read lib/data/repo/dashboard/dashboard_repo.dart
+→ Read lib/data/controller/dashboard/dashboard_controller.dart
+→ Read lib/data/controller/ride/ride_details/ride_details_controller.dart
+
+$ find lib -name "home_screen.dart" -o -name "poly_line_map.dart" -o -name "ride_details_screen.dart" | sort
+lib/presentation/screens/ride_details/ride_details_screen.dart
+lib/presentation/screens/ride_details/widgets/poly_line_map.dart
+lib/presentation/screens/rides/home_screen/home_screen.dart
+
+$ grep -rn "getPositionStream\|StreamSubscription\|Geolocator" lib --include=*.dart | head -40
+lib/data/controller/map/ride_map_controller.dart:445:      final pos = await Geolocator.getCurrentPosition(
+lib/data/controller/dashboard/dashboard_controller.dart:123:      final GeolocatorPlatform geolocator = GeolocatorPlatform.instance;
+lib/data/controller/dashboard/dashboard_controller.dart:158:      final moved = Geolocator.distanceBetween(
+lib/data/services/dispatch_callkit_service.dart:321:  static StreamSubscription<CallEvent?>? _subscription;
+lib/data/services/forground_location_service.dart:16:  StreamSubscription<Position>? _positionStream;
+lib/data/services/forground_location_service.dart:79:      _positionStream = Geolocator.getPositionStream(
+lib/data/services/forground_location_service.dart:165:        position = await Geolocator.getLastKnownPosition();
+lib/core/utils/util.dart:200:    if (!await Geolocator.isLocationServiceEnabled()) {
+lib/core/utils/util.dart:206:    LocationPermission permission = await Geolocator.checkPermission();
+lib/core/utils/util.dart:232:        permission = await Geolocator.requestPermission().timeout(const Duration(seconds: 30));
+lib/core/utils/util.dart:420:    Position position = await Geolocator.getCurrentPosition(
+lib/presentation/screens/rides/home_screen/home_screen.dart:31:  StreamSubscription<Position>? _positionStreamSubscription;
+lib/presentation/screens/rides/home_screen/home_screen.dart:79:    _positionStreamSubscription?.cancel();
+lib/presentation/screens/rides/home_screen/home_screen.dart:224:    final position = await Geolocator.getCurrentPosition(
+lib/presentation/screens/rides/home_screen/home_screen.dart:243:    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+lib/presentation/screens/rides/home_screen/home_screen.dart:246:    LocationPermission permission = await Geolocator.checkPermission();
+lib/presentation/screens/rides/home_screen/home_screen.dart:248:      permission = await Geolocator.requestPermission();
+lib/presentation/screens/rides/home_screen/home_screen.dart:273:    _positionStreamSubscription?.cancel();
+lib/presentation/screens/rides/home_screen/home_screen.dart:274:    _positionStreamSubscription = null;
+lib/presentation/screens/rides/home_screen/home_screen.dart:279:    if (_positionStreamSubscription != null) return;
+lib/presentation/screens/rides/home_screen/home_screen.dart:360:    _positionStreamSubscription?.cancel();
+lib/presentation/screens/rides/home_screen/home_screen.dart:365:      final position = await Geolocator.getCurrentPosition(
+lib/presentation/screens/rides/home_screen/home_screen.dart:376:    _positionStreamSubscription = Geolocator.getPositionStream(
+lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:44:    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:52:    final permission = await Geolocator.checkPermission();
+lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:67:        await Geolocator.openLocationSettings();
+lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:69:        await Geolocator.openAppSettings();
+lib/presentation/screens/dashboard/forground_task_widget.dart:90:    final permission = await Geolocator.checkPermission();
+
+→ Read lib/presentation/screens/rides/home_screen/home_screen.dart [limit=140]
+→ Read lib/presentation/screens/rides/home_screen/home_screen.dart [offset=340, limit=80]
+→ Read lib/presentation/screens/ride_details/widgets/poly_line_map.dart
+→ Read lib/presentation/screens/ride_details/ride_details_screen.dart
+→ Read test/data/controller/map/ride_map_multistop_test.dart
+→ Read test/data/controller/map/ride_map_driver_pickup_bounds_test.dart
+→ Read lib/core/utils/url_container.dart
+
+$ grep -n "driverLocationUpdate\|mapDefaultZoom\|driverLocation" lib/environment.dart
+8:  static const int driverLocationUpdateAfterNmetersOrMovements = 50; //Driver location update after n meters or movements
+9:  static const int driverLocationUpdateMaxIntervalSeconds = 30; //Max seconds between GPS pings when online
+26:  static const double mapDefaultZoom = 20;
+
+→ Read test/helpers/recording_api_client.dart
+→ Read lib/core/utils/app_status.dart
+
+$ grep -rn "CameraUpdate" ~/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-*/lib/src/types/camera.dart 2>/dev/null | head; ls ~/.pub-cache/hosted/pub.dev/ | grep google_maps
+ls: cannot access '/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/': No such file or directory
+
+$ grep -n "markerCar\|marker_car" lib/core/utils/my_icons.dart; grep -n "class RideRepo" -A 15 lib/data/repo/ride/ride_repo.dart; grep -n "apiClient" lib/data/repo/ride/ride_repo.dart | head -5
+5:  static const String markerCar = "assets/icon/marker_car.png"; // marker_car.png
+9:class RideRepo {
+10-  ApiClient apiClient;
+11-  RideRepo({required this.apiClient});
+12-
+13-  Future<ResponseModel> getRideDetails(String id) async {
+14-    String url = "${UrlContainer.baseUrl}${UrlContainer.rideDetails}/$id";
+15-    ResponseModel responseModel = await apiClient.request(
+16-      url,
+17-      Method.getMethod,
+18-      null,
+19-      passHeader: true,
+20-    );
+21-    return responseModel;
+22-  }
+23-
+24-  Future<ResponseModel> getRideList({
+10:  ApiClient apiClient;
+11:  RideRepo({required this.apiClient});
+15:    ResponseModel responseModel = await apiClient.request(
+30:    ResponseModel responseModel = await apiClient.request(
+41:    ResponseModel responseModel = await apiClient.request(
+
+$ grep -n "google_maps_flutter" pubspec.yaml pubspec.lock | head -20; grep -rn "Position(" test lib --include=*.dart | head
+pubspec.yaml:37:  google_maps_flutter: ^2.17.0
+pubspec.lock:906:  google_maps_flutter:
+pubspec.lock:909:      name: google_maps_flutter
+pubspec.lock:914:  google_maps_flutter_android:
+pubspec.lock:917:      name: google_maps_flutter_android
+pubspec.lock:922:  google_maps_flutter_ios:
+pubspec.lock:925:      name: google_maps_flutter_ios
+pubspec.lock:930:  google_maps_flutter_platform_interface:
+pubspec.lock:933:      name: google_maps_flutter_platform_interface
+pubspec.lock:938:  google_maps_flutter_web:
+pubspec.lock:941:      name: google_maps_flutter_web
+lib/data/controller/map/ride_map_controller.dart:144:  void animateMapCameraPosition() {
+lib/data/controller/map/ride_map_controller.dart:146:      CameraUpdate.newCameraPosition(
+lib/data/controller/map/ride_map_controller.dart:147:        CameraPosition(
+lib/data/controller/map/ride_map_controller.dart:250:            CameraUpdate.newCameraPosition(
+lib/data/controller/map/ride_map_controller.dart:251:              CameraPosition(
+lib/data/controller/map/ride_map_controller.dart:276:                    CameraUpdate.newCameraPosition(
+lib/data/controller/map/ride_map_controller.dart:277:                      CameraPosition(
+lib/data/controller/map/ride_map_controller.dart:302:              CameraUpdate.newCameraPosition(
+lib/data/controller/map/ride_map_controller.dart:303:                CameraPosition(
+lib/data/controller/map/ride_map_controller.dart:332:          CameraUpdate.newCameraPosition(
+
+$ echo $HOME; ls ~/.pub-cache/hosted/pub.dev 2>/dev/null | head; find / -maxdepth 6 -type d -name "google_maps_flutter_platform_interface-*" 2>/dev/null | head
+/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home
+
+$ env | grep -i "pub\|flutter\|home" | head -20; ls /home/ubuntu/.pub-cache/hosted/pub.dev 2>/dev/null | head; find /home/ubuntu -maxdepth 5 -type d -name "google_maps_flutter_platform_interface-*" 2>/dev/null | head
+PWD=/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target
+HOME=/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home
+TMPDIR=/home/ubuntu/actions-runner-2/_work/_temp/oc-agent
+OPENCODE_CONFIG=/home/ubuntu/actions-runner-2/_work/_temp/oc/opencode.json
+_fe_analyzer_shared-82.0.0
+analyzer-7.4.5
+archive-3.6.1
+args-2.7.0
+async-2.13.0
+boolean_selector-2.1.2
+browser_launcher-1.1.3
+built_collection-5.1.1
+built_value-8.10.1
+checked_yaml-2.0.4
+
+$ ls /home/ubuntu/.pub-cache/hosted/pub.dev | grep google_maps; sed -n '1,80p' /home/ubuntu/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-*/lib/src/types/camera.dart 2>/dev/null | head -100
+(no output)
+
+$ ls -la .dart_tool 2>/dev/null | head; grep -o '"name": "google_maps_flutter[^"]*"[^}]*' .dart_tool/package_config.json 2>/dev/null | head; ls /home/ubuntu/.pub-cache/hosted/pub.dev | wc -l
+100
+
+$ ls /home/ubuntu/.pub-cache/hosted/pub.dev | grep -E "geolocator|google_maps|get-|flutter_foreground" | head -20
+(no output)
+
