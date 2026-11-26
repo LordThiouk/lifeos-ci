@@ -16695,3 +16695,36 @@ $ export PATH="$HOME/bin/php83:$PATH"; php artisan --version
   19  [internal]:0
       Illuminate\Foundation\Application::Illuminate\Foundation\{closure}(Object(App\Providers\BladeDirectivesServiceProvider), "App\Providers\BladeDirectivesServiceProvider")
 
+$ mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions storage/logs bootstrap/cache && export PATH="$HOME/bin/php83:$PATH" && php artisan --version
+#!/usr/bin/env php
+Laravel Framework 11.51.0
+
+$ cat phpunit.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory>tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing" force="true"/>
+        <env name="APP_KEY" value="base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" force="true"/>
+        <env name="FIREBASE_PROJECT_ID" value="test-project" force="true"/>
+        <env name="DEVELOPER_TOKEN" value="test-dev-token-g35" force="true"/>
+        <env name="CRON_SECRET" value="baseline-cron-secret" force="true"/>
+        <env name="CACHE_STORE" value="array" force="true"/>
+        <env name="BROADCAST_CONNECTION" value="null" force="true"/>
+        <env name="DB_CONNECTION" value="sqlite" force="true"/>
+        <env name="DB_DATABASE" value=":memory:" force="true"/>
+        <env name="BCRYPT_ROUNDS" value="4" force="true"/>
+    </php>
+</phpunit>
+
