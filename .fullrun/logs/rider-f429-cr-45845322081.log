@@ -8871,3 +8871,238 @@ Driver (vert APK sous le même Artemis/Flutter 3.50.1) utilise **Gradle 8.14** (
 
 Fais UNIQUEMENT : aligner le toolchain Android Rider sur ce que **Flutter 3.50.1** accepte (cible : Gradle **8.14** + AGP/Kotlin compatibles, calqués sur Driver si possible, sans casser Firebase/Crashlytics). Pas de changement `lib/`. **Interdit** `flutter build` / `gradlew` sur la box — commits + note dans message. Auteur Papa Diop <76528706+LordThiouk@users.noreply.github.com>. Pas de git push. Ne touche pas `.fullrun`. Ne régénère aucun golden.
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls -la && git status && git log --oneline -5
+total 268
+drwxr-xr-x 18 ubuntu ubuntu  4096 Nov 26 16:34 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 16:32 ..
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 16:32 .claude
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 16:32 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 17:17 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 16:32 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1046 Nov 26 16:32 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  1188 Nov 26 16:32 .mcp.json
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 16:32 .omc
+-rw-r--r--  1 ubuntu ubuntu  8995 Nov 26 16:32 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu  3940 Nov 26 16:35 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu  5284 Nov 26 16:32 CLAUDE.md
+-rw-r--r--  1 ubuntu ubuntu  1411 Nov 26 16:32 FIX_SUMMARY.md
+-rw-r--r--  1 ubuntu ubuntu  3977 Nov 26 16:32 GALASS_CONTEXT.md
+-rw-r--r--  1 ubuntu ubuntu   100 Nov 26 16:32 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 16647 Nov 26 16:32 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 16:32 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  8465 Nov 26 16:32 NIMBALYST_DEV_SETUP.md
+-rw-r--r--  1 ubuntu ubuntu    13 Nov 26 16:32 README.md
+-rw-r--r--  1 ubuntu ubuntu  8175 Nov 26 16:32 RIDER-MULTISTOP.md
+-rw-r--r--  1 ubuntu ubuntu  6602 Nov 26 16:32 SECURE_CREDENTIALS_SETUP.md
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 16:32 _ephemeral
+-rw-r--r--  1 ubuntu ubuntu  1580 Nov 26 16:32 analysis_options.yaml
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 16:34 android
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 16:32 assets
+-rw-r--r--  1 ubuntu ubuntu  4837 Nov 26 16:32 codemagic.yaml.deprecated
+-rw-r--r--  1 ubuntu ubuntu   265 Nov 26 16:32 devtools_options.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 16:32 diag
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 16:32 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 16:32 fastlane
+-rw-r--r--  1 ubuntu ubuntu   363 Nov 26 16:32 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 16:32 ios
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 16:32 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 16:32 prompts
+-rw-r--r--  1 ubuntu ubuntu 68546 Nov 26 16:32 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  3366 Nov 26 16:32 pubspec.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 16:32 scripts
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 16:32 test
+-rw-r--r--  1 ubuntu ubuntu   441 Nov 26 16:32 test_result.txt
+On branch build/rider-apk-gradle
+Your branch is ahead of 'origin/build/rider-apk-gradle' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+8c28139 fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline -15 && echo "----BRANCHES----" && git branch -a && echo "----STATUS----" && git status
+8c28139 fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+b83aba6 test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+3a399e8 docs(isa): F4-34 rebuild evidence after Verify BLOCK
+2ec49c8 test(rider): F4-34 controller recreation, FCM dedup, cross-channel
+dcb4bf0 fix(rider): F4-34 share one-shot gate across controller and FCM
+69e248d docs(isa): tick ISC-F4-21 with map test evidence
+43e28ba fix(rider): F4-21 keep PENDING stops numbered, active leg only in ACTIVE/RUNNING
+3798ba2 docs(isa): consigner la décision Papa ISC-F5-16 (Rider carte jambe active)
+632862c docs(isa): consigner la décision Papa F4-34 C+B (2026-11-26)
+e4d93c0 docs(isa): F4-34 B+C decision and evidence
+61f2a29 feat(rider): F4-34 one-shot pick_up/arriving_soon alerts and FCM dedup
+----BRANCHES----
+* build/rider-apk-gradle
+  feat/multistop-e2e-2026-11-15
+  remotes/origin/build/rider-apk-gradle
+  remotes/origin/build/rider-f429
+  remotes/origin/close/rider-f434b-max
+  remotes/origin/diag/arret-etape-galass-ci-2026-11-24
+  remotes/origin/diag/multistop-serena-porte-2026-11-23
+  remotes/origin/diag/porte-build-2026-11-24
+  remotes/origin/feat/multistop-e2e-2026-11-15
+  remotes/origin/feat/multistop-rider-close-2026-11-20
+  remotes/origin/feat/patrol-pilot
+  remotes/origin/feat/phone-number-login
+  remotes/origin/feat/rider-f434-2026-11-26
+  remotes/origin/feature/accessibility-plan
+  remotes/origin/feature/firebase-laravel-bridge
+  remotes/origin/fix/multistop-close
+  remotes/origin/fix/profile-bugs
+  remotes/origin/fix/profile-complete-prefill
+  remotes/origin/fix/rider-multistop-wip
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-23-45290781492
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r3-45305125203
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r5-45320422961
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r6-45334725976
+  remotes/origin/fullrun-logs/multistop-ui-gaps-vera-2026-11-23-45268880692
+  remotes/origin/fullrun-logs/rider-apk-gradle-45847515781
+  remotes/origin/fullrun-logs/rider-f429-cr-45845322081
+  remotes/origin/fullrun-logs/rider-f429-cr-ll-45807711954
+  remotes/origin/fullrun-logs/rider-f429-forge-45845322748
+  remotes/origin/fullrun-logs/rider-f429-forge-ll-45807712042
+  remotes/origin/fullrun-logs/rider-f429-silas-ll-45807712379
+  remotes/origin/fullrun-logs/rider-f434b-max-45845322242
+  remotes/origin/fullrun-logs/rider-f434b-max-ll-45808727484
+  remotes/origin/fullrun-logs/rider-multistop-close-2-44832871010
+  remotes/origin/fullrun-logs/rider-multistop-close-3-44847122033
+  remotes/origin/fullrun-logs/rider-multistop-close-4-44854453615
+  remotes/origin/fullrun-logs/rider-multistop-close-44814973592
+  remotes/origin/fullrun-logs/rider-multistop-close-5-44865549101
+  remotes/origin/fullrun-logs/rider-multistop-close-6-44878329849
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44901958343
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44912440632
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44926692223
+  remotes/origin/fullrun-logs/ui-goldens-gate-rider-2026-11-23-45113355828
+  remotes/origin/fullrun-logs/ui-goldens-gate-rider-2026-11-23-45122523186
+  remotes/origin/fullrun-prompts
+  remotes/origin/main
+  remotes/origin/ovo-customizations
+  remotes/origin/test/service-option
+  remotes/origin/verify/rider-f429-cr
+  remotes/origin/verify/rider-f429-forge
+  remotes/origin/verify/rider-f429-silas
+  remotes/origin/verify/rider-f432-cr
+  remotes/origin/verify/rider-f432-emu-cr
+  remotes/origin/verify/rider-f432-emu-forge
+  remotes/origin/verify/rider-f432-emu-silas
+  remotes/origin/verify/rider-f432-forge
+  remotes/origin/verify/rider-f432-silas
+  remotes/origin/verify/rider-f434-cr
+  remotes/origin/verify/rider-f434-forge
+  remotes/origin/verify/rider-f434-silas
+  remotes/origin/verify/rider-f434b-cr
+  remotes/origin/verify/rider-f434b-forge
+  remotes/origin/verify/rider-f434b-silas
+----STATUS----
+On branch build/rider-apk-gradle
+Your branch is ahead of 'origin/build/rider-apk-gradle' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show 8c28139 --stat && echo "=====DIFF=====" && git show 8c28139
+commit 8c28139ebea952d47e713aa8ed074d81df4d3da5
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 16:36:53 2026 +0000
+
+    fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+    
+    Artemis 45801376130 — Build APK Rider ROUGE : la validation des dépendances
+    Android de Flutter 3.50.1 refuse Gradle 9.1.0 / AGP 9.0.1.
+    
+    - gradle-wrapper.properties : gradle-9.1.0-all -> gradle-8.14-all
+    - settings.gradle.kts : AGP 9.0.1 -> 8.11.1 (Kotlin 2.2.20 conservé)
+    - gradle.properties : retrait des options réservées à AGP 9
+      (android.newDsl, android.builtInKotlin, android.r8.proguardAndroidTxt.disallowed)
+    
+    KGP 2.2.20 est pleinement supporté avec Gradle <= 8.14 et AGP <= 8.11.1
+    (matrice JetBrains) ; AGP 8.11 exige Gradle >= 8.13 et plafonne à l'API 36.
+    Firebase google-services 4.3.15 et Crashlytics 3.0.7 inchangés.
+    Aucun changement lib/, aucun golden régénéré, .fullrun intact.
+    flutter build / gradlew non exécutés sur la box (politique CI).
+
+ CHANGELOG.md                                     | 4 ++++
+ android/gradle.properties                        | 3 ---
+ android/gradle/wrapper/gradle-wrapper.properties | 2 +-
+ android/settings.gradle.kts                      | 2 +-
+ 4 files changed, 6 insertions(+), 5 deletions(-)
+=====DIFF=====
+commit 8c28139ebea952d47e713aa8ed074d81df4d3da5
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 16:36:53 2026 +0000
+
+    fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+    
+    Artemis 45801376130 — Build APK Rider ROUGE : la validation des dépendances
+    Android de Flutter 3.50.1 refuse Gradle 9.1.0 / AGP 9.0.1.
+    
+    - gradle-wrapper.properties : gradle-9.1.0-all -> gradle-8.14-all
+    - settings.gradle.kts : AGP 9.0.1 -> 8.11.1 (Kotlin 2.2.20 conservé)
+    - gradle.properties : retrait des options réservées à AGP 9
+      (android.newDsl, android.builtInKotlin, android.r8.proguardAndroidTxt.disallowed)
+    
+    KGP 2.2.20 est pleinement supporté avec Gradle <= 8.14 et AGP <= 8.11.1
+    (matrice JetBrains) ; AGP 8.11 exige Gradle >= 8.13 et plafonne à l'API 36.
+    Firebase google-services 4.3.15 et Crashlytics 3.0.7 inchangés.
+    Aucun changement lib/, aucun golden régénéré, .fullrun intact.
+    flutter build / gradlew non exécutés sur la box (politique CI).
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index a7db2f3..810ca47 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
+ 
+ ## [Unreleased]
+ 
++### Fixed
++
++- Android : toolchain aligné sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.2.20) ; AGP 9.0.1 / Gradle 9.1.0 refusés par la validation CI
++
+ ## [1.0.13] - 2026-10-08
+ 
+ ### Fixed
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 0e4397f..4c72eeb 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -4,6 +4,3 @@ org.gradle.parallel=false
+ org.gradle.configureondemand=false
+ android.enableJetifier=false
+ android.useAndroidX=true
+-android.newDsl=false
+-android.builtInKotlin=false
+-android.r8.proguardAndroidTxt.disallowed=false
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..bfebd0b 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,7 +18,7 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+     id("com.google.firebase.crashlytics") version("3.0.7") apply false
+
