@@ -16800,3 +16800,149 @@ class SmsGateway{
 		@file_get_contents("https://api.smsbroadcast.com.au/api-adv.php?username=".$this->config->sms_broadcast->username."&password=".$this->config->sms_broadcast->password."&to=$this->to&from=$this->from&message=$message&ref=112233&maxsplit=5&delay=15");
 	}
 
+$ grep -n "driver/login\|driver.login" core/routes/api.php | head; sed -n '1,120p' core/app/Http/Controllers/Api/Driver/Auth/LoginController.php
+<?php
+
+namespace App\Http\Controllers\Api\Driver\Auth;
+
+use App\Constants\Status;
+use App\Http\Controllers\Controller;
+use App\Lib\SocialLogin;
+use App\Models\UserLogin;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
+class LoginController extends Controller
+{
+    /*
+    |--------------------------------------------------------------------------
+    | Login Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller handles authenticating users for the application and
+    | redirecting them to your home screen. The controller uses a trait
+    | to conveniently provide its functionality to your applications.
+    |
+    */
+
+    use AuthenticatesUsers;
+
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+
+    protected $username;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+
+
+    public function __construct()
+    {
+        $this->username = $this->findusername();
+    }
+
+    public function login(Request $request)
+    {
+
+        $validator = $this->validateLogin($request);
+        if ($validator->fails()) {
+            return apiResponse("validation_error", "error", $validator->errors()->all());
+        }
+
+        $credentials = request([$this->username, 'password']);
+
+        if (!Auth::guard('driver')->attempt(array_merge($credentials, ['is_deleted' => Status::NO]))) {
+            $response[] = 'The provided credentials can not match our record';
+            return apiResponse("invalid_credential", "error", $response);
+        }
+
+        $driver        = $request->user('driver');
+        $tokenResult = $driver->createToken('driver_token', ['driver'])->plainTextToken;
+        $this->authenticated($request, $driver);
+        $response[] = 'Login Successful';
+
+        return apiResponse("login_success", "success", $response, [
+            'driver'       => $driver,
+            'access_token' => $tokenResult,
+            'token_type'   => 'Bearer'
+        ]);
+    }
+
+    public function findusername()
+    {
+        $login     = request()->input('username');
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        request()->merge([$fieldType => $login]);
+        return $fieldType;
+    }
+
+    public function username()
+    {
+        return $this->username;
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        $validationRule = [
+            $this->username() => 'required|string',
+            'password'        => 'required|string',
+        ];
+        $validate = Validator::make($request->all(), $validationRule);
+        return $validate;
+    }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+
+        $notify[] = 'Logout Successful';
+        return apiResponse("logout", "success", $notify);
+    }
+
+    public function authenticated(Request $request, $driver)
+    {
+        $driver->tv = $driver->ts == Status::VERIFIED ? Status::UNVERIFIED : Status::VERIFIED;
+        $driver->save();
+
+        $ip        = getRealIP();
+        $exist     = UserLogin::where('user_ip', $ip)->where('driver_id', $driver->id)->first();
+        $driverLogin = new UserLogin();
+
+        if ($exist) {
+            $driverLogin->longitude    = $exist->longitude;
+            $driverLogin->latitude     = $exist->latitude;
+            $driverLogin->city         = $exist->city;
+            $driverLogin->country_code = $exist->country_code;
+
+S-W1-12 : le test `DriverLegacyLoginTest` commité ne teste pas le login réel. Inspectons le `LoginController` driver et la route.
+$ grep -n "driver/login\|Auth\\\\Driver\\\\Auth\\\\LoginController@login\|'driver/login'" core/routes/api.php
+(no output)
+
+$ grep -n "login" core/routes/api.php | head -20
+31:            Route::post('login', 'login');
+33:            Route::post('social-login', 'socialLogin');
+145:            Route::post('login', 'login');
+146:            Route::post('social-login', 'socialLogin');
+
+$ sed -n '138,150p' core/routes/api.php
+});
+
+//start driver route
+Route::namespace('Api\Driver')->prefix('driver')->group(function () {
+    Route::namespace('Auth')->group(function () {
+
+        Route::controller('LoginController')->group(function () {
+            Route::post('login', 'login');
+            Route::post('social-login', 'socialLogin');
+        });
+
+        Route::post('register', 'RegisterController@register');
+
