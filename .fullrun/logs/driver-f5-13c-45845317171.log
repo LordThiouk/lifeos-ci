@@ -2285,3 +2285,104 @@ dio: ^5.9.2
   firebase_auth: ^6.5.0
   firebase_messaging: ^16.2.1
 
+✗ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline --all | grep -i "file_picker\|file_picker v13" | head; echo "---is commit on branch---"; git merge-base --is-ancestor 6beb137 HEAD && echo "ancestor yes" || echo "NOT ancestor" failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline HEAD | grep -i "file_picker" | head; echo "---ancestry check via rev-list---"; git rev-list --count HEAD; git rev-parse 6beb137
+889fdcc fix(build): device_info_plus ^13.3.0 pour file_picker 13 / win32 6
+6beb137 fix(build): migrate file_picker v13 (pickFile / sans allowMultiple)
+81e7be9 fix(build): file_picker ^13.4.1 pour AGP 9 (FilePickerPlugin)
+ae2d4c4 fix: resolve file_picker 3.0.4 AGP namespace build failure
+---ancestry check via rev-list---
+150
+6beb1371a02af7b51c1fb65d9fb54e235919e4c2
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show HEAD:pubspec.yaml | grep -n "file_picker"
+17:  file_picker: ^11.0.2
+61:  # ^13 for win32 ^6 — required by file_picker ^13.4.1 (AGP 9 / Artemis Flutter 3.50.1).
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show 81e7be9:pubspec.yaml | grep -n "file_picker"; echo "---889fdcc---"; git show 889fdcc:pubspec.yaml | grep -n "file_picker"
+17:  file_picker: ^13.4.1
+---889fdcc---
+17:  file_picker: ^13.4.1
+61:  # ^13 for win32 ^6 — required by file_picker ^13.4.1 (AGP 9 / Artemis Flutter 3.50.1).
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline -- pubspec.yaml | head -30
+e741e31 wip(autosave): arbre de travail
+889fdcc fix(build): device_info_plus ^13.3.0 pour file_picker 13 / win32 6
+81e7be9 fix(build): file_picker ^13.4.1 pour AGP 9 (FilePickerPlugin)
+dbfd2ee fix(build): flutter_inappwebview 6.2.0-beta.3 (AGP 9 stack)
+7baf7d9 fix(build): override flutter_inappwebview_android 1.2.0-beta.3 (AGP 9)
+0f12ed5 wip(autosave): arbre de travail
+c9c65ff chore(e2e): align mobile working branch with multistop app code and tests
+9b34386 chore(release): 1.1.1+53
+3daa551 chore(release): 1.1.0+52
+51dcaab feat(dispatch): F7 CallKit ingress, verify fixes, iOS GO-with-conditions
+7a952bf chore(release): 1.1.0+51
+9254fe7 chore(release): 1.1.0+50
+92ce0e5 chore(release): 1.0.3+49
+5512363 chore(release): 1.0.2+48
+7251191 chore(release): 1.0.2+47
+71fc93e chore(release): 1.0.1+46
+8b75fa5 chore(release): 1.0.0+46
+33e1ded chore(release): 1.0.0+45
+5766401 chore(release): 1.0.0+44
+9f1021b chore(release): 1.0.0+43
+7c3765f chore(release): 1.0.0+4
+0454580 chore(release): 1.0.0+3
+c436154 feat(release): version SSoT tooling, docs, CODEMAPS, and one-shot release
+b8a3a09 feat(store): XOF step-5 money gates, session purge, RC 1.0.0+2
+e5a608c feat(i18n): franciser GalassDriver pour le marché Sénégal (fr_SN)
+9213894 feat: port sélectif OvoRide v2 (Phase 3 F29-F31)
+676eeb7 feat: initialiser Crashlytics et bouton Erreurs debug login
+5efd991 chore: démarrer Phase 2 Build CI et aligner toolchain
+ae2d4c4 fix: resolve file_picker 3.0.4 AGP namespace build failure
+4af9781 feat: Firebase Phone Auth phase 0-1 with UI reuse
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show e741e31 -- pubspec.yaml | head -60
+commit e741e310d80297cf8b881f7e29d032d847fb8773
+Author: Nix <nix@galass.local>
+Date:   Thu Nov 26 21:10:31 2026 +0000
+
+    wip(autosave): arbre de travail
+
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 1868cf3..362f34a 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -14,7 +14,7 @@ dependencies:
+   cupertino_icons: ^1.0.9
+   dio: ^5.9.2
+   dotted_border: ^3.1.0
+-  file_picker: ^13.4.1
++  file_picker: ^11.0.2
+   firebase_core: ^4.8.0
+   firebase_auth: ^6.5.0
+   firebase_messaging: ^16.2.1
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -i 's/^  file_picker: \^11.0.2/  file_picker: ^13.4.1/' pubspec.yaml && grep file_picker pubspec.yaml
+file_picker: ^13.4.1
+  # ^13 for win32 ^6 — required by file_picker ^13.4.1 (AGP 9 / Artemis Flutter 3.50.1).
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_CACHE=/home/ubuntu/.pub-cache; export PATH=/tmp/flutter_sdk/flutter/bin:$PATH; flutter pub get 2>&1 | tail -20
+vector_graphics 1.2.2 (1.3.1 available)
+  vector_graphics_codec 1.1.13 (1.2.0 available)
+  vector_graphics_compiler 1.2.5 (1.3.7 available)
+  vibration 3.1.8 (3.2.1 available)
+  video_player 2.11.1 (2.14.1 available)
+  video_player_android 2.9.5 (2.13.0 available)
+  video_player_avfoundation 2.9.7 (2.12.5 available)
+  video_player_platform_interface 6.7.0 (6.9.0 available)
+  vm_service 15.2.0 (15.4.0 available)
+  wakelock_plus 1.7.0 (1.8.2 available)
+  web 1.1.1 (1.1.2 available)
+  webview_flutter 4.13.1 (4.14.1 available)
+  webview_flutter_android 4.12.0 (4.14.1 available)
+  webview_flutter_wkwebview 3.25.1 (3.27.2 available)
+  xml 6.6.1 (7.1.0 available)
+  yaml 3.1.3 (3.1.4 available)
+Got dependencies!
+1 package is discontinued.
+157 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
