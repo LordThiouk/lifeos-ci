@@ -554,3 +554,207 @@ $ grep -rniE "ISC-22|ISC-13|liste en dur|trou d'heure" /home/ubuntu/actions-runn
 /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:200:- [x] ISC-13 — Une clé est portée par une surface : une clé de kit n'ouvre pas les endpoints de tenant, et une clé révoquée est refusée au premier appel suivant sans fenêtre de grâce ; la révocation est limitée au tenant du principal, une clé étrangère rend 404, cas couvert par test_key_scope et intrusion_suite. · type: security · check: clé de kit sur un endpoint de tenant, révocation croisée d'une clé d'un autre tenant par un admin, puis clé révoquée · threshold: 403 puis 401, 404 sur une clé d'un autre tenant, 0 fenêtre de grâce silencieuse · tool: cd api && uv run pytest tests/security/test_key_scope.py · anchors_to: derived: clé par surface C-24
 /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:209:- [x] ISC-22 — Les tables de la PR #30 scopées par tenant dans Postgres (app_user, subscription, reference, report) sont protégées par RLS activée et forcée, prouvé sur la vraie stack de dev : la connexion du tenant A ne lit ni n'écrit aucune ligne du tenant B, y compris par accès direct à la table. · type: security · check: login réel en antenly_tenant, jamais en propriétaire ni par SET ROLE, assertion current_user avec rolsuper=false et rolbypassrls=false, jeu seedé par le rôle plateforme avec au moins une ligne du tenant B par table, puis 1 000 requêtes sous le tenant A sur les 4 tables, accès direct, tentative d'écriture croisée, et contrôle has_table_privilege et has_column_privilege pour fingerprint et tenant plus relacl pour PUBLIC, tous faux, reference en lecture tolérant tenant_id NULL et ses écritures exigeant le tenant, relecture positive des lignes du tenant A par table, sous ANTENLY_DEV_STACK=1 et 0 test ignoré · threshold: identité non privilégiée assertée, seed A et seed B comptés et non nuls, N_A exact relu par table, 0 ligne étrangère sur 1 000 requêtes, 0 écriture croisée acceptée, RLS activée et forcée sur 4/4 tables, 0 privilège du rôle tenant sur fingerprint et sur tenant, 0 skip · tool: uv run pytest tests/integration/test_rls_postgres.py (depuis api/) · anchors_to: literal
 
+$ which uv; ls api/pyproject.toml api/uv.lock 2>/dev/null; cat scripts/migrate.sh | head -100
+api/pyproject.toml
+api/uv.lock
+#!/usr/bin/env bash
+# Apply the SQL migrations to the running local stack.
+#
+# Idempotent: a migration that is already recorded with the same checksum is
+# skipped, and a modified migration is a hard error instead of a silent re-run.
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+COMPOSE=${COMPOSE:-docker compose}
+POSTGRES_SERVICE=${POSTGRES_SERVICE:-postgres}
+CLICKHOUSE_SERVICE=${CLICKHOUSE_SERVICE:-clickhouse}
+S3_SERVICE=${S3_SERVICE:-seaweedfs}
+S3_BUCKET=${S3_BUCKET:-antenly-evidence}
+
+die() {
+    printf 'migrate: %s\n' "$*" >&2
+    exit 1
+}
+
+if command -v sha256sum >/dev/null 2>&1; then
+    checksum() { sha256sum "$1" | awk '{print $1}'; }
+else
+    checksum() { shasum -a 256 "$1" | awk '{print $1}'; }
+fi
+
+$COMPOSE exec -T "$POSTGRES_SERVICE" true >/dev/null 2>&1 ||
+    die "postgres is not running — run 'make up' first"
+$COMPOSE exec -T "$CLICKHOUSE_SERVICE" true >/dev/null 2>&1 ||
+    die "clickhouse is not running — run 'make up' first"
+
+pg_query() {
+    $COMPOSE exec -T -e QUERY="$1" "$POSTGRES_SERVICE" sh -ec \
+        'psql -v ON_ERROR_STOP=1 -qAt -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "$QUERY"'
+}
+
+ch_query() {
+    $COMPOSE exec -T -e QUERY="$1" "$CLICKHOUSE_SERVICE" sh -ec \
+        'clickhouse-client --user "$CLICKHOUSE_USER" --password "$CLICKHOUSE_PASSWORD" --database "$CLICKHOUSE_DB" --query "$QUERY"'
+}
+
+pg_query "CREATE TABLE IF NOT EXISTS schema_migrations (
+    version text PRIMARY KEY,
+    checksum text NOT NULL,
+    applied_at timestamptz NOT NULL DEFAULT now()
+)" >/dev/null
+
+printf 'Postgres\n'
+for file in migrations/postgres/*.sql; do
+    [ -e "$file" ] || continue
+    version=$(basename "$file")
+    sum=$(checksum "$file")
+    applied=$(pg_query "SELECT checksum FROM schema_migrations WHERE version = '$version'")
+    if [ -n "$applied" ]; then
+        [ "$applied" = "$sum" ] ||
+            die "postgres migration $version changed after it was applied — run 'make reset'"
+        printf '  %-24s already applied\n' "$version"
+        continue
+    fi
+    printf '  %-24s applying\n' "$version"
+    {
+        cat "$file"
+        printf "\nINSERT INTO schema_migrations (version, checksum) VALUES ('%s', '%s');\n" "$version" "$sum"
+    } | $COMPOSE exec -T "$POSTGRES_SERVICE" sh -ec \
+        'psql -v ON_ERROR_STOP=1 -q -1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f -'
+done
+
+ch_query "CREATE TABLE IF NOT EXISTS schema_migrations (
+    version String,
+    checksum String,
+    applied_at DateTime DEFAULT now()
+) ENGINE = MergeTree ORDER BY version" >/dev/null
+
+printf 'ClickHouse\n'
+for file in migrations/clickhouse/*.sql; do
+    [ -e "$file" ] || continue
+    version=$(basename "$file")
+    sum=$(checksum "$file")
+    applied=$(ch_query "SELECT checksum FROM schema_migrations WHERE version = '$version' FORMAT TSV")
+    if [ -n "$applied" ]; then
+        [ "$applied" = "$sum" ] ||
+            die "clickhouse migration $version changed after it was applied — run 'make reset'"
+        printf '  %-24s already applied\n' "$version"
+        continue
+    fi
+    printf '  %-24s applying\n' "$version"
+    {
+        cat "$file"
+        printf "\nINSERT INTO schema_migrations (version, checksum) VALUES ('%s', '%s');\n" "$version" "$sum"
+    } | $COMPOSE exec -T "$CLICKHOUSE_SERVICE" sh -ec \
+        'clickhouse-client --user "$CLICKHOUSE_USER" --password "$CLICKHOUSE_PASSWORD" --database "$CLICKHOUSE_DB" --multiquery'
+done
+
+# The evidence bucket is part of the schema contract: FR-11 stores every
+# evidence bundle under it. Idempotent by design (creating an existing bucket
+# succeeds).
+$COMPOSE exec -T -e BUCKET="$S3_BUCKET" "$S3_SERVICE" sh -ec \
+    'printf "s3.bucket.create -name %s\n" "$BUCKET" | weed shell -master=localhost:9333 >/dev/null'
+
+printf 'Done: schemas up to date, bucket %s present.\n' "$S3_BUCKET"
+
+→ Read api/tests/ingest/test_ingest_coverage.py
+
+$ command -v uv || ls /home/ubuntu/.local/bin/uv /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.local/bin/uv /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/bin/uv 2>/dev/null; echo ===; command -v docker; docker compose version 2>/dev/null | head -1; echo ===; docker ps 2>/dev/null | head -10
+===
+===
+
+$ cat Makefile; echo ===; ls /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/ 2>/dev/null; ls /home/ubuntu/actions-runner-3/_work/_temp/ 2>/dev/null | head
+# Antenly — local development stack.
+#
+# One command to bring up the full infra described by docs/PRD.md, one command
+# to take it down. See docs/dev-stack.md for the details.
+
+SHELL := /bin/bash
+COMPOSE ?= docker compose
+
+.DEFAULT_GOAL := help
+.PHONY: help up down reset migrate test logs ps
+
+help: ## Show this help
+	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-8s %s\n", $$1, $$2}'
+
+up: ## Start the stack and wait for every healthcheck
+	$(COMPOSE) up -d --wait --wait-timeout 180
+
+down: ## Stop the stack (volumes are kept)
+	$(COMPOSE) down
+
+reset: ## Stop the stack and delete its volumes (destructive)
+	$(COMPOSE) down -v
+
+migrate: ## Apply Postgres and ClickHouse migrations, create the evidence bucket
+	./scripts/migrate.sh
+
+test: up migrate ## Run the API test suite against the running stack
+	cd api && ANTENLY_DEV_STACK=1 uv run pytest -q
+
+ps: ## Show container state
+	$(COMPOSE) ps
+
+logs: ## Follow the logs of every service
+	$(COMPOSE) logs -f
+===
+attempt.start
+home
+oc-tail
+oc.pid
+opencode
+run-deepseek-v4.1-flash-free.log
+run-mimo-v2.6-flash-free.log
+1c1cf979-7fc9-4708-8317-95aac1cc7e08.sh
+377913c8-cb50-412c-9797-1905c8904f1c.sh
+469956b0-c6ca-4cb5-8570-1610a945df31.sh
+500cb7e1-7f65-4c4d-8e01-f996c2b379a3.sh
+58fa9b85-aa87-483d-ba0b-b01aae4e9da7.sh
+60e14eca-f5ea-4b12-a52e-e7fb79e29ad0.sh
+6b80e79e-472c-4ac9-92bc-62a5f3472798.sh
+70dac146-47b2-468c-b767-cd4050f7daca.sh
+9cfead5e-4edf-4482-a7c0-867e296ab328.sh
+_github_workflow
+
+$ ls /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/bin/ 2>/dev/null; echo ===; find /home/ubuntu -maxdepth 4 -name 'uv' -type f 2>/dev/null | head; echo ===; find /home/ubuntu/actions-runner-3 -maxdepth 5 -name 'uv' 2>/dev/null | head; echo ===; type docker podman 2>&1; ls /var/run/docker.sock 2>&1
+===
+===
+/home/ubuntu/actions-runner-3/externals/node20/include/node/uv
+/home/ubuntu/actions-runner-3/externals/node24/include/node/uv
+===
+/usr/bin/bash: line 1: type: docker: not found
+/usr/bin/bash: line 1: type: podman: not found
+ls: cannot access '/var/run/docker.sock': No such file or directory
+
+$ cat /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md 2>/dev/null | head -5; ls -la /home/ubuntu/actions-runner-3/_work/_temp/oc/ 2>/dev/null; echo ===; env | sort | head -60
+# Contexte d exécution lifeos-ci
+
+- Job : fr01-v1c
+- Agent : forge-code
+- Dépôt cible : LordThiouk/antenly
+total 88
+drwxr-xr-x 2 ubuntu ubuntu  4096 Nov 26 16:22 .
+drwxr-xr-x 9 ubuntu ubuntu  4096 Nov 26 16:22 ..
+-rw------- 1 ubuntu ubuntu  9680 Nov 26 16:22 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu 58100 Nov 26 16:29 opencode.log
+-rw-r--r-- 1 ubuntu ubuntu  1408 Nov 26 16:22 prompt.md
+===
+AGENT=1
+CHAIN_PHASE=build
+FULLRUN_STOP_AFTER_STEP=4
+FULLRUN_TARGET_AGENT=Forge
+HF_TOKEN=[REDACTED:hf-token]
+HOME=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home
+HUGGING_FACE_HUB_TOKEN=[REDACTED:hf-token]
+LANG=C.UTF-8
+OPENCODE=1
+OPENCODE_CONFIG=/home/ubuntu/actions-runner-3/_work/_temp/oc/opencode.json
+OPENCODE_PID=157073
+PATH=/usr/local/bin:/usr/bin:/bin
+PWD=/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target
+SHLVL=1
+TMPDIR=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent
+_=/usr/bin/env
+
