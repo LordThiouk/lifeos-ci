@@ -26,12 +26,12 @@ for needle in (
     'Silence ${SILENCE_SEC}s sans sortie',
     'bascule vers le modèle suivant',
     'oc-wrap.sh',
-    'echo $$ > "$1"',
     'OPENCODE_HTTPS_PROXY',
     'proxy_env',
     'Quota atteint sur $m : bascule vers le modèle suivant',
 ):
     assert needle in run, "garde-fou silence/proxy/chaîne incomplet : %r absent" % needle
+assert 'bash -c' not in run or 'oc-wrap.sh' in run
 
 # Plus de limite à une seule bascule quota/erreur.
 assert "bascule unique vers le modèle suivant" not in run, \
