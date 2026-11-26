@@ -5637,3 +5637,88 @@ $ grep -rn "45801376130\|Gradle 9\.1\|AGP 9\.0\|gradle-9\.1" --include=*.md . 2>
 ./CHANGELOG.md:12:- Android : toolchain aligné sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.2.20) ; AGP 9.0.1 / Gradle 9.1.0 refusés par la validation CI
 ./CHANGELOG.md:34:- Android Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1.0 for Flutter Codemagic CI
 
+$ git show 3023819 --format=fuller --stat | head -50; echo "===================="; git show a33e9a5 --format=full | head -60; echo "===================="; git show 0eb0df0 --format=full --stat | head -40
+commit 30238192e593a79f38bca07fa9165048f510ab6c
+Author:     Papa Diop <pirlothiouk@gmail.com>
+AuthorDate: Thu Oct 8 02:27:11 2026 +0000
+Commit:     Papa Diop <pirlothiouk@gmail.com>
+CommitDate: Thu Oct 8 02:27:11 2026 +0000
+
+    fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+
+ android/app/build.gradle.kts                     | 6 +++---
+ android/gradle.properties                        | 2 ++
+ android/gradle/wrapper/gradle-wrapper.properties | 2 +-
+ android/settings.gradle.kts                      | 4 ++--
+ 4 files changed, 8 insertions(+), 6 deletions(-)
+====================
+commit a33e9a58e67908b08e125eda4147ff6f2a3415c3
+Author: Papa Diop <pirlothiouk@gmail.com>
+Commit: Papa Diop <pirlothiouk@gmail.com>
+
+    fix(android): Gradle 8.14 for Flutter bundleRelease CI
+    
+    chore(release): bump to 1.0.8+104
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index b47746e..c8cb962 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
+ 
+ ## [Unreleased]
+ 
++## [1.0.8] - 2026-10-02
++
++### Fixed
++
++- Android CI : Gradle wrapper 8.14 (minimum Flutter 8.14.0) pour `bundleRelease` Codemagic
++
+ ## [1.0.7] - 2026-10-02
+ 
+ ### Changed
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 02767eb..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.13-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/lib/environment.dart b/lib/environment.dart
+index 89525f6..7536c0a 100644
+--- a/lib/environment.dart
++++ b/lib/environment.dart
+@@ -1,7 +1,7 @@
+ class Environment {
+   /* ATTENTION Please update your desired data. */
+   static const String appName = 'Galass';
+-  static const String version = '1.0.7';
++  static const String version = '1.0.8';
+ 
+   //Language
+   // Default display name for the app's language (used in UI language selectors)
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 7420e59..2439ef1 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -3,7 +3,7 @@ description: galass is a complete ride-sharing solution.
+ 
+ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+ 
+-version: 1.0.7+103
++version: 1.0.8+104
+ environment:
+   sdk: '>=3.5.0 <4.0.0'
+====================
+commit 0eb0df09be4c30b08e0d58f0dcb7443cc771178c
+Author: Papa Diop <pirlothiouk@gmail.com>
+Commit: Papa Diop <pirlothiouk@gmail.com>
+
+    fix(android): allow legacy proguard-android.txt for AGP 9 plugins
+
+ android/gradle.properties | 1 +
+ 1 file changed, 1 insertion(+)
+
