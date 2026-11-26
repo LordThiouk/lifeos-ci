@@ -2992,3 +2992,489 @@ $ find / -maxdepth 6 -name 'flutter' -type f -perm -u+x 2>/dev/null | sort; echo
 /opt/flutter/packages/flutter_tools
 /opt/flutter/packages/flutter_web_plugins
 
+$ cat /home/ubuntu/.bash_history 2>/dev/null; echo "---tmp---"; ls -la /tmp 2>/dev/null | head -60; echo "---flutter version file---"; cat /opt/flutter/version 2>/dev/null; ls /opt/flutter/bin/cache/ 2>/dev/null | head
+bore local 8888 --to bore.pub 2>&1 | tee /tmp/bore-proxy.log
+cloudflared tunnel --url tcp://127.0.0.1:8888 2>&1 | tee /tmp/cf-tcp.log
+---tmp---
+total 107568
+drwxrwxrwt. 33 root   root      12288 Nov 26 15:24 .
+drwxr-xr-x. 25 root   root       4096 Nov 26 04:55 ..
+drwxrwxrwt   2 ubuntu ubuntu     4096 Nov 26 04:55 .ICE-unix
+-r--r--r--   1 ubuntu ubuntu       11 Nov 26 04:55 .X1-lock
+drwxrwxrwt   2 root   ubuntu     4096 Nov 26 04:55 .X11-unix
+-rw-------   1 ubuntu ubuntu   514960 Nov 26 12:17 .bun-1000-71b650bef1b3e52c.node
+-rw-------   1 ubuntu ubuntu 12846400 Nov 26 12:17 .bun-1000-89812e6e6a68aaeb.so
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:08 .git_signing_key_tmp0ZGbAx
+-rw-------   1 ubuntu ubuntu       80 Nov 26 10:42 .git_signing_key_tmp0dd6Ht
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:15 .git_signing_key_tmp0zEvie
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:15 .git_signing_key_tmp128YfY
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:28 .git_signing_key_tmp1tD7oh
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:24 .git_signing_key_tmp2t6ULC
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:02 .git_signing_key_tmp2vGvad
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:32 .git_signing_key_tmp38ULAK
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:51 .git_signing_key_tmp3NDlXE
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:26 .git_signing_key_tmp4CN4T3
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:17 .git_signing_key_tmp5Vu5et
+-rw-------   1 ubuntu ubuntu       80 Nov 26 11:31 .git_signing_key_tmp9fenzV
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:38 .git_signing_key_tmpAhg9Ff
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:29 .git_signing_key_tmpB6Ejyn
+-rw-------   1 ubuntu ubuntu       80 Nov 26 14:07 .git_signing_key_tmpCG0llF
+-rw-------   1 ubuntu ubuntu       80 Nov 26 10:58 .git_signing_key_tmpCOoRnp
+-rw-------   1 ubuntu ubuntu       80 Nov 26 08:05 .git_signing_key_tmpEmIdFp
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:45 .git_signing_key_tmpHMIZfv
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:38 .git_signing_key_tmpIMF92L
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:30 .git_signing_key_tmpIQVHkg
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:25 .git_signing_key_tmpJSbCWR
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:33 .git_signing_key_tmpJsGM6V
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:41 .git_signing_key_tmpKwRMOl
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:29 .git_signing_key_tmpLR1UqC
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:16 .git_signing_key_tmpOBllB3
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:34 .git_signing_key_tmpPPOGps
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:21 .git_signing_key_tmpPkxcyJ
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:04 .git_signing_key_tmpQ9kHSp
+-rw-------   1 ubuntu ubuntu       80 Nov 26 10:04 .git_signing_key_tmpQwsLb9
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:16 .git_signing_key_tmpRyvz2T
+-rw-------   1 ubuntu ubuntu       80 Nov 26 10:26 .git_signing_key_tmpS6zrD9
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:19 .git_signing_key_tmpSiDxoo
+-rw-------   1 ubuntu ubuntu       80 Nov 26 10:26 .git_signing_key_tmpTHYz6v
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:28 .git_signing_key_tmpU5rXGz
+-rw-------   1 ubuntu ubuntu       80 Nov 26 14:26 .git_signing_key_tmpZ59JRe
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:35 .git_signing_key_tmpZVJmOA
+-rw-------   1 ubuntu ubuntu       80 Nov 26 12:34 .git_signing_key_tmpbPurpa
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:29 .git_signing_key_tmpbS4xPV
+-rw-------   1 ubuntu ubuntu       80 Nov 26 10:13 .git_signing_key_tmpbUxJva
+-rw-------   1 ubuntu ubuntu       80 Nov 26 14:05 .git_signing_key_tmpcai21j
+-rw-------   1 ubuntu ubuntu       80 Nov 26 12:22 .git_signing_key_tmpcyfm0g
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:28 .git_signing_key_tmpd2QgN2
+-rw-------   1 ubuntu ubuntu       80 Nov 26 12:58 .git_signing_key_tmpdDrI77
+-rw-------   1 ubuntu ubuntu       80 Nov 26 12:33 .git_signing_key_tmpdW0u6o
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:20 .git_signing_key_tmpdYfjRB
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:44 .git_signing_key_tmpgj0QEP
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:43 .git_signing_key_tmpiXYjGt
+-rw-------   1 ubuntu ubuntu       80 Nov 26 08:04 .git_signing_key_tmpkMtYVQ
+-rw-------   1 ubuntu ubuntu       80 Nov 26 12:24 .git_signing_key_tmpkZpoP1
+-rw-------   1 ubuntu ubuntu       80 Nov 26 14:43 .git_signing_key_tmpm9U2a1
+-rw-------   1 ubuntu ubuntu       80 Nov 26 08:13 .git_signing_key_tmpoTPhjd
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:49 .git_signing_key_tmpowrrKa
+---flutter version file---
+3.35.6LICENSE.dart_sdk_archive.md
+artifacts
+dart-sdk
+downloads
+engine-dart-sdk.stamp
+engine.realm
+engine.stamp
+engine_stamp.json
+engine_stamp.stamp
+flutter.version.json
+
+$ ls -la /tmp | rg -i 'flutter|dart|sdk|f429|verify|galass|lifeos' ; echo "---lifeos-ci-state---"; ls -laR /opt/lifeos-ci-state 2>/dev/null | head -80; echo "---lifeos-ci-tools---"; ls -laR /opt/lifeos-ci-tools 2>/dev/null | head -80
+-rw-r--r--   1 ubuntu ubuntu    13663 Nov 26 15:12 f429_contract_test.dart.orig
+-rw-r--r--   1 ubuntu ubuntu      891 Nov 26 15:12 f429_contract_test.log
+-rw-r--r--   1 ubuntu ubuntu      891 Nov 26 15:13 f429_green.log
+-rw-r--r--   1 ubuntu ubuntu     2826 Nov 26 15:13 f429_redbefore.log
+drwxr-xr-x   8 ubuntu ubuntu     4096 Nov 26 05:44 lifeos-ci-agents
+-rw-r--r--   1 ubuntu ubuntu      891 Nov 26 15:18 verify_f429_green.log
+-rw-r--r--   1 ubuntu ubuntu     2826 Nov 26 15:17 verify_f429_redbefore.log
+-rw-r--r--   1 ubuntu ubuntu     9023 Nov 26 15:17 verify_f429_run.log
+---lifeos-ci-state---
+/opt/lifeos-ci-state:
+total 12
+drwxr-xr-x   2 root root 4096 Nov 26 15:21 .
+drwxr-xr-x. 10 root root 4096 Nov 26 15:21 ..
+-rw-r--r--   1 root root   61 Nov 26 15:21 bases
+---lifeos-ci-tools---
+/opt/lifeos-ci-tools:
+total 20
+drwxr-xr-x   4 root root 4096 Nov 26 15:21 .
+drwxr-xr-x. 10 root root 4096 Nov 26 15:21 ..
+-rw-r--r--   1 root root  863 Nov 26 15:21 models.txt
+drwxr-xr-x   4 root root 4096 Nov 26 15:22 opencode
+drwxr-xr-x   2 root root 4096 Nov 26 15:06 targets
+
+/opt/lifeos-ci-tools/opencode:
+total 21764
+drwxr-xr-x 4 root root     4096 Nov 26 15:22 .
+drwxr-xr-x 4 root root     4096 Nov 26 15:21 ..
+-rwxr-xr-x 1 root root      905 Nov 26 15:06 allowed-repos.sh
+-rw-r--r-- 1 root root     1200 Nov 26 15:06 autosave-deny.txt
+-rwxr-xr-x 1 root root    11165 Nov 26 15:06 autosave.sh
+-rwxr-xr-x 1 root root     6310 Nov 26 15:06 bench-capped
+-rwxr-xr-x 1 root root     1134 Nov 26 15:06 check-agent.sh
+-rwxr-xr-x 1 root root     9449 Nov 26 15:06 checkpoint.sh
+-rw-r--r-- 1 root root     5225 Nov 26 15:06 ci-preamble.md
+drwxr-xr-x 2 root root     4096 Nov 26 15:06 config
+-rwxr-xr-x 1 root root      823 Nov 26 15:06 done-check-call.sh
+-rwxr-xr-x 1 root root    17498 Nov 26 15:06 done_check.sh
+-rwxr-xr-x 1 root root    27597 Nov 26 15:06 emu-e2e.sh
+-rwxr-xr-x 1 root root    20757 Nov 26 15:06 extra-repos.sh
+-rwxr-xr-x 1 root root 21958840 Nov 26 15:22 gitleaks
+-rwxr-xr-x 1 root root     2862 Nov 26 15:06 install-hook-profile.sh
+-rwxr-xr-x 1 root root     2870 Nov 26 15:06 leaklog.sh
+-rwxr-xr-x 1 root root     4618 Nov 26 15:06 lifeos-guard.sh
+-rwxr-xr-x 1 root root    11227 Nov 26 15:06 livelog.sh
+-rw-r--r-- 1 root root       63 Nov 26 15:06 log-recipient.txt
+-rwxr-xr-x 1 root root     2038 Nov 26 15:06 merge-agents.sh
+-rwxr-xr-x 1 root root    10970 Nov 26 15:06 merge-signed-carry.sh
+-rwxr-xr-x 1 root root     2590 Nov 26 15:06 notify.sh
+-rwxr-xr-x 1 root root      207 Nov 26 15:06 oc-wrap.sh
+-rwxr-xr-x 1 root root    12726 Nov 26 15:06 preannot.sh
+-rwxr-xr-x 1 root root     6436 Nov 26 15:06 progress.sh
+-rwxr-xr-x 1 root root     6093 Nov 26 15:06 quota.sh
+-rwxr-xr-x 1 root root     4087 Nov 26 15:06 redact-log.sh
+-rwxr-xr-x 1 root root    42414 Nov 26 15:06 run-fullrun.sh
+-rwxr-xr-x 1 root root     3152 Nov 26 15:06 silence-watch.sh
+-rwxr-xr-x 1 root root     4550 Nov 26 15:06 split-diff.sh
+-rwxr-xr-x 1 root root     2665 Nov 26 15:06 step-agents.sh
+drwxr-xr-x 3 root root     4096 Nov 26 15:06 tests
+-rwxr-xr-x 1 root root    14226 Nov 26 15:06 wippush.sh
+-rwxr-xr-x 1 root root     2474 Nov 26 15:06 wstunnel-up.sh
+
+/opt/lifeos-ci-tools/opencode/config:
+total 20
+drwxr-xr-x 2 root root 4096 Nov 26 15:06 .
+drwxr-xr-x 4 root root 4096 Nov 26 15:22 ..
+-rw-r--r-- 1 root root 9824 Nov 26 15:06 opencode.json
+
+/opt/lifeos-ci-tools/opencode/tests:
+total 152
+drwxr-xr-x 3 root root  4096 Nov 26 15:06 .
+drwxr-xr-x 4 root root  4096 Nov 26 15:22 ..
+-rwxr-xr-x 1 root root  3028 Nov 26 15:06 agent-run-livelog-test.sh
+-rwxr-xr-x 1 root root  1732 Nov 26 15:06 agent-run-preflight-test.sh
+-rwxr-xr-x 1 root root  2591 Nov 26 15:06 agent-run-silence-test.sh
+-rwxr-xr-x 1 root root  2278 Nov 26 15:06 agent-run-wippush-test.sh
+-rwxr-xr-x 1 root root  6335 Nov 26 15:06 agents-load-test.sh
+-rwxr-xr-x 1 root root  4137 Nov 26 15:06 allowed-repos-lifeos-test.sh
+-rwxr-xr-x 1 root root  2862 Nov 26 15:06 allowed-repos-test.sh
+-rwxr-xr-x 1 root root 13222 Nov 26 15:06 autosave-test.sh
+-rwxr-xr-x 1 root root  2167 Nov 26 15:06 critical-frozen-tools-test.sh
+-rwxr-xr-x 1 root root  4620 Nov 26 15:06 critical-git-isolation-test.sh
+-rwxr-xr-x 1 root root  3645 Nov 26 15:06 critical-state-isolation-test.sh
+-rwxr-xr-x 1 root root  2925 Nov 26 15:06 internals-test.sh
+-rwxr-xr-x 1 root root  1185 Nov 26 15:06 lib.sh
+-rwxr-xr-x 1 root root  2811 Nov 26 15:06 lifeos-chain-test.sh
+-rwxr-xr-x 1 root root  2929 Nov 26 15:06 lifeos-guard-test.sh
+-rwxr-xr-x 1 root root  2648 Nov 26 15:06 memcap-livelog-test.sh
+-rwxr-xr-x 1 root root  3465 Nov 26 15:06 memcap-test.sh
+-rwxr-xr-x 1 root root  2509 Nov 26 15:06 notify-test.sh
+-rwxr-xr-x 1 root root  3679 Nov 26 15:06 quota-test.sh
+-rwxr-xr-x 1 root root  3637 Nov 26 15:06 redact-test.sh
+-rwxr-xr-x 1 root root  2874 Nov 26 15:06 run-all.sh
+-rwxr-xr-x 1 root root  1481 Nov 26 15:06 silence-watch-test.sh
+-rwxr-xr-x 1 root root  4652 Nov 26 15:06 split-diff-test.sh
+-rwxr-xr-x 1 root root  4286 Nov 26 15:06 subagent-fail-test.sh
+
+$ for f in /tmp/f429_contract_test.log /tmp/f429_green.log /tmp/f429_redbefore.log /tmp/verify_f429_green.log /tmp/verify_f429_redbefore.log /tmp/verify_f429_run.log; do echo "===== $f ====="; cat "$f"; done
+===== /tmp/f429_contract_test.log =====
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:00 +1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:00 +2: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:00 +3: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:00 +4: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +5: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +6: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +7: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:01 +8: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:01 +9: (tearDownAll)
+00:01 +9: All tests passed!
+===== /tmp/f429_green.log =====
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:01 +1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:01 +2: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:01 +3: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:01 +4: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +5: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +6: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +7: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:01 +8: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:01 +9: (tearDownAll)
+00:01 +9: All tests passed!
+===== /tmp/f429_redbefore.log =====
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+══╡ EXCEPTION CAUGHT BY SCHEDULER LIBRARY ╞═════════════════════════════════════════════════════════
+The following message was thrown:
+An animation is still running even after the widget tree was disposed.
+
+There was one transient callback left. The stack trace for when it was registered is as follows:
+── callback 6 ──
+#2      SchedulerBinding.scheduleFrameCallback (package:flutter/src/scheduler/binding.dart:619:49)
+#3      RelayoutWhenSystemFontsChangeMixin._scheduleSystemFontsUpdate (package:flutter/src/rendering/object.dart:4730:31)
+#4      _SystemFontsNotifier.notifyListeners (package:flutter/src/painting/binding.dart:194:15)
+#5      PaintingBinding.handleSystemMessage (package:flutter/src/painting/binding.dart:183:22)
+<asynchronous suspension>
+#6      BasicMessageChannel.setMessageHandler.<anonymous closure> (package:flutter/src/services/platform_channel.dart:257:36)
+<asynchronous suspension>
+#7      _DefaultBinaryMessenger.setMessageHandler.<anonymous closure> (package:flutter/src/services/binding.dart:664:22)
+<asynchronous suspension>
+(elided 2 frames from class _FrameCallbackEntry)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:00 +0 -1: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING [E]
+  Test failed. See exception logs above.
+  The test description was: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+  
+00:00 +0 -1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:01 +1 -1: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:01 +2 -1: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:01 +3 -1: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +4 -1: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +5 -1: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +6 -1: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:01 +7 -1: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:02 +8 -1: Some tests failed.
+
+Failing tests:
+  /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+===== /tmp/verify_f429_green.log =====
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:01 +1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:01 +2: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:01 +3: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:01 +4: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +5: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +6: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +7: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:02 +8: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:02 +9: (tearDownAll)
+00:02 +9: All tests passed!
+===== /tmp/verify_f429_redbefore.log =====
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+══╡ EXCEPTION CAUGHT BY SCHEDULER LIBRARY ╞═════════════════════════════════════════════════════════
+The following message was thrown:
+An animation is still running even after the widget tree was disposed.
+
+There was one transient callback left. The stack trace for when it was registered is as follows:
+── callback 6 ──
+#2      SchedulerBinding.scheduleFrameCallback (package:flutter/src/scheduler/binding.dart:619:49)
+#3      RelayoutWhenSystemFontsChangeMixin._scheduleSystemFontsUpdate (package:flutter/src/rendering/object.dart:4730:31)
+#4      _SystemFontsNotifier.notifyListeners (package:flutter/src/painting/binding.dart:194:15)
+#5      PaintingBinding.handleSystemMessage (package:flutter/src/painting/binding.dart:183:22)
+<asynchronous suspension>
+#6      BasicMessageChannel.setMessageHandler.<anonymous closure> (package:flutter/src/services/platform_channel.dart:257:36)
+<asynchronous suspension>
+#7      _DefaultBinaryMessenger.setMessageHandler.<anonymous closure> (package:flutter/src/services/binding.dart:664:22)
+<asynchronous suspension>
+(elided 2 frames from class _FrameCallbackEntry)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING [E]
+  Test failed. See exception logs above.
+  The test description was: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+  
+00:01 +0 -1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:01 +1 -1: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:01 +2 -1: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:01 +3 -1: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +4 -1: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +5 -1: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +6 -1: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:02 +7 -1: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:02 +8 -1: Some tests failed.
+
+Failing tests:
+  /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+===== /tmp/verify_f429_run.log =====
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 93.0.0 (111.0.0 available)
+  _flutterfire_internals 1.3.72 (1.4.0 available)
+  analyzer 10.0.1 (14.7.0 available)
+  android_file_picker 1.1.1 (2.2.1 available)
+  archive 4.0.9 (4.7.1 available)
+  audio_session 0.2.3 (0.2.4 available)
+  build 4.0.6 (5.0.0 available)
+  built_collection 5.1.1 (6.0.0 available)
+  built_value 8.12.6 (8.13.0 available)
+  cached_network_image 3.4.1 (4.0.7 available)
+  cached_network_image_platform_interface 4.1.1 (5.0.4 available)
+  cached_network_image_web 1.3.1 (2.0.5 available)
+  chewie 1.13.1 (1.18.1 available)
+  cli_util 0.4.2 (0.6.1 available)
+> clock 1.1.3 (was 1.1.2)
+  code_assets 1.0.0 (2.2.0 available)
+  code_builder 4.11.1 (4.13.0 available)
+  connectivity_plus 7.1.1 (7.3.2 available)
+  coupon_uikit 0.2.1 (0.3.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  custom_marker_builder 0.0.4 (1.0.2 available)
+  dart_style 3.1.7 (3.1.14 available)
+  dbus 0.7.15 (0.8.1 available)
+  dio 5.9.2 (5.11.1 available)
+  dio_web_adapter 2.1.2 (2.2.2 available)
+  equatable 2.0.8 (3.0.0 available)
+  file_picker 12.3.0 (13.4.1 available)
+  file_picker_darwin 1.2.0 (2.5.2 available)
+  file_picker_linux 1.1.0 (2.0.5 available)
+  file_picker_platform_interface 3.4.0 (4.3.0 available)
+  file_picker_web 3.1.0 (4.2.2 available)
+  file_selector_linux 0.9.4 (0.9.4+1 available)
+  file_selector_macos 0.9.5 (0.9.5+2 available)
+  file_selector_windows 0.9.3+5 (0.9.3+6 available)
+  firebase_analytics 12.4.2 (13.1.0 available)
+  firebase_analytics_platform_interface 6.0.2 (6.1.0 available)
+  firebase_analytics_web 0.6.1+8 (0.6.4+16 available)
+  firebase_auth 6.5.0 (7.1.0 available)
+  firebase_auth_platform_interface 9.0.0 (9.2.0 available)
+  firebase_auth_web 6.2.0 (6.4.0 available)
+  firebase_core 4.10.0 (5.2.0 available)
+  firebase_core_platform_interface 7.0.1 (8.2.0 available)
+  firebase_core_web 3.8.0 (4.2.0 available)
+  firebase_crashlytics 5.2.3 (6.1.0 available)
+  firebase_crashlytics_platform_interface 3.8.23 (3.10.0 available)
+  firebase_messaging 16.2.1 (17.1.0 available)
+  firebase_messaging_platform_interface 4.7.10 (4.12.0 available)
+  firebase_messaging_web 4.1.6 (4.4.0 available)
+  flutter_cache_manager 3.4.1 (3.5.0 available)
+  flutter_local_notifications 19.5.0 (23.0.4 available)
+  flutter_local_notifications_linux 6.0.0 (9.0.0 available)
+  flutter_local_notifications_platform_interface 9.1.0 (13.0.0 available)
+  flutter_local_notifications_windows 1.0.3 (4.0.1 available)
+  flutter_plugin_android_lifecycle 2.0.34 (2.0.35 available)
+  flutter_secure_storage 10.3.1 (11.2.0 available)
+  flutter_secure_storage_darwin 0.3.2 (0.4.3 available)
+  flutter_secure_storage_linux 3.0.1 (3.0.3 available)
+  flutter_secure_storage_platform_interface 2.0.1 (2.1.1 available)
+  flutter_shaders 0.1.3 (0.1.5 available)
+  flutter_svg 2.3.0 (2.5.1 available)
+  flutter_widget_from_html 0.17.2 (0.17.4 available)
+  flutter_widget_from_html_core 0.17.2 (0.17.4 available)
+  fwfh_cached_network_image 0.16.1 (0.16.3 available)
+  fwfh_webview 0.15.7 (0.15.8 available)
+  geocoding 4.0.0 (5.0.1 available)
+  geocoding_android 4.0.1 (5.1.0 available)
+  geocoding_platform_interface 3.2.0 (5.0.0 available)
+  geolocator 14.0.2 (14.1.2 available)
+  geolocator_android 5.0.2 (5.2.1 available)
+  geolocator_apple 2.3.13 (2.4.3 available)
+  geolocator_platform_interface 4.2.6 (4.4.1 available)
+  geolocator_web 4.1.3 (4.1.4 available)
+  glob 2.1.3 (2.2.0 available)
+  google_maps 8.2.0 (8.3.0 available)
+  google_maps_flutter 2.14.2 (2.19.0 available)
+  google_maps_flutter_android 2.18.4 (2.21.0 available)
+  google_maps_flutter_ios 2.18.1 (2.18.7 available)
+  google_maps_flutter_platform_interface 2.15.0 (2.18.0 available)
+  google_maps_flutter_web 0.5.14+3 (0.6.5 available)
+  google_sign_in_android 7.2.10 (7.2.19 available)
+  google_sign_in_ios 6.3.0 (6.4.0 available)
+  gsettings 0.2.8 (0.2.9 available)
+  hooks 1.0.3 (2.2.0 available)
+  html 0.15.6 (0.15.7 available)
+  image 4.8.0 (4.13.1 available)
+  image_picker 1.2.2 (1.2.4 available)
+  image_picker_android 0.8.13+17 (0.8.13+25 available)
+  image_picker_ios 0.8.13+6 (0.8.13+16 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  in_app_review 2.0.11 (2.0.12 available)
+! intl 0.20.2 (overridden) (0.20.3 available)
+  jni 1.0.0 (1.2.1 available)
+  jni_flutter 1.0.1 (1.1.0 available)
+! just_audio 0.10.5 (overridden) (0.10.6 available)
++ listen 1.0.1
+  logger 2.7.0 (2.8.0 available)
+  lottie 3.3.3 (3.8.2 available)
+> matcher 0.12.20 (was 0.12.19)
+  material_color_utilities 0.13.0 (0.13.1 available)
+> meta 1.19.0 (was 1.18.0)
+  mime 2.0.0 (2.1.0 available)
+  mockito 5.6.4 (5.8.1 available)
+  native_toolchain_c 0.17.6 (0.19.6 available)
+  nm 0.5.0 (0.6.0 available)
+  objective_c 9.3.0 (9.6.4 available)
+  octo_image 2.1.0 (2.1.5 available)
+  open_file 3.5.11 (4.0.0 available)
+  open_file_android 1.0.6 (1.1.0 available)
+  open_file_ios 1.0.4 (1.1.0 available)
+  open_file_linux 0.0.5 (1.1.0 available)
+  open_file_mac 1.0.4 (1.1.0 available)
+  open_file_platform_interface 1.0.3 (1.1.0 available)
+  open_file_web 0.0.4 (1.1.0 available)
+  open_file_windows 0.0.3 (1.1.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider 2.1.5 (2.1.6 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  permission_handler 12.0.1 (13.0.2 available)
+  permission_handler_android 13.0.1 (14.1.1 available)
+  permission_handler_apple 9.4.7 (9.6.5 available)
+  permission_handler_html 0.1.3+5 (0.1.4+1 available)
+  permission_handler_platform_interface 4.3.0 (4.4.1 available)
+  permission_handler_windows 0.2.1 (0.2.4 available)
+  petitparser 7.0.2 (7.1.0 available)
+  pinput 5.0.2 (7.0.0 available)
+  platform 3.1.6 (3.2.0 available)
+  posix 6.5.0 (6.5.4 available)
+  pub_semver 2.2.0 (2.2.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  sanitize_html 2.1.0 (2.2.0 available)
+  shared_preferences 2.5.5 (2.5.6 available)
+  shared_preferences_android 2.4.23 (2.5.5 available)
+  shared_preferences_foundation 2.5.6 (2.6.2 available)
+  sheet 1.0.0 (1.0.1 available)
+  shimmer 3.0.0 (4.0.0 available)
+  sign_in_with_apple 7.0.1 (8.2.0 available)
+  source_gen 4.2.3 (4.3.1 available)
+  sqflite 2.4.2+1 (2.4.6 available)
+  sqflite_android 2.4.2+3 (2.4.6 available)
+  sqflite_common 2.5.7 (2.5.17 available)
+  sqflite_darwin 2.4.2 (2.4.6 available)
+  sqflite_platform_interface 2.4.0 (2.4.4 available)
+> stack_trace 1.12.2 (was 1.12.1)
+  stream_transform 2.1.1 (2.1.2 available)
+  synchronized 3.4.0+1 (3.6.1+1 available)
+> test_api 0.7.14 (was 0.7.11) (0.7.15 available)
+  timelines_plus 1.0.8 (2.0.1 available)
+  timezone 0.10.1 (0.11.2 available)
+  toastification 3.2.0 (3.2.2 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.29 (6.3.35 available)
+  url_launcher_ios 6.4.1 (6.4.2 available)
+  url_launcher_linux 3.2.2 (3.2.3 available)
+  url_launcher_macos 3.2.5 (3.2.6 available)
+  url_launcher_windows 3.1.5 (3.1.6 available)
+  uuid 4.5.3 (4.6.0 available)
+  vector_graphics 1.2.1 (1.3.1 available)
+  vector_graphics_codec 1.1.13 (1.2.0 available)
+  vector_graphics_compiler 1.2.2 (1.3.7 available)
+> vector_math 2.4.4 (was 2.2.0)
+  vibration 3.1.8 (3.2.1 available)
+  video_player 2.11.1 (2.14.1 available)
+  video_player_android 2.9.5 (2.13.0 available)
+  video_player_avfoundation 2.9.6 (2.12.5 available)
+  video_player_platform_interface 6.7.0 (6.9.0 available)
+  vm_service 15.2.0 (15.4.0 available)
+  wakelock_plus 1.8.0 (1.8.2 available)
+  web 1.1.1 (1.1.2 available)
+  webview_flutter 4.13.1 (4.14.1 available)
+  webview_flutter_android 4.12.0 (4.14.1 available)
+  webview_flutter_wkwebview 3.25.1 (3.27.2 available)
+  windows_file_picker 1.3.0 (2.0.2 available)
+  xml 6.6.1 (7.1.0 available)
+  yaml 3.1.3 (3.1.4 available)
+Changed 7 dependencies!
+171 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Upgrading analysis_options.yaml to exclude build and platform directories.
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:01 +1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:01 +2: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:01 +3: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:01 +4: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +5: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +6: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +7: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:01 +8: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:01 +9: (tearDownAll)
+00:01 +9: All tests passed!
+
