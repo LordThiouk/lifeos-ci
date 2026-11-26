@@ -1621,3 +1621,43 @@ phpunit exit=0
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && f=$(find vendor/laravel -name "TestCommand.php" | head -1); echo $f; grep -n "args\|options\|display" "$f" | head -40
 grep: : No such file or directory
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && find vendor/laravel -name "*Test*.php" -path "*Console*" | head; find vendor -name "TestCommand.php" | head
+vendor/laravel/framework/src/Illuminate/Console/Concerns/CreatesMatchingTest.php
+vendor/laravel/framework/src/Illuminate/Console/Scheduling/ScheduleTestCommand.php
+vendor/laravel/framework/src/Illuminate/Foundation/Console/TestMakeCommand.php
+vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php
+vendor/spatie/laravel-ignition/src/Commands/TestCommand.php
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && grep -n "display\|args\|option" vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php | head -30; echo ===; grep -rn "display-" vendor/nunomaduro/collision/src/ | head
+73:        if ($this->option('coverage') && ! Coverage::isAvailable()) {
+75:                "\n  <fg=white;bg=red;options=bold> ERROR </> Code coverage driver not available.%s</>",
+87:        $usesParallel = $this->option('parallel');
+93:        $options = array_slice($_SERVER['argv'], $this->option('without-tty') ? 3 : 2);
+97:        $parallel = $this->option('parallel');
+103:            $parallel ? $this->paratestArguments($options) : $this->phpunitArguments($options)
+111:            $process->setTty(! $this->option('without-tty'));
+128:        if ($exitCode === 0 && $this->option('coverage')) {
+129:            if (! $this->usingPest() && $this->option('parallel')) {
+135:            $exitCode = (int) ($coverage < $this->option('min'));
+139:                    "\n  <fg=white;bg=red;options=bold> FAIL </> Code coverage below expected:<fg=red;options=bold> %s %%</>. Minimum:<fg=white;options=bold> %s %%</>.",
+141:                    number_format((float) $this->option('min'), 1)
+157:            $command = $this->option('parallel') ? ['vendor/pestphp/pest/bin/pest', '--parallel'] : ['vendor/pestphp/pest/bin/pest'];
+159:            $command = $this->option('parallel') ? ['vendor/brianium/paratest/bin/paratest'] : ['vendor/phpunit/phpunit/phpunit'];
+178:        if ($this->option('coverage')) {
+183:        if ($this->option('ansi')) {
+185:        } elseif ($this->option('no-ansi')) {
+207:     * @param  array  $options
+210:    protected function phpunitArguments($options)
+212:        $options = array_merge(['--no-output'], $options);
+214:        $options = array_values(array_filter($options, function ($option) {
+215:            return ! Str::startsWith($option, '--env=')
+216:                && $option != '-q'
+217:                && $option != '--quiet'
+218:                && $option != '--coverage'
+219:                && $option != '--compact'
+220:                && $option != '--profile'
+221:                && $option != '--ansi'
+222:                && $option != '--no-ansi'
+223:                && ! Str::startsWith($option, '--min');
+===
+
