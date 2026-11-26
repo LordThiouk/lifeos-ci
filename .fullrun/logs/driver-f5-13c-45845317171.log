@@ -15300,3 +15300,7 @@ routes/admin.php:169:        Route::post('approve-all/{id}', 'approveAll')->name
 
 > Forge · nemotron-3.5-lightning-free
 
+Silence 180s sans nouvelle sortie (journal=49 o) : coupure opencode pid=389580
+
+> Forge · nemotron-3.5-super-vl-free
+
