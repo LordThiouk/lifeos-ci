@@ -9106,3 +9106,894 @@ index 9400a7e..bfebd0b 100644
      id("com.google.gms.google-services") version("4.3.15") apply false
      id("com.google.firebase.crashlytics") version("3.0.7") apply false
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && echo "=== settings.gradle.kts ===" && cat android/settings.gradle.kts && echo "=== gradle-wrapper ===" && cat android/gradle/wrapper/gradle-wrapper.properties && echo "=== gradle.properties ===" && cat android/gradle.properties && echo "=== build.gradle.kts (root) ===" && cat android/build.gradle.kts 2>/dev/null; echo "=== app/build.gradle.kts ===" && cat android/app/build.gradle.kts
+=== settings.gradle.kts ===
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "8.11.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.7") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+}
+
+include(":app")
+=== gradle-wrapper ===
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+=== gradle.properties ===
+org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+org.gradle.daemon=false
+org.gradle.parallel=false
+org.gradle.configureondemand=false
+android.enableJetifier=false
+android.useAndroidX=true
+=== build.gradle.kts (root) ===
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
+rootProject.layout.buildDirectory.value(newBuildDir)
+
+subprojects {
+    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
+    project.layout.buildDirectory.value(newSubprojectBuildDir)
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register<Delete>("clean") {
+    delete(rootProject.layout.buildDirectory)
+}
+=== app/build.gradle.kts ===
+import java.util.Properties
+import java.io.FileInputStream
+
+
+plugins {
+    id("com.android.application")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    // END: FlutterFire Configuration
+    id("kotlin-android")
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+android {
+    namespace = "sn.galass.galassrider"
+    compileSdk = 36
+    ndkVersion = "29.0.14033849"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true  
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId = "sn.galass.galassrider"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        minSdk = flutter.minSdkVersion
+        targetSdk = 36
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    signingConfigs {
+        create("release") {
+            val keystorePath = System.getenv("CM_KEYSTORE_PATH")
+            if (keystorePath != null) {
+                // Codemagic CI
+                storeFile = file(keystorePath)
+                storePassword = System.getenv("CM_KEYSTORE_PASSWORD") ?: ""
+                keyAlias = System.getenv("CM_KEY_ALIAS") ?: ""
+                keyPassword = System.getenv("CM_KEY_PASSWORD") ?: ""
+            } else {
+                // Local — lire key.properties
+                val props = Properties()
+                val propsFile = rootProject.file("key.properties")
+                if (propsFile.exists()) props.load(FileInputStream(propsFile))
+                storeFile = props["storeFile"]?.let { file(it as String) }
+                storePassword = props["storePassword"] as? String ?: ""
+                keyAlias = props["keyAlias"] as? String ?: ""
+                keyPassword = props["keyPassword"] as? String ?: ""
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+dependencies {
+  coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+  // Jetpack Security for Android Keystore-backed encryption
+  implementation("androidx.security:security-crypto:1.1.0-alpha06")
+}
+
+flutter {
+    source = "../.."
+}
+
+$ find / -iname "*driver*" -type d 2>/dev/null | grep -i galass | head; echo "---"; find / -path "*Galass*" -name "build.gradle.kts" 2>/dev/null | head; echo "---driver repos---"; ls /home/ubuntu 2>/dev/null; find / -maxdepth 5 -name "settings.gradle.kts" 2>/dev/null | head
+/agent/repos/Galass_backend-multistop/core/resources/views/admin/driver
+/agent/repos/Galass_backend-multistop/core/resources/views/templates/basic/driver
+/agent/repos/Galass_backend-multistop/core/app/Services/Driver
+/agent/repos/Galass_backend-multistop/core/app/Http/Controllers/Api/Driver
+/agent/repos/Galass_backend-multistop/core/vendor/phpunit/php-code-coverage/src/Driver
+/agent/repos/Galass_backend-multistop/core/vendor/intervention/image/src/Drivers
+/agent/repos/Galass_backend-multistop/assets/images/frontend/driver_steps
+/agent/repos/Galass_backend-multistop/assets/images/frontend/driver_banner
+/agent/repos/Galass_backend-multistop/assets/images/frontend/driver_page_cta
+/agent/repos/Galass_backend-multistop/MEMORY/WORK/20260619-galass-driver-runtime-fixes
+---
+/agent/repos/Galass_Rider/Galass_Rider-merge/android/app/build.gradle.kts
+/agent/repos/Galass_Rider/Galass_Rider-merge/android/build.gradle.kts
+/agent/repos/Galass_Rider/android/app/build.gradle.kts
+/agent/repos/Galass_Rider/android/build.gradle.kts
+/agent/repos/Galass_Driver/android/app/build.gradle.kts
+/agent/repos/Galass_Driver/android/build.gradle.kts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/Galass_Rider/android/app/build.gradle.kts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/Galass_Rider/android/build.gradle.kts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver/android/app/build.gradle.kts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver/android/build.gradle.kts
+---driver repos---
+actions-runner
+actions-runner-2
+actions-runner-3
+go
+/agent/repos/Galass_Rider/android/settings.gradle.kts
+/agent/repos/Galass_Driver/android/settings.gradle.kts
+
+$ echo "=== DRIVER settings.gradle.kts ==="; cat /agent/repos/Galass_Driver/android/settings.gradle.kts; echo "=== DRIVER gradle-wrapper ==="; cat /agent/repos/Galass_Driver/android/gradle/wrapper/gradle-wrapper.properties; echo "=== DRIVER gradle.properties ==="; cat /agent/repos/Galass_Driver/android/gradle.properties; echo "=== DRIVER build.gradle.kts root ==="; cat /agent/repos/Galass_Driver/android/build.gradle.kts; echo "=== DRIVER app/build.gradle.kts ==="; cat /agent/repos/Galass_Driver/android/app/build.gradle.kts
+=== DRIVER settings.gradle.kts ===
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "8.11.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+}
+
+include(":app")
+=== DRIVER gradle-wrapper ===
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+=== DRIVER gradle.properties ===
+org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError
+android.useAndroidX=true
+android.enableJetifier=true
+# This builtInKotlin flag was added automatically by Flutter migrator
+android.builtInKotlin=false
+# This newDsl flag was added automatically by Flutter migrator
+android.newDsl=false
+
+# Build speed (local Fastlane / incremental)
+org.gradle.caching=true
+org.gradle.parallel=true
+org.gradle.daemon=true
+org.gradle.configureondemand=true
+org.gradle.vfs.watch=true
+=== DRIVER build.gradle.kts root ===
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
+rootProject.layout.buildDirectory.value(newBuildDir)
+
+subprojects {
+    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
+    project.layout.buildDirectory.value(newSubprojectBuildDir)
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register<Delete>("clean") {
+    delete(rootProject.layout.buildDirectory)
+}
+=== DRIVER app/build.gradle.kts ===
+import java.io.FileInputStream
+import java.util.Properties
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    id("com.android.application")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    // END: FlutterFire Configuration
+    id("kotlin-android")
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
+fun signingValue(key: String, envName: String): String? {
+    return keystoreProperties.getProperty(key) ?: System.getenv(envName)
+}
+
+android {
+    namespace = "sn.galass.galassdriver"
+    compileSdk = 36
+    ndkVersion = "29.0.14033849"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
+    }
+
+    defaultConfig {
+        applicationId = "sn.galass.galassdriver"
+        minSdk = flutter.minSdkVersion
+        targetSdk = 36
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+        manifestPlaceholders["applicationName"] = "sn.galass.galassdriver.MainApplication"
+    }
+
+    signingConfigs {
+        create("release") {
+            val storePath = signingValue("storeFile", "CM_KEYSTORE_PATH")
+            keyAlias = signingValue("keyAlias", "CM_KEY_ALIAS")
+            keyPassword = signingValue("keyPassword", "CM_KEY_PASSWORD")
+            storePassword = signingValue("storePassword", "CM_KEYSTORE_PASSWORD")
+            if (storePath != null) {
+                storeFile = file(storePath)
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            val releaseSigning = signingConfigs.getByName("release")
+            signingConfig =
+                if (releaseSigning.storeFile != null && releaseSigning.keyAlias != null) {
+                    releaseSigning
+                } else {
+                    signingConfigs.getByName("debug")
+                }
+        }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+}
+
+flutter {
+    source = "../.."
+}
+
+$ ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.fullrun 2>/dev/null; echo "---"; find / -path "*fullrun-logs/rider-apk-gradle*" -maxdepth 8 -type d 2>/dev/null | head; echo "---extra rider---"; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra 2>/dev/null
+multistop-ui-gaps-serena-2026-11-23_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r3_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r3_checkpoint.json
+multistop-ui-gaps-serena-2026-11-24-r5_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r5_checkpoint.json
+multistop-ui-gaps-serena-2026-11-24-r6_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r6_checkpoint.json
+multistop-ui-gaps-vera-2026-11-23_DONE.md
+multistop-ui-gaps-vera-2026-11-23_checkpoint.json
+---
+---extra rider---
+Galass_Driver
+Galass_Rider
+galass-emu-actions-pub
+
+$ echo "=== extra Rider settings ==="; cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/Galass_Rider/android/settings.gradle.kts; echo "=== wrapper ==="; cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/Galass_Rider/android/gradle/wrapper/gradle-wrapper.properties; echo "=== gradle.properties ==="; cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/Galass_Rider/android/gradle.properties
+=== extra Rider settings ===
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "9.0.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.7") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+}
+
+include(":app")
+=== wrapper ===
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+=== gradle.properties ===
+org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+org.gradle.daemon=false
+org.gradle.parallel=false
+org.gradle.configureondemand=false
+android.enableJetifier=false
+android.useAndroidX=true
+android.newDsl=false
+android.builtInKotlin=false
+android.r8.proguardAndroidTxt.disallowed=false
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "8.11.1\|gradle-8.14\|9.0.1\|gradle-9.1" --include=*.md --include=*.yml --include=*.yaml --include=*.kts --include=*.properties . 2>/dev/null | grep -v node_modules | head -40
+./CHANGELOG.md:12:- Android : toolchain aligné sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.2.20) ; AGP 9.0.1 / Gradle 9.1.0 refusés par la validation CI
+./CHANGELOG.md:34:- Android Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1.0 for Flutter Codemagic CI
+./android/app/build.gradle.kts:19:    ndkVersion = "29.0.14033849"
+./android/settings.gradle.kts:21:    id("com.android.application") version "8.11.1" apply false
+./android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+
+$ grep -rl "rider-apk-gradle" /home/ubuntu/actions-runner/_work/lifeos-ci /agent 2>/dev/null | head; echo "---"; find / -path "*galass-emu-actions*" -name "*.yml" 2>/dev/null | head
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/logs/HEAD
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/logs/refs/heads/build/rider-apk-gradle
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/config
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/FETCH_HEAD
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/HEAD
+/agent/repos/Galass_Rider/.git/COMMIT_EDITMSG
+/agent/repos/Galass_Rider/.git/logs/HEAD
+/agent/repos/Galass_Rider/.git/HEAD
+---
+/agent/repos/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml
+
+$ grep -n "rider-apk-gradle\|Build APK\|flutter.*build\|gradle.*version\|toolchain\|dependency validation\|flutter 3.5" /agent/repos/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml | head -40
+130:      - name: Build APK (staging, debug, même job, pas d'upload)
+133:            (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+
+$ sed -n '90,180p' /agent/repos/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml
+# AGP peut résoudre le keystore debug ailleurs que dans $HOME/.android: on réplique
+          # le même fichier partout où les outils Android le cherchent.
+          for d in "$HOME/.android" "${ANDROID_SDK_HOME:-$HOME}/.android" "${ANDROID_PREFS_ROOT:-$HOME}/.android" "$ANDROID_HOME/.android"; do
+            mkdir -p "$d" 2>/dev/null || continue
+            cp -f ~/.android/debug.keystore "$d/debug.keystore" 2>/dev/null || true
+          done
+          [ -n "${ANDROID_USER_HOME:-}" ] && cp -f ~/.android/debug.keystore "$ANDROID_USER_HOME/debug.keystore" 2>/dev/null || true
+          # Init script global: force la signature debug sur CE keystore (aucun fichier projet modifié).
+          mkdir -p ~/.gradle/init.d
+          cat > ~/.gradle/init.d/zz-debug-signing.gradle <<'GRADLE'
+          allprojects { proj ->
+            proj.plugins.withId('com.android.application') {
+              proj.afterEvaluate {
+                try {
+                  def android = proj.extensions.findByName('android')
+                  if (android == null) return
+                  def sc = android.signingConfigs.findByName('debug')
+                  if (sc == null) sc = android.signingConfigs.create('debug')
+                  sc.storeFile = new File(System.getenv('HOME'), '.android/debug.keystore')
+                  sc.storePassword = 'android'
+                  sc.keyAlias = 'androiddebugkey'
+                  sc.keyPassword = 'android'
+                  def bt = android.buildTypes.findByName('debug')
+                  if (bt != null) bt.signingConfig = sc
+                  proj.logger.lifecycle("debug signing force sur ~/.android/debug.keystore")
+                } catch (Throwable t) {
+                  proj.logger.lifecycle("debug-signing init ignore: ${t.message}")
+                }
+              }
+            }
+          }
+          GRADLE
+          echo "init script: $(wc -l < ~/.gradle/init.d/zz-debug-signing.gradle) lignes"
+      - name: Tests unitaires Flutter (preuve ISC — avant rm -rf src)
+        run: |
+          set -e
+          for a in rider driver; do
+            echo "== flutter test ($a) =="
+            (cd src/$a && flutter pub get >/dev/null && flutter test)
+          done
+      - name: Build APK (staging, debug, même job, pas d'upload)
+        run: |
+          for a in rider driver; do
+            (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+            mkdir -p apk/$a && cp src/$a/build/app/outputs/flutter-apk/app-debug.apk apk/$a/
+          done
+          rm -rf src
+      - name: Vérifier la signature des APK (apksigner)
+        run: |
+          AS=$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -1)apksigner
+          exp=$(cat /tmp/expected_sha1); echo "attendu: $exp"
+          echo "HOME=$HOME ANDROID_SDK_HOME=${ANDROID_SDK_HOME:-} ANDROID_PREFS_ROOT=${ANDROID_PREFS_ROOT:-} ANDROID_USER_HOME=${ANDROID_USER_HOME:-}"
+          find "$HOME" "$ANDROID_HOME" /usr/local/lib/android /opt /tmp -name debug.keystore 2>/dev/null | while read -r f; do
+            printf 'keystore %s ' "$f"; keytool -list -v -keystore "$f" -storepass android 2>/dev/null | awk '/SHA1:/{print $2; exit}'
+          done
+          sha1_of() { "$AS" verify --print-certs "$1" | awk '/SHA-1 digest/{print toupper($NF)}' | head -1 | sed 's/../&:/g;s/:$//'; }
+          rc=0
+          for a in rider driver; do
+            "$AS" verify --print-certs apk/$a/app-debug.apk | grep -E "Signer|SHA-1|DN"
+            got=$(sha1_of apk/$a/app-debug.apk)
+            echo "$a SHA-1 APK (build): $got"
+            if [ "$got" != "$exp" ]; then
+              # Le build a signé avec un autre certificat: re-signature explicite avec le keystore fixe.
+              cp apk/$a/app-debug.apk "apk/$a/app-unsigned.apk"
+              "$AS" sign --ks ~/.android/debug.keystore --ks-pass pass:android --key-pass pass:android \
+                --ks-key-alias androiddebugkey --out apk/$a/app-debug.apk "apk/$a/app-unsigned.apk"
+              rm -f "apk/$a/app-unsigned.apk"
+              got=$(sha1_of apk/$a/app-debug.apk)
+              echo "$a SHA-1 APK (re-signé): $got"
+            fi
+            echo "APK_SHA1_$(echo "$a" | tr a-z A-Z)=$got" >> "$GITHUB_ENV"
+            [ "$got" = "$exp" ] || { echo "::warning::$a signé avec un autre certificat que la clé Maps"; rc=1; }
+          done
+          echo "APK_SHA1_TARGET=$exp" >> "$GITHUB_ENV"
+          [ $rc -eq 0 ] && echo "SHA-1 APK = certificat Maps attendu" || echo "::warning::SHA-1 APK != certificat Maps (run poursuivi, voir apk-sha1)"
+          # Libérer la RAM: les daemons Gradle (Xmx6g) restent vivants et étouffent l'émulateur (ANR / QEMU hang)
+          pkill -f GradleDaemon || true; pkill -f KotlinCompileDaemon || true; sleep 3; free -m
+      - name: Activer KVM (règle udev officielle)
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -l /dev/kvm
+          echo "Runner: $(nproc) vCPU, $(awk '/MemTotal/{print int($2/1024)}' /proc/meminfo) Mo RAM"
+
+      - uses: actions/setup-node@v4
+        with: {node-version: "24"}
+
+      - name: Installer opencode (version de la box)
+        run: |
+          npm install -g --no-fund --no-audit "opencode-ai@${OPENCODE_VERSION}" >/dev/null 2>&1
+
+$ which flutter; flutter --version 2>/dev/null; ls /opt 2>/dev/null; find / -name "flutter" -type f 2>/dev/null | head; echo "---sdk---"; find / -path "*flutter*3.50*" -maxdepth 8 -type d 2>/dev/null | head
+/usr/local/bin/flutter
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+/opt/flutter/bin/flutter
+/tmp/flutter/bin/flutter
+---sdk---
+
+$ ls /tmp/flutter/bin /opt/flutter/bin 2>/dev/null; echo "---versions---"; /tmp/flutter/bin/flutter --version 2>/dev/null; echo "==="; /opt/flutter/bin/flutter --version 2>/dev/null
+/opt/flutter/bin:
+cache
+dart
+dart.bat
+flutter
+flutter-dev
+flutter-dev.bat
+flutter.bat
+internal
+
+/tmp/flutter/bin:
+cache
+dart
+dart.bat
+flutter
+flutter-dev
+flutter-dev.bat
+flutter.bat
+internal
+---versions---
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ae9b586f34 (8 days ago) • 2026-11-18 17:01:07 -0800
+Engine • hash 51379e6df48ea8ee7205623b90fe66491cad8df3 (revision 4d35714800) (8 days ago) • 2026-11-18 01:50:07.000Z
+Tools • Dart 3.14.0 • DevTools 2.61.0
+The Flutter CLI developer tool uses Google Analytics to report usage and diagnostic
+data along with package dependencies, and crash reporting to send basic crash
+reports. This data is used to help improve the Dart platform, Flutter framework,
+and related tools.
+
+Telemetry is not sent on the very first run. To disable reporting of telemetry,
+run this terminal command:
+
+    flutter --disable-analytics
+
+If you opt out of telemetry, an opt-out event will be sent, and then no further
+information will be sent. This data is collected in accordance with the Google
+Privacy Policy (https://policies.google.com/privacy).
+
+===
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
+$ grep -rn "9.1.0\|9.0.1\|8.14\|8.11" /tmp/flutter/packages/flutter_tools/gradle 2>/dev/null | head -30; echo "==="; find /tmp/flutter -name "*.dart" | xargs grep -l "gradle.*version\|AGP" 2>/dev/null | head
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:689:    // Regression test for https://github.com/flutter/flutter/issues/191081: a plugin that also
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2047:        val (mockAndroidExtension, mockCmake) = setUpMockExternalNativeBuild(project, ndkVersion = "29.0.13846066")
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2055:            File(tempDir.toFile(), "ndk/29.0.13846066/source.properties").apply {
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2075:                    "ndk;29.0.13846066"
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2089:        val (mockAndroidExtension, mockCmake) = setUpMockExternalNativeBuild(project, ndkVersion = "29.0.13846066")
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2092:        every { project.findProperty(FlutterPluginUtils.PROP_INSTALLED_NDK_VERSIONS) } returns "29.0.13846066"
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2112:        val (mockAndroidExtension, mockCmake) = setUpMockExternalNativeBuild(project, ndkVersion = "29.0.13846066")
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2184:        val (mockAndroidExtension, mockCmake) = setUpMockExternalNativeBuild(project, ndkVersion = "29.0.13846066")
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2187:        every { project.findProperty(FlutterPluginUtils.PROP_INSTALLED_NDK_VERSIONS) } returns "29.0.13846066"
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2206:        val (mockAndroidExtension, mockCmake) = setUpMockExternalNativeBuild(project, ndkVersion = "29.0.13846066")
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2246:        val (_, mockCmake, _, cmakeArguments) = setUpMockExternalNativeBuild(project, ndkVersion = "29.0.13846066")
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2270:        val (_, mockCmake, _, cmakeArguments) = setUpMockExternalNativeBuild(project, ndkVersion = "29.0.13846066")
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2295:        val (_, mockCmake, _, cmakeArguments) = setUpMockExternalNativeBuild(project, ndkVersion = "29.0.13846066")
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginUtilsTest.kt:2379:        every { androidExtension.ndkVersion } returns "29.0.13846066"
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/tasks/BaseFlutterTaskHelperTest.kt:224:        // The exec function will be deprecated in gradle 8.11 and will be removed in gradle 9.0
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/tasks/BaseFlutterTaskHelperTest.kt:325:        // The exec function will be deprecated in gradle 8.11 and will be removed in gradle 9.0
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/tasks/EnableHcppManifestTaskTest.kt:350:        // Fixture captured from an actual AGP 8.11.1 processDebugMainManifest output
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:255:        val exampleErrorGradleVersion = "9.1.0"
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginTest.kt:1081:        const val FAKE_ENGINE_STAMP = "901b0f1afe77c3555abee7b86a26aaa37f131379"
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/AgpCommonExtensionWrapperTest.kt:105:        val appExt = mockk<ApplicationExtension>(relaxed = true) { every { ndkVersion } returns "29.0.1" }
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/AgpCommonExtensionWrapperTest.kt:110:        assertEquals("29.0.1", AgpCommonExtensionWrapper(appExt).ndkVersion)
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/testing/AndroidExtensionMocks.kt:26: * Default parameter values (e.g. `compileSdk = 35`, `ndkVersion = "29.0.13846066"`) serve as representative
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/testing/AndroidExtensionMocks.kt:38:    ndkVersion: String? = "29.0.13846066",
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/testing/AndroidExtensionMocks.kt:84:    ndkVersion: String? = "29.0.13846066",
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/testing/AndroidExtensionMocks.kt:140:    ndkVersion: String? = "29.0.13846066",
+===
+/tmp/flutter/engine/src/flutter/tools/gradle/generate_gradle_cipd_packages.dart
+/tmp/flutter/packages/flutter_tools/test/src/android_common.dart
+/tmp/flutter/packages/flutter_tools/test/android_java17_integration.shard/android_dependency_version_checking_test.dart
+/tmp/flutter/packages/flutter_tools/test/integration.shard/android_gradle_java_version_test.dart
+/tmp/flutter/packages/flutter_tools/test/integration.shard/isolated/native_assets_agp_version_test.dart
+/tmp/flutter/packages/flutter_tools/test/integration.shard/android_run_flutter_gradle_plugin_tests_test.dart
+/tmp/flutter/packages/flutter_tools/test/integration.shard/android_gradle_print_ndk_version_test.dart
+/tmp/flutter/packages/flutter_tools/test/integration.shard/flutter_build_apk_split_per_abi_test.dart
+/tmp/flutter/packages/flutter_tools/test/integration.shard/android_plugin_example_app_build_test.dart
+/tmp/flutter/packages/flutter_tools/test/integration.shard/android_gradle_asset_merging_test.dart
+
+$ sed -n '1,260p' /tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt
+// Copyright 2014 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+package com.flutter.gradle
+
+import com.android.build.api.AndroidPluginVersion
+import com.android.build.api.variant.AndroidComponentsExtension
+import com.android.build.api.variant.Variant
+import com.flutter.gradle.DependencyVersionChecker.AGP_NAME
+import com.flutter.gradle.DependencyVersionChecker.GRADLE_NAME
+import com.flutter.gradle.DependencyVersionChecker.JAVA_NAME
+import com.flutter.gradle.DependencyVersionChecker.KGP_NAME
+import com.flutter.gradle.DependencyVersionChecker.MIN_SDK_NAME
+import com.flutter.gradle.DependencyVersionChecker.POTENTIAL_JAVA_FIX
+import com.flutter.gradle.DependencyVersionChecker.errorAGPVersion
+import com.flutter.gradle.DependencyVersionChecker.errorGradleVersion
+import com.flutter.gradle.DependencyVersionChecker.errorJavaVersion
+import com.flutter.gradle.DependencyVersionChecker.errorKGPVersion
+import com.flutter.gradle.DependencyVersionChecker.errorMinSdkVersion
+import com.flutter.gradle.DependencyVersionChecker.firstUnsupportedAGPMajorVersion
+import com.flutter.gradle.DependencyVersionChecker.getErrorMessage
+import com.flutter.gradle.DependencyVersionChecker.getFlavorSpecificMessage
+import com.flutter.gradle.DependencyVersionChecker.getFutureUnsupportedMajorVersionErrorMessage
+import com.flutter.gradle.DependencyVersionChecker.getPotentialAGPFix
+import com.flutter.gradle.DependencyVersionChecker.getPotentialGradleFix
+import com.flutter.gradle.DependencyVersionChecker.getPotentialKGPFix
+import com.flutter.gradle.DependencyVersionChecker.getPotentialSDKFix
+import com.flutter.gradle.DependencyVersionChecker.getWarnMessage
+import com.flutter.gradle.DependencyVersionChecker.warnAGPVersion
+import com.flutter.gradle.DependencyVersionChecker.warnGradleVersion
+import com.flutter.gradle.DependencyVersionChecker.warnKGPVersion
+import com.flutter.gradle.DependencyVersionChecker.warnMinSdkVersion
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.slot
+import io.mockk.verify
+import org.gradle.api.Action
+import org.gradle.api.JavaVersion
+import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.logging.Logger
+import org.gradle.api.provider.Provider
+import org.gradle.api.provider.ProviderFactory
+import org.gradle.api.tasks.TaskContainer
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+
+private const val FAKE_PROJECT_ROOT_DIR = "/fake/root/dir"
+
+// The following values will need to be modified when the corresponding "warn$DepName" versions
+// are updated in DependencyVersionChecker.kt
+private const val SUPPORTED_GRADLE_VERSION: String = "9.5.0"
+private val SUPPORTED_JAVA_VERSION: JavaVersion = JavaVersion.VERSION_17
+private val SUPPORTED_AGP_VERSION: AndroidPluginVersion = AndroidPluginVersion(9, 3, 1)
+private const val SUPPORTED_KGP_VERSION: String = "2.4.20"
+private val SUPPORTED_SDK_VERSION: MinSdkVersion = MinSdkVersion("release", 30)
+
+class DependencyVersionCheckerTest {
+    @Test
+    fun `Template versions are considered supported`() {
+        val mockProject = MockProjectFactory.createMockProjectWithSpecifiedDependencyVersions()
+
+        val mockLogger = mockProject.logger
+        every { mockLogger.error(any()) } returns Unit
+        every { mockLogger.warn(any()) } returns Unit
+
+        DependencyVersionChecker.checkDependencyVersions(mockProject)
+
+        // Verify that no error or warning messages were logged.
+        verify(exactly = 0) { mockLogger.error(any()) }
+        verify(exactly = 0) { mockLogger.warn(any()) }
+    }
+
+    @Test
+    fun `AGP version in error range results in DependencyValidationException`() {
+        val exampleErrorAgpVersion = AndroidPluginVersion(9, 1, 0)
+        val mockProject = MockProjectFactory.createMockProjectWithSpecifiedDependencyVersions(agpVersion = exampleErrorAgpVersion)
+
+        val dependencyValidationException =
+            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+        assert(
+            dependencyValidationException.message ==
+                getErrorMessage(
+                    AGP_NAME,
+                    exampleErrorAgpVersion.toString(),
+                    errorAGPVersion.toString(),
+                    getPotentialAGPFix(FAKE_PROJECT_ROOT_DIR)
+                )
+        )
+    }
+
+    @Test
+    fun `AGP version in warn range results in warning logs`() {
+        val exampleWarnAgpVersion = AndroidPluginVersion(9, 1, 1)
+        val mockProject = MockProjectFactory.createMockProjectWithSpecifiedDependencyVersions(agpVersion = exampleWarnAgpVersion)
+
+        val mockLogger = mockProject.logger
+        every { mockLogger.error(any()) } returns Unit
+
+        DependencyVersionChecker.checkDependencyVersions(mockProject)
+        verify {
+            mockLogger.error(
+                getWarnMessage(
+                    AGP_NAME,
+                    exampleWarnAgpVersion.toString(),
+                    warnAGPVersion.toString(),
+                    getPotentialAGPFix(FAKE_PROJECT_ROOT_DIR)
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `AGP version with unsupported major version results in DependencyValidationException`() {
+        val exampleUnsupportedAgpVersion = AndroidPluginVersion(firstUnsupportedAGPMajorVersion, 0, 0)
+        val mockProject =
+            MockProjectFactory.createMockProjectWithSpecifiedDependencyVersions(agpVersion = exampleUnsupportedAgpVersion)
+
+        val dependencyValidationException =
+            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+        assertEquals(
+            getFutureUnsupportedMajorVersionErrorMessage(
+                AGP_NAME,
+                "$firstUnsupportedAGPMajorVersion.0.0",
+                firstUnsupportedAGPMajorVersion,
+                getPotentialAGPFix(FAKE_PROJECT_ROOT_DIR)
+            ),
+            dependencyValidationException.message
+        )
+    }
+
+    @Test
+    fun `AGP version above unsupported major version results in DependencyValidationException`() {
+        val exampleUnsupportedAgpVersion = AndroidPluginVersion(firstUnsupportedAGPMajorVersion, 3, 1)
+        val mockProject =
+            MockProjectFactory.createMockProjectWithSpecifiedDependencyVersions(agpVersion = exampleUnsupportedAgpVersion)
+
+        val dependencyValidationException =
+            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+        assertEquals(
+            getFutureUnsupportedMajorVersionErrorMessage(
+                AGP_NAME,
+                "$firstUnsupportedAGPMajorVersion.3.1",
+                firstUnsupportedAGPMajorVersion,
+                getPotentialAGPFix(FAKE_PROJECT_ROOT_DIR)
+            ),
+            dependencyValidationException.message
+        )
+    }
+
+    @Test
+    fun `AGP version below unsupported major version is considered supported`() {
+        val exampleSupportedAgpVersion = AndroidPluginVersion(firstUnsupportedAGPMajorVersion - 1, 99, 99)
+        val mockProject =
+            MockProjectFactory.createMockProjectWithSpecifiedDependencyVersions(agpVersion = exampleSupportedAgpVersion)
+
+        val mockLogger = mockProject.logger
+        every { mockLogger.error(any()) } returns Unit
+
+        DependencyVersionChecker.checkDependencyVersions(mockProject)
+
+        verify(exactly = 0) { mockLogger.error(any()) }
+    }
+
+    @Test
+    fun `KGP version in error range results in DependencyValidationException`() {
+        val exampleErrorKgpVersion = "2.4.0"
+        val mockProject = MockProjectFactory.createMockProjectWithSpecifiedDependencyVersions(kgpVersion = exampleErrorKgpVersion)
+
+        val dependencyValidationException =
+            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+
+        println(dependencyValidationException.message)
+        assert(
+            dependencyValidationException.message ==
+                getErrorMessage(
+                    KGP_NAME,
+                    exampleErrorKgpVersion,
+                    errorKGPVersion.toString(),
+                    getPotentialKGPFix(FAKE_PROJECT_ROOT_DIR)
+                )
+        )
+    }
+
+    @Test
+    fun `KGP version in warn range results in warning logs`() {
+        val exampleWarnKgpVersion = "2.4.10"
+        val mockProject = MockProjectFactory.createMockProjectWithSpecifiedDependencyVersions(kgpVersion = exampleWarnKgpVersion)
+
+        val mockLogger = mockProject.logger
+        every { mockLogger.error(any()) } returns Unit
+
+        DependencyVersionChecker.checkDependencyVersions(mockProject)
+        verify {
+            mockLogger.error(
+                getWarnMessage(
+                    KGP_NAME,
+                    exampleWarnKgpVersion,
+                    warnKGPVersion.toString(),
+                    getPotentialKGPFix(FAKE_PROJECT_ROOT_DIR)
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `AGP 9 built-in Kotlin skips KGP min version enforcement by default`() {
+        val mockProject =
+            MockProjectFactory.createMockProjectWithSpecifiedDependencyVersions(
+                kgpVersion = "2.2.10",
+                builtInKotlinProperty = null
+            )
+
+        val mockLogger = mockProject.logger
+        every { mockLogger.debug(any()) } returns Unit
+
+        DependencyVersionChecker.checkDependencyVersions(mockProject)
+
+        verify {
+            mockLogger.debug(
+                "Skipping Kotlin min-version enforcement because the project uses " +
+                    "AGP built-in Kotlin or does not apply KGP."
+            )
+        }
+    }
+
+    // No test for Java version in warn range, as the lowest supported Java version is also the
+    // lowest possible.
+    @Test
+    fun `Java version in error range results in error logs`() {
+        val exampleErrorJavaVersion = JavaVersion.VERSION_16
+        val mockProject = MockProjectFactory.createMockProjectWithSpecifiedDependencyVersions(javaVersion = exampleErrorJavaVersion)
+
+        val mockLogger = mockProject.logger
+        every { mockLogger.error(any()) } returns Unit
+
+        val dependencyValidationException =
+            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+        assert(
+            dependencyValidationException.message ==
+                getErrorMessage(
+                    JAVA_NAME,
+                    exampleErrorJavaVersion.toString(),
+                    errorJavaVersion.toString(),
+                    POTENTIAL_JAVA_FIX
+                )
+        )
+    }
+
+    @Test
+    fun `Gradle version in error range results in DependencyValidationException`() {
+        val exampleErrorGradleVersion = "9.1.0"
+        val mockProject = MockProjectFactory.createMockProjectWithSpecifiedDependencyVersions(gradleVersion = exampleErrorGradleVersion)
+
+        val dependencyValidationException =
+            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+
+$ find /tmp/flutter -name "DependencyVersionChecker.kt" && echo "---" && grep -n "errorGradleVersion\|warnGradleVersion\|errorAGPVersion\|warnAGPVersion\|errorKGPVersion\|warnKGPVersion\|firstUnsupportedAGPMajorVersion\|SUPPORTED\|MIN_SDK\|fun checkDependencyVersions\|gradleVersion\|9\.1\|8\.14\|8\.11" /tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/com/flutter/gradle/DependencyVersionChecker.kt
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt
+---
+grep: /tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/com/flutter/gradle/DependencyVersionChecker.kt: No such file or directory
+
+$ find /tmp/flutter -name "DependencyVersionChecker.kt" -path "*main*"
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt
+
