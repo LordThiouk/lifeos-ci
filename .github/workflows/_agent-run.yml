@@ -427,6 +427,21 @@ jobs:
           # dans ~/.claude/LIFEOS/MEMORY/STATE, impossible dans lifeos/ (lecture seule).
           cp -a lifeos/LIFEOS "$agent_home/.claude/LIFEOS"
           cp -a lifeos/hooks "$agent_home/.claude/hooks"
+          # Fiches attendues par la config opencode (~/.claude/agents/<Nom>.md).
+          # lifeos/agents = fiches Claude canoniques ; lifeos/opencode/agent =
+          # alias FullRun (code-reviewer, Vera, Serena) absents de lifeos/agents.
+          rm -rf "$agent_home/.claude/agents"
+          mkdir -p "$agent_home/.claude/agents"
+          if [ -d lifeos/agents ]; then
+            cp -a lifeos/agents/*.md "$agent_home/.claude/agents/"
+          fi
+          if [ -d lifeos/opencode/agent ]; then
+            for f in lifeos/opencode/agent/*.md; do
+              [ -e "$f" ] || continue
+              dest="$agent_home/.claude/agents/$(basename "$f")"
+              [ -e "$dest" ] || cp -a "$f" "$dest"
+            done
+          fi
           chmod -R u+w "$agent_home/.claude"
           mkdir -p "$agent_home/.claude/LIFEOS/MEMORY/STATE"
           if [ ! -e /home/box ] && [ ! -L /home/box ]; then
