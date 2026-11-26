@@ -2212,3 +2212,30 @@ VERDICT: PASS
 68 /tmp/task_done.md
 -rw-r--r-- 1 ubuntu ubuntu 3746 Nov 26 15:19 /tmp/task_done.md
 
+# Todos
+[✓] Vérifier l'état du dépôt (branche, HEAD, .fullrun, orphelins)
+[✓] Exécuter flutter test test/widget/course_en_cours_contract_test.dart et coller la sortie
+[✓] Contrôle rouge-avant (retrait temporaire setUpAll puis restauration)
+[✓] Contrôler qu'aucun golden/.fullrun n'a bougé
+[✓] Valider/corriger VERIFY-F429.md (1re ligne VERDICT) et unicité du commit
+[✓] Écrire /tmp/task_done.md factuel (SHA, tests, résultats)
+
+Exécution terminée. Résumé factuel :
+
+## Ce que disait le prompt
+Job `rider-f429-cr`, dépôt `Galass_Rider`, branche `verify/rider-f429-cr` — **rôle de vérification uniquement** : lancer `flutter test test/widget/course_en_cours_contract_test.dart`, coller la sortie, écrire `VERIFY-F429.md` (1re ligne `VERDICT: PASS|BLOCK`), **un** commit auteur Papa Diop, pas de push, pas de correction, aucun golden régénéré, `.fullrun` intact, résumé dans `/tmp/task_done.md`.
+
+## État trouvé au démarrage
+Le livrable existait déjà (artefacts d'un run antérieur, non poussé) : commit `de565ae` + `VERIFY-F429.md` + `/tmp/task_done.md`. Je **ne l'ai pas pris pour acquis** : je l'ai revérifié intégralement, et je n'ai pas créé de second commit (cela aurait violé « Un commit »).
+
+## Vérifications exécutées (indépendantes)
+1. **Test demandé** : `flutter test test/widget/course_en_cours_contract_test.dart` → **9/9 All tests passed**, exit 0, dont `ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING`. Sortie **strictement identique** (hors horodatages, `diff` nul) à celle collée dans `VERIFY-F429.md`.
+2. **Environnement** : confirmé que le SDK système (Flutter 3.35.6 / Dart 3.9.2) échoue sur `share_plus ^13.3.1` (Dart `>=3.10`) ; exécution sous Flutter 3.50.1 / Dart 3.14.0, comme documenté.
+3. **Rouge-avant** : retrait temporaire de `setUpAll(loadGoldenFonts);` → échec exact du test **a-b** avec « An animation is still running … RelayoutWhenSystemFontsChangeMixin » (exit 1) ; `git checkout` pour restaurer puis re-run → **9/9 verts**. Le correctif `fb2b0ff` est bien la condition du vert.
+4. **Propriété de l'arbre** : `pubspec.lock` / `analysis_options.yaml` réécrits par l'`pub get` implicite → restaurés ; `git status --porcelain` **vide**, `test/goldens/` inchangé, `.fullrun/` inchangé, aucun code modifié, aucun secret dans le diff.
+
+## Résultat
+- **VERDICT: PASS** — ISC-F4-29 a-b vérifié.
+- Commit unique : `de565ae52723df6f258a0475a42034cee202ac0b` — `Papa Diop <76528706+LordThiouk@users.noreply.github.com>` — « verify(rider): F4-29 a-b PASS — contract 9/9, red-before reproduced » (seul ajout : `VERIFY-F429.md`, 88 lignes, 1re ligne `VERDICT: PASS`).
+- Aucun push/merge/gh, `lifeos/` non touché.
+- `/tmp/task_done.md` réécrit (68 lignes) avec SHAs, sorties de tests et résultats.
