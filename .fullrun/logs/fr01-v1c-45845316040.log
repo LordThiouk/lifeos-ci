@@ -8357,3 +8357,73 @@ Try `flutter pub outdated` for more information.
 00:01 +7: ISC-F5-13 — « Annuler la course » reste visuellement distinct (danger) en RIDE_ACTIVE avec stops, Annuler reste danger distinct
 00:01 +8: All tests passed!
 
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && /tmp/flutter/bin/flutter analyze test/unit/multistop_end_gate_test.dart 2>&1 | tail -20
+vm_service 15.2.0 (15.4.0 available)
+  wakelock_plus 1.5.2 (1.8.2 available)
+  wakelock_plus_platform_interface 1.5.1 (1.7.0 available)
+  web 1.1.1 (1.1.2 available)
+  webview_flutter 4.13.1 (4.14.1 available)
+  webview_flutter_android 4.12.0 (4.14.1 available)
+  webview_flutter_wkwebview 3.25.1 (3.27.2 available)
+  win32 5.15.0 (6.4.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.6.1 (7.1.0 available)
+  yaml 3.1.3 (3.1.4 available)
+Got dependencies!
+1 package is discontinued.
+167 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing multistop_end_gate_test.dart...                       
+
+   info • 'package:flutter/material.dart' is deprecated and shouldn't be used. Use package:material_ui/material_ui.dart instead. This feature was deprecated after v3.47.0-0.0.pre. Try replacing the use of the deprecated member with the replacement • test/unit/multistop_end_gate_test.dart:1:1 • deprecated_member_use
+
+1 issue found. (ran in 11.4s)
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos && bun LIFEOS/TOOLS/ISATool.ts tick --isc ISC-F5-13 --evidence "flutter test test/unit/multistop_end_gate_test.dart -> 8/8 passed (ISC-F5-13: Annuler danger distinct du CTA principal en RIDE_ACTIVE, avec et sans stops) ; flutter analyze test/unit/multistop_end_gate_test.dart -> 1 info deprecated_member_use pré-existant, 0 errors" /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+introuvable: --isc
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos && grep -n "tick" LIFEOS/TOOLS/ISATool.ts | head -30
+64:// ── human-tick : coche d'une claim `[scope:human — raison]` par le principal, signée ─────────────────────────
+65:// Une claim humaine (ratification, acte de Papa) n'est jamais cochée par un agent : `tick` la laisserait passer
+66:// pour une preuve outil. `human-tick` exige la clé ISA_STAMP_KEY dans l'ENVIRONNEMENT (secret du principal ou de
+93:export interface HumanTickPayload { v: 1; op: "human-tick"; isa: string; isc: string; claim: string; evidence: string; by: string; at: string }
+105:  const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(text, isaPath), isc, claim: lines[idx]!.trim(), evidence: m[1]!, by: m[2]!, at: m[3]! };
+118:  if (!cmd || !path) { console.log(`usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+121:  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+122:  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+127:  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+139:  } else if (cmd === "tick" || cmd === "untick") {
+142:    const optName = cmd === "tick" ? "evidence" : "reason";
+145:    t = t.replace(re, `$1[${cmd === "tick" ? "x" : " "}]$2`);
+148:    const sha = cmd === "tick" ? headShort(path) : null;
+149:    const line = cmd === "tick" ? `- ${isc}: ${note}${sha ? ` [@${sha}]` : ""}` : `- ${isc}: NON VALIDÉ — ${note}`;
+150:    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`; save(path, t, `${cmd === "tick" ? "evidence" : "reason"}:${isc}`);
+151:  } else if (cmd === "human-tick" || cmd === "human-verify") {
+165:    if (!isHumanScoped(lines, idx)) { console.error(`human-tick refusé : ${isc} n'est pas marquée [scope:human — raison] (sur sa ligne ou le titre ### de son bloc). Une claim de build se coche avec \`tick\` sur preuve outil.`); process.exit(HUMAN_TICK_EXIT.NOT_HUMAN); }
+170:    const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(t, path), isc, claim: lines[idx]!.trim(), evidence, by, at };
+174:    save(path, t, `human-tick:${isc}`);
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos && bun LIFEOS/TOOLS/ISATool.ts tick /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md --isc ISC-F5-13 --evidence "flutter test test/unit/multistop_end_gate_test.dart -> 8/8 passed (ISC-F5-13: Annuler danger distinct du CTA principal en RIDE_ACTIVE, avec et sans stops) ; flutter analyze test/unit/multistop_end_gate_test.dart -> 1 info deprecated_member_use pré-existant, 0 errors"
+ISATool tick:ISC-F5-13 ok → /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md (progress 17/21, hmac-sha256:211b45a14584…)
+ISATool evidence:ISC-F5-13 ok → /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md (progress 17/21, hmac-sha256:c91a152f7104…)
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && grep -n "ISC-F5-13" MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+144:| ISC-F5-13 | widget      | « Annuler la course » reste visuellement distinct (couleur danger) du CTA principal, quel que soit l'état | bgColor danger ≠ bgColor CTA principal | flutter test test/unit/multistop_end_gate_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23) | literal |
+148:| ISC-F5-17 | widget      | **Contrat d'écran** « Driver en course » (RIDE_RUNNING, dérivé du code actuel 2026-11-23) — présence testée individuellement de : avatar+nom+note (`UserDetailsWidget`), bouton message, bouton appel, un seul CTA principal actionnable (ISC-F5-12), « Annuler la course » distinct-danger (ISC-F5-13), bloc itinéraire pickup→arrêts→destination, repères d'arrêts sur la carte (ISC-F5-16). **Règle « ajouter sans retirer »** : retirer un de ces éléments exige une ligne ISA explicite validée par Papa. | 7 assertions `find.byKey`/`find.text` toutes vertes, une par élément listé | flutter test test/widget/course_en_cours_driver_contract_test.dart (golden) | ISC-F5-12, ISC-F5-13, ISC-F5-16 |
+220:- [x] ISC-F5-13: « Annuler la course » est clairement une action dangereuse, différente de l'action principale. **Audit code** : déjà vrai aujourd'hui (`bgColor: MyColor.redCancelTextColor` = `0xFFF93E2C`, l.217-225, vs couleur primaire par défaut du CTA principal) — ce claim verrouille ce comportement correct en régression plutôt que de supposer un bug.
+317:- ISC-F5-13: flutter test test/unit/multistop_end_gate_test.dart -> 8/8 passed (ISC-F5-13: Annuler danger distinct du CTA principal en RIDE_ACTIVE, avec et sans stops) ; flutter analyze test/unit/multistop_end_gate_test.dart -> 1 info deprecated_member_use pré-existant, 0 errors [@32607ee]
+333:- [ ] **F6 revue UI téléphone** — ISC-F5-12 (CTA unique par état), ISC-F5-13 (Annuler = danger, verrou régression), ISC-F5-14 (retrait compteur, supersède ISC-F5-3 partie compteur, **contrat repère fixé 2026-11-23** : `Semantics` `galass.driver.stops=<done>/<total>`), ISC-F5-15 (pas de libellé générique au dernier arrêt ; **infirmé visuellement** sur `driver_ride_running_multistop_all_stops_done.png`, garde maintenue), ISC-F5-16 (markers actif/estompé+numéroté, étend ISC-F5-4), ISC-F5-17 (contrat d'écran « Driver en course », règle ajouter-sans-retirer), ISC-F5-18 (goldens stop1/stop2 actifs distincts — **mesuré identiques** aujourd'hui). Aucun code tant que ces ISC ne sont pas construits (TDD rouge→vert). Dépend des goldens `test/goldens/driver/` (depuis `main`, worktree séparé) et de la porte CI golden-diff (ISA harnais emu).
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git check-ignore MEMORY/WORK/20261006-galass-driver-multistop/ISA.md; echo "exit: $?"; git status --short
+exit: 1
+ M MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+ M test/unit/multistop_end_gate_test.dart
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git add test/unit/multistop_end_gate_test.dart && git commit --author="Papa Diop <76528706+LordThiouk@users.noreply.github.com>" -m "test(driver): ISC-F5-13 verrouille Annuler = danger distinct du CTA principal" 2>&1 | tail -10
+[build/driver-f5-13c a35a0fe] test(driver): ISC-F5-13 verrouille Annuler = danger distinct du CTA principal
+ 1 file changed, 94 insertions(+)
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git add MEMORY/WORK/20261006-galass-driver-multistop/ISA.md && git commit --author="Papa Diop <76528706+LordThiouk@users.noreply.github.com>" -m "isa(driver): coche ISC-F5-13 (preuve flutter test 8/8)" 2>&1 | tail -10
+[build/driver-f5-13c d514f2f] isa(driver): coche ISC-F5-13 (preuve flutter test 8/8)
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
