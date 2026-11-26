@@ -12,6 +12,7 @@ TESTS=(
   agent-run-wippush-test.sh
   agent-run-silence-test.sh
   silence-watch-test.sh
+  wstunnel-up-test.sh
   agents-load-test.sh
   allowed-repos-test.sh
   allowed-repos-lifeos-test.sh

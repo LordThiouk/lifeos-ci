@@ -3,7 +3,9 @@
 # Toute ligne non vide et non commentée = opencode/*-free ou opencode/big-pickle.
 #
 # Probes (IP US Oregon, opencode 1.19.4) : OK sauf tidepool-alpha-free (unavailable).
-# Accès hors US / IP bloquée : secret GitHub OPENCODE_HTTPS_PROXY (http(s)|socks5).
+# Accès hors US / IP bloquée :
+#   OPENCODE_WSTUNNEL_URL (wss://… — prioritaire, streaming OK depuis GH)
+#   ou OPENCODE_HTTPS_PROXY (http(s)|socks5 — bore fragile pour le stream).
 # Ne sert PAS à multiplier le quota free — uniquement à joindre l'API.
 opencode/deepseek-v4.1-flash-free
 opencode/mimo-v2.6-flash-free

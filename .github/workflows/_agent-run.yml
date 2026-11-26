@@ -72,6 +72,10 @@ on:
       # Proxy optionnel (http(s)|socks5) si l'IP du runner est géo-bloquée pour opencode.ai.
       OPENCODE_HTTPS_PROXY:
         required: false
+      # Tunnel WebSocket (wstunnel) — préféré à bore pour le streaming LLM depuis GH.
+      # Ex. wss://xxx.trycloudflare.com pointant vers un wstunnel server US.
+      OPENCODE_WSTUNNEL_URL:
+        required: false
     outputs:
       status:
         description: "ok, quota, timeout, vide ou erreur"
@@ -745,6 +749,8 @@ jobs:
           # Proxy optionnel (http(s):// ou socks5://) pour joindre opencode.ai si l'IP
           # du runner / du poste est géo-bloquée. Ne multiplie pas le quota free.
           OPENCODE_HTTPS_PROXY: ${{ secrets.OPENCODE_HTTPS_PROXY }}
+          # Tunnel WS (prioritaire) : contourne le mute stream observé via bore.pub.
+          OPENCODE_WSTUNNEL_URL: ${{ secrets.OPENCODE_WSTUNNEL_URL }}
           MODEL_NORM: ${{ steps.validate.outputs.model_norm }}
           LIVE_BRANCH: ${{ steps.live.outputs.branch }}
         run: |
@@ -764,8 +770,13 @@ jobs:
           if [ -n "${HF_TOKEN:-}" ]; then
             hf_env+=(HF_TOKEN="$HF_TOKEN" HUGGING_FACE_HUB_TOKEN="$HF_TOKEN")
           fi
-          proxy_env=()
-          if [ -n "${OPENCODE_HTTPS_PROXY:-}" ]; then
+          # WStunnel prioritaire : montee un proxy HTTP local vers le serveur US.
+          # Fallback : OPENCODE_HTTPS_PROXY (bore / SOCKS) si WSTUNNEL absent.
+          effective_proxy=""
+          if [ -n "${OPENCODE_WSTUNNEL_URL:-}" ]; then
+            effective_proxy="$(bash "$TOOLS_DIR/opencode/wstunnel-up.sh")"
+            echo "Proxy wstunnel activé → $effective_proxy"
+          elif [ -n "${OPENCODE_HTTPS_PROXY:-}" ]; then
             case "$OPENCODE_HTTPS_PROXY" in
               http://*|https://*|socks5://*|socks5h://*) ;;
               *)
@@ -773,15 +784,19 @@ jobs:
                 exit 1
                 ;;
             esac
-            proxy_env+=(
-              HTTPS_PROXY="$OPENCODE_HTTPS_PROXY"
-              HTTP_PROXY="$OPENCODE_HTTPS_PROXY"
-              ALL_PROXY="$OPENCODE_HTTPS_PROXY"
-              https_proxy="$OPENCODE_HTTPS_PROXY"
-              http_proxy="$OPENCODE_HTTPS_PROXY"
-              all_proxy="$OPENCODE_HTTPS_PROXY"
-            )
+            effective_proxy="$OPENCODE_HTTPS_PROXY"
             echo "Proxy opencode activé (schéma $(printf '%s' "$OPENCODE_HTTPS_PROXY" | cut -d: -f1))"
+          fi
+          proxy_env=()
+          if [ -n "$effective_proxy" ]; then
+            proxy_env+=(
+              HTTPS_PROXY="$effective_proxy"
+              HTTP_PROXY="$effective_proxy"
+              ALL_PROXY="$effective_proxy"
+              https_proxy="$effective_proxy"
+              http_proxy="$effective_proxy"
+              all_proxy="$effective_proxy"
+            )
           fi
           mapfile -t models < <(bash "$TOOLS_DIR/opencode/quota.sh" list "$TOOLS_DIR/models.txt")
           [ "${#models[@]}" -gt 0 ] || { echo "::error::models.txt vide"; exit 1; }
