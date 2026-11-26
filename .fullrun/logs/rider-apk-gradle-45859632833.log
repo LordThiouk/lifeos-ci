@@ -3124,3 +3124,53 @@ Silence 180s sans nouvelle sortie (journal=48 o) : coupure opencode pid=569035
 > Forge · seaglass-alpha-free
 
 → Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+$ pwd && ls -la
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+total 252
+drwxr-xr-x 17 ubuntu ubuntu  4096 Nov 26 22:04 .
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 21:46 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 21:46 .archive
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 22:04 .dart_tool
+-rw-r--r--  1 ubuntu ubuntu 34752 Nov 26 22:04 .flutter-plugins-dependencies
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 21:46 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 22:22 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 21:46 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1079 Nov 26 21:46 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  7714 Nov 26 21:46 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu 14109 Nov 26 21:46 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu    70 Nov 26 21:46 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 15826 Nov 26 21:46 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 21:46 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  2970 Nov 26 21:46 README.md
+-rw-r--r--  1 ubuntu ubuntu  1662 Nov 26 21:46 analysis_options.yaml
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 22:04 android
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 21:46 assets
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 22:04 build
+-rw-r--r--  1 ubuntu ubuntu   392 Nov 26 21:46 dart_test.yaml
+-rw-r--r--  1 ubuntu ubuntu   184 Nov 26 21:46 devtools_options.yaml
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 21:46 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 21:46 fastlane
+-rw-r--r--  1 ubuntu ubuntu   639 Nov 26 21:46 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 21:46 ios
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 21:46 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 21:46 prompts
+-rw-r--r--  1 ubuntu ubuntu 70417 Nov 26 22:04 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  2947 Nov 26 22:04 pubspec.yaml
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 21:46 test
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 21:46 tool
+
+$ git status && git branch --show-current && git log --oneline -5
+On branch feat/multistop-e2e-2026-11-15
+Your branch is ahead of 'origin/feat/multistop-e2e-2026-11-15' by 3 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+feat/multistop-e2e-2026-11-15
+9443d49 fix(driver-f5-19): run ride_map_live_location tests green (teardown hang fix)
+c526ef3 wip(autosave): arbre de travail
+eb3b8d8 isa(driver): tick ISC-F5-19 live car location in ride
+589a7d7 isa(driver): Papa confirme liste ISC-F5-17 (7 éléments figés)
+3fe5b84 wip(driver-f5-19): partial work (agent stopped)
+
+Je vais lire le prompt et exécuter ISC-F5-19 uniquement. Commençons par inspecter l'environnement.
