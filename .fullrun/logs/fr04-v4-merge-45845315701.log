@@ -6190,3 +6190,90 @@ android/gradle.properties                        | 19 ++++++++++++-------
  android/settings.gradle.kts                      |  6 +++---
  3 files changed, 16 insertions(+), 11 deletions(-)
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git -c user.name="Papa Diop" -c user.email="76528706+LordThiouk@users.noreply.github.com" commit -m "build(android): align Rider toolchain with Flutter 3.50.1
+
+- Downgrade Gradle wrapper 9.1.0 -> 8.14 (match Driver, accepted by Flutter 3.50.1)
+- Downgrade AGP 9.0.1 -> 8.11.1
+- Align Kotlin 2.2.20 -> 2.3.0 and Crashlytics plugin 3.0.7 -> 3.0.3
+- Align gradle.properties with Driver-stable flags (keep android.enableJetifier=false)
+
+No lib/ changes. Not built locally (flutter build/gradlew forbidden on box)." && git log --oneline -3
+On branch build/rider-apk-gradle
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   android/gradle.properties
+	modified:   android/gradle/wrapper/gradle-wrapper.properties
+	modified:   android/settings.gradle.kts
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git add android/gradle.properties android/gradle/wrapper/gradle-wrapper.properties android/settings.gradle.kts && git -c user.name="Papa Diop" -c user.email="76528706+LordThiouk@users.noreply.github.com" commit -m "build(android): align Rider toolchain with Flutter 3.50.1
+
+- Downgrade Gradle wrapper 9.1.0 -> 8.14 (match Driver, accepted by Flutter 3.50.1)
+- Downgrade AGP 9.0.1 -> 8.11.1
+- Align Kotlin 2.2.20 -> 2.3.0 and Crashlytics plugin 3.0.7 -> 3.0.3
+- Align gradle.properties with Driver-stable flags (keep android.enableJetifier=false)
+
+No lib/ changes. Not built locally (flutter build/gradlew forbidden on box)." && git log --oneline -3
+[build/rider-apk-gradle 207d752] build(android): align Rider toolchain with Flutter 3.50.1
+ 3 files changed, 16 insertions(+), 11 deletions(-)
+207d752 build(android): align Rider toolchain with Flutter 3.50.1
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && echo "===author===" && git log -1 --format='%an <%ae>' && echo "===diff stat vs fcdd581===" && git diff --stat fcdd581..HEAD && echo "===changed files===" && git diff --name-only fcdd581..HEAD && echo "===verify no lib/.fullrun/golden===" && git diff --name-only fcdd581..HEAD | grep -E "lib/|\.fullrun|golden" || echo "none (good)"
+===author===
+Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+===diff stat vs fcdd581===
+ android/gradle.properties                        | 19 ++++++++++++-------
+ android/gradle/wrapper/gradle-wrapper.properties |  2 +-
+ android/settings.gradle.kts                      |  6 +++---
+ 3 files changed, 16 insertions(+), 11 deletions(-)
+===changed files===
+android/gradle.properties
+android/gradle/wrapper/gradle-wrapper.properties
+android/settings.gradle.kts
+===verify no lib/.fullrun/golden===
+none (good)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && find android -name "*.kt" -o -name "*.java" | head && echo "---" && cat android/app/src/main/kotlin/sn/galass/galassrider/MainActivity.kt 2>/dev/null; find android -name "MainActivity*"
+android/app/src/main/kotlin/sn/galass/galassrider/MainActivity.kt
+android/app/src/main/java/sn/galass/galassrider/security/CredentialManager.kt
+android/app/src/main/java/sn/galass/galassrider/security/CredentialSetup.kt
+---
+package sn.galass.galassrider
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}
+android/app/src/main/kotlin/sn/galass/galassrider/MainActivity.kt
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "java.time\|java.util.*\|record \|sealed \|switch.*->\|text blocks\|\.toList()" android/app/src/main/java/sn/galass/galassrider/security/ | head
+(no output)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls VERIFY-F434B.md 2>/dev/null && echo "STILL EXISTS" || echo "removed (good)"; echo "---"; git status --short; echo "---branch---"; git branch --show-current
+removed (good)
+---
+---branch---
+build/rider-apk-gradle
+
+← Write /tmp/task_done.md
+Wrote file successfully.
+
+Tâche exécutée. Résumé :
+
+- Branche `build/rider-apk-gradle` réinitialisée sur `feat/multistop-e2e-2026-11-15` @ F4-29 (`fcdd581`), sans le commit de vérification parasite ni `VERIFY-F434B.md`.
+- Un seul commit ajouté : `207d752` — auteur Papa Diop `<76528706+LordThiouk@users.noreply.github.com>`.
+- Alignement toolchain Android sur Driver/Flutter 3.50.1 :
+  - `gradle-wrapper.properties` : Gradle 9.1.0 → **8.14**
+  - `settings.gradle.kts` : AGP 9.0.1 → **8.11.1**, Crashlytics 3.0.7 → **3.0.3**, Kotlin 2.2.20 → **2.3.0**
+  - `gradle.properties` : aligné Driver (jvmargs Xmx8G, cache/parallel/daemon/configureondemand/vfs.watch), `android.enableJetifier=false` conservé
+- `lib/` inchangé, aucun golden régénéré, `.fullrun` non touché, pas de push, pas de build local.
+- Note écrite dans `/tmp/task_done.md`.
+
+> Forge · hy4-flash-free
+
+I'll read the prompt file first.
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
