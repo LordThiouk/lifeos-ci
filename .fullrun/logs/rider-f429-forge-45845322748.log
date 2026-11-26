@@ -16456,3 +16456,49 @@ google
 lifeos-ci-state
 lifeos-ci-tools
 
+$ ls /opt/fullrun-tools /opt/fullrun-live 2>/dev/null | head -40; find / -maxdepth 4 -name 'php' -type f 2>/dev/null | head; find /nix -maxdepth 3 -name 'php*' 2>/dev/null | head
+/opt/fullrun-live:
+isa.key
+live.bundle
+pid
+repo.git
+status
+tip
+us-box-cursor
+us-box-cursor-2
+us-box-cursor-3
+worker.pid
+
+/opt/fullrun-tools:
+allowed-repos.sh
+autosave-deny.txt
+autosave.sh
+bench-capped
+checkpoint.sh
+done-check-call.sh
+done_check.sh
+emu-e2e.sh
+gitleaks
+gitleaks.toml
+leaklog.sh
+livelog.sh
+log-recipient.txt
+merge-signed-carry.sh
+progress.sh
+redact-log.sh
+us-box-cursor
+us-box-cursor-2
+us-box-cursor-3
+wippush.sh
+
+$ whoami; command -v apt-get apt nix nix-shell; find / -name 'php8*' -maxdepth 6 2>/dev/null | head
+ubuntu
+/usr/bin/apt-get
+/usr/bin/apt
+
+$ find / -name 'php' \( -type f -o -type l \) 2>/dev/null | grep -v proc | head; ls /usr/bin | grep -i php; ls /home/ubuntu | head -30
+actions-runner
+actions-runner-2
+actions-runner-3
+go
+
