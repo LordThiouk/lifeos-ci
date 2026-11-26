@@ -2053,3 +2053,129 @@ $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "IS
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "\- \[.\] ISC-F5-19" MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
 229:- [x] ISC-F5-19: **Pendant RIDE_ACTIVE et RIDE_RUNNING, la voiture du chauffeur est mise à jour en temps réel sur la carte Driver (flux GPS → marqueur voiture partagé `marker_car.png` → caméra) ET sa position est envoyée au backend (`POST driver/location-update`, broadcast Pusher côté Rider).** Audit code 2026-11-25 (lecture seule) : affichage **PARTIEL** — `ride_map_controller.dart` l.88/333-340 ne lit la position qu'une fois via `Geolocator.getCurrentPosition` au `loadMap`, le marqueur `driver_location` (l.209-222, icône `MyIcons.markerCar` = `assets/icon/marker_car.png`, l.313) reste figé, et la caméra ne cadre qu'à l'ouverture (`poly_line_map.dart` l.43-46, `ride_map_controller.dart` l.406-412) ; le suivi temps réel de la home (`home_screen.dart` l.376-388) est mis en pause dès l'ouverture de la course (`didPushNext` l.95-99). Envoi backend **PARTIEL** — aucun ping dédié course dans `ride_details_*` ; seul le service foreground envoie `driver/location-update` (`forground_location_service.dart` l.79-114/121-152, `dashboard_repo.dart` l.38-51, `url_container.dart` l.74), uniquement si le chauffeur est online (`forground_location_service.dart` l.34-39, `main.dart` l.121-126) ; `maybePingServerLocation` (`dashboard_controller.dart` l.65-91) est lui aussi coupé avec la home. Falsifier: un test widget/unit montre le marqueur `driver_location` qui change sur un flux GPS pendant RIDE_ACTIVE/RUNNING et une requête `driver/location-update` émise depuis l'écran course, ou une capture device où la voiture avance et la caméra suit. Cross: ISC-F4-32 (Rider). [app: Driver · classe: temps réel carte+backend · preuve: widget + grep]
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && find test -name "*ride_map_live_location*" -o -name "*live_location*" 2>/dev/null; echo "---"; ls test/unit 2>/dev/null | grep -i live; echo "---probe---"; cat test/unit/tmp_probe_test.dart 2>/dev/null | head -120
+test/unit/ride_map_live_location_test.dart
+---
+ride_map_live_location_test.dart
+---probe---
+import 'dart:async';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:galass_driver/core/utils/my_icons.dart';
+import 'package:galass_driver/core/utils/url_container.dart';
+import 'package:galass_driver/data/controller/map/ride_map_controller.dart';
+import 'package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_model.dart';
+import 'package:galass_driver/data/repo/dashboard/dashboard_repo.dart';
+import 'package:galass_driver/data/repo/polyline/polyline_repo.dart';
+import 'package:galass_driver/data/repo/ride/ride_repo.dart';
+import 'package:galass_driver/data/services/api_client.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../helpers/recording_api_client.dart';
+
+class _MapRepo extends PolylineRepo {
+  _MapRepo({required super.apiClient});
+}
+
+class _RideRepo extends RideRepo {
+  _RideRepo({required super.apiClient});
+}
+
+class _CountingApiClient extends RecordingApiClient {
+  _CountingApiClient({required super.sharedPreferences});
+
+  final List<({String uri, Map<String, dynamic>? params})> calls = [];
+
+  @override
+  Future<ResponseModel> request(
+    String uri,
+    String method,
+    Map<String, dynamic>? params, {
+    bool passHeader = false,
+    bool isOnlyAcceptType = false,
+    bool skipAuthSideEffects = false,
+    bool redactSensitiveLogs = false,
+  }) {
+    calls.add((uri: uri, params: params));
+    return super.request(
+      uri,
+      method,
+      params,
+      passHeader: passHeader,
+      isOnlyAcceptType: isOnlyAcceptType,
+      skipAuthSideEffects: skipAuthSideEffects,
+      redactSensitiveLogs: redactSensitiveLogs,
+    );
+  }
+}
+
+RideModel _ride(String status) => RideModel(id: 'ride-live-19', status: status);
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  late _CountingApiClient apiClient;
+  late RideMapController mapController;
+  late RideDetailsController details;
+  late StreamController<LatLng> positions;
+
+  setUp(() async {
+    Get.testMode = true;
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    apiClient = _CountingApiClient(sharedPreferences: prefs);
+    Get.put<ApiClient>(apiClient);
+    mapController = RideMapController(
+      polylineRepo: _MapRepo(apiClient: apiClient),
+    );
+    details = RideDetailsController(
+      repo: _RideRepo(apiClient: apiClient),
+      mapController: mapController,
+      locationRepo: DashBoardRepo(apiClient: apiClient),
+    );
+    Get.put(details);
+    positions = StreamController<LatLng>();
+  });
+
+  tearDown(() async {
+    Get.reset();
+  });
+
+  group('probe', () {
+    test('trivial asset expect', () {
+      expect(MyIcons.markerCar, 'assets/icon/marker_car.png');
+    });
+  });
+}
+
+→ Read test/unit/ride_map_live_location_test.dart
+→ Read lib/data/controller/ride/ride_details/ride_details_controller.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && flutter --version 2>&1 | head; echo "---dart---"; dart --version 2>&1; echo "---pub cache---"; ls ~/.pub-cache 2>/dev/null | head; find / -name "flutter" -type f 2>/dev/null | head
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+---dart---
+Dart SDK version: 3.9.2 (stable) (Wed Aug 27 03:49:40 2025 -0700) on "linux_x64"
+---pub cache---
+hosted
+/opt/flutter/bin/flutter
+/tmp/flutter_sdk/flutter/bin/flutter
+/tmp/flutter/bin/flutter
+
+$ ls /tmp/flutter_sdk 2>/dev/null; echo "---"; /tmp/flutter_sdk/flutter/bin/flutter --version 2>&1 | head -3; echo "---pub cache size---"; du -sh ~/.pub-cache 2>/dev/null; ls ~/.pub-cache/hosted 2>/dev/null
+flutter
+flutter3501.tar.xz
+---
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ae9b586f34 (8 days ago) • 2026-11-18 17:01:07 -0800
+Engine • hash 51379e6df48ea8ee7205623b90fe66491cad8df3 (revision 4d35714800) (8 days ago) • 2026-11-18 01:50:07.000Z
+---pub cache size---
+15M	/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.pub-cache
+pub.dev
+
