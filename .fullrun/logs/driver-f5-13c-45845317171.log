@@ -3660,3 +3660,37 @@ lrwxrwxrwx. 1 root root      5 May 27  2024 clang++ -> clang
 lrwxrwxrwx. 1 root root      5 May 27  2024 clang-18 -> clang
 lrwxrwxrwx. 1 root root      5 May 27  2024 clang-cpp -> clang
 
+$ PATH=/tmp/fake-llvm-bin:$PATH flutter test --no-pub test/unit/ride_map_live_location_test.dart 2>&1 | tail -20
+Failed to find llvm-ar relative to LocalFile: '/usr/lib/llvm-18/bin/clang': LocalFile: '/usr/lib/llvm-18/bin/llvm-ar' doesn't exist.
+
+$ mkdir -p /tmp/forge-llvm-bin && cp /usr/lib/llvm-18/bin/clang /tmp/forge-llvm-bin/clang && cp /usr/lib/llvm-18/bin/clang /tmp/forge-llvm-bin/clang++ && ln -sf /usr/bin/ar /tmp/forge-llvm-bin/llvm-ar && ln -sf /usr/bin/ld /tmp/forge-llvm-bin/ld.lld && ls -la /tmp/forge-llvm-bin/
+total 316
+drwxr-xr-x   2 ubuntu ubuntu   4096 Nov 26 22:29 .
+drwxrwxrwt. 51 root   root    28672 Nov 26 22:29 ..
+-rwxr-xr-x   1 ubuntu ubuntu 140592 Nov 26 22:29 clang
+-rwxr-xr-x   1 ubuntu ubuntu 140592 Nov 26 22:29 clang++
+lrwxrwxrwx   1 ubuntu ubuntu     11 Nov 26 22:29 ld.lld -> /usr/bin/ld
+lrwxrwxrwx   1 ubuntu ubuntu     11 Nov 26 22:29 llvm-ar -> /usr/bin/ar
+
+$ PATH=/tmp/forge-llvm-bin:$PATH flutter test --no-pub test/unit/ride_map_live_location_test.dart 2>&1 | tail -20
+^
+../../../../../.pub-cache/hosted/pub.dev/record_use-0.6.0/lib/src/recordings.dart:1:1: Error: The language version 3.10 specified for the package 'record_use' is too high. The highest supported language version is 3.9.
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+^
+../../../../../.pub-cache/hosted/pub.dev/record_use-0.6.0/lib/src/reference.dart:1:1: Error: The language version 3.10 specified for the package 'record_use' is too high. The highest supported language version is 3.9.
+// Copyright (c) 2024, the Dart project authors.  Please see the AUTHORS file
+^
+../../../../../.pub-cache/hosted/pub.dev/record_use-0.6.0/lib/src/serialization_context.dart:1:1: Error: The language version 3.10 specified for the package 'record_use' is too high. The highest supported language version is 3.9.
+// Copyright (c) 2026, the Dart project authors.  Please see the AUTHORS file
+^
+../../../../../.pub-cache/hosted/pub.dev/record_use-0.6.0/lib/src/syntax.g.dart:1:1: Error: The language version 3.10 specified for the package 'record_use' is too high. The highest supported language version is 3.9.
+// Copyright (c) 2025, the Dart project authors. Please see the AUTHORS file
+^
+Bad state: Generating kernel failed!
+
+stdout:
+Compiling /home/ubuntu/.pub-cache/hosted/pub.dev/objective_c-9.4.1/hook/build.dart to kernel file /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.dart_tool/hooks_runner/objective_c/538b655446c224260abd936559e280e6/hook.dill.
+
+
+Building native assets failed. See the logs for more details.
+
