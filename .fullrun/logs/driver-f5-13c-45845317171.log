@@ -16633,3 +16633,83 @@ echo '=== security group ==='; php artisan test --group=security 2>&1 | grep -E 
 === security group ===
    INFO  No tests found.
 
+$ ls core/tests/Feature/Admin/ | grep -i 'ManageDrivers\|Vehicle' ; find core/tests -iname 'ManageDrivers*'; grep -rl "group=security\|@group security\|#\[Group('security')\]\|->group('security')" core/tests | head
+AdminVehicleRedirectTest.php
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core; php artisan test --filter=ServiceOrderVisibilityTest 2>&1 | head -30
+#!/usr/bin/env php
+
+   FAIL  Tests\Feature\Admin\ServiceOrderVisibilityTest
+  ✓ migration adds sort order and visibility with initial order          0.13s  
+  ⨯ admin can reorder and toggle visibility                              0.05s  
+  ✓ rider service api returns admin order and excludes hidden            0.01s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Admin\ServiceOrderVisibilityTest > admin can reorde…   
+  Expected response status code [201, 301, 302, 303, 307, 308] but received 500.
+Failed asserting that false is true.
+
+The following exception occurred during the last request:
+
+PDOException: SQLSTATE[HY000]: General error: 1 no such table: general_settings in /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Connection.php:407
+Stack trace:
+#0 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Connection.php(407): PDO->prepare('select * from "...')
+#1 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Connection.php(812): Illuminate\Database\Connection->Illuminate\Database\{closure}('select * from "...', Array)
+#2 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Connection.php(779): Illuminate\Database\Connection->runQueryCallback('select * from "...', Array, Object(Closure))
+#3 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Connection.php(398): Illuminate\Database\Connection->run('select * from "...', Array, Object(Closure))
+#4 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(3106): Illuminate\Database\Connection->select('select * from "...', Array, true)
+#5 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(3091): Illuminate\Database\Query\Builder->runSelect()
+#6 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(3676): Illuminate\Database\Query\Builder->Illuminate\Database\Query\{closure}()
+#7 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(3090): Illuminate\Database\Query\Builder->onceWithColumns(Array, Object(Closure))
+#8 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(811): Illuminate\Database\Query\Builder->get(Array)
+#9 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(793): Illuminate\Database\Eloquent\Builder->getModels(Array)
+#10 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Concerns/BuildsQueries.php(343): Illuminate\Database\Eloquent\Builder->get(Array)
+#11 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php(23): Illuminate\Database\Eloquent\Builder->first()
+#12 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2372): Illuminate\Database\Eloquent\Model->forwardCallTo(Object(Illuminate\Database\Eloquent\Builder), 'first', Array)
+#13 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2384): Illuminate\Database\Eloquent\Model->__call('first', Array)
+#14 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Helpers/helpers.php(529): Illuminate\Database\Eloquent\Model::__callStatic('first', Array)
+
+$ grep -n "public function isFillable" -A 14 core/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/GuardsAttributes.php
+167:    public function isFillable($key)
+168-    {
+169-        if (static::$unguarded) {
+170-            return true;
+171-        }
+172-
+173-        // If the key is in the "fillable" array, we can of course assume that it's
+174-        // a fillable attribute. Otherwise, we will check the guarded array when
+175-        // we need to determine if the attribute is black-listed on the model.
+176-        if (in_array($key, $this->getFillable())) {
+177-            return true;
+178-        }
+179-
+180-        // If the attribute is explicitly listed in the "guarded" array then we can
+181-        // return false immediately. This means this attribute is definitely not
+
+$ sed -n '180,205p' core/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/GuardsAttributes.php
+// If the attribute is explicitly listed in the "guarded" array then we can
+        // return false immediately. This means this attribute is definitely not
+        // fillable and there is no point in going any further in this method.
+        if ($this->isGuarded($key)) {
+            return false;
+        }
+
+        return empty($this->getFillable()) &&
+            ! str_contains($key, '.') &&
+            ! str_starts_with($key, '_');
+    }
+
+    /**
+     * Determine if the given key is guarded.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function isGuarded($key)
+    {
+        if (empty($this->getGuarded())) {
+            return false;
+        }
+
+        return $this->getGuarded() == ['*'] ||
+               ! empty(preg_grep('/^'.preg_quote($key, '/').'$/i', $this->getGuarded())) ||
+
