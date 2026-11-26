@@ -14538,3 +14538,12 @@ Index: /home/ubuntu/actions-runner-3/_work/_temp/task_done.md
  État W1 (S-W1-01..18) :
 
 
+$ git status --short --branch && echo "=== last 3 commit authors ===" && git log -3 --format='%h %an <%ae> %s' && echo "=== diff check ===" && git diff --check && echo OK
+## fullrun/lot-client-w0...origin/fullrun/lot-client-w0 [ahead 6]
+=== last 3 commit authors ===
+ba46cf67 Papa Diop <76528706+LordThiouk@users.noreply.github.com> fix(driver-register): S-W1-11 — photo absente renvoie 422
+b1a8d143 Papa Diop <76528706+LordThiouk@users.noreply.github.com> test(sms): S-W1-07/08/09/10 — capturer le vrai SMS envoyé
+074690f0 Papa Diop <76528706+LordThiouk@users.noreply.github.com> test(approval): S-W1-03/04/05 — rendre le mock SMS exécutable
+=== diff check ===
+OK
+
