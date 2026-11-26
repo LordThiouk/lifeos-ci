@@ -18027,3 +18027,53 @@ $ grep -n "statusCode =" core/app/Http/Controllers/Api/User/RideController.php
 114:            $statusCode = ($result['remark'] ?? '') === 'validation_error' ? 422 : 200;
 
 S-W1-18 : `RideController` renvoie 200 pour `not_found`. ISC-44 exige 422. Ajuste `$statusCode`, puis crée les tests nommés.
+← Edit core/app/Http/Controllers/Api/User/RideController.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Controllers/Api/User/RideController.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Controllers/Api/User/RideController.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Controllers/Api/User/RideController.php
+@@ -110,9 +110,9 @@
+ $result   = $this->rideService->createRide($payload, auth()->user());
+ $notify[] = $result['message'];
+ 
+ if ($result['status'] == 'error') {
+-    $statusCode = ($result['remark'] ?? '') === 'validation_error' ? 422 : 200;
++    $statusCode = in_array($result['remark'] ?? '', ['validation_error', 'not_found'], true) ? 422 : 200;
+ 
+     return apiResponse($result['remark'], 'error', $notify, statusCode: $statusCode);
+ }
+ 
+
+
+← Write core/tests/Feature/Admin/RiderServiceListOrderTest.php
+Wrote file successfully.
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core; php artisan test --filter=RiderServiceListOrderTest 2>&1 | tail -8
+#!/usr/bin/env php
+
+   PASS  Tests\Feature\Admin\RiderServiceListOrderTest
+  ✓ rider service list uses admin order and excludes hidden              0.08s  
+
+  Tests:    1 passed (1 assertions)
+  Duration: 0.14s
+
+← Write core/tests/Feature/Admin/HiddenServiceExistingRideTest.php
+Wrote file successfully.
+
+← Edit core/tests/Feature/Admin/HiddenServiceExistingRideTest.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Admin/HiddenServiceExistingRideTest.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Admin/HiddenServiceExistingRideTest.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Admin/HiddenServiceExistingRideTest.php
+@@ -56,9 +56,8 @@
+     'city_min_fare' => 1000, 'city_max_fare' => 5000, 'city_recommend_fare' => 2000, 'city_fare_commission' => 10,
+ ]);
+ DB::table('rides')->insert(['id' => 1, 'user_id' => 1, 'service_id' => $service->id, 'status' => Status::RIDE_COMPLETED, 'amount' => 2000, 'created_at' => now(), 'updated_at' => now()]);
+ 
+-$found = Service::find(1->service_id ?? 1);
+ $found = Service::find(DB::table('rides')->where('id', 1)->value('service_id'));
+ 
+ $this->assertNotNull($found);
+ $this->assertFalse((bool) $found->is_visible);
+
+
