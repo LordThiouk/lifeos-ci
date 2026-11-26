@@ -10806,3 +10806,125 @@ drwxr-xr-x 2 ubuntu ubuntu  4096 Nov 26 10:45 tests
 ---vendor---
 artemis
 
+$ cd /agent/repos/galass-emu-actions-pub && ls -la vendor/artemis && echo "---" && find vendor/artemis -maxdepth 2 -type f | head -50
+total 1084
+drwxr-xr-x  9 ubuntu ubuntu   4096 Nov 26 10:45 .
+drwxr-xr-x  3 ubuntu ubuntu   4096 Nov 26 10:45 ..
+-rw-r--r--  1 ubuntu ubuntu    176 Nov 26 10:45 .dockerignore
+-rw-r--r--  1 ubuntu ubuntu   1250 Nov 26 10:45 .env.example
+-rw-r--r--  1 ubuntu ubuntu   1325 Nov 26 10:45 .gitignore
+-rw-r--r--  1 ubuntu ubuntu    480 Nov 26 10:45 .pre-commit-config.yaml
+-rw-r--r--  1 ubuntu ubuntu    108 Nov 26 10:45 .quality-baseline.json
+-rw-r--r--  1 ubuntu ubuntu   1697 Nov 26 10:45 CONTRIBUTING.md
+-rw-r--r--  1 ubuntu ubuntu   2277 Nov 26 10:45 Dockerfile
+-rw-r--r--  1 ubuntu ubuntu  11344 Nov 26 10:45 LICENSE
+-rw-r--r--  1 ubuntu ubuntu   4473 Nov 26 10:45 Makefile
+-rw-r--r--  1 ubuntu ubuntu  17798 Nov 26 10:45 README.md
+-rw-r--r--  1 ubuntu ubuntu  18178 Nov 26 10:45 README_CN.md
+drwxr-xr-x  4 ubuntu ubuntu   4096 Nov 26 10:45 apps
+drwxr-xr-x 23 ubuntu ubuntu   4096 Nov 26 10:45 artemis
+drwxr-xr-x  2 ubuntu ubuntu   4096 Nov 26 10:45 config
+drwxr-xr-x  6 ubuntu ubuntu   4096 Nov 26 10:45 mcp_server
+drwxr-xr-x  4 ubuntu ubuntu   4096 Nov 26 10:45 packages
+-rw-r--r--  1 ubuntu ubuntu   6430 Nov 26 10:45 pyproject.toml
+-rw-r--r--  1 ubuntu ubuntu    492 Nov 26 10:45 pyright-core.json
+drwxr-xr-x  2 ubuntu ubuntu   4096 Nov 26 10:45 scripts
+-rw-r--r--  1 ubuntu ubuntu   5932 Nov 26 10:45 setup.py
+-rw-r--r--  1 ubuntu ubuntu   1124 Nov 26 10:45 start.bat
+-rwxr-xr-x  1 ubuntu ubuntu  19016 Nov 26 10:45 start.sh
+drwxr-xr-x  3 ubuntu ubuntu   4096 Nov 26 10:45 third_party
+-rw-r--r--  1 ubuntu ubuntu 934827 Nov 26 10:45 uv.lock
+---
+vendor/artemis/.dockerignore
+vendor/artemis/setup.py
+vendor/artemis/CONTRIBUTING.md
+vendor/artemis/Makefile
+vendor/artemis/config/artemis.jsonc
+vendor/artemis/Dockerfile
+vendor/artemis/README.md
+vendor/artemis/scripts/run_edge_case_part.py
+vendor/artemis/scripts/test_all_edge_cases.py
+vendor/artemis/scripts/install_deps.ps1
+vendor/artemis/scripts/real_device_video_acceptance.py
+vendor/artemis/scripts/verify_concurrency_and_devices.py
+vendor/artemis/scripts/start.ps1
+vendor/artemis/scripts/quality_ratchet.py
+vendor/artemis/scripts/run_ui.py
+vendor/artemis/scripts/check_dependency_sources.py
+vendor/artemis/scripts/install_deps.sh
+vendor/artemis/start.bat
+vendor/artemis/.quality-baseline.json
+vendor/artemis/artemis/_legacy_imports.py
+vendor/artemis/artemis/__init__.py
+vendor/artemis/artemis/context.py
+vendor/artemis/artemis/constants.py
+vendor/artemis/artemis/__main__.py
+vendor/artemis/artemis/main.py
+vendor/artemis/artemis/_version.py
+vendor/artemis/pyright-core.json
+vendor/artemis/.pre-commit-config.yaml
+vendor/artemis/mcp_server/__init__.py
+vendor/artemis/mcp_server/README.md
+vendor/artemis/mcp_server/base.py
+vendor/artemis/mcp_server/rules.md
+vendor/artemis/mcp_server/server.py
+vendor/artemis/mcp_server/__main__.py
+vendor/artemis/start.sh
+vendor/artemis/LICENSE
+vendor/artemis/.env.example
+vendor/artemis/uv.lock
+vendor/artemis/apps/__init__.py
+vendor/artemis/.gitignore
+vendor/artemis/pyproject.toml
+vendor/artemis/README_CN.md
+
+$ env | sort | grep -iE "token|secret|github|api|base|url|pass" | head -60
+(no output)
+
+$ find / -name "*.env" 2>/dev/null | head -20; echo "---"; ls -la /home/ubuntu/.config 2>/dev/null; echo "---gh---"; which gh; echo "---git config---"; git config --global --list 2>/dev/null; echo "---opencode---"; ls -la ~/.config/opencode 2>/dev/null
+/tmp/cursor-exec-daemon-cgroup-rooms.1.env
+/usr/lib/go-1.22/go.env
+/usr/lib/python3/dist-packages/ansible_collections/community/okd/molecule/default/files/nginx.env
+/usr/lib/python3/dist-packages/ansible_collections/community/okd/molecule/default/files/example.env
+/home/ubuntu/actions-runner-3/.env
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/USER/CUSTOMIZATIONS/SKILLS/Interceptor/preferences.env
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/secrets/lifeos.enc.env
+/home/ubuntu/actions-runner/.env
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/USER/CUSTOMIZATIONS/SKILLS/Interceptor/preferences.env
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/secrets/lifeos.enc.env
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/USER/CUSTOMIZATIONS/SKILLS/Interceptor/preferences.env
+/home/ubuntu/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.11.linux-amd64/go.env
+/home/ubuntu/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.27.4.linux-amd64/go.env
+/home/ubuntu/actions-runner-2/.env
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/USER/CUSTOMIZATIONS/SKILLS/Interceptor/preferences.env
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/secrets/lifeos.enc.env
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/ios/Flutter/ephemeral/flutter_native_integration.env
+/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.claude/LIFEOS/USER/CUSTOMIZATIONS/SKILLS/Interceptor/preferences.env
+---
+total 52
+drwxr-xr-x. 13 ubuntu ubuntu 4096 Nov 26 14:25 .
+drwxr-x---. 20 ubuntu ubuntu 4096 Nov 26 17:30 ..
+drwxr-xr-x   3 ubuntu ubuntu 4096 Nov 26 14:25 GitHub
+drwx------   2 ubuntu ubuntu 4096 Nov 26 04:55 dconf
+drwxr-xr-x   2 ubuntu ubuntu 4096 Nov 26 07:05 flutter
+drwxr-xr-x   2 ubuntu ubuntu 4096 Nov 26 17:30 gh
+drwxr-xr-x.  3 ubuntu ubuntu 4096 Nov 11 01:55 go
+drwxr-xr-x.  3 ubuntu ubuntu 4096 Nov 11 01:54 google-chrome-cdp
+drwxr-xr-x.  3 ubuntu ubuntu 4096 Nov 11 01:54 google-chrome-playwright
+drwxr-xr-x.  2 ubuntu ubuntu 4096 Nov 11 01:54 gtk-3.0
+drwxr-xr-x   3 ubuntu ubuntu 4096 Nov 26 12:19 opencode
+drwxr-xr-x.  3 ubuntu ubuntu 4096 Nov 11 01:54 plank
+drwxr-xr-x.  5 ubuntu ubuntu 4096 Nov 26 04:55 xfce4
+---gh---
+/usr/local/bin/gh
+---git config---
+---opencode---
+total 40
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 17:27 .
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 17:42 ..
+-rw-r--r--  1 ubuntu ubuntu    63 Nov 26 17:27 .gitignore
+dr-xr-xr-x  2 ubuntu ubuntu  4096 Nov 26 17:27 hook-profiles
+drwxr-xr-x 29 ubuntu ubuntu  4096 Nov 26 17:27 node_modules
+-rw-r--r--  1 ubuntu ubuntu 14627 Nov 26 17:27 package-lock.json
+-rw-r--r--  1 ubuntu ubuntu    64 Nov 26 17:27 package.json
+
