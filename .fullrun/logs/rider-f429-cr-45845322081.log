@@ -4594,3 +4594,161 @@ Changed 47 dependencies!
 179 packages have newer versions incompatible with dependency constraints.
 Try `flutter pub outdated` for more information.
 
+$ flutter test test/widget/course_en_cours_contract_test.dart 2>&1
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          
+00:01 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          
+00:02 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          
+00:03 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart:115:38: Error: A value of type 'FilePickerResult?' can't be assigned to a variable of type 'List<PlatformFile>'.
+ - 'FilePickerResult' is from 'package:file_picker/src/api/file_picker_result.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/file_picker_result.dart').
+ - 'List' is from 'dart:core'.
+ - 'PlatformFile' is from 'package:file_picker/src/api/platform_file.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/platform_file.dart').
+    final List<PlatformFile> files = await FilePicker.pickFiles(
+                                     ^
+
+00:04 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          lib/presentation/screens/edit_profile/widget/profile_image.dart:121:38: Error: A value of type 'FilePickerResult?' can't be assigned to a variable of type 'List<PlatformFile>'.
+ - 'FilePickerResult' is from 'package:file_picker/src/api/file_picker_result.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/file_picker_result.dart').
+ - 'List' is from 'dart:core'.
+ - 'PlatformFile' is from 'package:file_picker/src/api/platform_file.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/platform_file.dart').
+    final List<PlatformFile> files = await FilePicker.pickFiles(
+                                     ^
+
+00:05 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          lib/data/controller/account/profile_controller.dart:171:38: Error: A value of type 'FilePickerResult?' can't be assigned to a variable of type 'List<PlatformFile>'.
+ - 'FilePickerResult' is from 'package:file_picker/src/api/file_picker_result.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/file_picker_result.dart').
+ - 'List' is from 'dart:core'.
+ - 'PlatformFile' is from 'package:file_picker/src/api/platform_file.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/platform_file.dart').
+    final List<PlatformFile> files = await FilePicker.pickFiles(
+                                     ^
+lib/data/controller/support/new_ticket_controller.dart:35:38: Error: A value of type 'FilePickerResult?' can't be assigned to a variable of type 'List<PlatformFile>'.
+ - 'FilePickerResult' is from 'package:file_picker/src/api/file_picker_result.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/file_picker_result.dart').
+ - 'List' is from 'dart:core'.
+ - 'PlatformFile' is from 'package:file_picker/src/api/platform_file.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/platform_file.dart').
+    final List<PlatformFile> files = await FilePicker.pickFiles(
+                                     ^
+lib/data/controller/support/ticket_details_controller.dart:57:38: Error: A value of type 'FilePickerResult?' can't be assigned to a variable of type 'List<PlatformFile>'.
+ - 'FilePickerResult' is from 'package:file_picker/src/api/file_picker_result.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/file_picker_result.dart').
+ - 'List' is from 'dart:core'.
+ - 'PlatformFile' is from 'package:file_picker/src/api/platform_file.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/platform_file.dart').
+    final List<PlatformFile> files = await FilePicker.pickFiles(
+                                     ^
+
+00:06 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          
+00:07 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          
+00:08 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          
+00:09 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          
+00:10 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          
+00:11 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart                                                                          
+00:11 +0 -1: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart [E]                                                                   
+  Failed to load "/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart":
+  Compilation failed for testPath=/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart: lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart:115:38: Error: A value of type 'FilePickerResult?' can't be assigned to a variable of type 'List<PlatformFile>'.
+   - 'FilePickerResult' is from 'package:file_picker/src/api/file_picker_result.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/file_picker_result.dart').
+   - 'List' is from 'dart:core'.
+   - 'PlatformFile' is from 'package:file_picker/src/api/platform_file.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/platform_file.dart').
+      final List<PlatformFile> files = await FilePicker.pickFiles(
+                                       ^
+  lib/presentation/screens/edit_profile/widget/profile_image.dart:121:38: Error: A value of type 'FilePickerResult?' can't be assigned to a variable of type 'List<PlatformFile>'.
+   - 'FilePickerResult' is from 'package:file_picker/src/api/file_picker_result.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/file_picker_result.dart').
+   - 'List' is from 'dart:core'.
+   - 'PlatformFile' is from 'package:file_picker/src/api/platform_file.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/platform_file.dart').
+      final List<PlatformFile> files = await FilePicker.pickFiles(
+                                       ^
+  lib/data/controller/account/profile_controller.dart:171:38: Error: A value of type 'FilePickerResult?' can't be assigned to a variable of type 'List<PlatformFile>'.
+   - 'FilePickerResult' is from 'package:file_picker/src/api/file_picker_result.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/file_picker_result.dart').
+   - 'List' is from 'dart:core'.
+   - 'PlatformFile' is from 'package:file_picker/src/api/platform_file.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/platform_file.dart').
+      final List<PlatformFile> files = await FilePicker.pickFiles(
+                                       ^
+  lib/data/controller/support/new_ticket_controller.dart:35:38: Error: A value of type 'FilePickerResult?' can't be assigned to a variable of type 'List<PlatformFile>'.
+   - 'FilePickerResult' is from 'package:file_picker/src/api/file_picker_result.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/file_picker_result.dart').
+   - 'List' is from 'dart:core'.
+   - 'PlatformFile' is from 'package:file_picker/src/api/platform_file.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/platform_file.dart').
+      final List<PlatformFile> files = await FilePicker.pickFiles(
+                                       ^
+  lib/data/controller/support/ticket_details_controller.dart:57:38: Error: A value of type 'FilePickerResult?' can't be assigned to a variable of type 'List<PlatformFile>'.
+   - 'FilePickerResult' is from 'package:file_picker/src/api/file_picker_result.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/file_picker_result.dart').
+   - 'List' is from 'dart:core'.
+   - 'PlatformFile' is from 'package:file_picker/src/api/platform_file.dart' ('../../../_temp/oc-agent/home/.pub-cache/hosted/pub.dev/file_picker-11.0.3/lib/src/api/platform_file.dart').
+      final List<PlatformFile> files = await FilePicker.pickFiles(
+                                       ^
+  .
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart -p vm --plain-name 'loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart'
+
+00:11 +0 -1: Some tests failed.
+
+$ grep -n "FilePicker" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+(no output)
+
+$ grep -A 20 "share_plus" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.dart_tool/package_config.json
+"name": "share_plus",
+      "rootUri": "file:///home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/share_plus-12.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "share_plus_platform_interface",
+      "rootUri": "file:///home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/share_plus_platform_interface-6.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "shared_preferences",
+      "rootUri": "file:///home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/shared_preferences-2.5.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "shared_preferences_android",
+      "rootUri": "file:///home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/shared_preferences_android-2.4.23",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+    },
+    {
+      "name": "shared_preferences_foundation",
+      "rootUri": "file:///home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.5.6",
+      "packageUri": "lib/",
+      "languageVersion": "3.9"
+
+Let me revert my pubspec changes and try a clean approach:
+← Edit pubspec.yaml
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/pubspec.yaml
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/pubspec.yaml
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/pubspec.yaml
+@@ -45,9 +45,9 @@
+ path_provider: ^2.1.5
+ permission_handler: ^12.0.1
+ pinput: ^5.0.2
+ pusher_channels_flutter: ^2.5.0
+-share_plus: ^12.0.0
++share_plus: ^13.3.1
+ shared_preferences: ^2.5.3
+ sheet: ^1.0.0
+ shimmer: ^3.0.0
+ sign_in_with_apple: ^7.0.1
+
+
+← Edit pubspec.yaml
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/pubspec.yaml
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/pubspec.yaml
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/pubspec.yaml
+@@ -15,9 +15,9 @@
+ cupertino_icons: ^1.0.8
+ custom_marker_builder: ^0.0.4
+ dio: ^5.9.0
+ dotted_border: ^3.1.0
+-file_picker: ^11.0.0
++file_picker: ^12.0.0
+ firebase_core: ^4.2.1
+ firebase_auth: ^6.5.0
+ firebase_messaging: ^16.0.4
+ flutter:
+
+
+$ flutter pub get 2>&1
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because galassrider depends on share_plus >=13.0.0 which requires SDK version >=3.10.0 <4.0.0, version solving failed.
+Failed to update packages.
+
