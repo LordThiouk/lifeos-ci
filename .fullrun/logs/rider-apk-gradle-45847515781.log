@@ -5494,3 +5494,71 @@ function os(): array
         'windows 8',
         'windows xp' . 'linux',
 
+← Edit core/resources/views/admin/services/index.blade.php
+Index: /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/resources/views/admin/services/index.blade.php
+===================================================================
+--- /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/resources/views/admin/services/index.blade.php
++++ /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/resources/views/admin/services/index.blade.php
+@@ -133,8 +133,25 @@
+ <div class="form-group">
+     <label>@lang('Subtitle')</label>
+     <input class="form-control" name="subtitle" type="text" required value="{{ old('subtitle') }}">
+ </div>
++<div class="row">
++    <div class="col-lg-6">
++        <div class="form-group">
++            <label>@lang('Order')</label>
++            <input class="form-control" name="sort_order" type="number" min="0" value="{{ old('sort_order') }}">
++        </div>
++    </div>
++    <div class="col-lg-6">
++        <div class="form-group">
++            <label>@lang('Visible')</label>
++            <select class="form-control" name="is_visible">
++                <option value="1">@lang('Yes')</option>
++                <option value="0">@lang('No')</option>
++            </select>
++        </div>
++    </div>
++</div>
+ <div class="row mb-3">
+     <div class="py-2">
+         <h5 class="divider-title">@lang('City Fare')</h5>
+     </div>
+
+
+← Edit core/resources/views/admin/services/index.blade.php
+Index: /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/resources/views/admin/services/index.blade.php
+===================================================================
+--- /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/resources/views/admin/services/index.blade.php
++++ /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/resources/views/admin/services/index.blade.php
+@@ -260,8 +260,10 @@
+ const imagePath = $(this).data('image');
+ const action = "{{ route('admin.service.update', ':id') }}";
+ $("input[name='name']").val(data.name);
+ $("input[name='subtitle']").val(data.subtitle);
++$("input[name='sort_order']").val(data.sort_order ?? 0);
++$("select[name='is_visible']").val(data.is_visible ? '1' : '0');
+ $("input[name='city_min_fare']").val(getAmount(data.city_min_fare));
+ $("input[name='city_max_fare']").val(getAmount(data.city_max_fare));
+ $("input[name='city_recommend_fare']").val(getAmount(data.city_recommend_fare));
+ $("input[name='city_fare_commission']").val(getAmount(data.city_fare_commission, 2));
+
+
+← Edit core/resources/views/admin/services/index.blade.php
+Index: /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/resources/views/admin/services/index.blade.php
+===================================================================
+--- /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/resources/views/admin/services/index.blade.php
++++ /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/resources/views/admin/services/index.blade.php
+@@ -281,8 +281,9 @@
+ $(".add-btn").on('click', function(e) {
+     const action = "{{ route('admin.service.store') }}";
+     $modal.find(".modal-title").text("@lang('Add Service')");
+     $modal.find('form').trigger('reset');
++    $("select[name='is_visible']").val('1');
+     $modal.find('form').attr('action', action);
+     $modal.find(".image-upload img").attr('src', "{{ asset('assets/images/drag-and-drop.png') }}");
+     $modal.find(".image-upload [type=file]").attr('required', true);
+     $modal.modal("show");
+
+
