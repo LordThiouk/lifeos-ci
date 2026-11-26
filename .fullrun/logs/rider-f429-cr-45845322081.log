@@ -7752,3 +7752,8 @@ drwxr-xr-x 9 ubuntu ubuntu   4096 Nov 26 18:20 ..
 -rw-r--r-- 1 ubuntu ubuntu 429918 Nov 26 19:04 opencode.log
 
 → Read /tmp/tmp.rYsFqYqu6a/oc/prompt.md
+
+> Forge · big-pickle
+
+✗ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md failed
+Error: File not found: /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
