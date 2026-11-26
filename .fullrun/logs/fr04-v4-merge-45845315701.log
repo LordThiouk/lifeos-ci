@@ -3219,3 +3219,25 @@ Date:   Thu Nov 26 22:04:21 2026 +0000
 
 ✱ Glob "test/**/ride_map_live_location*" in . · 1 match
 L'arbre est propre et il y a déjà des commits `driver-f5-19`. Je vérifie l'état actuel du code et des tests.
+
+$ git log --oneline -15 && echo ---- && git cat-file -t d088550 2>/dev/null || echo "d088550 introuvable"
+9443d49 fix(driver-f5-19): run ride_map_live_location tests green (teardown hang fix)
+c526ef3 wip(autosave): arbre de travail
+eb3b8d8 isa(driver): tick ISC-F5-19 live car location in ride
+589a7d7 isa(driver): Papa confirme liste ISC-F5-17 (7 éléments figés)
+3fe5b84 wip(driver-f5-19): partial work (agent stopped)
+d088550 feat(ride): ISC-F5-19 live car marker + ride-context location ping
+e741e31 wip(autosave): arbre de travail
+889fdcc fix(build): device_info_plus ^13.3.0 pour file_picker 13 / win32 6
+6beb137 fix(build): migrate file_picker v13 (pickFile / sans allowMultiple)
+81e7be9 fix(build): file_picker ^13.4.1 pour AGP 9 (FilePickerPlugin)
+590fe53 isa(driver): coche ISC-F5-15 (preuve flutter test 1/1 + goldens 5/5)
+3f120b4 wip(autosave): arbre de travail
+dbfd2ee fix(build): flutter_inappwebview 6.2.0-beta.3 (AGP 9 stack)
+7baf7d9 fix(build): override flutter_inappwebview_android 1.2.0-beta.3 (AGP 9)
+b2678cd fix(build): android.newDsl=false (Kotlin plugin vs AGP 9)
+----
+commit
+
+✱ Grep "applyLiveDriverLocation" in . · 2 matches
+✱ Grep "location-update" in . · 25 matches
