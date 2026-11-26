@@ -11282,3 +11282,13 @@ inputs: None
 name: artemis-staging-e2e
 status: completed conclusion: failure
 
+$ cd /tmp/ghlogs && grep -n "ref:" joblogs.zip | head; echo "---checkout lines---"; grep -n "Checking out\|ref:" joblogs.zip | head
+167:2026-11-26T10:26:45.5006676Z   ref: feat/multistop-e2e-2026-11-15
+271:2026-11-26T10:26:46.7323843Z   ref: feat/multistop-e2e-2026-11-15
+---checkout lines---
+122:2026-11-26T10:26:45.3024342Z ##[group]Checking out the ref
+167:2026-11-26T10:26:45.5006676Z   ref: feat/multistop-e2e-2026-11-15
+251:2026-11-26T10:26:46.5246080Z ##[group]Checking out the ref
+271:2026-11-26T10:26:46.7323843Z   ref: feat/multistop-e2e-2026-11-15
+355:2026-11-26T10:26:47.7884642Z ##[group]Checking out the ref
+
