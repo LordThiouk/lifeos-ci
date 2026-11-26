@@ -2003,3 +2003,34 @@ WARN  Tests\Feature\Security\DeveloperTokenStatusTest
 rc=0
 === grep fgc in collision
 
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && COLLISION_PRINTER=DefaultPrinter php vendor/phpunit/phpunit/phpunit --no-output --configuration=phpunit.xml --filter=DeveloperTokenStatusTest --display-warnings 2>&1 | cat -v | head -30
+WARN  Tests\Feature\Security\DeveloperTokenStatusTest
+  ! api login without dev token returns 401 M-bM-^FM-^R file_get_contents(/home/uM-bM-^@M-& 0.09s  
+  ! api login with wrong dev token returns 401 M-bM-^FM-^R file_get_contents(/homM-bM-^@M-& 0.02s  
+  M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@  
+   WARNINGS  Tests\Feature\Security\DeveloperTokenStatusTest > api login witM-bM-^@M-&   
+  file_get_contents(/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/.env): Failed to open stream: No such file or directory
+
+  at vendor/vlucas/phpdotenv/src/Store/File/Reader.php:73
+     69M-bM-^VM-^U      */
+     70M-bM-^VM-^U     private static function readFromFile(string $path, ?string $encoding = null)
+     71M-bM-^VM-^U     {
+     72M-bM-^VM-^U         /** @var Option<string> */
+  M-bM-^^M-^\  73M-bM-^VM-^U         $content = Option::fromValue(@\file_get_contents($path), false);
+     74M-bM-^VM-^U 
+     75M-bM-^VM-^U         return $content->flatMap(static function (string $content) use ($encoding) {
+     76M-bM-^VM-^U             return Str::utf8($content, $encoding)->mapError(static function (string $error) {
+     77M-bM-^VM-^U                 throw new InvalidEncodingException($error);
+
+      ^[[2m+7 vendor frames ^[[22m
+  8   tests/CreatesApplication.php:14
+  9   tests/Feature/Security/DeveloperTokenStatusTest.php:15
+
+  M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@  
+   WARNINGS  Tests\Feature\Security\DeveloperTokenStatusTest > api login witM-bM-^@M-&   
+  file_get_contents(/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/.env): Failed to open stream: No such file or directory
+
+  at vendor/vlucas/phpdotenv/src/Store/File/Reader.php:73
+     69M-bM-^VM-^U      */
+     70M-bM-^VM-^U     private static function readFromFile(string $path, ?string $encoding = null)
+
