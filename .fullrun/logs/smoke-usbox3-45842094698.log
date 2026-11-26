@@ -17918,3 +17918,80 @@ $result   = $this->rideService->createRide($payload, auth()->user());
     public function details($id)
     {
 
+$ sed -n '1,75p' core/app/Services/Rider/RideService.php
+<?php
+
+namespace App\Services\Rider;
+
+use App\Constants\Status;
+use App\Models\DispatchAttempt;
+use App\Models\User;
+use App\Repositories\RideRepo;
+use App\Events\Ride as EventsRide;
+use App\Services\Dispatch\DispatchTrigger;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Http;
+
+class RideService
+{
+    protected $rideRepo;
+
+    public function __construct(RideRepo $rideRepo)
+    {
+        $this->rideRepo = $rideRepo;
+    }
+
+    // Controller access start
+
+    public function getFareAndRouteData(float $pickupLat, float $pickupLng, float $destLat, float $destLng, array $stops = []): array
+    {
+        $zoneData = $this->detectZones($pickupLat, $pickupLng, $destLat, $destLng);
+
+        if ($zoneData['status'] == 'error') {
+            return $zoneData;
+        }
+
+        $stopValidation = $this->validateStops(
+            $stops,
+            $pickupLat,
+            $pickupLng,
+            $destLat,
+            $destLng,
+            $zoneData['pickup_zone']
+        );
+
+        if ($stopValidation['status'] === 'error') {
+            return $stopValidation;
+        }
+
+        $mapData = $this->resolveSegmentMapData(
+            $pickupLat,
+            $pickupLng,
+            $destLat,
+            $destLng,
+            $stopValidation['prepared_stops'] ?? []
+        );
+
+        if ($mapData['status'] == 'error') {
+            return serviceError('api_error', $mapData['message'] ?? trans('Unknown map error'));
+        }
+
+        $fareData = $this->calculateFare(
+            $zoneData['pickup_zone'],
+            $zoneData['destination_zone'],
+            $mapData['distance']
+        );
+
+        return serviceSuccess('ride_data', trans('Fare calculated successfully'), [
+            'pickup_zone'      => $zoneData['pickup_zone'],
+            'destination_zone' => $zoneData['destination_zone'],
+            'distance'         => $mapData['distance'],
+            'duration'         => $mapData['duration'],
+            'ride_type'        => $fareData['ride_type'],
+            'services'         => $fareData['services'],
+        ]);
+    }
+
+    public function createRide(array $requestData, $user): array
+    {
+
