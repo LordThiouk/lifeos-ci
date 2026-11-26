@@ -3674,3 +3674,29 @@ c8ffd2e fix(build): align Rider Android toolchain to Flutter 3.50.1 (Gradle 8.14
 424957d verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
 
 Tout est vérifié et cohérent. Une dernière confirmation sur l'autre checkout du dépôt cible :
+Mission accomplie. Voici le bilan factuel de l'exécution complète du prompt :
+
+## ✅ Tâche exécutée — « Rider APK Artemis FAIL sous Flutter 3.50.1 »
+
+**Prompt source** : `/home/ubuntu/actions-runner/_work/_temp/oc/prompt.md`
+
+### Résultat de la mission
+- **Diagnostic confirmé** : build APK Rider rouge — `android/gradle/wrapper/gradle-wrapper.properties` en **Gradle 9.1.0**, `android/settings.gradle.kts` en **AGP 9.0.1** / Kotlin 2.2.20 / Crashlytics 3.0.7 (refusés par Flutter 3.50.1).
+- **Correctif appliqué** (parité avec le Driver vert) :
+  - Gradle wrapper : **9.1.0 → 8.14**
+  - AGP : **9.0.1 → 8.11.1**
+  - Kotlin : **2.2.20 → 2.3.0**
+  - Crashlytics : **3.0.7 → 3.0.3**
+  - `android/gradle.properties` : flags Driver-stable (jvmargs 8G, caching/parallel/daemon/on).
+
+### Livrables
+- **Commit** : `ec07f3e` — `build(android): align Rider toolchain with Flutter 3.50.1` (branche `build/rider-apk-gradle`).
+- **Résumé factuel** : `/tmp/task_done.md` (SHA, fichiers changés, tests/build non exécutés localement — interdits par politique).
+
+### Contraintes respectées
+- ❌ **Pas** de push / merge / `gh` / `ssh` / `scp`.
+- ❌ **Pas** de modification de `main/master`.
+- ❌ **Pas** de changement `lib/`, `.fullrun`, goldens.
+- ❌ **Pas** de build local (`flutter build` / `gradlew` interdits sur la box — validation attendue via CI Artemis).
+
+**État final** : arbre de travail propre, branche `build/rider-apk-gradle`, correctif en place et committé. ✅
