@@ -4205,3 +4205,24 @@ index 78e86c7..8497d8b 100644
  ## Remaining Work
 
 Provenance ISA OK. Voyons le diff de l'ISA :
+Vérifions la convention de commit des travaux similaires précédents :
+$ git show --stat --oneline 505637e | head -15; echo "====="; git show --stat --oneline bd77f91 | head -12; echo "=====119fb0c====="; git show --stat --oneline 119fb0c | head -15
+505637e fix(driver): ISC-F5-12 CTA unique par état (confirm stop / terminer)
+ .../WORK/20261006-galass-driver-multistop/ISA.md   |  11 +-
+ .../widgets/ride_details_bottom_sheet_widget.dart  |  47 +++---
+ test/unit/multistop_end_gate_test.dart             | 169 +++++++++++++++++++++
+ 3 files changed, 200 insertions(+), 27 deletions(-)
+=====
+bd77f91 docs(driver): verdict position voiture temps réel + ISC-F5-19
+ .../WORK/20261006-galass-driver-multistop/ISA.md   | 16 ++++++----
+ docs/driver-live-location-2026-11-25.md            | 36 ++++++++++++++++++++++
+ 2 files changed, 46 insertions(+), 6 deletions(-)
+=====119fb0c=====
+119fb0c feat(driver): ISC-F5-16 arrêt actif distinct + arrêts estompés numérotés
+ .../WORK/20261006-galass-driver-multistop/ISA.md   |   9 +-
+ lib/data/controller/map/ride_map_controller.dart   | 229 ++++++++++++++++-----
+ .../ride/ride_details/ride_details_controller.dart |   2 +
+ lib/data/model/global/ride/ride_stop_progress.dart |  76 +++++++
+ .../controller/map/ride_map_multistop_test.dart    |  97 +++++++++
+ 5 files changed, 352 insertions(+), 61 deletions(-)
+
