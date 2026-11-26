@@ -1417,3 +1417,42 @@ $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "dr
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "marker_car.png\|markerCar" lib/core/utils/my_icons.dart | head -5
 5:  static const String markerCar = "assets/icon/marker_car.png"; // marker_car.png
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "tick" /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts | head -20
+64:// ── human-tick : coche d'une claim `[scope:human — raison]` par le principal, signée ─────────────────────────
+65:// Une claim humaine (ratification, acte de Papa) n'est jamais cochée par un agent : `tick` la laisserait passer
+66:// pour une preuve outil. `human-tick` exige la clé ISA_STAMP_KEY dans l'ENVIRONNEMENT (secret du principal ou de
+93:export interface HumanTickPayload { v: 1; op: "human-tick"; isa: string; isc: string; claim: string; evidence: string; by: string; at: string }
+105:  const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(text, isaPath), isc, claim: lines[idx]!.trim(), evidence: m[1]!, by: m[2]!, at: m[3]! };
+118:  if (!cmd || !path) { console.log(`usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+121:  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+122:  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+127:  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+139:  } else if (cmd === "tick" || cmd === "untick") {
+142:    const optName = cmd === "tick" ? "evidence" : "reason";
+145:    t = t.replace(re, `$1[${cmd === "tick" ? "x" : " "}]$2`);
+148:    const sha = cmd === "tick" ? headShort(path) : null;
+149:    const line = cmd === "tick" ? `- ${isc}: ${note}${sha ? ` [@${sha}]` : ""}` : `- ${isc}: NON VALIDÉ — ${note}`;
+150:    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`; save(path, t, `${cmd === "tick" ? "evidence" : "reason"}:${isc}`);
+151:  } else if (cmd === "human-tick" || cmd === "human-verify") {
+165:    if (!isHumanScoped(lines, idx)) { console.error(`human-tick refusé : ${isc} n'est pas marquée [scope:human — raison] (sur sa ligne ou le titre ### de son bloc). Une claim de build se coche avec \`tick\` sur preuve outil.`); process.exit(HUMAN_TICK_EXIT.NOT_HUMAN); }
+170:    const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(t, path), isc, claim: lines[idx]!.trim(), evidence, by, at };
+174:    save(path, t, `human-tick:${isc}`);
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "RecordingApiClient" test/helpers 2>&1 | head -10
+test/helpers/recording_api_client.dart:7:class RecordingApiClient extends ApiClient {
+test/helpers/recording_api_client.dart:8:  RecordingApiClient({required super.sharedPreferences});
+test/helpers/recording_api_client.dart:90:class MemoryAfterInitRecordingApiClient extends RecordingApiClient {
+test/helpers/recording_api_client.dart:91:  MemoryAfterInitRecordingApiClient({required super.sharedPreferences});
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && dart format --output=none --set-exit-if-changed lib/data/controller/map/ride_map_controller.dart lib/data/controller/ride/ride_details/ride_details_controller.dart test/unit/ride_map_live_location_test.dart 2>&1 | tail -20
+Warning: Package resolution error when reading "analysis_options.yaml" file:
+Failed to resolve package URI "package:flutter_lints/flutter.yaml" in include.
+Changed lib/data/controller/map/ride_map_controller.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file:
+Failed to resolve package URI "package:flutter_lints/flutter.yaml" in include.
+Changed lib/data/controller/ride/ride_details/ride_details_controller.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file:
+Failed to resolve package URI "package:flutter_lints/flutter.yaml" in include.
+Changed test/unit/ride_map_live_location_test.dart
+Formatted 3 files (3 changed) in 0.33 seconds.
+
