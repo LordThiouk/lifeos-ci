@@ -5977,3 +5977,23 @@ $ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && sed -n '4
 $ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && grep -rn "TextPainter(" lib --include='*.dart' | head -10
 lib/data/controller/map/ride_map_controller.dart:466:      final painter = TextPainter(
 
+$ grep -B2 -A15 "TextPainter({" /opt/flutter/packages/flutter/lib/src/painting/text_painter.dart | head -30
+///
+  /// The [maxLines] property, if non-null, must be greater than zero.
+  TextPainter({
+    InlineSpan? text,
+    TextAlign textAlign = TextAlign.start,
+    TextDirection? textDirection,
+    @Deprecated(
+      'Use textScaler instead. '
+      'Use of textScaleFactor was deprecated in preparation for the upcoming nonlinear text scaling support. '
+      'This feature was deprecated after v3.12.0-2.0.pre.',
+    )
+    double textScaleFactor = 1.0,
+    TextScaler textScaler = const _UnspecifiedTextScaler(),
+    int? maxLines,
+    String? ellipsis,
+    Locale? locale,
+    StrutStyle? strutStyle,
+    TextWidthBasis textWidthBasis = TextWidthBasis.parent,
+
