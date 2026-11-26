@@ -11362,3 +11362,220 @@ index 1099500e..12dc2e5b 100644
  
  ## Remaining Work
 
+$ find / -name "ISATool*" 2>/dev/null; echo "---"; find / -path "*LIFEOS/TOOLS*" -name "*.ts" 2>/dev/null | head
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+---
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/life-os/install/LIFEOS/TOOLS/MigrateContextFreshness.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/life-os/install/LIFEOS/TOOLS/GenerateKnowledgeSchemaDoc.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/life-os/install/LIFEOS/TOOLS/SessionHarvester.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/life-os/install/LIFEOS/TOOLS/Recommend.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/life-os/install/LIFEOS/TOOLS/MergeSettings.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/life-os/install/LIFEOS/TOOLS/MutationTier.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/life-os/install/LIFEOS/TOOLS/TokenXray/TokenXray.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/life-os/install/LIFEOS/TOOLS/ReferenceCheck.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/life-os/install/LIFEOS/TOOLS/BannerRetro.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/skills-shared/life-os/install/LIFEOS/TOOLS/UsageAggregator.ts
+
+$ sed -n '1,80p' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+#!/usr/bin/env bun
+// ISATool.ts — l'outil exécutable du skill ISA (Scaffold / Append / Tick / Set / Adopt / Verify).
+// Toute écriture d'un ISA.md passe ici : l'outil recalcule progress M/N puis pose une empreinte
+// HMAC-SHA256 (frontmatter `isa_stamp`) que ISAGate vérifie en HARD. Une édition à la main
+// (Edit/Write/sed) casse l'empreinte → ISAGate `provenance-*`.
+import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync, chmodSync, realpathSync } from "node:fs";
+import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { dirname, join } from "node:path";
+import { headShort } from "./FullRunBuildGuard";
+import { parseScopeTag } from "./IsaFeatures";
+const HOME = process.env.HOME!;
+const STATE = join(HOME, ".claude/LIFEOS/MEMORY/STATE");
+const KEY = join(STATE, ".isa-stamp-key");
+const LEDGER = join(STATE, "isa-provenance.jsonl");
+const SCOPE_LOG = join(STATE, "isa-scope-tags.jsonl");
+const STAMP_RE = /^isa_stamp:.*\n/m;
+
+function key(create = false): Buffer | null {
+  if (!existsSync(KEY)) { if (!create) return null; mkdirSync(STATE, { recursive: true }); writeFileSync(KEY, randomBytes(32).toString("hex")); chmodSync(KEY, 0o600); }
+  const k = Buffer.from(readFileSync(KEY, "utf8").trim(), "hex"); if (k.length < 32) throw new Error("clé d'empreinte ISA invalide (< 32 octets)"); return k;
+}
+// l'empreinte ne vit que dans le frontmatter : une ligne `isa_stamp:` du corps n'est ni retirée ni lue
+const fmSplit = (t: string) => { const m = t.match(/^---\n[\s\S]*?\n---/); return m ? [m[0], t.slice(m[0].length)] : ["", t]; };
+export const unstamped = (t: string) => { const [f, b] = fmSplit(t); return f.replace(STAMP_RE, "") + b; };
+export function computeStamp(text: string, k = key()): string | null {
+  return k ? "hmac-sha256:" + createHmac("sha256", k).update(unstamped(text)).digest("hex") : null;
+}
+export function verifyStamp(text: string): { ok: boolean; code?: string; message?: string } {
+  const m = fmSplit(text)[0].match(/^isa_stamp:\s*(\S+)/m);
+  if (!m) return { ok: false, code: "provenance-missing", message: "no isa_stamp — this ISA was not written by the ISA skill tools (ISATool.ts). Hand edits are forbidden: re-write via `bun ~/.claude/LIFEOS/TOOLS/ISATool.ts`." };
+  const k = key(); if (!k) return { ok: false, code: "provenance-key-missing", message: "stamp key absent — cannot verify provenance." };
+  const want = Buffer.from(computeStamp(text, k)!), got = Buffer.from(m[1]);
+  if (want.length !== got.length || !timingSafeEqual(want, got)) return { ok: false, code: "provenance-mismatch", message: "isa_stamp does not match content — the ISA was edited outside ISATool.ts (hand edit). Revert, or re-apply the change via ISATool.ts." };
+  return { ok: true };
+}
+function fmSet(t: string, f: string, v: string): string {
+  const m = t.match(/^---\n([\s\S]*?)\n---/); if (!m) return `---\n${f}: ${v}\n---\n` + t;
+  const re = new RegExp(`^${f}:.*$`, "m");
+  const body = re.test(m[1]) ? m[1].replace(re, `${f}: ${v}`) : `${m[1]}\n${f}: ${v}`;
+  return t.replace(m[0], `---\n${body}\n---`);
+}
+const progress = (t: string) => { const b = (t.match(/^\s*- \[[ xX]\] (?:\*\*)?ISC-/gm) ?? []).length; const d = (t.match(/^\s*- \[[xX]\] (?:\*\*)?ISC-/gm) ?? []).length; return `${d}/${b}`; };
+// Marqueur de périmètre build `[scope:…]` : il sort des claims de la porte build. Toute écriture qui en pose un
+// (ligne ajoutée/modifiée dans l'ISA, ou argument de la commande) est journalisée — l'agent ne peut pas s'exclure
+// des claims sans laisser de trace relisible par le principal.
+function logScopeTags(path: string, op: string, before: string, after: string) {
+  const had = new Set(before.split("\n").filter((l) => l.includes("[scope:")).map((l) => l.trim()));
+  const added = after.split("\n").map((l) => l.trim()).filter((l) => l.includes("[scope:") && !had.has(l));
+  const inArgs = args.filter((a) => a.includes("[scope:"));
+  if (!added.length && !inArgs.length) return;
+  mkdirSync(STATE, { recursive: true });
+  appendFileSync(SCOPE_LOG, JSON.stringify({ ts: new Date().toISOString(), op, path, by: process.env.LIFEOS_HOST ?? process.env.LIFEOS_SESSION_ID ?? "unknown", added: added.map((l) => l.slice(0, 300)), args: inArgs.map((a) => a.slice(0, 300)) }) + "\n");
+  console.error(`ISATool: marqueur [scope:] écrit (${op}) — journalisé dans ${SCOPE_LOG.replace(HOME, "~")} ; il n'a d'effet sur la porte build que s'il existait à l'ouverture du run.`);
+}
+function save(path: string, text: string, op: string, stampOnly = false) {
+  const k = key(true)!; let t = unstamped(text);
+  if (!stampOnly && /^---\n[\s\S]*?\n---/.test(t)) { t = fmSet(t, "progress", progress(t)); t = fmSet(t, "updated", new Date().toISOString()); }
+  t = fmSet(t, "isa_stamp", "PENDING"); const s = computeStamp(t, k)!; t = t.replace(/^isa_stamp:.*$/m, `isa_stamp: ${s}`);
+  logScopeTags(path, op, unstamped(existsSync(path) ? readFileSync(path, "utf8") : ""), t);
+  mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, t);
+  appendFileSync(LEDGER, JSON.stringify({ ts: new Date().toISOString(), op, path: realpathSync(path), stamp: s, by: process.env.LIFEOS_HOST ?? (process.env.LIFEOS_SESSION_ID?.startsWith("ses_") ? "opencode" : "claude"), session: process.env.LIFEOS_SESSION_ID ?? "" }) + "\n");
+  console.log(`ISATool ${op} ok → ${path} (progress ${progress(t)}, ${s.slice(0, 24)}…)`);
+}
+// ── human-tick : coche d'une claim `[scope:human — raison]` par le principal, signée ─────────────────────────
+// Une claim humaine (ratification, acte de Papa) n'est jamais cochée par un agent : `tick` la laisserait passer
+// pour une preuve outil. `human-tick` exige la clé ISA_STAMP_KEY dans l'ENVIRONNEMENT (secret du principal ou de
+// la CI, jamais lu sur disque) et signe { ISA, claim, justification, auteur, horodatage } en HMAC-SHA256. La ligne
+// de Verification porte la signature : `human-verify` (ou verifyHumanTick) la recontrôle. Codes : 3 clé absente ou
+// invalide, 4 claim non `[scope:human]`, 1 entrée invalide (claim introuvable, déjà cochée, justification faible).
+export const HUMAN_TICK_EXIT = { INPUT: 1, NO_KEY: 3, NOT_HUMAN: 4 } as const;
+const escRe = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/** Clé de signature humaine : hex, au moins 32 octets. `null` si absente, `"invalid"` si mal formée. */
+export function humanKeyFromEnv(env: Record<string, string | undefined> = process.env): Buffer | null | "invalid" {
+  const raw = (env.ISA_STAMP_KEY ?? "").trim();
+  if (!raw) return null;
+  if (!/^(?:[0-9a-fA-F]{2}){32,}$/.test(raw)) return "invalid";
+  return Buffer.from(raw, "hex");
+}
+/** La claim (ligne `idx`) est-elle `[scope:human — raison]`, sur sa ligne ou dans le titre `###` de son bloc ? */
+export function isHumanScoped(lines: string[], idx: number): boolean {
+
+$ grep -n "case \|command\|\"tick\"\|\"append\"\|\"verify\"\|\"set\"" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts | head -40
+44:// (ligne ajoutée/modifiée dans l'ISA, ou argument de la commande) est journalisée — l'agent ne peut pas s'exclure
+134:  } else if (cmd === "append") {
+139:  } else if (cmd === "tick" || cmd === "untick") {
+142:    const optName = cmd === "tick" ? "evidence" : "reason";
+144:    if (weakNote(note)) { console.error(`--${optName} trop faible (${note.trim().length} car.) : cite la commande et sa sortie pour une coche, la constatation de revue pour un décochage.`); process.exit(1); }
+145:    t = t.replace(re, `$1[${cmd === "tick" ? "x" : " "}]$2`);
+148:    const sha = cmd === "tick" ? headShort(path) : null;
+149:    const line = cmd === "tick" ? `- ${isc}: ${note}${sha ? ` [@${sha}]` : ""}` : `- ${isc}: NON VALIDÉ — ${note}`;
+150:    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`; save(path, t, `${cmd === "tick" ? "evidence" : "reason"}:${isc}`);
+175:  } else if (cmd === "set") { save(path, fmSet(readIsa(), need(opt("field"), "field"), need(opt("value"), "value")), `set:${opt("field")}`);
+178:  } else if (cmd === "verify") { const r = verifyStamp(readIsa()); console.log(r.ok ? "✅ provenance ok" : `❌ [${r.code}] ${r.message}`); process.exit(r.ok ? 0 : 2);
+179:  } else { console.error(`commande inconnue: ${cmd}`); process.exit(1); }
+
+$ sed -n '90,185p' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+}
+const isaSlug = (t: string, p: string) =>
+  fmSplit(t)[0].match(/^slug:\s*(\S+)/m)?.[1] ?? fmSplit(t)[0].match(/^task:\s*(.+)$/m)?.[1]?.trim() ?? p.split("/").slice(-2, -1)[0] ?? "";
+export interface HumanTickPayload { v: 1; op: "human-tick"; isa: string; isc: string; claim: string; evidence: string; by: string; at: string }
+export const humanSig = (p: HumanTickPayload, k: Buffer) => "hmac-sha256:" + createHmac("sha256", k).update(JSON.stringify(p)).digest("hex");
+const HUMAN_LINE_RE = (isc: string) =>
+  new RegExp(`^- ${escRe(isc)}: HUMAIN — (.+) \\(par ([^,()\\[\\]\\n]{1,60}), (\\d{4}-\\d{2}-\\d{2}T[0-9:.]+Z)\\) \\[human-sig:(hmac-sha256:[0-9a-f]{64})\\]\\s*$`, "m");
+/** Recontrôle la coche humaine de `isc` : claim cochée, toujours `[scope:human]`, signature valide pour la clé. */
+export function verifyHumanTick(text: string, isc: string, k: Buffer, isaPath = ""): { ok: boolean; reason: string } {
+  const lines = text.split("\n");
+  const idx = lines.findIndex((l) => new RegExp(`^\\s*- \\[[xX]\\] (?:\\*\\*)?${escRe(isc)}\\b`).test(l));
+  if (idx < 0) return { ok: false, reason: `${isc} absente ou non cochée` };
+  if (!isHumanScoped(lines, idx)) return { ok: false, reason: `${isc} n'est pas [scope:human — raison]` };
+  const m = text.match(HUMAN_LINE_RE(isc));
+  if (!m) return { ok: false, reason: `${isc} : aucune ligne de Verification HUMAIN signée` };
+  const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(text, isaPath), isc, claim: lines[idx]!.trim(), evidence: m[1]!, by: m[2]!, at: m[3]! };
+  const want = Buffer.from(humanSig(payload, k)), got = Buffer.from(m[4]!);
+  if (want.length !== got.length || !timingSafeEqual(want, got)) return { ok: false, reason: `${isc} : signature humaine invalide (claim, justification ou clé modifiée)` };
+  return { ok: true, reason: `${isc} : coche humaine signée par ${m[2]} le ${m[3]}` };
+}
+const args = process.argv.slice(2); const [cmd, path] = args;
+const opt = (n: string) => { const i = args.indexOf(`--${n}`); return i >= 0 ? args[i + 1] : undefined; };
+const need = (v: string | undefined, n: string) => { if (v === undefined) { console.error(`--${n} requis`); process.exit(1); } return v; };
+// Une preuve (ou une raison de décochage) tient en une phrase mesurable, pas en un jeton.
+const weakNote = (v: string) => { const s = v.trim(); return s.length < 20 || /^(?:todo|tbd|n\/?a|à faire|a faire|ok|done|passe|test|…)$/i.test(s); };
+const readIsa = () => { if (!existsSync(path)) { console.error(`introuvable: ${path}`); process.exit(1); } return readFileSync(path, "utf8"); };
+const fromFileOrText = () => opt("file") ? readFileSync(opt("file")!, "utf8") : need(opt("text"), "text");
+if (import.meta.main) {
+  if (!cmd || !path) { console.log(`usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+  scaffold --slug s --goal "…" [--title t]      crée l'ISA (sections Problem…Decisions)
+  append   --section "Claims" --text "…"|--file f  ajoute sous une section (créée si absente)
+  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+  set      --field phase --value build          frontmatter
+  replace  --old "…" --new "…"                  remplacement exact unique (corrections)
+  adopt                                          tamponne un ISA hérité (après relecture)
+  verify                                         contrôle l'empreinte (exit 2 si KO)
+  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)`); process.exit(1); }
+  if (cmd === "scaffold") {
+    if (existsSync(path)) { console.error("existe déjà — utilise append/set"); process.exit(1); }
+    const slug = need(opt("slug"), "slug"), goal = need(opt("goal"), "goal");
+    save(path, `---\ntask: ${opt("title") ?? slug}\nslug: ${slug}\nphase: observe\nprogress: 0/0\nprincipal_stated_goal: ${JSON.stringify(goal)}\nstarted: ${new Date().toISOString()}\n---\n\n## Problem\n\n## Vision\n\n## Out of Scope\n\n## Constraints\n\n## Goal\n\n${goal}\n\n## Claims\n\n## Test Strategy\n\n| isc | type | check | threshold | tool | anchors_to |\n|-----|------|-------|-----------|------|------------|\n\n## Features\n\n## Decisions\n\n## Verification\n`, "scaffold");
+  } else if (cmd === "append") {
+    let t = readIsa(); const sec = need(opt("section"), "section"); const add = fromFileOrText().replace(/\n+$/, "");
+    const re = new RegExp(`(^## ${sec.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, "m");
+    t = re.test(t) ? t.replace(re, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${add}\n\n`) : `${t.replace(/\n+$/, "")}\n\n## ${sec}\n\n${add}\n`;
+    save(path, t, `append:${sec}`);
+  } else if (cmd === "tick" || cmd === "untick") {
+    let t = readIsa(); const isc = need(opt("isc"), "isc"); const re = new RegExp(`^(\\s*- )\\[[ xX]\\]( (?:\\*\\*)?${isc}\\b)`, "m");
+    if (!re.test(t)) { console.error(`${isc} introuvable`); process.exit(1); }
+    const optName = cmd === "tick" ? "evidence" : "reason";
+    const note = need(opt(optName), optName);
+    if (weakNote(note)) { console.error(`--${optName} trop faible (${note.trim().length} car.) : cite la commande et sa sortie pour une coche, la constatation de revue pour un décochage.`); process.exit(1); }
+    t = t.replace(re, `$1[${cmd === "tick" ? "x" : " "}]$2`);
+    save(path, t, `${cmd}:${isc}`); t = readFileSync(path, "utf8");
+    const re2 = /(^## Verification\s*$)([\s\S]*?)(?=^## |(?![\s\S]))/m;
+    const sha = cmd === "tick" ? headShort(path) : null;
+    const line = cmd === "tick" ? `- ${isc}: ${note}${sha ? ` [@${sha}]` : ""}` : `- ${isc}: NON VALIDÉ — ${note}`;
+    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`; save(path, t, `${cmd === "tick" ? "evidence" : "reason"}:${isc}`);
+  } else if (cmd === "human-tick" || cmd === "human-verify") {
+    const k = humanKeyFromEnv();
+    if (k === null) { console.error(`${cmd} refusé : ISA_STAMP_KEY absent de l'environnement — une coche humaine n'est jamais posée sans signature.`); process.exit(HUMAN_TICK_EXIT.NO_KEY); }
+    if (k === "invalid") { console.error(`${cmd} refusé : ISA_STAMP_KEY invalide (hexadécimal, au moins 32 octets attendus).`); process.exit(HUMAN_TICK_EXIT.NO_KEY); }
+    const isc = need(opt("isc"), "isc"); const t0 = readIsa();
+    if (cmd === "human-verify") { const r = verifyHumanTick(t0, isc, k, path); console.log(r.ok ? `✅ ${r.reason}` : `❌ ${r.reason}`); process.exit(r.ok ? 0 : 2); }
+    const evidence = need(opt("evidence"), "evidence").trim();
+    if (/[\r\n]/.test(evidence)) { console.error("--evidence tient sur une ligne."); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    if (weakNote(evidence)) { console.error(`--evidence trop faible (${evidence.length} car.) : dis ce que tu as constaté ou décidé, et où (document, réunion, revue).`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    const by = (opt("by") ?? process.env.LIFEOS_PRINCIPAL ?? process.env.USER ?? "principal").trim();
+    if (!/^[^,()[\]\n]{1,60}$/.test(by)) { console.error("--by invalide (1 à 60 caractères, sans virgule, parenthèse ni crochet)."); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    const lines = t0.split("\n"); const re = new RegExp(`^(\\s*- )\\[([ xX])\\]( (?:\\*\\*)?${escRe(isc)}\\b.*)$`);
+    const idx = lines.findIndex((l) => re.test(l));
+    if (idx < 0) { console.error(`${isc} introuvable`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    if (!isHumanScoped(lines, idx)) { console.error(`human-tick refusé : ${isc} n'est pas marquée [scope:human — raison] (sur sa ligne ou le titre ### de son bloc). Une claim de build se coche avec \`tick\` sur preuve outil.`); process.exit(HUMAN_TICK_EXIT.NOT_HUMAN); }
+    const m = lines[idx]!.match(re)!;
+    if (m[2] !== " ") { console.error(`${isc} est déjà cochée — rien à signer.`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    lines[idx] = `${m[1]}[x]${m[3]}`;
+    let t = lines.join("\n"); const at = new Date().toISOString();
+    const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(t, path), isc, claim: lines[idx]!.trim(), evidence, by, at };
+    const line = `- ${isc}: HUMAIN — ${evidence} (par ${by}, ${at}) [human-sig:${humanSig(payload, k)}]`;
+    const re2 = /(^## Verification\s*$)([\s\S]*?)(?=^## |(?![\s\S]))/m;
+    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`;
+    save(path, t, `human-tick:${isc}`);
+  } else if (cmd === "set") { save(path, fmSet(readIsa(), need(opt("field"), "field"), need(opt("value"), "value")), `set:${opt("field")}`);
+  } else if (cmd === "replace") { const t = readIsa(), o = need(opt("old"), "old"); if (t.split(o).length !== 2) { console.error("old doit apparaître exactement une fois"); process.exit(1); } save(path, t.replace(o, need(opt("new"), "new")), "replace");
+  } else if (cmd === "adopt") { save(path, readIsa(), "adopt", true); // empreinte seule : contenu inchangé
+  } else if (cmd === "verify") { const r = verifyStamp(readIsa()); console.log(r.ok ? "✅ provenance ok" : `❌ [${r.code}] ${r.message}`); process.exit(r.ok ? 0 : 2);
+  } else { console.error(`commande inconnue: ${cmd}`); process.exit(1); }
+}
+
