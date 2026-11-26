@@ -45,24 +45,25 @@ for needle in (
     "IN_WIP_PUSH_MIN=15",
     "STATE_DIR/bases",
     "sudo -n env -i",
+    'T="$FULLRUN_TOOLS"; L="$FULLRUN_WIP"',
 ):
     assert needle in run, "démon wippush incomplet : %r absent" % needle
 
 oom = steps[i_oom].get("run", "")
 assert "oom_score_adj" in oom, "protection OOM absente"
-assert "/opt/fullrun-wip/pid" in oom, "OOM ne protège pas wippush"
-assert "/opt/fullrun-live/pid" in oom, "OOM ne protège pas livelog"
+assert '"$FULLRUN_WIP/pid"' in oom, "OOM ne protège pas wippush (slot)"
+assert '"$FULLRUN_LIVE/pid"' in oom, "OOM ne protège pas livelog (slot)"
 
 oc = steps[i_oc].get("run", "")
 for needle in (
-    "/opt/fullrun-tools/progress.sh start",
-    "/opt/fullrun-tools/progress.sh loop",
+    '"$FULLRUN_TOOLS"/progress.sh start',
+    '"$FULLRUN_TOOLS"/progress.sh loop',
     "progress.sh once fin",
     "OC_PROGRESS_INTERVAL=120",
 ):
     assert needle in oc, "progress.sh non branché pendant opencode : %r" % needle
 
-print("OK   wippush + OOM + progress branchés avant/pendant opencode")
+print("OK   wippush + OOM + progress branchés avant/pendant opencode (slots runner)")
 PY
 
 echo "PASS agent-run-wippush : démons wip/OOM/progress branchés dans _agent-run.yml"

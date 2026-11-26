@@ -97,10 +97,8 @@ env:
   GITLEAKS_SHA256: "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
   AGE_VERSION: "1.2.1"
   AGE_SHA256: "7df45a6cc87d4da11cc03a539a7470c15b1041ab2b396af088fe9990f7c79d50"
-  # Copies root-owned, hors de l'espace de travail de l'agent (C1).
-  TOOLS_DIR: /opt/lifeos-ci-tools
-  # État de sécurité écrit avant opencode, root-owned, non modifiable par l'agent (C3).
-  STATE_DIR: /opt/lifeos-ci-state
+  # TOOLS_DIR / STATE_DIR / FULLRUN_* : isolés par RUNNER_NAME via opencode/runner-slot.sh
+  # (jusqu'à 3 runners sur la même VM sans collision /opt ni /tmp).
 
 jobs:
   run:
@@ -150,22 +148,36 @@ jobs:
       - name: Outils de confiance figés (root, avant opencode)
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           T="$TOOLS_DIR"
+          FT="$FULLRUN_TOOLS"
+          FL="$FULLRUN_LIVE"
+          FW="$FULLRUN_WIP"
           # /opt est 0777 sur les runners hébergés : sans cela l'agent (même UID) pourrait
           # renommer /opt/lifeos-ci-tools et y placer sa propre copie.
           sudo chmod go-w /opt
           [ -z "$(find /opt -maxdepth 0 -perm /022)" ] \
             || { echo "::error::/opt reste inscriptible par le groupe ou les autres"; exit 1; }
-          sudo rm -rf "$T" "$STATE_DIR"
-          sudo install -d -o root -g root -m 0755 "$T" "$STATE_DIR"
+          # Ne touche que le slot de CE runner (les autres jobs gardent leur /opt).
+          sudo rm -rf "$T" "$STATE_DIR" "$FT" "$FL" "$FW"
+          sudo install -d -o root -g root -m 0755 "$T" "$STATE_DIR" "$FT" "$FL" "$FW"
           sudo cp -a ci/opencode "$T/opencode"
           sudo cp -a ci/targets "$T/targets"
           sudo install -o root -g root -m 0644 ci/models.txt "$T/models.txt"
-          # Journal en direct : copie root dans /opt/fullrun-tools, même modèle que
+          # Journal en direct : copie root dans $FULLRUN_TOOLS (isolé par runner), même modèle que
           # opencode-fullrun.yml. allowed-repos.sh vient de targets/ (liste lifeos-ci,
           # TARGET_REPO du run) et non de opencode/ (liste Galass historique).
-          FT=/opt/fullrun-tools; FL=/opt/fullrun-live
-          sudo install -d -o root -g root -m 0755 "$FT" "$FL"
+          echo "Slot runner=$RUNNER_NAME → STATE_DIR=$STATE_DIR TOOLS_DIR=$TOOLS_DIR"
           # Même jeu d'outils figés que opencode-fullrun (mini FullRun) : livelog, wippush/autosave,
           # progress, checkpoint, done_check, emu-e2e — hors de portée de l'agent.
           sudo install -o root -g root -m 0755 \
@@ -181,8 +193,8 @@ jobs:
           sudo install -o root -g root -m 0755 "$FT/bench-capped" /usr/local/bin/bench-capped
           command -v bench-capped >/dev/null \
             || { echo "::error::bench-capped absent du PATH"; exit 1; }
-          sudo chown -R root:root "$T" "$STATE_DIR" "$FT" "$FL"
-          sudo chmod -R go-w "$T" "$STATE_DIR" "$FT" "$FL"
+          sudo chown -R root:root "$T" "$STATE_DIR" "$FT" "$FL" "$FW"
+          sudo chmod -R go-w "$T" "$STATE_DIR" "$FT" "$FL" "$FW"
           sudo find "$T" -type f -exec chmod 0644 {} +
           sudo find "$T" -type f -name '*.sh' -exec chmod 0755 {} +
           sudo find "$T" -type f \( -name bench-capped -o -name gitleaks \) -exec chmod 0755 {} +
@@ -199,6 +211,17 @@ jobs:
           CI_TOKEN: ${{ secrets.CI_TOKEN }}
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           fail() { echo "::error::$1"; exit 1; }
           [ -n "${CI_TOKEN:-}" ] || fail "secret CI_TOKEN absent"
           [[ "$IN_AGENT" =~ ^[a-z0-9][a-z0-9-]{0,31}$ ]] || fail "agent invalide"
@@ -272,6 +295,17 @@ jobs:
           EXTRA_NORM: ${{ steps.validate.outputs.extra_norm }}
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           auth=$(printf 'x-access-token:%s' "$CI_TOKEN" | base64 -w0)
           echo "::add-mask::$auth"
           export GIT_CONFIG_GLOBAL=/dev/null
@@ -308,6 +342,17 @@ jobs:
           CI_TOKEN: ${{ secrets.CI_TOKEN }}
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           url="https://github.com/LordThiouk/lifeos.git"
           # Self-hosted : un run précédent peut laisser lifeos/ en a-w (lifeos_write=false).
           if [ -e lifeos ]; then
@@ -344,6 +389,17 @@ jobs:
           EXTRA_NORM: ${{ steps.validate.outputs.extra_norm }}
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           tmp="$RUNNER_TEMP/bases.$$"
           : > "$tmp"
           base=$(git -C target rev-parse HEAD)
@@ -371,6 +427,17 @@ jobs:
           EXTRA_NORM: ${{ steps.validate.outputs.extra_norm }}
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           mkdir -p "$RUNNER_TEMP/oc"
           pfile="$RUNNER_TEMP/oc/prompt.md"
           {
@@ -385,7 +452,7 @@ jobs:
             printf -- '- Travaille uniquement dans les dépôts fournis ; committe ton travail validé sur la branche courante.\n'
             printf -- '- Jamais de push, jamais de merge, jamais gh/ssh/scp ; le workflow pousse et ouvre la PR.\n'
             printf -- '- Jamais de secret ni de clé en dur. Ne modifie pas main/master.\n'
-            printf -- '- Écris un court résumé factuel (SHA, tests, résultats) dans /tmp/task_done.md.\n'
+            printf -- '- Écris un court résumé factuel (SHA, tests, résultats) dans %s.\n' "$RUNNER_TEMP/task_done.md"
             printf -- '- lifeos de référence : lifeos/ (lecture seule si lifeos_write=false).\n'
             if [ "$LIFEOS_WRITE" = false ]; then
               printf -- '- lifeos est en lecture seule : ne tente jamais de le modifier.\n'
@@ -432,12 +499,23 @@ jobs:
           if [ -s "target/.fullrun/${IN_JOB}_checkpoint.json" ] \
             && [ ! -L "target/.fullrun" ] \
             && [ ! -L "target/.fullrun/${IN_JOB}_checkpoint.json" ]; then
-            { echo; bash /opt/fullrun-tools/checkpoint.sh resume-text --job "$IN_JOB" --repo "$GITHUB_WORKSPACE/target" | head -c 6000; } >> "$pfile" || true
+            { echo; bash "$FULLRUN_TOOLS/checkpoint.sh" resume-text --job "$IN_JOB" --repo "$GITHUB_WORKSPACE/target" | head -c 6000; } >> "$pfile" || true
           fi
 
       - name: Installer opencode et gitleaks
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           # Prefix user (self-hosted n'a souvent pas le droit d'écrire /usr/lib) ;
           # le binaire est ensuite figé dans /usr/local/bin (PATH de env -i).
           npm_prefix="$RUNNER_TEMP/npm-global"
@@ -457,9 +535,9 @@ jobs:
           sudo install -o root -g root -m 0755 "$RUNNER_TEMP/gl/gitleaks" /usr/local/bin/gitleaks
           # Copie figée utilisée par la porte post-opencode (jamais le PATH de l'agent).
           sudo install -o root -g root -m 0755 "$RUNNER_TEMP/gl/gitleaks" "$TOOLS_DIR/opencode/gitleaks"
-          # Copie figée pour le démon du journal en direct (/opt/fullrun-tools, même modèle
+          # Copie figée pour le démon du journal en direct ($FULLRUN_TOOLS, même modèle
           # que opencode-fullrun.yml).
-          sudo install -o root -g root -m 0755 "$RUNNER_TEMP/gl/gitleaks" /opt/fullrun-tools/gitleaks
+          sudo install -o root -g root -m 0755 "$RUNNER_TEMP/gl/gitleaks" "$FULLRUN_TOOLS/gitleaks"
           gitleaks version
 
       # Chiffrement des instantanés du journal en direct quand gitleaks trouve encore
@@ -469,6 +547,17 @@ jobs:
         continue-on-error: true
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           f="$RUNNER_TEMP/age.tgz"
           curl -sSfL -o "$f" "https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz"
           echo "${AGE_SHA256}  $f" | sha256sum -c --quiet
@@ -487,6 +576,17 @@ jobs:
         if: ${{ inputs.agent != 'task' }}
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           command -v bun >/dev/null || { echo "::error::bun absent après installation"; exit 1; }
           # L'étape opencode tourne avec `env -i PATH=/usr/local/bin:/usr/bin:/bin` :
           # le bun du tool cache n'y est pas visible, on l'installe dans /usr/local/bin.
@@ -540,6 +640,17 @@ jobs:
           EXTRA_NORM: ${{ steps.validate.outputs.extra_norm }}
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           mkdir -p "$RUNNER_TEMP/oc"
           cat > "$RUNNER_TEMP/oc/opencode.json" <<'CFG'
           {
@@ -606,6 +717,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           agent_home="$RUNNER_TEMP/oc-agent/home"
           pf="$agent_home/.claude/LIFEOS/TOOLS/FullRunPreflight.ts"
           if [ ! -f "$pf" ]; then
@@ -646,6 +768,17 @@ jobs:
       - name: Installer ffmpeg
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
           ffmpeg -version | head -1
 
@@ -660,7 +793,18 @@ jobs:
           OC_LOG: ${{ runner.temp }}/oc/opencode.log
         run: |
           set +x
-          T=/opt/fullrun-tools; L=/opt/fullrun-live
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
+          T="$FULLRUN_TOOLS"; L="$FULLRUN_LIVE"
           [[ "$IN_JOB" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$ && "$RUN_ID" =~ ^[0-9]{1,20}$ ]] \
             || { echo "::warning::job ou run invalide : pas de journal en direct"; exit 0; }
           [ -n "${PUSH_TOKEN:-}" ] || { echo "::warning::CI_TOKEN absent : pas de journal en direct"; exit 0; }
@@ -675,7 +819,7 @@ jobs:
             gcfg="$T/gitleaks.toml"
           fi
           if [ -n "${ISA_STAMP_KEY:-}" ]; then
-            printf '%s' "$ISA_STAMP_KEY" | sudo sh -c 'umask 077; cat > /opt/fullrun-live/isa.key'
+            printf '%s' "$ISA_STAMP_KEY" | sudo sh -c 'umask 077; cat > "$0"' "$FULLRUN_LIVE/isa.key"
           fi
           LOGB="fullrun-logs/${IN_JOB}-${RUN_ID}"
           # shellcheck disable=SC2024
@@ -707,7 +851,18 @@ jobs:
           RUN_ID: ${{ github.run_id }}
         run: |
           set +x
-          T=/opt/fullrun-tools; L=/opt/fullrun-wip
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
+          T="$FULLRUN_TOOLS"; L="$FULLRUN_WIP"
           [[ "$IN_JOB" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$ && "$RUN_ID" =~ ^[0-9]{1,20}$ ]] \
             || { echo "::warning::job ou run invalide : pas de push périodique"; exit 0; }
           [ -n "${PUSH_TOKEN:-}" ] || { echo "::warning::CI_TOKEN absent : pas de push périodique"; exit 0; }
@@ -724,7 +879,7 @@ jobs:
             WIP_STATE="$L" WIP_REPO="$GITHUB_WORKSPACE/target" WIP_BRANCH="$IN_BRANCH" \
             WIP_JOB="$IN_JOB" WIP_RUN="$RUN_ID" TARGET_REPO="$TARGET_REPO" \
             WIP_BASE_SHA="$BASE_SHA" WIP_GITLEAKS="$T/gitleaks" WIP_GL_CONFIG="$gcfg" \
-            WIP_ISA_KEY_FILE=/opt/fullrun-live/isa.key WIP_TOKEN_STDIN=1 \
+            WIP_ISA_KEY_FILE="$FULLRUN_LIVE/isa.key" WIP_TOKEN_STDIN=1 \
             WIP_AUTOSAVE_DENY="$T/autosave-deny.txt" \
             IN_WIP_PUSH_MIN=15 \
             setsid -f nice -n 0 "$T/wippush.sh" daemon > "$RUNNER_TEMP/wip.out" 2>&1 &
@@ -743,10 +898,21 @@ jobs:
         continue-on-error: true
         run: |
           set +x
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           for p in $(pgrep -f '[R]unner.Worker' 2>/dev/null || true); do
             echo -500 | sudo -n tee "/proc/$p/oom_score_adj" >/dev/null 2>&1 || true
           done
-          for f in /opt/fullrun-live/pid /opt/fullrun-wip/pid; do
+          for f in "$FULLRUN_LIVE/pid" "$FULLRUN_WIP/pid"; do
             p=$(sudo -n cat "$f" 2>/dev/null || true)
             if [[ "$p" =~ ^[0-9]{1,9}$ ]]; then
               echo -500 | sudo -n tee "/proc/$p/oom_score_adj" >/dev/null 2>&1 || true
@@ -773,6 +939,17 @@ jobs:
           LIVE_BRANCH: ${{ steps.live.outputs.branch }}
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           agent_tmp="$RUNNER_TEMP/oc-agent"
           agent_home="$agent_tmp/home"
           mkdir -p "$agent_tmp" "$agent_home"
@@ -857,8 +1034,8 @@ jobs:
           export OC_PROGRESS_INTERVAL=120
           [ -n "${LIVE_BRANCH:-}" ] && export OC_LIVE_BRANCH="$LIVE_BRANCH"
           [ -n "${IN_ISA:-}" ] && export OC_ISA_PATH="$GITHUB_WORKSPACE/target/$IN_ISA"
-          /opt/fullrun-tools/progress.sh start || true
-          /opt/fullrun-tools/progress.sh loop & progress_mon=$!
+          "$FULLRUN_TOOLS"/progress.sh start || true
+          "$FULLRUN_TOOLS"/progress.sh loop & progress_mon=$!
           status="erreur"
           used=""
           # Silence sans sortie → bascule (défaut 180 s). Ne pas brûler le plafond
@@ -976,7 +1153,7 @@ jobs:
                 new_commits=$((new_commits + 1))
               fi
             fi
-            if [ "$new_commits" -gt 0 ] || [ -f /tmp/task_done.md ]; then
+            if [ "$new_commits" -gt 0 ] || [ -f "$RUNNER_TEMP/task_done.md" ]; then
               status="ok"
             elif [ ! -s "$log" ]; then
               status="vide"
@@ -994,7 +1171,7 @@ jobs:
           esac
           kill "$progress_mon" 2>/dev/null || true
           wait "$progress_mon" 2>/dev/null || true
-          /opt/fullrun-tools/progress.sh once fin "$stop_prog" || true
+          "$FULLRUN_TOOLS"/progress.sh once fin "$stop_prog" || true
           if [ -s "$agent_tmp/oc-tail" ]; then
             sudo install -o root -g root -m 0644 "$agent_tmp/oc-tail" "$STATE_DIR/oc-tail"
           else
@@ -1011,6 +1188,17 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           status="erreur"
           model=""
           rc=""
@@ -1050,6 +1238,17 @@ jobs:
           GIT_CONFIG_NOSYSTEM: "1"
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           pkill -KILL -f '(^|[ /])opencode run ' 2>/dev/null || true
           head_sha=""
           [ -f "$STATE_DIR/bases" ] || { echo "head_sha=" >> "$GITHUB_OUTPUT"; exit 0; }
@@ -1137,7 +1336,7 @@ jobs:
               "$LIFEOS_WRITE" "LordThiouk/$r" "$branch"
             "$TOOLS_DIR/opencode/gitleaks" detect --source "$dir" \
               --log-opts="$base..$h" --no-banner --redact >/dev/null
-            b="$work/$(printf '%s' "$r" | tr -c 'A-Za-z0-9._-' '_').git"
+            b="$work/$(printf '%s' "$r" | tr -c 'A-Za-z0-9_-' '_').git"
             git init -q --bare "$b"
             env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$RUNNER_TEMP" \
               GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 GIT_TERMINAL_PROMPT=0 \
@@ -1232,6 +1431,17 @@ jobs:
           OC_STATUS: ${{ steps.oc.outputs.status }}
         run: |
           set -euo pipefail
+          # Isolateur multi-runner : chemins /opt dérivés UNIQUEMENT de RUNNER_NAME
+          # (pas de source ci/ — l'agent peut modifier le workspace après checkout).
+          _slot=$(printf '%s' "${RUNNER_NAME:-runner}" | tr -c 'A-Za-z0-9_-' '_' | cut -c1-64)
+          export RUNNER_SLOT=${_slot:-runner}
+          unset _slot
+          export STATE_DIR="/opt/lifeos-ci-state/$RUNNER_SLOT"
+          export TOOLS_DIR="/opt/lifeos-ci-tools/$RUNNER_SLOT"
+          export FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"
+          export FULLRUN_LIVE="/opt/fullrun-live/$RUNNER_SLOT"
+          export FULLRUN_WIP="/opt/fullrun-wip/$RUNNER_SLOT"
+
           case "${OC_STATUS:-erreur}" in
             ok)
               echo "Run opencode terminé : ok"
