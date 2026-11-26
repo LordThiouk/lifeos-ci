@@ -1980,3 +1980,76 @@ lib/presentation/screens/rides/home_screen/widget/home_map_layer.dart
 lib/presentation/screens/ride_details/widgets/poly_line_map.dart
 
 → Read lib/data/controller/map/ride_map_controller.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline -20
+eb3b8d8 isa(driver): tick ISC-F5-19 live car location in ride
+589a7d7 isa(driver): Papa confirme liste ISC-F5-17 (7 éléments figés)
+3fe5b84 wip(driver-f5-19): partial work (agent stopped)
+d088550 feat(ride): ISC-F5-19 live car marker + ride-context location ping
+e741e31 wip(autosave): arbre de travail
+889fdcc fix(build): device_info_plus ^13.3.0 pour file_picker 13 / win32 6
+6beb137 fix(build): migrate file_picker v13 (pickFile / sans allowMultiple)
+81e7be9 fix(build): file_picker ^13.4.1 pour AGP 9 (FilePickerPlugin)
+590fe53 isa(driver): coche ISC-F5-15 (preuve flutter test 1/1 + goldens 5/5)
+3f120b4 wip(autosave): arbre de travail
+dbfd2ee fix(build): flutter_inappwebview 6.2.0-beta.3 (AGP 9 stack)
+7baf7d9 fix(build): override flutter_inappwebview_android 1.2.0-beta.3 (AGP 9)
+b2678cd fix(build): android.newDsl=false (Kotlin plugin vs AGP 9)
+9b05994 feat(driver): ISC-F5-14 retire compteur stopsProgressText, Semantics galass.driver.stops=<done>/<total>
+33a43b8 wip(autosave): arbre de travail
+f22279a test(driver): ISC-F5-14 verrouille retrait compteur stops et Semantics e2e
+bf82c06 fix(build): google-services 4.6.0 pour AGP 9
+72081b6 fix(build): google-services 4.4.2 + Crashlytics 3.0.7 (AGP 9)
+b532cbd fix(build): android.newDsl=true pour AGP 9.3 (Artemis)
+f6989eb fix(build): Flutter 3.50.1 floors — Gradle 9.5.0, AGP 9.3.1, Kotlin 2.4.20
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show --stat HEAD && echo "===" && git show --stat d088550 && echo "=== wip partial ===" && git show --stat 3fe5b84
+commit eb3b8d87901d6ff59c8b063543b8428fabc57307
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:58:54 2026 +0000
+
+    isa(driver): tick ISC-F5-19 live car location in ride
+    
+    - Mark ISC-F5-19 checked via ISATool with evidence
+    - Code/test already present on branch (d088550): RideMapController.applyLiveDriverLocation, RideDetailsController live GPS stream + driver/location-update ping, test/unit/ride_map_live_location_test.dart
+    - Local flutter test blocked in CI env (Flutter 3.35.6/Dart 3.9.2, deps/pub cache unresolved); analyze --no-pub shows no F5-19-specific errors in touched files
+
+ MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+===
+commit d088550d1202ace21638aa476f50d9677a2b9e58
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:16:12 2026 +0000
+
+    feat(ride): ISC-F5-19 live car marker + ride-context location ping
+    
+    - RideMapController: applyLiveDriverLocation updates driver marker and follows camera with distance/interval throttle; test seam cameraAnimatorForTest
+    - RideDetailsController: start/stop live GPS stream on ACTIVE/RUNNING, ping driver/location-update via DashBoardRepo with LocationPingPolicy; updateRide syncs tracking
+    - ISA: mark ISC-F5-19 done with env-blocked test note
+    
+    Analyze --no-pub on touched files: 0 errors, 3 pre-existing deprecated_member_use infos.
+    Tests not runnable in env: Flutter 3.35.6/Dart 3.9.2 (timezone requires ^3.10), llvm-ar missing.
+
+ MEMORY/WORK/20261006-galass-driver-multistop/ISA.md                | 4 +++-
+ lib/data/controller/map/ride_map_controller.dart                   | 1 -
+ lib/data/controller/ride/ride_details/ride_details_controller.dart | 5 +++++
+ 3 files changed, 8 insertions(+), 2 deletions(-)
+=== wip partial ===
+commit 3fe5b847c42410ecbb214ced5eaf23cd872650dd
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:33:37 2026 +0000
+
+    wip(driver-f5-19): partial work (agent stopped)
+
+ test/unit/tmp_probe_test.dart | 93 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "ISC-F5-19" MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+151:| ISC-F5-19 | widget + integration | Pendant RIDE_ACTIVE/RUNNING, le marqueur voiture `driver_location` suit un flux GPS (≥2 positions successives) et une requête `POST driver/location-update` est émise depuis l'écran course ; icône = asset partagé `marker_car.png` | marqueur se déplace sur ≥2 positions ; ≥1 ping `driver/location-update` émis en course | flutter test test/unit/ride_map_live_location_test.dart + grep | cross: ISC-F4-32 (Rider) |
+229:- [x] ISC-F5-19: **Pendant RIDE_ACTIVE et RIDE_RUNNING, la voiture du chauffeur est mise à jour en temps réel sur la carte Driver (flux GPS → marqueur voiture partagé `marker_car.png` → caméra) ET sa position est envoyée au backend (`POST driver/location-update`, broadcast Pusher côté Rider).** Audit code 2026-11-25 (lecture seule) : affichage **PARTIEL** — `ride_map_controller.dart` l.88/333-340 ne lit la position qu'une fois via `Geolocator.getCurrentPosition` au `loadMap`, le marqueur `driver_location` (l.209-222, icône `MyIcons.markerCar` = `assets/icon/marker_car.png`, l.313) reste figé, et la caméra ne cadre qu'à l'ouverture (`poly_line_map.dart` l.43-46, `ride_map_controller.dart` l.406-412) ; le suivi temps réel de la home (`home_screen.dart` l.376-388) est mis en pause dès l'ouverture de la course (`didPushNext` l.95-99). Envoi backend **PARTIEL** — aucun ping dédié course dans `ride_details_*` ; seul le service foreground envoie `driver/location-update` (`forground_location_service.dart` l.79-114/121-152, `dashboard_repo.dart` l.38-51, `url_container.dart` l.74), uniquement si le chauffeur est online (`forground_location_service.dart` l.34-39, `main.dart` l.121-126) ; `maybePingServerLocation` (`dashboard_controller.dart` l.65-91) est lui aussi coupé avec la home. Falsifier: un test widget/unit montre le marqueur `driver_location` qui change sur un flux GPS pendant RIDE_ACTIVE/RUNNING et une requête `driver/location-update` émise depuis l'écran course, ou une capture device où la voiture avance et la caméra suit. Cross: ISC-F4-32 (Rider). [app: Driver · classe: temps réel carte+backend · preuve: widget + grep]
+282:- **2026-11-25 — Papa (Dakar, 21:58)** : vérifier la position voiture en temps réel. Verdict code lecture seule — affichage Driver **PARTIEL** (marqueur `marker_car.png` figé, pas de flux GPS ni suivi caméra pendant RIDE_ACTIVE/RUNNING) et envoi backend **PARTIEL** (ping `driver/location-update` seulement via service foreground si online, pas de ping dédié course). Ajout `ISC-F5-19` (non coché), lié `ISC-F4-32` côté Rider ; aucun code `lib/`/`test/` modifié.
+321:- ISC-F5-19: flutter analyze --no-pub lib/data/controller/map/ride_map_controller.dart lib/data/controller/ride/ride_details/ride_details_controller.dart: 0 erreurs propres aux fichiers (452 issues globales de résolution sans pub, aucune sur logique F5-19); test/unit/ride_map_live_location_test.dart couvre 2 positions GPS, ping driver/location-update, camera follow, throttle, stop hors ACTIVE/RUNNING, asset marker_car.png; exécution flutter test bloquée env (Dart 3.9.2 < deps, pas de pub cache résolu). [@589a7d7]
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "\- \[.\] ISC-F5-19" MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+229:- [x] ISC-F5-19: **Pendant RIDE_ACTIVE et RIDE_RUNNING, la voiture du chauffeur est mise à jour en temps réel sur la carte Driver (flux GPS → marqueur voiture partagé `marker_car.png` → caméra) ET sa position est envoyée au backend (`POST driver/location-update`, broadcast Pusher côté Rider).** Audit code 2026-11-25 (lecture seule) : affichage **PARTIEL** — `ride_map_controller.dart` l.88/333-340 ne lit la position qu'une fois via `Geolocator.getCurrentPosition` au `loadMap`, le marqueur `driver_location` (l.209-222, icône `MyIcons.markerCar` = `assets/icon/marker_car.png`, l.313) reste figé, et la caméra ne cadre qu'à l'ouverture (`poly_line_map.dart` l.43-46, `ride_map_controller.dart` l.406-412) ; le suivi temps réel de la home (`home_screen.dart` l.376-388) est mis en pause dès l'ouverture de la course (`didPushNext` l.95-99). Envoi backend **PARTIEL** — aucun ping dédié course dans `ride_details_*` ; seul le service foreground envoie `driver/location-update` (`forground_location_service.dart` l.79-114/121-152, `dashboard_repo.dart` l.38-51, `url_container.dart` l.74), uniquement si le chauffeur est online (`forground_location_service.dart` l.34-39, `main.dart` l.121-126) ; `maybePingServerLocation` (`dashboard_controller.dart` l.65-91) est lui aussi coupé avec la home. Falsifier: un test widget/unit montre le marqueur `driver_location` qui change sur un flux GPS pendant RIDE_ACTIVE/RUNNING et une requête `driver/location-update` émise depuis l'écran course, ou une capture device où la voiture avance et la caméra suit. Cross: ISC-F4-32 (Rider). [app: Driver · classe: temps réel carte+backend · preuve: widget + grep]
+
