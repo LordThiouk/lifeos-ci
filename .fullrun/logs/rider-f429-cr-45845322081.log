@@ -7622,3 +7622,113 @@ Test : **`00:04 +9: All tests passed!`** (9/9). `flutter test` lance un `pub get
 Wrote file successfully.
 
 Tout est propre : pas de golden touché, `.fullrun` intact, `pubspec.lock` déjà modifié avant mon run (mêmes compteurs 78/166). Je rédige `VERIFY-F429.md` (1re ligne `VERDICT: PASS`, sortie collée, rôle vérification seule).
+$ git status --porcelain=v1 && git diff -- VERIFY-F429.md
+M VERIFY-F429.md
+ M lib/data/controller/account/profile_controller.dart
+ M lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
+ M lib/data/controller/support/new_ticket_controller.dart
+ M lib/data/controller/support/ticket_details_controller.dart
+ M lib/presentation/screens/edit_profile/widget/profile_image.dart
+ M pubspec.lock
+ M pubspec.yaml
+diff --git a/VERIFY-F429.md b/VERIFY-F429.md
+index 94e8135..b5ef8fc 100644
+--- a/VERIFY-F429.md
++++ b/VERIFY-F429.md
+@@ -1,22 +1,74 @@
+ VERDICT: PASS
+ 
+-ISC-F4-29 a-b (profil chauffeur RUNNING — fonts setUpAll) — vérification via
+-flutter test test/widget/course_en_cours_contract_test.dart.
+-
+-Résultat : 00:04 +9: All tests passed!
+-
+-Tests exécutés (9/9 OK) :
+-- ISC-F4-29 a-b : profil chauffeur (avatar, nom, note) en RUNNING
+-- ISC-F4-29 c-h : les 8 éléments du contrat sont présents
+-- ISC-F4-22 : repère Semantics galass.rider.stops, compteur retiré
+-- ISC-F4-25 : tuile « Des notes pour la prise en charge ? » visible en RUNNING
+-- ISC-F4-26 : bouton message autonome à côté du bouton appel
+-- ISC-F4-27 : bloc prise en charge/destination = liste complète
+-- ISC-F4-28 : verrou : bouton SOS toujours rendu en RUNNING
+-- ISC-F4-23 : après le dernier arrêt, la destination réelle est rendue
+-- ISC-F4-31 : RIDE_ACTIVE : SOS présent, aucune UI recherche
+-
+-Environnement : Dart SDK 3.9.2, Flutter 3.35.6.
+-Rôle : vérification uniquement — aucune correction, aucun golden régénéré.
+-Commit : un seul commit, auteur Papa Diop <76528706+LordThiouk@users.noreply.github.com>.
+-Pas de git push. .fullrun non touché.
++# Rider F4-29 — Vérification (ISA multistop, ISC-F4-29 a-b)
++
++- Dépôt : Galass_Rider (`/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target`)
++- Branche : `verify/rider-f429-cr`
++- Périmètre : **ISC-F4-29 a-b** — profil chauffeur RUNNING (avatar, nom, note) en `RIDE_RUNNING`, fonts golden chargées en `setUpAll`.
++- Commande exacte exécutée : `flutter test test/widget/course_en_cours_contract_test.dart`
++- Environnement : Flutter 3.35.6 (channel user-branch), Dart SDK 3.9.2, Linux.
++- Rôle : **vérification uniquement**. Aucune correction appliquée. **Aucun golden régénéré** (pas de `--update-goldens`). `.fullrun` non touché. `lifeos/` lecture seule, non modifié.
++
++## ISA (contrat canonique)
++
++- ISA multistop : `MEMORY/WORK/20261006-galass-rider-multistop/ISA.md`
++- **ISC-F4-29** (ligne 143) : contrat d'écran « Rider en course » (RIDE_RUNNING, référence Papa 2026-11-23) — présence testée individuellement de chacun : avatar, nom+note, plaque, « Any pickup notes? » à gauche du bouton appel sur la même ligne, bouton message, distance/temps/tarif, bloc « Lieu de prise en charge »/« Destination », bouton SOS. Règle « ajouter sans retirer ». Test strategy : `flutter test test/widget/course_en_cours_contract_test.dart` (golden). Prérequis : ISC-F4-25, ISC-F4-26, ISC-F4-27, ISC-F4-28. [x] cochée (ligne 251).
++- Périmètre vérifié ici : **ISC-F4-29 a-b** (profil chauffeur RUNNING — fonts setUpAll, commit `fb2b0ff` « load golden fonts in setUpAll »). Le fichier de test contient aussi les assertions c-h et autres tests liés (voir sortie ci-dessous) ; leur résultat est reporté à titre informatif, le verdict porte sur a-b.
++- Falsifier : `setUpAll(loadGoldenFonts)` requis (sinon « An animation is still running … RelayoutWhenSystemFontsChangeMixin._scheduleSystemFontsUpdate », cf. ISA ligne 477). Les fonts sont chargées en `setUpAll` dans `test/widget/course_en_cours_contract_test.dart`. Aucun golden régénéré.
++
++## Résultat
++
++- **9/9 tests passés** : `00:04 +9: All tests passed!`
++- Sortie test pertinente : `setUpAll` → `+1 ISC-F4-29 a-b …` → `+9 (tearDownAll)`. Rien d'autre émis.
++- `flutter test` a d'abord effectué `flutter pub get` implicite (« Resolving dependencies… / Downloading packages… / Got dependencies! 179 packages have newer versions incompatible with dependency constraints. »). **Rien committé** : `pubspec.yaml`/`pubspec.lock` déjà modifiés avant ce run (non touchés par la vérification, hors du commit).
++- Sortie `flutter test` également disponible en run CI brut ; copie ci-dessous (les retours `\r` du reporter sont rendus en lignes séparées, `loading…` tronqués pour la lisibilité, contenu inchangé).
++
++## Sortie collée
++
++```text
++00:00 +0: loading test/widget/course_en_cours_contract_test.dart
++00:01 +0: loading test/widget/course_en_cours_contract_test.dart
++00:02 +0: loading test/widget/course_en_cours_contract_test.dart
++00:03 +0: loading test/widget/course_en_cours_contract_test.dart
++00:03 +0: (setUpAll)
++00:03 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
++00:04 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
++00:04 +1: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
++00:04 +1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
++00:04 +2: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
++00:04 +2: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
++00:04 +3: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
++00:04 +3: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
++00:04 +4: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
++00:04 +4: ISC-F4-26 — bouton message autonome à côté du bouton appel
++00:04 +5: ISC-F4-26 — bouton message autonome à côté du bouton appel
++00:04 +5: ISC-F4-27 — bloc prise en charge/destination = liste complète
++00:04 +6: ISC-F4-27 — bloc prise en charge/destination = liste complète
++00:04 +6: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
++00:04 +7: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
++00:04 +7: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
++00:04 +8: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
++00:04 +8: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
++00:04 +9: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
++00:04 +9: (tearDownAll)
++00:04 +9: All tests passed!
++```
++
++## Tests exécutés (9/9 OK)
++
++- **ISC-F4-29 a-b : profil chauffeur (avatar, nom, note) en RUNNING** ✔
++- **ISC-F4-29 c-h : les 8 éléments du contrat sont présents** ✔
++- ISC-F4-22 : repère Semantics `galass.rider.stops`, compteur retiré ✔
++- ISC-F4-25 : tuile « Des notes pour la prise en charge ? » visible en RUNNING ✔
++- ISC-F4-26 : bouton message autonome à côté du bouton appel ✔
++- ISC-F4-27 : bloc prise en charge/destination = liste complète ✔
++- ISC-F4-28 : verrou : bouton SOS toujours rendu en RUNNING ✔
++- ISC-F4-23 : après le dernier arrêt, la destination réelle est rendue ✔
++- ISC-F4-31 : RIDE_ACTIVE : SOS présent, aucune UI recherche ✔
++
++## État du dépôt
++
++- Modifications non commitées **préexistantes** (non créées par cette vérification, **non incluses** dans ce commit) : `lib/data/controller/account/profile_controller.dart`, `lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart`, `lib/data/controller/support/new_ticket_controller.dart`, `lib/data/controller/support/ticket_details_controller.dart`, `lib/presentation/screens/edit_profile/widget/profile_image.dart`, `pubspec.yaml`, `pubspec.lock`.
++- Ce commit ajoute/remplace **uniquement** `VERIFY-F429.md`.
++- **Un seul commit**, auteur `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`.
++- **Pas de git push**, pas de merge, pas de gh/ssh/scp, pas de secret. Branche `verify/rider-f429-cr`, pas `main`/`master`. `.fullrun` intact. `lifeos/` non modifié.
+
+Fichier écrit. Je re-vérifie l'état + le diff de `VERIFY-F429.md`, puis je fais **un seul commit** (auteur Papa Diop), sans push.
