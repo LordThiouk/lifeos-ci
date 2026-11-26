@@ -4059,3 +4059,18 @@ $ grep -rn "validateGradleAndKGP\|validateAgpAndKgp\|validateGradleAndAgp\|valid
 /tmp/flutter/packages/flutter_tools/lib/src/project.dart:1018:    final bool compatibleKgpGradle = gradle.validateGradleAndKGP(
 /tmp/flutter/packages/flutter_tools/lib/src/project.dart:1024:    final bool compatibleAgpKgp = gradle.validateAgpAndKgp(
 
+$ grep -rn "androidSkipBuildDependencyValidation\|skipBuildDependencyValidation" /tmp/flutter/packages/flutter_tools/lib --include=*.dart | head -20
+/tmp/flutter/packages/flutter_tools/lib/src/build_info.dart:50:    this.androidSkipBuildDependencyValidation = false,
+/tmp/flutter/packages/flutter_tools/lib/src/build_info.dart:98:      androidSkipBuildDependencyValidation: androidSkipBuildDependencyValidation,
+/tmp/flutter/packages/flutter_tools/lib/src/build_info.dart:208:  final bool androidSkipBuildDependencyValidation;
+/tmp/flutter/packages/flutter_tools/lib/src/runner/options/common_options.dart:228:  static const androidSkipBuildDependencyValidation = FlagOptionDescriptor(
+/tmp/flutter/packages/flutter_tools/lib/src/runner/options/common_options.dart:343:    BuildInfoOptions.androidSkipBuildDependencyValidation,
+/tmp/flutter/packages/flutter_tools/lib/src/runner/options/common_options.dart:414:    BuildInfoOptions.androidSkipBuildDependencyValidation,
+/tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart:840:    BuildInfoOptions.androidSkipBuildDependencyValidation.addTo(argParser, hideOverride: hide);
+/tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart:1063:    final bool androidSkipBuildDependencyValidation =
+/tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart:1064:        !hasOption(BuildInfoOptions.androidSkipBuildDependencyValidation) ||
+/tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart:1065:        getValue(BuildInfoOptions.androidSkipBuildDependencyValidation);
+/tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart:1146:      androidSkipBuildDependencyValidation: androidSkipBuildDependencyValidation,
+/tmp/flutter/packages/flutter_tools/lib/src/android/gradle.dart:457:    if (!buildInfo.androidSkipBuildDependencyValidation) {
+/tmp/flutter/packages/flutter_tools/lib/src/android/gradle.dart:573:    if (buildInfo.androidSkipBuildDependencyValidation) {
+
