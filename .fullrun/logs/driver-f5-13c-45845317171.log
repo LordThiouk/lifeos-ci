@@ -2230,3 +2230,388 @@ fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
   remotes/origin/fullrun-logs/rider-f429-forge-ll-45807712042
   remotes/origin/fullrun-logs/rider-f429-silas-ll-45807712379
 
+$ git show --stat 8c28139; echo ===; git diff origin/build/rider-apk-gradle..HEAD --stat; echo ===; git log --oneline origin/build/rider-apk-gradle -3
+commit 8c28139ebea952d47e713aa8ed074d81df4d3da5
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 16:36:53 2026 +0000
+
+    fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+    
+    Artemis 45801376130 — Build APK Rider ROUGE : la validation des dépendances
+    Android de Flutter 3.50.1 refuse Gradle 9.1.0 / AGP 9.0.1.
+    
+    - gradle-wrapper.properties : gradle-9.1.0-all -> gradle-8.14-all
+    - settings.gradle.kts : AGP 9.0.1 -> 8.11.1 (Kotlin 2.2.20 conservé)
+    - gradle.properties : retrait des options réservées à AGP 9
+      (android.newDsl, android.builtInKotlin, android.r8.proguardAndroidTxt.disallowed)
+    
+    KGP 2.2.20 est pleinement supporté avec Gradle <= 8.14 et AGP <= 8.11.1
+    (matrice JetBrains) ; AGP 8.11 exige Gradle >= 8.13 et plafonne à l'API 36.
+    Firebase google-services 4.3.15 et Crashlytics 3.0.7 inchangés.
+    Aucun changement lib/, aucun golden régénéré, .fullrun intact.
+    flutter build / gradlew non exécutés sur la box (politique CI).
+
+ CHANGELOG.md                                     | 4 ++++
+ android/gradle.properties                        | 3 ---
+ android/gradle/wrapper/gradle-wrapper.properties | 2 +-
+ android/settings.gradle.kts                      | 2 +-
+ 4 files changed, 6 insertions(+), 5 deletions(-)
+===
+ CHANGELOG.md                                     | 4 ++++
+ android/gradle.properties                        | 3 ---
+ android/gradle/wrapper/gradle-wrapper.properties | 2 +-
+ android/settings.gradle.kts                      | 2 +-
+ 4 files changed, 6 insertions(+), 5 deletions(-)
+===
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+
+$ cat android/gradle/wrapper/gradle-wrapper.properties; echo ===; cat android/settings.gradle.kts; echo ===; cat android/build.gradle.kts; echo ===; cat android/gradle/libs.versions.toml 2>/dev/null; echo ===; cat android/app/build.gradle.kts
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+===
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "8.11.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.7") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+}
+
+include(":app")
+===
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
+rootProject.layout.buildDirectory.value(newBuildDir)
+
+subprojects {
+    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
+    project.layout.buildDirectory.value(newSubprojectBuildDir)
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register<Delete>("clean") {
+    delete(rootProject.layout.buildDirectory)
+}
+===
+===
+import java.util.Properties
+import java.io.FileInputStream
+
+
+plugins {
+    id("com.android.application")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    // END: FlutterFire Configuration
+    id("kotlin-android")
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+android {
+    namespace = "sn.galass.galassrider"
+    compileSdk = 36
+    ndkVersion = "29.0.14033849"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true  
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId = "sn.galass.galassrider"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        minSdk = flutter.minSdkVersion
+        targetSdk = 36
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    signingConfigs {
+        create("release") {
+            val keystorePath = System.getenv("CM_KEYSTORE_PATH")
+            if (keystorePath != null) {
+                // Codemagic CI
+                storeFile = file(keystorePath)
+                storePassword = System.getenv("CM_KEYSTORE_PASSWORD") ?: ""
+                keyAlias = System.getenv("CM_KEY_ALIAS") ?: ""
+                keyPassword = System.getenv("CM_KEY_PASSWORD") ?: ""
+            } else {
+                // Local — lire key.properties
+                val props = Properties()
+                val propsFile = rootProject.file("key.properties")
+                if (propsFile.exists()) props.load(FileInputStream(propsFile))
+                storeFile = props["storeFile"]?.let { file(it as String) }
+                storePassword = props["storePassword"] as? String ?: ""
+                keyAlias = props["keyAlias"] as? String ?: ""
+                keyPassword = props["keyPassword"] as? String ?: ""
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+dependencies {
+  coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+  // Jetpack Security for Android Keystore-backed encryption
+  implementation("androidx.security:security-crypto:1.1.0-alpha06")
+}
+
+flutter {
+    source = "../.."
+}
+
+$ cat android/gradle.properties; echo "=== full android tree ==="; find android -type f | sort
+org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+org.gradle.daemon=false
+org.gradle.parallel=false
+org.gradle.configureondemand=false
+android.enableJetifier=false
+android.useAndroidX=true
+=== full android tree ===
+android/.gitignore
+android/app/build.gradle.kts
+android/app/google-services.json
+android/app/src/debug/AndroidManifest.xml
+android/app/src/debug/res/xml/network_security_config.xml
+android/app/src/main/AndroidManifest.xml
+android/app/src/main/java/sn/galass/galassrider/security/CredentialManager.kt
+android/app/src/main/java/sn/galass/galassrider/security/CredentialSetup.kt
+android/app/src/main/kotlin/sn/galass/galassrider/MainActivity.kt
+android/app/src/main/res/README.md
+android/app/src/main/res/drawable-v21/launch_background.xml
+android/app/src/main/res/drawable/launch_background.xml
+android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+android/app/src/main/res/values-night/styles.xml
+android/app/src/main/res/values/styles.xml
+android/app/src/profile/AndroidManifest.xml
+android/build.gradle.kts
+android/gradle.properties
+android/gradle/wrapper/gradle-wrapper.properties
+android/settings.gradle.kts
+
+$ ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos 2>&1 | head -50; echo ===; ls /home/ubuntu/actions-runner/_work/ ; echo ===; ls /tmp | head -30
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci:
+FIX-CI.md
+FIX-SERENA.md
+FIX-VERA-AUDIT.md
+INVENTAIRE.md
+README.md
+REPORT.md
+REVIEW-AGENTS-LOAD.md
+REVIEW-ASSEMBLE.md
+REVIEW-PR1.md
+REVIEW-PR20.md
+REVIEW.md
+TESTS-DIAG.md
+docs
+models.txt
+opencode
+prompts
+targets
+
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos:
+CLAUDE.md
+ISA.md
+LIFEOS
+MEMORY
+README.md
+Workflows
+agents
+bun.lock
+commands
+hooks
+opencode
+package.json
+rules
+scripts
+secrets
+settings.template.json
+skills
+skills-shared
+===
+_PipelineMapping
+_actions
+_temp
+_tool
+lifeos-ci
+===
+LICENSE
+PROMPT-SMOKE.md
+README.md
+actionlint
+actions-runner-2.log
+actions-runner-3.log
+actions-runner.log
+agent-store-fuse.log
+agp.html
+agp811.html
+anyos-xstartup
+artemis-f432-fail
+artemis-golden
+artemis-r3.gz
+artemis-r3.log
+artemis-wf.yml
+bore
+bore-proxy.log
+bore-ws-pong.err
+bore-ws-pong.out
+bore-wstunnel.log
+bore.tgz
+capture-vnc-user-env
+capture-vnc-user-env.hash
+capture-vnc-user-env.version
+cf-tcp.log
+cf-ws.log
+check_mount.py
+check_mount2.py
+check_toolchain.py
+
+$ ls -la /tmp/*.py /tmp/*.md /tmp/*.html 2>/dev/null; echo ===; cat /tmp/check_toolchain.py
+-rw-r--r-- 1 ubuntu ubuntu    326 Nov 26 13:54 /tmp/PROMPT-SMOKE.md
+-rw-r--r-- 1 ubuntu ubuntu  28894 Feb  5  2025 /tmp/README.md
+-rw-r--r-- 1 ubuntu ubuntu    265 Nov 26 16:34 /tmp/agp.html
+-rw-r--r-- 1 ubuntu ubuntu 281918 Nov 26 16:35 /tmp/agp811.html
+-rw-r--r-- 1 ubuntu ubuntu   1211 Nov 26 15:31 /tmp/check_mount.py
+-rw-r--r-- 1 ubuntu ubuntu   1111 Nov 26 15:32 /tmp/check_mount2.py
+-rw-r--r-- 1 ubuntu ubuntu   2786 Nov 26 16:36 /tmp/check_toolchain.py
+-rw-r--r-- 1 ubuntu ubuntu  87964 Nov 26 16:34 /tmp/kgp.html
+-rw-r--r-- 1 ubuntu ubuntu  12672 Nov 26 15:55 /tmp/l7_seg.py
+-rw-r--r-- 1 ubuntu ubuntu   8518 Nov 26 16:03 /tmp/m_2c73957.py
+-rw-r--r-- 1 ubuntu ubuntu  20523 Nov 26 16:03 /tmp/m_6002480.py
+-rw-r--r-- 1 ubuntu ubuntu   8518 Nov 26 16:03 /tmp/m_885009e.py
+-rw-r--r-- 1 ubuntu ubuntu   5210 Nov 26 15:31 /tmp/run_migrate.py
+-rw-r--r-- 1 ubuntu ubuntu   4252 Nov 26 15:32 /tmp/run_migrate2.py
+-rw-r--r-- 1 ubuntu ubuntu   2187 Nov 26 16:37 /tmp/task_done.md
+-rw-r--r-- 1 ubuntu ubuntu   7666 Nov 26 15:55 /tmp/test_boundary_p95.py
+-rw-r--r-- 1 ubuntu ubuntu  14195 Nov 26 15:55 /tmp/test_per_station.py
+-rw-r--r-- 1 ubuntu ubuntu  13718 Nov 26 15:55 /tmp/test_threshold_state.py
+===
+#!/usr/bin/env python3
+"""Static check of the Rider Android toolchain against the compatibility windows
+read from flutter_tools/lib/src/android/gradle_utils.dart (local Flutter 3.35.6)
+plus the official AGP/KGP matrices."""
+import re, sys
+
+def v(s):
+    return tuple(int(x) for x in s.split('.'))
+
+def within(x, lo, hi, inclusive_max=False):
+    x, lo, hi = v(x), v(lo), v(hi)
+    return lo <= x <= hi if inclusive_max else lo <= x < hi
+
+ok = True
+def check(label, cond, detail):
+    global ok
+    print(('PASS' if cond else 'FAIL'), '-', label, '|', detail)
+    ok = ok and cond
+
+wrap = open('android/gradle/wrapper/gradle-wrapper.properties').read()
+m = re.search(r'gradle-([0-9.]+)-all\.zip', wrap)
+gradle = m.group(1) if m else None
+settings = open('android/settings.gradle.kts').read()
+agp = re.search(r'com\.android\.application"\) version "([0-9.]+)"', settings).group(1)
+kgp = re.search(r'org\.jetbrains\.kotlin\.android"\) version "([0-9.]+)"', settings).group(1)
+gms = re.search(r'google-services"\) version\("([0-9.]+)"\)', settings).group(1)
+crash = re.search(r'crashlytics"\) version\("([0-9.]+)"\)', settings).group(1)
+
+print(f'detected: gradle={gradle} agp={agp} kgp={kgp} gms={gms} crashlytics={crash}')
+
+# flutter validateGradleAndAgp: AGP 8.11.0-8.11.99 -> Gradle >= 8.13 (max = maxKnown)
+check('validateGradleAndAgp (AGP 8.11 -> Gradle >=8.13)',
+      within(agp, '8.11.0', '8.11.99', True) and within(gradle, '8.13', '100.0', True),
+      f'AGP {agp} / Gradle {gradle}')
+
+# flutter validateGradleAndKGP: KGP 2.2.20-2.2.29 -> 7.6.3 <= Gradle < 8.14.99
+check('validateGradleAndKGP (KGP 2.2.20 -> Gradle 7.6.3..<8.14.99)',
+      within(kgp, '2.2.20', '2.2.29', True) and within(gradle, '7.6.3', '8.14.99'),
+      f'KGP {kgp} / Gradle {gradle}')
+
+# flutter validateAgpAndKgp: KGP 2.2.20-2.2.29 -> 7.3.1 <= AGP < 8.12
+check('validateAgpAndKgp (KGP 2.2.20 -> AGP 7.3.1..<8.12)',
+      within(kgp, '2.2.20', '2.2.29', True) and within(agp, '7.3.1', '8.12'),
+      f'KGP {kgp} / AGP {agp}')
+
+# official AGP 8.11 matrix: min Gradle 8.13, max API 36
+check('AGP 8.11 min Gradle 8.13', within(gradle, '8.13', '100.0', True), f'Gradle {gradle}')
+app = open('android/app/build.gradle.kts').read()
+compile_sdk = re.search(r'compileSdk = (\d+)', app).group(1)
+check('AGP 8.11 max API 36 >= compileSdk', int(compile_sdk) <= 36, f'compileSdk {compile_sdk}')
+
+# Firebase/Crashlytics plugins unchanged
+check('Firebase plugins unchanged', gms == '4.3.15' and crash == '3.0.7', f'gms {gms} / crashlytics {crash}')
+
+# no AGP9-only flags left
+props = open('android/gradle.properties').read()
+leftover = [k for k in ('newDsl', 'builtInKotlin', 'proguardAndroidTxt') if k in props]
+check('no AGP9-only gradle.properties flags', not leftover, f'leftover={leftover}')
+
+sys.exit(0 if ok else 1)
+
+$ which flutter dart java 2>&1; flutter --version 2>&1 | head -5; ls /tmp/task_done.md 2>&1
+/usr/local/bin/flutter
+/usr/local/bin/dart
+/usr/bin/java
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+/tmp/task_done.md
+
