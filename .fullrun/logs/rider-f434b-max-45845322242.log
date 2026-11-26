@@ -771,3 +771,332 @@ drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 16:22 .npm
 ===
 ===
 
+$ grep -rn "uv " /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/*.sh 2>/dev/null | head -20; echo ===; cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/allowed-repos.sh 2>/dev/null; echo ===; ls /opt/fullrun-tools/ 2>/dev/null
+===
+#!/usr/bin/env bash
+# Liste blanche unique des dépôts Galass acceptés comme target_repo ou extra_repos.
+# Sourcé par extra-repos.sh, livelog.sh, wippush.sh et les étapes du workflow
+# (validation, push, PR). Ne pas recopier la liste ailleurs : le test
+# allowed-repos-test.sh vérifie que les options: de workflow_dispatch
+# correspondent à allowed_repos_list, et qu'aucune copie en dur ne reste.
+# Ce fichier ne fait que définir des fonctions : il est sûr à sourcer.
+
+# Noms exacts, sans espaces, ordre stable (identique aux options: du workflow).
+ALLOWED_REPOS='Galass_Driver Galass_Rider Galass_backend galass-emu-actions-pub'
+
+allowed_repos_list() {
+  local r
+  # shellcheck disable=SC2086
+  for r in $ALLOWED_REPOS; do
+    printf '%s\n' "$r"
+  done
+}
+
+allowed_repo() {
+  local r
+  # shellcheck disable=SC2086
+  for r in $ALLOWED_REPOS; do
+    [ "$1" = "$r" ] && return 0
+  done
+  return 1
+}
+===
+allowed-repos.sh
+autosave-deny.txt
+autosave.sh
+bench-capped
+checkpoint.sh
+done-check-call.sh
+done_check.sh
+emu-e2e.sh
+gitleaks
+gitleaks.toml
+leaklog.sh
+livelog.sh
+log-recipient.txt
+merge-signed-carry.sh
+progress.sh
+redact-log.sh
+wippush.sh
+
+$ find "$HOME/.local" -maxdepth 4 2>/dev/null | head -40; echo ===; find "$HOME" -name 'uv*' 2>/dev/null | head; echo ===; ls "$HOME/.local" 2>/dev/null; ls "$HOME/.local/share" 2>/dev/null; ls "$HOME/.cargo/bin" 2>/dev/null
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share/opencode
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share/opencode/repos
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share/opencode/log
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share/opencode/log/opencode.log
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share/opencode/opencode.db-wal
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share/opencode/opencode.db-shm
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share/opencode/opencode.db
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share/opencode/snapshot
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share/opencode/snapshot/02c38a223b4f929580a4b5e1927272869bc93d69
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share/opencode-lifeos
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/share/opencode-lifeos/nix-lifeos.prompt.md
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/state
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/state/opencode
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/state/opencode/locks
+===
+===
+share
+state
+opencode
+opencode-lifeos
+
+$ cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/.env.example; echo ===; grep -rn "uv\b" /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/prompts/ 2>/dev/null | head; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/prompts/ 2>/dev/null
+# Copy to .env and fill in. Never commit .env.
+
+# Hugging Face read token for the private dataset LordThiouk/antenly-corpus (used by scripts/corpus/fetch.sh)
+HF_TOKEN=[REDACTED:hf-token]
+# Local folder where the corpus is downloaded (default: ./antenly-corpus)
+ANTENLY_CORPUS_DIR=./antenly-corpus
+# Racine de l'audio decode par la face ffprobe d'ISC-1 (api/tests/annotation).
+# Sans elle les probes de couverture DECODEE sont *skip* — et *fail* si
+# ANTENLY_REQUIRE_AUDIO=1, ce que fait le job corpus-ffprobe de la CI.
+ANTENLY_CORPUS_AUDIO=./antenly-corpus
+
+# Radio capture (scripts/capture.sh, normally set by the "Radio capture" workflow)
+# Slice number, 1 to 5
+SLICE=1
+# Capture duration in minutes
+DURATION_MIN=340
+# Encode to Opus (true) or keep MP3 (false)
+OPUS=true
+
+# --- Stack de dev locale (docker-compose.yml, voir docs/dev-stack.md) ---
+# Valeurs factices de dev uniquement, jamais de vraie valeur ici.
+POSTGRES_USER=antenly
+POSTGRES_PASSWORD=changeme-postgres-dev
+POSTGRES_DB=antenly
+POSTGRES_PORT=5432
+CLICKHOUSE_USER=antenly
+CLICKHOUSE_PASSWORD=changeme-clickhouse-dev
+CLICKHOUSE_DB=antenly
+CLICKHOUSE_HTTP_PORT=8123
+CLICKHOUSE_NATIVE_PORT=9009
+NATS_USER=antenly
+NATS_PASSWORD=changeme-nats-dev
+NATS_PORT=4222
+NATS_MONITOR_PORT=8222
+S3_ACCESS_KEY=changeme-s3-access
+S3_SECRET_KEY=changeme-s3-secret
+S3_PORT=8333
+S3_BUCKET=antenly-evidence
+===
+agent-run-inputs.md
+allow-acr.md
+assemble.md
+brick-build-aditi-ui.md
+brick-build-anvil.md
+brick-build-engineer.md
+brick-build-forge-code.md
+brick-close-max.md
+brick-fullrun.md
+brick-plan-serena.md
+brick-verify-code-review.md
+brick-verify-forge-audit.md
+brick-verify-silas.md
+chain-inputs.md
+extra-fetch.md
+extra-fetch2.md
+find-bugs-isa.md
+fix-ci.md
+fix-push.md
+fr303.md
+hf-ffmpeg.md
+no-auto-next.md
+pipeline.md
+pr20-review.md
+pushfix.md
+review-assemble.md
+review20.md
+serena-fix.md
+startup.md
+timeout-fix.md
+vera-audit-fix.md
+
+→ Read /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-build-forge-code.md
+
+$ grep -rn "uv\b\|python3\|pytest" /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/check-agent.sh /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/done_check.sh 2>/dev/null | head; echo ===; ls /usr/bin/python* /usr/local/bin/python* 2>/dev/null; python3 --version 2>&1; pip3 --version 2>&1 | head -1
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/done_check.sh:3:# python3. OC_DONE_AGENTS (liste séparée par des virgules, défaut = OC_MAX_SUBAGENT = Max) :
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/done_check.sh:40:command -v python3 >/dev/null 2>&1 || ko a:python3
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/done_check.sh:51:storage=$(python3 - "$STORE" "$AGENTS" "$last_commit" "$ANY" <<'PY'
+===
+/usr/bin/python-argcomplete-check-easy-install-script
+/usr/bin/python3
+/usr/bin/python3.12
+Python 3.12.3
+pip 24.0 from /usr/lib/python3/dist-packages/pip (python 3.12)
+
+$ ls -la /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.local/bin/ 2>&1 | head; echo ===; ls /home/ubuntu/actions-runner-*/_work/_temp/*/home/.local/bin/ 2>/dev/null; echo ===; find /home/ubuntu/actions-runner-3 -name 'uv' 2>/dev/null | head; find /opt /usr/local -name 'uv' 2>/dev/null | head
+ls: cannot access '/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.local/bin/': No such file or directory
+===
+===
+/home/ubuntu/actions-runner-3/externals/node20/include/node/uv
+/home/ubuntu/actions-runner-3/externals/node24/include/node/uv
+
+$ cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/api/pyproject.toml
+[project]
+name = "antenly-api"
+version = "0.1.0"
+description = "Antenly API (FastAPI)"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+# pg8000 : pilote PostgreSQL pur Python (aucun binaire, aucune compilation) pour
+#          la stack de dev et les probes RLS. boto3 : client S3/SeaweedFS pour le
+#          magasin objet. Les deux licences sont permissives (BSD-3-Clause et
+#          Apache-2.0), la règle clean-room n'interdit ni l'une ni l'autre.
+dependencies = [
+    "fastapi>=0.115",
+    "pg8000>=1.31.6",
+    "boto3>=1.44.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+    "ruff>=0.6",
+    "pip-licenses>=5",
+    "numpy>=2.4.6",
+    "jsonschema>=4.26.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/antenly_api"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+$ ss -tlnp 2>/dev/null | head -30 || netstat -tlnp 2>/dev/null | head -30; echo ===; curl -s -m 2 http://127.0.0.1:8123/ 2>&1 | head -3; echo ===; curl -s -m 2 http://127.0.0.1:5432/ 2>&1 | head -3; echo ===; ls /usr/bin/docker* /usr/local/bin/docker* /snap/bin/docker 2>/dev/null; find / -maxdepth 3 -name 'docker' -type f 2>/dev/null | head
+===
+===
+===
+
+$ cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/api/tests/ingest/conftest.py; echo ===; cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/api/tests/ingest/test_stream_pool.py | head -60
+"""Conftest ingest : met scripts/ingest sur sys.path et expose les fixtures.
+
+Aucun réseau, aucun ffmpeg : les playlists HLS et le manifeste sont des fichiers
+statiques sous fixtures/. Les fixtures ne portent aucune URL, IP ni clé.
+"""
+
+from __future__ import annotations
+
+import json
+import pathlib
+import sys
+
+import pytest
+
+ROOT = pathlib.Path(__file__).resolve().parents[3]  # api/tests/ingest -> racine
+INGEST = ROOT / "scripts" / "ingest"
+if str(INGEST) not in sys.path:
+    sys.path.insert(0, str(INGEST))
+
+TOOLS_INVENTORY = ROOT / "tools" / "inventory"
+if str(TOOLS_INVENTORY) not in sys.path:
+    sys.path.insert(0, str(TOOLS_INVENTORY))
+
+FIXTURES = pathlib.Path(__file__).resolve().parent / "fixtures"
+
+
+def load_json_fixture(name: str) -> dict:
+    return json.loads((FIXTURES / name).read_text(encoding="utf-8"))
+
+
+def read_hls_master(name: str = "hls/master.m3u8") -> list[str]:
+    return (FIXTURES / name).read_text(encoding="utf-8").splitlines()
+
+
+@pytest.fixture
+def fixtures_dir() -> pathlib.Path:
+    return FIXTURES
+
+
+@pytest.fixture
+def hls_master() -> pathlib.Path:
+    return FIXTURES / "hls" / "master.m3u8"
+
+
+@pytest.fixture
+def hls_manifest() -> pathlib.Path:
+    return FIXTURES / "hls-manifest.json"
+
+
+@pytest.fixture
+def ingest_manifest() -> pathlib.Path:
+    return FIXTURES / "manifest.jsonl"
+
+
+@pytest.fixture
+def inventory() -> pathlib.Path:
+    return FIXTURES / "inventory.csv"
+===
+"""ISC-12 — pool multi-URL : bascule en 10 s, URL morte retirée, 0 chaîne sans essai.
+
+Le schéma du pool (migration 004) porte l'origine et le client, aligné sur
+``tools/inventory/pool.py`` (STREAM_COLUMNS) et la console privée
+(``pool_console.py``, origine « prive »). Le test injecte une URL morte
+(timeout et URL invalide) dans un pool de plusieurs URL et observe la bascule
+vers la suivante, la remarque datée et le retrait de la rotation.
+"""
+
+from __future__ import annotations
+
+import re
+from pathlib import Path
+
+import pool
+import pool_console
+
+ROOT = Path(__file__).resolve().parents[3]
+POOL_MIGRATION = ROOT / "migrations" / "postgres" / "004_pool_origin.sql"
+
+A = "https://radio-a.example.invalid/a.mp3"
+B = "https://radio-a.example.invalid/b.mp3"
+
+
+def _rows(*urls: str) -> list[dict]:
+    return [
+        {"channel_id": "radio-a", "url": url, "priority": len(urls) - index, "score": 0}
+        for index, url in enumerate(urls)
+    ]
+
+
+def test_migration_pool_ajoute_origine_et_client() -> None:
+    sql = POOL_MIGRATION.read_text(encoding="utf-8")
+    for column in ("origin", "client"):
+        assert re.search(rf"ADD COLUMN\s+{column}\b", sql), column
+    assert "origin IN ('catalogue', 'prive')" in sql
+    assert "client IS NOT NULL" in sql
+    assert "origin" in pool.STREAM_COLUMNS
+    assert "client" in pool.STREAM_COLUMNS
+
+
+def test_bascule_vers_url_suivante_en_10s_maximum() -> None:
+    rows = _rows(A, B)
+    clock = {"t": 0.0}
+
+    def try_url(url: str, timeout_s: float) -> dict:
+        if url == A:
+            clock["t"] += timeout_s  # simule l'attente complète du timeout
+            return {"ok": False, "server_fail": True, "reason": "timeout"}
+        clock["t"] += 0.1
+        return {"ok": True}
+
+    worker = pool.PoolWorker(
+        lambda channel_id: (rows, []),
+        try_url,
+        clock=lambda: clock["t"],
+        timeout_s=10.0,
+    )
+    result = worker.cycle("radio-a")
+    assert result.status == "joignable"
+
