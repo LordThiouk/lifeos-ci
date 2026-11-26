@@ -3694,3 +3694,27 @@ Compiling /home/ubuntu/.pub-cache/hosted/pub.dev/objective_c-9.4.1/hook/build.da
 
 Building native assets failed. See the logs for more details.
 
+$ cat .dart_tool/version 2>/dev/null; grep -n -A2 'record_use' pubspec.lock | head; grep -n -A2 'objective_c' pubspec.lock | head; grep -n -A2 'device_info_plus' pubspec.lock | head
+3.50.11674:  record_use:
+1675-    dependency: transitive
+1676-    description:
+1677:      name: record_use
+1678-      sha256: "[REDACTED:hex64]"
+1679-      url: "https://pub.dev"
+1378:  objective_c:
+1379-    dependency: transitive
+1380-    description:
+1381:      name: objective_c
+1382-      sha256: "[REDACTED:hex64]"
+1383-      url: "https://pub.dev"
+236:  device_info_plus:
+237-    dependency: "direct main"
+238-    description:
+239:      name: device_info_plus
+240-      sha256: [REDACTED:hex64]
+241-      url: "https://pub.dev"
+--
+244:  device_info_plus_platform_interface:
+245-    dependency: transitive
+246-    description:
+
