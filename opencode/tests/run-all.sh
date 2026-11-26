@@ -7,6 +7,7 @@ here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 # Liste explicite : la preuve que chaque test du socle est lancé (aucun oubli).
 TESTS=(
+  agent-run-livelog-test.sh
   agents-load-test.sh
   allowed-repos-test.sh
   allowed-repos-lifeos-test.sh
