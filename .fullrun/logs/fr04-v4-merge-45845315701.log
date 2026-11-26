@@ -3665,3 +3665,12 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
 26:    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
 
 Le diagnostic est clair maintenant : le run précédent (deepseek/mimo) avait déjà exécuté la tâche (commit `ec07f3e` à 18:42:24, `/tmp/task_done.md` à 18:42:43), puis un nouveau run a démarré à 18:42:51 — **celui-ci est ma session**. Je fais une vérification finale complète.
+$ git -C /agent/repos/Galass_Rider status --porcelain=v1 2>&1 | head -5; echo "=====BRANCH====="; git -C /agent/repos/Galass_Rider branch --show-current 2>&1; echo "=====LOG====="; git -C /agent/repos/Galass_Rider log --oneline -2 2>&1
+?? Galass_Rider-merge/
+=====BRANCH=====
+build/rider-apk-gradle
+=====LOG=====
+c8ffd2e fix(build): align Rider Android toolchain to Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.3.0, Crashlytics 3.0.3)
+424957d verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+
+Tout est vérifié et cohérent. Une dernière confirmation sur l'autre checkout du dépôt cible :
