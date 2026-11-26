@@ -7609,3 +7609,138 @@ class HiddenServiceRideTest extends TestCase
     }
 }
 
+$ ls -la core/database/migrations/ | grep -i "2026_11_26" ; echo "======SQL======"; ls -la core/database/sql/ | grep -i "2026_11_26"; echo "======SERVICE MODEL======"; sed -n '1,60p' core/app/Models/Service.php
+-rw-r--r-- 1 ubuntu ubuntu 1394 Nov 26 20:52 2026_11_26_000001_add_order_visible_to_services.php
+======SQL======
+-rw-r--r-- 1 ubuntu ubuntu  535 Nov 26 20:52 2026_11_26_services_order_visible.sql
+======SERVICE MODEL======
+<?php
+
+namespace App\Models;
+
+use App\Traits\GlobalStatus;
+use Illuminate\Database\Eloquent\Model;
+
+class Service extends Model
+{
+    use  GlobalStatus;
+
+    protected $casts = [
+        'city_min_fare'             => 'double',
+        'city_max_fare'             => 'double',
+        'city_recommend_fare'       => 'double',
+        'city_fare_commission'      => 'double',
+        'intercity_min_fare'        => 'double',
+        'intercity_max_fare'        => 'double',
+        'intercity_recommend_fare'  => 'double',
+        'intercity_fare_commission' => 'double',
+        'status'                    => 'integer',
+        'sort_order'                => 'integer',
+        'is_visible'                => 'boolean',
+    ];
+
+    public function scopeVisible($query)
+    {
+        // null = legacy rows before migration; treat as visible (default true).
+        return $query->where(function ($q) {
+            $q->where('is_visible', true)->orWhereNull('is_visible');
+        });
+    }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order')->orderBy('id');
+    }
+}
+
+$ ls -la extra/ 2>&1; echo "======"; ls -la extra/Galass_Rider 2>&1 | head -5; ls -la extra/Galass_Driver 2>&1 | head -5
+ls: cannot access 'extra/': No such file or directory
+======
+ls: cannot access 'extra/Galass_Rider': No such file or directory
+ls: cannot access 'extra/Galass_Driver': No such file or directory
+
+$ ls -la /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/; echo "======"; ls -la /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/Galass_Rider 2>&1 | head -8; echo "======"; ls -la /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver 2>&1 | head -8
+total 20
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 20:53 .
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 20:53 ..
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 20:53 Galass_Driver
+drwxr-xr-x 14 ubuntu ubuntu 4096 Nov 26 20:53 Galass_Rider
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 16:22 galass-emu-actions-pub
+======
+total 244
+drwxr-xr-x 14 ubuntu ubuntu  4096 Nov 26 20:53 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 20:53 ..
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 20:53 .claude
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 20:53 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 20:53 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1046 Nov 26 20:53 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  1188 Nov 26 20:53 .mcp.json
+======
+total 184
+drwxr-xr-x 13 ubuntu ubuntu  4096 Nov 26 20:53 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 20:53 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:53 .archive
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 20:53 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 20:53 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu   984 Nov 26 20:53 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  7357 Nov 26 20:53 AGENTS.md
+
+$ cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/database/sql/2026_11_26_services_order_visible.sql; echo "======MIGRATION======"; cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/database/migrations/2026_11_26_000001_add_order_visible_to_services.php
+-- ISA 2026-11-22-galass-lot-client / ISC-40
+-- Ajoute l'ordre d'affichage et la visibilité des services.
+-- À appliquer manuellement sur le VPS (MariaDB) avant déploiement du code.
+
+ALTER TABLE `services`
+    ADD COLUMN `sort_order` INT UNSIGNED NOT NULL DEFAULT 0 AFTER `id`,
+    ADD COLUMN `is_visible` TINYINT(1) NOT NULL DEFAULT 1 AFTER `sort_order`;
+
+SET @p := 0;
+UPDATE `services` SET `sort_order` = (@p := @p + 1) ORDER BY `id` ASC;
+
+-- Rollback
+-- ALTER TABLE `services` DROP COLUMN `is_visible`, DROP COLUMN `sort_order`;
+======MIGRATION======
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('services', function (Blueprint $table) {
+            if (!Schema::hasColumn('services', 'sort_order')) {
+                $table->unsignedInteger('sort_order')->default(0)->after('id');
+            }
+            if (!Schema::hasColumn('services', 'is_visible')) {
+                $table->boolean('is_visible')->default(true)->after('sort_order');
+            }
+        });
+
+        $services = DB::table('services')->orderBy('id')->get(['id']);
+        $position = 1;
+        foreach ($services as $service) {
+            DB::table('services')->where('id', $service->id)->update([
+                'sort_order' => $position,
+                'is_visible' => DB::raw('COALESCE(is_visible, 1)'),
+            ]);
+            $position++;
+        }
+    }
+
+    public function down(): void
+    {
+        Schema::table('services', function (Blueprint $table) {
+            if (Schema::hasColumn('services', 'is_visible')) {
+                $table->dropColumn('is_visible');
+            }
+            if (Schema::hasColumn('services', 'sort_order')) {
+                $table->dropColumn('sort_order');
+            }
+        });
+    }
+};
+
