@@ -5292,3 +5292,325 @@ $ grep -rln "rider-apk-gradle" /agent/repos 2>/dev/null | head; echo "=== rider 
 /agent/repos/Galass_Rider/.claude/PAI/MEMORY/WORK/galass-phone-auth-876543/ISA.md
 /agent/repos/Galass_Driver/MEMORY/WORK/20260613-galassdriver-firebase-phone-auth/ISA.md
 
+$ sed -n '215,245p' /tmp/flutter/packages/flutter_tools/lib/src/runner/options/common_options.dart; echo "=== flutter_command 1050-1075 ==="; sed -n '1050,1075p' /tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart; echo "=== option_descriptor FlagOptionDescriptor ==="; grep -n "class FlagOptionDescriptor" -A 30 /tmp/flutter/packages/flutter_tools/lib/src/runner/options/option_descriptor.dart | head -50
+'via the -P flag. These can be accessed in build.gradle via the "project.property" API.',
+  );
+
+  static const androidProjectCacheDir = StringOptionDescriptor(
+    name: FlutterOptions.kAndroidGradleProjectCacheDir,
+    valueHelp: 'path/to/project/cache/',
+    verboseOnly: true,
+    help:
+        'In an Android build, this flag allows the Gradle project cache directory to be specified '
+        'to an absolute path. Setting this is roughly equivalent to setting the '
+        'GRADLE_PROJECT_CACHE_DIR environment variable.',
+  );
+
+  static const androidSkipBuildDependencyValidation = FlagOptionDescriptor(
+    name: FlutterOptions.kAndroidSkipBuildDependencyValidation,
+    verboseOnly: true,
+    help: 'Skips Android Gradle project dependency verification.',
+  );
+
+  static const performanceMeasurementFile = StringOptionDescriptor(
+    name: FlutterOptions.kPerformanceMeasurementFile,
+    help: 'Output file name for performance measurement file.',
+  );
+
+  static const shrink = FlagOptionDescriptor(
+    name: 'shrink',
+    verboseOnly: true,
+    help:
+        'This flag has no effect. Code shrinking is always enabled in release builds. '
+        'To learn more, see: https://developer.android.com/studio/build/shrink-code',
+  );
+=== flutter_command 1050-1075 ===
+          : _fsUtils.getUniqueDirectory(_fs.directory(getBuildDirectory()), 'flutter_size');
+      directory.createSync(recursive: true);
+      codeSizeDirectory = directory.path;
+    }
+
+    final bool dartObfuscation = getValue(BuildInfoOptions.obfuscate);
+
+    final String? splitDebugInfoPath = getValue(BuildInfoOptions.splitDebugInfo);
+
+    final bool androidGradleDaemon =
+        !hasOption(BuildInfoOptions.androidGradleDaemon) ||
+        getValue(BuildInfoOptions.androidGradleDaemon);
+
+    final bool androidSkipBuildDependencyValidation =
+        !hasOption(BuildInfoOptions.androidSkipBuildDependencyValidation) ||
+        getValue(BuildInfoOptions.androidSkipBuildDependencyValidation);
+
+    final List<String> androidProjectArgs = getValue(BuildInfoOptions.androidProjectArg);
+
+    final String? androidGradleProjectCacheDir = getValue(BuildInfoOptions.androidProjectCacheDir);
+
+    if (dartObfuscation && (splitDebugInfoPath == null || splitDebugInfoPath.isEmpty)) {
+      throwToolExit(
+        '"--${FlutterOptions.kDartObfuscationOption}" can only be used in '
+        'combination with "--${FlutterOptions.kSplitDebugInfoOption}"',
+      );
+=== option_descriptor FlagOptionDescriptor ===
+342:class FlagOptionDescriptor extends OptionDescriptor<bool> {
+343-  const FlagOptionDescriptor({
+344-    required super.name,
+345-    required super.help,
+346-    super.abbr,
+347-    super.defaultsTo = false,
+348-    this.negatable = true,
+349-    super.scope,
+350-    super.hide,
+351-    super.verboseOnly,
+352-  });
+353-
+354-  /// Whether the flag can be negated with `--no-<name>`.
+355-  final bool negatable;
+356-
+357-  @override
+358-  void addTo(ArgParser parser, {bool verboseHelp = false, bool? hideOverride}) {
+359-    if (_isAlreadyRegistered(parser)) {
+360-      return;
+361-    }
+362-    parser.addFlag(
+363-      name,
+364-      abbr: abbr,
+365-      help: help,
+366-      defaultsTo: defaultsTo ?? false,
+367-      negatable: negatable,
+368-      hide: _computeEffectiveHide(verboseHelp: verboseHelp, hideOverride: hideOverride),
+369-    );
+370-    _recordRegistration(parser);
+371-  }
+372-
+
+$ grep -rn "bool hasOption\|hasOption(" /tmp/flutter/packages/flutter_tools/lib/src/runner/*.dart /tmp/flutter/packages/flutter_tools/lib/src/*.dart | head -20; echo "=== def ==="; grep -rn "hasOption" -B3 -A8 /tmp/flutter/packages/flutter_tools/lib/src/runner/runner.dart /tmp/flutter/packages/flutter_tools/lib/src/commands/base.dart 2>/dev/null | head -40
+/tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart:965:    if (!hasOption(DebuggingOptionDescriptors.enableHcpp) ||
+/tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart:1017:        hasOption(BuildInfoOptions.trackWidgetCreation) &&
+/tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart:1060:        !hasOption(BuildInfoOptions.androidGradleDaemon) ||
+/tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart:1064:        !hasOption(BuildInfoOptions.androidSkipBuildDependencyValidation) ||
+/tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart:1088:        hasOption(CommonOptions.treeShakeIcons) &&
+=== def ===
+
+$ grep -n "hasOption" /tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart | head; echo "=== def context ==="; grep -n "bool hasOption\|bool getValue\|_isFlagParsed\|wasParsed" -A 6 /tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart | head -60
+965:    if (!hasOption(DebuggingOptionDescriptors.enableHcpp) ||
+1017:        hasOption(BuildInfoOptions.trackWidgetCreation) &&
+1060:        !hasOption(BuildInfoOptions.androidGradleDaemon) ||
+1064:        !hasOption(BuildInfoOptions.androidSkipBuildDependencyValidation) ||
+1088:        hasOption(CommonOptions.treeShakeIcons) &&
+=== def context ===
+399:    if (wasParsed(CommonOptions.target)) {
+400-      return getValue(CommonOptions.target);
+401-    }
+402-    final List<String>? rest = argResults?.rest;
+403-    if (rest != null && rest.isNotEmpty) {
+404-      return rest.first;
+405-    }
+--
+534:      (argResults?.wasParsed(vmServicePortOption) ?? false) ||
+535:      (argResults?.wasParsed('host-vmservice-port') ?? false);
+536-
+537-  int _tryParseHostVmservicePort() {
+538-    final String? vmServicePort = stringArg(vmServicePortOption);
+539-    final String? hostPort = stringArg('host-vmservice-port');
+540-    if (vmServicePort == null && hostPort == null) {
+541-      throwToolExit('Invalid port for `--vm-service-port/--host-vmservice-port`');
+--
+551:    if (!wasParsed(DebuggingOptionDescriptors.ddsPort) && _hostVmServicePortProvided) {
+552-      // If an explicit DDS port is _not_ provided, use the host-vmservice-port for DDS.
+553-      return _tryParseHostVmservicePort();
+554-    }
+555-    return getValue(DebuggingOptionDescriptors.ddsPort);
+556-  }
+557-
+--
+559:    if (wasParsed(DebuggingOptionDescriptors.devToolsServerAddressOption)) {
+560-      final Uri? uri = Uri.tryParse(
+561-        getValue(DebuggingOptionDescriptors.devToolsServerAddressOption)!,
+562-      );
+563-      if (uri != null && uri.host.isNotEmpty && uri.port != 0) {
+564-        return uri;
+565-      }
+--
+581:    if ((argResults?.wasParsed(vmServicePortOption) ?? false) &&
+582:        (argResults?.wasParsed('host-vmservice-port') ?? false)) {
+583-      throwToolExit(
+584-        'Only one of "--vm-service-port" and '
+585-        '"--host-vmservice-port" may be specified.',
+586-      );
+587-    }
+588-    // If DDS is enabled and no explicit DDS port is provided, use the
+--
+591:    if (enableDds && !wasParsed(DebuggingOptionDescriptors.ddsPort)) {
+592-      return null;
+593-    }
+594-    return _tryParseHostVmservicePort();
+595-  }
+596-
+597-  /// Gets the vmservice port provided to in the 'device-vmservice-port' option.
+--
+719:        (argResults?.wasParsed(FlutterOptions.kDeviceTimeout) ?? false)) {
+720-      final int? timeoutSeconds = int.tryParse(stringArg(FlutterOptions.kDeviceTimeout)!);
+721-      if (timeoutSeconds == null) {
+722-        throwToolExit(
+723-          'Could not parse "--${FlutterOptions.kDeviceTimeout}" argument. It must be an integer.',
+724-        );
+725-      }
+--
+733:        (argResults?.wasParsed(FlutterOptions.kDeviceConnection) ?? false)) {
+734-      return switch (stringArg(FlutterOptions.kDeviceConnection)) {
+
+$ grep -rn "bool hasOption" /tmp/flutter/packages/flutter_tools/lib | head; grep -rn "bool getValue" /tmp/flutter/packages/flutter_tools/lib | head
+/tmp/flutter/packages/flutter_tools/lib/src/runner/options/safe_arg_results.dart:28:  bool hasOption(OptionDescriptor<Object?> descriptor) =>
+/tmp/flutter/packages/flutter_tools/lib/src/runner/options/option_descriptor.dart:374:  bool getValue(ArgResults? results, {ArgResults? globalResults}) {
+
+$ sed -n '1,60p' /tmp/flutter/packages/flutter_tools/lib/src/runner/options/safe_arg_results.dart; echo "=== option_descriptor getValue/hasOption ==="; sed -n '360,400p' /tmp/flutter/packages/flutter_tools/lib/src/runner/options/option_descriptor.dart
+// Copyright 2014 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+import '../../base/common.dart';
+import '../flutter_command.dart';
+
+/// Type-safe argument extraction extension for [FlutterCommand].
+extension SafeArgResults on FlutterCommand {
+  /// Returns the resolved value for [descriptor], falling back to its default value.
+  T getValue<T>(OptionDescriptor<T> descriptor) {
+    try {
+      return descriptor.getValue(argResults, globalResults: globalResults);
+    } on FormatException catch (e) {
+      throwToolExit(e.message);
+    }
+  }
+
+  /// Returns whether [descriptor] was explicitly provided on the command line.
+  bool wasProvided(OptionDescriptor<Object?> descriptor) =>
+      descriptor.wasProvided(argResults, globalResults: globalResults);
+
+  /// Checks if this option was explicitly parsed (alias for [wasProvided]).
+  bool wasParsed(OptionDescriptor<Object?> descriptor) =>
+      descriptor.wasProvided(argResults, globalResults: globalResults);
+
+  /// Returns whether [descriptor] is registered on this command (or globally).
+  bool hasOption(OptionDescriptor<Object?> descriptor) =>
+      descriptor.isRegistered(argResults, globalResults: globalResults);
+}
+=== option_descriptor getValue/hasOption ===
+      return;
+    }
+    parser.addFlag(
+      name,
+      abbr: abbr,
+      help: help,
+      defaultsTo: defaultsTo ?? false,
+      negatable: negatable,
+      hide: _computeEffectiveHide(verboseHelp: verboseHelp, hideOverride: hideOverride),
+    );
+    _recordRegistration(parser);
+  }
+
+  @override
+  bool getValue(ArgResults? results, {ArgResults? globalResults}) {
+    final ArgResults? target = _resolveTargetResults(results, globalResults);
+    if (target != null && target.options.contains(name)) {
+      return (target[name] as bool?) ?? defaultsTo ?? false;
+    }
+    return defaultsTo ?? false;
+  }
+}
+
+/// A descriptor for tri-state boolean flags without a default value.
+///
+/// When omitted from the command line, [getValue] returns `null`.
+class NullableFlagOptionDescriptor extends OptionDescriptor<bool?> {
+  const NullableFlagOptionDescriptor({
+    required super.name,
+    required super.help,
+    super.abbr,
+    this.negatable = true,
+    super.scope,
+    super.hide,
+    super.verboseOnly,
+  }) : super(defaultsTo: null);
+
+  /// Whether the flag can be negated with `--no-<name>`.
+  final bool negatable;
+
+  @override
+
+$ R=/agent/repos/Galass_Driver; git -C $R log --oneline -15 -- android/gradle/wrapper/gradle-wrapper.properties; echo "=== settings history ==="; git -C $R log --oneline -10 -- android/settings.gradle.kts
+7bfad34 chore: livrer Phase 2 toolchain et hygiene CI Codemagic
+9c4ea87 Initial commit: Galass Driver Flutter app
+=== settings history ===
+676eeb7 feat: initialiser Crashlytics et bouton Erreurs debug login
+16fa860 fix: monter Kotlin 2.3.0 pour google_maps_flutter_android CI
+7bfad34 chore: livrer Phase 2 toolchain et hygiene CI Codemagic
+5efd991 chore: démarrer Phase 2 Build CI et aligner toolchain
+7bc9702 chore: sync Google Maps API key and bump Kotlin to 2.3.0
+9c4ea87 Initial commit: Galass Driver Flutter app
+
+$ R=/agent/repos/Galass_Driver; git -C $R show --stat 5efd991 | head -40; echo "===================="; git -C $R show 5efd991 -- android/gradle/wrapper/gradle-wrapper.properties android/settings.gradle.kts | head -60; echo "===================="; git -C $R log -3 --format="%H %ad %s%n%b" --date=short 7bfad34 | head -60
+commit 5efd9910ce0c48bdb36718b122b47766033db182
+Author: LordThiouk <pirlothiouk@gmail.com>
+Date:   Sat Jun 13 06:26:10 2026 +0200
+
+    chore: démarrer Phase 2 Build CI et aligner toolchain
+    
+    Documenter Phase 2 dans ISA, aligner firebase_auth sur le rider (^6.5.0),
+    rétablir Kotlin 2.1.0 template, brancher signing galass_driver_keystore
+    (Codemagic + CM_KEYSTORE_*) et kotlinOptions JVM 11.
+    
+    Co-authored-by: Cursor <cursoragent@cursor.com>
+
+ ISA.md                         | 175 ++++++++++++++++++++++++++++++++++++++---
+ android/app/build.gradle.kts   |  42 ++++++++--
+ android/key.properties.example |   6 ++
+ android/settings.gradle.kts    |   2 +-
+ codemagic.yaml                 |   2 +-
+ pubspec.yaml                   |   2 +-
+ 6 files changed, 210 insertions(+), 19 deletions(-)
+====================
+commit 5efd9910ce0c48bdb36718b122b47766033db182
+Author: LordThiouk <pirlothiouk@gmail.com>
+Date:   Sat Jun 13 06:26:10 2026 +0200
+
+    chore: démarrer Phase 2 Build CI et aligner toolchain
+    
+    Documenter Phase 2 dans ISA, aligner firebase_auth sur le rider (^6.5.0),
+    rétablir Kotlin 2.1.0 template, brancher signing galass_driver_keystore
+    (Codemagic + CM_KEYSTORE_*) et kotlinOptions JVM 11.
+    
+    Co-authored-by: Cursor <cursoragent@cursor.com>
+
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 7ec43b2..c4b6403 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -22,7 +22,7 @@ plugins {
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+     // END: FlutterFire Configuration
+-    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
++    id("org.jetbrains.kotlin.android") version "2.1.0" apply false
+ }
+ 
+ include(":app")
+====================
+7bfad34874ef7a18b3907b4824ea99cefbca68a1 2026-06-13 chore: livrer Phase 2 toolchain et hygiene CI Codemagic
+Monter AGP 8.11.1 et Gradle 8.14, migrer kotlin compilerOptions JVM 11,
+aligner iOS 15.0, renommer artefacts GalassDriver et ajouter flutter test en CI.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+5efd9910ce0c48bdb36718b122b47766033db182 2026-06-13 chore: démarrer Phase 2 Build CI et aligner toolchain
+Documenter Phase 2 dans ISA, aligner firebase_auth sur le rider (^6.5.0),
+rétablir Kotlin 2.1.0 template, brancher signing galass_driver_keystore
+(Codemagic + CM_KEYSTORE_*) et kotlinOptions JVM 11.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+d231c55b4ebd6be861abc3b850dfafd587646b0e 2026-06-13 fix: migrate Kotlin JVM target config for Gradle 2.3
+Replace deprecated kotlinOptions with compilerOptions and JvmTarget.JVM_11 in app build.gradle.kts.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
