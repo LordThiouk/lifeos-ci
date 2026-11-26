@@ -1,0 +1,1371 @@
+
+> Forge · deepseek-v4.1-flash-free
+
+I'll read the prompt file and execute it.
+→ Read /home/ubuntu/actions-runner-2/_work/_temp/oc/prompt.md
+
+$ ls -la /home/ubuntu/actions-runner-2/_work/_temp/oc/ 2>&1
+total 28
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 15:52 .
+drwxr-xr-x 9 ubuntu ubuntu 4096 Nov 26 15:52 ..
+-rw------- 1 ubuntu ubuntu 9680 Nov 26 15:52 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu  160 Nov 26 15:52 opencode.log
+-rw-r--r-- 1 ubuntu ubuntu 1533 Nov 26 15:52 prompt.md
+
+$ pwd && ls -la && git status 2>&1 | head -30
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target
+total 96
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 15:52 .
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 15:52 ..
+-rw-r--r--  1 ubuntu ubuntu 1364 Nov 26 15:06 .env.example
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 15:52 .git
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 .github
+-rw-r--r--  1 ubuntu ubuntu  615 Nov 26 15:06 .gitignore
+-rw-r--r--  1 ubuntu ubuntu 1352 Nov 26 15:06 .gitleaks.toml
+-rw-r--r--  1 ubuntu ubuntu  578 Nov 26 15:06 CLEANROOM.md
+-rw-r--r--  1 ubuntu ubuntu  255 Nov 26 15:06 LICENSE
+-rw-r--r--  1 ubuntu ubuntu 2551 Nov 26 15:52 MAX-FR04-V3.md
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 MEMORY
+-rw-r--r--  1 ubuntu ubuntu 1000 Nov 26 15:06 Makefile
+-rw-r--r--  1 ubuntu ubuntu  999 Nov 26 15:52 README.md
+-rw-r--r--  1 ubuntu ubuntu 3444 Nov 26 15:52 VERIFY-FR04-V3.md
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 15:52 api
+drwxr-xr-x  7 ubuntu ubuntu 4096 Nov 26 15:52 data
+-rw-r--r--  1 ubuntu ubuntu 2737 Nov 26 15:06 docker-compose.override.yml
+-rw-r--r--  1 ubuntu ubuntu 3714 Nov 26 15:06 docker-compose.yml
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 15:06 docs
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 engine
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 15:06 migrations
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 15:52 prompts
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 15:52 scripts
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 tools
+On branch isa/fr-04-vera-2026-11-26
+Your branch is up to date with 'origin/isa/fr-04-vera-2026-11-26'.
+
+nothing to commit, working tree clean
+
+$ git log --oneline -3 origin/build/fr04-l7 2>&1; echo "---L9---"; git log --oneline -3 origin/build/fr04-l9 2>&1
+6002480 feat(segmentation): erreur par classe et par station L7 (T7.1)
+f824102 merge(fr04): Vague 3 L8 into isa
+e795ede merge(fr04): Vague 3 L5 into isa
+---L9---
+2c73957 feat(segmentation): porte de gel des seuils FR-04 L9 (T9.1)
+f824102 merge(fr04): Vague 3 L8 into isa
+e795ede merge(fr04): Vague 3 L5 into isa
+
+$ git log --oneline -5 && echo "---" && git rev-parse HEAD && echo "---" && git branch -a | head -30
+885009e merge(fr04): Vague 4 L6 into isa
+e53feed feat(segmentation): P95 des frontieres sur tous les relus L6 (T6.1)
+87c77d7 docs(fr04): verdict Max Vague 3 (L4+L5+L8) — PASS
+c2f169e docs(fr04): vérifie la Vague 3 (L4+L5+L8) — PASS
+f824102 merge(fr04): Vague 3 L8 into isa
+---
+885009e9c6b380d1e3a83d8916e548593bbe2c13
+---
+* isa/fr-04-vera-2026-11-26
+  remotes/origin/annotation/pilot100-2026-11-14
+  remotes/origin/annotation/pilot100-agreement
+  remotes/origin/build/fr01-v1c
+  remotes/origin/build/fr04-l2
+  remotes/origin/build/fr04-l3
+  remotes/origin/build/fr04-l4
+  remotes/origin/build/fr04-l5
+  remotes/origin/build/fr04-l6
+  remotes/origin/build/fr04-l7
+  remotes/origin/build/fr04-l8
+  remotes/origin/build/fr04-l9
+  remotes/origin/chore/isa-annotation-isc43-ratif-2026-11-24
+  remotes/origin/close/fr04-v3-max
+  remotes/origin/close/fr04-v4-pending
+  remotes/origin/cursor/language-pass-slice-resume-b609
+  remotes/origin/docs/isa-cloture-2026-11-18
+  remotes/origin/eval/compare-engines-2026-11-25
+  remotes/origin/feat/fingerprint-engine-maison-2026-11-15
+  remotes/origin/feat/inventory-mytuner
+  remotes/origin/feat/mytuner-stream-scrape
+  remotes/origin/feat/relecture-2-overlay-2026-11-16
+  remotes/origin/fix/csv-import-and-no-media-test
+  remotes/origin/fix/inventory-allowlist-names
+  remotes/origin/fix/isc15-replay-speech-rule-2026-11-16
+  remotes/origin/fix/mytuner-discover
+  remotes/origin/fix/mytuner-names-only
+  remotes/origin/fix/orb-pagination-skip-stream-tests
+  remotes/origin/fullrun-logs/annotation-build-solo-45072495775
+  remotes/origin/fullrun-logs/annotation-build-solo2-45082420751
+
+$ git config user.name; git config user.email; echo "---"; ls api/src/antenly_api/eval/ 2>&1; echo "---"; ls api/tests/segmentation/ 2>&1
+Papa Diop
+76528706+LordThiouk@users.noreply.github.com
+---
+__init__.py
+boundaries.py
+emission.py
+metrics.py
+segmentation.py
+split.py
+---
+__init__.py
+test_boundary_p95.py
+test_emission.py
+test_eval_split.py
+test_min_duration.py
+test_other.py
+test_overlap_flag.py
+test_per_class.py
+test_schema.py
+test_segment_contract.py
+test_segmenter_baseline.py
+
+$ git diff --stat 885009e..origin/build/fr04-l7 2>&1; echo "===L9==="; git diff --stat 885009e..origin/build/fr04-l9 2>&1
+MAX-FR04-V3.md                              |  34 ---
+ VERIFY-FR04-V3.md                           |  64 -----
+ api/src/antenly_api/eval/__init__.py        |  18 ++
+ api/src/antenly_api/eval/boundaries.py      | 211 ---------------
+ api/src/antenly_api/eval/metrics.py         | 283 ++++++++++++++++++++-
+ api/src/antenly_api/eval/segmentation.py    | 211 +++++++++------
+ api/src/antenly_api/eval/split.py           |  82 ++++++
+ api/tests/segmentation/test_boundary_p95.py | 216 ----------------
+ api/tests/segmentation/test_per_station.py  | 382 ++++++++++++++++++++++++++++
+ 9 files changed, 901 insertions(+), 600 deletions(-)
+===L9===
+ MAX-FR04-V3.md                                 |  34 --
+ VERIFY-FR04-V3.md                              |  64 ---
+ api/src/antenly_api/eval/boundaries.py         | 211 ----------
+ api/src/antenly_api/eval/segmentation.py       |  90 +---
+ api/tests/segmentation/test_boundary_p95.py    | 216 ----------
+ api/tests/segmentation/test_threshold_state.py | 448 ++++++++++++++++++++
+ scripts/check/fr04_threshold_state.py          | 547 +++++++++++++++++++++++++
+ 7 files changed, 1012 insertions(+), 598 deletions(-)
+
+✗ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && echo "MB L7: $(git merge-base HEAD origin/build/fr04-l7)"; echo "MB L9: $(git merge-base HEAD origin/build/fr04-l9)"; echo "---L6 diff 885009e^..885009e---"; git diff --stat 885009e^1..885009e 2>&1 failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git log --oneline --graph --all --decorate | head -40
+* 2e9ac8a (origin/fullrun-logs/fr04-v4-merge-45845315701) chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:51 Dakar, clair — branche à supprimer après lecture
+* c15265f chore(ci): journal en direct du run driver-f5-13c (45845317171), 15:51 Dakar, clair — branche à supprimer après lecture
+* a03efff (origin/fullrun-logs/fr01-v1c-45845316040) chore(ci): journal en direct du run fr01-v1c (45845316040), 15:51 Dakar, clair — branche à supprimer après lecture
+* c414c9c chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:51 Dakar, clair — branche à supprimer après lecture
+* baa0247 chore(ci): journal en direct du run rider-apk-gradle (45847515781), 15:51 Dakar, clair — branche à supprimer après lecture
+* 3139ac3 chore(ci): journal en direct du run rider-f429-cr (45845322081), 15:50 Dakar, clair — branche à supprimer après lecture
+* d4fc3f3 chore(ci): journal en direct du run smoke-usbox3 (45842094698), 15:50 Dakar, clair — branche à supprimer après lecture
+* c6ef8a2 chore(ci): journal en direct du run rider-f434b-max (45845322242), 15:49 Dakar, clair — branche à supprimer après lecture
+* f1d26dc chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:49 Dakar, clair — branche à supprimer après lecture
+* ef320d4 chore(ci): journal en direct du run driver-f5-13c (45845317171), 15:49 Dakar, clair — branche à supprimer après lecture
+* 21a3a1b chore(ci): journal en direct du run fr01-v1c (45845316040), 15:49 Dakar, clair — branche à supprimer après lecture
+* 8c61249 chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:49 Dakar, clair — branche à supprimer après lecture
+* 3b7a24f chore(ci): journal en direct du run rider-apk-gradle (45847515781), 15:49 Dakar, clair — branche à supprimer après lecture
+* 5d895ff chore(ci): journal en direct du run rider-f429-cr (45845322081), 15:48 Dakar, clair — branche à supprimer après lecture
+* ee65a04 chore(ci): journal en direct du run smoke-usbox3 (45842094698), 15:48 Dakar, clair — branche à supprimer après lecture
+* bc727e6 chore(ci): journal en direct du run rider-f434b-max (45845322242), 15:47 Dakar, clair — branche à supprimer après lecture
+* 7af8b56 chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:47 Dakar, clair — branche à supprimer après lecture
+* 67a5af1 chore(ci): journal en direct du run driver-f5-13c (45845317171), 15:47 Dakar, clair — branche à supprimer après lecture
+* ba52255 chore(ci): journal en direct du run fr01-v1c (45845316040), 15:47 Dakar, clair — branche à supprimer après lecture
+* 17fb192 chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:47 Dakar, clair — branche à supprimer après lecture
+* d14c153 chore(ci): journal en direct du run rider-apk-gradle (45847515781), 15:47 Dakar, clair — branche à supprimer après lecture
+* 2f99d33 chore(ci): journal en direct du run rider-f429-cr (45845322081), 15:46 Dakar, clair — branche à supprimer après lecture
+* 3eed533 chore(ci): journal en direct du run smoke-usbox3 (45842094698), 15:46 Dakar, clair — branche à supprimer après lecture
+* 6a67c69 chore(ci): journal en direct du run rider-f434b-max (45845322242), 15:45 Dakar, clair — branche à supprimer après lecture
+* 2cfb80a chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:45 Dakar, clair — branche à supprimer après lecture
+* 24dec63 chore(ci): journal en direct du run driver-f5-13c (45845317171), 15:45 Dakar, clair — branche à supprimer après lecture
+* 0e87bb3 chore(ci): journal en direct du run fr01-v1c (45845316040), 15:45 Dakar, clair — branche à supprimer après lecture
+* 04ba30f chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:45 Dakar, clair — branche à supprimer après lecture
+* 556f763 chore(ci): journal en direct du run rider-f429-cr (45845322081), 15:44 Dakar, clair — branche à supprimer après lecture
+* 58755f5 chore(ci): journal en direct du run smoke-usbox3 (45842094698), 15:44 Dakar, clair — branche à supprimer après lecture
+* 6ad74d5 chore(ci): journal en direct du run rider-f434b-max (45845322242), 15:43 Dakar, clair — branche à supprimer après lecture
+* 034debd chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:43 Dakar, clair — branche à supprimer après lecture
+* e2b919c chore(ci): journal en direct du run fr01-v1c (45845316040), 15:43 Dakar, clair — branche à supprimer après lecture
+* 1f46175 chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:42 Dakar, clair — branche à supprimer après lecture
+* f95b947 chore(ci): journal en direct du run rider-f429-cr (45845322081), 15:42 Dakar, clair — branche à supprimer après lecture
+* dd61c3e chore(ci): journal en direct du run smoke-usbox3 (45842094698), 15:42 Dakar, clair — branche à supprimer après lecture
+* 2ffd737 chore(ci): journal en direct du run rider-f434b-max (45845322242), 15:41 Dakar, clair — branche à supprimer après lecture
+* c98fcdd chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:41 Dakar, clair — branche à supprimer après lecture
+* 8d0763b chore(ci): journal en direct du run fr01-v1c (45845316040), 15:41 Dakar, clair — branche à supprimer après lecture
+* 5aa1f05 chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:40 Dakar, clair — branche à supprimer après lecture
+
+→ Read /home/ubuntu/actions-runner-2/_work/_temp/oc/opencode.json
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && ls .github/workflows/ && ls scripts/ && ls scripts/check 2>/dev/null | head
+capture.yml
+ci.yml
+inventory-pass2.yml
+inventory-probe.yml
+annotation
+capture.sh
+clickhouse_rls.sh
+corpus
+dev-migrate.sh
+migrate.sh
+roles.sh
+s3_tenants.sh
+
+$ ls -la /tmp/ 2>&1 | head -40; echo "---task_done---"; cat /tmp/task_done.md 2>&1 | head -50
+total 108376
+drwxrwxrwt. 33 root   root      16384 Nov 26 15:53 .
+drwxr-xr-x. 25 root   root       4096 Nov 26 04:55 ..
+drwxrwxrwt   2 ubuntu ubuntu     4096 Nov 26 04:55 .ICE-unix
+-r--r--r--   1 ubuntu ubuntu       11 Nov 26 04:55 .X1-lock
+drwxrwxrwt   2 root   ubuntu     4096 Nov 26 04:55 .X11-unix
+-rw-------   1 ubuntu ubuntu   514960 Nov 26 12:17 .bun-1000-71b650bef1b3e52c.node
+-rw-------   1 ubuntu ubuntu 12846400 Nov 26 12:17 .bun-1000-89812e6e6a68aaeb.so
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:08 .git_signing_key_tmp0ZGbAx
+-rw-------   1 ubuntu ubuntu       80 Nov 26 10:42 .git_signing_key_tmp0dd6Ht
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:15 .git_signing_key_tmp0zEvie
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:15 .git_signing_key_tmp128YfY
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:28 .git_signing_key_tmp1tD7oh
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:24 .git_signing_key_tmp2t6ULC
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:02 .git_signing_key_tmp2vGvad
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:32 .git_signing_key_tmp38ULAK
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:51 .git_signing_key_tmp3NDlXE
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:26 .git_signing_key_tmp4CN4T3
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:17 .git_signing_key_tmp5Vu5et
+-rw-------   1 ubuntu ubuntu       80 Nov 26 11:31 .git_signing_key_tmp9fenzV
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:38 .git_signing_key_tmpAhg9Ff
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:29 .git_signing_key_tmpB6Ejyn
+-rw-------   1 ubuntu ubuntu       80 Nov 26 14:07 .git_signing_key_tmpCG0llF
+-rw-------   1 ubuntu ubuntu       80 Nov 26 10:58 .git_signing_key_tmpCOoRnp
+-rw-------   1 ubuntu ubuntu       80 Nov 26 08:05 .git_signing_key_tmpEmIdFp
+-rw-------   1 ubuntu ubuntu       80 Nov 26 15:31 .git_signing_key_tmpH37Vcn
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:45 .git_signing_key_tmpHMIZfv
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:38 .git_signing_key_tmpIMF92L
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:30 .git_signing_key_tmpIQVHkg
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:25 .git_signing_key_tmpJSbCWR
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:33 .git_signing_key_tmpJsGM6V
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:41 .git_signing_key_tmpKwRMOl
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:29 .git_signing_key_tmpLR1UqC
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:16 .git_signing_key_tmpOBllB3
+-rw-------   1 ubuntu ubuntu       80 Nov 26 15:31 .git_signing_key_tmpOm42mv
+-rw-------   1 ubuntu ubuntu       80 Nov 26 07:34 .git_signing_key_tmpPPOGps
+-rw-------   1 ubuntu ubuntu       80 Nov 26 05:21 .git_signing_key_tmpPkxcyJ
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:04 .git_signing_key_tmpQ9kHSp
+-rw-------   1 ubuntu ubuntu       80 Nov 26 10:04 .git_signing_key_tmpQwsLb9
+-rw-------   1 ubuntu ubuntu       80 Nov 26 06:16 .git_signing_key_tmpRyvz2T
+---task_done---
+# Antenly FR-01 — rebuild V1 (fr01-v1c)
+
+- Branche : `build/fr01-v1c`, base ISA `1bbf95b`
+- HEAD validé : `91fbab5` — `fix(fr01-v1): ISC-22 catalogue genere, ISC-13 trou d'heure nomme`
+- Auteur des commits de correction : Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+- Push/merge : aucun ; `.fullrun` intact ; ISA `lifeos/` non modifiée ; V2 non démarrée ; aucune revue lancée.
+
+## Corrections au trayeau V1
+
+- ISC-22 : suppression de la liste figée de `scripts/capture.sh` ; catalogue généré par `scripts/ingest/catalogue_stations.py` depuis le journal source daté, injecté par `STATIONS_FILE` dans `capture.yml`.
+- ISC-13 : `aggregate()` refuse désormais une chaîne-heure entièrement absente entre la première et la dernière heure observée (`trou d'heure`), sans interpolation ; test de régression ajouté.
+- Schéma/migrations inchangés (`003_ingestion.sql`, `004_pool_origin.sql`, `003_ingestion.sql` ClickHouse), déjà en place sur la base.
+
+## Preuves exécutées
+
+- `api/.venv/bin/python -m pytest tests/ingest/test_open_catalogue.py -q` → **6 passed** (ISC-22).
+- `api/.venv/bin/python -m pytest tests/ingest/test_stream_pool.py -q` → **6 passed** (ISC-12).
+- `api/.venv/bin/python -m pytest tests/ingest -q` → **49 passed**.
+- `api/.venv/bin/python -m antenly_api.eval.coverage --window=10s --hourly --input /tmp/fr01_windows.jsonl --output /tmp/fr01_coverage.jsonl` → **4 chaîne(s)-heure(s), 100 % des fenêtres classées, 0 trou** (ISC-13, 1440 fenêtres de 10 s).
+- `bash -n scripts/capture.sh` → syntaxe OK ; `python -m py_compile scripts/ingest/catalogue_stations.py` → OK.
+- `./scripts/migrate.sh` → **non exécutable ici** : `migrate: postgres is not running — run 'make up' first` (Docker/absence de pile locale) ; aucune migration appliquée ni modifiée dans ce run.
+
+## État git
+
+- Arbre de travail propre (hors fichier `.deb` préexistant non suivi).
+- 3 commits locaux en avance sur `origin/build/fr01-v1c`, non poussés.
+- Les coches ISC-12/13/22 étaient déjà posées dans l'ISA à la base ; aucune recoche effectuée (clé d'empreinte ISA absente dans cet environnement).
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && ls -la .fullrun 2>&1 | head; echo "---MEMORY---"; find MEMORY -maxdepth 3 -type f 2>/dev/null | head -40; echo "---prompts---"; ls prompts/
+ls: cannot access '.fullrun': No such file or directory
+---MEMORY---
+MEMORY/WORK/2026-11-02-fingerprint-engine/ISA.md
+MEMORY/WORK/2026-11-02-fr-06-classification-emission/ISA.md
+MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md
+MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/COMPLETENESS.yml
+MEMORY/WORK/2026-11-02-fr-02-detection-reference/ISA.md
+MEMORY/WORK/2026-11-02-channel-inventory-47/ISA.md
+MEMORY/WORK/2026-11-02-channel-inventory-47/ISA.html
+MEMORY/WORK/2026-11-02-fr-11-extrait-preuve/ISA.md
+MEMORY/WORK/2026-11-09-inventory-url-pool/ISA.md
+MEMORY/WORK/2026-11-03-fr-17-facturation/ISA.md
+MEMORY/WORK/2026-11-10-language-identification/ISA.md
+MEMORY/WORK/2026-11-02-fr-04-segmentation/ISA.md
+MEMORY/WORK/2026-11-02-fr-04-segmentation/COMPLETENESS.yml
+MEMORY/WORK/2026-11-02-fr-04-segmentation/fullrun-carry.json
+MEMORY/WORK/2026-11-10-ip-licensing-review/ISA.md
+MEMORY/WORK/2026-11-02-fr-09-temps-parole/ISA.md
+MEMORY/WORK/2026-11-02-fr-07-epg/ISA.md
+MEMORY/WORK/2026-11-10-acr-system-reference/ISA.md
+MEMORY/WORK/2026-11-10-now-playing-relay/ISA.md
+MEMORY/WORK/2026-11-02-fr-12-alertes/ISA.md
+MEMORY/WORK/2026-11-02-fr-02-statistical-bench/ISA.md
+MEMORY/WORK/2026-11-02-audio-buffer/ISA.md
+MEMORY/WORK/2026-11-03-cover-version-id/ISA.md
+MEMORY/WORK/2026-11-03-sdr-fm-capture/ISA.md
+MEMORY/WORK/2026-11-02-reference-catalog/ISA.md
+MEMORY/WORK/2026-11-02-annotation-tool/ISA.md
+MEMORY/WORK/2026-11-02-annotation-tool/COMPLETENESS.yml
+MEMORY/WORK/2026-11-02-annotation-tool/REA-DONE.md
+MEMORY/WORK/2026-11-02-annotation-tool/fullrun-carry.json
+MEMORY/WORK/2026-11-02-fr-01-ingestion-live/ISA.md
+MEMORY/WORK/2026-11-10-loudness-monitoring/ISA.md
+MEMORY/WORK/2026-11-02-fr-03-horodatage/ISA.md
+MEMORY/WORK/2026-11-02-fr-13-exports/ISA.md
+MEMORY/WORK/2026-11-02-regulator-ui/ISA.md
+MEMORY/WORK/2026-11-02-isa-mvp-backlog-fix/ISA.md
+MEMORY/WORK/2026-11-02-isa-mvp-backlog-fix/ISA.html
+MEMORY/WORK/2026-11-02-fr-10-isrc/ISA.md
+MEMORY/WORK/2026-11-02-fr-05-ucf/ISA.md
+MEMORY/WORK/2026-11-03-fr-16-flotte-kits/ISA.md
+MEMORY/WORK/2026-11-02-capture-corpus-24h/ISA.md
+---prompts---
+annot-close.md
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git log --oneline origin/fullrun-logs/fr04-v4-merge-45845315701 -5 2>&1; echo "---files---"; git ls-tree -r --name-only origin/fullrun-logs/fr04-v4-merge-45845315701 2>&1 | head -30
+2e9ac8a chore(ci): journal en direct du run fr04-v4-merge (45845315701), 15:51 Dakar, clair — branche à supprimer après lecture
+c15265f chore(ci): journal en direct du run driver-f5-13c (45845317171), 15:51 Dakar, clair — branche à supprimer après lecture
+a03efff chore(ci): journal en direct du run fr01-v1c (45845316040), 15:51 Dakar, clair — branche à supprimer après lecture
+c414c9c chore(ci): journal en direct du run rider-f429-forge (45845322748), 15:51 Dakar, clair — branche à supprimer après lecture
+baa0247 chore(ci): journal en direct du run rider-apk-gradle (45847515781), 15:51 Dakar, clair — branche à supprimer après lecture
+---files---
+.fullrun/logs/fr04-v4-merge-45845315701.log
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git show origin/fullrun-logs/fr04-v4-merge-45845315701:.fullrun/logs/fr04-v4-merge-45845315701.log 2>&1 | head -120
+> Forge · deepseek-v4.1-flash-free
+
+I'll read the prompt file first.
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+$ ls -la
+total 204
+drwxr-xr-x 15 ubuntu ubuntu  4096 Nov 26 15:44 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:45 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 .archive
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:44 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 15:45 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 15:44 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1079 Nov 26 15:44 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  7714 Nov 26 15:44 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu 14109 Nov 26 15:44 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu    70 Nov 26 15:44 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 15826 Nov 26 15:44 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  2970 Nov 26 15:44 README.md
+-rw-r--r--  1 ubuntu ubuntu  1662 Nov 26 15:44 analysis_options.yaml
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:44 android
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 15:44 assets
+-rw-r--r--  1 ubuntu ubuntu   392 Nov 26 15:44 dart_test.yaml
+-rw-r--r--  1 ubuntu ubuntu   184 Nov 26 15:44 devtools_options.yaml
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 fastlane
+-rw-r--r--  1 ubuntu ubuntu   639 Nov 26 15:44 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 15:44 ios
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:44 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:44 prompts
+-rw-r--r--  1 ubuntu ubuntu 68359 Nov 26 15:44 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  2849 Nov 26 15:44 pubspec.yaml
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 15:44 test
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 tool
+
+$ pwd && git status --short && git branch --show-current && git log --oneline -5
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+build/driver-f5-13c
+32607ee test(goldens): rebase ride_details sous Flutter 3.50.1 (regen F6)
+119fb0c feat(driver): ISC-F5-16 arrêt actif distinct + arrêts estompés numérotés
+505637e fix(driver): ISC-F5-12 CTA unique par état (confirm stop / terminer)
+bd77f91 docs(driver): verdict position voiture temps réel + ISC-F5-19
+7187e3a prompt: driver live location
+
+$ ls MEMORY/WORK/ && ls MEMORY/WORK/20261006-galass-driver-multistop/ 2>/dev/null
+20260613-galassdriver-firebase-phone-auth
+20260709-galassdriver-fcm-push
+20260709-galassdriver-french-localization
+20260710-galassdriver-ride-message-display
+20260713-galassdriver-ride-message-getx-reuse
+20260715-galassdriver-fcm-apns-retry
+20260715-galassdriver-ride-message-definitive-fix
+20260715-galassdriver-ride-message-realign-initial
+20260716-galassdriver-store-release-ready
+20260718-galassdriver-apple-511-location-preprompt
+20260718-galassdriver-version-docs-release
+20260730-galassdriver-kyc-submit-spinner
+20260730-galassdriver-vehicle-verification-submit
+20261002-galass-driver-dispatch-f4
+20261006-galass-driver-multistop
+ISA.html
+ISA.md
+
+$ grep -rn "ISC-F5-13" MEMORY/ | head -50
+MEMORY/WORK/20261006-galass-driver-multistop/ISA.md:144:| ISC-F5-13 | widget      | « Annuler la course » reste visuellement distinct (couleur danger) du CTA principal, quel que soit l'état | bgColor danger ≠ bgColor CTA principal | flutter test test/unit/multistop_end_gate_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23) | literal |
+MEMORY/WORK/20261006-galass-driver-multistop/ISA.md:148:| ISC-F5-17 | widget      | **Contrat d'écran** « Driver en course » (RIDE_RUNNING, dérivé du code actuel 2026-11-23) — présence testée individuellement de : avatar+nom+note (`UserDetailsWidget`), bouton message, bouton appel, un seul CTA principal actionnable (ISC-F5-12), « Annuler la course » distinct-danger (ISC-F5-13), bloc itinéraire pickup→arrêts→destination, repères d'arrêts sur la carte (ISC-F5-16). **Règle « ajouter sans retirer »** : retirer un de ces éléments exige une ligne ISA explicite validée par Papa. | 7 assertions `find.byKey`/`find.text` toutes vertes, une par élément listé | flutter test test/widget/course_en_cours_driver_contract_test.dart (golden) | ISC-F5-12, ISC-F5-13, ISC-F5-16 |
+MEMORY/WORK/20261006-galass-driver-multistop/ISA.md:220:- [ ] ISC-F5-13: « Annuler la course » est clairement une action dangereuse, différente de l'action principale. **Audit code** : déjà vrai aujourd'hui (`bgColor: MyColor.redCancelTextColor` = `0xFFF93E2C`, l.217-225, vs couleur primaire par défaut du CTA principal) — ce claim verrouille ce comportement correct en régression plutôt que de supposer un bug.
+MEMORY/WORK/20261006-galass-driver-multistop/ISA.md:332:- [ ] **F6 revue UI téléphone** — ISC-F5-12 (CTA unique par état), ISC-F5-13 (Annuler = danger, verrou régression), ISC-F5-14 (retrait compteur, supersède ISC-F5-3 partie compteur, **contrat repère fixé 2026-11-23** : `Semantics` `galass.driver.stops=<done>/<total>`), ISC-F5-15 (pas de libellé générique au dernier arrêt ; **infirmé visuellement** sur `driver_ride_running_multistop_all_stops_done.png`, garde maintenue), ISC-F5-16 (markers actif/estompé+numéroté, étend ISC-F5-4), ISC-F5-17 (contrat d'écran « Driver en course », règle ajouter-sans-retirer), ISC-F5-18 (goldens stop1/stop2 actifs distincts — **mesuré identiques** aujourd'hui). Aucun code tant que ces ISC ne sont pas construits (TDD rouge→vert). Dépend des goldens `test/goldens/driver/` (depuis `main`, worktree séparé) et de la porte CI golden-diff (ISA harnais emu).
+MEMORY/WORK/20261006-galass-driver-multistop/ISA.html:1548:<table class="data"><thead><tr><th>isc</th><th>type</th><th>check</th><th>threshold</th><th>tool</th><th>anchors_to</th></tr></thead><tbody><tr><td>ISC-F0-1</td><td>manual</td><td>dual-write SHA256 repo=LifeOS</td><td>match</td><td>shasum</td><td>literal</td></tr><tr><td>ISC-F0-2</td><td>unit</td><td>flutter test baseline pre-edit</td><td>exit 0</td><td>flutter test</td><td>literal</td></tr><tr><td>ISC-F5-1</td><td>unit</td><td>RideModel.fromJson parses stops[]</td><td>count + order</td><td>flutter test test/unit/multistop_ride_model_test.dart</td><td>literal</td></tr><tr><td>ISC-F5-2</td><td>unit</td><td>RideModel.fromJson sans stops</td><td>stops null/empty</td><td>flutter test test/unit/multistop_ride_model_test.dart</td><td>literal</td></tr><tr><td>ISC-F5-3</td><td>manual</td><td>active ride screen lists stops</td><td>≥2 labels</td><td>ARTEMIS</td><td>literal</td></tr><tr><td>ISC-F5-4</td><td>manual</td><td>map shows intermediate markers</td><td>pins visible</td><td>ARTEMIS</td><td>literal</td></tr><tr><td>ISC-F5-5</td><td>manual</td><td>offer modal ou detail fetch shows stop summary</td><td>visible</td><td>ARTEMIS</td><td>literal</td></tr><tr><td>Anti-F5-1</td><td>unit</td><td>legacy ride JSON UI path unchanged</td><td>grep + test</td><td>flutter test test/unit/multistop_regression_test.dart</td><td>literal</td></tr><tr><td>Anti-F5-2</td><td>unit</td><td>dispatch F4 tests still GREEN</td><td>exit 0</td><td>flutter test test/unit/dispatch_f4_*</td><td>cross: 20261002-galass-driver-dispatch-f4</td></tr><tr><td>ISC-F5-6</td><td>unit</td><td>completeStop API client payload</td><td>POST correct</td><td>flutter test test/unit/multistop_complete_stop_test.dart</td><td>literal</td></tr><tr><td>ISC-F5-7</td><td>manual</td><td>CONFIRM STOP slider visible at intermediate stop</td><td>visible</td><td>ARTEMIS</td><td>literal</td></tr><tr><td>ISC-F5-8</td><td>unit</td><td>map loadMap targets current_leg only post-ack</td><td>waypoints segment</td><td>flutter test test/unit/ride_map_multistop_test.dart</td><td>ISC-F5-6</td></tr><tr><td>ISC-F5-9</td><td>unit</td><td>END blocked UI until all stops completed</td><td>button disabled</td><td>flutter test test/unit/multistop_end_gate_test.dart</td><td>literal</td></tr><tr><td>ISC-F5-10</td><td>unit</td><td>STOP_COMPLETED refreshes ride state</td><td>parse+update</td><td>flutter test test/unit/multistop_pusher_test.dart</td><td>literal</td></tr><tr><td>ISC-F5-11</td><td>manual</td><td>CallKit Accept → app foreground + ride details</td><td>app visible ≤3s</td><td>device / ARTEMIS</td><td>cross: 20261002-galass-driver-dispatch-f4</td></tr><tr><td>Anti-F5-3</td><td>unit</td><td>accept path still calls launchApp / bring-to-fg</td><td>grep ≥1</td><td>grep + unit</td><td>derived: ISC-F5-11</td></tr><tr><td>Bridge-B6</td><td>integration</td><td>confirm stop → rider notified</td><td>≤5s</td><td>ARTEMIS staging</td><td>cross: parent F7</td></tr><tr><td>ISC-F5-12</td><td>widget</td><td>une seule action principale actionnable par état : escale(s) pending → « Confirmer l'arrêt » visible+actif, « Terminer la course » <strong>masqué</strong> (pas seulement disabled) ; dernier arrêt → « Confirmer l'arrêt » disparaît, « Terminer la course » visible+actif avec un style visuellement distinct de son état désactivé (pas seulement opacité 0.6 sur la même couleur primaire)</td><td>1 seul bouton actionnable rendu par état ; style actif ≠ style désactivé au-delà de l'opacité</td><td>flutter test test/unit/multistop_end_gate_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23)</td><td>ISC-F5-9</td></tr><tr><td>ISC-F5-13</td><td>widget</td><td>« Annuler la course » reste visuellement distinct (couleur danger) du CTA principal, quel que soit l'état</td><td>bgColor danger ≠ bgColor CTA principal</td><td>flutter test test/unit/multistop_end_gate_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23)</td><td>literal</td></tr><tr><td>ISC-F5-14</td><td>widget</td><td>Compteur « x/N arrêt(s) terminé(s) » (<code>stopsProgressText</code>) retiré du widget tree Driver, partout (staging et prod) ; repère stable non visible à la place pour le harnais e2e</td><td><code>find.textContaining('arrêt')</code> sur le pattern compteur ne matche plus ; clé stable résout</td><td>flutter test test/unit/multistop_stops_progress_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23)</td><td>supersedes: ISC-F5-3</td></tr><tr><td>ISC-F5-15</td><td>widget</td><td>Après le dernier arrêt, aucun écran course active Driver n'affiche le libellé générique « Point de prise en charge » à la place de la destination réelle</td><td>texte rendu == adresse destination réelle, jamais <code>MyStrings.pickUpLocation</code> sur le nœud final</td><td>flutter test test/unit/multistop_itinerary_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23)</td><td>literal</td></tr><tr><td>ISC-F5-16</td><td>widget</td><td>Carte course active — l'arrêt actif (prochain non-<code>completed_at</code>) a un style distinct ; les autres arrêts intermédiaires sont numérotés et estompés (pas la même icône uniforme qu'aujourd'hui)</td><td>icône active ≠ icône estompée-numérotée ; tous les stops non-actifs portent un numéro</td><td>flutter test test/unit/ride_map_multistop_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23)</td><td>ISC-F5-4</td></tr><tr><td>ISC-F5-17</td><td>widget</td><td><strong>Contrat d'écran</strong> « Driver en course » (RIDE_RUNNING, dérivé du code actuel 2026-11-23) — présence testée individuellement de : avatar+nom+note (<code>UserDetailsWidget</code>), bouton message, bouton appel, un seul CTA principal actionnable (ISC-F5-12), « Annuler la course » distinct-danger (ISC-F5-13), bloc itinéraire pickup→arrêts→destination, repères d'arrêts sur la carte (ISC-F5-16). <strong>Règle « ajouter sans retirer »</strong> : retirer un de ces éléments exige une ligne ISA explicite validée par Papa.</td><td>7 assertions <code>find.byKey</code>/<code>find.text</code> toutes vertes, une par élément listé</td><td>flutter test test/widget/course_en_cours_driver_contract_test.dart (golden)</td><td>ISC-F5-12, ISC-F5-13, ISC-F5-16</td></tr><tr><td>Bridge-B7</td><td>integration</td><td>e2e verte couvrant les arrêts ET les points UI (b/c/d/e) avec captures Driver et Rider comparées côte à côte — <strong>étendu 2026-11-23 : zéro écart golden non accepté</strong> (cf. ISA harnais emu)</td><td>PASS</td><td>ARTEMIS + galass-emu-actions-pub run</td><td>cross: 20261006-galass-rider-multistop</td></tr></tbody></table>
+MEMORY/WORK/20261006-galass-driver-multistop/ISA.html:1599:<li>[ ] ISC-F5-13: « Annuler la course » est clairement une action dangereuse, différente de l'action principale. <strong>Audit code</strong> : déjà vrai aujourd'hui (<code>bgColor: MyColor.redCancelTextColor</code> = <code>0xFFF93E2C</code>, l.217-225, vs couleur primaire par défaut du CTA principal) — ce claim verrouille ce comportement correct en régression plutôt que de supposer un bug.</li>
+MEMORY/WORK/20261006-galass-driver-multistop/ISA.html:1717:<li>[ ] <strong>F6 revue UI téléphone</strong> — ISC-F5-12 (CTA unique par état), ISC-F5-13 (Annuler = danger, verrou régression), ISC-F5-14 (retrait compteur, supersède ISC-F5-3 partie compteur), ISC-F5-15 (pas de libellé générique au dernier arrêt), ISC-F5-16 (markers actif/estompé+numéroté, étend ISC-F5-4), ISC-F5-17 (contrat d'écran « Driver en course », règle ajouter-sans-retirer). Aucun code tant que ces ISC ne sont pas construits (TDD rouge→vert). Dépend des goldens <code>test/goldens/driver/</code> (depuis <code>main</code>, worktree séparé) et de la porte CI golden-diff décrites dans la nouvelle ISA harnais emu (<code>galass-emu-actions-pub</code>), pas encore construites.</li>
+
+$ grep -rn "Annuler la course\|cancelRide\|redCancelTextColor" lib/ | head -40
+lib/data/controller/deposit/deposit_history_controller.dart:184:              ? MyColor.redCancelTextColor
+lib/data/controller/ride/ride_details/ride_details_controller.dart:395:  Future<void> cancelRide(String rideId) async {
+lib/data/controller/ride/ride_details/ride_details_controller.dart:400:      ResponseModel responseModel = await repo.cancelRide(
+lib/data/controller/withdraw/withdraw_history_controller.dart:121:                ? MyColor.redCancelTextColor
+lib/data/controller/support/ticket_details_controller.dart:221:                  ? MyColor.redCancelTextColor
+lib/data/controller/support/ticket_details_controller.dart:229:                  ? MyColor.redCancelTextColor
+lib/data/repo/ride/ride_repo.dart:180:  Future<ResponseModel> cancelRide({
+lib/core/utils/util.dart:126:      return MyColor.redCancelTextColor;
+lib/core/utils/ticket_helper.dart:15:                ? MyColor.redCancelTextColor
+lib/core/utils/ticket_helper.dart:29:                ? MyColor.redCancelTextColor
+lib/core/utils/my_color.dart:83:  static const Color redCancelTextColor = Color(0xFFF93E2C);
+lib/core/utils/my_strings.dart:167:  static const String rideCancel = "Annuler la course";
+lib/core/utils/my_strings.dart:176:  static const String cancelRide = "Annuler la course";
+lib/presentation/components/dialog/app_dialog.dart:242:                            bgColor: MyColor.redCancelTextColor,
+lib/presentation/components/snack_bar/show_custom_snackbar.dart:57:        primaryColor: MyColor.redCancelTextColor,
+lib/presentation/components/column_widget/label_column.dart:44:                  color: MyColor.redCancelTextColor,
+lib/presentation/components/column_widget/bottom_sheet_column.dart:36:          style: isCharge ? regularDefault.copyWith(color: MyColor.redCancelTextColor) : regularDefault,
+lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:271:                              inactiveTrackColor: MyColor.redCancelTextColor,
+lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:355:                        color: MyColor.redCancelTextColor.withValues(
+lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:363:                        imgColor: MyColor.redCancelTextColor,
+lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:364:                        textColor: MyColor.redCancelTextColor,
+lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:367:                          color: MyColor.redCancelTextColor,
+lib/presentation/screens/support_ticket/ticket_details/ticket_details_screen.dart:84:                              color: MyColor.redCancelTextColor,
+lib/presentation/screens/support_ticket/ticket_details/ticket_details_screen.dart:90:                            color: MyColor.redCancelTextColor,
+lib/presentation/screens/support_ticket/ticket_details/widget/attachment_preview.dart:118:                  backgroundColor: MyColor.redCancelTextColor,
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:200:                            text: MyStrings.cancelRide.tr,
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:206:                            bgColor: MyColor.redCancelTextColor,
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:289:                      color: (ride.status == AppStatus.RIDE_CANCELED) ? MyColor.redCancelTextColor.withValues(alpha: 0.2) : MyColor.getPrimaryColor().withValues(alpha: 0.1),
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:305:                            color: (ride.status == AppStatus.RIDE_CANCELED) ? MyColor.redCancelTextColor : MyColor.getPrimaryColor(),
+lib/presentation/screens/ride_details/widgets/ride_cancel_bottom_sheet.dart:41:                  controller.cancelRide(ride.id ?? '-1');
+lib/presentation/screens/ride_details/widgets/user_details_widget.dart:145:                  backgroundColor: MyColor.redCancelTextColor,
+lib/presentation/screens/ride_history/widget/ride_info_card.dart:347:                    backgroundColor: MyColor.redCancelTextColor.withValues(alpha: 0.1),
+lib/presentation/screens/ride_history/widget/ride_info_card.dart:354:                              color: MyColor.redCancelTextColor,
+lib/presentation/screens/ride_history/widget/ride_info_card.dart:362:                                color: MyColor.redCancelTextColor,
+lib/presentation/screens/ride_history/widget/ride_info_card.dart:369:                              color: MyColor.redCancelTextColor,
+lib/presentation/screens/account/change-password/change_password_screen.dart:101:                        color: MyColor.redCancelTextColor,
+lib/presentation/screens/dashboard/widgets/vahicle_kyc_warning_section.dart:65:                                    color: controller.isVehicleVerificationPending ? MyColor.pendingColor : MyColor.redCancelTextColor,
+lib/presentation/screens/dashboard/widgets/vahicle_kyc_warning_section.dart:91:                            controller.isVehicleVerificationPending ? MyColor.pendingColor : MyColor.redCancelTextColor,
+lib/presentation/screens/dashboard/widgets/driver_kyc_warning_section.dart:66:                                    color: controller.isDriverVerificationPending ? MyColor.pendingColor : MyColor.redCancelTextColor,
+lib/presentation/screens/dashboard/widgets/driver_kyc_warning_section.dart:92:                            controller.isDriverVerificationPending ? MyColor.pendingColor : MyColor.redCancelTextColor,
+
+$ ls test/unit/ | grep -i multistop; echo ---; ls test/goldens/driver/ 2>/dev/null | head
+multistop_chat_ride_id_test.dart
+multistop_complete_stop_test.dart
+multistop_end_gate_test.dart
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git log --oneline -1 origin/build/fr04-l6 2>&1; echo "---"; git ls-tree -r --name-only HEAD api/src/antenly_api/eval/ api/tests/segmentation/ scripts/check/ 2>&1
+e53feed feat(segmentation): P95 des frontieres sur tous les relus L6 (T6.1)
+---
+api/src/antenly_api/eval/__init__.py
+api/src/antenly_api/eval/boundaries.py
+api/src/antenly_api/eval/emission.py
+api/src/antenly_api/eval/metrics.py
+api/src/antenly_api/eval/segmentation.py
+api/src/antenly_api/eval/split.py
+api/tests/segmentation/__init__.py
+api/tests/segmentation/test_boundary_p95.py
+api/tests/segmentation/test_emission.py
+api/tests/segmentation/test_eval_split.py
+api/tests/segmentation/test_min_duration.py
+api/tests/segmentation/test_other.py
+api/tests/segmentation/test_overlap_flag.py
+api/tests/segmentation/test_per_class.py
+api/tests/segmentation/test_schema.py
+api/tests/segmentation/test_segment_contract.py
+api/tests/segmentation/test_segmenter_baseline.py
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && echo "=== L6 branch files ==="; git ls-tree -r --name-only origin/build/fr04-l6 2>&1 | grep -E "segmentation|scripts/check" ; echo "=== L7 ==="; git ls-tree -r --name-only origin/build/fr04-l7 2>&1 | grep -E "segmentation|scripts/check"; echo "=== L9 ==="; git ls-tree -r --name-only origin/build/fr04-l9 2>&1 | grep -E "segmentation|scripts/check"
+=== L6 branch files ===
+MEMORY/WORK/2026-11-02-fr-04-segmentation/COMPLETENESS.yml
+MEMORY/WORK/2026-11-02-fr-04-segmentation/ISA.md
+MEMORY/WORK/2026-11-02-fr-04-segmentation/fullrun-carry.json
+api/src/antenly_api/eval/segmentation.py
+api/src/antenly_api/segmentation/__init__.py
+api/src/antenly_api/segmentation/baseline.py
+api/src/antenly_api/segmentation/contract.py
+api/src/antenly_api/segmentation/geometry.py
+api/src/antenly_api/segmentation/overlap.py
+api/tests/segmentation/__init__.py
+api/tests/segmentation/test_boundary_p95.py
+api/tests/segmentation/test_emission.py
+api/tests/segmentation/test_eval_split.py
+api/tests/segmentation/test_min_duration.py
+api/tests/segmentation/test_other.py
+api/tests/segmentation/test_overlap_flag.py
+api/tests/segmentation/test_per_class.py
+api/tests/segmentation/test_schema.py
+api/tests/segmentation/test_segment_contract.py
+api/tests/segmentation/test_segmenter_baseline.py
+data/segmentation/fixtures/segments-v1.json
+data/segmentation/schema/segment-v1.schema.json
+=== L7 ===
+MEMORY/WORK/2026-11-02-fr-04-segmentation/COMPLETENESS.yml
+MEMORY/WORK/2026-11-02-fr-04-segmentation/ISA.md
+MEMORY/WORK/2026-11-02-fr-04-segmentation/fullrun-carry.json
+api/src/antenly_api/eval/segmentation.py
+api/src/antenly_api/segmentation/__init__.py
+api/src/antenly_api/segmentation/baseline.py
+api/src/antenly_api/segmentation/contract.py
+api/src/antenly_api/segmentation/geometry.py
+api/src/antenly_api/segmentation/overlap.py
+api/tests/segmentation/__init__.py
+api/tests/segmentation/test_emission.py
+api/tests/segmentation/test_eval_split.py
+api/tests/segmentation/test_min_duration.py
+api/tests/segmentation/test_other.py
+api/tests/segmentation/test_overlap_flag.py
+api/tests/segmentation/test_per_class.py
+api/tests/segmentation/test_per_station.py
+api/tests/segmentation/test_schema.py
+api/tests/segmentation/test_segment_contract.py
+api/tests/segmentation/test_segmenter_baseline.py
+data/segmentation/fixtures/segments-v1.json
+data/segmentation/schema/segment-v1.schema.json
+=== L9 ===
+MEMORY/WORK/2026-11-02-fr-04-segmentation/COMPLETENESS.yml
+MEMORY/WORK/2026-11-02-fr-04-segmentation/ISA.md
+MEMORY/WORK/2026-11-02-fr-04-segmentation/fullrun-carry.json
+api/src/antenly_api/eval/segmentation.py
+api/src/antenly_api/segmentation/__init__.py
+api/src/antenly_api/segmentation/baseline.py
+api/src/antenly_api/segmentation/contract.py
+api/src/antenly_api/segmentation/geometry.py
+api/src/antenly_api/segmentation/overlap.py
+api/tests/segmentation/__init__.py
+api/tests/segmentation/test_emission.py
+api/tests/segmentation/test_eval_split.py
+api/tests/segmentation/test_min_duration.py
+api/tests/segmentation/test_other.py
+api/tests/segmentation/test_overlap_flag.py
+api/tests/segmentation/test_per_class.py
+api/tests/segmentation/test_schema.py
+api/tests/segmentation/test_segment_contract.py
+api/tests/segmentation/test_segmenter_baseline.py
+api/tests/segmentation/test_threshold_state.py
+data/segmentation/fixtures/segments-v1.json
+data/segmentation/schema/segment-v1.schema.json
+scripts/check/fr04_threshold_state.py
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git show --stat --oneline HEAD 2>&1 | head -40; echo "=== parents ==="; git rev-list --parents -n 1 HEAD
+885009e merge(fr04): Vague 4 L6 into isa
+
+ api/src/antenly_api/eval/boundaries.py      | 211 +++++++++++++++++++++++++++
+ api/src/antenly_api/eval/segmentation.py    |  90 +++++++++---
+ api/tests/segmentation/test_boundary_p95.py | 216 ++++++++++++++++++++++++++++
+ 3 files changed, 500 insertions(+), 17 deletions(-)
+=== parents ===
+885009e9c6b380d1e3a83d8916e548593bbe2c13 87c77d7767569646291e49996c09fdb8d1ae37bf e53feedb2cad86b20cdbcea701fcb9420923d9a6
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git log --graph --oneline --decorate -20 HEAD 2>&1
+*   885009e (HEAD -> isa/fr-04-vera-2026-11-26, origin/isa/fr-04-vera-2026-11-26, origin/close/fr04-v4-pending) merge(fr04): Vague 4 L6 into isa
+|\  
+| * e53feed (origin/build/fr04-l6) feat(segmentation): P95 des frontieres sur tous les relus L6 (T6.1)
+* | 87c77d7 (origin/close/fr04-v3-max) docs(fr04): verdict Max Vague 3 (L4+L5+L8) — PASS
+* | c2f169e (origin/verify/fr04-v3-forge) docs(fr04): vérifie la Vague 3 (L4+L5+L8) — PASS
+|/  
+*   f824102 merge(fr04): Vague 3 L8 into isa
+|\  
+| * 985c07d (origin/build/fr04-l8) feat(segmentation): banc de mesure FR-06 du type d'emission L8 (T8.1)
+* |   e795ede merge(fr04): Vague 3 L5 into isa
+|\ \  
+| * | a242b0b (origin/build/fr04-l5) fix(tests): paquet tests.segmentation pour eviter un import file mismatch L5
+| * | 98f3296 fix(segmentation): un non_declare ne remplace pas un drapeau deja declare L5
+| * | f4f118b feat(segmentation): drapeau de superposition voix/musique et chant L5 (T5.1)
+| |/  
+* / b986d3e (origin/build/fr04-l4) feat(segmentation): filtrage duree minimale et residus explicites L4 (T4.1)
+|/  
+*   73bfbda Merge remote-tracking branch 'origin/build/fr04-l3' into isa/fr-04-vera-2026-11-26
+|\  
+| * db518e2 (origin/build/fr04-l3) feat(segmentation): segmenteur baseline inaSpeechSegmenter L3 (T3.1)
+* | c1071b3 (origin/build/fr04-l2) feat(segmentation): matrice de confusion et rappel par classe L2 (T2.2)
+* | e81e2fd feat(segmentation): split de test gele et JSON rejouable L2 (T2.1)
+|/  
+* e642fb5 feat(segmentation): contrat de sortie versionne L1 (T1.1, T1.2)
+* 3982c46 docs(isa): fr-04 — termine le plan Serena (preuves par ISC, PLAN: COMPLET)
+* bd2ad9d docs(isa): fr-04 — retire la marque attend décision Papa des tâches du plan
+* 943163b docs(isa): fr-04 — reporte les décisions Papa du 2026-11-26 04:31 (ISC-2, ISC-5)
+* 8c7657e docs(isa): fr-04 — complète les chemins et états des preuves du plan
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && wc -l api/src/antenly_api/eval/segmentation.py api/src/antenly_api/eval/metrics.py api/src/antenly_api/eval/split.py api/src/antenly_api/eval/boundaries.py api/src/antenly_api/eval/__init__.py; echo "=== base f824102 ==="; git show f824102:api/src/antenly_api/eval/segmentation.py | wc -l; git show f824102:api/src/antenly_api/eval/metrics.py | wc -l; git show f824102:api/src/antenly_api/eval/split.py 2>&1 | wc -l
+283 api/src/antenly_api/eval/segmentation.py
+  224 api/src/antenly_api/eval/metrics.py
+  404 api/src/antenly_api/eval/split.py
+  211 api/src/antenly_api/eval/boundaries.py
+   44 api/src/antenly_api/eval/__init__.py
+ 1166 total
+=== base f824102 ===
+227
+224
+404
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && echo "=== L7 segmentation ==="; git show origin/build/fr04-l7:api/src/antenly_api/eval/segmentation.py | wc -l; echo "=== L9 segmentation ==="; git show origin/build/fr04-l9:api/src/antenly_api/eval/segmentation.py | wc -l; echo "=== L7 metrics ==="; git show origin/build/fr04-l7:api/src/antenly_api/eval/metrics.py | wc -l; echo "=== L9 metrics ==="; git show origin/build/fr04-l9:api/src/antenly_api/eval/metrics.py | wc -l
+=== L7 segmentation ===
+346
+=== L9 segmentation ===
+227
+=== L7 metrics ===
+505
+=== L9 metrics ===
+224
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && echo "=== L9 segmentation vs base diff ==="; git diff f824102..origin/build/fr04-l9 -- api/src/antenly_api/eval/segmentation.py 2>&1 | head -60
+=== L9 segmentation vs base diff ===
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && echo "=== L9 vs base: segmentation ==="; git diff --stat f824102..origin/build/fr04-l9 -- api/src/antenly_api/eval/ api/tests/segmentation/ scripts/check/ 2>&1; echo; echo "=== L7 vs base: eval ==="; git diff --stat f824102..origin/build/fr04-l7 -- api/src/antenly_api/eval/ api/tests/segmentation/ 2>&1
+=== L9 vs base: segmentation ===
+ api/tests/segmentation/test_threshold_state.py | 448 ++++++++++++++++++++
+ scripts/check/fr04_threshold_state.py          | 547 +++++++++++++++++++++++++
+ 2 files changed, 995 insertions(+)
+
+=== L7 vs base: eval ===
+ api/src/antenly_api/eval/__init__.py       |  18 ++
+ api/src/antenly_api/eval/metrics.py        | 283 ++++++++++++++++++++-
+ api/src/antenly_api/eval/segmentation.py   | 129 +++++++++-
+ api/src/antenly_api/eval/split.py          |  82 +++++++
+ api/tests/segmentation/test_per_station.py | 382 +++++++++++++++++++++++++++++
+ 5 files changed, 888 insertions(+), 6 deletions(-)
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && echo "===== DIFF base->HEAD (L6) segmentation.py ====="; git diff f824102..HEAD -- api/src/antenly_api/eval/segmentation.py
+===== DIFF base->HEAD (L6) segmentation.py =====
+diff --git a/api/src/antenly_api/eval/segmentation.py b/api/src/antenly_api/eval/segmentation.py
+index b77bae1..b937971 100644
+--- a/api/src/antenly_api/eval/segmentation.py
++++ b/api/src/antenly_api/eval/segmentation.py
+@@ -27,6 +27,7 @@ from pathlib import Path
+ from typing import Any
+ 
+ from ..annotation.models import InvariantError, NoObservationError
++from .boundaries import BoundaryP95Report, load_boundary_p95
+ from .metrics import PerClassReport, evaluate_per_class
+ from .split import DEFAULT_FROZEN_MANIFEST, FrozenSplit, load_frozen_split
+ 
+@@ -153,10 +154,35 @@ def _report_lines(split: FrozenSplit, report: PerClassReport, predictor: str) ->
+     return lines
+ 
+ 
++def _boundary_lines(report: BoundaryP95Report) -> list[str]:
++    start_moved = (
++        "n/a" if report.p95_start_ms_moved_only is None else f"{report.p95_start_ms_moved_only} ms"
++    )
++    end_moved = (
++        "n/a" if report.p95_end_ms_moved_only is None else f"{report.p95_end_ms_moved_only} ms"
++    )
++    lines = [
++        (
++            f"banc FR-04 frontieres : {report.n_reviewed} segments relus "
++            "(P95 sur tous, y compris inchanges)"
++        ),
++        (
++            f"  P95 debut {report.p95_start_ms} ms (deplaces seuls : {start_moved}) ; "
++            f"seuil {report.thresholds.p95_start_ms} ms"
++        ),
++        (
++            f"  P95 fin {report.p95_end_ms} ms (deplaces seuls : {end_moved}) ; "
++            f"seuil {report.thresholds.p95_end_ms} ms"
++        ),
++    ]
++    lines.extend(f"  {violation}" for violation in report.boundary_violations())
++    return lines
++
++
+ def main(argv: list[str] | None = None) -> int:
+     parser = argparse.ArgumentParser(
+         prog="antenly_api.eval.segmentation",
+-        description="Banc de mesure FR-04 : matrice de confusion et rappel par classe (L2).",
++        description="Banc de mesure FR-04 : matrice de confusion, rappel et frontieres (L2/L6).",
+     )
+     parser.add_argument(
+         "--split",
+@@ -184,19 +210,36 @@ def main(argv: list[str] | None = None) -> int:
+         action="store_true",
+         help="rapport par classe (comportement par defaut du banc L2)",
+     )
++    parser.add_argument(
++        "--boundary-p95",
++        action="store_true",
++        help="P95 des deplacements de start_ms et end_ms sur tous les segments relus",
++    )
+     parser.add_argument("--json", action="store_true", help="rapport JSON sur stdout")
+     parser.add_argument("--out", type=Path, default=None, help="ecrit le rapport JSON dans ce fichier")
+     args = parser.parse_args(argv)
+ 
++    manifest = args.manifest or DEFAULT_FROZEN_MANIFEST
++    per_class_requested = args.per_class or not args.boundary_p95
++
++    boundary_report: BoundaryP95Report | None = None
++    split: FrozenSplit | None = None
++    report: PerClassReport | None = None
++    predictions: Mapping[str, str] | None = None
++    predictor = PREDICTOR_SOURCE
++
+     try:
+-        split = load_frozen_split(args.manifest or DEFAULT_FROZEN_MANIFEST)
+-        if args.predictions is None:
+-            predictions = None
+-            predictor = PREDICTOR_SOURCE
+-        else:
+-            predictions = load_predictions(args.predictions, split)
+-            predictor = str(args.predictions)
+-        report = evaluate(split, predictions)
++        if args.boundary_p95:
++            boundary_report = load_boundary_p95(manifest)
++        if per_class_requested:
++            split = load_frozen_split(manifest)
++            if args.predictions is None:
++                predictions = None
++                predictor = PREDICTOR_SOURCE
++            else:
++                predictions = load_predictions(args.predictions, split)
++                predictor = str(args.predictions)
++            report = evaluate(split, predictions)
+     except NoObservationError as exc:
+         print(f"FAIL banc FR-04 : {exc}", file=sys.stderr)
+         return 2
+@@ -204,12 +247,19 @@ def main(argv: list[str] | None = None) -> int:
+         print(f"FAIL entree inexploitable : {exc}", file=sys.stderr)
+         return 2
+ 
+-    payload = report_payload(
+-        split,
+-        report,
+-        predictor=predictor,
+-        predictions=predictions,
+-    )
++    if per_class_requested:
++        # Les deux branches sont construites dans le try ci-dessus : le typage
++        # local ne suffit pas a prouver qu'elles sont non nulles ici.
++        payload = report_payload(
++            split,
++            report,
++            predictor=predictor,
++            predictions=predictions,
++        )
++        if boundary_report is not None:
++            payload["boundary_p95"] = boundary_report.payload()
++    else:
++        payload = boundary_report.payload() if boundary_report is not None else {}
+     if args.out is not None:
+         args.out.write_text(
+             json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n",
+@@ -218,8 +268,14 @@ def main(argv: list[str] | None = None) -> int:
+     if args.json:
+         print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
+     else:
+-        for line in _report_lines(split, report, predictor):
+-            print(line)
++        if per_class_requested:
++            for line in _report_lines(split, report, predictor):
++                print(line)
++        if boundary_report is not None:
++            for line in _boundary_lines(boundary_report):
++                print(line)
++    if boundary_report is not None and boundary_report.boundary_violations():
++        return 1
+     return 0
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && echo "===== DIFF base->L7 segmentation.py ====="; git diff f824102..origin/build/fr04-l7 -- api/src/antenly_api/eval/segmentation.py
+===== DIFF base->L7 segmentation.py =====
+diff --git a/api/src/antenly_api/eval/segmentation.py b/api/src/antenly_api/eval/segmentation.py
+index b77bae1..7dcdf59 100644
+--- a/api/src/antenly_api/eval/segmentation.py
++++ b/api/src/antenly_api/eval/segmentation.py
+@@ -1,8 +1,9 @@
+-"""CLI du banc de mesure FR-04 (lot L2) : split gele et rappel par classe.
++"""CLI du banc de mesure FR-04 (lots L2 et L7) : split gele, classes, stations.
+ 
+ Usage minimal :
+ 
+     uv run python -m antenly_api.eval.segmentation --split=test --per-class
++    uv run python -m antenly_api.eval.segmentation --split=test --per-class --per-station
+ 
+ Sans `--predictions`, le banc mesure la PRE-ANNOTATION du split (`source_class`)
+ comme predicteur de reference interne. Ce n'est PAS le segmenteur baseline (lot
+@@ -10,6 +11,12 @@ L3, tache T3.1) et aucun seuil d'ISC n'est coche ici : le banc publie la matrice
+ de confusion, le rappel par classe, N et l'IC Wilson 95 %. Le seuil de 85 %
+ d'ISC-3 sera applique quand le segmenteur existera.
+ 
++`--per-station` ajoute la mesure L7/ISC-11 : taux d'erreur par classe et par
++station, IC Wilson 95 % par classe, ecart entre stations, et controle du split
++tenu a l'ecart (graine ecrite, aucun id de test dans l'entrainement declare). Le
++banc publie ces chiffres sans appliquer le seuil de 10 % : la preuve finale
++d'ISC-11 attend un segmenteur evalue.
++
+ Avec `--predictions`, le fichier JSON associe un id de segment a sa classe
+ predite (`{"segments": {"seg-000011": "parole", ...}}` ou directement l'objet
+ `{"seg-000011": "parole", ...}`). Toute couverture partielle est refusee : un
+@@ -27,8 +34,20 @@ from pathlib import Path
+ from typing import Any
+ 
+ from ..annotation.models import InvariantError, NoObservationError
+-from .metrics import PerClassReport, evaluate_per_class
+-from .split import DEFAULT_FROZEN_MANIFEST, FrozenSplit, load_frozen_split
++from .metrics import (
++    PerClassReport,
++    PerStationReport,
++    StationObservation,
++    evaluate_per_class,
++    evaluate_per_station,
++)
++from .split import (
++    DEFAULT_FROZEN_MANIFEST,
++    FrozenSplit,
++    HeldOutControl,
++    held_out_control,
++    load_frozen_split,
++)
+ 
+ SEGMENTATION_SCHEMA = "eval-segmentation-v1"
+ PREDICTOR_SOURCE = "source_class"
+@@ -98,6 +117,34 @@ def evaluate(
+     return evaluate_per_class(pairs)
+ 
+ 
++def station_observations(
++    split: FrozenSplit,
++    predictions: Mapping[str, str] | None = None,
++) -> list[StationObservation]:
++    """Projette le split en observations `(station, verite, prediction)` (L7).
++
++    Sans fichier de predictions, la pre-annotation `source_class` sert de
++    predicteur de reference interne, exactement comme `evaluate`.
++    """
++    if predictions is None:
++        return [
++            StationObservation(segment.station, segment.truth, segment.source)
++            for segment in split.segments
++        ]
++    return [
++        StationObservation(segment.station, segment.truth, predictions[segment.id])
++        for segment in split.segments
++    ]
++
++
++def evaluate_station(
++    split: FrozenSplit,
++    predictions: Mapping[str, str] | None = None,
++) -> PerStationReport:
++    """Mesure l'erreur par classe et par station sur le split gele (ISC-11)."""
++    return evaluate_per_station(station_observations(split, predictions), seed=split.seed)
++
++
+ def _predictions_sha256(split: FrozenSplit, predictions: Mapping[str, str]) -> str:
+     ordered = {segment.id: predictions[segment.id] for segment in split.segments}
+     blob = json.dumps(ordered, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+@@ -110,6 +157,8 @@ def report_payload(
+     *,
+     predictor: str,
+     predictions: Mapping[str, str] | None = None,
++    station_report: PerStationReport | None = None,
++    held_out: HeldOutControl | None = None,
+ ) -> dict[str, object]:
+     payload: dict[str, object] = {
+         "schema": SEGMENTATION_SCHEMA,
+@@ -124,12 +173,59 @@ def report_payload(
+         },
+         "per_class": report.payload(),
+     }
++    if station_report is not None:
++        station_payload = station_report.payload()
++        station_payload["held_out"] = held_out.payload() if held_out is not None else None
++        payload["per_station"] = station_payload
+     if predictions is not None:
+         payload["predictions_sha256"] = _predictions_sha256(split, predictions)
+     return payload
+ 
+ 
+-def _report_lines(split: FrozenSplit, report: PerClassReport, predictor: str) -> list[str]:
++def _error_rate_text(rate) -> str:
++    if rate.rate is None:
++        return f"{rate.corrected} / {rate.reviewed} = n/a"
++    interval = (
++        f" IC 95 % [{rate.ci_low:.4f}, {rate.ci_high:.4f}]"
++        if rate.ci_low is not None and rate.ci_high is not None
++        else ""
++    )
++    return f"{rate.corrected} / {rate.reviewed} = {100.0 * rate.rate:.2f} %{interval}"
++
++
++def _station_lines(station_report: PerStationReport, held_out: HeldOutControl) -> list[str]:
++    lines = [
++        f"  erreur par classe (N, IC Wilson 95 %) : {station_report.n} segments",
++    ]
++    for name, rate in station_report.class_rates.items():
++        marker = "" if name in station_report.prd_class_rates else " (residuelle, hors seuil FR-04)"
++        lines.append(f"    {name} : {_error_rate_text(rate)}{marker}")
++    lines.append("  erreur par station :")
++    for name, rate in station_report.station_rates.items():
++        lines.append(f"    station {name} : {_error_rate_text(rate)}")
++    spread = (
++        "indecidable"
++        if station_report.station_spread is None
++        else f"{100.0 * station_report.station_spread:.2f} %"
++    )
++    lines.append(f"  ecart entre stations : {spread}")
++    lines.append(
++        "  split tenu a l'ecart : graine "
++        f"{held_out.seed}{' ecrite' if held_out.seed_written else ' ABSENTE'}, "
++        f"{held_out.n_test} segments de test, {held_out.n_training} a l'entrainement, "
++        f"{'disjoint' if held_out.disjoint else 'CHEVAUCHEMENT'}"
++    )
++    return lines
++
++
++def _report_lines(
++    split: FrozenSplit,
++    report: PerClassReport,
++    predictor: str,
++    *,
++    station_report: PerStationReport | None = None,
++    held_out: HeldOutControl | None = None,
++) -> list[str]:
+     lines = [
+         (
+             f"banc FR-04 : {split.n} segments du split gele {split.corpus_version} "
+@@ -150,6 +246,8 @@ def _report_lines(split: FrozenSplit, report: PerClassReport, predictor: str) ->
+         row = report.confusion[truth]
+         cells = ", ".join(f"{prediction}={count}" for prediction, count in row.items() if count)
+         lines.append(f"    {truth} : {cells or '0'}")
++    if station_report is not None and held_out is not None:
++        lines.extend(_station_lines(station_report, held_out))
+     return lines
+ 
+ 
+@@ -184,6 +282,14 @@ def main(argv: list[str] | None = None) -> int:
+         action="store_true",
+         help="rapport par classe (comportement par defaut du banc L2)",
+     )
++    parser.add_argument(
++        "--per-station",
++        action="store_true",
++        help=(
++            "taux d'erreur par classe et par station, IC Wilson a 95 pour cent et "
++            "ecart entre stations, avec le controle du split tenu a l'ecart (ISC-11, L7)"
++        ),
++    )
+     parser.add_argument("--json", action="store_true", help="rapport JSON sur stdout")
+     parser.add_argument("--out", type=Path, default=None, help="ecrit le rapport JSON dans ce fichier")
+     args = parser.parse_args(argv)
+@@ -197,6 +303,11 @@ def main(argv: list[str] | None = None) -> int:
+             predictions = load_predictions(args.predictions, split)
+             predictor = str(args.predictions)
+         report = evaluate(split, predictions)
++        held_out = None
++        station_report = None
++        if args.per_station:
++            held_out = held_out_control(split)
++            station_report = evaluate_station(split, predictions)
+     except NoObservationError as exc:
+         print(f"FAIL banc FR-04 : {exc}", file=sys.stderr)
+         return 2
+@@ -209,6 +320,8 @@ def main(argv: list[str] | None = None) -> int:
+         report,
+         predictor=predictor,
+         predictions=predictions,
++        station_report=station_report,
++        held_out=held_out,
+     )
+     if args.out is not None:
+         args.out.write_text(
+@@ -218,7 +331,13 @@ def main(argv: list[str] | None = None) -> int:
+     if args.json:
+         print(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True))
+     else:
+-        for line in _report_lines(split, report, predictor):
++        for line in _report_lines(
++            split,
++            report,
++            predictor,
++            station_report=station_report,
++            held_out=held_out,
++        ):
+             print(line)
+     return 0
+
+→ Read api/src/antenly_api/eval/segmentation.py
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && sed -n '160,360p' /tmp/l7_seg.py
+(no output)
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git show origin/build/fr04-l7:api/src/antenly_api/eval/segmentation.py > /tmp/l7_seg.py && sed -n '1,60p' /tmp/l7_seg.py
+"""CLI du banc de mesure FR-04 (lots L2 et L7) : split gele, classes, stations.
+
+Usage minimal :
+
+    uv run python -m antenly_api.eval.segmentation --split=test --per-class
+    uv run python -m antenly_api.eval.segmentation --split=test --per-class --per-station
+
+Sans `--predictions`, le banc mesure la PRE-ANNOTATION du split (`source_class`)
+comme predicteur de reference interne. Ce n'est PAS le segmenteur baseline (lot
+L3, tache T3.1) et aucun seuil d'ISC n'est coche ici : le banc publie la matrice
+de confusion, le rappel par classe, N et l'IC Wilson 95 %. Le seuil de 85 %
+d'ISC-3 sera applique quand le segmenteur existera.
+
+`--per-station` ajoute la mesure L7/ISC-11 : taux d'erreur par classe et par
+station, IC Wilson 95 % par classe, ecart entre stations, et controle du split
+tenu a l'ecart (graine ecrite, aucun id de test dans l'entrainement declare). Le
+banc publie ces chiffres sans appliquer le seuil de 10 % : la preuve finale
+d'ISC-11 attend un segmenteur evalue.
+
+Avec `--predictions`, le fichier JSON associe un id de segment a sa classe
+predite (`{"segments": {"seg-000011": "parole", ...}}` ou directement l'objet
+`{"seg-000011": "parole", ...}`). Toute couverture partielle est refusee : un
+segment du split sans prediction ne doit pas disparaitre du denominateur.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from collections.abc import Mapping
+from pathlib import Path
+from typing import Any
+
+from ..annotation.models import InvariantError, NoObservationError
+from .metrics import (
+    PerClassReport,
+    PerStationReport,
+    StationObservation,
+    evaluate_per_class,
+    evaluate_per_station,
+)
+from .split import (
+    DEFAULT_FROZEN_MANIFEST,
+    FrozenSplit,
+    HeldOutControl,
+    held_out_control,
+    load_frozen_split,
+)
+
+SEGMENTATION_SCHEMA = "eval-segmentation-v1"
+PREDICTOR_SOURCE = "source_class"
+
+
+def _prediction_mapping(payload: Any) -> dict[str, str]:
+    if isinstance(payload, Mapping) and "segments" in payload:
+        payload = payload["segments"]
+    if isinstance(payload, Mapping):
+        mapping = dict(payload)
+
+→ Read /tmp/l7_seg.py [offset=100, limit=260]
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && grep -n "main(\|segmentation\.main\|per_station\|boundary_p95\|per_class\|report_payload\|_report_lines" /tmp/test_per_station.py /tmp/test_boundary_p95.py /tmp/test_threshold_state.py 2>/dev/null | head -60
+/tmp/test_per_station.py:36:    evaluate_per_station,
+/tmp/test_per_station.py:86:    report = evaluate_per_station(_observations(), seed=20261102)
+/tmp/test_per_station.py:107:    report = evaluate_per_station(_observations(), seed=20261102)
+/tmp/test_per_station.py:123:    report = evaluate_per_station(
+/tmp/test_per_station.py:143:    report = evaluate_per_station(_observations(), seed=20261102)
+/tmp/test_per_station.py:158:    report = evaluate_per_station(_observations(), seed=20261102)
+/tmp/test_per_station.py:169:    report = evaluate_per_station(
+/tmp/test_per_station.py:183:        evaluate_per_station([], seed=20261102)
+/tmp/test_per_station.py:188:        evaluate_per_station([_obs("afiafm", "parole", "meteo")], seed=20261102)
+/tmp/test_per_station.py:193:        evaluate_per_station([_obs("  ", "parole", "parole")], seed=20261102)
+/tmp/test_per_station.py:196:def test_report_payload_publishes_n_ci_and_marks_prd_classes() -> None:
+/tmp/test_per_station.py:197:    report = evaluate_per_station(_observations(), seed=20261102)
+/tmp/test_per_station.py:220:    first = evaluate_per_station(_observations(), seed=20261102).to_json()
+/tmp/test_per_station.py:221:    second = evaluate_per_station(_observations(), seed=20261102).to_json()
+/tmp/test_per_station.py:261:def test_frozen_split_per_station_measurement_end_to_end() -> None:
+/tmp/test_per_station.py:330:def test_cli_per_class_and_per_station_emits_a_replayable_json(
+/tmp/test_per_station.py:333:    exit_code = main(["--split=test", "--per-class", "--per-station", "--json"])
+/tmp/test_per_station.py:339:    station = payload["per_station"]
+/tmp/test_per_station.py:361:def test_cli_without_per_station_keeps_the_l2_payload(
+/tmp/test_per_station.py:364:    exit_code = main(["--split=test", "--per-class", "--json"])
+/tmp/test_per_station.py:368:    assert "per_station" not in payload
+/tmp/test_per_station.py:374:    exit_code = main(["--split=test", "--per-station"])
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git show origin/build/fr04-l7:api/tests/segmentation/test_per_station.py > /tmp/test_per_station.py; git show HEAD:api/tests/segmentation/test_boundary_p95.py > /tmp/test_boundary_p95.py; git show origin/build/fr04-l9:api/tests/segmentation/test_threshold_state.py > /tmp/test_threshold_state.py; wc -l /tmp/test_per_station.py /tmp/test_boundary_p95.py /tmp/test_threshold_state.py
+382 /tmp/test_per_station.py
+  216 /tmp/test_boundary_p95.py
+  448 /tmp/test_threshold_state.py
+ 1046 total
+
+$ sed -n '1,60p' /tmp/test_boundary_p95.py; echo "=== CLI part ==="; grep -n "def test_cli\|main(\[" /tmp/test_boundary_p95.py
+"""T6.1/L6 — P95 des deplacements de frontieres sur TOUS les segments relus.
+
+La mesure porte sur le perimetre relu complet : un segment confirme (frontieres
+inchangees) compte un delta nul. Les probes verifient le P95 par rang le plus
+proche (`annotation.rates.p95`), le seuil de `annotation.models.Thresholds`
+(`p95_start_ms`, `p95_end_ms`), le refus d'un ensemble vide et la relecture
+reelle des sceaux `review-v1-frozen-600` et `review-750-frozen`.
+
+La mesure de reference d'ISC-12 est celle du sceau 750 : P95 debut 666 ms >
+500 ms, P95 fin 0 ms. Le corpus 600 relu par Papa reste sous le seuil (0/0),
+ce qui prouve que les segments inchanges entrent bien dans le denominateur.
+"""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import pytest
+
+from antenly_api.annotation.freeze import load_thresholds
+from antenly_api.annotation.models import InvariantError, NoObservationError, Thresholds
+from antenly_api.eval.boundaries import (
+    BOUNDARY_P95_SCHEMA,
+    boundary_deltas,
+    boundary_p95,
+    load_boundary_p95,
+)
+from antenly_api.eval.segmentation import main
+from antenly_api.eval.split import DEFAULT_FROZEN_MANIFEST
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+FREEZE_750_MANIFEST = REPO_ROOT / "data" / "annotation" / "freeze-750" / "manifest.json"
+
+
+def _segment(
+    segment_id: str,
+    start_ms: int,
+    end_ms: int,
+    *,
+    status: str = "reviewed",
+    original: tuple[int, int] | None = None,
+) -> dict:
+    raw: dict[str, object] = {
+        "id": segment_id,
+        "status": status,
+        "start_ms": start_ms,
+        "end_ms": end_ms,
+    }
+    if original is not None:
+        raw["original"] = {"start_ms": original[0], "end_ms": original[1]}
+    return raw
+
+
+def _independent_p95(values: list[int]) -> int:
+    """P95 par rang le plus proche, ecrit ici (recalcul independant)."""
+    ranked = sorted(values)
+    return ranked[-(-(95 * len(ranked)) // 100) - 1]
+
+
+=== CLI part ===
+194:def test_cli_boundary_p95_on_the_frozen_split(capsys: pytest.CaptureFixture[str]) -> None:
+195:    exit_code = main(["--boundary-p95", "--json"])
+206:def test_cli_boundary_p95_reports_the_750_reference_failure(
+209:    exit_code = main(["--manifest", str(FREEZE_750_MANIFEST), "--boundary-p95", "--json"])
+
+$ sed -n '320,382p' /tmp/test_per_station.py
+assert observations[0] == StationObservation(
+        station=first.station,
+        truth=first.truth,
+        prediction=first.source,
+    )
+
+
+# ── CLI : --per-class --per-station ──────────────────────────────────────────
+
+
+def test_cli_per_class_and_per_station_emits_a_replayable_json(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    exit_code = main(["--split=test", "--per-class", "--per-station", "--json"])
+
+    assert exit_code == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["schema"] == "eval-segmentation-v1"
+    assert payload["split"]["seed"] == 20261102
+    station = payload["per_station"]
+    assert station["schema"] == "eval-per-station-v1"
+    assert station["n"] == 600
+    assert station["seed"] == 20261102
+    assert station["station_spread"] == pytest.approx(0.25)
+    assert station["highest_station"] == "rtsmatam"
+    assert station["lowest_station"] == "lovefm"
+    assert station["thresholds"]["applied"] is False
+    held_out = station["held_out"]
+    assert held_out["seed_written"] is True
+    assert held_out["disjoint"] is True
+    assert held_out["n_test"] == 600
+    assert set(station["by_station"]) == {
+        "afiafm",
+        "lovefm",
+        "rfm",
+        "rtsmatam",
+        "sudfm",
+        "zikfm",
+    }
+
+
+def test_cli_without_per_station_keeps_the_l2_payload(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    exit_code = main(["--split=test", "--per-class", "--json"])
+
+    assert exit_code == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert "per_station" not in payload
+
+
+def test_cli_text_report_names_the_spread_and_the_held_out_control(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    exit_code = main(["--split=test", "--per-station"])
+
+    assert exit_code == 0
+    out = capsys.readouterr().out
+    assert "erreur par classe" in out
+    assert "erreur par station" in out
+    assert "ecart entre stations : 25.00 %" in out
+    assert "split tenu a l'ecart" in out
+    assert "disjoint" in out
+
+$ grep -n "def test\|main(\[" /tmp/test_threshold_state.py | head -40; echo "=== imports ==="; sed -n '1,50p' /tmp/test_threshold_state.py
+173:def test_frontmatter_phase_is_read(tmp_path: Path) -> None:
+179:def test_missing_phase_is_none(tmp_path: Path) -> None:
+189:def test_absent_freeze_before_complete_isa_is_conforme(tmp_path: Path) -> None:
+202:def test_repository_state_is_not_frozen() -> None:
+214:def test_freeze_before_complete_isa_is_refused(tmp_path: Path) -> None:
+224:def test_journal_freeze_before_complete_isa_is_refused(tmp_path: Path) -> None:
+233:def test_journal_records_early_freeze_even_after_isa_completion(tmp_path: Path) -> None:
+242:def test_journal_freeze_without_manifest_is_refused(tmp_path: Path) -> None:
+254:def test_freeze_after_complete_isa_is_accepted(tmp_path: Path) -> None:
+264:def test_manifest_without_thresholds_is_not_a_freeze(tmp_path: Path) -> None:
+279:def test_thresholds_not_copied_into_manifest_are_refused(tmp_path: Path) -> None:
+289:def test_unratified_thresholds_are_refused_when_frozen(tmp_path: Path) -> None:
+302:def test_freeze_without_journal_entry_is_refused(tmp_path: Path) -> None:
+311:def test_report_values_hash_mismatch_is_refused(tmp_path: Path) -> None:
+323:def test_report_source_hash_mismatch_is_refused(tmp_path: Path) -> None:
+335:def test_report_without_manifest_is_refused(tmp_path: Path) -> None:
+347:def test_malformed_journal_is_refused(tmp_path: Path) -> None:
+359:def test_journal_freeze_not_by_papa_is_refused(tmp_path: Path) -> None:
+371:def test_gate_does_not_write_any_file(tmp_path: Path) -> None:
+392:def test_cli_passes_on_repository_state(capsys: pytest.CaptureFixture[str]) -> None:
+393:    code = gate.main([])
+400:def test_cli_returns_one_on_freeze_before_completion(
+425:def test_cli_publishes_json(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+=== imports ===
+"""ISC-9 - porte de gel FR-04 : aucun seuil fige avant la phase complete.
+
+La porte `scripts/check/fr04_threshold_state.py` ne fige rien : elle relit l'ISA
+corpus, le journal de decision, le fichier de seuils signe et le manifeste du
+corpus, puis refuse tout etat incoherent. Ces probes couvrent les deux faces du
+critere :
+
+- 0 seuil fige avant `phase: complete` (manifeste ou journal) ;
+- un gel, quand il existe, prend la forme d'un fichier de seuils date et ratifie
+  par Papa, recopie a l'identique dans le manifeste (empreinte des valeurs).
+
+Aucune probe n'ecrit `data/annotation/thresholds.json` ni ne cree de sceau : le
+premier gel reste un acte de Papa.
+"""
+
+from __future__ import annotations
+
+import importlib.util
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+ROOT = Path(__file__).resolve().parents[3]
+SCRIPT = ROOT / "scripts" / "check" / "fr04_threshold_state.py"
+
+_SPEC = importlib.util.spec_from_file_location("fr04_threshold_state", SCRIPT)
+assert _SPEC is not None and _SPEC.loader is not None
+gate = importlib.util.module_from_spec(_SPEC)
+sys.modules[_SPEC.name] = gate
+_SPEC.loader.exec_module(gate)
+
+RATIFIED_AT = "2026-11-23T19:10:00Z"
+DECIDED_AT = "2026-11-26T09:00:00Z"
+
+
+def _thresholds_payload() -> dict:
+    return {
+        "version": "ratified-test",
+        "status": "RATIFIED",
+        "review_per_station": 100,
+        "floor_per_station": 20,
+        "max_class_correction_rate": 0.10,
+        "max_type_correction_rate": 0.15,
+        "max_station_spread": 0.05,
+        "p95_start_ms": 500,
+        "p95_end_ms": 500,
+        "ci_half_width": 0.13,
+        "langue_required": False,
+
+$ sed -n '190,216p' /tmp/test_boundary_p95.py; echo "=== per_station head ==="; sed -n '1,60p' /tmp/test_per_station.py
+assert report.to_json() == report.to_json()
+    assert json.loads(report.to_json())["schema"] == BOUNDARY_P95_SCHEMA
+
+
+def test_cli_boundary_p95_on_the_frozen_split(capsys: pytest.CaptureFixture[str]) -> None:
+    exit_code = main(["--boundary-p95", "--json"])
+
+    assert exit_code == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["schema"] == BOUNDARY_P95_SCHEMA
+    assert payload["n_reviewed"] == 600
+    assert payload["p95_start_ms"] == 0
+    assert payload["p95_end_ms"] == 0
+    assert payload["violations"] == []
+
+
+def test_cli_boundary_p95_reports_the_750_reference_failure(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    exit_code = main(["--manifest", str(FREEZE_750_MANIFEST), "--boundary-p95", "--json"])
+
+    assert exit_code == 1
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["n_reviewed"] == 750
+    assert payload["p95_start_ms"] == 666
+    assert payload["p95_end_ms"] == 0
+    assert any("ISC-12" in violation for violation in payload["violations"])
+=== per_station head ===
+"""T7.1 / L7 — erreur par classe et par station, IC Wilson et split tenu a l'ecart.
+
+ISC-11 demande quatre choses, prouvees ici sans cocher l'ISC lui-meme (la preuve
+finale depend d'un segmenteur evalue) :
+
+1. un taux d'erreur par CLASSE, dont le denominateur est le nombre de segments
+   REELS de la classe (`verite == classe`) et non le nombre de predictions ;
+2. un taux d'erreur par STATION, puis l'ecart `max - min` entre stations ;
+3. un IC Wilson 95 % par classe, ecrit depuis sa definition et compare a
+   `metrics._wilson`, sans plancher de 30 segments ;
+4. le controle du split tenu a l'ecart : graine ecrite et aucun id de test dans
+   l'entrainement declare, refuse nommement sinon.
+
+Les ancres de reference sont `rates.py` (`_wilson`, `correction_rates`) et
+`data/annotation/review-v1/agreement-v1.md` : la mesure `source_class` du banc
+doit y retrouver 32,3 % d'erreur globale, 46,0 % pour rtsmatam, 21,0 % pour
+lovefm et 25,0 points d'ecart. Ces valeurs sont un point de comparaison, pas une
+coche : le banc publie, le seuil d'ISC-11 n'est pas applique.
+"""
+
+from __future__ import annotations
+
+import json
+import math
+from dataclasses import replace
+
+import pytest
+
+from antenly_api.annotation.models import InvariantError, NoObservationError
+from antenly_api.eval.metrics import (
+    CLASS_ORDER,
+    MAX_CLASS_ERROR_RATE,
+    MAX_STATION_SPREAD,
+    PRD_CLASS_NAMES,
+    StationObservation,
+    evaluate_per_station,
+)
+from antenly_api.eval.segmentation import (
+    evaluate,
+    evaluate_station,
+    main,
+    station_observations,
+)
+from antenly_api.eval.split import (
+    FrozenSplit,
+    held_out_control,
+    load_frozen_split,
+)
+
+WILSON_Z = 1.959963984540054
+
+
+def _wilson_reference(errors: int, n: int) -> tuple[float, float, float]:
+    """Formule de Wilson ecrite depuis la definition, sans importer rates.py."""
+    p_hat = errors / n
+    z2 = WILSON_Z * WILSON_Z
+    denominator = 1.0 + z2 / n
+    centre = (p_hat + z2 / (2 * n)) / denominator
+    half = WILSON_Z * math.sqrt(p_hat * (1 - p_hat) / n + z2 / (4 * n * n)) / denominator
+    return max(0.0, centre - half), min(1.0, centre + half), half
+
