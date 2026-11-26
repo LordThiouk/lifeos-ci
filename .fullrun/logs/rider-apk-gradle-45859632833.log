@@ -6299,3 +6299,332 @@ $ grep -an "Error: Your project's\|is lower\|FAILURE: Build failed\|What went wr
 2026-11-26T10:30:57.8069797Z done
 2026-11-26T10:30:57.8069947Z rm -rf src
 
+$ find /tmp/flutter/packages/flutter_tools/gradle -name "build.gradle.kts*" -o -name "*.kts.template" | head; echo ===; find /tmp/flutter/packages/flutter_tools/templates -path "*app*" -name "*.tmpl" | head -20
+/tmp/flutter/packages/flutter_tools/gradle/build.gradle.kts
+===
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl/Runner.xcodeproj/project.pbxproj.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl/RunnerTests/RunnerTests.swift.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png.img.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png.img.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_64.png.img.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_32.png.img.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_128.png.img.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png.img.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png.img.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/macos.tmpl/Runner/Configs/AppInfo.xcconfig.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/projectName.iml.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/android-kotlin.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/android-kotlin.tmpl/app/src/main/kotlin/androidIdentifier/MainActivity.kt.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/android-kotlin.tmpl/app/build.gradle.kts.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/android-kotlin.tmpl/build.gradle.kts.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/android-kotlin.tmpl/projectName_android.iml.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/.gitignore.tmpl
+/tmp/flutter/packages/flutter_tools/templates/app/android-java.tmpl
+
+$ sed -n '960,1060p' /tmp/gu_3501.dart
+min: '0.0',
+    max: oldestDocumentedJavaGradleCompatibility,
+    inclusiveMax: false,
+  )) {
+    logger.printTrace('Gradle Version: $gradleVersion is too old.');
+    return false;
+  }
+
+  // Check if versions are newer than the max supported versions.
+  if (isWithinVersionRange(javaVersion, min: oneMajorVersionHigherJavaVersion, max: '100.100')) {
+    // Assume versions Java versions newer than [maxSupportedJavaVersion]
+    // required a higher gradle version.
+    final bool validGradle = isWithinVersionRange(
+      gradleVersion,
+      min: maxKnownAndSupportedGradleVersion,
+      max: '100.00',
+    );
+    logger.printWarning(
+      'Newer than known valid Java version ($javaVersion), gradle ($gradleVersion).'
+      '\n Treating as valid configuration.',
+    );
+    return validGradle;
+  }
+
+  // Begin known Java <-> Gradle evaluation.
+  for (final JavaGradleCompat data in _javaGradleCompatList) {
+    if (isWithinVersionRange(
+      javaVersion,
+      min: data.javaMin,
+      max: data.javaMax,
+      inclusiveMax: false,
+    )) {
+      // Null max value should be treated as unbounded on the max side.
+      return isWithinVersionRange(
+        gradleVersion,
+        min: data.gradleMin,
+        max: data.gradleMax ?? '100.100',
+      );
+    }
+  }
+
+  logger.printTrace(
+    'Unknown Java-Gradle compatibility, Java: $javaVersion, Gradle: $gradleVersion',
+  );
+  return false;
+}
+
+/// Returns compatibility information for the valid range of Gradle versions for
+/// the specified Java version.
+///
+/// Returns null when the tooling has not documented the compatible Gradle
+/// versions for the Java version (either the version is too old or too new). If
+/// this seems like a mistake, the caller may need to update the
+/// [_javaGradleCompatList] detailing Java/Gradle compatibility.
+JavaGradleCompat? getValidGradleVersionRangeForJavaVersion(Logger logger, {required String javaV}) {
+  for (final JavaGradleCompat data in _javaGradleCompatList) {
+    if (isWithinVersionRange(javaV, min: data.javaMin, max: data.javaMax, inclusiveMax: false)) {
+      return data;
+    }
+  }
+
+  logger.printTrace('Unable to determine valid Gradle version range for Java version $javaV.');
+  return null;
+}
+
+/// Validate that the specified Java and Android Gradle Plugin (AGP) versions are
+/// compatible with each other.
+///
+/// Returns true when the specified Java and AGP versions are
+/// definitely compatible; True if AGP is newer than known, otherwise, false. In addition,
+/// this will return false when either a null Java or AGP version is provided.
+///
+/// Source of truth are the AGP release notes:
+/// https://developer.android.com/build/releases/gradle-plugin
+bool validateJavaAndAgp(Logger logger, {required String? javaV, required String? agpV}) {
+  if (javaV == null || agpV == null) {
+    logger.printTrace('Java version or AGP version unknown ($javaV, $agpV).');
+    return false;
+  }
+
+  // Check if AGP version is too old to perform validation.
+  if (isWithinVersionRange(
+    agpV,
+    min: '1.0',
+    max: oldestDocumentedJavaAgpCompatibilityVersion,
+    inclusiveMax: false,
+  )) {
+    logger.printTrace('AGP Version: $agpV is too old to determine Java compatibility.');
+    return false;
+  }
+
+  if (isWithinVersionRange(
+    agpV,
+    min: maxKnownAndSupportedAgpVersion,
+    max: '100.100',
+    inclusiveMin: false,
+  )) {
+    logger.printTrace('AGP Version: $agpV is too new to determine Java compatibility.');
+    return true;
+  }
+
+$ grep -n "_javaGradleCompatList" -A 40 /tmp/gu_3501.dart | head -60; echo "=== java/AGP table ==="; sed -n '1060,1120p' /tmp/gu_3501.dart
+985:  for (final JavaGradleCompat data in _javaGradleCompatList) {
+986-    if (isWithinVersionRange(
+987-      javaVersion,
+988-      min: data.javaMin,
+989-      max: data.javaMax,
+990-      inclusiveMax: false,
+991-    )) {
+992-      // Null max value should be treated as unbounded on the max side.
+993-      return isWithinVersionRange(
+994-        gradleVersion,
+995-        min: data.gradleMin,
+996-        max: data.gradleMax ?? '100.100',
+997-      );
+998-    }
+999-  }
+1000-
+1001-  logger.printTrace(
+1002-    'Unknown Java-Gradle compatibility, Java: $javaVersion, Gradle: $gradleVersion',
+1003-  );
+1004-  return false;
+1005-}
+1006-
+1007-/// Returns compatibility information for the valid range of Gradle versions for
+1008-/// the specified Java version.
+1009-///
+1010-/// Returns null when the tooling has not documented the compatible Gradle
+1011-/// versions for the Java version (either the version is too old or too new). If
+1012-/// this seems like a mistake, the caller may need to update the
+1013:/// [_javaGradleCompatList] detailing Java/Gradle compatibility.
+1014-JavaGradleCompat? getValidGradleVersionRangeForJavaVersion(Logger logger, {required String javaV}) {
+1015:  for (final JavaGradleCompat data in _javaGradleCompatList) {
+1016-    if (isWithinVersionRange(javaV, min: data.javaMin, max: data.javaMax, inclusiveMax: false)) {
+1017-      return data;
+1018-    }
+1019-  }
+1020-
+1021-  logger.printTrace('Unable to determine valid Gradle version range for Java version $javaV.');
+1022-  return null;
+1023-}
+1024-
+1025-/// Validate that the specified Java and Android Gradle Plugin (AGP) versions are
+1026-/// compatible with each other.
+1027-///
+1028-/// Returns true when the specified Java and AGP versions are
+1029-/// definitely compatible; True if AGP is newer than known, otherwise, false. In addition,
+1030-/// this will return false when either a null Java or AGP version is provided.
+1031-///
+1032-/// Source of truth are the AGP release notes:
+1033-/// https://developer.android.com/build/releases/gradle-plugin
+1034-bool validateJavaAndAgp(Logger logger, {required String? javaV, required String? agpV}) {
+1035-  if (javaV == null || agpV == null) {
+1036-    logger.printTrace('Java version or AGP version unknown ($javaV, $agpV).');
+1037-    return false;
+1038-  }
+1039-
+1040-  // Check if AGP version is too old to perform validation.
+1041-  if (isWithinVersionRange(
+1042-    agpV,
+1043-    min: '1.0',
+1044-    max: oldestDocumentedJavaAgpCompatibilityVersion,
+=== java/AGP table ===
+
+  // Begin known Java <-> AGP evaluation.
+  for (final JavaAgpCompat data in _javaAgpCompatList) {
+    if (isWithinVersionRange(agpV, min: data.agpMin, max: data.agpMax)) {
+      return isWithinVersionRange(javaV, min: data.javaMin, max: '100.100');
+    }
+  }
+
+  logger.printTrace('Unknown Java-AGP compatibility $javaV, $agpV');
+  return false;
+}
+
+/// Returns compatibility information concerning the minimum AGP
+/// version for the specified Java version.
+JavaAgpCompat? getMinimumAgpVersionForJavaVersion(Logger logger, {required String javaV}) {
+  for (final JavaAgpCompat data in _javaAgpCompatList) {
+    if (isWithinVersionRange(javaV, min: data.javaMin, max: '100.100')) {
+      return data;
+    }
+  }
+
+  logger.printTrace('Unable to determine minimum AGP version for specified Java version.');
+  return null;
+}
+
+/// Returns valid Java range for specified Gradle and AGP versions.
+///
+/// Assumes that gradleV and agpV are compatible versions.
+VersionRange getJavaVersionFor({required String gradleV, required String agpV}) {
+  // Find minimum Java version based on AGP compatibility.
+  String? minJavaVersion;
+  for (final JavaAgpCompat data in _javaAgpCompatList) {
+    if (isWithinVersionRange(agpV, min: data.agpMin, max: data.agpMax)) {
+      minJavaVersion = data.javaMin;
+    }
+  }
+
+  // Find maximum Java version based on Gradle compatibility.
+  String? maxJavaVersion;
+  for (final JavaGradleCompat data in _javaGradleCompatList.reversed) {
+    if (isWithinVersionRange(
+      gradleV,
+      min: data.gradleMin,
+      max: maxKnownAndSupportedGradleVersion,
+    )) {
+      maxJavaVersion = data.javaMax;
+    }
+  }
+
+  return VersionRange(minJavaVersion, maxJavaVersion);
+}
+
+/// Returns the Gradle version that is required by the given Android Gradle plugin version
+/// by picking the largest compatible version from
+/// https://developer.android.com/studio/releases/gradle-plugin#updating-gradle
+String getGradleVersionFor(String agpV) {
+  final compatList = <GradleForAgp>[
+    GradleForAgp(agpMin: '1.0.0', agpMax: '1.1.3', minRequiredGradle: '2.3'),
+    GradleForAgp(agpMin: '1.2.0', agpMax: '1.3.1', minRequiredGradle: '2.9'),
+    GradleForAgp(agpMin: '1.5.0', agpMax: '1.5.0', minRequiredGradle: '2.2.1'),
+    GradleForAgp(agpMin: '2.0.0', agpMax: '2.1.2', minRequiredGradle: '2.13'),
+
+$ cat /tmp/flutter/packages/flutter_tools/templates/app/android-kotlin.tmpl/app/build.gradle.kts.tmpl; echo "==== root ===="; cat /tmp/flutter/packages/flutter_tools/templates/app/android-kotlin.tmpl/build.gradle.kts.tmpl; echo "==== settings tmpl ==="; find /tmp/flutter/packages/flutter_tools/templates/app/android-kotlin.tmpl -name "settings.gradle.kts*"; find /tmp/flutter/packages/flutter_tools/templates -name "settings.gradle.kts*" | head
+plugins {
+    id("com.android.application")
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+android {
+    namespace = "{{androidIdentifier}}"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId = "{{androidIdentifier}}"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
+        // Uses the version code from pubspec.yaml. When using split APKs, 1000 * ABI_VERSION
+        // is added automatically by Flutter. (https://developer.android.com/studio/build/configure-apk-splits#configure-APK-versions)
+        // You can force using the value of versionCode by specifying the `-P force-version-code-ignoring-abi=true`
+        // flag during build.
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
+flutter {
+    source = "../.."
+}
+==== root ====
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+val newBuildDir: Directory =
+    rootProject.layout.buildDirectory
+        .dir("../../build")
+        .get()
+rootProject.layout.buildDirectory.value(newBuildDir)
+
+subprojects {
+    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
+    project.layout.buildDirectory.value(newSubprojectBuildDir)
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register<Delete>("clean") {
+    delete(rootProject.layout.buildDirectory)
+}
+==== settings tmpl ===
+/tmp/flutter/packages/flutter_tools/templates/app/android.tmpl/settings.gradle.kts.tmpl
+/tmp/flutter/packages/flutter_tools/templates/plugin/android.tmpl/settings.gradle.kts.tmpl
+
