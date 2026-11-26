@@ -173,5 +173,5 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
-      chain: true
+      chain: ${{ inputs.chain }}
     secrets: inherit
