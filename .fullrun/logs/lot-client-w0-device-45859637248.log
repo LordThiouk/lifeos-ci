@@ -482,3 +482,275 @@ drwxr-xr-x 3 root root     4096 Nov 26 14:26 tests
 /opt/flutter/packages/flutter_tools/lib/src/android/android_emulator.dart
 /opt/flutter/packages/flutter_tools/lib/src/commands/emulators.dart
 
+$ /opt/fullrun-tools/emu-e2e.sh 2>&1 | head -60
+commande inconnue : <vide>
+
+$ head -80 /opt/fullrun-tools/emu-e2e.sh
+#!/usr/bin/env bash
+# FullRun galass-ci : option with_emulators.
+# Déclenche le e2e Artemis sur LordThiouk/galass-emu-actions-pub (secrets e2e déjà
+# présents là-bas), attend un verdict borné, et n'affiche qu'un court extrait en
+# échec. Pas de démarrage local d'émulateurs, pas de build APK, pas de secret e2e
+# sur galass-ci. Le jeton (GALASS_TOKEN) n'est jamais affiché ni passé à opencode.
+#
+#   emu-e2e.sh run            déclenche, attend, affiche le verdict
+#   emu-e2e.sh status <run_id> état du run (lecture seule, id numérique) : status=… conclusion=…
+#   emu-e2e.sh resolve-refs   affiche rider_ref et driver_ref
+#   emu-e2e.sh prompt-block   bloc à ajouter au prompt (aucun secret)
+#   emu-e2e.sh append-prompt  ajoute le bloc à $OC_WORK/prompt.md
+#
+# Ne relâche aucune garde FullRun. Modèle dispatché : opencode/*-free (jamais FreeLLM, jamais de clé API).
+set -euo pipefail
+set +x
+
+FROZEN="/opt/fullrun-tools/emu-e2e.sh"
+CANON_STATE="/opt/fullrun-tools/emu-e2e.state"
+CANON_TOKEN="/opt/fullrun-live/emu-e2e.token"
+# Chaînage : un run e2e peut durer plus qu'un lien (jobs courts). INFLIGHT = id du run lancé et pas
+# encore terminé (lu par le step chain, transmis au lien suivant dans chain_state) ; RESUME = id
+# restauré au démarrage du lien suivant (root 0600) : « run » reprend alors le sondage de CE run au
+# lieu d'en relancer un. Fichiers root, hors de portée d'opencode.
+EMU_INFLIGHT_FILE="${EMU_E2E_INFLIGHT_FILE:-/opt/fullrun-live/emu-run}"
+EMU_RESUME_FILE="${EMU_E2E_RESUME_FILE:-/opt/fullrun-live/emu-resume}"
+EMU_OWNER="LordThiouk"
+EMU_REPO_NAME="galass-emu-actions-pub"
+EMU_REPO="${EMU_OWNER}/${EMU_REPO_NAME}"
+EMU_WORKFLOW="artemis-staging-e2e.yml"
+RIDER_REPO="Galass_Rider"
+DRIVER_REPO="Galass_Driver"
+DEFAULT_MODEL="opencode/deepseek-v4.1-flash-free"
+DEFAULT_TIMEOUT_SEC=10800
+DEFAULT_POLL_SEC=30
+DEFAULT_LOG_TAIL=80
+DEFAULT_LOG_WIDTH=300
+# Plafond par appel gh : un appel réseau qui pend ne doit jamais bloquer la boucle d'attente.
+DEFAULT_GH_TIMEOUT_SEC=60
+# Après TERM, KILL au bout de N s : un gh qui ignore TERM ne bloque pas non plus.
+GH_KILL_AFTER_SEC=5
+# Lectures consécutives du run en échec avant d'abandonner (erreurs transitoires tolérées).
+MAX_VIEW_FAILS=5
+FALLBACK_REF="main"
+
+fail() { echo "$1" >&2; exit 1; }
+
+# Rebond sur le binaire figé (root) pour run / resolve-refs : le jeton n'est pas
+# dans l'environnement d'opencode, seulement dans un fichier root 0600.
+maybe_sudo() {
+  local cmd="${1:-}"
+  case "$cmd" in
+    run|resolve-refs|status) ;;
+    *) return 0 ;;
+  esac
+  [ "$(id -u)" -eq 0 ] && return 0
+  [ -f "$CANON_TOKEN" ] || return 0
+  [ -x "$FROZEN" ] || fail "outil figé absent : $FROZEN"
+  exec sudo -n -H -- "$FROZEN" "$@"
+}
+
+load_file_vars() {
+  local f="$1" line k v
+  [ -f "$f" ] || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      ''|\#*) continue ;;
+    esac
+    k="${line%%=*}"
+    v="${line#*=}"
+    case "$k" in
+      OC_BRANCH) OC_BRANCH="$v" ;;
+      EMU_E2E_MODEL) EMU_E2E_MODEL="$v" ;;
+      EMU_E2E_TIMEOUT_SEC) EMU_E2E_TIMEOUT_SEC="$v" ;;
+      EMU_E2E_POLL_SEC) EMU_E2E_POLL_SEC="$v" ;;
+      EMU_LOG_TAIL) EMU_LOG_TAIL="$v" ;;
+      EMU_LOG_WIDTH) EMU_LOG_WIDTH="$v" ;;
+      EMU_E2E_GH_TIMEOUT_SEC) EMU_E2E_GH_TIMEOUT_SEC="$v" ;;
+      *) ;;
+    esac
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && OC_BRANCH=fullrun/lot-client-w0 /opt/fullrun-tools/emu-e2e.sh resolve-refs 2>&1 | head -30; echo "rc=$?"
+jeton GALASS_TOKEN inaccessible (fichier d'outil figé)
+rc=0
+
+$ sed -n '80,260p' /opt/fullrun-tools/emu-e2e.sh
+esac
+  done < "$f"
+}
+
+# En CI (root + état figé) : ignorer les variables d'environnement injectables.
+# En test : EMU_E2E_STATE / l'environnement.
+load_config() {
+  OC_BRANCH="${OC_BRANCH:-${IN_BRANCH:-}}"
+  EMU_E2E_MODEL="${EMU_E2E_MODEL:-$DEFAULT_MODEL}"
+  EMU_E2E_TIMEOUT_SEC="${EMU_E2E_TIMEOUT_SEC:-$DEFAULT_TIMEOUT_SEC}"
+  EMU_E2E_POLL_SEC="${EMU_E2E_POLL_SEC:-$DEFAULT_POLL_SEC}"
+  EMU_LOG_TAIL="${EMU_LOG_TAIL:-$DEFAULT_LOG_TAIL}"
+  EMU_LOG_WIDTH="${EMU_LOG_WIDTH:-$DEFAULT_LOG_WIDTH}"
+  EMU_E2E_GH_TIMEOUT_SEC="${EMU_E2E_GH_TIMEOUT_SEC:-$DEFAULT_GH_TIMEOUT_SEC}"
+  if [ "$(id -u)" -eq 0 ] && [ -f "$CANON_STATE" ]; then
+    OC_BRANCH=""; EMU_E2E_MODEL="$DEFAULT_MODEL"
+    EMU_E2E_TIMEOUT_SEC="$DEFAULT_TIMEOUT_SEC"
+    EMU_E2E_POLL_SEC="$DEFAULT_POLL_SEC"
+    EMU_LOG_TAIL="$DEFAULT_LOG_TAIL"
+    EMU_LOG_WIDTH="$DEFAULT_LOG_WIDTH"
+    EMU_E2E_GH_TIMEOUT_SEC="$DEFAULT_GH_TIMEOUT_SEC"
+    load_file_vars "$CANON_STATE"
+  elif [ -n "${EMU_E2E_STATE:-}" ] && [ -f "$EMU_E2E_STATE" ]; then
+    load_file_vars "$EMU_E2E_STATE"
+  fi
+  [[ "${EMU_E2E_TIMEOUT_SEC}" =~ ^[0-9]+$ ]] || fail "timeout invalide"
+  [[ "${EMU_E2E_POLL_SEC}" =~ ^[0-9]+$ ]] || fail "intervalle de sondage invalide"
+  [[ "${EMU_LOG_TAIL}" =~ ^[0-9]+$ ]] || fail "taille d'extrait invalide"
+  [[ "${EMU_LOG_WIDTH}" =~ ^[0-9]+$ ]] || fail "largeur d'extrait invalide"
+  [[ "${EMU_E2E_GH_TIMEOUT_SEC}" =~ ^[0-9]+$ ]] || fail "timeout d'appel gh invalide"
+  if [ "$EMU_E2E_GH_TIMEOUT_SEC" -lt 1 ] || [ "$EMU_E2E_GH_TIMEOUT_SEC" -gt 600 ]; then
+    fail "timeout d'appel gh hors bornes (1-600)"
+  fi
+  [ "$EMU_E2E_TIMEOUT_SEC" -ge 1 ] || fail "timeout invalide"
+  [ "$EMU_E2E_POLL_SEC" -ge 0 ] || fail "intervalle de sondage invalide"
+  if [ "$EMU_LOG_TAIL" -lt 1 ] || [ "$EMU_LOG_TAIL" -gt 200 ]; then
+    fail "taille d'extrait hors bornes (1-200)"
+  fi
+  if [ "$EMU_LOG_WIDTH" -lt 40 ] || [ "$EMU_LOG_WIDTH" -gt 500 ]; then
+    fail "largeur d'extrait hors bornes"
+  fi
+  [ -n "$OC_BRANCH" ] || fail "branche de travail manquante (OC_BRANCH)"
+}
+
+normalize_model() {
+  local m="$1"
+  m="${m#"${m%%[![:space:]]*}"}"
+  m="${m%"${m##*[![:space:]]}"}"
+  case "$m" in
+    opencode/*) printf '%s\n' "$m" ;;
+    *) printf 'opencode/%s\n' "$m" ;;
+  esac
+}
+
+validate_model() {
+  local raw="$1" m
+  [ -n "$raw" ] || fail "modèle refusé (uniquement opencode/*-free)"
+  case "$raw" in
+    *freellm*|*FreeLLM*|*[Ff]ree[Ll][Ll][Mm]*)
+      fail "modèle refusé (pas de FreeLLM) : $raw"
+      ;;
+  esac
+  m=$(normalize_model "$raw")
+  [[ "$m" =~ ^opencode/[a-z0-9][a-z0-9.-]*-free$ ]] \
+    || fail "modèle refusé (uniquement opencode/*-free) : $raw"
+  printf '%s\n' "$m"
+}
+
+gh_bin() {
+  printf '%s\n' "${EMU_E2E_GH:-gh}"
+}
+
+read_token() {
+  local f="${EMU_E2E_TOKEN_FILE:-}"
+  if [ "$(id -u)" -eq 0 ] && [ -f "$CANON_TOKEN" ]; then
+    f="$CANON_TOKEN"
+  fi
+  [ -n "$f" ] || f="$CANON_TOKEN"
+  [ -r "$f" ] || fail "jeton GALASS_TOKEN inaccessible (fichier d'outil figé)"
+  # une seule ligne, sans l'afficher
+  IFS= read -r token < "$f" || true
+  [ -n "${token:-}" ] || fail "jeton GALASS_TOKEN vide"
+}
+
+urlenc() {
+  python3 -c 'import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1], safe=""))' "$1"
+}
+
+branch_exists() {
+  local repo="$1" ref="$2" enc
+  enc=$(urlenc "$ref")
+  gh_cmd api --silent "repos/${EMU_OWNER}/${repo}/branches/${enc}"
+}
+
+resolve_one() {
+  local repo="$1" ref
+  if branch_exists "$repo" "$OC_BRANCH"; then
+    printf '%s\n' "$OC_BRANCH"
+  else
+    printf '%s\n' "$FALLBACK_REF"
+  fi
+}
+
+resolve_refs() {
+  load_config
+  read_token
+  rider_ref=$(resolve_one "$RIDER_REPO")
+  driver_ref=$(resolve_one "$DRIVER_REPO")
+  # emu_ref : branche de galass-emu-actions-pub lui-même (le harnais e2e), pas
+  # seulement Rider/Driver — revue : sans elle, `gh workflow run` tournait toujours
+  # sur le harnais de main, même quand la branche de travail le modifiait.
+  emu_ref=$(resolve_one "$EMU_REPO_NAME")
+  echo "rider_ref=${rider_ref}"
+  echo "driver_ref=${driver_ref}"
+  echo "emu_ref=${emu_ref}"
+  if [ "$rider_ref" = "$FALLBACK_REF" ] && [ "$OC_BRANCH" != "$FALLBACK_REF" ]; then
+    echo "note : ${RIDER_REPO} n'a pas la branche ${OC_BRANCH} sur GitHub ; fallback ${FALLBACK_REF}."
+  fi
+  if [ "$driver_ref" = "$FALLBACK_REF" ] && [ "$OC_BRANCH" != "$FALLBACK_REF" ]; then
+    echo "note : ${DRIVER_REPO} n'a pas la branche ${OC_BRANCH} sur GitHub ; fallback ${FALLBACK_REF}."
+  fi
+  if [ "$emu_ref" = "$FALLBACK_REF" ] && [ "$OC_BRANCH" != "$FALLBACK_REF" ]; then
+    echo "note : ${EMU_REPO_NAME} n'a pas la branche ${OC_BRANCH} sur GitHub ; fallback ${FALLBACK_REF}."
+  fi
+}
+
+prompt_block() {
+  cat <<EOF
+# Tests e2e via galass-emu-actions-pub (with_emulators)
+
+Les émulateurs ne tournent pas sur ce runner. Pour lancer les tests e2e (vrai staging,
+apps Rider et Driver), appelle seulement :
+
+    /opt/fullrun-tools/emu-e2e.sh run
+
+Cet outil déclenche le workflow \`artemis-staging-e2e.yml\` sur
+\`LordThiouk/galass-emu-actions-pub\` (les secrets e2e restent dans ce dépôt), attend
+la fin (délai borné), puis affiche le verdict et, en cas d'échec, un court extrait
+des logs (pas le journal complet). Tu peux corriger le code, commiter, puis relancer
+la commande en boucle.
+
+- \`rider_ref\` / \`driver_ref\` : la branche de travail \`\$OC_BRANCH\` si elle existe
+  sur le dépôt, sinon \`main\`. Tu ne choisis pas ces refs toi-même.
+- Si le script retombe sur \`main\`, la branche de travail n'est pas encore sur GitHub :
+  attends le push wip, puis relance.
+- Modèle côté emu : uniquement \`opencode/*-free\` (défaut
+  \`opencode/deepseek-v4.1-flash-free\`). Le CLI opencode (pas une clé API)
+  pilote les émulateurs sur le dépôt emu. Pas de FreeLLM, pas d'appel HTTP
+  direct à un modèle. Les modèles FullRun restent \`opencode/*-free\`.
+- Lancement : l'outil dure jusqu'à la fin du run (plusieurs dizaines de minutes) ; lance-le en
+  tâche de fond détachée, en deux commandes séparées : d'abord \`LOG=/tmp/fullrun/e2e-run.log\`,
+  puis \`setsid nohup sudo -n -H -- env GITHUB_ACTIONS=true /opt/fullrun-tools/emu-e2e.sh run
+  > "\$LOG" 2>&1 < /dev/null &\`. Jamais \`A && B && nohup … &\` : le sous-shell garde la
+  sortie de ton outil ouverte, l'outil est tué au délai et le script avec lui.
+- Chaque sondage écrit une ligne datée dans ce log. Ne dors pas plus de 2 cycles sur un log qui
+  ne bouge plus : lis l'état réel avec \`sudo -n -H -- /opt/fullrun-tools/emu-e2e.sh status <run_id>\`
+  (lecture seule, l'équivalent de \`gh run view\`, sans jeton chez toi) et passe à la suite si le
+  run est \`status=completed\` (le verdict est dans \`conclusion=\`), ou signale le blocage.
+- Tu n'as aucun jeton : n'utilise pas \`gh\` toi-même, n'invente pas de secret,
+  n'écris aucun secret. Passe seulement par le script figé ci-dessus
+  (pas une copie dans le workspace).
+EOF
+}
+
+append_prompt() {
+  local p
+  [ -n "${OC_WORK:-}" ] || fail "OC_WORK manquant"
+  p="${OC_WORK}/prompt.md"
+  [ -f "$p" ] || fail "prompt introuvable : $p"
+  { printf '\n'; prompt_block; printf '\n'; } >> "$p"
+  echo "bloc e2e (emu-e2e) ajouté au prompt"
+}
+
+iso_now() {
+  date -u +%Y-%m-%dT%H:%M:%SZ
+}
+
+iso_minus() {
+  local sec="$1"
+  date -u -d "-${sec} seconds" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null \
+    || python3 -c 'import datetime,sys; s=int(sys.argv[1]); print((datetime.datetime.now(datetime.timezone.utc)-datetime.timedelta(seconds=s)).strftime("%Y-%m-%dT%H:%M:%SZ"))' "$sec"
+
