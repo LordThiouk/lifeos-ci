@@ -8798,3 +8798,260 @@ $ ls -la /tmp/task_done.md 2>&1; echo "=====WIPPUSH====="; grep -n "wip_push\|ta
 247:save_group carry "wip(carry): reprise du run"
 248:save_group code "wip(autosave): arbre de travail"
 
+$ cat /tmp/task_done.md
+# W0 device (Artemis) — lot-client
+
+- Dépôt: LordThiouk/Galass_backend
+- Branche: fullrun/lot-client-w0
+- SHA: 9a012ce2 (w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés)
+- ISA: MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md (progress 0/63, aucun ISC coché)
+
+## Vérification Artemis (API publique galass-emu-actions-pub, artemis-staging-e2e.yml)
+
+| Run | URL | created_at | head_sha (emu) | conclusion | step 11 tests Flutter | step 12 build APK | steps 13-19 (apksigner/KVM/opencode/E2E) | artefacts device |
+|---|---|---|---|---|---|---|---|---|
+| #150 45778554984 | https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45778554984 | 2026-11-26T07:52:21Z | 81d149d4 (feat/multistop-e2e-2026-11-15) | failure | failure | skipped | skipped | aucun (evidence encrypted 337o seulement) |
+| #151 45782061889 | https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45782061889 | 2026-11-26T08:18:31Z | 81d149d4 | failure | failure | skipped | skipped | aucun |
+| #152 45801376130 | https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130 | 2026-11-26T10:26:37Z | 81d149d4 | failure | **success** | **failure** | skipped | aucun (evidence encrypted 337o seulement) |
+
+## Résultat W0 (S-W0-01…S-W0-07 / ISC-22,50,80-84)
+
+- **BLOCK**. Aucune capture ni logcat device produit : aucun run n'a atteint KVM/E2E ; artefacts publics = `staging-e2e-evidence-encrypted` uniquement, pas de `e2e-out/summary.md`, `report.json`, `ui/*.xml`, `smoke.log`.
+- Run #152 montre la régression goldens/Flutter 3.44.8 corrigée (step 11 OK), mais échoue au build APK (step 12). Cause step 12 non diagnostiquée ici : logs GitHub Actions non téléchargeables sans authentification API ; aucun jeton GALASS_TOKEN disponible, aucun dispatch possible depuis ce runner.
+- **Aucun ISC coché** (preuve device exigée non obtenue). Aucune modification W1+. Bugs multistop exclus.
+- Preuves backend partielles précédentes conservées dans l'ISA (ISC-80/81/82/84 notes), non refaites.
+
+## Contraintes respectées
+
+- Pas de git push/merge/commande gh/ssh/scp/sudo. Pas de modification `.fullrun`. Pas de secrets. Commits auteur Papa Diop <76528706+LordThiouk@users.noreply.github.com>.
+
+$ git status --porcelain=v1 -uall | head -30; echo "=====DIFF STAT vs BASE====="; git diff --stat 2aa0dcd1f4bf24c70d3929c180d498a5ac2fa7ff..HEAD 2>&1 | tail -20; echo "=====FULLRUN DIR====="; ls -la .fullrun/; echo "=====ARCHIVE====="; ls -la .archive/ISA/
+=====DIFF STAT vs BASE=====
+ .fullrun/galass-lot-client-w0_DONE.md              |  18 ++
+ .../2026-11-22-galass-lot-client/COMPLETENESS.yml  |  16 ++
+ MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md    | 227 +++++++++++++++++++--
+ .../fullrun-carry.json                             |  95 +++++++++
+ .../Push/CashPaymentReceivedTimestampTest.php      | 131 ++++++++++++
+ prompts/lc-dec.md                                  |   6 +
+ 6 files changed, 477 insertions(+), 16 deletions(-)
+=====FULLRUN DIR=====
+total 12
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 17:27 .
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 17:27 ..
+-rw-r--r--  1 ubuntu ubuntu 1155 Nov 26 17:27 galass-lot-client-w0_DONE.md
+=====ARCHIVE=====
+total 140
+drwxr-xr-x 3 ubuntu ubuntu  4096 Nov 26 17:27 .
+drwxr-xr-x 3 ubuntu ubuntu  4096 Nov 26 17:27 ..
+-rw-r--r-- 1 ubuntu ubuntu 41059 Nov 26 17:27 20260609-galass-firebase-phone-auth-backend.md
+-rw-r--r-- 1 ubuntu ubuntu 40851 Nov 26 17:27 20260618-galass-wave-orange-money-payments.md
+-rw-r--r-- 1 ubuntu ubuntu  8405 Nov 26 17:27 20260710-galass-francisation-sn.md
+-rw-r--r-- 1 ubuntu ubuntu  8360 Nov 26 17:27 20260711-galass-dakar-xof-money.md
+-rw-r--r-- 1 ubuntu ubuntu  4718 Nov 26 17:27 20260711-galass-phone-unique-per-table.md
+drwxr-xr-x 3 ubuntu ubuntu  4096 Nov 26 17:27 20260729-galass-prod-security-hardening
+-rw-r--r-- 1 ubuntu ubuntu 10070 Nov 26 17:27 20260729-galass-prod-security-hardening.md
+
+$ grep -rn "EMU_E2E_TOKEN_FILE\|emu-e2e.token\|GALASS_TOKEN" /opt/lifeos-ci-tools /opt/fullrun-tools /tmp/lifeos-ci-agents /tmp/cursor 2>/dev/null | grep -vE "proc|node_modules|flutter" | head -30
+/opt/lifeos-ci-tools/opencode/tests/upstream-fullrun/with-emulators-test.sh:109:export EMU_E2E_TOKEN_FILE="$tmp/token"
+/opt/lifeos-ci-tools/opencode/tests/upstream-fullrun/with-emulators-test.sh:118:refs=$(EMU_E2E_GH="$tmp/mock-gh" EMU_E2E_TOKEN_FILE="$tmp/token" OC_BRANCH="feat/multi" \
+/opt/lifeos-ci-tools/opencode/tests/upstream-fullrun/with-emulators-test.sh:129:refs2=$(EMU_E2E_GH="$tmp/mock-gh" EMU_E2E_TOKEN_FILE="$tmp/token" OC_BRANCH="feat/multi" \
+/opt/lifeos-ci-tools/opencode/extra-repos.sh:100:    env -u EXTRA_TOKEN -u TOKEN -u AUTH_HEADER -u PUSH_TOKEN -u GALASS_TOKEN \
+/opt/lifeos-ci-tools/opencode/extra-repos.sh:455:        env -u TOKEN -u EXTRA_TOKEN -u AUTH_HEADER -u GALASS_TOKEN -u PUSH_TOKEN \
+/opt/lifeos-ci-tools/opencode/livelog.sh:9:# hors de portée d'opencode sans sudo. Le jeton (GALASS_TOKEN) arrive sur stdin quand
+/opt/lifeos-ci-tools/opencode/emu-e2e.sh:6:# sur galass-ci. Le jeton (GALASS_TOKEN) n'est jamais affiché ni passé à opencode.
+/opt/lifeos-ci-tools/opencode/emu-e2e.sh:20:CANON_TOKEN="/opt/fullrun-live/emu-e2e.token"
+/opt/lifeos-ci-tools/opencode/emu-e2e.sh:153:  local f="${EMU_E2E_TOKEN_FILE:-}"
+/opt/lifeos-ci-tools/opencode/emu-e2e.sh:158:  [ -r "$f" ] || fail "jeton GALASS_TOKEN inaccessible (fichier d'outil figé)"
+/opt/lifeos-ci-tools/opencode/emu-e2e.sh:161:  [ -n "${token:-}" ] || fail "jeton GALASS_TOKEN vide"
+/opt/lifeos-ci-tools/opencode/emu-e2e.sh:456:    fail "échec du déclenchement : le jeton GALASS_TOKEN a-t-il le droit actions:write sur ${EMU_REPO} ?"
+/opt/fullrun-tools/livelog.sh:9:# hors de portée d'opencode sans sudo. Le jeton (GALASS_TOKEN) arrive sur stdin quand
+/opt/fullrun-tools/emu-e2e.sh:6:# sur galass-ci. Le jeton (GALASS_TOKEN) n'est jamais affiché ni passé à opencode.
+/opt/fullrun-tools/emu-e2e.sh:20:CANON_TOKEN="/opt/fullrun-live/emu-e2e.token"
+/opt/fullrun-tools/emu-e2e.sh:153:  local f="${EMU_E2E_TOKEN_FILE:-}"
+/opt/fullrun-tools/emu-e2e.sh:158:  [ -r "$f" ] || fail "jeton GALASS_TOKEN inaccessible (fichier d'outil figé)"
+/opt/fullrun-tools/emu-e2e.sh:161:  [ -n "${token:-}" ] || fail "jeton GALASS_TOKEN vide"
+/opt/fullrun-tools/emu-e2e.sh:456:    fail "échec du déclenchement : le jeton GALASS_TOKEN a-t-il le droit actions:write sur ${EMU_REPO} ?"
+/tmp/lifeos-ci-agents/INVENTAIRE.md:230:  - galass (8) : `Garde du secret GALASS_TOKEN`, `Checkout galass-ci`,
+/tmp/lifeos-ci-agents/INVENTAIRE.md:246:  - galass (7) : `Garde du secret GALASS_TOKEN`, `Checkout galass-ci`,
+/tmp/lifeos-ci-agents/INVENTAIRE.md:291:- préparation e2e dans « Outils de contrôle figés » : jeton `GALASS_TOKEN` root `0600` dans
+/tmp/lifeos-ci-agents/INVENTAIRE.md:292:  `/opt/fullrun-live/emu-e2e.token`, fichier `emu-run`/`emu-resume`, état `emu-e2e.state`, et
+/tmp/lifeos-ci-agents/INVENTAIRE.md:294:- `Garde du secret` (galass : `GALASS_TOKEN` ; à adapter en `CI_TOKEN` pour lifeos-ci) ;
+/tmp/lifeos-ci-agents/INVENTAIRE.md:328:- `Garde du secret` (galass : `GALASS_TOKEN` ; à décliner en `CI_TOKEN`).
+/tmp/lifeos-ci-agents/INVENTAIRE.md:394:porter depuis galass. Le jeton de push cible de galass est `GALASS_TOKEN` ; pour lifeos-ci,
+/tmp/lifeos-ci-agents/INVENTAIRE.md:414:  `ANTENLY_CI_DISPATCH_TOKEN`, plus `LIFEOS_READ_TOKEN`) ; galass utilise `GALASS_TOKEN` pour la
+/tmp/lifeos-ci-agents/.github/workflows/opencode-fullrun.yml:984:            printf '%s\n' "$CI_TOKEN" | sudo sh -c 'umask 077; cat > /opt/fullrun-live/emu-e2e.token'
+/tmp/lifeos-ci-agents/.github/workflows/opencode-fullrun.yml:990:            sudo chown root:root /opt/fullrun-live/emu-e2e.token
+/tmp/lifeos-ci-agents/.github/workflows/opencode-fullrun.yml:991:            sudo chmod 0600 /opt/fullrun-live/emu-e2e.token
+
+$ grep -rIl "GALASS_TOKEN" /opt /tmp /home /etc /usr/local 2>/dev/null | grep -vE "proc|node_modules|flutter|\.git/" | head -20; echo "=====EMU TESTS====="; ls -la /opt/lifeos-ci-tools/opencode/tests/upstream-fullrun/; echo "=====EMU E2E TEST====="; find /opt /tmp -name "*emu*e2e*" -o -name "*e2e*emu*" 2>/dev/null | grep -vE "proc|node_modules|flutter|lifeos-ci/lifeos-ci/lifeos" | head -20
+/opt/fullrun-tools/livelog.sh
+/opt/fullrun-tools/emu-e2e.sh
+/opt/lifeos-ci-tools/opencode/extra-repos.sh
+/opt/lifeos-ci-tools/opencode/livelog.sh
+/opt/lifeos-ci-tools/opencode/emu-e2e.sh
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T15-19-41Z-69df/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T11-29-27Z-2566/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T13-20-24Z-b126/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+/tmp/lifeos-ci-agents/INVENTAIRE.md
+/tmp/lifeos-ci-agents/opencode/extra-repos.sh
+/tmp/lifeos-ci-agents/opencode/livelog.sh
+/tmp/lifeos-ci-agents/opencode/emu-e2e.sh
+/tmp/livelogs/rider-golden.log
+/tmp/w0_decision.txt
+/tmp/task_done.md
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/INVENTAIRE.md
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/extra-repos.sh
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/livelog.sh
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/emu-e2e.sh
+/home/ubuntu/.cursor/projects/workspace/agent-tools/0b1cef4f-3b9d-4d17-8ad3-c676e0b8bbea.txt
+=====EMU TESTS=====
+total 384
+drwxr-xr-x 2 root root  4096 Nov 26 14:26 .
+drwxr-xr-x 3 root root  4096 Nov 26 14:26 ..
+-rwxr-xr-x 1 root root  7487 Nov 26 14:26 agent-idle-test.sh
+-rwxr-xr-x 1 root root  7139 Nov 26 14:26 allowed-repos-cwd-test.sh
+-rwxr-xr-x 1 root root 20250 Nov 26 14:26 chain-step-test.sh
+-rwxr-xr-x 1 root root 12138 Nov 26 14:26 checkpoint-watchdog-verdict-test.sh
+-rwxr-xr-x 1 root root 61954 Nov 26 14:26 done-check-test.sh
+-rwxr-xr-x 1 root root 23836 Nov 26 14:26 extra-repos-test.sh
+-rwxr-xr-x 1 root root  2131 Nov 26 14:26 ffmpeg-install-test.sh
+-rwxr-xr-x 1 root root  6904 Nov 26 14:26 first-link-prompt-test.sh
+-rwxr-xr-x 1 root root 20484 Nov 26 14:26 hmac-state-test.sh
+-rwxr-xr-x 1 root root  3685 Nov 26 14:26 hook-profile-install-test.sh
+-rwxr-xr-x 1 root root  5930 Nov 26 14:26 leaklog-test.sh
+-rwxr-xr-x 1 root root 10591 Nov 26 14:26 livelog-test.sh
+-rwxr-xr-x 1 root root 13587 Nov 26 14:26 merge-signed-carry-test.sh
+-rwxr-xr-x 1 root root  7440 Nov 26 14:26 oc-deadline-test.sh
+-rwxr-xr-x 1 root root 13629 Nov 26 14:26 preannot-test.sh
+-rwxr-xr-x 1 root root 10893 Nov 26 14:26 preflight-test.sh
+-rwxr-xr-x 1 root root  4588 Nov 26 14:26 prompt-contract-test.sh
+-rwxr-xr-x 1 root root 21470 Nov 26 14:26 stall-resume-test.sh
+-rwxr-xr-x 1 root root  3588 Nov 26 14:26 start-step-test.sh
+-rwxr-xr-x 1 root root 14208 Nov 26 14:26 stop-after-step-test.sh
+-rwxr-xr-x 1 root root  4296 Nov 26 14:26 stop-step-target-agent-test.sh
+-rwxr-xr-x 1 root root  5567 Nov 26 14:26 turn-end-test.sh
+-rwxr-xr-x 1 root root  9001 Nov 26 14:26 unit-contract-test.sh
+-rw-r--r-- 1 root root  1223 Nov 26 14:26 verdict-cli.lib
+-rwxr-xr-x 1 root root 10872 Nov 26 14:26 wippush-test.sh
+-rwxr-xr-x 1 root root 32185 Nov 26 14:26 with-emulators-test.sh
+=====EMU E2E TEST=====
+/opt/fullrun-tools/emu-e2e.sh
+/opt/lifeos-ci-tools/opencode/emu-e2e.sh
+/tmp/lifeos-ci-agents/opencode/emu-e2e.sh
+
+$ cat /tmp/w0_decision.txt 2>&1; echo "=====LIFEL OGS====="; cat /tmp/livelogs/rider-golden.log 2>&1 | head -40; echo "=====WORKFLOW TOKEN STEP CONTEXT====="; sed -n '940,1010p' /tmp/lifeos-ci-agents/.github/workflows/opencode-fullrun.yml
+- **2026-11-26 — W0 device (Artemis) : BLOCK, aucun ISC coché.** Vérification API publique `galass-emu-actions-pub` (`artemis-staging-e2e.yml`) : runs récents emu `feat/multistop-e2e-2026-11-15` @ `81d149d4` — #150 `45778554984` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45778554984 (2026-11-26T07:52:21Z, failure, step 11 « Tests unitaires Flutter » failed, build/KVM/E2E skipped) ; #151 `45782061889` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45782061889 (2026-11-26T08:18:31Z, failure, step 11 failed) ; #152 `45801376130` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130 (2026-11-26T10:26:37Z, failure). Run #152 : step 11 tests Flutter **success** (régression goldens/Flutter 3.44.8 corrigée sur cette tête), mais step 12 « Build APK (staging, debug, même job, pas d'upload) » **failure** ; étapes 13-19 (apksigner, KVM, opencode, E2E multistop) **skipped**. Artefacts publics : uniquement `staging-e2e-evidence-encrypted` (337 o) ; aucun `e2e-out/summary.md`, `report.json`, `ui/*.xml`, `smoke.log`. **Aucune capture ni logcat device produite** ; S-W0-01…S-W0-07 / ISC-22,50,80-84 restent non cochés. Cause step 12 non diagnostiquée ici (logs non téléchargeables sans authentification API ; pas de jeton GALASS_TOKEN, pas de dispatch possible depuis ce runner). Aucun W1+ entamé.
+=====LIFEL OGS=====
+
+> Nix/LifeOS · deepseek-v4.1-flash-free
+
+$ ls -la /home/runner/work/_temp/oc/ 2>/dev/null; echo "---"; cat /home/runner/work/_temp/oc/REPORT.md 2>/dev/null | head -100
+total 32
+drwxr-xr-x  2 runner runner  4096 Nov 23 06:12 .
+drwxr-xr-x 11 runner runner  4096 Nov 23 06:12 ..
+-rw-r--r--  1 runner runner    51 Nov 23 06:12 opencode.log
+-rw-r--r--  1 runner runner     0 Nov 23 06:12 opencode.log.act
+-rw-r--r--  1 runner runner     0 Nov 23 06:12 opencode.log.internal
+-rw-r--r--  1 runner runner     0 Nov 23 06:12 opencode.log.internal.stamp
+-rw-r--r--  1 runner runner    22 Nov 23 06:12 opencode.log.status
+-rw-r--r--  1 runner runner 16098 Nov 23 06:12 prompt.md
+---
+
+$ pwd; ls -la; echo "---"; git log --oneline -15; echo "---"; git status --short | head -50
+/home/runner/work/galass-ci/galass-ci/target
+total 252
+drwxr-xr-x 16 runner runner  4096 Nov 23 06:12 .
+drwxr-xr-x  6 runner runner  4096 Nov 23 06:12 ..
+drwxr-xr-x  4 runner runner  4096 Nov 23 06:12 .claude
+drwxr-xr-x  2 runner runner  4096 Nov 23 06:12 .fullrun
+drwxr-xr-x  7 runner runner  4096 Nov 23 06:12 .git
+-rw-r--r--  1 runner runner    66 Nov 23 06:12 .gitattributes
+-rw-r--r--  1 runner runner  1122 Nov 23 06:12 .gitignore
+-rw-r--r--  1 runner runner  1188 Nov 23 06:12 .mcp.json
+drwxr-xr-x  3 runner runner  4096 Nov 23 06:12 .omc
+-rw-r--r--  1 runner runner  8995 Nov 23 06:12 AGENTS.md
+-rw-r--r--  1 runner runner  3781 Nov 23 06:12 CHANGELOG.md
+-rw-r--r--  1 runner runner  5284 Nov 23 06:12 CLAUDE.md
+-rw-r--r--  1 runner runner  1411 Nov 23 06:12 FIX_SUMMARY.md
+-rw-r--r--  1 runner runner  3977 Nov 23 06:12 GALASS_CONTEXT.md
+-rw-r--r--  1 runner runner   100 Nov 23 06:12 Gemfile
+-rw-r--r--  1 runner runner 16647 Nov 23 06:12 Gemfile.lock
+drwxr-xr-x  3 runner runner  4096 Nov 23 06:12 MEMORY
+-rw-r--r--  1 runner runner  8465 Nov 23 06:12 NIMBALYST_DEV_SETUP.md
+-rw-r--r--  1 runner runner    13 Nov 23 06:12 README.md
+-rw-r--r--  1 runner runner  6602 Nov 23 06:12 SECURE_CREDENTIALS_SETUP.md
+drwxr-xr-x  3 runner runner  4096 Nov 23 06:12 _ephemeral
+-rw-r--r--  1 runner runner  1580 Nov 23 06:12 analysis_options.yaml
+=====WORKFLOW TOKEN STEP CONTEXT=====
+          if git cat-file -e "$BASE_SHA:.gitleaksignore" 2>/dev/null; then
+            git show "$BASE_SHA:.gitleaksignore" | sudo tee "$T/gitleaks-ignore/.gitleaksignore" >/dev/null
+            sudo chmod 0644 "$T/gitleaks-ignore/.gitleaksignore"
+          fi
+          # Clé ISA pour le masquage du journal en direct : root, 0600.
+          printf '%s' "${ISA_STAMP_KEY:-}" | sudo sh -c 'umask 077; cat > /opt/fullrun-live/isa.key'
+          # preannot : le GITHUB_TOKEN de CE dépôt (permission actions: write) déclenche
+          # ci.yml, dont le job preannot-ina. Même dépôt, donc aucun second jeton. Le jeton
+          # vit dans un fichier root 0600, jamais dans l'environnement d'opencode ; l'outil
+          # figé le lit en root via sudoers (une seule commande autorisée).
+          if [ -n "${GH_DISPATCH_TOKEN:-}" ]; then
+            printf '::add-mask::%s\n' "$GH_DISPATCH_TOKEN"
+            printf '%s\n' "$GH_DISPATCH_TOKEN" | sudo sh -c 'umask 077; cat > /opt/fullrun-live/preannot.token'
+            sudo chown root:root /opt/fullrun-live/preannot.token
+            sudo chmod 0600 /opt/fullrun-live/preannot.token
+            {
+              printf 'OC_BRANCH=%s\n' "$IN_BRANCH"
+              printf 'PREANNOT_TIMEOUT_SEC=5400\n'
+              printf 'PREANNOT_POLL_SEC=30\n'
+              printf 'PREANNOT_LOG_TAIL=80\n'
+              printf 'PREANNOT_LOG_WIDTH=300\n'
+              printf 'PREANNOT_ART_DIR=%s\n' "${OC_WORK:-/tmp}/preannot"
+            } | sudo tee "$T/preannot.state" >/dev/null
+            sudo chown root:root "$T/preannot.state"
+            sudo chmod 0644 "$T/preannot.state"
+            u=$(id -un)
+            {
+              printf 'Defaults!/opt/fullrun-tools/preannot.sh env_reset\n'
+              printf 'Defaults!/opt/fullrun-tools/preannot.sh secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"\n'
+              printf '%s ALL=(root) NOPASSWD: /opt/fullrun-tools/preannot.sh run\n' "$u"
+            } | sudo tee /etc/sudoers.d/fullrun-preannot >/dev/null
+            sudo chmod 0440 /etc/sudoers.d/fullrun-preannot
+            sudo visudo -cf /etc/sudoers.d/fullrun-preannot >/dev/null
+            echo "outil preannot figé : ci.yml (job preannot-ina), jeton d'antenly-ci hors d'opencode"
+          else
+            echo "::warning::GITHUB_TOKEN absent : preannot.sh sans jeton (dispatch impossible)"
+          fi
+          # with_emulators : jeton CI_TOKEN hors d'opencode (fichier root 0600), état figé, sudoers strict.
+          # Provisioning copié de galass-ci (opencode-fullrun.yml l.820-842) : sans le jeton et l'état,
+          # with_emulators=true échoue dès le premier `emu-e2e.sh run`.
+          if [ "${WITH_EMULATORS:-}" = "true" ]; then
+            [ -x "$CI_DIR/opencode/emu-e2e.sh" ] || { echo "::error::emu-e2e.sh absent : impossible d'activer with_emulators"; exit 1; }
+            [ -n "${CI_TOKEN:-}" ] || { echo "::error::secret CI_TOKEN absent : impossible d'activer with_emulators"; exit 1; }
+            printf '::add-mask::%s\n' "$CI_TOKEN"
+            printf '%s\n' "$CI_TOKEN" | sudo sh -c 'umask 077; cat > /opt/fullrun-live/emu-e2e.token'
+            # Chaînage : run e2e du lien précédent encore en vol → emu-e2e.sh run le reprend (root 0600).
+            if [[ "${IN_EMU_RUN:-}" =~ ^[0-9]{1,20}$ ]]; then
+              printf '%s\n' "$IN_EMU_RUN" | sudo sh -c 'umask 077; cat > /opt/fullrun-live/emu-resume'
+              echo "run e2e ${IN_EMU_RUN} repris du lien précédent"
+            fi
+            sudo chown root:root /opt/fullrun-live/emu-e2e.token
+            sudo chmod 0600 /opt/fullrun-live/emu-e2e.token
+            {
+              printf 'OC_BRANCH=%s\n' "$IN_BRANCH"
+              printf 'EMU_E2E_MODEL=deepseek-v4.1-flash-free\n'
+              printf 'EMU_E2E_TIMEOUT_SEC=10800\n'
+              printf 'EMU_E2E_POLL_SEC=30\n'
+              printf 'EMU_LOG_TAIL=80\n'
+              printf 'EMU_LOG_WIDTH=300\n'
+            } | sudo tee "$T/emu-e2e.state" >/dev/null
+            sudo chown root:root "$T/emu-e2e.state"
+            sudo chmod 0644 "$T/emu-e2e.state"
+            u=$(id -un)
+            {
+              printf 'Defaults!/opt/fullrun-tools/emu-e2e.sh env_reset\n'
+              printf 'Defaults!/opt/fullrun-tools/emu-e2e.sh secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"\n'
+              printf '%s ALL=(root) NOPASSWD: /opt/fullrun-tools/emu-e2e.sh run, /opt/fullrun-tools/emu-e2e.sh resolve-refs, /opt/fullrun-tools/emu-e2e.sh status [0-9]*\n' "$u"
+            } | sudo tee /etc/sudoers.d/fullrun-emu-e2e >/dev/null
+            sudo chmod 0440 /etc/sudoers.d/fullrun-emu-e2e
+            sudo visudo -cf /etc/sudoers.d/fullrun-emu-e2e >/dev/null
+          fi
+
