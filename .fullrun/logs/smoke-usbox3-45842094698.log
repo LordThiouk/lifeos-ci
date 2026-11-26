@@ -11582,3 +11582,15 @@ if (import.meta.main) {
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts verify MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
 ❌ [provenance-mismatch] isa_stamp does not match content — the ISA was edited outside ISATool.ts (hand edit). Revert, or re-apply the change via ISATool.ts.
 
+$ cat > /tmp/decision.txt <<'EOF'
+- **2026-11-26 (suite) — W0 device : cause step 12 précisée via logs API authentifiés.** Téléchargement du journal du run #152 (`GET repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/logs`) avec le jeton GitHub disponible sur le runner (`~/.config/gh/hosts.yml`) : réponse 200 (403 sans authentification, comme constaté par l'agent précédent). Le log confirme : step 11 « Tests unitaires Flutter » **success** (478 tests verts) ; step 12 « Build APK (staging, debug, même job, pas d'upload) » **failure** avec `BUILD FAILED in 1m 9s` et le message gradle « Potential fix: Your project's gradle version is typically defined in the gradle wrapper file… » ; étapes 13-19 **skipped**. La sortie du build est tronquée par `tail -n 15` dans le workflow, donc la cause exacte (version Gradle/Flutter runner 3.50.1 vs projet 3.44.8, ou erreur de compilation) reste indéterminée ici. Artefacts publics inchangés : uniquement `staging-e2e-evidence-encrypted` (337 o) ; aucun `e2e-out/summary.md`, `report.json`, `ui/*.xml` ni `smoke.log` ; **aucune capture ni logcat device**. Conséquence : S-W0-01…S-W0-07 / ISC-22, ISC-50, ISC-80 à ISC-84 restent **BLOQUÉS côté device, non cochés** ; `progress` inchangé (0/63) ; les preuves backend déjà consignées restent en place et ne sont pas refaites. Aucun W1+ entamé. Prérequis pour débloquer : (1) jeton `GALASS_TOKEN` pour dispatch Artemis, (2) authentification API pour logs complets, (3) correction du build APK (version Flutter/Gradle) côté `galass-emu-actions-pub` par Papa.
+EOF
+echo "written"
+written
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ISA=/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md && bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts append "$ISA" --section Decisions --file /tmp/decision.txt
+ISATool append:Decisions ok → /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md (progress 0/63, hmac-sha256:4f281c2b948c…)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ISA=/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md && bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts verify "$ISA"
+✅ provenance ok
+
