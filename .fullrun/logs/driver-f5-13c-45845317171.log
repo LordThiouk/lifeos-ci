@@ -1222,3 +1222,6 @@ criterion now: ISC-F5-10 — `multistop_pusher_test.dart` 8/8 covers flat onEven
 
 - ISC-F0-1: probe — SHA256 repo=LifeOS match close 2026-10-09 (dual-write)
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "stopLiveLocationTracking" lib/presentation/screens/ride_details/ride_details_screen.dart
+108:      Get.find<RideDetailsController>().stopLiveLocationTracking();
+
