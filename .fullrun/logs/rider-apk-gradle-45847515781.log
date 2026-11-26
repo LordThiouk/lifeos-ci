@@ -16733,3 +16733,20 @@ $ export PATH="$HOME/bin/php83:$PATH" && php artisan test --group=security 2>&1 
 
    INFO  No tests found.
 
+$ grep -rn "group" tests --include='*.php' -i | grep -i secur | head; ls tests; ls tests/Feature | head -30
+Concerns
+CreatesApplication.php
+Feature
+Fixtures
+Manual
+Support
+TestCase.php
+Unit
+Admin
+Auth
+Dispatch
+Integration
+MultiStop
+Push
+Security
+
