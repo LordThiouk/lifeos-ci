@@ -8523,3 +8523,35 @@ drwxr-xr-x 8 ubuntu ubuntu 4096 Nov 26 17:39 ..
 drwxr-xr-x 4 ubuntu ubuntu 4096 Nov 26 17:27 share
 drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 17:27 state
 
+$ grep -rIl "ghp_\|github_pat_\|x-access-token" /opt /tmp /home /root /etc /usr/local/etc /var 2>/dev/null | grep -vE "proc|node_modules|flutter|\.git/|lifeos-ci/lifeos-ci/lifeos" | head -30
+/opt/fullrun-tools/wippush.sh
+/opt/fullrun-tools/livelog.sh
+/opt/fullrun-tools/redact-log.sh
+/opt/lifeos-ci-tools/opencode/wippush.sh
+/opt/lifeos-ci-tools/opencode/tests/internals-test.sh
+/opt/lifeos-ci-tools/opencode/tests/lib.sh
+/opt/lifeos-ci-tools/opencode/tests/upstream-fullrun/chain-step-test.sh
+/opt/lifeos-ci-tools/opencode/tests/upstream-fullrun/extra-repos-test.sh
+/opt/lifeos-ci-tools/opencode/tests/upstream-fullrun/leaklog-test.sh
+/opt/lifeos-ci-tools/opencode/tests/upstream-fullrun/wippush-test.sh
+/opt/lifeos-ci-tools/opencode/tests/upstream-fullrun/livelog-test.sh
+/opt/lifeos-ci-tools/opencode/extra-repos.sh
+/opt/lifeos-ci-tools/opencode/livelog.sh
+/opt/lifeos-ci-tools/opencode/redact-log.sh
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T15-19-41Z-69df/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T11-29-27Z-2566/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T13-20-24Z-b126/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+/tmp/lifeos-ci-agents/REVIEW.md
+/tmp/lifeos-ci-agents/REPORT.md
+/tmp/lifeos-ci-agents/.github/workflows/_agent-run.yml
+/tmp/lifeos-ci-agents/.github/workflows/opencode-fullrun.yml
+/tmp/lifeos-ci-agents/opencode/wippush.sh
+/tmp/lifeos-ci-agents/opencode/tests/internals-test.sh
+/tmp/lifeos-ci-agents/opencode/tests/lib.sh
+/tmp/lifeos-ci-agents/opencode/tests/upstream-fullrun/chain-step-test.sh
+/tmp/lifeos-ci-agents/opencode/tests/upstream-fullrun/extra-repos-test.sh
+/tmp/lifeos-ci-agents/opencode/tests/upstream-fullrun/leaklog-test.sh
+/tmp/lifeos-ci-agents/opencode/tests/upstream-fullrun/wippush-test.sh
+/tmp/lifeos-ci-agents/opencode/tests/upstream-fullrun/livelog-test.sh
+/tmp/lifeos-ci-agents/opencode/extra-repos.sh
+
