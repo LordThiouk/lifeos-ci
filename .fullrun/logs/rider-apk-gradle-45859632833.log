@@ -1596,3 +1596,25 @@ error • The method 'canLaunchUrl' isn't defined for the type 'RideDetailsContr
 
 452 issues found. (ran in 0.4s)
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git restore --staged test/unit/tmp_probe_test.dart && git restore test/unit/tmp_probe_test.dart && git status --short
+M lib/data/controller/map/ride_map_controller.dart
+ M lib/data/controller/ride/ride_details/ride_details_controller.dart
+ M test/unit/ride_map_live_location_test.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "startLiveLocationTracking\|stopLiveLocationTracking" lib/presentation/screens/ride_details/ride_details_screen.dart lib/data/controller/ride/ride_details/ride_details_controller.dart | head -15
+lib/presentation/screens/ride_details/ride_details_screen.dart:108:      Get.find<RideDetailsController>().stopLiveLocationTracking();
+lib/data/controller/ride/ride_details/ride_details_controller.dart:141:      startLiveLocationTracking();
+lib/data/controller/ride/ride_details/ride_details_controller.dart:143:      stopLiveLocationTracking();
+lib/data/controller/ride/ride_details/ride_details_controller.dart:152:  void startLiveLocationTracking() {
+lib/data/controller/ride/ride_details/ride_details_controller.dart:180:  void stopLiveLocationTracking() {
+lib/data/controller/ride/ride_details/ride_details_controller.dart:190:      stopLiveLocationTracking();
+lib/data/controller/ride/ride_details/ride_details_controller.dart:226:    stopLiveLocationTracking();
+lib/data/controller/ride/ride_details/ride_details_controller.dart:337:            startLiveLocationTracking();
+lib/data/controller/ride/ride_details/ride_details_controller.dart:339:            stopLiveLocationTracking();
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "driver/location-update" lib/data/controller/ride/ride_details/ride_details_controller.dart lib/data/repo/dashboard/dashboard_repo.dart lib/core/utils/url_container.dart
+lib/data/controller/ride/ride_details/ride_details_controller.dart:36:  /// `driver/location-update` sink. Injected in tests; otherwise built from
+lib/data/controller/ride/ride_details/ride_details_controller.dart:150:  /// `driver/location-update` pings from the ride context, independent of the
+lib/data/controller/ride/ride_details/ride_details_controller.dart:197:  /// Sends `driver/location-update` for the current ride, throttled by
+lib/core/utils/url_container.dart:74:  static const String driverLocationUpdate = 'driver/location-update';
+
