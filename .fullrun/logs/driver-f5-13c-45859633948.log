@@ -5808,3 +5808,27 @@ $ echo $HOME; echo "---"; env | grep -i flutter; echo "==="; env | grep -i pub; 
 ===
 /usr/local/bin/dart
 
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git diff --name-only -- pubspec.yaml pubspec.lock | cat; echo "===YAML==="; git diff -- pubspec.yaml | tail -40
+pubspec.lock
+pubspec.yaml
+===YAML===
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 7c07ea9..2bee066 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -14,7 +14,7 @@ dependencies:
+   cupertino_icons: ^1.0.9
+   dio: ^5.9.2
+   dotted_border: ^3.1.0
+-  file_picker: ^13.4.1
++  file_picker: ^11.0.2
+   firebase_core: ^4.8.0
+   firebase_auth: ^6.5.0
+   firebase_messaging: ^16.2.1
+
+$ /opt/flutter/bin/flutter --version 2>&1 | tail -5
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
