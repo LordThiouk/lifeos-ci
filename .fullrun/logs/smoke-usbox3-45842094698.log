@@ -2256,3 +2256,32 @@ fatal: invalid object name 'main'.
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show origin/main:pubspec.yaml 2>/dev/null | grep -n "file_picker\|device_info_plus"
 17:  file_picker: ^11.0.2
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show 6beb137 --stat | head -20; echo "==="; git show 6beb137:pubspec.yaml 2>/dev/null | grep -n "file_picker"
+commit 6beb1371a02af7b51c1fb65d9fb54e235919e4c2
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:01:52 2026 +0000
+
+    fix(build): migrate file_picker v13 (pickFile / sans allowMultiple)
+    
+    API 13 retire allowMultiple — single via pickFile, multi via pickFiles.
+    Aligné Rider pour Artemis AGP 9 / Flutter 3.50.1.
+
+ .../driver_kyc_controller/driver_kyc_controller.dart          |  9 ++++-----
+ .../ride/ride_meassage/ride_meassage_controller.dart          |  7 +++----
+ lib/data/controller/support/new_ticket_controller.dart        | 11 ++++++-----
+ lib/data/controller/support/ticket_details_controller.dart    |  7 +++----
+ .../vehicle_verification/vehicle_verification_controller.dart | 11 +++++------
+ lib/data/controller/withdraw/withdraw_confirm_controller.dart |  9 ++++-----
+ .../screens/edit_profile/widget/profile_image.dart            |  8 ++++----
+ 7 files changed, 29 insertions(+), 33 deletions(-)
+===
+17:  file_picker: ^13.4.1
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '15,20p' pubspec.yaml
+dio: ^5.9.2
+  dotted_border: ^3.1.0
+  file_picker: ^11.0.2
+  firebase_core: ^4.8.0
+  firebase_auth: ^6.5.0
+  firebase_messaging: ^16.2.1
+
