@@ -3859,3 +3859,182 @@ Error: The read tool was called with invalid arguments: SchemaError(Missing key
 Please rewrite the input so it satisfies the expected schema.
 Il y a un `ISATool.ts`. Lisons-le pour savoir comment cocher l'ISC :
 → Read /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+
+$ sed -n 1,60p MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+---
+task: "Galass Driver — affichage courses multi-arrêts (F5 enfant)"
+slug: 20261006-galass-driver-multistop
+project: Galass_Driver
+isa_kind: task
+phase: complete
+progress: 16/21
+algorithm: 8.20.2
+isa_spec: 2.19.0
+started: 2026-10-06T02:30:00Z
+updated: 2026-11-26T07:50:27.608Z
+parent: 20261006-galass-regression-multistop
+principal_stated_goal: "Multi-stop driver V2 : CONFIRM STOP par escale, navigation segment courant, END seulement destination finale"
+principal_stated_goal_source: parent
+principal_stated_goal_signal: 4
+principal_stated_goal_locked: 2026-10-06T02:30:00Z
+context_sufficient: true
+interview_invoked: false
+isa_stamp: hmac-sha256:[REDACTED:hex64]
+---
+
+## Problem
+
+L'app **Galass Driver** (`/Users/macbook/Galass_Driver`) affiche pickup + destination uniquement : `RideModel` ne parse pas `stops[]`, les écrans course active / modal `DISPATCH_OFFER` ne listent pas les escales, la carte ne marque pas les arrêts intermédiaires. Le backend (parent F2+F3 **CLOSED**) retourne `ride.stops[]` ordonnés sur `GET /api/ride/details/{id}` et persiste `ride_stops`. Fin de course v1 = **END global** (`POST driver/rides/end/{id}`) — pas d'ack par stop. Sans F5 driver, le chauffeur ne voit pas l'itinéraire multi-escales commandé par le rider.
+
+## Vision
+
+Le chauffeur voit **pickup → arrêt 1 → arrêt 2 → destination**, confirme chaque escale (**CONFIRM STOP**), navigue le **segment courant**, et n'active **END** qu'à la destination finale. Euphoric surprise : parcours multi-stop aussi clair qu'une note de course Uber.
+
+## Out of Scope
+
+- **Galass Rider** (F4 — ISA `20261006-galass-rider-multistop`).
+- Backend Laravel (parent ISA).
+- Navigation turn-by-turn Google Maps in-app refonte.
+- Refonte CallKit UX (nouveau design / Android fullScreenIntent) — **hors scope** ; auto-open post-accept **in scope** (F5).
+- Deploy Play Store — handoff principal.
+
+
+
+## Language
+
+- **stops[]** — escales intermédiaires ordonnées par `sequence` ASC. *Avoid:* traiter comme destinations alternatives.
+- **Confirm stop** — slider/bouton driver « Confirmer l'arrêt » ; appelle `POST complete-stop` ; débloque navigation suivante.
+- **current_leg** — cible navigation active (pickup → stop1 → … → destination).
+- **END course** — autorisé uniquement à la destination finale une fois toutes escales ack.
+- **CallKit accept → foreground** — après Accept sur l'appel entrant, l'app Driver passe au premier plan et ouvre la course (ride details). *Avoid:* confondre avec « CallKit sonne » (déjà OK).
+
+
+
+## Principles
+
+- **Chirurgical** : modèle ride + écrans course active / map / offer modal ; ne pas casser dispatch F4, CallKit, GPS ping, messages.
+- **Parent-first** : schéma JSON = `Galass_backend/docs/API_MULTI_STOP.md` § GET detail.
+- **Backward compatible** : `stops` absent ou `[]` = UI actuelle inchangée.
+- **Evidence** : unit parse JSON + grep ; ARTEMIS manual liste/map.
+
+
+
+## Constraints
+
+$ grep -n "ISC-F5-13\|## Verification\|## Claims\|## Features\|## Decisions\|## Test" MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | head -30; echo "====="; wc -l MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+121:## Test Strategy
+144:| ISC-F5-13 | widget      | « Annuler la course » reste visuellement distinct (couleur danger) du CTA principal, quel que soit l'état | bgColor danger ≠ bgColor CTA principal | flutter test test/unit/multistop_end_gate_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23) | literal |
+148:| ISC-F5-17 | widget      | **Contrat d'écran** « Driver en course » (RIDE_RUNNING, dérivé du code actuel 2026-11-23) — présence testée individuellement de : avatar+nom+note (`UserDetailsWidget`), bouton message, bouton appel, un seul CTA principal actionnable (ISC-F5-12), « Annuler la course » distinct-danger (ISC-F5-13), bloc itinéraire pickup→arrêts→destination, repères d'arrêts sur la carte (ISC-F5-16). **Règle « ajouter sans retirer »** : retirer un de ces éléments exige une ligne ISA explicite validée par Papa. | 7 assertions `find.byKey`/`find.text` toutes vertes, une par élément listé | flutter test test/widget/course_en_cours_driver_contract_test.dart (golden) | ISC-F5-12, ISC-F5-13, ISC-F5-16 |
+153:## Features
+220:- [ ] ISC-F5-13: « Annuler la course » est clairement une action dangereuse, différente de l'action principale. **Audit code** : déjà vrai aujourd'hui (`bgColor: MyColor.redCancelTextColor` = `0xFFF93E2C`, l.217-225, vs couleur primaire par défaut du CTA principal) — ce claim verrouille ce comportement correct en régression plutôt que de supposer un bug.
+231:## Decisions
+294:## Verification
+332:- [ ] **F6 revue UI téléphone** — ISC-F5-12 (CTA unique par état), ISC-F5-13 (Annuler = danger, verrou régression), ISC-F5-14 (retrait compteur, supersède ISC-F5-3 partie compteur, **contrat repère fixé 2026-11-23** : `Semantics` `galass.driver.stops=<done>/<total>`), ISC-F5-15 (pas de libellé générique au dernier arrêt ; **infirmé visuellement** sur `driver_ride_running_multistop_all_stops_done.png`, garde maintenue), ISC-F5-16 (markers actif/estompé+numéroté, étend ISC-F5-4), ISC-F5-17 (contrat d'écran « Driver en course », règle ajouter-sans-retirer), ISC-F5-18 (goldens stop1/stop2 actifs distincts — **mesuré identiques** aujourd'hui). Aucun code tant que ces ISC ne sont pas construits (TDD rouge→vert). Dépend des goldens `test/goldens/driver/` (depuis `main`, worktree séparé) et de la porte CI golden-diff (ISA harnais emu).
+=====
+333 MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+
+L'ISATool est un script bun. Examinons l'ISA concernée avant de cocher :
+$ sed -n 200,250p MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+- [x] ISC-F5-8: Carte — polyline/markers **segment courant** après ack (pas tout l'itinéraire en navigation).
+- [x] ISC-F5-9: Bouton END / Complete trip — **disabled** tant qu'escales pending ; actif destination finale seulement.
+- [x] ISC-F5-10: Handler Pusher `STOP_COMPLETED` — resync `RideModel.stops` + `current_leg`.
+
+
+
+### F5 · CallKit accept → course
+
+Why: après Accept CallKit, le chauffeur doit atterrir dans l'app sur la course (stops visibles) sans relancer l'app à la main.
+
+- [x] ISC-F5-11: **CallKit Accept** → app au premier plan + navigation **ride details** (pickup / timeline stops) ≤3 s. *(device principal 2026-10-09: CTAs ACTIVE OK)*
+- [x] Anti-F5-3: Anti: chemin accept conserve un bring-to-foreground explicite (`launchApp` / équivalent) — pas de silent stay-in-background.
+
+
+
+### F6 · Revue UI multistop téléphone (retours Papa, run e2e 45093391102, 2026-11-23)
+
+Why: revue des captures du bundle evidence déchiffré (lu, aucun secret recopié) + retours directs de Papa. Aucun correctif de code dans cette étape — ISC seulement. **Note : cette ISA est `phase: complete` / `18/18` close depuis 2026-10-09 ; cette section ajoute des claims non cochés sans changer `phase` ni cocher/décocher quoi que ce soit, sur instruction explicite. Signalé à Papa : la convention Algorithm (OPERATIONAL_RULES) prévoit normalement qu'un edit de corps ISA sur une tâche `complete` la fait revenir à `learn` — ici volontairement non appliqué.**
+
+- [x] ISC-F5-12: Une seule action principale par état — « Confirmer l'arrêt » quand un arrêt est actif, « Terminer la course » seulement après le dernier arrêt, visuellement distinct et sans avoir l'air désactivé. **Audit code (agent lecture seule, 2026-11-23)** : `ride_details_bottom_sheet_widget.dart` l.231-283 — « Terminer la course » est aujourd'hui **toujours rendu** dans le bloc RUNNING, seulement `isDisabled` (opacité 0.6 via `rounded_button.dart` l.59, même couleur primaire, même texte) ; les deux CTA sont donc visibles simultanément tant qu'une escale reste pending, un seul étant réellement actionnable. Falsifier: 2 CTA actionnables simultanément, ou « Terminer la course » encore visible+actif avant le dernier arrêt.
+- [ ] ISC-F5-13: « Annuler la course » est clairement une action dangereuse, différente de l'action principale. **Audit code** : déjà vrai aujourd'hui (`bgColor: MyColor.redCancelTextColor` = `0xFFF93E2C`, l.217-225, vs couleur primaire par défaut du CTA principal) — ce claim verrouille ce comportement correct en régression plutôt que de supposer un bug.
+- [ ] ISC-F5-14: Les compteurs « x/2 arrêt(s) terminé(s) » sont retirés de l'UI Driver, partout (staging et prod) ; **supersède ISC-F5-3** pour la partie compteur (la liste ordonnée des arrêts elle-même reste). **Audit code** : fonction `stopsProgressText` confirmée `ride_details_bottom_sheet_widget.dart` l.30-46, rendue l.92-98. Le harnais emu reçoit un repère invisible stable à la place — **contrat fixé 2026-11-23** : UN nœud `Semantics` invisible, `content-desc` exact `galass.driver.stops=<done>/<total>`, monté seulement si `ride.stops` non vide (miroir Rider `ISC-F4-22`, consommé par harnais `ISC-EMU-1`). Un `Key` widget seul ne suffit pas (invisible à `uiautomator dump`).
+- [ ] ISC-F5-15: Après le dernier arrêt, le Driver n'affiche plus « Point de prise en charge » mais la vraie destination finale. **Audit code (2026-11-23)** : aucune occurrence de `MyStrings.pickUpLocation` trouvée sur le nœud final dans les écrans course active lus (`ride_destination_widget.dart`, `ride_itinerary_timeline.dart` — le dernier nœud utilise toujours `MyStrings.destination` + l'adresse réelle) ; **non vérifié à 100%** sur d'éventuels autres écrans (notification push, carte plein écran) — ce claim sert de garde-fou si un tel cas existe ou apparaît.
+- [x] ISC-F5-16: Le Driver affiche des repères d'arrêts sur la carte, avec l'arrêt actif mis en avant et les autres estompés+numérotés. **Audit code** : `ride_map_controller.dart` l.245-268 — tous les arrêts intermédiaires partagent aujourd'hui la même icône `destinationIcon` 40×40, **aucune numérotation**, **aucune distinction active/futur** ; `ISC-F5-4` (markers existants) est donc insuffisant tel quel pour ce besoin — ce claim l'étend plutôt que de le dupliquer. **Verrou de régression (méthode anti-régression 2026-11-23, Papa) : preuve golden + capture e2e ajoutées en exigence, jamais affaiblie.**
+- [ ] ISC-F5-17 (2026-11-23, méthode anti-régression Papa) : contrat d'écran « Driver en course » — éléments obligatoires dérivés du code actuel (avatar+nom+note, bouton message, bouton appel, CTA unique par état, Annuler=danger, bloc itinéraire, repères d'arrêts), chacun avec un test widget de présence, règle « ajouter sans retirer » (retrait = ligne ISA explicite validée par Papa). Papa n'a détaillé la liste de référence que pour l'écran Rider (point 3 de la demande) ; la liste Driver ci-dessus est dérivée du code lu, **à confirmer/compléter par Papa** si une référence précise existe pour le Driver aussi. [app: Driver · classe: contrat d'écran · preuve: golden]
+### F8 · Position voiture temps réel en course (Papa 2026-11-25)
+
+Why: Papa demande que la voiture du chauffeur se mette à jour en temps réel sur la carte Driver pendant RIDE_ACTIVE/RIDE_RUNNING et que sa position parte au backend pour que le Rider la voie.
+
+- [ ] ISC-F5-19: **Pendant RIDE_ACTIVE et RIDE_RUNNING, la voiture du chauffeur est mise à jour en temps réel sur la carte Driver (flux GPS → marqueur voiture partagé `marker_car.png` → caméra) ET sa position est envoyée au backend (`POST driver/location-update`, broadcast Pusher côté Rider).** Audit code 2026-11-25 (lecture seule) : affichage **PARTIEL** — `ride_map_controller.dart` l.88/333-340 ne lit la position qu'une fois via `Geolocator.getCurrentPosition` au `loadMap`, le marqueur `driver_location` (l.209-222, icône `MyIcons.markerCar` = `assets/icon/marker_car.png`, l.313) reste figé, et la caméra ne cadre qu'à l'ouverture (`poly_line_map.dart` l.43-46, `ride_map_controller.dart` l.406-412) ; le suivi temps réel de la home (`home_screen.dart` l.376-388) est mis en pause dès l'ouverture de la course (`didPushNext` l.95-99). Envoi backend **PARTIEL** — aucun ping dédié course dans `ride_details_*` ; seul le service foreground envoie `driver/location-update` (`forground_location_service.dart` l.79-114/121-152, `dashboard_repo.dart` l.38-51, `url_container.dart` l.74), uniquement si le chauffeur est online (`forground_location_service.dart` l.34-39, `main.dart` l.121-126) ; `maybePingServerLocation` (`dashboard_controller.dart` l.65-91) est lui aussi coupé avec la home. Falsifier: un test widget/unit montre le marqueur `driver_location` qui change sur un flux GPS pendant RIDE_ACTIVE/RUNNING et une requête `driver/location-update` émise depuis l'écran course, ou une capture device où la voiture avance et la caméra suit. Cross: ISC-F4-32 (Rider). [app: Driver · classe: temps réel carte+backend · preuve: widget + grep]
+
+## Decisions
+
+- **2026-10-09 23:49** — Principal: **tout confirmé** → ISA **CLOSED** `phase: complete` `progress: 18/18` (Features 16 + Bridge-B4/B6). Dual-write LifeOS SHA256 match.
+- **2026-10-09 23:47** — Principal: **tout confirmé device** → claims F2/F3/Bridge fermés ; Remaining Work `[x]`.
+- **2026-10-09 23:41** — Principal device: CallKit Accept → ride ACTIVE + CTA Prise en charge / Annuler **OK**. ISC-F5-11 device **CLOSED** ; Remaining Work Device F5 CallKit **[x]**.
+- **2026-10-09 22:18** — Device CTA absents post-CallKit **CLOSED (code)** Marcus `{"status":"pass","tests":"28/28"}` : root = pending nav armé **avant** accept POST → resume flush ouvre details pré-ACTIVE puis skip reload. Fix: arm **après** accept ; reload si déjà sur route ; `putFresh` + dispose delete ; sheet animateTo retries. Device Accept → pickup/cancel **OPEN**.
+- **2026-10-09 21:03** — Marcus CallKit ACTIVE nav **PASS** `{"status":"pass","tests":"23/23"}` : Accept → settle resumed → **une** `Get.offNamed` ride details (rideId string) ; flush skip si déjà sur le bon ride (`normalizeDispatchRideId`) ; sheet jump 0.4 post-load ; sticky footer inchangé. Device Accept → CTAs ACTIVE **OPEN**.
+- **2026-10-09** — Principal: CTA absents **seulement** post-CallKit (ouverture normale OK) — race nav/stack reset, pas fold seul. Marcus: nav unique resume→ride ACTIVE + sheet settle ; sticky footer garde.
+- **2026-10-09** — Device: Accept ouvre l’app mais CTA pickup/annuler invisibles — timeline multistop remplit sheet 0.4 ; Aditi sticky footer CTA après itinéraire.
+- **2026-10-09** — CallKit iOS GAP-1 fix Marcus: Accept → `setCallConnected` + **defer endCall** (≥1.8s post-nav) ; Android FG→endCall inchangé ; **20/20** tests. Device Accept rebuild OPEN.
+- **2026-10-09** — Device: auto-open encore KO — root cause iOS: `launchApp` **unimplemented** ; `endCall` immédiat post-Accept tue l’activation CallKit. Marcus retry: delay/skip endCall iOS.
+- **2026-10-09** — CallKit FG fix Marcus: `_bringAppToForeground` **avant** `endCall` ; wait paused ≤500ms post-launchApp ; **18/18** CallKit tests GREEN. Device re-verify OPEN. (ISA-level FullRun false-blocked 12/16 paused — hotfix hors lane F5 already complete.)
+- **2026-10-09** — Principal: CallKit auto-open cassé device + spacing itinéraire→CTA — Marcus FG retry ; Aditi `spaceDown` après RideDestination.
+- **2026-10-09** — Principal: CTA ACTIVE+RUNNING **après** itinéraire (pas avant) — revert ordre Aditi ; comportement inchangé.
+- **2026-10-09** — Device: après CallKit, « Prise en charge » / « Annuler » semblaient absents — cause ordre ListView (boutons sous timeline multistop dense), pas suppression. Aditi : CTA ACTIVE+RUNNING **au-dessus** de `RideDestination` ; comportement inchangé.
+- **2026-10-09** — FullRun F5 Max **GO-with-conditions** `{"status":"pass"}` — F5 **code** lane CLOSED ; conditions: device ISC-F5-11 ≤3s OPEN ; unit≠device ; TTL arm early ; Android killed isolate handoff ; clear-on-details vs late wipe. Pipeline F5 **complete**.
+- **2026-10-09** — FullRun F5 verify re-run **PASS** — Silas/code-reviewer/Forge `{"status":"pass"}` ; CK-RACE-01/02/03 CLOSED ; **18/18** CallKit tests ; advance → **Max**.
+- **2026-10-09** — FullRun F5 build retry PASS — Marcus: bg accept→handleCallKitAccept ; retries to 4.5s + clear-on-details ; flush before onWillStart ; 18/18.
+- **2026-10-09** — FullRun F5 verify FAIL — Silas HIGH: bg `_dispatchCallKitHeadlessRespond` bypass FG/pending ; late launchApp wipe after 1.2s retries ; resumed flush gated `onWillStart`. code-reviewer/Forge pass (MEDIUM defer). Retreat → Marcus.
+- **2026-10-09** — FullRun F5 build PASS (Marcus) : Anti-F5-3 lock + FG→lifecycle→respond + pending re-nav/flush ; 9/9+1/1 tests ; ISC-F5-11 device ≤3s OPEN (F5-D).
+
+$ sed -n 285,333p MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+## Learning
+
+- 2026-10-07 | conjectured: `PusherResponseModel.fromJson` then switch would handle `STOP_COMPLETED` like other ride events
+refuted by: code-reviewer HIGH — F7 payload flat `{ride_id,stop_id,...}` has no nested `data` → fromJson throws → handler never runs
+learned: flat stop events must branch before envelope parse ; missing ride_id must fail-close on shared driver channel
+criterion now: ISC-F5-10 — `multistop_pusher_test.dart` 8/8 covers flat onEvent + fail-close + nested empty guard
+
+
+
+## Verification
+
+- ISC-F0-1: probe — SHA256 repo=LifeOS match close 2026-10-09 (dual-write)
+- ISC-F0-2: bash — `flutter test` 235/235 baseline pre-edit (Marcus F1 2026-10-06)
+- ISC-F5-1: unit — `multistop_ride_model_test.dart` 4/4 PASS
+- ISC-F5-2: unit — legacy sans `stops` / `[]` → `hasStops false`
+- Anti-F5-1: device — principal single-stop OK (2026-10-09)
+- Anti-F5-2: bash — dispatch suite GREEN post-F2
+- ISC-F5-3: device — principal timeline liste (2026-10-09)
+- ISC-F5-4: device — principal markers carte (2026-10-09)
+- ISC-F5-5: device — principal résumé multi-stop (2026-10-09)
+- ISC-F5-6: unit — `multistop_complete_stop_test.dart` POST `{}` + auth
+- ISC-F5-7: device — principal CONFIRM STOP RUNNING (2026-10-09)
+- ISC-F5-8: unit — `ride_map_multistop_test.dart` currentLeg nav
+- ISC-F5-9: unit — `multistop_end_gate_test.dart` 3/3
+- ISC-F5-10: unit — `multistop_pusher_test.dart` 8/8
+- Anti-F5-3: unit — CallKit accept suite GREEN
+- ISC-F5-11: device — principal Accept → CTAs ACTIVE (2026-10-09)
+- Bridge-B4: device — principal ordre stops (2026-10-09)
+- Bridge-B6: device — principal rider notifié (2026-10-09)
+- ISA: `phase: complete` 18/18 principal (2026-10-09 23:49)
+- ISC-F5-12: cd target && flutter test test/unit/multistop_end_gate_test.dart -> 6/6 passed (3 widget ISC-F5-12: escale pending=Confirm seul, dernier arret=End seul vert, single-stop legacy=End seul) [@bd77f91]
+- ISC-F5-16: flutter test test/data/controller/map/ride_map_multistop_test.dart -> 8/8 passed (3 tests ISC-F5-16 : arrêt actif distinct, autres arrêts numérotés+estompés, chemin legacy vide inchangé) [@505637e]
+
+## Remaining Work
+
+- [x] **Re-verify labels** — hot reload / rebuild : « Arrêt 1 », « Arrêt 2 » (fix `@number` 2026-10-09).
+- [x] **Device F2** — ISC-F5-3 liste **PASS device** (ordre OK) ; F5-4 markers + F5-5 modal résumé encore à confirmer explicitement.
+- [x] **Device F4** — ISC-F5-7 CONFIRM STOP après « Prise en charge » / course RUNNING.
+- [x] **Anti-F5-1 device** — single-stop UI inchangé.
+- [x] **Bridge-B4 / B6** — E2E staging ordre + rider notifié.
+- [x] **Device F5 CallKit** — ISC-F5-11 Accept → app + ride details + CTAs ACTIVE (principal 2026-10-09).
+- [x] **F5 CallKit code** — Anti-F5-3 + harden Marcus GREEN.
+- [x] Inventaire touchpoints — `_ephemeral/F0-multistop-inventory.md`.
+- [x] **ISC-F0-1** — dual-write SHA256 match post-F4 ISA update.
+- [x] **Ship gate parent** — F7 prod live `0907f57b` + `completed_at` Ran (2026-10-07) ; release store Driver F4 débloquée.
+- [x] **F2 code** — timeline+map+modal+presenter GREEN ; device OPEN.
+- [x] **F4 V2 ack code** — ISC-F5-6..10 GREEN ; FullRun F4 COMPLETE ; Max GO-with-conditions.
+- [ ] **F6 revue UI téléphone** — ISC-F5-12 (CTA unique par état), ISC-F5-13 (Annuler = danger, verrou régression), ISC-F5-14 (retrait compteur, supersède ISC-F5-3 partie compteur, **contrat repère fixé 2026-11-23** : `Semantics` `galass.driver.stops=<done>/<total>`), ISC-F5-15 (pas de libellé générique au dernier arrêt ; **infirmé visuellement** sur `driver_ride_running_multistop_all_stops_done.png`, garde maintenue), ISC-F5-16 (markers actif/estompé+numéroté, étend ISC-F5-4), ISC-F5-17 (contrat d'écran « Driver en course », règle ajouter-sans-retirer), ISC-F5-18 (goldens stop1/stop2 actifs distincts — **mesuré identiques** aujourd'hui). Aucun code tant que ces ISC ne sont pas construits (TDD rouge→vert). Dépend des goldens `test/goldens/driver/` (depuis `main`, worktree séparé) et de la porte CI golden-diff (ISA harnais emu).
+- [ ] **Contrat marqueur à propager** — `Semantics` `galass.driver.stops=<done>/<total>` doit être implémenté et consommé par `e2e/run.sh` (`MARK_driver_stop1_done`/`stop2_done` lisent aujourd'hui le texte compteur, l.143-144 sur `feat/multistop-e2e-2026-11-15`) ; dépendance Driver ↔ galass-emu-actions-pub (`ISC-EMU-1`).
+
