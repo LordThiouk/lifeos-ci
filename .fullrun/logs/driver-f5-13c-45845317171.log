@@ -2284,3 +2284,648 @@ targets
 $ env | grep -i 'gh\|token\|galass\|github' | sed 's/=.*/=***/' | sort
 (no output)
 
+$ find /home/ubuntu/actions-runner/_work/lifeos-ci -name 'ISATool.ts' -o -name 'artemis-staging-e2e.yml' 2>&1 | head -30
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+
+$ ls /opt/fullrun-wip 2>&1; echo "==="; ls /home/ubuntu/actions-runner/_work 2>&1 | head -20
+autosave.err
+pid
+status
+worker.pid
+===
+_PipelineMapping
+_actions
+_temp
+_tool
+lifeos-ci
+
+$ git -C /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target remote -v
+origin	https://github.com/LordThiouk/Galass_backend (fetch)
+origin	https://github.com/LordThiouk/Galass_backend (push)
+
+$ ls /opt/lifeos-ci-tools/opencode 2>&1; echo "==="; cat /opt/lifeos-ci-tools/opencode/emu-e2e.sh | head -120
+allowed-repos.sh
+autosave-deny.txt
+autosave.sh
+bench-capped
+check-agent.sh
+checkpoint.sh
+ci-preamble.md
+config
+done-check-call.sh
+done_check.sh
+emu-e2e.sh
+extra-repos.sh
+gitleaks
+install-hook-profile.sh
+leaklog.sh
+lifeos-guard.sh
+livelog.sh
+log-recipient.txt
+merge-agents.sh
+merge-signed-carry.sh
+notify.sh
+oc-wrap.sh
+preannot.sh
+progress.sh
+quota.sh
+redact-log.sh
+run-fullrun.sh
+silence-watch.sh
+split-diff.sh
+step-agents.sh
+tests
+wippush.sh
+wstunnel-up.sh
+===
+#!/usr/bin/env bash
+# FullRun galass-ci : option with_emulators.
+# Déclenche le e2e Artemis sur LordThiouk/galass-emu-actions-pub (secrets e2e déjà
+# présents là-bas), attend un verdict borné, et n'affiche qu'un court extrait en
+# échec. Pas de démarrage local d'émulateurs, pas de build APK, pas de secret e2e
+# sur galass-ci. Le jeton (GALASS_TOKEN) n'est jamais affiché ni passé à opencode.
+#
+#   emu-e2e.sh run            déclenche, attend, affiche le verdict
+#   emu-e2e.sh status <run_id> état du run (lecture seule, id numérique) : status=… conclusion=…
+#   emu-e2e.sh resolve-refs   affiche rider_ref et driver_ref
+#   emu-e2e.sh prompt-block   bloc à ajouter au prompt (aucun secret)
+#   emu-e2e.sh append-prompt  ajoute le bloc à $OC_WORK/prompt.md
+#
+# Ne relâche aucune garde FullRun. Modèle dispatché : opencode/*-free (jamais FreeLLM, jamais de clé API).
+set -euo pipefail
+set +x
+
+FROZEN="/opt/fullrun-tools/emu-e2e.sh"
+CANON_STATE="/opt/fullrun-tools/emu-e2e.state"
+CANON_TOKEN="/opt/fullrun-live/emu-e2e.token"
+# Chaînage : un run e2e peut durer plus qu'un lien (jobs courts). INFLIGHT = id du run lancé et pas
+# encore terminé (lu par le step chain, transmis au lien suivant dans chain_state) ; RESUME = id
+# restauré au démarrage du lien suivant (root 0600) : « run » reprend alors le sondage de CE run au
+# lieu d'en relancer un. Fichiers root, hors de portée d'opencode.
+EMU_INFLIGHT_FILE="${EMU_E2E_INFLIGHT_FILE:-/opt/fullrun-live/emu-run}"
+EMU_RESUME_FILE="${EMU_E2E_RESUME_FILE:-/opt/fullrun-live/emu-resume}"
+EMU_OWNER="LordThiouk"
+EMU_REPO_NAME="galass-emu-actions-pub"
+EMU_REPO="${EMU_OWNER}/${EMU_REPO_NAME}"
+EMU_WORKFLOW="artemis-staging-e2e.yml"
+RIDER_REPO="Galass_Rider"
+DRIVER_REPO="Galass_Driver"
+DEFAULT_MODEL="opencode/deepseek-v4.1-flash-free"
+DEFAULT_TIMEOUT_SEC=10800
+DEFAULT_POLL_SEC=30
+DEFAULT_LOG_TAIL=80
+DEFAULT_LOG_WIDTH=300
+# Plafond par appel gh : un appel réseau qui pend ne doit jamais bloquer la boucle d'attente.
+DEFAULT_GH_TIMEOUT_SEC=60
+# Après TERM, KILL au bout de N s : un gh qui ignore TERM ne bloque pas non plus.
+GH_KILL_AFTER_SEC=5
+# Lectures consécutives du run en échec avant d'abandonner (erreurs transitoires tolérées).
+MAX_VIEW_FAILS=5
+FALLBACK_REF="main"
+
+fail() { echo "$1" >&2; exit 1; }
+
+# Rebond sur le binaire figé (root) pour run / resolve-refs : le jeton n'est pas
+# dans l'environnement d'opencode, seulement dans un fichier root 0600.
+maybe_sudo() {
+  local cmd="${1:-}"
+  case "$cmd" in
+    run|resolve-refs|status) ;;
+    *) return 0 ;;
+  esac
+  [ "$(id -u)" -eq 0 ] && return 0
+  [ -f "$CANON_TOKEN" ] || return 0
+  [ -x "$FROZEN" ] || fail "outil figé absent : $FROZEN"
+  exec sudo -n -H -- "$FROZEN" "$@"
+}
+
+load_file_vars() {
+  local f="$1" line k v
+  [ -f "$f" ] || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      ''|\#*) continue ;;
+    esac
+    k="${line%%=*}"
+    v="${line#*=}"
+    case "$k" in
+      OC_BRANCH) OC_BRANCH="$v" ;;
+      EMU_E2E_MODEL) EMU_E2E_MODEL="$v" ;;
+      EMU_E2E_TIMEOUT_SEC) EMU_E2E_TIMEOUT_SEC="$v" ;;
+      EMU_E2E_POLL_SEC) EMU_E2E_POLL_SEC="$v" ;;
+      EMU_LOG_TAIL) EMU_LOG_TAIL="$v" ;;
+      EMU_LOG_WIDTH) EMU_LOG_WIDTH="$v" ;;
+      EMU_E2E_GH_TIMEOUT_SEC) EMU_E2E_GH_TIMEOUT_SEC="$v" ;;
+      *) ;;
+    esac
+  done < "$f"
+}
+
+# En CI (root + état figé) : ignorer les variables d'environnement injectables.
+# En test : EMU_E2E_STATE / l'environnement.
+load_config() {
+  OC_BRANCH="${OC_BRANCH:-${IN_BRANCH:-}}"
+  EMU_E2E_MODEL="${EMU_E2E_MODEL:-$DEFAULT_MODEL}"
+  EMU_E2E_TIMEOUT_SEC="${EMU_E2E_TIMEOUT_SEC:-$DEFAULT_TIMEOUT_SEC}"
+  EMU_E2E_POLL_SEC="${EMU_E2E_POLL_SEC:-$DEFAULT_POLL_SEC}"
+  EMU_LOG_TAIL="${EMU_LOG_TAIL:-$DEFAULT_LOG_TAIL}"
+  EMU_LOG_WIDTH="${EMU_LOG_WIDTH:-$DEFAULT_LOG_WIDTH}"
+  EMU_E2E_GH_TIMEOUT_SEC="${EMU_E2E_GH_TIMEOUT_SEC:-$DEFAULT_GH_TIMEOUT_SEC}"
+  if [ "$(id -u)" -eq 0 ] && [ -f "$CANON_STATE" ]; then
+    OC_BRANCH=""; EMU_E2E_MODEL="$DEFAULT_MODEL"
+    EMU_E2E_TIMEOUT_SEC="$DEFAULT_TIMEOUT_SEC"
+    EMU_E2E_POLL_SEC="$DEFAULT_POLL_SEC"
+    EMU_LOG_TAIL="$DEFAULT_LOG_TAIL"
+    EMU_LOG_WIDTH="$DEFAULT_LOG_WIDTH"
+    EMU_E2E_GH_TIMEOUT_SEC="$DEFAULT_GH_TIMEOUT_SEC"
+    load_file_vars "$CANON_STATE"
+  elif [ -n "${EMU_E2E_STATE:-}" ] && [ -f "$EMU_E2E_STATE" ]; then
+    load_file_vars "$EMU_E2E_STATE"
+  fi
+  [[ "${EMU_E2E_TIMEOUT_SEC}" =~ ^[0-9]+$ ]] || fail "timeout invalide"
+  [[ "${EMU_E2E_POLL_SEC}" =~ ^[0-9]+$ ]] || fail "intervalle de sondage invalide"
+  [[ "${EMU_LOG_TAIL}" =~ ^[0-9]+$ ]] || fail "taille d'extrait invalide"
+  [[ "${EMU_LOG_WIDTH}" =~ ^[0-9]+$ ]] || fail "largeur d'extrait invalide"
+  [[ "${EMU_E2E_GH_TIMEOUT_SEC}" =~ ^[0-9]+$ ]] || fail "timeout d'appel gh invalide"
+  if [ "$EMU_E2E_GH_TIMEOUT_SEC" -lt 1 ] || [ "$EMU_E2E_GH_TIMEOUT_SEC" -gt 600 ]; then
+    fail "timeout d'appel gh hors bornes (1-600)"
+  fi
+  [ "$EMU_E2E_TIMEOUT_SEC" -ge 1 ] || fail "timeout invalide"
+  [ "$EMU_E2E_POLL_SEC" -ge 0 ] || fail "intervalle de sondage invalide"
+  if [ "$EMU_LOG_TAIL" -lt 1 ] || [ "$EMU_LOG_TAIL" -gt 200 ]; then
+    fail "taille d'extrait hors bornes (1-200)"
+  fi
+  if [ "$EMU_LOG_WIDTH" -lt 40 ] || [ "$EMU_LOG_WIDTH" -gt 500 ]; then
+    fail "largeur d'extrait hors bornes"
+  fi
+
+$ curl -sS "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/workflows/artemis-staging-e2e.yml/runs?per_page=5" | python3 -m json.tool | head -180
+{
+    "total_count": 152,
+    "workflow_runs": [
+        {
+            "id": 45801376130,
+            "name": "artemis-staging-e2e",
+            "node_id": "WFR_kwLOVUU4yM8AAAAKqfmJgg",
+            "head_branch": "feat/multistop-e2e-2026-11-15",
+            "head_sha": "81d149d489023a6581efac780f60813e4e32a757",
+            "path": ".github/workflows/artemis-staging-e2e.yml",
+            "display_title": "artemis-staging-e2e",
+            "run_number": 152,
+            "event": "workflow_dispatch",
+            "status": "completed",
+            "conclusion": "failure",
+            "workflow_id": 393662982,
+            "check_suite_id": 123917411423,
+            "check_suite_node_id": "CS_kwDOVUU4yM8AAAAc2g2kXw",
+            "url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130",
+            "html_url": "https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130",
+            "pull_requests": [
+                {
+                    "url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/pulls/8",
+                    "id": 5462799669,
+                    "number": 8,
+                    "head": {
+                        "ref": "feat/multistop-e2e-2026-11-15",
+                        "sha": "81d149d489023a6581efac780f60813e4e32a757",
+                        "repo": {
+                            "id": 1430599880,
+                            "url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub",
+                            "name": "galass-emu-actions-pub"
+                        }
+                    },
+                    "base": {
+                        "ref": "main",
+                        "sha": "33f9ab9891d64ead6d560156b1c167ae20252bab",
+                        "repo": {
+                            "id": 1430599880,
+                            "url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub",
+                            "name": "galass-emu-actions-pub"
+                        }
+                    }
+                }
+            ],
+            "created_at": "2026-11-26T10:26:37Z",
+            "updated_at": "2026-11-26T10:32:15Z",
+            "actor": {
+                "login": "LordThiouk",
+                "id": 76528706,
+                "node_id": "MDQ6VXNlcjc2NTI4NzA2",
+                "avatar_url": "https://avatars.githubusercontent.com/u/76528706?v=4",
+                "gravatar_id": "",
+                "url": "https://api.github.com/users/LordThiouk",
+                "html_url": "https://github.com/LordThiouk",
+                "followers_url": "https://api.github.com/users/LordThiouk/followers",
+                "following_url": "https://api.github.com/users/LordThiouk/following{/other_user}",
+                "gists_url": "https://api.github.com/users/LordThiouk/gists{/gist_id}",
+                "starred_url": "https://api.github.com/users/LordThiouk/starred{/owner}{/repo}",
+                "subscriptions_url": "https://api.github.com/users/LordThiouk/subscriptions",
+                "organizations_url": "https://api.github.com/users/LordThiouk/orgs",
+                "repos_url": "https://api.github.com/users/LordThiouk/repos",
+                "events_url": "https://api.github.com/users/LordThiouk/events{/privacy}",
+                "received_events_url": "https://api.github.com/users/LordThiouk/received_events",
+                "type": "User",
+                "user_view_type": "public",
+                "site_admin": false
+            },
+            "run_attempt": 1,
+            "referenced_workflows": [],
+            "run_started_at": "2026-11-26T10:26:37Z",
+            "triggering_actor": {
+                "login": "LordThiouk",
+                "id": 76528706,
+                "node_id": "MDQ6VXNlcjc2NTI4NzA2",
+                "avatar_url": "https://avatars.githubusercontent.com/u/76528706?v=4",
+                "gravatar_id": "",
+                "url": "https://api.github.com/users/LordThiouk",
+                "html_url": "https://github.com/LordThiouk",
+                "followers_url": "https://api.github.com/users/LordThiouk/followers",
+                "following_url": "https://api.github.com/users/LordThiouk/following{/other_user}",
+                "gists_url": "https://api.github.com/users/LordThiouk/gists{/gist_id}",
+                "starred_url": "https://api.github.com/users/LordThiouk/starred{/owner}{/repo}",
+                "subscriptions_url": "https://api.github.com/users/LordThiouk/subscriptions",
+                "organizations_url": "https://api.github.com/users/LordThiouk/orgs",
+                "repos_url": "https://api.github.com/users/LordThiouk/repos",
+                "events_url": "https://api.github.com/users/LordThiouk/events{/privacy}",
+                "received_events_url": "https://api.github.com/users/LordThiouk/received_events",
+                "type": "User",
+                "user_view_type": "public",
+                "site_admin": false
+            },
+            "jobs_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/jobs",
+            "logs_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/logs",
+            "check_suite_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/check-suites/123917411423",
+            "artifacts_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/artifacts",
+            "cancel_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/cancel",
+            "rerun_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/rerun",
+            "previous_attempt_url": null,
+            "workflow_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/workflows/393662982",
+            "head_commit": {
+                "id": "81d149d489023a6581efac780f60813e4e32a757",
+                "tree_id": "01c7db92591944670a15bc9085a6c386150cc12e",
+                "message": "fix(ci): aligner Flutter sur 3.50.1 (goldens Driver, Dart 3.14.0)",
+                "timestamp": "2026-11-26T07:31:35Z",
+                "author": {
+                    "name": "Papa Diop",
+                    "email": "76528706+LordThiouk@users.noreply.github.com"
+                },
+                "committer": {
+                    "name": "Papa Diop",
+                    "email": "76528706+LordThiouk@users.noreply.github.com"
+                }
+            },
+            "repository": {
+                "id": 1430599880,
+                "node_id": "R_kgDOVUU4yA",
+                "name": "galass-emu-actions-pub",
+                "full_name": "LordThiouk/galass-emu-actions-pub",
+                "private": false,
+                "owner": {
+                    "login": "LordThiouk",
+                    "id": 76528706,
+                    "node_id": "MDQ6VXNlcjc2NTI4NzA2",
+                    "avatar_url": "https://avatars.githubusercontent.com/u/76528706?v=4",
+                    "gravatar_id": "",
+                    "url": "https://api.github.com/users/LordThiouk",
+                    "html_url": "https://github.com/LordThiouk",
+                    "followers_url": "https://api.github.com/users/LordThiouk/followers",
+                    "following_url": "https://api.github.com/users/LordThiouk/following{/other_user}",
+                    "gists_url": "https://api.github.com/users/LordThiouk/gists{/gist_id}",
+                    "starred_url": "https://api.github.com/users/LordThiouk/starred{/owner}{/repo}",
+                    "subscriptions_url": "https://api.github.com/users/LordThiouk/subscriptions",
+                    "organizations_url": "https://api.github.com/users/LordThiouk/orgs",
+                    "repos_url": "https://api.github.com/users/LordThiouk/repos",
+                    "events_url": "https://api.github.com/users/LordThiouk/events{/privacy}",
+                    "received_events_url": "https://api.github.com/users/LordThiouk/received_events",
+                    "type": "User",
+                    "user_view_type": "public",
+                    "site_admin": false
+                },
+                "html_url": "https://github.com/LordThiouk/galass-emu-actions-pub",
+                "description": null,
+                "fork": false,
+                "url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub",
+                "forks_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/forks",
+                "keys_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/keys{/key_id}",
+                "collaborators_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/collaborators{/collaborator}",
+                "teams_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/teams",
+                "hooks_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/hooks",
+                "issue_events_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/issues/events{/number}",
+                "events_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/events",
+                "assignees_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/assignees{/user}",
+                "branches_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/branches{/branch}",
+                "tags_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/tags",
+                "blobs_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/git/blobs{/sha}",
+                "git_tags_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/git/tags{/sha}",
+                "git_refs_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/git/refs{/sha}",
+                "trees_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/git/trees{/sha}",
+                "statuses_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/statuses/{sha}",
+                "languages_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/languages",
+                "stargazers_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/stargazers",
+                "contributors_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/contributors",
+                "subscribers_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/subscribers",
+                "subscription_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/subscription",
+                "commits_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/commits{/sha}",
+                "git_commits_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/git/commits{/sha}",
+                "comments_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/comments{/number}",
+                "issue_comment_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/issues/comments{/number}",
+                "contents_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/contents/{+path}",
+                "compare_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/compare/{base}...{head}",
+                "merges_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/merges",
+                "archive_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/{archive_format}{/ref}",
+                "downloads_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/downloads",
+                "issues_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/issues{/number}",
+                "pulls_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/pulls{/number}",
+                "milestones_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/milestones{/number}",
+                "notifications_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/notifications{?since,all,participating}",
+                "labels_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/labels{/name}",
+                "releases_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/releases{/id}",
+
+$ curl -sS "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45768119261/jobs?per_page=30" | python3 -c "import sys,json; d=json.load(sys.stdin); [print(j['name'],'|',j['conclusion'],'|',j['status']) or [print(' ',s['number'],s['name'],'|',s['conclusion']) for s in j['steps']] for j in d.get('jobs',[])]" | head -120
+e2e | failure | completed
+  1 Set up job | success
+  2 Run actions/checkout@v4 | success
+  3 Garde staging | success
+  4 Run actions/checkout@v4 | success
+  5 Run actions/checkout@v4 | success
+  6 Libérer disque | success
+  7 Run actions/setup-java@v4 | success
+  8 Run subosito/flutter-action@v2 | success
+  9 Licences Android + NDK | success
+  10 Keystore debug fixe (JKS, SHA-1 stable pour la clé Maps) | success
+  11 Tests unitaires Flutter (preuve ISC — avant rm -rf src) | failure
+  12 Build APK (staging, debug, même job, pas d'upload) | skipped
+  13 Vérifier la signature des APK (apksigner) | skipped
+  14 Activer KVM (règle udev officielle) | skipped
+  15 Run actions/setup-node@v4 | skipped
+  16 Installer opencode (version de la box) | skipped
+  17 Valider le modèle (opencode/*-free) | skipped
+  18 Tests du harnais (syntaxe + contrats) | skipped
+  19 E2E multistop (opencode + API fallback) | skipped
+  20 Publier le diagnostic texte (non chiffré, sans captures) | success
+  21 Chiffrer les preuves | success
+  22 Run actions/upload-artifact@v4 | success
+  23 Publier le smoke log (masqué) | success
+  24 Résumé (PASS/FAIL seulement) | success
+  44 Post Run subosito/flutter-action@v2 | success
+  45 Post Run actions/setup-java@v4 | success
+  46 Post Run actions/checkout@v4 | success
+  47 Post Run actions/checkout@v4 | success
+  48 Post Run actions/checkout@v4 | success
+  49 Complete job | success
+
+$ curl -sS "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45768119261/artifacts" | python3 -m json.tool | head -80
+{
+    "total_count": 1,
+    "artifacts": [
+        {
+            "id": 15092328944,
+            "node_id": "MDg6QXJ0aWZhY3QxNTA5MjMyODk0NA==",
+            "name": "staging-e2e-evidence-encrypted",
+            "size_in_bytes": 337,
+            "url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/artifacts/15092328944",
+            "archive_download_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/artifacts/15092328944/zip",
+            "expired": false,
+            "digest": "sha256:[REDACTED:hex64]",
+            "created_at": "2026-11-26T06:30:13Z",
+            "updated_at": "2026-11-26T06:30:13Z",
+            "expires_at": "2026-12-03T06:30:13Z",
+            "workflow_run": {
+                "id": 45768119261,
+                "repository_id": 1430599880,
+                "head_repository_id": 1430599880,
+                "head_branch": "feat/multistop-e2e-2026-11-15",
+                "head_sha": "0cc7a5ca939539c5cf8c1eead221f870dabf8127"
+            }
+        }
+    ]
+}
+
+$ sed -n '1,140p' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+#!/usr/bin/env bun
+// ISATool.ts — l'outil exécutable du skill ISA (Scaffold / Append / Tick / Set / Adopt / Verify).
+// Toute écriture d'un ISA.md passe ici : l'outil recalcule progress M/N puis pose une empreinte
+// HMAC-SHA256 (frontmatter `isa_stamp`) que ISAGate vérifie en HARD. Une édition à la main
+// (Edit/Write/sed) casse l'empreinte → ISAGate `provenance-*`.
+import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync, chmodSync, realpathSync } from "node:fs";
+import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { dirname, join } from "node:path";
+import { headShort } from "./FullRunBuildGuard";
+import { parseScopeTag } from "./IsaFeatures";
+const HOME = process.env.HOME!;
+const STATE = join(HOME, ".claude/LIFEOS/MEMORY/STATE");
+const KEY = join(STATE, ".isa-stamp-key");
+const LEDGER = join(STATE, "isa-provenance.jsonl");
+const SCOPE_LOG = join(STATE, "isa-scope-tags.jsonl");
+const STAMP_RE = /^isa_stamp:.*\n/m;
+
+function key(create = false): Buffer | null {
+  if (!existsSync(KEY)) { if (!create) return null; mkdirSync(STATE, { recursive: true }); writeFileSync(KEY, randomBytes(32).toString("hex")); chmodSync(KEY, 0o600); }
+  const k = Buffer.from(readFileSync(KEY, "utf8").trim(), "hex"); if (k.length < 32) throw new Error("clé d'empreinte ISA invalide (< 32 octets)"); return k;
+}
+// l'empreinte ne vit que dans le frontmatter : une ligne `isa_stamp:` du corps n'est ni retirée ni lue
+const fmSplit = (t: string) => { const m = t.match(/^---\n[\s\S]*?\n---/); return m ? [m[0], t.slice(m[0].length)] : ["", t]; };
+export const unstamped = (t: string) => { const [f, b] = fmSplit(t); return f.replace(STAMP_RE, "") + b; };
+export function computeStamp(text: string, k = key()): string | null {
+  return k ? "hmac-sha256:" + createHmac("sha256", k).update(unstamped(text)).digest("hex") : null;
+}
+export function verifyStamp(text: string): { ok: boolean; code?: string; message?: string } {
+  const m = fmSplit(text)[0].match(/^isa_stamp:\s*(\S+)/m);
+  if (!m) return { ok: false, code: "provenance-missing", message: "no isa_stamp — this ISA was not written by the ISA skill tools (ISATool.ts). Hand edits are forbidden: re-write via `bun ~/.claude/LIFEOS/TOOLS/ISATool.ts`." };
+  const k = key(); if (!k) return { ok: false, code: "provenance-key-missing", message: "stamp key absent — cannot verify provenance." };
+  const want = Buffer.from(computeStamp(text, k)!), got = Buffer.from(m[1]);
+  if (want.length !== got.length || !timingSafeEqual(want, got)) return { ok: false, code: "provenance-mismatch", message: "isa_stamp does not match content — the ISA was edited outside ISATool.ts (hand edit). Revert, or re-apply the change via ISATool.ts." };
+  return { ok: true };
+}
+function fmSet(t: string, f: string, v: string): string {
+  const m = t.match(/^---\n([\s\S]*?)\n---/); if (!m) return `---\n${f}: ${v}\n---\n` + t;
+  const re = new RegExp(`^${f}:.*$`, "m");
+  const body = re.test(m[1]) ? m[1].replace(re, `${f}: ${v}`) : `${m[1]}\n${f}: ${v}`;
+  return t.replace(m[0], `---\n${body}\n---`);
+}
+const progress = (t: string) => { const b = (t.match(/^\s*- \[[ xX]\] (?:\*\*)?ISC-/gm) ?? []).length; const d = (t.match(/^\s*- \[[xX]\] (?:\*\*)?ISC-/gm) ?? []).length; return `${d}/${b}`; };
+// Marqueur de périmètre build `[scope:…]` : il sort des claims de la porte build. Toute écriture qui en pose un
+// (ligne ajoutée/modifiée dans l'ISA, ou argument de la commande) est journalisée — l'agent ne peut pas s'exclure
+// des claims sans laisser de trace relisible par le principal.
+function logScopeTags(path: string, op: string, before: string, after: string) {
+  const had = new Set(before.split("\n").filter((l) => l.includes("[scope:")).map((l) => l.trim()));
+  const added = after.split("\n").map((l) => l.trim()).filter((l) => l.includes("[scope:") && !had.has(l));
+  const inArgs = args.filter((a) => a.includes("[scope:"));
+  if (!added.length && !inArgs.length) return;
+  mkdirSync(STATE, { recursive: true });
+  appendFileSync(SCOPE_LOG, JSON.stringify({ ts: new Date().toISOString(), op, path, by: process.env.LIFEOS_HOST ?? process.env.LIFEOS_SESSION_ID ?? "unknown", added: added.map((l) => l.slice(0, 300)), args: inArgs.map((a) => a.slice(0, 300)) }) + "\n");
+  console.error(`ISATool: marqueur [scope:] écrit (${op}) — journalisé dans ${SCOPE_LOG.replace(HOME, "~")} ; il n'a d'effet sur la porte build que s'il existait à l'ouverture du run.`);
+}
+function save(path: string, text: string, op: string, stampOnly = false) {
+  const k = key(true)!; let t = unstamped(text);
+  if (!stampOnly && /^---\n[\s\S]*?\n---/.test(t)) { t = fmSet(t, "progress", progress(t)); t = fmSet(t, "updated", new Date().toISOString()); }
+  t = fmSet(t, "isa_stamp", "PENDING"); const s = computeStamp(t, k)!; t = t.replace(/^isa_stamp:.*$/m, `isa_stamp: ${s}`);
+  logScopeTags(path, op, unstamped(existsSync(path) ? readFileSync(path, "utf8") : ""), t);
+  mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, t);
+  appendFileSync(LEDGER, JSON.stringify({ ts: new Date().toISOString(), op, path: realpathSync(path), stamp: s, by: process.env.LIFEOS_HOST ?? (process.env.LIFEOS_SESSION_ID?.startsWith("ses_") ? "opencode" : "claude"), session: process.env.LIFEOS_SESSION_ID ?? "" }) + "\n");
+  console.log(`ISATool ${op} ok → ${path} (progress ${progress(t)}, ${s.slice(0, 24)}…)`);
+}
+// ── human-tick : coche d'une claim `[scope:human — raison]` par le principal, signée ─────────────────────────
+// Une claim humaine (ratification, acte de Papa) n'est jamais cochée par un agent : `tick` la laisserait passer
+// pour une preuve outil. `human-tick` exige la clé ISA_STAMP_KEY dans l'ENVIRONNEMENT (secret du principal ou de
+// la CI, jamais lu sur disque) et signe { ISA, claim, justification, auteur, horodatage } en HMAC-SHA256. La ligne
+// de Verification porte la signature : `human-verify` (ou verifyHumanTick) la recontrôle. Codes : 3 clé absente ou
+// invalide, 4 claim non `[scope:human]`, 1 entrée invalide (claim introuvable, déjà cochée, justification faible).
+export const HUMAN_TICK_EXIT = { INPUT: 1, NO_KEY: 3, NOT_HUMAN: 4 } as const;
+const escRe = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/** Clé de signature humaine : hex, au moins 32 octets. `null` si absente, `"invalid"` si mal formée. */
+export function humanKeyFromEnv(env: Record<string, string | undefined> = process.env): Buffer | null | "invalid" {
+  const raw = (env.ISA_STAMP_KEY ?? "").trim();
+  if (!raw) return null;
+  if (!/^(?:[0-9a-fA-F]{2}){32,}$/.test(raw)) return "invalid";
+  return Buffer.from(raw, "hex");
+}
+/** La claim (ligne `idx`) est-elle `[scope:human — raison]`, sur sa ligne ou dans le titre `###` de son bloc ? */
+export function isHumanScoped(lines: string[], idx: number): boolean {
+  const own = parseScopeTag(lines[idx]!);
+  if (own) return "kind" in own && own.kind === "human";
+  for (let i = idx - 1; i >= 0; i--) {
+    const l = lines[i]!.trim();
+    if (/^```|^~~~/.test(l)) return false; // prudence : jamais de marqueur hérité à travers un bloc de code
+    if (/^###\s/.test(l)) { const tag = parseScopeTag(l); return !!tag && "kind" in tag && tag.kind === "human"; }
+    if (/^#{1,2}\s/.test(l)) return false;
+  }
+  return false;
+}
+const isaSlug = (t: string, p: string) =>
+  fmSplit(t)[0].match(/^slug:\s*(\S+)/m)?.[1] ?? fmSplit(t)[0].match(/^task:\s*(.+)$/m)?.[1]?.trim() ?? p.split("/").slice(-2, -1)[0] ?? "";
+export interface HumanTickPayload { v: 1; op: "human-tick"; isa: string; isc: string; claim: string; evidence: string; by: string; at: string }
+export const humanSig = (p: HumanTickPayload, k: Buffer) => "hmac-sha256:" + createHmac("sha256", k).update(JSON.stringify(p)).digest("hex");
+const HUMAN_LINE_RE = (isc: string) =>
+  new RegExp(`^- ${escRe(isc)}: HUMAIN — (.+) \\(par ([^,()\\[\\]\\n]{1,60}), (\\d{4}-\\d{2}-\\d{2}T[0-9:.]+Z)\\) \\[human-sig:(hmac-sha256:[0-9a-f]{64})\\]\\s*$`, "m");
+/** Recontrôle la coche humaine de `isc` : claim cochée, toujours `[scope:human]`, signature valide pour la clé. */
+export function verifyHumanTick(text: string, isc: string, k: Buffer, isaPath = ""): { ok: boolean; reason: string } {
+  const lines = text.split("\n");
+  const idx = lines.findIndex((l) => new RegExp(`^\\s*- \\[[xX]\\] (?:\\*\\*)?${escRe(isc)}\\b`).test(l));
+  if (idx < 0) return { ok: false, reason: `${isc} absente ou non cochée` };
+  if (!isHumanScoped(lines, idx)) return { ok: false, reason: `${isc} n'est pas [scope:human — raison]` };
+  const m = text.match(HUMAN_LINE_RE(isc));
+  if (!m) return { ok: false, reason: `${isc} : aucune ligne de Verification HUMAIN signée` };
+  const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(text, isaPath), isc, claim: lines[idx]!.trim(), evidence: m[1]!, by: m[2]!, at: m[3]! };
+  const want = Buffer.from(humanSig(payload, k)), got = Buffer.from(m[4]!);
+  if (want.length !== got.length || !timingSafeEqual(want, got)) return { ok: false, reason: `${isc} : signature humaine invalide (claim, justification ou clé modifiée)` };
+  return { ok: true, reason: `${isc} : coche humaine signée par ${m[2]} le ${m[3]}` };
+}
+const args = process.argv.slice(2); const [cmd, path] = args;
+const opt = (n: string) => { const i = args.indexOf(`--${n}`); return i >= 0 ? args[i + 1] : undefined; };
+const need = (v: string | undefined, n: string) => { if (v === undefined) { console.error(`--${n} requis`); process.exit(1); } return v; };
+// Une preuve (ou une raison de décochage) tient en une phrase mesurable, pas en un jeton.
+const weakNote = (v: string) => { const s = v.trim(); return s.length < 20 || /^(?:todo|tbd|n\/?a|à faire|a faire|ok|done|passe|test|…)$/i.test(s); };
+const readIsa = () => { if (!existsSync(path)) { console.error(`introuvable: ${path}`); process.exit(1); } return readFileSync(path, "utf8"); };
+const fromFileOrText = () => opt("file") ? readFileSync(opt("file")!, "utf8") : need(opt("text"), "text");
+if (import.meta.main) {
+  if (!cmd || !path) { console.log(`usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+  scaffold --slug s --goal "…" [--title t]      crée l'ISA (sections Problem…Decisions)
+  append   --section "Claims" --text "…"|--file f  ajoute sous une section (créée si absente)
+  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+  set      --field phase --value build          frontmatter
+  replace  --old "…" --new "…"                  remplacement exact unique (corrections)
+  adopt                                          tamponne un ISA hérité (après relecture)
+  verify                                         contrôle l'empreinte (exit 2 si KO)
+  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)`); process.exit(1); }
+  if (cmd === "scaffold") {
+    if (existsSync(path)) { console.error("existe déjà — utilise append/set"); process.exit(1); }
+    const slug = need(opt("slug"), "slug"), goal = need(opt("goal"), "goal");
+    save(path, `---\ntask: ${opt("title") ?? slug}\nslug: ${slug}\nphase: observe\nprogress: 0/0\nprincipal_stated_goal: ${JSON.stringify(goal)}\nstarted: ${new Date().toISOString()}\n---\n\n## Problem\n\n## Vision\n\n## Out of Scope\n\n## Constraints\n\n## Goal\n\n${goal}\n\n## Claims\n\n## Test Strategy\n\n| isc | type | check | threshold | tool | anchors_to |\n|-----|------|-------|-----------|------|------------|\n\n## Features\n\n## Decisions\n\n## Verification\n`, "scaffold");
+  } else if (cmd === "append") {
+    let t = readIsa(); const sec = need(opt("section"), "section"); const add = fromFileOrText().replace(/\n+$/, "");
+    const re = new RegExp(`(^## ${sec.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, "m");
+    t = re.test(t) ? t.replace(re, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${add}\n\n`) : `${t.replace(/\n+$/, "")}\n\n## ${sec}\n\n${add}\n`;
+    save(path, t, `append:${sec}`);
+  } else if (cmd === "tick" || cmd === "untick") {
+    let t = readIsa(); const isc = need(opt("isc"), "isc"); const re = new RegExp(`^(\\s*- )\\[[ xX]\\]( (?:\\*\\*)?${isc}\\b)`, "m");
+
+$ curl -sS "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/jobs?per_page=50" | python3 -c "
+import sys,json
+d=json.load(sys.stdin)
+for j in d.get('jobs',[]):
+    print(j['name'],'|',j['conclusion'],'|',j['status'])
+    for s in j.get('steps',[]):
+        print(f\"  {s['number']:>2} {s['name']} | {s['conclusion']} | {s.get('status')}\")
+" | head -140
+e2e | failure | completed
+   1 Set up job | success | completed
+   2 Run actions/checkout@v4 | success | completed
+   3 Garde staging | success | completed
+   4 Run actions/checkout@v4 | success | completed
+   5 Run actions/checkout@v4 | success | completed
+   6 Libérer disque | success | completed
+   7 Run actions/setup-java@v4 | success | completed
+   8 Run subosito/flutter-action@v2 | success | completed
+   9 Licences Android + NDK | success | completed
+  10 Keystore debug fixe (JKS, SHA-1 stable pour la clé Maps) | success | completed
+  11 Tests unitaires Flutter (preuve ISC — avant rm -rf src) | success | completed
+  12 Build APK (staging, debug, même job, pas d'upload) | failure | completed
+  13 Vérifier la signature des APK (apksigner) | skipped | completed
+  14 Activer KVM (règle udev officielle) | skipped | completed
+  15 Run actions/setup-node@v4 | skipped | completed
+  16 Installer opencode (version de la box) | skipped | completed
+  17 Valider le modèle (opencode/*-free) | skipped | completed
+  18 Tests du harnais (syntaxe + contrats) | skipped | completed
+  19 E2E multistop (opencode + API fallback) | skipped | completed
+  20 Publier le diagnostic texte (non chiffré, sans captures) | success | completed
+  21 Chiffrer les preuves | success | completed
+  22 Run actions/upload-artifact@v4 | success | completed
+  23 Publier le smoke log (masqué) | success | completed
+  24 Résumé (PASS/FAIL seulement) | success | completed
+  44 Post Run subosito/flutter-action@v2 | success | completed
+  45 Post Run actions/setup-java@v4 | success | completed
+  46 Post Run actions/checkout@v4 | success | completed
+  47 Post Run actions/checkout@v4 | success | completed
+  48 Post Run actions/checkout@v4 | success | completed
+  49 Complete job | success | completed
+
+$ curl -sS "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/artifacts" | python3 -m json.tool
+{
+    "total_count": 1,
+    "artifacts": [
+        {
+            "id": 15107422110,
+            "node_id": "MDg6QXJ0aWZhY3QxNTEwNzQyMjExMA==",
+            "name": "staging-e2e-evidence-encrypted",
+            "size_in_bytes": 337,
+            "url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/artifacts/15107422110",
+            "archive_download_url": "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/artifacts/15107422110/zip",
+            "expired": false,
+            "digest": "sha256:[REDACTED:hex64]",
+            "created_at": "2026-11-26T10:32:10Z",
+            "updated_at": "2026-11-26T10:32:10Z",
+            "expires_at": "2026-12-03T10:32:09Z",
+            "workflow_run": {
+                "id": 45801376130,
+                "repository_id": 1430599880,
+                "head_repository_id": 1430599880,
+                "head_branch": "feat/multistop-e2e-2026-11-15",
+                "head_sha": "81d149d489023a6581efac780f60813e4e32a757"
+            }
+        }
+    ]
+}
+
+$ curl -sS "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs?per_page=5&workflow_id=393662982" | python3 -c "
+import sys,json
+d=json.load(sys.stdin)
+for r in d.get('workflow_runs',[]):
+    print(r['id'], r['run_number'], r['conclusion'], r['status'], r['head_sha'][:8], r['created_at'], r['html_url'])
+"
+45801376130 152 failure completed 81d149d4 2026-11-26T10:26:37Z https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130
+45782061889 151 failure completed 81d149d4 2026-11-26T08:18:31Z https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45782061889
+45778554984 150 failure completed 81d149d4 2026-11-26T07:52:21Z https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45778554984
+45768119261 149 failure completed 0cc7a5ca 2026-11-26T06:25:42Z https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45768119261
+45766646463 148 failure completed 0cc7a5ca 2026-11-26T06:12:53Z https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45766646463
+
+$ grep -n '"tick"' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts | head -5
+139:  } else if (cmd === "tick" || cmd === "untick") {
+142:    const optName = cmd === "tick" ? "evidence" : "reason";
+145:    t = t.replace(re, `$1[${cmd === "tick" ? "x" : " "}]$2`);
+148:    const sha = cmd === "tick" ? headShort(path) : null;
+149:    const line = cmd === "tick" ? `- ${isc}: ${note}${sha ? ` [@${sha}]` : ""}` : `- ${isc}: NON VALIDÉ — ${note}`;
+
