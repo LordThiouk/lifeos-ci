@@ -17350,3 +17350,155 @@ $ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$
   Tests:    1 failed, 1 passed (4 assertions)
   Duration: 0.54s
 
+$ grep -aE 'testing\.(ERROR|WARNING)' core/storage/logs/laravel.log | tail -3 | cut -c1-300
+[2026-11-26 20:20:49] testing.ERROR: SQLSTATE[HY000]: General error: 1 no such table: general_settings (Connection: sqlite, SQL: select * from "general_settings" limit 1) {"userId":1,"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): SQLSTATE[HY000]: General error: 1
+[2026-11-26 20:23:35] testing.ERROR: SQLSTATE[HY000]: General error: 1 no such table: general_settings (Connection: sqlite, SQL: select * from "general_settings" limit 1) {"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): SQLSTATE[HY000]: General error: 1 no such ta
+[2026-11-26 20:28:39] testing.ERROR: Undefined array key "HTTP_USER_AGENT" {"exception":"[object] (ErrorException(code: 0): Undefined array key \"HTTP_USER_AGENT\" at /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Lib/ClientInfo.php:46)
+
+$ sed -n '1,70p' core/app/Lib/ClientInfo.php
+<?php
+
+namespace App\Lib;
+
+class ClientInfo
+{
+
+	/**
+	 * Get requestor IP information
+	 *
+	 * @return array
+	 */
+	public static function ipInfo()
+	{
+		$ip = getRealIP();
+
+		$xml = @simplexml_load_file("http://www.geoplugin.net/xml.gp?ip=" . $ip);
+
+		$country = @$xml->geoplugin_countryName;
+		$city = @$xml->geoplugin_city;
+		$area = @$xml->geoplugin_areaCode;
+		$code = @$xml->geoplugin_countryCode;
+		$long = @$xml->geoplugin_longitude;
+		$lat = @$xml->geoplugin_latitude;
+
+		$data['country'] = $country ?? [];
+		$data['city'] = $city ?? [];
+		$data['area'] = $area ?? [];
+		$data['code'] = $code ?? [];
+		$data['long'] = $long ?? [];
+		$data['lat'] = $lat ?? [];
+		$data['ip'] = $ip;
+		$data['time'] = date('Y-m-d h:i:s A');
+
+
+		return $data;
+	}
+
+	/**
+	 * Get requestor operating system information
+	 *
+	 * @return array
+	 */
+	public static function osBrowser()
+	{
+		$userAgent = $_SERVER['HTTP_USER_AGENT'];
+		$osPlatform = "Unknown OS Platform";
+		$osArray = array(
+			'/windows nt 10/i' => 'Windows 10',
+			'/windows nt 6.3/i' => 'Windows 8.1',
+			'/windows nt 6.2/i' => 'Windows 8',
+			'/windows nt 6.1/i' => 'Windows 7',
+			'/windows nt 6.0/i' => 'Windows Vista',
+			'/windows nt 5.2/i' => 'Windows Server 2003/XP x64',
+			'/windows nt 5.1/i' => 'Windows XP',
+			'/windows xp/i' => 'Windows XP',
+			'/windows nt 5.0/i' => 'Windows 2000',
+			'/windows me/i' => 'Windows ME',
+			'/win98/i' => 'Windows 98',
+			'/win95/i' => 'Windows 95',
+			'/win16/i' => 'Windows 3.11',
+			'/macintosh|mac os x/i' => 'Mac OS X',
+			'/mac_powerpc/i' => 'Mac OS 9',
+			'/linux/i' => 'Linux',
+			'/ubuntu/i' => 'Ubuntu',
+			'/iphone/i' => 'iPhone',
+			'/ipod/i' => 'iPod',
+			'/ipad/i' => 'iPad',
+			'/android/i' => 'Android',
+			'/blackberry/i' => 'BlackBerry',
+
+← Edit core/app/Lib/ClientInfo.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Lib/ClientInfo.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Lib/ClientInfo.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Lib/ClientInfo.php
+@@ -42,9 +42,9 @@
+  * @return array
+  */
+ public static function osBrowser()
+ {
+-	$userAgent = $_SERVER['HTTP_USER_AGENT'];
++       $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+ 	$osPlatform = "Unknown OS Platform";
+ 	$osArray = array(
+ 		'/windows nt 10/i' => 'Windows 10',
+ 		'/windows nt 6.3/i' => 'Windows 8.1',
+
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core; php artisan test --filter=DriverRegisterPhotoTest 2>&1 | tail -10
+➜ 143▕         $response->assertJsonPath('remark', 'registration_success');
+    144▕ 
+    145▕         $driver = Driver::where('email', 'driver@example.com')->first();
+    146▕         $this->assertNotNull($driver);
+    147▕         $this->assertNotEmpty($driver->image);
+
+
+  Tests:    1 failed, 1 passed (4 assertions)
+  Duration: 0.55s
+
+$ grep -aE 'testing\.(ERROR|WARNING)' core/storage/logs/laravel.log | tail -3 | cut -c1-300
+[2026-11-26 20:23:35] testing.ERROR: SQLSTATE[HY000]: General error: 1 no such table: general_settings (Connection: sqlite, SQL: select * from "general_settings" limit 1) {"exception":"[object] (Spatie\\LaravelIgnition\\Exceptions\\ViewException(code: 0): SQLSTATE[HY000]: General error: 1 no such ta
+[2026-11-26 20:28:39] testing.ERROR: Undefined array key "HTTP_USER_AGENT" {"exception":"[object] (ErrorException(code: 0): Undefined array key \"HTTP_USER_AGENT\" at /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Lib/ClientInfo.php:46)
+[2026-11-26 20:28:56] testing.ERROR: SQLSTATE[HY000]: General error: 1 no such table: rider_rules (Connection: sqlite, SQL: select * from "rider_rules" where "status" = 1 and 0 = 1) {"exception":"[object] (Illuminate\\Database\\QueryException(code: HY000): SQLSTATE[HY000]: General error: 1 no such t
+
+$ grep -n "function getRulesAttribute\|rider_rules" -A 8 core/app/Models/Driver.php | head -20
+(no output)
+
+$ grep -n "rules" core/app/Models/Driver.php | head -20
+24:            $this->append('rules');
+43:        'custom_rules'      => 'object',
+128:    public function rules(): Attribute {
+
+$ sed -n '120,150p' core/app/Models/Driver.php
+public function withdrawals() {
+        return $this->hasMany(Withdrawal::class)->where('status', '!=', Status::PAYMENT_INITIATE);
+    }
+
+    public function riderRules() {
+        return RiderRule::active()->whereIn('id', $this->rider_rule_id ?? [])->get();
+    }
+
+    public function rules(): Attribute {
+        return new Attribute(function () {
+            return $this->riderRules()->pluck('name');
+        });
+    }
+
+    public function tickets() {
+        return $this->hasMany(SupportTicket::class);
+    }
+
+    public function fullname(): Attribute {
+        return new Attribute(
+            get: fn() => $this->firstname . ' ' . $this->lastname,
+        );
+    }
+
+    public function scopeActive($query) {
+        return $query->where('status', Status::USER_ACTIVE)->where('ev', Status::VERIFIED)->where('sv', Status::VERIFIED)->where('vv', Status::VERIFIED);
+    }
+
+    public function scopeBanned($query) {
+        return $query->where('status', Status::USER_BAN);
+    }
+
