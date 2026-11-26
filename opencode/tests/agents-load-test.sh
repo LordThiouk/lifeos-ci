@@ -31,6 +31,8 @@ cat > "$tmp/ci.json" <<'JSON'
   }
 }
 JSON
+# Copie intacte : sert à simuler la config d'un run task (aucune fusion .agent).
+cp "$tmp/ci.json" "$tmp/ci-base.json"
 
 agents=(Silas Forge Engineer Designer Architect Anvil Max code-reviewer Vera Serena)
 bash "$merge" "$src" "$tmp/ci.json" "${agents[@]}" > "$tmp/merge.out" 2>&1 \
@@ -93,3 +95,48 @@ out=$(bash "$check" "$tmp/ci.json" "$tmp/agents" Forge 2>&1) || rc=$?
 printf '%s\n' "$out" | grep -q "::error::fiche absente" \
   || ko "message d'erreur fiche absente absent : $out"
 ok "fiche absente refusée (exit $rc, ::error::)"
+
+# --- 7. workflow : fusion .agent réservée aux runs FullRun -----------------
+# La régression B1 venait d'une fusion exécutée aussi pour agent: task, alors
+# que les fiches ~/.claude/agents et le prompt Nix ne sont préparés que pour
+# les FullRun. Le garde-fou doit rester dans le workflow.
+wf="$here/../.github/workflows/_agent-run.yml"
+[ -f "$wf" ] || ko "workflow introuvable : $wf"
+python3 - "$wf" <<'PY' || ko "workflow : fusion .agent non réservée aux runs FullRun"
+import sys
+import yaml
+
+y = yaml.safe_load(open(sys.argv[1]))
+steps = y["jobs"]["run"]["steps"]
+
+def step(needle):
+    for s in steps:
+        if needle in s.get("name", ""):
+            return s
+    raise AssertionError("step introuvable : %s" % needle)
+
+prep = step("Préparer le socle ISA")
+assert "task" in str(prep.get("if", "")), \
+    "le socle ISA (fiches, prompt Nix) doit rester réservé aux FullRun"
+
+cfg = step("Configurer opencode et git")
+run = cfg["run"]
+guard = 'if [ "${IN_AGENT:-}" != task ]; then'
+merge = 'merge-agents.sh'
+assert merge in run, "merge-agents.sh absent de la config opencode"
+assert guard in run, "garde-fou task absent autour de la fusion"
+assert run.index(guard) < run.index(merge), "fusion .agent avant le garde-fou task"
+assert run.rindex("fi") > run.index(merge), "garde-fou task non refermé après la fusion"
+print("OK   workflow : fusion .agent conditionnée à IN_AGENT != task")
+PY
+
+# --- 8. chemin task : aucune référence de fichier à charger ----------------
+# Un run task ne fusionne pas le bloc .agent (garde-fou vérifié ci-dessus) :
+# sa config ne contient donc aucune référence {file:...} vers des fiches ou le
+# prompt Nix absents.
+cp "$tmp/ci-base.json" "$tmp/task.json"
+[ -z "$(jq -r '.agent // empty' "$tmp/task.json")" ] \
+  || ko "un run task ne doit pas embarquer de bloc .agent"
+task_refs=$(jq -r '.. | strings | select(startswith("{file:"))' "$tmp/task.json")
+[ -z "$task_refs" ] || ko "référence de fichier dans la config task : $task_refs"
+ok "chemin task : config sans .agent, aucune référence de fichier (pas de bad file reference)"

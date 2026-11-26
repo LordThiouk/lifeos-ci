@@ -1,45 +1,36 @@
-VERDICT: BLOCK
+VERDICT: PASS
 
 # Revue agents-load — 2026-11-26
 
 Périmètre : `_agent-run.yml`, `opencode/merge-agents.sh`, `opencode/check-agent.sh`,
 `opencode/tests/agents-load-test.sh` (diff vs `origin/main`, commit de base `ef1fcca`).
-Le test passe, mais le fix introduit une régression sur les runs `task` : verdict BLOCK.
+B1 (régression des runs `task`) est corrigé et couvert par le test : verdict PASS.
 
 ## Points bloquants
 
-### B1. Les runs `task` chargent une config fusionnée qui référence des fichiers absents
+### B1. Les runs `task` chargent une config fusionnée qui référence des fichiers absents (corrigé)
 
-- L'étape « Configurer opencode et git » (`_agent-run.yml:458`) s'exécute pour **tous**
-  les runs, y compris `agent: task` (aucun `if:`).
-- Elle fusionne tout le bloc `.agent` de la config de référence
-  (`_agent-run.yml:495-499`). Ce bloc référence :
-  - `Nix/LifeOS` → `{file:{env:HOME}/.local/share/opencode-lifeos/nix-lifeos.prompt.md}` ;
-  - tous les agents → `{file:{env:HOME}/.claude/agents/<Nom>.md}`.
+Constat initial :
+
+- L'étape « Configurer opencode et git » s'exécute pour **tous** les runs, y compris
+  `agent: task`, et fusionnait tout le bloc `.agent` de la config de référence.
+- Ce bloc référence le prompt `Nix/LifeOS` et toutes les fiches
+  `{file:{env:HOME}/.claude/agents/<Nom>.md}`.
 - Or ces fichiers ne sont copiés que dans l'étape « Préparer le socle ISA inscriptible
-  (agents FullRun) » (`_agent-run.yml:413-450`), gardée par
-  `if: ${{ inputs.agent != 'task' }}` (`_agent-run.yml:414`). Pour `task`, rien n'est copié.
+  (agents FullRun) », gardée par `if: ${{ inputs.agent != 'task' }}`.
 - opencode valide les références `{file:...}` **au chargement** de la config (cf. commit
-  `20eef62`), et le run utilise `HOME="$agent_home"` +
-  `OPENCODE_CONFIG="$RUNNER_TEMP/oc/opencode.json"` (`_agent-run.yml:600` et `:604`).
-  Donc chaque run `task` échoue en « bad file reference » (dont le prompt Nix/LifeOS,
-  agent par défaut).
-- Correctif suggéré (non appliqué, revue seule) : conditionner la fusion à
-  `inputs.agent != 'task'`, ou préparer aussi les fiches / le prompt Nix pour `task`.
+  `20eef62`) : chaque run `task` échouait en « bad file reference ».
 
-Reproduction (opencode `1.19.4`, config avec une seule ref `{file:...}` absente,
-même chemin de chargement que le run : `OPENCODE_CONFIG` + `HOME` dédié) :
+Correctif appliqué (minimal) : la fusion FullRun est conditionnée à
+`IN_AGENT != task` dans « Configurer opencode et git ». Pour `task`, la config
+éphémère ne contient aucun bloc `.agent` et donc aucune référence `{file:...}` ;
+les runs FullRun continuent de fusionner (fiches + prompt Nix déjà préparés).
+Aucune étape `.fullrun` n'est modifiée.
 
-```
-$ opencode run --model opencode/mimo-v2.6-flash-free "dis bonjour"
-Error: Configuration is invalid at .../opencode.json: bad file reference:
-"{file:$HOME/.local/share/opencode-lifeos/nix-lifeos.prompt.md}" ... does not exist
-EXIT=1
-```
-
-La validation porte sur **tout** le bloc `.agent` : un agent `subagent` seul
-invalide déjà la config, même si l'agent par défaut est valide. Or pour `task`,
-`$HOME/.claude/agents/` et le prompt Nix n'existent pas.
+Couverture : `opencode/tests/agents-load-test.sh` vérifie désormais (1) que le
+workflow garde la fusion sous `IN_AGENT != task` et le socle ISA sous
+`inputs.agent != 'task'`, et (2) que la config du chemin `task` ne contient ni
+bloc `.agent` ni référence `{file:...}` (pas de bad file reference).
 
 ## Points non bloquants
 
@@ -95,8 +86,10 @@ OK   permissions et clés CI conservées (seul .agent est fusionné)
 OK   check-agent.sh accepte les agents FullRun et affiche agent/fiche/mode
 OK   agent inconnu refusé (exit 1, ::error::)
 OK   fiche absente refusée (exit 1, ::error::)
+OK   workflow : fusion .agent conditionnée à IN_AGENT != task
+OK   chemin task : config sans .agent, aucune référence de fichier (pas de bad file reference)
 EXIT=0
 ```
 
-Note : ce test ne couvre pas le chemin `task` (B1), d'où le verdict BLOCK malgré un
-test vert.
+Le chemin `task` est désormais couvert : la config du run ne référence aucun
+fichier absent, donc plus de « bad file reference » au chargement.
