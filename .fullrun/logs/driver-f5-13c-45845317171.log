@@ -739,3 +739,430 @@ android/gradle.properties
 android/gradle/wrapper/gradle-wrapper.properties
 android/settings.gradle.kts
 
+$ grep -rn "file_picker" pubspec.yaml pubspec.lock | head; echo ===; ls scripts; echo ===; ls docs; ls docs/* 2>/dev/null | head -20
+pubspec.yaml:19:  file_picker: ^12.0.0
+pubspec.lock:28:  android_file_picker:
+pubspec.lock:31:      name: android_file_picker
+pubspec.lock:356:  file_picker:
+pubspec.lock:359:      name: file_picker
+pubspec.lock:364:  file_picker_darwin:
+pubspec.lock:367:      name: file_picker_darwin
+pubspec.lock:372:  file_picker_linux:
+pubspec.lock:375:      name: file_picker_linux
+pubspec.lock:380:  file_picker_platform_interface:
+===
+bump_version.ps1
+read_version.ps1
+release.ps1
+===
+CODEMAPS
+RELEASE.md
+docs/RELEASE.md
+
+docs/CODEMAPS:
+INDEX.md
+android.md
+app.md
+auth.md
+ci.md
+ios.md
+
+$ git show 0eb0df0 -- android/ | head -60; echo ===; git log --oneline --all -- android/gradle.properties; echo ===; git show 3a3731e --stat | head -40
+commit 0eb0df09be4c30b08e0d58f0dcb7443cc771178c
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Thu Oct 8 02:38:14 2026 +0000
+
+    fix(android): allow legacy proguard-android.txt for AGP 9 plugins
+
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 5302212..0e4397f 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -6,3 +6,4 @@ android.enableJetifier=false
+ android.useAndroidX=true
+ android.newDsl=false
+ android.builtInKotlin=false
++android.r8.proguardAndroidTxt.disallowed=false
+===
+0eb0df0 fix(android): allow legacy proguard-android.txt for AGP 9 plugins
+3023819 fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+523f32a Bid Module Customization Work v3
+623fd83 Fix: disable Jetifier + split ABI build
+61d350e Fix: increase Gradle JVM heap space
+be7462f Initial commit
+===
+commit 3a3731e6dba1f343ec26a63450de22a42a483da0
+Author: Nix <nix@galass.local>
+Date:   Mon Nov 16 01:19:34 2026 +0000
+
+    chore(e2e): align mobile working branch with multistop app code and tests
+
+ AGENTS.md                                          |   5 +
+ CLAUDE.md                                          |   5 +
+ android/app/src/debug/AndroidManifest.xml          |   4 +
+ .../src/debug/res/xml/network_security_config.xml  |  10 ++
+ lib/core/helper/string_format_helper.dart          |   4 +
+ lib/core/utils/my_strings.dart                     |   5 +
+ lib/core/utils/url_container.dart                  |   6 +-
+ lib/data/controller/home/home_controller.dart      |  21 ++-
+ .../locationpicker/location_picker_screen.dart     | 169 +++++++++++---------
+ .../widget/ride_details_bottom_sheet_widget.dart   |  66 ++++----
+ test/services/auth_service_test.dart               |  33 +++-
+ test/unit/multistop_create_test.dart               |  78 +++++++++
+ test/unit/multistop_fare_test.dart                 | 106 +++++++++++++
+ test/unit/multistop_picker_test.dart               |  32 ++++
+ test/unit/multistop_running_sheet_test.dart        | 153 ++++++++++++++++++
+ test/unit/multistop_strings_sweep_test.dart        | 174 +++++++++++++++++++++
+ 16 files changed, 759 insertions(+), 112 deletions(-)
+
+$ ls ~/.pub-cache/hosted/pub.dev 2>/dev/null | grep -i "file_picker\|inappwebview" | head; echo ---; ls /usr/local/flutter 2>/dev/null | head; echo ---; cat docs/CODEMAPS/android.md 2>/dev/null | head -60
+---
+---
+# CODEMAP — Android
+
+Surfaces natives Android pour Galass Rider.
+
+## Build & signature
+
+| Chemin | Rôle |
+|--------|------|
+| `android/app/build.gradle.kts` | Module app Gradle Kotlin DSL (applicationId, signing) |
+| `android/settings.gradle.kts` | Settings Gradle multi-projet |
+| `android/build.gradle.kts` | Root Gradle |
+| `android/gradle.properties` | Propriétés Gradle |
+| `android/key.properties` | Credentials signing local (non commité si secrets) |
+
+## Manifest & ressources
+
+| Chemin | Rôle |
+|--------|------|
+| `android/app/src/main/AndroidManifest.xml` | Permissions, activity, clés Maps / FCM |
+| `android/app/src/main/kotlin/` | Entrée Kotlin `MainActivity` (si présent) |
+| `android/app/google-services.json` | Config Firebase Android |
+
+## Version artifact
+
+Le `versionName` / `versionCode` Flutter proviennent de `pubspec.yaml` (`X.Y.Z+N`) au `flutter build` — ne pas inventer un numéro depuis `BITRISE_BUILD_NUMBER` (voir `docs/RELEASE.md`).
+
+$ grep -rn "gradle\|AGP\|Kotlin" docs/CODEMAPS/ci.md docs/CODEMAPS/android.md 2>/dev/null | head -30
+docs/CODEMAPS/android.md:9:| `android/app/build.gradle.kts` | Module app Gradle Kotlin DSL (applicationId, signing) |
+docs/CODEMAPS/android.md:10:| `android/settings.gradle.kts` | Settings Gradle multi-projet |
+docs/CODEMAPS/android.md:11:| `android/build.gradle.kts` | Root Gradle |
+docs/CODEMAPS/android.md:12:| `android/gradle.properties` | Propriétés Gradle |
+docs/CODEMAPS/android.md:20:| `android/app/src/main/kotlin/` | Entrée Kotlin `MainActivity` (si présent) |
+
+$ ls -la _ephemeral; ls -R _ephemeral 2>/dev/null | head -30
+total 12
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:32 .
+drwxr-xr-x 18 ubuntu ubuntu 4096 Nov 26 16:32 ..
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 16:32 EV-local-20261118-F9
+_ephemeral:
+EV-local-20261118-F9
+
+_ephemeral/EV-local-20261118-F9:
+red-f9.txt
+
+$ grep -rln "rider-apk-gradle\|45801376130" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target 2>/dev/null | head -20
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/FETCH_HEAD
+
+$ grep -rn "3\.50\.1\|AGP\|gradle-8\|gradle-9" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci --include="*.md" --include="*.sh" --include="*.yml" --include="*.yaml" 2>/dev/null | head -20; echo ---; grep -rn "flutter-version\|FLUTTER_VERSION\|3\.50" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/targets/allowed-repos.sh 2>/dev/null | head
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/INVENTAIRE.md:262:    `test_preannot_pipeline.py avec le vrai segmenteur`, `Python licences (deny GPL/AGPL)`,
+---
+
+$ timeout 20 curl -s -o /dev/null -w "%{http_code}\n" https://pub.dev/api/packages/file_picker || echo "no network"
+200
+
+$ cd /tmp && timeout 30 curl -s https://pub.dev/api/packages/file_picker | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['latest']['version']); print(d['latest']['archive_url']); print(d['latest']['pubspec'].get('environment'))"
+13.4.1
+https://pub.dev/api/archives/file_picker-13.4.1.tar.gz
+{'sdk': '>=3.10.0 <4.0.0', 'flutter': '>=3.38.0'}
+
+$ sed -n '20,40p;350,390p' pubspec.lock
+analyzer:
+    dependency: transitive
+    description:
+      name: analyzer
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.0.1"
+  android_file_picker:
+    dependency: transitive
+    description:
+      name: android_file_picker
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
+  archive:
+    dependency: transitive
+    description:
+      name: archive
+      sha256: [REDACTED:hex64]
+    description:
+      name: file
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.1"
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.3.0"
+  file_picker_darwin:
+    dependency: transitive
+    description:
+      name: file_picker_darwin
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
+  file_picker_linux:
+    dependency: transitive
+    description:
+      name: file_picker_linux
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+  file_picker_platform_interface:
+    dependency: transitive
+    description:
+      name: file_picker_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.0"
+  file_picker_web:
+    dependency: transitive
+    description:
+
+$ mkdir -p /tmp/fp && cd /tmp/fp && timeout 40 curl -sL https://pub.dev/api/archives/android_file_picker-1.1.1.tar.gz -o afp.tgz && tar xzf afp.tgz && ls && echo === && cat android/build.gradle 2>/dev/null; cat android/build.gradle.kts 2>/dev/null; echo === && cat pubspec.yaml
+CHANGELOG.md
+LICENSE
+README.md
+afp.tgz
+android
+example
+lib
+pubspec.yaml
+test
+===
+import com.android.build.gradle.LibraryExtension
+import groovy.lang.GroovyObject
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.withGroovyBuilder
+
+group = "com.mr.flutter.plugin.filepicker"
+version = "1.0-SNAPSHOT"
+
+// Temporary workaround, not a permanent fix. Pinning an older AGP here while
+// the consuming app applies a newer one through the `plugins` block is
+// generally discouraged, this module didn't declare it until it broke
+// `android.newDsl=false` projects with custom root level Gradle
+// configuration (#2170). Flutter's own AGP 9 `newDsl` migration is still in
+// progress (https://github.com/flutter/flutter/issues/180137); its interim
+// compatibility shim doesn't appear to reliably reach plugin modules that
+// don't declare their own classpath. Remove this block again once that
+// migration lands upstream and `android.newDsl=false` is no longer needed.
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.5.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22")
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+fun GroovyObject.intProperty(name: String): Int {
+    val value = getProperty(name)
+    return when (value) {
+        is Number -> value.toInt()
+        is String -> value.toInt()
+        else -> error("Property '$name' is not an Int-compatible value: $value")
+    }
+}
+
+val agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
+    .substringBefore('.')
+    .toInt()
+val builtInKotlinProperty = providers.gradleProperty("android.builtInKotlin").orNull
+val isBuiltInKotlinEnabled = agpVersion >= 9 &&
+    (builtInKotlinProperty == null || builtInKotlinProperty.toBoolean())
+val shouldApplyKotlinAndroidPlugin = agpVersion < 9 || !isBuiltInKotlinEnabled
+
+apply(plugin = "com.android.library")
+if (shouldApplyKotlinAndroidPlugin) {
+    apply(plugin = "org.jetbrains.kotlin.android")
+}
+
+val flutterExtension = extensions.getByName("flutter") as GroovyObject
+val flutterCompileSdkVersion = flutterExtension.intProperty("compileSdkVersion")
+
+configure<LibraryExtension> {
+    compileSdk = flutterCompileSdkVersion
+    namespace = "com.mr.flutter.plugin.filepicker"
+
+    defaultConfig {
+        minSdk = 21
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("proguard-rules.pro")
+    }
+
+    lint {
+        disable += "InvalidPackage"
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    if (shouldApplyKotlinAndroidPlugin) {
+        withGroovyBuilder {
+            "kotlinOptions" {
+                setProperty("jvmTarget", JavaVersion.VERSION_17.toString())
+            }
+        }
+    }
+}
+
+dependencies {
+    add("implementation", "androidx.core:core:1.18.0")
+    add("implementation", "androidx.core:core-ktx:1.18.0")
+    add("implementation", "androidx.annotation:annotation:1.10.0")
+    add("implementation", "androidx.lifecycle:lifecycle-runtime:2.10.0")
+}
+
+===
+name: android_file_picker
+description: Android implementation of the file_picker plugin, supporting file picking, saving, and Storage Access Framework (SAF) URI grants.
+version: 1.1.1
+homepage: https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_android
+repository: https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker_android
+topics:
+  - file-picker
+  - android
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.10.0 <4.0.0"
+  flutter: ">=3.38.0"
+
+flutter:
+  plugin:
+    implements: file_picker
+    platforms:
+      android:
+        package: com.mr.flutter.plugin.filepicker
+        pluginClass: FilePickerPlugin
+        dartPluginClass: FilePickerAndroid
+
+dependencies:
+  flutter:
+    sdk: flutter
+  file_picker_platform_interface: ^3.3.0
+  cross_file: ^0.3.5+4
+  path: ^1.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+$ cd /tmp && timeout 40 curl -s "https://developer.android.com/build/releases/gradle-plugin" -o agp.html; python3 - <<'EOF'
+import re
+h=open('/tmp/agp.html',encoding='utf-8',errors='ignore').read()
+t=re.sub(r'<script.*?</script>','',h,flags=re.S)
+t=re.sub(r'<[^>]+>',' ',t)
+t=re.sub(r'\s+',' ',t)
+i=t.find('Android Gradle plugin and Gradle compatibility')
+print(t[i:i+1200] if i>0 else t[:600])
+EOF
+Redirecting... Redirecting... You should be redirected automatically to the target URL: /build/releases/agp-9-5-0-release-notes . If not, click the link.
+
+$ cd /tmp && timeout 40 curl -s "https://kotlinlang.org/docs/gradle-configure-project.html" | tr -d '\n' | grep -o "KGP 2\.2\.20[^<]*" | head -5; echo ---; timeout 40 curl -s "https://kotlinlang.org/docs/gradle-configure-project.html" | sed -n 's/.*<table[^>]*>\(.*\)<\/table>.*/\1/p' | head -c 400
+---
+<thead><tr class="ijRowHead" id="-fc2lu8_134"><th id="-fc2lu8_137"><p>Gradle property</p></th><th id="-fc2lu8_138"><p>Description</p></th></tr></thead><tbody><tr id="-fc2lu8_135"><td id="-fc2lu8_139"><p><code class="code" id="-fc2lu8_141">kotlin.project.persistent.dir</code></p></td><td id="-fc2lu8_140"><p>Configures the location where your project-level data is stored. Default: <code class="code"
+
+$ cd /tmp && timeout 40 curl -s "https://kotlinlang.org/docs/gradle-configure-project.html" -o kgp.html; python3 - <<'EOF'
+import re
+h=open('/tmp/kgp.html',encoding='utf-8',errors='ignore').read()
+t=re.sub(r'<script.*?</script>','',h,flags=re.S)
+t=re.sub(r'<[^>]+>','|',t)
+t=re.sub(r'\|+','|',t)
+i=t.find('2.2.20')
+print(t[max(0,i-1500):i+1500])
+EOF
+plugin| to your build script file |build.gradle(.kts)| and |configure the project's dependencies| there.|To learn more about the contents of a build script, visit the |Explore the build script| section.|Apply the plugin|To apply the Kotlin Gradle plugin, use the |plugins{}| block| from the Gradle plugins DSL:|
+plugins {
+    // Replace `&lt;...&gt;` with the plugin name appropriate for your target environment
+    kotlin(&quot;&lt;...&gt;&quot;) version &quot;2.4.21&quot;
+    // For example, if your target environment is JVM:
+    // kotlin(&quot;jvm&quot;) version &quot;2.4.21&quot;
+}
+|
+plugins {
+    // Replace `&lt;...&gt;` with the plugin name appropriate for your target environment
+    id 'org.jetbrains.kotlin.&lt;...&gt;' version '2.4.21'
+    // For example, if your target environment is JVM: 
+    // id 'org.jetbrains.kotlin.jvm' version '2.4.21'
+}
+|The Kotlin Gradle plugin (KGP) and Kotlin share the same version numbering.|When configuring your project, check the Kotlin Gradle plugin (KGP) compatibility with available Gradle versions. In the following table, there are the minimum and maximum |fully supported| versions of Gradle and Android Gradle plugin (AGP):|KGP version|Gradle min and max versions|AGP min and max versions|2.4.20&ndash;2.4.21|7.6.3&ndash;9.7.0|8.5.2&ndash;9.3.1|2.4.0&ndash;2.4.10|7.6.3&ndash;9.5.0|8.5.2&ndash;9.1.0|2.3.20&ndash;2.3.21|7.6.3&ndash;9.3.0|8.2.2&ndash;9.0.0|2.3.10|7.6.3&ndash;9.0.0|8.2.2&ndash;9.0.0|2.3.0|7.6.3&ndash;9.0.0|8.2.2&ndash;8.13.0|2.2.20&ndash;2.2.21|7.6.3&ndash;8.14|7.3.1&ndash;8.11.1|2.2.0&ndash;2.2.10|7.6.3&ndash;8.14|7.3.1&ndash;8.10.0|2.1.20&ndash;2.1.21|7.6.3&ndash;8.12.1|7.3.1&ndash;8.7.2|2.1.0&ndash;2.1.10|7.6.3&ndash;8.10*|7.3.1&ndash;8.7.2|2.0.20&ndash;2.0.21|6.8.3&ndash;8.8*|7.1.3&ndash;8.5|2.0.0|6.8.3&ndash;8.5|7.1.3&ndash;8.3.1|1.9.20&ndash;1.9.25|6.8.3&ndash;8.1.1|4.2.2&ndash;8.1.0|*Kotlin 2.0.20&ndash;2.0.21 and Kotlin 2.1.0&ndash;2.1.10 are fully compatible with Gradle up to 8.6. Gradle versions 8.7&ndash;8.10 are also supported, with only one exception: If you use the Kotlin Multiplatform Gradle plugin, you may see deprecation warnings in your multiplatform projects calling the |withJava()| function in the JVM target. For more information, see |Java source sets created by default|.|You can also use Gradle and AGP versions up to the latest releases, but if you do, keep in mind that you might encounter deprecation warnings or some new features might not work.|For example, the Kotlin Gradle plugin and the |kotlin-multiplatform| plugin 2.4.21 require the minimum Gradle version of 7.6.3 for your project to compile.|Similarly, the maximum fully supported version is 9.7.0. It doesn't have deprecated Gradle methods and properties, and supports all the current Gradle features.|Earlier KGP versions|KGP version|Gradle min and max versions|AGP min and max versions|1.9.0&ndash;1.9.10|6.8.3&ndash;7.6.0|4.2.2&ndash;7.4.0|1.8.20&ndash;1.8.22|6.8.3&ndash;7.6.0|4.1.3&ndash;7.4.0|1.8.0&ndash;1.8.11|6.8.3
+
+$ cat .gitattributes; echo ===; cat .git/config | head -20; git status
+# Auto detect text files and perform LF normalization
+* text=auto
+===
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/LordThiouk/Galass_Rider
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[gc]
+	auto = 0
+[branch "feat/multistop-e2e-2026-11-15"]
+	remote = origin
+	merge = refs/heads/feat/multistop-e2e-2026-11-15
+[user]
+	name = Papa Diop
+	email = 76528706+LordThiouk@users.noreply.github.com
+On branch feat/multistop-e2e-2026-11-15
+Your branch is up to date with 'origin/feat/multistop-e2e-2026-11-15'.
+
+nothing to commit, working tree clean
+
+$ grep -rn "9\.0\.1\|9\.1\.0\|gradle-9\|newDsl\|builtInKotlin\|proguardAndroidTxt" --exclude-dir=.git --exclude-dir=build . | head -20; echo ===; grep -rn "agp\|AGP\|gradle" fastlane -r 2>/dev/null | head
+./CHANGELOG.md:30:- Android Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1.0 for Flutter Codemagic CI
+./_ephemeral/EV-local-20261118-F9/red-f9.txt:56:  flutter_local_notifications_platform_interface 9.1.0 (13.0.0 available)
+./android/app/build.gradle.kts:19:    ndkVersion = "29.0.14033849"
+./android/settings.gradle.kts:21:    id("com.android.application") version "9.0.1" apply false
+./android/gradle/wrapper/gradle-wrapper.properties:5:distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+./android/gradle.properties:7:android.newDsl=false
+./android/gradle.properties:8:android.builtInKotlin=false
+./android/gradle.properties:9:android.r8.proguardAndroidTxt.disallowed=false
+./pubspec.lock:672:    version: "9.1.0"
+===
+fastlane/metadata/ios/fr-FR/release_notes.txt:1:Corrections stabilité file_picker / AGP9. Build et release Fastlane Android + iOS.
+fastlane/metadata/ios/en-US/release_notes.txt:1:Corrections stabilité file_picker / AGP9. Build et release Fastlane Android + iOS.
+fastlane/metadata/android/fr-FR/changelogs/109.txt:3:- file_picker 12 AGP9/Kotlin + FilePicker API
+fastlane/metadata/android/en-US/changelogs/109.txt:3:- file_picker 12 AGP9/Kotlin + FilePicker API
+
