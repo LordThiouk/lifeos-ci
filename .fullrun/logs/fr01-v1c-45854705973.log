@@ -1,0 +1,447 @@
+
+> Forge · deepseek-v4.1-flash-free
+
+Silence 180s sans nouvelle sortie (journal=46 o) : coupure opencode pid=392323
+
+> Forge · mimo-v2.6-flash-free
+
+Silence 180s sans nouvelle sortie (journal=42 o) : coupure opencode pid=395530
+
+> Forge · iceman-free
+
+→ Read /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md
+
+$ pwd
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target
+
+$ grep -rn "pickUpLocation" lib 2>&1 | head -80
+
+lib/core/utils/my_strings.dart:72:  static const String pickUpLocation = "Point de prise en charge";
+lib/presentation/components/timeline/ride_itinerary_timeline.dart:160:        sectionLabel: MyStrings.pickUpLocation,
+lib/presentation/components/timeline/ride_itinerary_timeline.dart:191:              sectionLabel: MyStrings.pickUpLocation,
+lib/presentation/screens/rides/home_screen/widget/new_ride_card.dart:143:                        MyStrings.pickUpLocation.tr,
+lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart:195:                                    : MyStrings.pickUpLocation.tr,
+lib/presentation/screens/ride_details/widgets/ride_destination_widget.dart:39:                MyStrings.pickUpLocation.tr,
+lib/presentation/screens/ride_history/widget/ride_info_card.dart:180:                      MyStrings.pickUpLocation.tr,
+
+$ grep -rn "Point de prise en charge" lib 2>&1 | head -80
+lib/core/utils/my_strings.dart:72:  static const String pickUpLocation = "Point de prise en charge";
+
+→ Read lib/presentation/screens/ride_details/widgets/ride_destination_widget.dart
+→ Read lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+→ Read lib/presentation/components/timeline/ride_itinerary_timeline.dart
+
+$ ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit 2>&1 | head -60
+multistop_chat_ride_id_test.dart
+multistop_complete_stop_test.dart
+multistop_end_gate_test.dart
+multistop_offer_summary_test.dart
+multistop_pusher_test.dart
+multistop_regression_test.dart
+multistop_ride_model_test.dart
+multistop_stops_progress_test.dart
+multistop_strings_sweep_test.dart
+pusher_cash_payment_request_test.dart
+
+$ ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test 2>&1 | head -60
+core
+data
+fixtures
+goldens
+helpers
+presentation
+tool
+unit
+
+$ ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_itinerary_test.dart 2>&1 | head -20
+ls: cannot access '/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_itinerary_test.dart': No such file or directory
+
+$ grep -rn "multistop_itinerary_test" /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target 2>&1 | head -40
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md:146:| ISC-F5-15 | widget      | Après le dernier arrêt, aucun écran course active Driver n'affiche le libellé générique « Point de prise en charge » à la place de la destination réelle | texte rendu == adresse destination réelle, jamais `MyStrings.pickUpLocation` sur le nœud final | flutter test test/unit/multistop_itinerary_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23) | literal |
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-driver-multistop/ISA.html:1548:<table class="data"><thead><tr><th>isc</th><th>type</th><th>check</th><th>threshold</th><th>tool</th><th>anchors_to</th></tr></thead><tbody><tr><td>ISC-F0-1</td><td>manual</td><td>dual-write SHA256 repo=LifeOS</td><td>match</td><td>shasum</td><td>literal</td></tr><tr><td>ISC-F0-2</td><td>unit</td><td>flutter test baseline pre-edit</td><td>exit 0</td><td>flutter test</td><td>literal</td></tr><tr><td>ISC-F5-1</td><td>unit</td><td>RideModel.fromJson parses stops[]</td><td>count + order</td><td>flutter test test/unit/multistop_ride_model_test.dart</td><td>literal</td></tr><tr><td>ISC-F5-2</td><td>unit</td><td>RideModel.fromJson sans stops</td><td>stops null/empty</td><td>flutter test test/unit/multistop_ride_model_test.dart</td><td>literal</td></tr><tr><td>ISC-F5-3</td><td>manual</td><td>active ride screen lists stops</td><td>≥2 labels</td><td>ARTEMIS</td><td>literal</td></tr><tr><td>ISC-F5-4</td><td>manual</td><td>map shows intermediate markers</td><td>pins visible</td><td>ARTEMIS</td><td>literal</td></tr><tr><td>ISC-F5-5</td><td>manual</td><td>offer modal ou detail fetch shows stop summary</td><td>visible</td><td>ARTEMIS</td><td>literal</td></tr><tr><td>Anti-F5-1</td><td>unit</td><td>legacy ride JSON UI path unchanged</td><td>grep + test</td><td>flutter test test/unit/multistop_regression_test.dart</td><td>literal</td></tr><tr><td>Anti-F5-2</td><td>unit</td><td>dispatch F4 tests still GREEN</td><td>exit 0</td><td>flutter test test/unit/dispatch_f4_*</td><td>cross: 20261002-galass-driver-dispatch-f4</td></tr><tr><td>ISC-F5-6</td><td>unit</td><td>completeStop API client payload</td><td>POST correct</td><td>flutter test test/unit/multistop_complete_stop_test.dart</td><td>literal</td></tr><tr><td>ISC-F5-7</td><td>manual</td><td>CONFIRM STOP slider visible at intermediate stop</td><td>visible</td><td>ARTEMIS</td><td>literal</td></tr><tr><td>ISC-F5-8</td><td>unit</td><td>map loadMap targets current_leg only post-ack</td><td>waypoints segment</td><td>flutter test test/unit/ride_map_multistop_test.dart</td><td>ISC-F5-6</td></tr><tr><td>ISC-F5-9</td><td>unit</td><td>END blocked UI until all stops completed</td><td>button disabled</td><td>flutter test test/unit/multistop_end_gate_test.dart</td><td>literal</td></tr><tr><td>ISC-F5-10</td><td>unit</td><td>STOP_COMPLETED refreshes ride state</td><td>parse+update</td><td>flutter test test/unit/multistop_pusher_test.dart</td><td>literal</td></tr><tr><td>ISC-F5-11</td><td>manual</td><td>CallKit Accept → app foreground + ride details</td><td>app visible ≤3s</td><td>device / ARTEMIS</td><td>cross: 20261002-galass-driver-dispatch-f4</td></tr><tr><td>Anti-F5-3</td><td>unit</td><td>accept path still calls launchApp / bring-to-fg</td><td>grep ≥1</td><td>grep + unit</td><td>derived: ISC-F5-11</td></tr><tr><td>Bridge-B6</td><td>integration</td><td>confirm stop → rider notified</td><td>≤5s</td><td>ARTEMIS staging</td><td>cross: parent F7</td></tr><tr><td>ISC-F5-12</td><td>widget</td><td>une seule action principale actionnable par état : escale(s) pending → « Confirmer l'arrêt » visible+actif, « Terminer la course » <strong>masqué</strong> (pas seulement disabled) ; dernier arrêt → « Confirmer l'arrêt » disparaît, « Terminer la course » visible+actif avec un style visuellement distinct de son état désactivé (pas seulement opacité 0.6 sur la même couleur primaire)</td><td>1 seul bouton actionnable rendu par état ; style actif ≠ style désactivé au-delà de l'opacité</td><td>flutter test test/unit/multistop_end_gate_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23)</td><td>ISC-F5-9</td></tr><tr><td>ISC-F5-13</td><td>widget</td><td>« Annuler la course » reste visuellement distinct (couleur danger) du CTA principal, quel que soit l'état</td><td>bgColor danger ≠ bgColor CTA principal</td><td>flutter test test/unit/multistop_end_gate_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23)</td><td>literal</td></tr><tr><td>ISC-F5-14</td><td>widget</td><td>Compteur « x/N arrêt(s) terminé(s) » (<code>stopsProgressText</code>) retiré du widget tree Driver, partout (staging et prod) ; repère stable non visible à la place pour le harnais e2e</td><td><code>find.textContaining('arrêt')</code> sur le pattern compteur ne matche plus ; clé stable résout</td><td>flutter test test/unit/multistop_stops_progress_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23)</td><td>supersedes: ISC-F5-3</td></tr><tr><td>ISC-F5-15</td><td>widget</td><td>Après le dernier arrêt, aucun écran course active Driver n'affiche le libellé générique « Point de prise en charge » à la place de la destination réelle</td><td>texte rendu == adresse destination réelle, jamais <code>MyStrings.pickUpLocation</code> sur le nœud final</td><td>flutter test test/unit/multistop_itinerary_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23)</td><td>literal</td></tr><tr><td>ISC-F5-16</td><td>widget</td><td>Carte course active — l'arrêt actif (prochain non-<code>completed_at</code>) a un style distinct ; les autres arrêts intermédiaires sont numérotés et estompés (pas la même icône uniforme qu'aujourd'hui)</td><td>icône active ≠ icône estompée-numérotée ; tous les stops non-actifs portent un numéro</td><td>flutter test test/unit/ride_map_multistop_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23)</td><td>ISC-F5-4</td></tr><tr><td>ISC-F5-17</td><td>widget</td><td><strong>Contrat d'écran</strong> « Driver en course » (RIDE_RUNNING, dérivé du code actuel 2026-11-23) — présence testée individuellement de : avatar+nom+note (<code>UserDetailsWidget</code>), bouton message, bouton appel, un seul CTA principal actionnable (ISC-F5-12), « Annuler la course » distinct-danger (ISC-F5-13), bloc itinéraire pickup→arrêts→destination, repères d'arrêts sur la carte (ISC-F5-16). <strong>Règle « ajouter sans retirer »</strong> : retirer un de ces éléments exige une ligne ISA explicite validée par Papa.</td><td>7 assertions <code>find.byKey</code>/<code>find.text</code> toutes vertes, une par élément listé</td><td>flutter test test/widget/course_en_cours_driver_contract_test.dart (golden)</td><td>ISC-F5-12, ISC-F5-13, ISC-F5-16</td></tr><tr><td>Bridge-B7</td><td>integration</td><td>e2e verte couvrant les arrêts ET les points UI (b/c/d/e) avec captures Driver et Rider comparées côte à côte — <strong>étendu 2026-11-23 : zéro écart golden non accepté</strong> (cf. ISA harnais emu)</td><td>PASS</td><td>ARTEMIS + galass-emu-actions-pub run</td><td>cross: 20261006-galass-rider-multistop</td></tr></tbody></table>
+
+$ ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_* 2>&1 | head -30
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_chat_ride_id_test.dart
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_complete_stop_test.dart
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_offer_summary_test.dart
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_pusher_test.dart
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_regression_test.dart
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_ride_model_test.dart
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_stops_progress_test.dart
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_strings_sweep_test.dart
+
+$ cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart 2>&1 | head -120
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:galass_driver/core/utils/app_status.dart';
+import 'package:galass_driver/core/utils/my_color.dart';
+import 'package:galass_driver/core/utils/my_strings.dart';
+import 'package:galass_driver/data/controller/map/ride_map_controller.dart';
+import 'package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_stop_model.dart';
+import 'package:galass_driver/data/repo/polyline/polyline_repo.dart';
+import 'package:galass_driver/data/repo/ride/ride_repo.dart';
+import 'package:galass_driver/data/services/api_client.dart';
+import 'package:galass_driver/presentation/components/buttons/rounded_button.dart';
+import 'package:galass_driver/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../helpers/recording_api_client.dart';
+
+/// No HTTP: the CTA contract is the widget tree, never a response.
+class _NoopRideRepo extends RideRepo {
+  _NoopRideRepo({required super.apiClient});
+
+  @override
+  Future<ResponseModel> getRideDetails(String id) async =>
+      ResponseModel(true, 'ok', 200, <String, dynamic>{});
+}
+
+/// No GoogleMap platform view in the test host.
+class _NoopMap extends RideMapController {
+  _NoopMap({required super.polylineRepo});
+
+  @override
+  void loadMap({
+    required LatLng pickup,
+    required LatLng destination,
+    List<LatLng> intermediateStops = const <LatLng>[],
+    LatLng? currentLeg,
+  }) {}
+
+  @override
+  Future<void> setCustomMarkerIcon({bool? isRunning}) async {}
+}
+
+RideModel _rideWithStops({required int completed}) => RideModel(
+      id: '42',
+      status: AppStatus.RIDE_RUNNING,
+      pickupLocation: 'Plateau, Dakar',
+      destination: 'Aéroport AIBD, Diass',
+      distance: '38.4',
+      duration: '52',
+      amount: '12500',
+      stops: List<RideStopModel>.generate(3, (index) {
+        final sequence = index + 1;
+        return RideStopModel(
+          id: '$sequence',
+          sequence: '$sequence',
+          latitude: '14.70$sequence',
+          longitude: '-17.44$sequence',
+          locationLabel: 'Arrêt $sequence',
+          completedAt:
+              index < completed ? '2026-11-23 09:1$sequence:00' : null,
+        );
+      }),
+    );
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  group('RideModel multistop end gate', () {
+    test('canEndRide true when no stops', () {
+      final ride = RideModel(id: '1');
+      expect(ride.canEndRide, isTrue);
+      expect(ride.canConfirmStop, isFalse);
+    });
+
+    test('canEndRide false while a stop is pending', () {
+      final ride = RideModel(
+        id: '1',
+        stops: [
+          RideStopModel(
+            id: '10',
+            sequence: '1',
+            latitude: '14.7',
+            longitude: '-17.4',
+            completedAt: null,
+          ),
+        ],
+      );
+      expect(ride.canEndRide, isFalse);
+      expect(ride.canConfirmStop, isTrue);
+    });
+
+    test('canEndRide true when all stops completed', () {
+      final ride = RideModel(
+        id: '1',
+        stops: [
+          RideStopModel(
+            id: '10',
+            sequence: '1',
+            latitude: '14.7',
+            longitude: '-17.4',
+            completedAt: '2026-10-07T00:00:00Z',
+          ),
+        ],
+      );
+      expect(ride.canEndRide, isTrue);
+      expect(ride.canConfirmStop, isFalse);
+    });
+  });
+
+  group('ISC-F5-12 — une seule action principale par état', () {
+    late RideDetailsController controller;
+
+    setUp(() async {
+      Get.testMode = true;
+      Get.reset();
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+
+$ cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_stops_progress_test.dart 2>&1 | head -120
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:galass_driver/core/utils/app_status.dart';
+import 'package:galass_driver/data/controller/map/ride_map_controller.dart';
+import 'package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_stop_model.dart';
+import 'package:galass_driver/data/repo/polyline/polyline_repo.dart';
+import 'package:galass_driver/data/repo/ride/ride_repo.dart';
+import 'package:galass_driver/data/services/api_client.dart';
+import 'package:galass_driver/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../helpers/recording_api_client.dart';
+
+/// No HTTP: the widget contract is the tree, never a response.
+class _NoopRideRepo extends RideRepo {
+  _NoopRideRepo({required super.apiClient});
+
+  @override
+  Future<ResponseModel> getRideDetails(String id) async =>
+      ResponseModel(true, 'ok', 200, <String, dynamic>{});
+}
+
+/// No GoogleMap platform view in the test host.
+class _NoopMap extends RideMapController {
+  _NoopMap({required super.polylineRepo});
+
+  @override
+  void loadMap({
+    required LatLng pickup,
+    required LatLng destination,
+    List<LatLng> intermediateStops = const <LatLng>[],
+    LatLng? currentLeg,
+  }) {}
+
+  @override
+  Future<void> setCustomMarkerIcon({bool? isRunning}) async {}
+}
+
+RideModel _rideWithStops({required int completed}) => RideModel(
+      id: '42',
+      status: AppStatus.RIDE_RUNNING,
+      pickupLocation: 'Plateau, Dakar',
+      destination: 'Aéroport AIBD, Diass',
+      distance: '38.4',
+      duration: '52',
+      amount: '12500',
+      stops: List<RideStopModel>.generate(3, (index) {
+        final sequence = index + 1;
+        return RideStopModel(
+          id: '$sequence',
+          sequence: '$sequence',
+          latitude: '14.70$sequence',
+          longitude: '-17.44$sequence',
+          locationLabel: 'Arrêt $sequence',
+          completedAt:
+              index < completed ? '2026-11-23 09:1$sequence:00' : null,
+        );
+      }),
+    );
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  group('ISC-F5-14 — compteur visible retiré, Semantics e2e présent', () {
+    late RideDetailsController controller;
+
+    setUp(() async {
+      Get.testMode = true;
+      Get.reset();
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      final prefs = await SharedPreferences.getInstance();
+      final apiClient = RecordingApiClient(sharedPreferences: prefs);
+      Get.put<ApiClient>(apiClient);
+      controller = Get.put<RideDetailsController>(
+        RideDetailsController(
+          repo: _NoopRideRepo(apiClient: apiClient),
+          mapController: _NoopMap(
+            polylineRepo: PolylineRepo(apiClient: apiClient),
+          ),
+        ),
+      );
+      controller.currency = 'FCFA';
+      controller.userImageUrl = '';
+      controller.isLoading = false;
+    });
+
+    tearDown(Get.reset);
+
+    Future<void> pumpSheet(WidgetTester tester, RideModel ride) async {
+      controller.ride = ride;
+      await tester.pumpWidget(
+        GetMaterialApp(
+          home: Scaffold(
+            body: Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                height: 560,
+                child: RideDetailsBottomSheetWidget(
+                  scrollController: ScrollController(),
+                  draggableScrollableController:
+                      DraggableScrollableController(),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+
+    testWidgets(
+        'compteur "x/N arrêt(s) terminé(s)" absent du widget tree en course active',
+        (tester) async {
+      await pumpSheet(tester, _rideWithStops(completed: 1));
+
+$ cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_offer_summary_test.dart 2>&1 | head -80
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:galass_driver/core/helper/xof_money_helper.dart';
+import 'package:galass_driver/core/utils/my_strings.dart';
+import 'package:galass_driver/data/controller/dashboard/dashboard_controller.dart';
+import 'package:galass_driver/data/model/global/ride/ride_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_stop_model.dart';
+import 'package:galass_driver/data/repo/dashboard/dashboard_repo.dart';
+import 'package:galass_driver/data/services/api_client.dart';
+import 'package:galass_driver/data/services/dispatch_callkit_service.dart';
+import 'package:galass_driver/data/services/dispatch_offer_alert_service.dart';
+import 'package:galass_driver/data/services/dispatch_offer_state.dart';
+import 'package:galass_driver/presentation/components/dialog/custom_new_ride_dialog.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toastification/toastification.dart';
+
+import '../helpers/recording_api_client.dart';
+
+class _FakeRepo extends DashBoardRepo {
+  _FakeRepo({required super.apiClient});
+}
+
+/// ISC-F5-12: dispatch offer modal must render the multi-stop summary
+/// (stop count + ordered first label) and substituted price/distance —
+/// never the raw "@priceKey"/"@distanceKey" template tokens (D-11 run7).
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  late _FakeRepo fakeRepo;
+  late DashBoardController controller;
+
+  setUp(() async {
+    Get.testMode = true;
+    useCallKitForDispatchForTest = false;
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final apiClient = RecordingApiClient(sharedPreferences: prefs);
+    Get.put<ApiClient>(apiClient);
+    fakeRepo = _FakeRepo(apiClient: apiClient);
+    controller = DashBoardController(repo: fakeRepo)..userOnline = true;
+    Get.put<DashBoardController>(controller);
+    Get.put<DispatchOfferAlertService>(DispatchOfferAlertService(
+      apiClient: apiClient,
+      startAudioOverride: () async {},
+      stopAudioOverride: () async {},
+    ));
+    CustomNewRideDialog.hydrateRetryDelay = const Duration(milliseconds: 200);
+  });
+
+  tearDown(() {
+    // Always, even when a test body fails mid-way: a leaked toast poisons
+    // the next test's toastification overlay.
+    toastification.dismissAll(delayForAnimation: false);
+    useCallKitForDispatchForTest = null;
+    CustomNewRideDialog.offerLoaderForTest = null;
+    CustomNewRideDialog.hydrateRetryDelay = const Duration(seconds: 2);
+    DispatchOfferClock.resetForTest();
+    CustomNewRideDialog.clearActiveOffersForTest();
+    Get.reset();
+  });
+
+  RideModel _twoStopsOffer() => RideModel(
+        id: '901',
+        pickupLocation: 'Point E',
+        destination: 'Plateau',
+        amount: '4200',
+        recommendAmount: '3200',
+        distance: '5.34',
+        stops: [
+          RideStopModel.fromJson({'id': 1, 'sequence': 1, 'location_label': 'Médina'}),
+          RideStopModel.fromJson({'id': 2, 'sequence': 2, 'location_label': 'Fann'}),
+        ],
+      );
+
+  Future<void> show(WidgetTester tester, RideModel ride) async {
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      ToastificationWrapper(
+
+← Write test/unit/multistop_itinerary_test.dart
+Wrote file successfully.
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && flutter test test/unit/multistop_itinerary_test.dart 2>&1 | tail -120
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because galass_driver depends on timezone 0.11.0 which requires SDK version ^3.10.0, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try using the Flutter SDK version: 3.50.1. 
+Failed to update packages.
+
+$ flutter --version 2>&1 | tail -40
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && git status --short 2>&1 | tail -80
+?? test/unit/multistop_itinerary_test.dart
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && flutter --version 2>&1 | head -2
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && flutter test test/unit/multistop_itinerary_test.dart 2>&1 | tail -80
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because galass_driver depends on timezone 0.11.0 which requires SDK version ^3.10.0, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try using the Flutter SDK version: 3.50.1. 
+Failed to update packages.
+
+$ find /usr -name 'flutter' 2>&1 | head -30
+/usr/local/bin/flutter
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && grep -rn "timezone" pubspec.yaml 2>&1 | head -20
+56:  timezone: 0.11.0
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && grep -rn "timezone" pubspec.lock 2>&1 | head -10
+1911:  timezone:
+1914:      name: timezone
+
