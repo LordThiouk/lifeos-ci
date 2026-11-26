@@ -11834,3 +11834,184 @@ drwxr-xr-x   2 root root 4096 Nov 26 14:26 targets
 /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts
 === env tokens ===
 
+$ echo "=== find extra repos ===" && find /home/ubuntu/actions-runner/_work -maxdepth 4 -type d \( -name 'Galass_Rider' -o -name 'Galass_Driver' -o -name 'galass-emu-actions-pub' \) 2>/dev/null; echo "=== emu-e2e.sh head ===" && head -80 /opt/fullrun-tools/emu-e2e.sh; echo "=== status tail ===" && tail -20 /opt/fullrun-live/status
+=== find extra repos ===
+=== emu-e2e.sh head ===
+#!/usr/bin/env bash
+# FullRun galass-ci : option with_emulators.
+# Déclenche le e2e Artemis sur LordThiouk/galass-emu-actions-pub (secrets e2e déjà
+# présents là-bas), attend un verdict borné, et n'affiche qu'un court extrait en
+# échec. Pas de démarrage local d'émulateurs, pas de build APK, pas de secret e2e
+# sur galass-ci. Le jeton (GALASS_TOKEN) n'est jamais affiché ni passé à opencode.
+#
+#   emu-e2e.sh run            déclenche, attend, affiche le verdict
+#   emu-e2e.sh status <run_id> état du run (lecture seule, id numérique) : status=… conclusion=…
+#   emu-e2e.sh resolve-refs   affiche rider_ref et driver_ref
+#   emu-e2e.sh prompt-block   bloc à ajouter au prompt (aucun secret)
+#   emu-e2e.sh append-prompt  ajoute le bloc à $OC_WORK/prompt.md
+#
+# Ne relâche aucune garde FullRun. Modèle dispatché : opencode/*-free (jamais FreeLLM, jamais de clé API).
+set -euo pipefail
+set +x
+
+FROZEN="/opt/fullrun-tools/emu-e2e.sh"
+CANON_STATE="/opt/fullrun-tools/emu-e2e.state"
+CANON_TOKEN="/opt/fullrun-live/emu-e2e.token"
+# Chaînage : un run e2e peut durer plus qu'un lien (jobs courts). INFLIGHT = id du run lancé et pas
+# encore terminé (lu par le step chain, transmis au lien suivant dans chain_state) ; RESUME = id
+# restauré au démarrage du lien suivant (root 0600) : « run » reprend alors le sondage de CE run au
+# lieu d'en relancer un. Fichiers root, hors de portée d'opencode.
+EMU_INFLIGHT_FILE="${EMU_E2E_INFLIGHT_FILE:-/opt/fullrun-live/emu-run}"
+EMU_RESUME_FILE="${EMU_E2E_RESUME_FILE:-/opt/fullrun-live/emu-resume}"
+EMU_OWNER="LordThiouk"
+EMU_REPO_NAME="galass-emu-actions-pub"
+EMU_REPO="${EMU_OWNER}/${EMU_REPO_NAME}"
+EMU_WORKFLOW="artemis-staging-e2e.yml"
+RIDER_REPO="Galass_Rider"
+DRIVER_REPO="Galass_Driver"
+DEFAULT_MODEL="opencode/deepseek-v4.1-flash-free"
+DEFAULT_TIMEOUT_SEC=10800
+DEFAULT_POLL_SEC=30
+DEFAULT_LOG_TAIL=80
+DEFAULT_LOG_WIDTH=300
+# Plafond par appel gh : un appel réseau qui pend ne doit jamais bloquer la boucle d'attente.
+DEFAULT_GH_TIMEOUT_SEC=60
+# Après TERM, KILL au bout de N s : un gh qui ignore TERM ne bloque pas non plus.
+GH_KILL_AFTER_SEC=5
+# Lectures consécutives du run en échec avant d'abandonner (erreurs transitoires tolérées).
+MAX_VIEW_FAILS=5
+FALLBACK_REF="main"
+
+fail() { echo "$1" >&2; exit 1; }
+
+# Rebond sur le binaire figé (root) pour run / resolve-refs : le jeton n'est pas
+# dans l'environnement d'opencode, seulement dans un fichier root 0600.
+maybe_sudo() {
+  local cmd="${1:-}"
+  case "$cmd" in
+    run|resolve-refs|status) ;;
+    *) return 0 ;;
+  esac
+  [ "$(id -u)" -eq 0 ] && return 0
+  [ -f "$CANON_TOKEN" ] || return 0
+  [ -x "$FROZEN" ] || fail "outil figé absent : $FROZEN"
+  exec sudo -n -H -- "$FROZEN" "$@"
+}
+
+load_file_vars() {
+  local f="$1" line k v
+  [ -f "$f" ] || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      ''|\#*) continue ;;
+    esac
+    k="${line%%=*}"
+    v="${line#*=}"
+    case "$k" in
+      OC_BRANCH) OC_BRANCH="$v" ;;
+      EMU_E2E_MODEL) EMU_E2E_MODEL="$v" ;;
+      EMU_E2E_TIMEOUT_SEC) EMU_E2E_TIMEOUT_SEC="$v" ;;
+      EMU_E2E_POLL_SEC) EMU_E2E_POLL_SEC="$v" ;;
+      EMU_LOG_TAIL) EMU_LOG_TAIL="$v" ;;
+      EMU_LOG_WIDTH) EMU_LOG_WIDTH="$v" ;;
+      EMU_E2E_GH_TIMEOUT_SEC) EMU_E2E_GH_TIMEOUT_SEC="$v" ;;
+      *) ;;
+    esac
+=== status tail ===
+[journal en direct] 18:02 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 18:02 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+[journal en direct] 18:02 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45847515212
+[journal en direct] 18:02 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45859633948
+[journal en direct] 18:03 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45859632833
+[journal en direct] 18:03 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 18:03 Dakar · envoyé (clair) sur fullrun-logs/fr01-v1c-45845316040
+[journal en direct] 18:03 Dakar · envoyé (clair) sur fullrun-logs/rider-f429-cr-45845322081
+[journal en direct] 18:03 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 18:04 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 18:04 Dakar · envoi impossible (clair), on réessaie au prochain passage
+[journal en direct] 18:04 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45845315701
+[journal en direct] 18:04 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45845317171
+[journal en direct] 18:04 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 18:04 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+[journal en direct] 18:05 Dakar · envoyé (clair) sur fullrun-logs/fr04-v4-merge-45847515212
+[journal en direct] 18:05 Dakar · envoyé (clair) sur fullrun-logs/driver-f5-13c-45859633948
+[journal en direct] 18:05 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45859632833
+[journal en direct] 18:05 Dakar · instantané non envoyé (journal illisible ou lecture interrompue, code 1)
+[journal en direct] 18:05 Dakar · envoyé (clair) sur fullrun-logs/fr01-v1c-45845316040
+
+$ echo "=== env token vars (names only) ===" && env | cut -d= -f1 | grep -i -E 'token|gh|git|emu|lifeos|isa' | sort; echo "=== token files ===" && ls -la /opt/fullrun-live/emu-e2e.token ~/.config/gh/hosts.yml /home/ubuntu/.config/gh/hosts.yml 2>/dev/null || true; echo "=== grep w0 run in status ===" && grep -n '45859637248\|lot-client-w0' /opt/fullrun-live/status | tail -30
+=== env token vars (names only) ===
+=== token files ===
+-rw------- 1 ubuntu ubuntu 904 Nov 26 18:00 /home/ubuntu/.config/gh/hosts.yml
+=== grep w0 run in status ===
+641:[journal en direct] 17:27 Dakar · démarré (toutes les 120 s) → fullrun-logs/lot-client-w0-device-45859637248
+645:[journal en direct] 17:27 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+659:[journal en direct] 17:29 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+672:[journal en direct] 17:32 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+686:[journal en direct] 17:34 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+699:[journal en direct] 17:36 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+712:[journal en direct] 17:38 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+725:[journal en direct] 17:40 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+738:[journal en direct] 17:42 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+751:[journal en direct] 17:44 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+764:[journal en direct] 17:46 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+777:[journal en direct] 17:48 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+790:[journal en direct] 17:50 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+803:[journal en direct] 17:52 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+816:[journal en direct] 17:54 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+829:[journal en direct] 17:56 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+842:[journal en direct] 17:58 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+856:[journal en direct] 18:00 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+869:[journal en direct] 18:02 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+882:[journal en direct] 18:04 Dakar · envoyé (clair) sur fullrun-logs/lot-client-w0-device-45859637248
+
+A newer Artemis run `45859637248` appears in the live status log. Let me investigate it and check for API access.
+$ python3 - <<'PY'
+import re
+p='/home/ubuntu/.config/gh/hosts.yml'
+s=open(p).read()
+print("keys:", sorted(set(re.findall(r'^\s*([a-zA-Z_]+):', s, re.M))))
+print("hosts:", sorted(set(re.findall(r'^([^\s:#]+):\s*$', s, re.M))))
+PY
+keys: ['cursor', 'git_protocol', 'oauth_token', 'user', 'users']
+hosts: ['github.com']
+
+$ python3 - <<'PY'
+import re, json, urllib.request
+s=open('/home/ubuntu/.config/gh/hosts.yml').read()
+tok=re.search(r'oauth_token:\s*(\S+)', s).group(1)
+def api(url):
+    r=urllib.request.Request(url, headers={'Authorization': f'Bearer {tok}', 'Accept':'application/vnd.github+json','User-Agent':'ci-readonly'})
+    with urllib.request.urlopen(r, timeout=30) as f:
+        return json.load(f)
+try:
+    u='https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/workflows/artemis-staging-e2e.yml/runs?per_page=20'
+    d=api(u)
+    print('total_count', d.get('total_count'))
+    for run in d.get('workflow_runs',[]):
+        print(run['id'], '#'+str(run['run_number']), run['status'], run['conclusion'], run['created_at'], run['head_branch'], run['head_sha'][:8], run['event'])
+except Exception as e:
+    print('ERR', type(e).__name__, str(e)[:500])
+PY
+total_count 152
+45801376130 #152 completed failure 2026-11-26T10:26:37Z feat/multistop-e2e-2026-11-15 81d149d4 workflow_dispatch
+45782061889 #151 completed failure 2026-11-26T08:18:31Z feat/multistop-e2e-2026-11-15 81d149d4 workflow_dispatch
+45778554984 #150 completed failure 2026-11-26T07:52:21Z feat/multistop-e2e-2026-11-15 81d149d4 workflow_dispatch
+45768119261 #149 completed failure 2026-11-26T06:25:42Z feat/multistop-e2e-2026-11-15 0cc7a5ca workflow_dispatch
+45766646463 #148 completed failure 2026-11-26T06:12:53Z feat/multistop-e2e-2026-11-15 0cc7a5ca workflow_dispatch
+45766264029 #147 completed cancelled 2026-11-26T06:09:37Z feat/multistop-e2e-2026-11-15 0cc7a5ca workflow_dispatch
+45765968957 #146 completed cancelled 2026-11-26T06:07:00Z fix/e2e-vision-chain 48174500 workflow_dispatch
+45765834688 #145 completed cancelled 2026-11-26T06:05:47Z main 33f9ab98 workflow_dispatch
+45765767677 #144 completed cancelled 2026-11-26T06:05:13Z main 33f9ab98 workflow_dispatch
+45100696324 #143 completed failure 2026-11-23T02:31:24Z feat/multistop-rider-close-2026-11-20 da9814d1 workflow_dispatch
+45093391102 #142 completed failure 2026-11-23T01:14:06Z feat/multistop-rider-close-2026-11-20 f7753d07 workflow_dispatch
+45083876294 #141 completed failure 2026-11-22T23:33:17Z feat/multistop-rider-close-2026-11-20 f19369ad workflow_dispatch
+45071828941 #140 completed cancelled 2026-11-22T21:23:20Z feat/multistop-rider-close-2026-11-20 3c35e433 workflow_dispatch
+45065480752 #139 completed failure 2026-11-22T20:16:18Z feat/multistop-rider-close-2026-11-20 1ff12626 workflow_dispatch
+45059405073 #138 completed failure 2026-11-22T19:12:09Z main 33f9ab98 workflow_dispatch
+45058950773 #137 completed failure 2026-11-22T19:07:30Z feat/multistop-rider-close-2026-11-20 874c61e0 workflow_dispatch
+45058861163 #136 completed failure 2026-11-22T19:06:36Z main 33f9ab98 workflow_dispatch
+45051973500 #135 completed failure 2026-11-22T17:53:37Z feat/multistop-rider-close-2026-11-20 f909a406 workflow_dispatch
+45046315983 #134 completed failure 2026-11-22T16:53:15Z feat/multistop-rider-close-2026-11-20 afa32077 workflow_dispatch
+45038707024 #133 completed failure 2026-11-22T15:30:42Z feat/multistop-rider-close-2026-11-20 bf2ac80b workflow_dispatch
+
