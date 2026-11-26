@@ -5934,3 +5934,46 @@ $ for tag in 3.44.8 3.50.0; do echo "=== $tag"; curl -sS -o /tmp/dvc_$tag.kt -w 
 332:        if (version < errorKGPVersion) {
 337:                    errorKGPVersion.toString(),
 
+$ head -40 /agent/repos/Galass_Driver/android/app/build.gradle.kts; echo "=== skip flags anywhere in Driver ==="; grep -rn "skipDependencyChecks\|skip-build-dependency" /agent/repos/Galass_Driver --include=*.kts --include=*.properties --include=*.yaml --include=*.yml --include=*.md 2>/dev/null | head
+import java.io.FileInputStream
+import java.util.Properties
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    id("com.android.application")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    // END: FlutterFire Configuration
+    id("kotlin-android")
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
+fun signingValue(key: String, envName: String): String? {
+    return keystoreProperties.getProperty(key) ?: System.getenv(envName)
+}
+
+android {
+    namespace = "sn.galass.galassdriver"
+    compileSdk = 36
+    ndkVersion = "29.0.14033849"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
+    }
+
+    defaultConfig {
+        applicationId = "sn.galass.galassdriver"
+        minSdk = flutter.minSdkVersion
+        targetSdk = 36
+=== skip flags anywhere in Driver ===
+
