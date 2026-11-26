@@ -4010,3 +4010,19 @@ $ grep -rln "DependencyValidation\|minimum supported version of\|DependencyVersi
 /tmp/flutter/packages/flutter_tools/lib/src/runner/options/common_options.dart
 /tmp/flutter/packages/flutter_tools/lib/src/runner/flutter_command.dart
 
+$ cat /tmp/flutter/version 2>/dev/null; git -C /tmp/flutter log --oneline -1 2>/dev/null; git -C /tmp/flutter describe --tags 2>/dev/null; grep -n "errorGradleVersion\|errorAGPVersion\|errorKGPVersion\|warnGradleVersion" /tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt
+ae9b586f34a [3.50] Changelog for 3.50.1 (#196936)
+3.50.1
+88:    @VisibleForTesting internal val warnGradleVersion: Version = Version(9, 5, 0)
+90:    @VisibleForTesting internal val errorGradleVersion: Version = Version(9, 3, 1)
+99:    @VisibleForTesting internal val errorAGPVersion: AndroidPluginVersion = AndroidPluginVersion(9, 1, 1)
+105:    @VisibleForTesting internal val errorKGPVersion: Version = Version(2, 4, 10)
+231:        if (version < errorGradleVersion) {
+236:                    errorGradleVersion.toString(),
+240:        } else if (version < warnGradleVersion) {
+245:                    warnGradleVersion.toString(),
+291:        if (androidPluginVersion < errorAGPVersion) {
+296:                    errorAGPVersion.toString(),
+316:        if (version < errorKGPVersion) {
+321:                    errorKGPVersion.toString(),
+
