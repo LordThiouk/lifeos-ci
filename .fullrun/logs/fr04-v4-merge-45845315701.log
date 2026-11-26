@@ -13824,3 +13824,47 @@ probes
 /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts
 /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '1,80p' lifeos/LIFEOS/TOOLS/ISATool.ts
+sed: can't read lifeos/LIFEOS/TOOLS/ISATool.ts: No such file or directory
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls -la | grep -i lifeos; echo "---"; find /home/ubuntu/actions-runner/_work/lifeos-ci -maxdepth 2 -name "lifeos" -type d 2>/dev/null
+---
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ ; echo "---"; ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ | grep -i isa
+total 24
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 19:11 .
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 14:26 ..
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 14:26 ci
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 19:11 extra
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 19:11 lifeos
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 19:11 target
+---
+-r--r--r--  1 ubuntu ubuntu  10374 Nov 26 19:11 ISAGate.ts
+dr-xr-xr-x  2 ubuntu ubuntu   4096 Nov 26 19:11 ISARender
+-r--r--r--  1 ubuntu ubuntu  25262 Nov 26 19:11 ISARender.ts
+-r--r--r--  1 ubuntu ubuntu  17043 Nov 26 19:11 ISATool.ts
+-r--r--r--  1 ubuntu ubuntu  11293 Nov 26 19:11 ISAToolHumanTick.test.ts
+-r--r--r--  1 ubuntu ubuntu   2904 Nov 26 19:11 ISAToolScopeLog.test.ts
+-r--r--r--  1 ubuntu ubuntu    697 Nov 26 19:11 IsaFeatures.test.ts
+-r--r--r--  1 ubuntu ubuntu  11348 Nov 26 19:11 IsaFeatures.ts
+-r--r--r--  1 ubuntu ubuntu  17256 Nov 26 19:11 IsaFrontier.ts
+-r--r--r--  1 ubuntu ubuntu   8429 Nov 26 19:11 IsaReconcile.ts
+
+$ bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts --help 2>&1 | head -60
+usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+  scaffold --slug s --goal "…" [--title t]      crée l'ISA (sections Problem…Decisions)
+  append   --section "Claims" --text "…"|--file f  ajoute sous une section (créée si absente)
+  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+  set      --field phase --value build          frontmatter
+  replace  --old "…" --new "…"                  remplacement exact unique (corrections)
+  adopt                                          tamponne un ISA hérité (après relecture)
+  verify                                         contrôle l'empreinte (exit 2 si KO)
+  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts verify MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md 2>&1 | head
+❌ [provenance-key-missing] stamp key absent — cannot verify provenance.
+
