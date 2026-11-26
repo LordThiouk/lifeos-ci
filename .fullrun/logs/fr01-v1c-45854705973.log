@@ -3963,3 +3963,330 @@ class RideService
     }
 }
 
+$ cat core/tests/Feature/Admin/HiddenServiceRideTest.php
+<?php
+
+namespace Tests\Feature\Admin;
+
+use App\Constants\Status;
+use App\Models\Service;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Tests\TestCase;
+
+/**
+ * ISA 2026-11-22-galass-lot-client — ISC-43, ISC-44.
+ */
+class HiddenServiceRideTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config([
+            'database.default'                     => 'sqlite',
+            'database.connections.sqlite.database' => ':memory:',
+        ]);
+        DB::purge('sqlite');
+        DB::reconnect('sqlite');
+
+        Schema::create('services', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger('sort_order')->default(0);
+            $table->boolean('is_visible')->default(true);
+            $table->string('name')->nullable();
+            $table->tinyInteger('status')->default(1);
+            $table->timestamps();
+        });
+        Schema::create('rides', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('service_id')->nullable();
+            $table->integer('status')->default(Status::RIDE_COMPLETED);
+            $table->double('amount')->default(0);
+            $table->timestamps();
+        });
+    }
+
+    public function test_hidden_service_still_readable_for_existing_ride(): void
+    {
+        $service = Service::create(['name' => 'Hidden', 'status' => Status::ENABLE, 'is_visible' => false, 'sort_order' => 1]);
+        DB::table('rides')->insert(['id' => 1, 'user_id' => 1, 'service_id' => $service->id, 'status' => Status::RIDE_COMPLETED, 'amount' => 1000, 'created_at' => now(), 'updated_at' => now()]);
+
+        $ride = DB::table('rides')->where('id', 1)->first();
+        $found = Service::find($ride->service_id);
+        $this->assertNotNull($found);
+        $this->assertFalse((bool) $found->is_visible);
+    }
+
+    public function test_hidden_service_cannot_be_used_for_new_ride(): void
+    {
+        $service = Service::create(['name' => 'Hidden', 'status' => Status::ENABLE, 'is_visible' => false, 'sort_order' => 1]);
+
+        $visible = Service::active()->visible()->find($service->id);
+        $this->assertNull($visible);
+    }
+}
+
+$ cat core/tests/Feature/Auth/DriverLegacyLoginTest.php
+<?php
+
+namespace Tests\Feature\Auth;
+
+use App\Constants\Status;
+use App\Models\Driver;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
+use Tests\TestCase;
+
+/**
+ * ISA 2026-11-22-galass-lot-client — ISC-20.2.
+ */
+class DriverLegacyLoginTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config([
+            'database.default'                     => 'sqlite',
+            'database.connections.sqlite.database' => ':memory:',
+        ]);
+        DB::purge('sqlite');
+        DB::reconnect('sqlite');
+
+        Schema::create('drivers', function (Blueprint $table) {
+            $table->id();
+            $table->string('firstname')->nullable();
+            $table->string('lastname')->nullable();
+            $table->string('username')->nullable();
+            $table->string('email')->nullable();
+            $table->string('country_code', 10)->nullable();
+            $table->string('mobile', 40)->nullable();
+            $table->string('dial_code', 10)->nullable();
+            $table->string('password')->nullable();
+            $table->string('image')->nullable();
+            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('dv')->default(0);
+            $table->tinyInteger('vv')->default(0);
+            $table->tinyInteger('ev')->default(1);
+            $table->tinyInteger('sv')->default(1);
+            $table->tinyInteger('ts')->default(0);
+            $table->tinyInteger('tv')->default(1);
+            $table->tinyInteger('profile_complete')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('personal_access_tokens', function (Blueprint $table) {
+            $table->id();
+            $table->morphs('tokenable');
+            $table->string('name');
+            $table->string('token', 64)->unique();
+            $table->text('abilities')->nullable();
+            $table->timestamp('last_used_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('general_settings', function (Blueprint $table) {
+            $table->id();
+            $table->string('site_name')->default('Galass');
+            $table->string('cur_text')->default('XOF');
+            $table->string('cur_sym')->default('F');
+            $table->tinyInteger('driver_registration')->default(1);
+            $table->tinyInteger('secure_password')->default(0);
+            $table->timestamps();
+        });
+
+        DB::table('general_settings')->insert([
+            'id' => 1, 'site_name' => 'Galass', 'cur_text' => 'XOF', 'cur_sym' => 'F',
+            'driver_registration' => 1, 'secure_password' => 0,
+            'created_at' => now(), 'updated_at' => now(),
+        ]);
+    }
+
+    public function test_legacy_driver_without_photo_can_still_login(): void
+    {
+        $driver = Driver::create([
+            'firstname' => 'Legacy',
+            'lastname'  => 'Driver',
+            'username'  => 'legacydriver',
+            'email'     => 'legacy@example.com',
+            'country_code' => 'SN',
+            'mobile'    => '770000099',
+            'dial_code' => '221',
+            'password'  => Hash::make('password'),
+            'image'     => null,
+            'status'    => Status::USER_ACTIVE,
+            'ev'        => Status::VERIFIED,
+            'sv'        => Status::VERIFIED,
+            'tv'        => Status::VERIFIED,
+        ]);
+
+        $this->assertNull($driver->image);
+        $this->assertTrue(Hash::check('password', $driver->fresh()->password));
+        $this->assertSame(Status::USER_ACTIVE, (int) $driver->status);
+    }
+}
+
+$ cat core/tests/Feature/Auth/DriverRegisterPhotoTest.php
+<?php
+
+namespace Tests\Feature\Auth;
+
+use App\Constants\Status;
+use App\Models\Driver;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
+
+/**
+ * ISA 2026-11-22-galass-lot-client — ISC-20, ISC-20.2.
+ */
+class DriverRegisterPhotoTest extends TestCase
+{
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config([
+            'database.default'                     => 'sqlite',
+            'database.connections.sqlite.database' => ':memory:',
+        ]);
+        \Illuminate\Support\Facades\DB::purge('sqlite');
+        \Illuminate\Support\Facades\DB::reconnect('sqlite');
+
+        Schema::create('drivers', function (Blueprint $table) {
+            $table->id();
+            $table->string('firstname')->nullable();
+            $table->string('lastname')->nullable();
+            $table->string('username')->nullable();
+            $table->string('email')->nullable();
+            $table->string('country_code', 10)->nullable();
+            $table->string('mobile', 40)->nullable();
+            $table->string('dial_code', 10)->nullable();
+            $table->string('password')->nullable();
+            $table->string('image')->nullable();
+            $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('dv')->default(0);
+            $table->tinyInteger('vv')->default(0);
+            $table->tinyInteger('ev')->default(1);
+            $table->tinyInteger('sv')->default(1);
+            $table->tinyInteger('ts')->default(0);
+            $table->tinyInteger('tv')->default(1);
+            $table->tinyInteger('profile_complete')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('admin_notifications', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->default(0);
+            $table->unsignedBigInteger('driver_id')->default(0);
+            $table->string('title')->nullable();
+            $table->string('click_url')->nullable();
+            $table->tinyInteger('is_read')->default(0);
+            $table->timestamps();
+        });
+
+        Schema::create('user_logins', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->default(0);
+            $table->unsignedBigInteger('driver_id')->default(0);
+            $table->string('user_ip')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('country')->nullable();
+            $table->string('country_code')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('browser')->nullable();
+            $table->string('os')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('personal_access_tokens', function (Blueprint $table) {
+            $table->id();
+            $table->morphs('tokenable');
+            $table->string('name');
+            $table->string('token', 64)->unique();
+            $table->text('abilities')->nullable();
+            $table->timestamp('last_used_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('general_settings', function (Blueprint $table) {
+            $table->id();
+            $table->string('site_name')->default('Galass');
+            $table->string('cur_text')->default('XOF');
+            $table->string('cur_sym')->default('F');
+            $table->tinyInteger('driver_registration')->default(1);
+            $table->tinyInteger('secure_password')->default(0);
+            $table->tinyInteger('agree')->default(0);
+            $table->tinyInteger('ev')->default(0);
+            $table->tinyInteger('sv')->default(0);
+            $table->timestamps();
+        });
+
+        \Illuminate\Support\Facades\DB::table('general_settings')->insert([
+            'id' => 1, 'site_name' => 'Galass', 'cur_text' => 'XOF', 'cur_sym' => 'F',
+            'driver_registration' => 1, 'secure_password' => 0, 'agree' => 0, 'ev' => 0, 'sv' => 0,
+            'created_at' => now(), 'updated_at' => now(),
+        ]);
+    }
+
+    public function test_registration_requires_photo(): void
+    {
+        Storage::fake('public');
+
+        $response = $this->postJson('/api/driver/register', [
+            'firstname' => 'Test',
+            'lastname'  => 'Driver',
+            'email'     => 'driver@example.com',
+            'password'  => 'password',
+            'password_confirmation' => 'password',
+        ], ['dev-token' => config('app.dev_token', env('DEVELOPER_TOKEN'))]);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('remark', 'validation_error');
+    }
+
+    public function test_registration_stores_photo(): void
+    {
+        Storage::fake('public');
+
+        $file = UploadedFile::fake()->image('profile.jpg', 200, 200);
+
+        $response = $this->post('/api/driver/register', [
+            'firstname' => 'Test',
+            'lastname'  => 'Driver',
+            'email'     => 'driver@example.com',
+            'password'  => 'password',
+            'password_confirmation' => 'password',
+            'image'     => $file,
+        ], [
+            'dev-token' => config('app.dev_token', env('DEVELOPER_TOKEN')),
+            'Accept'    => 'application/json',
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('remark', 'registration_success');
+
+        $driver = Driver::where('email', 'driver@example.com')->first();
+        $this->assertNotNull($driver);
+        $this->assertNotEmpty($driver->image);
+    }
+}
+
+$ ls /usr/bin/php* /usr/local/bin/php* /opt/*/bin/php* 2>&1 | head -20; echo "==="; echo $PATH
+ls: cannot access '/usr/bin/php*': No such file or directory
+ls: cannot access '/usr/local/bin/php*': No such file or directory
+ls: cannot access '/opt/*/bin/php*': No such file or directory
+===
+/usr/local/bin:/usr/bin:/bin
+
