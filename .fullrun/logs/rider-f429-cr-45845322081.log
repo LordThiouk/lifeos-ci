@@ -7609,3 +7609,5 @@ Silence 180s sans nouvelle sortie (journal=48 o) : coupure opencode pid=294296
 
 > Forge · seaglass-alpha-free
 
+✗ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md failed
+Error: File not found: /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
