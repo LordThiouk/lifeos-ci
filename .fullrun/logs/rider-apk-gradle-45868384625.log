@@ -3881,3 +3881,19 @@ Analyzing 5 items...
 
 3 issues found. (ran in 11.2s)
 
+$ /tmp/flutter/bin/flutter test --no-pub 2>&1 | tail -8
+00:40 +486: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/tool/pubspec_version_test.dart: AppVersion.parse parses X.Y.Z+B
+00:40 +487: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/tool/pubspec_version_test.dart: AppVersion.parse rejects invalid formats
+00:40 +488: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/tool/pubspec_version_test.dart: AppVersion.bump ISC-3 patch 1.0.0+2 → 1.0.1+3
+00:40 +489: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/tool/pubspec_version_test.dart: AppVersion.bump ISC-4 build 1.0.0+2 → 1.0.0+3
+00:40 +490: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/tool/pubspec_version_test.dart: AppVersion.bump minor resets patch and increments build
+00:40 +491: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/tool/pubspec_version_test.dart: AppVersion.bump major resets minor/patch and increments build
+00:40 +492: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/tool/pubspec_version_test.dart: PubspecVersionIo (RED until EXECUTE) reads and writes version line
+00:40 +493: All tests passed!
+
+$ git status --short; echo "--- goldens check:"; git diff --stat -- test/goldens; echo "--- .fullrun check:"; git status --short -- .fullrun; echo OK
+--- goldens check:
+--- .fullrun check:
+OK
+
+Suite complète : **493/493 verts**. Je vérifie qu'aucun golden, `.fullrun`, ni `lifeos/` n'a bougé.
