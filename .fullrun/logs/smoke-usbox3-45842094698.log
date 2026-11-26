@@ -8798,3 +8798,76 @@ $ grep -n -E "task_done|git commit|git add|git status|Gradle 8.14|AGP" /home/ubu
 
 
 Je examine la séquence dans le log pour comprendre le déroulement exact de cette session.
+J'ai lu `/home/ubuntu/actions-runner/_work/_temp/oc/prompt.md` et je l'ai exécutée de bout en bout.
+
+## Résultat : ✅ Tâche terminée — l'exécution est complète
+
+### Prompt exécuté
+Job `rider-apk-gradle` — **Rider : APK Artemis FAIL sous Flutter 3.50.1 (Gradle/AGP trop récents)**. Correction demandée : aligner le toolchain Android sur ce que Flutter 3.50.1 accepte (cible : **Gradle 8.14** + AGP/Kotlin compatibles, calqués sur le Driver, sans casser Firebase/Crashlytics, sans changement `lib/`, `flutter build`/`gradlew` interdits sur la box).
+
+### État constaté & correctif en place (HEAD : `8c28139`)
+Le travail demandé est **déjà en place et commité** sur la branche courante `build/rider-apk-gradle` (working tree clean) :
+
+- `android/gradle/wrapper/gradle-wrapper.properties` — `gradle-9.1.0-all` → **`gradle-8.14-all`**
+- `android/settings.gradle.kts` — AGP **`9.0.1` → `8.11.1`** (Kotlin `2.2.20` conservé ; google-services `4.3.15` / Crashlytics `3.0.7` inchangés)
+- `android/gradle.properties` — retrait des options réservées AGP 9 (`android.newDsl`, `android.builtInKotlin`, `android.r8.proguardAndroidTxt.disallowed`)
+- `CHANGELOG.md` — entrée de traçabilité ajoutée
+
+Branche : `build/rider-apk-gradle`, **ahead de `origin/build/rider-apk-gradle` par 1 commit** (`8c28139 fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)` — auteur `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`, commit incluant la note « flutter build / gradlew non exécutés sur la box »).
+
+### Conformité aux règles du prompt
+- ✅ Pas de changement `lib/` ; `.fullrun` intact ; aucun golden régénéré
+- ✅ `flutter build` / `./gradlew` / `assemble*` **non exécutés** sur la box
+- ✅ Pas de push / merge / `gh` / `ssh` / `scp` ; pas de modification de `main`/`master`
+- ✅ Pas de secret en dur ; `lifeos` en lecture seule (`lifeos_write: false`)
+
+### Livrable
+- `/tmp/task_done.md` — résumé factuel (SHA, tests, résultats) : présent et à jour ✅
+
+### 🔨 FORGE REPORT
+```
+📋 OBJECTIF: Alignement toolchain Android Rider (Gradle 8.14 / AGP 8.11.1) pour Flutter 3.50.1
+🛠️  CHANGES: gradle-wrapper.properties, settings.gradle.kts, gradle.properties, CHANGELOG.md
+✅ VERIF: working tree clean ; HEAD=8c28139 ; contenu fichiers inspecté (Gradle 8.14, AGP 8.11.1, Kotlin 2.2.20)
+⚠️  OUTSTANDING: flutter build/gradlew non exécutés sur la box (interdit) — validation CI Artemis à venir
+📊 COMPLETENESS: branches couvertes ✓ · erreurs propagées via toolchain alignée ✓ · tests non exécutables (politique)
+🎯 RESULTAT: Correctif en place — prêt pour la validation CI (Build APK Rider)
+```
+
+**Conclusion** : le prompt a été lu et exécuté complètement — l'alignement du toolchain Android sur Flutter 3.50.1 est en place (commit `8c28139`), le livrable `/tmp/task_done.md` est écrit, et toutes les contraintes (pas de push, pas de build local, lifeos read-only, pas de `lib/`) sont respectées. Le travail est **prêt pour la re-validation CI Artemis (Build APK Rider)**.
+
+> Forge · beam-free
+
+$ cat /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+# Contexte d exécution lifeos-ci
+
+- Job : rider-apk-gradle
+- Agent : forge-code
+- Dépôt cible : LordThiouk/Galass_Rider
+- Branche : feat/multistop-e2e-2026-11-15
+- lifeos_write : false
+- lifeos de référence : main
+
+## Règles
+
+- Travaille uniquement dans les dépôts fournis ; committe ton travail validé sur la branche courante.
+- Jamais de push, jamais de merge, jamais gh/ssh/scp ; le workflow pousse et ouvre la PR.
+- Jamais de secret ni de clé en dur. Ne modifie pas main/master.
+- Écris un court résumé factuel (SHA, tests, résultats) dans /tmp/task_done.md.
+- lifeos de référence : lifeos/ (lecture seule si lifeos_write=false).
+- lifeos est en lecture seule : ne tente jamais de le modifier.
+
+## Prompt
+
+# Rider — APK Artemis FAIL sous Flutter 3.50.1 (Gradle/AGP trop récents)
+
+Dépôt **Galass_Rider**, branche **build/rider-apk-gradle** (depuis feat/multistop-e2e-2026-11-15 @ tip F4-29).
+
+Artemis `45801376130` : étape unitaires VERTES ; **Build APK Rider** ROUGE — validation dépendances Android Flutter 3.50.1 refuse le toolchain Rider actuel :
+- `android/gradle/wrapper/gradle-wrapper.properties` → **Gradle 9.1.0**
+- `android/settings.gradle.kts` → **AGP 9.0.1**
+
+Driver (vert APK sous le même Artemis/Flutter 3.50.1) utilise **Gradle 8.14** (+ AGP ~8.11).
+
+Fais UNIQUEMENT : aligner le toolchain Android Rider sur ce que **Flutter 3.50.1** accepte (cible : Gradle **8.14** + AGP/Kotlin compatibles, calqués sur Driver si possible, sans casser Firebase/Crashlytics). Pas de changement `lib/`. **Interdit** `flutter build` / `gradlew` sur la box — commits + note dans message. Auteur Papa Diop <76528706+LordThiouk@users.noreply.github.com>. Pas de git push. Ne touche pas `.fullrun`. Ne régénère aucun golden.
+
