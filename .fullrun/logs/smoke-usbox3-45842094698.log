@@ -1628,3 +1628,338 @@ $ grep -rn "file_picker" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/t
 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/account/profile_controller.dart:171:    final List<PlatformFile> files = await FilePicker.pickFiles(
 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/presentation/screens/edit_profile/widget/profile_image.dart:121:    final List<PlatformFile> files = await FilePicker.pickFiles(
 
+$ sed -n '105,130p' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart; grep -n "FilePicker" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/presentation/screens/edit_profile/widget/profile_image.dart | head
+void addEventMessage(RideMessage rideMessage) {
+    userId = repo.apiClient.sharedPreferences.getString(SharedPreferenceHelper.userIdKey) ?? '-1';
+    printX("$userId ${rideMessage.rideId}");
+    massageList.insert(0, rideMessage);
+    updateCount(unreadMsg + 1);
+    MyUtils.vibrate();
+    update();
+  }
+
+  void pickFile() async {
+    final List<PlatformFile> files = await FilePicker.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'jpeg'],
+    );
+    if (files.isEmpty) return;
+
+    final path = files.single.path;
+    if (path == null || path.isEmpty) return;
+
+    final file = File(path);
+    if (!SecurityValidators.isUploadWithinLimit(file)) {
+      CustomSnackBar.error(errorList: [MyStrings.fileTooLarge.tr]);
+      return;
+    }
+
+121:    final List<PlatformFile> files = await FilePicker.pickFiles(
+
+$ mkdir -p /tmp/fp && curl -sL -m 60 "https://pub.dev/api/archives/file_picker-12.3.0.tar.gz" -o /tmp/fp/fp12.tar.gz && ls -la /tmp/fp/ && tar -tzf /tmp/fp/fp12.tar.gz | grep -E "android/.*gradle|CHANGELOG" | head -20
+total 112
+drwxr-xr-x   6 ubuntu ubuntu  4096 Nov 26 18:36 .
+drwxrwxrwt. 41 root   root   20480 Nov 26 18:36 ..
+-rw-r--r--   1 ubuntu ubuntu  2900 Sep 10 04:40 CHANGELOG.md
+-rw-r--r--   1 ubuntu ubuntu  1070 Sep 10 04:40 LICENSE
+-rw-r--r--   1 ubuntu ubuntu   521 Sep 10 04:40 README.md
+-rw-r--r--   1 ubuntu ubuntu 20918 Nov 26 16:34 afp.tgz
+drwxr-xr-x   3 ubuntu ubuntu  4096 Jan  1  1970 android
+drwxr-xr-x   2 ubuntu ubuntu  4096 Jan  1  1970 example
+-rw-r--r--   1 ubuntu ubuntu 25943 Nov 26 18:36 fp12.tar.gz
+drwxr-xr-x   3 ubuntu ubuntu  4096 Jan  1  1970 lib
+-rw-r--r--   1 ubuntu ubuntu   909 Sep 10 04:40 pubspec.yaml
+drwxr-xr-x   2 ubuntu ubuntu  4096 Jan  1  1970 test
+CHANGELOG.md
+
+$ cd /tmp/fp && tar -tzf fp12.tar.gz | head -40; echo ====; tar -tzf afp.tgz 2>/dev/null | head -40; ls -la
+lib
+lib/src
+lib/src/file_picker.dart
+lib/file_picker.dart
+pubspec.yaml
+README.md
+example
+example/example.dart
+CHANGELOG.md
+test
+test/file_picker_test.dart
+LICENSE
+====
+LICENSE
+test
+test/file_picker_android_test.dart
+README.md
+example
+example/example.dart
+pubspec.yaml
+android
+android/src
+android/src/main
+android/src/main/AndroidManifest.xml
+android/src/main/kotlin
+android/src/main/kotlin/com
+android/src/main/kotlin/com/mr
+android/src/main/kotlin/com/mr/flutter
+android/src/main/kotlin/com/mr/flutter/plugin
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FilePickerDelegate.kt
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FilePickerPlugin.kt
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker/MethodResultWrapper.kt
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FileUtils.kt
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FileInfo.kt
+android/build.gradle.kts
+android/proguard-rules.pro
+CHANGELOG.md
+lib
+lib/android_file_picker.dart
+lib/src
+lib/src/android_saf_handle.dart
+lib/src/file_picker_android_options.dart
+lib/src/file_picker_android.dart
+lib/src/android_platform_file.dart
+total 112
+drwxr-xr-x   6 ubuntu ubuntu  4096 Nov 26 18:36 .
+drwxrwxrwt. 41 root   root   20480 Nov 26 18:36 ..
+-rw-r--r--   1 ubuntu ubuntu  2900 Sep 10 04:40 CHANGELOG.md
+-rw-r--r--   1 ubuntu ubuntu  1070 Sep 10 04:40 LICENSE
+-rw-r--r--   1 ubuntu ubuntu   521 Sep 10 04:40 README.md
+-rw-r--r--   1 ubuntu ubuntu 20918 Nov 26 16:34 afp.tgz
+drwxr-xr-x   3 ubuntu ubuntu  4096 Jan  1  1970 android
+drwxr-xr-x   2 ubuntu ubuntu  4096 Jan  1  1970 example
+-rw-r--r--   1 ubuntu ubuntu 25943 Nov 26 18:36 fp12.tar.gz
+drwxr-xr-x   3 ubuntu ubuntu  4096 Jan  1  1970 lib
+-rw-r--r--   1 ubuntu ubuntu   909 Sep 10 04:40 pubspec.yaml
+drwxr-xr-x   2 ubuntu ubuntu  4096 Jan  1  1970 test
+
+$ cd /tmp/fp && curl -sL -m 60 "https://pub.dev/api/archives/android_file_picker-1.1.1.tar.gz" -o afp111.tgz && tar -tzf afp111.tgz | head -40
+LICENSE
+test
+test/file_picker_android_test.dart
+README.md
+example
+example/example.dart
+pubspec.yaml
+android
+android/src
+android/src/main
+android/src/main/AndroidManifest.xml
+android/src/main/kotlin
+android/src/main/kotlin/com
+android/src/main/kotlin/com/mr
+android/src/main/kotlin/com/mr/flutter
+android/src/main/kotlin/com/mr/flutter/plugin
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FilePickerDelegate.kt
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FilePickerPlugin.kt
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker/MethodResultWrapper.kt
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FileUtils.kt
+android/src/main/kotlin/com/mr/flutter/plugin/filepicker/FileInfo.kt
+android/build.gradle.kts
+android/proguard-rules.pro
+CHANGELOG.md
+lib
+lib/android_file_picker.dart
+lib/src
+lib/src/android_saf_handle.dart
+lib/src/file_picker_android_options.dart
+lib/src/file_picker_android.dart
+lib/src/android_platform_file.dart
+
+$ cd /tmp/fp && mkdir -p afp111 && tar -xzf afp111.tgz -C afp111 && cat afp111/android/build.gradle.kts; echo ====; grep -n "sdk\|kotlin\|agp" afp111/pubspec.yaml
+import com.android.build.gradle.LibraryExtension
+import groovy.lang.GroovyObject
+import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.withGroovyBuilder
+
+group = "com.mr.flutter.plugin.filepicker"
+version = "1.0-SNAPSHOT"
+
+// Temporary workaround, not a permanent fix. Pinning an older AGP here while
+// the consuming app applies a newer one through the `plugins` block is
+// generally discouraged, this module didn't declare it until it broke
+// `android.newDsl=false` projects with custom root level Gradle
+// configuration (#2170). Flutter's own AGP 9 `newDsl` migration is still in
+// progress (https://github.com/flutter/flutter/issues/180137); its interim
+// compatibility shim doesn't appear to reliably reach plugin modules that
+// don't declare their own classpath. Remove this block again once that
+// migration lands upstream and `android.newDsl=false` is no longer needed.
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.5.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22")
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+fun GroovyObject.intProperty(name: String): Int {
+    val value = getProperty(name)
+    return when (value) {
+        is Number -> value.toInt()
+        is String -> value.toInt()
+        else -> error("Property '$name' is not an Int-compatible value: $value")
+    }
+}
+
+val agpVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION
+    .substringBefore('.')
+    .toInt()
+val builtInKotlinProperty = providers.gradleProperty("android.builtInKotlin").orNull
+val isBuiltInKotlinEnabled = agpVersion >= 9 &&
+    (builtInKotlinProperty == null || builtInKotlinProperty.toBoolean())
+val shouldApplyKotlinAndroidPlugin = agpVersion < 9 || !isBuiltInKotlinEnabled
+
+apply(plugin = "com.android.library")
+if (shouldApplyKotlinAndroidPlugin) {
+    apply(plugin = "org.jetbrains.kotlin.android")
+}
+
+val flutterExtension = extensions.getByName("flutter") as GroovyObject
+val flutterCompileSdkVersion = flutterExtension.intProperty("compileSdkVersion")
+
+configure<LibraryExtension> {
+    compileSdk = flutterCompileSdkVersion
+    namespace = "com.mr.flutter.plugin.filepicker"
+
+    defaultConfig {
+        minSdk = 21
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("proguard-rules.pro")
+    }
+
+    lint {
+        disable += "InvalidPackage"
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    if (shouldApplyKotlinAndroidPlugin) {
+        withGroovyBuilder {
+            "kotlinOptions" {
+                setProperty("jvmTarget", JavaVersion.VERSION_17.toString())
+            }
+        }
+    }
+}
+
+dependencies {
+    add("implementation", "androidx.core:core:1.18.0")
+    add("implementation", "androidx.core:core-ktx:1.18.0")
+    add("implementation", "androidx.annotation:annotation:1.10.0")
+    add("implementation", "androidx.lifecycle:lifecycle-runtime:2.10.0")
+}
+
+====
+13:  sdk: ">=3.10.0 <4.0.0"
+27:    sdk: flutter
+34:    sdk: flutter
+
+$ cd /tmp/fp && tar -xzf fp12.tar.gz -C . --one-top-level=fp12 2>/dev/null || (mkdir -p fp12 && tar -xzf fp12.tar.gz -C fp12); cat fp12/pubspec.yaml; echo ====; head -40 fp12/CHANGELOG.md
+name: file_picker
+description: A package that allows you to use a native file explorer to pick single or multiple absolute file paths, with extension filtering support.
+homepage: https://github.com/vicajilau/flutter_file_picker
+repository: https://github.com/vicajilau/flutter_file_picker/tree/main/packages/file_picker
+issue_tracker: https://github.com/vicajilau/flutter_file_picker/issues
+topics:
+  - file-picker
+  - files
+  - storage
+  - desktop
+  - web
+version: 12.3.0
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.10.0 <4.0.0"
+  flutter: ">=3.38.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  file_picker_platform_interface: ^3.4.0
+  android_file_picker: ^1.1.0
+  file_picker_darwin: ^1.2.0
+  file_picker_linux: ^1.1.0
+  windows_file_picker: ^1.3.0
+  file_picker_web: ^3.1.0
+  cross_file: ^0.3.5+4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  plugin_platform_interface: ^2.1.8
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        default_package: android_file_picker
+      ios:
+        default_package: file_picker_darwin
+      linux:
+        default_package: file_picker_linux
+      macos:
+        default_package: file_picker_darwin
+      web:
+        default_package: file_picker_web
+      windows:
+        default_package: windows_file_picker
+====
+## 12.3.0
+
+### Desktop (Windows)
+- Added `WindowsOptions.acceptLabel`, letting callers set the confirm ("OK") button text on `pickFile()`, `pickFiles()`, `getDirectoryPath()`, and `saveFile()` dialogs. [#1861](https://github.com/vicajilau/flutter_file_picker/issues/1861)
+
+### macOS
+- Added `DarwinOptions.acceptLabel`, letting callers set the confirm button text for `pickFile()`/`pickFiles()` (`NSOpenPanel.prompt`). Has no effect on iOS. [#1861](https://github.com/vicajilau/flutter_file_picker/issues/1861)
+
+## 12.2.0
+
+### General
+- Added `PlatformFile.lengthSync()`, replacing the `size` property removed in 12.0. It returns the length the native picker already reported, without any I/O, or `null` when the platform did not report one, in which case `length()` still reads it from disk. [#2187](https://github.com/vicajilau/flutter_file_picker/issues/2187)
+- Raised the lower bounds on the platform implementations and the platform interface together. `PlatformFile.lengthSync()` is abstract, so an implementation published before it does not satisfy the new interface, and leaving the old bounds would let pub resolve a combination that compiles nowhere.
+
+## 12.1.3
+
+### General
+- Raised the lower bounds on the platform implementations to the first versions built against `file_picker_platform_interface` 3.2.0. The facade already required `^3.2.0` for the interface itself, but still allowed implementations predating the `DarwinOptions` parameter added there, so pub could legally resolve a combination that does not compile. [#2186](https://github.com/vicajilau/flutter_file_picker/issues/2186)
+
+## 12.1.2
+
+### General
+- Stopped importing `file_picker_darwin` directly from the facade package. `skipEntitlementsChecks()` now dispatches through the new `FilePickerPlatform.skipEntitlementsChecks()` hook instead of a type test on `FilePickerPlatform.instance`. That import pulled `dart:io` into `file_picker`'s import graph, making the package incompatible with wasm and breaking analysis when resolved against the lowest allowed dependency versions. No behavior change on any platform.
+
+### iOS
+- Added `darwinOptions` (`DarwinOptions`) to `pickFile()`/`pickFiles()`, letting callers set `DarwinAssetRepresentationMode` to request the photo library return media in its `current` or a `compatible` representation instead of always transcoding to the system default (`automatic`). Restores a way to avoid expensive transcoding for large HEVC, HDR, or slow-motion videos, which existed before the Darwin implementation was rewritten. Non-automatic modes require `compressionQuality: 0`, mixing the two throws an `ArgumentError`.
+
+## 12.1.1
+
+### macOS
+- Fixed `FilePicker.skipEntitlementsChecks()` being a permanent no-op. It now delegates to `FilePickerDarwin.skipEntitlementsChecks()` when running on macOS, so non-sandboxed apps can actually skip the App Sandbox entitlement checks again.
+
+## 12.1.0
+
+### General
+- Added `PlatformFile.extension`, restoring the pre-12.0 convenience getter that was dropped during the federated rewrite. Returns the file extension of `name` without the leading dot, or `null` if there is none.
+
+### iOS
+- Fixed a crash (`FileSystemException`/`OSError: Is a directory`) when picking a Live Photo from the gallery. Live Photos are saved by iOS as `.pvt` packages (directories); the still image contained in the package is now extracted instead of returning the package itself.
+
