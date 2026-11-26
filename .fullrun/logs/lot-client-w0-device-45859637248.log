@@ -3583,3 +3583,208 @@ jobs:
       - uses: actions/checkout@v4
         with: {repository: LordThiouk/Galass_Rider, ref: "${{ inputs.rider_ref }}", token: "${{ secrets.GALASS_REPO_TOKEN }}", path: src/rider, persist-credentials: false}
 
+$ echo "=====CI====="; find /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci -type f | head -60; echo "=====LIFEOS TOP====="; ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/ | head -40
+=====CI=====
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/TESTS-DIAG.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/REVIEW.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/models.txt
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/docs/galass-bugs-isa-locate-2026-11-25.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/README.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/serena-fix.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-close-max.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/allow-acr.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-fullrun.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/review-assemble.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-build-forge-code.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/vera-audit-fix.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/extra-fetch.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/startup.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/review20.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/fix-push.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/assemble.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/no-auto-next.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/chain-inputs.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-build-engineer.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/agent-run-inputs.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/fix-ci.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/pipeline.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/pr20-review.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-verify-silas.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/timeout-fix.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-verify-forge-audit.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/fr303.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-build-aditi-ui.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-verify-code-review.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-plan-serena.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/extra-fetch2.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/find-bugs-isa.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/pushfix.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/brick-build-anvil.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/prompts/hf-ffmpeg.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/FIX-SERENA.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/INVENTAIRE.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/REPORT.md
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/HEAD
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/test/ci-old-0813
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/fullrun-prompts
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/cursor/wire-livelog-e410
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/cursor/driver-f6-prompts-e410
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/cursor/task-model-deepseek-e410
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/cursor/restore-preflight-model-e410
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/cursor/silence-switch-e410
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/cursor/wstunnel-proxy-e410
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/pipe-smoke-main
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/review/bricks-a
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/review/bricks-c
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/review/bricks
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/seed/socle-2026-11-25
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/main
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/fr/brick-build-aditi-ui
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/fr/agent-run-inputs
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/fr/brick-close-max
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/fr/brick-fullrun
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/fr/brick-wire-inputs
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/.git/logs/refs/remotes/origin/fr/brick-build-engineer
+=====LIFEOS TOP=====
+total 184
+dr-xr-xr-x  16 ubuntu ubuntu  4096 Nov 26 17:27 .
+drwxr-xr-x   5 ubuntu ubuntu  4096 Nov 26 17:27 ..
+dr-xr-xr-x   8 ubuntu ubuntu  4096 Nov 26 17:27 .git
+dr-xr-xr-x   4 ubuntu ubuntu  4096 Nov 26 17:27 .github
+-r--r--r--   1 ubuntu ubuntu   535 Nov 26 17:27 .gitignore
+-r--r--r--   1 ubuntu ubuntu   126 Nov 26 17:27 .sops.yaml
+-r--r--r--   1 ubuntu ubuntu  5502 Nov 26 17:27 CLAUDE.md
+-r--r--r--   1 ubuntu ubuntu  1487 Nov 26 17:27 ISA.md
+dr-xr-xr-x  14 ubuntu ubuntu  4096 Nov 26 17:27 LIFEOS
+dr-xr-xr-x   3 ubuntu ubuntu  4096 Nov 26 17:27 MEMORY
+-r--r--r--   1 ubuntu ubuntu   591 Nov 26 17:27 README.md
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 17:27 Workflows
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 17:27 agents
+-r--r--r--   1 ubuntu ubuntu   543 Nov 26 17:27 bun.lock
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 17:27 commands
+dr-xr-xr-x   5 ubuntu ubuntu  4096 Nov 26 17:27 hooks
+dr-xr-xr-x   7 ubuntu ubuntu  4096 Nov 26 17:27 opencode
+-r--r--r--   1 ubuntu ubuntu   383 Nov 26 17:27 package.json
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 17:27 rules
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 17:27 scripts
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 17:27 secrets
+-r--r--r--   1 ubuntu ubuntu 72246 Nov 26 17:27 settings.template.json
+dr-xr-xr-x 188 ubuntu ubuntu 12288 Nov 26 17:27 skills
+dr-xr-xr-x 236 ubuntu ubuntu 12288 Nov 26 17:27 skills-shared
+
+$ git log --oneline -30; echo "=====LAST COMMIT FULL====="; git show --stat HEAD | head -60
+9a012ce2 w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés
+3a071572 w0(artemis): BLOCK confirmé runs 148/149 — goldens Driver 4/4 sous 3.44.8 (baselines 3.50.1) ; ISC 22/50/80-84 non cochés
+5b62a92b w0(artemis): run 45768119261 échoue aux tests Flutter ; W0 device BLOQUÉ, ISC non cochés
+691864eb w0(isc-84): S-W0-07 preuve backend partielle CASH_PAYMENT_RECEIVED horodaté ; ISC-84 non coché
+8a07570d w0(isc-83): S-W0-06 ancre R-6 vérifiée ; repro device/logcat bloquée
+142ec782 w0(isc-82): S-W0-05 ancres D-12 vérifiées ; tests single-offer verts ; e2e device bloqué
+a95aed47 w0(isc-81): S-W0-04 ancres D-9 vérifiées ; DispatchAdminSettingsTest vert ; repro device bloquée
+57d3cf05 w0(isc-80): S-W0-03 ancres D-1 vérifiées ; preuve backend online_status ; repro device bloquée
+313ce45e w0(isc-50): S-W0-02 ancres OTP Rider+Driver vérifiées ; PhoneAuthUniquenessTest vert
+9b2873f4 w0(isc-22): S-W0-01 ancres mobile revérifiées ; route:list backend OK ; repro device bloquée
+a5c15f5e w0(isc-84): S-W0-07 R-7 repro device bloquée ; lecture backend faite
+ad1ee65e w0(isc-83): S-W0-06 R-6 repro device bloquée
+2579b560 w0(isc-82): S-W0-05 D-12 repro device bloquée
+66195fbe w0(isc-81): S-W0-04 D-9 repro device bloquée ; lecture offer_timeout faite
+900ffa84 w0(isc-80): S-W0-03 D-1 repro device bloquée ; lecture backend faite
+02c629e6 w0(isc-50): S-W0-02 écran login/OTP bloqué — dépôts mobiles absents
+6ef918a0 w0(isc-22): S-W0-01 repro bloquée — device/emu indisponibles
+a5458b0b docs(isa): plan Serena — espacer les entrées de vague
+58653dc0 docs(isa): plan Serena — ajouter ISC-83.1 (R-6 run7)
+dda52b32 docs(isa): plan de build Serena — W3 bugs OUVERTS et W4 vérification
+b621d619 docs(isa): plan de build Serena — W2 Rider puis Driver
+375610c2 docs(isa): plan de build Serena — W0 repro et W1 backend
+cad1a516 docs(isa): Vera audit — ISC-60/82, ISC-6 exécutable, ISC-22.1 en W2
+acbd3c17 docs(isa): Vera audit — corriger ancrages fichier:ligne vérifiés
+d85a16e4 docs(isa): décisions Papa points 7 (A) et 10 (B)
+604f4f76 prompt: lot client décisions 7 et 10
+688ac5e6 docs(isa): signaler le prérequis docs/BUGS.md trié (bloquant build)
+85cf944d docs(isa): consigner CheckCompleteness pass (Vera plan)
+7a67a378 docs(isa): résoudre le fog SMS (passerelle Laravel existante)
+f1477798 docs(isa): ordre de build par vagues et carte de dispatch
+=====LAST COMMIT FULL=====
+commit 9a012ce234cdfab0d580f3bdc9da95b2e27fa73f
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 17:39:50 2026 +0000
+
+    w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés
+
+ MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+$ wc -l MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md; echo "=====DIFF HEAD====="; git show HEAD; echo "=====DIFF HEAD~1====="; git show HEAD~1 | head -80
+511 MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+=====DIFF HEAD=====
+commit 9a012ce234cdfab0d580f3bdc9da95b2e27fa73f
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 17:39:50 2026 +0000
+
+    w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés
+
+diff --git a/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md b/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+index f57f6400..1099500e 100644
+--- a/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
++++ b/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+@@ -8,9 +8,9 @@ progress: 0/63
+ algorithm: 8.20.2
+ isa_spec: 2.21.0
+ started: 2026-11-22T18:20:00Z
+-updated: 2026-11-26T06:50:28.861Z
++updated: 2026-11-26T17:39:46.635Z
+ context_sufficient: true
+-isa_stamp: hmac-sha256:[REDACTED:hex64]
++isa_stamp: hmac-sha256:[REDACTED:hex64]
+ ---
+ ## Problem
+ 
+@@ -499,6 +499,7 @@ Repro locale (lecture et exécution seules, aucun code écrit, Flutter **3.44.8*
+ Cause racine = écart de version Flutter, pas une régression du code : les baselines ont été posées par `df372db` « test(goldens): baseline Driver depuis main 9b34386 (Flutter **3.50.1**) » (2026-11-23 19:24Z, seulement sur `feat/multistop-e2e-2026-11-15`, absent de `main`) alors que le workflow épinglit **3.44.8**. Rejeu du même fichier sous Flutter **3.50.1** : `00:01 +4 … All tests passed!`. Historique CI cohérent : run #143 (2026-11-23 02:31Z, avant `df372db`) passait l'étape 11 et allait jusqu'à l'étape 19 (échec e2e) ; depuis, chaque run échoue en 468/4. Correctif à trancher par Papa (hors W0 : aucune écriture) : `flutter-version` du workflow vers 3.50.1, ou régénération des goldens sous 3.44.8.
+ Dispatch ou relance impossible depuis ce runner : `/opt/fullrun-tools/emu-e2e.sh` et le jeton `/opt/fullrun-live/emu-e2e.token` absents ; `OC_BRANCH=fullrun/lot-client-w0 /opt/lifeos-ci-tools/opencode/emu-e2e.sh resolve-refs|status|run` → `jeton GALASS_TOKEN inaccessible (fichier d'outil figé)` ; `gh`, `sudo` et `git push` interdits par la politique du run (lecture seule via l'API publique). Refs : `origin/feat/multistop-e2e-2026-11-15` présente localement sur Rider, Driver et emu ; sur GitHub elle répond 200 pour `galass-emu-actions-pub` (public) et 404 sans authentification pour `Galass_Rider`/`Galass_Driver` (privés) : ni leur présence réelle, ni les `rider_ref`/`driver_ref` effectivement dispatchés ne sont vérifiables d'ici.
+ Conséquence : S-W0-01…S-W0-07 (ISC-22, ISC-50, ISC-80 à ISC-84) restent **BLOQUÉS côté device, non cochés** ; `progress` inchangé (0/63) ; les preuves backend déjà consignées restent en place et ne sont pas refaites.
++- **2026-11-26 — W0 device (Artemis) : BLOCK, aucun ISC coché.** Vérification API publique `galass-emu-actions-pub` (`artemis-staging-e2e.yml`) : runs récents emu `feat/multistop-e2e-2026-11-15` @ `81d149d4` — #150 `45778554984` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45778554984 (2026-11-26T07:52:21Z, failure, step 11 « Tests unitaires Flutter » failed, build/KVM/E2E skipped) ; #151 `45782061889` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45782061889 (2026-11-26T08:18:31Z, failure, step 11 failed) ; #152 `45801376130` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130 (2026-11-26T10:26:37Z, failure). Run #152 : step 11 tests Flutter **success** (régression goldens/Flutter 3.44.8 corrigée sur cette tête), mais step 12 « Build APK (staging, debug, même job, pas d'upload) » **failure** ; étapes 13-19 (apksigner, KVM, opencode, E2E multistop) **skipped**. Artefacts publics : uniquement `staging-e2e-evidence-encrypted` (337 o) ; aucun `e2e-out/summary.md`, `report.json`, `ui/*.xml`, `smoke.log`. **Aucune capture ni logcat device produite** ; S-W0-01…S-W0-07 / ISC-22,50,80-84 restent non cochés. Cause step 12 non diagnostiquée ici (logs non téléchargeables sans authentification API ; pas de jeton GALASS_TOKEN, pas de dispatch possible depuis ce runner). Aucun W1+ entamé.
+ 
+ ## Remaining Work
+ 
+=====DIFF HEAD~1=====
+commit 3a0715726c58d7fae824255c5f9aa183ab2711b8
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 06:50:46 2026 +0000
+
+    w0(artemis): BLOCK confirmé runs 148/149 — goldens Driver 4/4 sous 3.44.8 (baselines 3.50.1) ; ISC 22/50/80-84 non cochés
+
+diff --git a/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md b/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+index 4d6c0161..f57f6400 100644
+--- a/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
++++ b/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+@@ -8,9 +8,9 @@ progress: 0/63
+ algorithm: 8.20.2
+ isa_spec: 2.21.0
+ started: 2026-11-22T18:20:00Z
+-updated: 2026-11-26T06:33:42.016Z
++updated: 2026-11-26T06:50:28.861Z
+ context_sufficient: true
+-isa_stamp: hmac-sha256:[REDACTED:hex64]
++isa_stamp: hmac-sha256:[REDACTED:hex64]
+ ---
+ ## Problem
+ 
+@@ -494,6 +494,11 @@ Why: les cinq doutes qui touchent la course sont tranchés par un test appareil
+ **2026-11-26 04:49 — W0 S-W0-06 / ISC-83 : ancre Rider revérifiée, preuve device/logcat toujours indisponible ; aucun test backend applicable ; ISC laissé `[ ]`.** Ancre : `extra/Galass_Rider/lib/data/controller/location/select_location_controller.dart:382-393` (`animateMapCameraPosition` → `mapController?.animateCamera` sans garde de disposition), liée à `lib/data/controller/map/ride_map_controller.dart:155-176` (`loadMap` → `getPolyLinePoints`). Le crash R-6 est un `FATAL NullPointerException` dans `TextureRegistry$SurfaceProducer.getWidth()` (platform view GoogleMap après dispose) : il ne se reproduit qu'avec un émulateur et le logcat natif. `adb`/`flutter` absents, dépôt Rider présent mais non exécutable ; aucun `php artisan test` ne couvre une vue native Flutter. Verdict : BLOQUÉ côté device ; ISC laissé `[ ]`.
+ **2026-11-26 04:50 — W0 S-W0-07 / ISC-84 : preuve backend partielle ajoutée (horodatage d'émission de `CASH_PAYMENT_RECEIVED`), e2e device non refait, ISC-84 laissé `[ ]`.** Ancre Rider revérifiée : `extra/Galass_Rider/lib/data/controller/pusher/pusher_ride_controller.dart:81` (`case 'online_payment_received'`) et `:101` (`case 'cash_payment_received'` → `_handleCashPayment`). Backend relu : `core/app/Http/Controllers/Api/Driver/RideController.php:325-333` émet `CASH_PAYMENT_RECEIVED` sur `rider-user-{id}` juste après `RidePaymentManager()->payment(...)`, puis `RidePushNotifier::paymentReceived` (`:335`). Nouveau test de preuve : `core/tests/Feature/Push/CashPaymentReceivedTimestampTest.php` ; `php artisan test --filter=CashPaymentReceivedTimestampTest` → `Tests: 1 deprecated (11 assertions)` : exactement 1 événement, canal `rider-user-1`, horodatage d'émission capté par listener pendant la requête HTTP (`$before <= listener_time <= $after`), et `ShouldBroadcastNow` (broadcast immédiat, pas de file). Cela prouve la moitié serveur de R-7 ; l'écart ≤ 5 s entre l'événement serveur et l'affichage Rider exige toujours l'e2e émulateur (`adb`/`flutter` absents). Conformément à la consigne, ISC-84 n'est pas coché.
+ **2026-11-26 06:33 — W0 device via Artemis : BLOCK, aucun ISC coché.** Run Artemis `45768119261` — https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45768119261 — `workflow_dispatch` sur `feat/multistop-e2e-2026-11-15` (head `0cc7a5ca`), créé 06:25:42Z, terminé 06:30:19Z, conclusion **failure**. Le job échoue à l'étape 11 « Tests unitaires Flutter (preuve ISC — avant rm -rf src) » (annotation : `468 tests passed, 4 failed`, exit 1) ; les étapes 12 « Build APK », 14 « Activer KVM » et 19 « E2E multistop » sont **skipped**. Aucun émulateur n'a démarré, aucun APK installé, et les artefacts de diagnostic sont absents (`No files were found … e2e-out/summary.md`, `e2e-out/report.json`, `e2e-out/ui/*.xml`, `e2e/smoke.log`) : **aucune capture ni logcat device**. Seul l'artefact chiffré `staging-e2e-evidence-encrypted` (337 o) existe. Sur ce runner, `/opt/fullrun-tools/emu-e2e.sh` et le jeton `GALASS_TOKEN` sont absents et `gh`/`sudo` sont interdits : aucun nouveau déclenchement Artemis n'est possible. Conséquence : S-W0-01…S-W0-07 (ISC-22, ISC-50, ISC-80 à ISC-84) restent **BLOQUÉS côté device**, non cochés (`progress` inchangé, 0/63) ; les preuves backend partielles déjà consignées sont conservées et non refaites. Conformément à la consigne, aucun ISC n'est coché tant que la preuve device exigée ne passe pas.
++**2026-11-26 06:49 — W0 device via Artemis : BLOCK confirmé (runs #148 et #149), cause identifiée (goldens Driver vs Flutter 3.44.8), aucun ISC coché.** Cibles : run `45768119261` (#149) — https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45768119261 — et run `45766646463` (#148, même tête) : `workflow_dispatch`, emu `feat/multistop-e2e-2026-11-15` @ `0cc7a5ca`, tous deux `conclusion=failure` bloqués à l'étape 11 « Tests unitaires Flutter (preuve ISC — avant rm -rf src) » (annotation `468 tests passed, 4 failed`, `Process completed with exit code 1`) ; étapes 12–19 (Build APK, apksigner, KVM, opencode, E2E multistop) **skipped** → aucun émulateur démarré, aucun APK installé, aucun `e2e-out/summary.md`, `e2e-out/report.json`, `e2e-out/ui/*.xml` ni `e2e/smoke.log` (`No files were found`), seul artefact `staging-e2e-evidence-encrypted` (337 o). **Aucune capture et aucun logcat device n'ont été produits** pour S-W0-01…S-W0-07. Relevé public de l'API à 06:46Z : 149 runs au total, aucun plus récent que #149.
++Repro locale (lecture et exécution seules, aucun code écrit, Flutter **3.44.8** = `flutter-version` ligne 70 de `artemis-staging-e2e.yml` sur `0cc7a5ca`) : Rider @ `origin/feat/multistop-e2e-2026-11-15` → `flutter test` = `00:30 +303 ~2: All tests passed!` (rc 0) ; Driver @ la même ref → `flutter test` = `00:58 +468 -4: Some tests failed.`, **chiffre identique à l'annotation CI**. Les 4 échecs sont tous dans `test/goldens/driver/ride_details_golden_test.dart` : « course en cours — single stop (legacy shape, no stops[]) », « course multistop — arrêt 1 actif (aucun arrêt terminé) », « course multistop — arrêt 2 actif (arrêt 1 terminé) », « course multistop — tous les arrêts terminés (destination finale) », chacun `Pixel test failed, 0.00%, 4px/6px diff detected`.
++Cause racine = écart de version Flutter, pas une régression du code : les baselines ont été posées par `df372db` « test(goldens): baseline Driver depuis main 9b34386 (Flutter **3.50.1**) » (2026-11-23 19:24Z, seulement sur `feat/multistop-e2e-2026-11-15`, absent de `main`) alors que le workflow épinglit **3.44.8**. Rejeu du même fichier sous Flutter **3.50.1** : `00:01 +4 … All tests passed!`. Historique CI cohérent : run #143 (2026-11-23 02:31Z, avant `df372db`) passait l'étape 11 et allait jusqu'à l'étape 19 (échec e2e) ; depuis, chaque run échoue en 468/4. Correctif à trancher par Papa (hors W0 : aucune écriture) : `flutter-version` du workflow vers 3.50.1, ou régénération des goldens sous 3.44.8.
++Dispatch ou relance impossible depuis ce runner : `/opt/fullrun-tools/emu-e2e.sh` et le jeton `/opt/fullrun-live/emu-e2e.token` absents ; `OC_BRANCH=fullrun/lot-client-w0 /opt/lifeos-ci-tools/opencode/emu-e2e.sh resolve-refs|status|run` → `jeton GALASS_TOKEN inaccessible (fichier d'outil figé)` ; `gh`, `sudo` et `git push` interdits par la politique du run (lecture seule via l'API publique). Refs : `origin/feat/multistop-e2e-2026-11-15` présente localement sur Rider, Driver et emu ; sur GitHub elle répond 200 pour `galass-emu-actions-pub` (public) et 404 sans authentification pour `Galass_Rider`/`Galass_Driver` (privés) : ni leur présence réelle, ni les `rider_ref`/`driver_ref` effectivement dispatchés ne sont vérifiables d'ici.
++Conséquence : S-W0-01…S-W0-07 (ISC-22, ISC-50, ISC-80 à ISC-84) restent **BLOQUÉS côté device, non cochés** ; `progress` inchangé (0/63) ; les preuves backend déjà consignées restent en place et ne sont pas refaites.
+ 
+ ## Remaining Work
+ 
+@@ -501,3 +506,5 @@ Why: les cinq doutes qui touchent la course sont tranchés par un test appareil
+ - [ ] Ajouter l'ISC enfant `ISC-N.1` dans l'ISA phone-auth du Rider (ISC-5) avant les points 8 et 10.
+ - [x] CheckCompleteness exécuté le 2026-11-26 (status pass, 63 ISC, 0 coché) ; audit Vera (étape 3) exécuté (PASS) avant le build.
+ - [ ] Miroir Linear de l'ISA, uniquement après finalisation d'OAuth (optionnel).
++- [ ] Prérequis aux preuves device W0 (Artemis) : l'étape 11 du workflow échoue en `468 tests passed, 4 failed` — les 4 goldens `test/goldens/driver/ride_details_golden_test.dart` ont été générés sous Flutter **3.50.1** (`df372db`) alors que `artemis-staging-e2e.yml` épinglit **3.44.8** ; décision Papa hors W0 (aligner `flutter-version` ou régénérer les goldens) avant tout nouveau dispatch.
++
+
