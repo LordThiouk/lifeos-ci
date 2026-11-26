@@ -4541,3 +4541,57 @@ index 4f65bb1..8c45a44 100644
 +    /// L'invariant, dans l'état actuellement rendu : si un CTA « Annuler la
 +    /// course » existe, il est rouge danger et ne partage la couleur d'aucun
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show 1e49ab5 -- test/unit/multistop_end_gate_test.dart | sed -n '200,400p'
++          .widgetList<RoundedButton>(find.byType(RoundedButton))
++          .where((button) => button.key != cancelKey)
++          .toList();
++      expect(others, isNotEmpty);
++      for (final other in others) {
++        expect(effectiveBg(other), isNot(cancel.bgColor));
++      }
++    }
++
++    testWidgets('RIDE_ACTIVE — CTA principal actif', (tester) async {
++      await _pumpSheet(tester, _activeRide());
++      expectCancelDangerAndDistinct(tester);
++    });
++
++    testWidgets('RIDE_ACTIVE — CTA principal en chargement', (tester) async {
++      controller.isStartBtnLoading = true;
++      await _pumpSheet(tester, _activeRide());
++      expectCancelDangerAndDistinct(tester);
++    });
++
++    testWidgets('tout état rendu — jamais un Annuler de la couleur du CTA principal',
++        (tester) async {
++      final rides = <String, RideModel>{
++        'RIDE_ACTIVE': _activeRide(),
++        'RIDE_RUNNING escale pending': _rideWithStops(completed: 1),
++        'RIDE_RUNNING dernier arrêt': _rideWithStops(completed: 3),
++        'RIDE_RUNNING single-stop': _singleStopRunningRide(),
++      };
++
++      var checkedStates = 0;
++      for (final ride in rides.values) {
++        await _pumpSheet(tester, ride);
++        if (find.byKey(cancelKey).evaluate().isEmpty) continue;
++        checkedStates++;
++        expectCancelDangerAndDistinct(tester);
++      }
++      // Garde-fou : le balayage a bien rencontré au moins un état avec Annuler.
++      expect(checkedStates, greaterThan(0));
++    });
++  });
+ }
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && flutter test test/unit/multistop_end_gate_test.dart 2>&1 | tail -30
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because galass_driver depends on timezone 0.11.0 which requires SDK version ^3.10.0, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try using the Flutter SDK version: 3.50.1. 
+Failed to update packages.
+
