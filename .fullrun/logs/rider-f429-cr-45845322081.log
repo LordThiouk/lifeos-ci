@@ -3912,3 +3912,10 @@ bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/IS
 ISATool tick:ISC-F5-19 ok → /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md (progress 20/21, hmac-sha256:12636efc4748…)
 ISATool evidence:ISC-F5-19 ok → /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md (progress 20/21, hmac-sha256:6724b7c181f8…)
 
+$ ISA=/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts verify "$ISA"; echo "verify exit=$?"; git -C /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target diff --stat
+✅ provenance ok
+verify exit=0
+ MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
