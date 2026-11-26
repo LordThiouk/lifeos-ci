@@ -9633,3 +9633,258 @@ $ grep -rn 'checkDependencyVersions\|DependencyVersionChecker' /tmp/flutter/pack
 --- /tmp/gp_FlutterPluginUtils.kt
 --- /tmp/gp_VersionFetcher.kt
 
+$ grep -n -e 'flutter build apk' -e 'android-skip-build-dependency-validation' -e 'FLUTTER_ROOT' -e 'stable-3.50.1' -e 'assembleDebug' /tmp/tmp.D8Us5rvQrl/r/.fullrun/logs/rider-apk-gradle-45868384625.log | head -60
+1083:-  - Step 12 Build APK : **failure** (`BUILD FAILED in 1m 9s`, `assembleDebug exit 1`, Gradle wrapper `src/rider/android/gradle/wrapper/gradle-wrapper.properties` — version mismatch 3.50.1 vs projet 3.44.8)
+1084:+   - Step 12 Build APK : **failure** (`BUILD FAILED in 1m 9s`, `assembleDebug exit 1`, message Gradle renvoyant au wrapper `src/rider/android/gradle/wrapper/gradle-wrapper.properties`). Le log authentifié montre `FLUTTER_ROOT=…/stable-3.50.1-x64` mais la sortie du build est tronquée par `tail -n 15` : cause exacte non déterminable ici.
+1132:-   - Step 12 Build APK : **failure** (`BUILD FAILED in 1m 9s`, `assembleDebug exit 1`, message Gradle renvoyant au wrapper `src/rider/android/gradle/wrapper/gradle-wrapper.properties`). Le log authentifié montre `FLUTTER_ROOT=…/stable-3.50.1-x64` mais la sortie du build est tronquée par `tail -n 15` : cause exacte non déterminable ici.
+1133:+  - Step 12 Build APK : **failure** (`BUILD FAILED in 1m 9s`, `assembleDebug exit 1`, message Gradle renvoyant au wrapper `src/rider/android/gradle/wrapper/gradle-wrapper.properties`). Le log authentifié montre `FLUTTER_ROOT=…/stable-3.50.1-x64` mais la sortie du build est tronquée par `tail -n 15` : cause exacte non déterminable ici.
+1151:+- **Blocage successif sur Artemis** : (1) runs #148/#151 : 4 goldens Driver posés sous Flutter **3.50.1** (`df372db`) échouent sous **3.44.8** épinglé par le workflow ; (2) run #152 : step 11 vert mais **Build APK** échoue (`assembleDebug exit 1`), steps E2E skippés — cause exacte non déterminable (sortie tronquée). Correction à trancher par Papa hors W0.
+1167:🔍 ANALYSIS: Relevé API indépendant : `artemis-staging-e2e.yml` plafonne à 152 runs, le dernier étant #152 `45801376130` (10:26:37Z, `failure`, `feat/multistop-e2e-2026-11-15` @ `81d149d4`, https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130). Step 11 vert (478 tests), step 12 `Build APK` en échec (`assembleDebug exit 1`), steps 13–19 skippés ; aucun artefact `e2e-out/*`, `ui/*.xml` ni `smoke.log`. Les captures des runs #139/#141/#142/#143 sont sur des refs hors consigne et des points multistop → non réutilisables. Défaut découvert : la ligne Decisions du commit `5fbbcfad` avait été ajoutée hors ISATool, invalidant `isa_stamp` (`provenance-mismatch`, ISAGate en échec).
+
+$ grep -n -e 'flutter build' -e 'android-skip' -e 'FLUTTER_VERSION' -e 'flutter-version' -e 'assembleDebug' /tmp/artemis-wf.yml /tmp/artemis_workflow_81d149d4.yml 2>/dev/null | head -60; echo "===CI REPO WORKFLOWS==="; grep -rn -e 'android-skip-build-dependency-validation' -e 'flutter build apk' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci 2>/dev/null | head -40
+/tmp/artemis-wf.yml:70:        with: {flutter-version: "3.44.8", channel: stable, cache: true}
+/tmp/artemis-wf.yml:133:            (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+/tmp/artemis_workflow_81d149d4.yml:70:        with: {flutter-version: "3.50.1", channel: stable, cache: true}
+/tmp/artemis_workflow_81d149d4.yml:133:            (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+===CI REPO WORKFLOWS===
+
+$ grep -rn -e 'skipDependencyChecks' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target /tmp/tmp.D8Us5rvQrl 2>/dev/null | head -30; echo "===DRIVER DIRS==="; ls -d /tmp/tmp.*/r /home/ubuntu/actions-runner*/_work/*/lifeos-ci/lifeos-ci/driver* 2>/dev/null | head -30
+===DRIVER DIRS===
+/tmp/tmp.D8Us5rvQrl/r
+/tmp/tmp.WdpYtHwz3p/r
+
+$ ls -la /tmp/tmp.WdpYtHwz3p/r /tmp/tmp.D8Us5rvQrl/r 2>&1 | head -80
+/tmp/tmp.D8Us5rvQrl/r:
+total 16
+drwxr-xr-x 4 ubuntu ubuntu 4096 Nov 26 18:53 .
+drwx------ 3 ubuntu ubuntu 4096 Nov 26 18:53 ..
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 18:53 .fullrun
+drwxr-xr-x 8 ubuntu ubuntu 4096 Nov 26 18:53 .git
+
+/tmp/tmp.WdpYtHwz3p/r:
+total 16
+drwxr-xr-x 4 ubuntu ubuntu 4096 Nov 26 18:35 .
+drwx------ 3 ubuntu ubuntu 4096 Nov 26 18:35 ..
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 18:35 .fullrun
+drwxr-xr-x 8 ubuntu ubuntu 4096 Nov 26 18:35 .git
+
+$ sed -n '2480,2570p' /tmp/tmp.D8Us5rvQrl/r/.fullrun/logs/rider-apk-gradle-45868384625.log
+$ git add android/gradle/wrapper/gradle-wrapper.properties android/settings.gradle.kts android/gradle.properties && git status --short
+M  android/gradle.properties
+M  android/gradle/wrapper/gradle-wrapper.properties
+M  android/settings.gradle.kts
+
+$ git commit --author="Papa Diop <76528706+LordThiouk@users.noreply.github.com>" -m "build(android): align Rider toolchain with Flutter 3.50.1
+
+- Downgrade Gradle wrapper 9.1.0 -> 8.14 (match Driver, accepted by Flutter 3.50.1)
+- Downgrade AGP 9.0.1 -> 8.11.1
+- Align Kotlin 2.2.20 -> 2.3.0 and Crashlytics plugin 3.0.7 -> 3.0.3
+- Align gradle.properties with Driver-stable flags (keep android.enableJetifier=false)
+
+No lib/ changes. Not built locally (flutter build/gradlew forbidden on box)."
+[build/rider-apk-gradle ec07f3e] build(android): align Rider toolchain with Flutter 3.50.1
+ 3 files changed, 16 insertions(+), 11 deletions(-)
+
+$ git log --oneline -2 --decorate && echo "===" && git status --short
+ec07f3e (HEAD -> build/rider-apk-gradle) build(android): align Rider toolchain with Flutter 3.50.1
+424957d (origin/feat/multistop-e2e-2026-11-15, feat/multistop-e2e-2026-11-15) verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+===
+
+$ cat > /tmp/task_done.md << 'MD'
+# task_done — Rider APK Gradle toolchain align (Flutter 3.50.1)
+
+- Repo: `LordThiouk/Galass_Rider` (workspace: `/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target`)
+- Branch: `build/rider-apk-gradle` (from `feat/multistop-e2e-2026-11-15` @ `424957d`)
+- Commit: `ec07f3e` — `build(android): align Rider toolchain with Flutter 3.50.1`
+- Author: `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`
+- Push: **none** (interdit). Merge: **none**.
+
+## Changements (Android toolchain uniquement, pas de `lib/`)
+
+Aligné sur Driver (vert APK sous Artemis/Flutter 3.50.1) :
+
+| Fichier | Avant | Après |
+|---|---:|---:|
+| `android/gradle/wrapper/gradle-wrapper.properties` | Gradle 9.1.0 | Gradle 8.14 |
+| `android/settings.gradle.kts` | AGP 9.0.1, Kotlin 2.2.20, Crashlytics 3.0.7 | AGP 8.11.1, Kotlin 2.3.0, Crashlytics 3.0.3 |
+| `android/gradle.properties` | jvmargs 6g/1g, daemon/parallel/configureondemand off, jetifier off, r8.proguard disallowed | Driver-stable flags: jvmargs 8G/4G/512m+UTF-8, caching/parallel/daemon/configureondemand/vfs.watch on, `android.enableJetifier=false` conservé |
+
+Non modifié : `android/app/build.gradle.kts`, `android/build.gradle.kts`, `lib/`, `.fullrun`, goldens.
+
+## Vérification
+
+- `git diff --stat`: 3 files changed, 16 insertions(+), 11 deletions(-).
+- **Build/test local non exécuté** : `flutter build` / `gradlew` interdits sur la box (politique build). Validation attendue côté CI Artemis (Build APK Rider).
+
+## Risques / notes
+
+- Downgrade AGP 9.x -> 8.11.1 + Gradle 9.1 -> 8.14 : attendu compatible Flutter 3.50.1 (réf Driver). À confirmer par CI.
+- `android.enableJetifier=false` conservé (était déjà false sur Rider) ; Driver est à `true` mais le changement n'est pas nécessaire ici.
+MD
+
+(no output)
+
+## Résumé factuel
+
+- **Repo/branche**: `LordThiouk/Galass_Rider`, branche `build/rider-apk-gradle` (depuis `feat/multistop-e2e-2026-11-15` @ `424957d`).
+- **Commit**: `ec07f3e` — `build(android): align Rider toolchain with Flutter 3.50.1` (Auteur: `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`).
+- **Aucun push / merge / gh / ssh / scp**. Aucun changement `lib/`, `.fullrun`, goldens.
+
+## Changements (toolchain Android uniquement, calé sur Driver vert)
+
+| Fichier | Avant | Après |
+|---|---:|---:|
+| `android/gradle/wrapper/gradle-wrapper.properties` | Gradle `9.1.0` | Gradle `8.14` |
+| `android/settings.gradle.kts` | AGP `9.0.1`, Kotlin `2.2.20`, Crashlytics `3.0.7` | AGP `8.11.1`, Kotlin `2.3.0`, Crashlytics `3.0.3` |
+| `android/gradle.properties` | jvmargs 6g/1g, daemon/parallel/configureondemand off, jetifier off | Flags stables Driver: jvmargs `8G/4G/512m`+UTF-8, caching/parallel/daemon/configureondemand/vfs.watch on ; `android.enableJetifier=false` conservé |
+
+`android/app/build.gradle.kts` et `android/build.gradle.kts` inchangés (déjà compatibles).
+
+## Vérification
+
+- `git diff --stat`: **3 files changed, 16 insertions(+), 11 deletions(-)**.
+- **Aucun `flutter build` / `gradlew` exécuté localement** (interdit sur la box, politique build). Validation attendue côté CI Artemis (Build APK Rider).
+
+Résumé écrit dans `/tmp/task_done.md`.
+
+> Forge · flint-40b-free
+
+✗ Read  failed [path=/home/ubuntu/actions-runner/_work/_temp/oc/prompt.md]
+Error: The read tool was called with invalid arguments: SchemaError(Missing key
+  at ["filePath"]).
+Please rewrite the input so it satisfies the expected schema.
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+$ git status && git branch -a && git log --oneline -5
+On branch build/rider-apk-gradle
+nothing to commit, working tree clean
+* build/rider-apk-gradle
+  feat/multistop-e2e-2026-11-15
+
+$ sed -n '560,625p' /tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart; echo "===KGP ranges 665-710==="; sed -n '665,715p' /tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart
+logger.printTrace('Gradle or KGP version unknown ($gradleV, $kgpV).');
+    return false;
+  }
+
+  if (isWithinVersionRange(gradleV, min: '0.0', max: oldestConsideredGradleVersion)) {
+    logger.printTrace(
+      'Gradle version $gradleV older than oldest considered $oldestConsideredGradleVersion',
+    );
+    return false;
+  }
+
+  if (isWithinVersionRange(
+    kgpV,
+    min: maxKnownAndSupportedKgpVersion,
+    max: '100.100',
+    inclusiveMin: false,
+  )) {
+    logger.printTrace(
+      'Newer than known KGP version ($kgpV), gradle ($gradleV).'
+      '\n Treating as valid configuration.',
+    );
+    return true;
+  }
+
+  // https://kotlinlang.org/docs/gradle-configure-project.html#apply-the-plugin
+  // Documentation is non continuous, past versions are known to the
+  // publishers of KGP. When covering version ranges beyond what is documented
+  // add a comment with the documented value.
+  // Continuous KGP version handling is preferred in case an emergency patch to a
+  // past release is shipped this code will assume the version range that is closest.
+
+  // Documented max is 2.4.20, using 2.4.29 covers patch versions.
+  if (isWithinVersionRange(kgpV, min: '2.4.0', max: '2.4.29')) {
+    return isWithinVersionRange(gradleV, min: '8.5', max: '9.5.99', inclusiveMax: false);
+  }
+  // Documented max is 2.3.10, using 2.3.29 covers patch versions.
+  if (isWithinVersionRange(kgpV, min: '2.3.0', max: '2.3.29')) {
+    // Documented max is 9.5.0, using 9.5.99 non inclusive covers patch versions.
+    return isWithinVersionRange(gradleV, min: '7.6.3', max: '9.5.99', inclusiveMax: false);
+  }
+  // Documented max is 2.2.21, using 2.3.0 covers patch versions.
+  if (isWithinVersionRange(kgpV, min: '2.2.20', max: '2.3.0')) {
+    // Documented max is 8.14, using 8.14.99 non inclusive covers patch versions.
+    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.14.99', inclusiveMax: false);
+  }
+  if (isWithinVersionRange(kgpV, min: '2.2.0', max: '2.2.10')) {
+    // Documented max is 8.14, using 8.14.99 non inclusive covers patch versions.
+    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.14.99', inclusiveMax: false);
+  }
+  if (isWithinVersionRange(kgpV, min: '2.1.20', max: '2.1.21')) {
+    // Documented max is 8.12.1, using 8.12.99 non inclusive covers patch versions.
+    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.12.99', inclusiveMax: false);
+  }
+  if (isWithinVersionRange(kgpV, min: '2.1.0', max: '2.1.10')) {
+    // Documented max is 8.10, using 8.11 non inclusive covers patch versions.
+    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.11', inclusiveMax: false);
+  }
+  // Documented max is 2.0.21.
+  if (isWithinVersionRange(kgpV, min: '2.0.20', max: '2.1', inclusiveMax: false)) {
+    // Documented max is 8.5, using 8.9 non inclusive covers patch versions.
+    // Kotlin Multiplatform can throw warnings on 8.8.
+    return isWithinVersionRange(gradleV, min: '6.8.3', max: '8.9', inclusiveMax: false);
+  }
+  if (isWithinVersionRange(kgpV, min: '2.0', max: '2.0.20', inclusiveMax: false)) {
+    // Documented max is 8.5, using 8.6 non inclusive covers patch versions.
+    return isWithinVersionRange(gradleV, min: '6.8.3', max: '8.6', inclusiveMax: false);
+===KGP ranges 665-710===
+// If compatibility cannot be evaluated returns false.
+// If versions are newer than the max known version a warning is logged and true
+// returned.
+//
+// Source of truth found here:
+// https://kotlinlang.org/docs/gradle-configure-project.html#apply-the-plugin
+bool validateAgpAndKgp(Logger logger, {required String? kgpV, required String? agpV}) {
+  if (agpV == null || kgpV == null || agpV.isEmpty || kgpV.isEmpty) {
+    logger.printTrace('KGP or AGP version unknown ($kgpV, $agpV).');
+    return false;
+  }
+
+  if (isWithinVersionRange(agpV, min: '0.0', max: oldestConsideredAgpVersion)) {
+    logger.printTrace(
+      'AGP version ($agpV) older than oldest supported $oldestConsideredAgpVersion.',
+    );
+  }
+
+  if (isWithinVersionRange(
+        kgpV,
+        min: maxKnownAndSupportedKgpVersion,
+        max: '100.100',
+        inclusiveMin: false,
+      ) ||
+      isWithinVersionRange(
+        agpV,
+        min: maxKnownAgpVersionWithFullKotlinSupport,
+        max: '100.100',
+        inclusiveMin: false,
+      )) {
+    logger.printTrace(
+      'Newer than known KGP version ($kgpV), AGP ($agpV).'
+      '\n Treating as valid configuration.',
+    );
+    return true;
+  }
+
+  // https://kotlinlang.org/docs/gradle-configure-project.html#apply-the-plugin
+  // Documentation is non continuous, past versions are known to the
+  // publishers of KGP. When covering version ranges beyond what is documented
+  // add a comment with the documented value.
+  // Continuous KGP version handling is preferred in case an emergency patch to a
+  // past release is shipped this code will assume the version range that is closest.
+
+  // Documented max is 2.4.20.
+  if (isWithinVersionRange(kgpV, min: '2.4.20', max: '2.4.29')) {
+    // Documented max is 9.3.1
+    return isWithinVersionRange(agpV, min: '8.2.2', max: '9.3.99', inclusiveMax: false);
+  }
+  // Documented max is 2.4.10, using 2.4.19 covers patch versions.
+  if (isWithinVersionRange(kgpV, min: '2.4.0', max: '2.4.19')) {
+
+$ ls -l android/gradle/wrapper/; echo "===JAR MANIFEST==="; unzip -p android/gradle/wrapper/gradle-wrapper.jar META-INF/MANIFEST.MF 2>/dev/null | head -30; echo "===AGP DOC HINTS==="; grep -o -i -m 10 'compatible with AGP[^<]*' /tmp/agp.html /tmp/kgp.html /tmp/agp811.html 2>/dev/null | head -20
+total 4
+-rw-r--r-- 1 ubuntu ubuntu 201 Nov 26 18:55 gradle-wrapper.properties
+===JAR MANIFEST===
+===AGP DOC HINTS===
+
+Je vérifie les versions exactes acceptées par Flutter 3.50.1 avant de corriger le commit erroné.
