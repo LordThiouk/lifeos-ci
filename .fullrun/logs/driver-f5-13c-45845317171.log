@@ -1200,3 +1200,259 @@ jobs:
           AS=$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -1)apksigner
           exp=$(cat /tmp/expected_sha1); echo "attendu: $exp"
 
+$ curl -s -m 30 "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45778554984/jobs" | jq -r '.jobs[] | .steps[] | "\(.number). \(.name) -> \(.conclusion)"' | head -30
+1. Set up job -> success
+2. Run actions/checkout@v4 -> success
+3. Garde staging -> success
+4. Run actions/checkout@v4 -> success
+5. Run actions/checkout@v4 -> success
+6. Libérer disque -> success
+7. Run actions/setup-java@v4 -> success
+8. Run subosito/flutter-action@v2 -> success
+9. Licences Android + NDK -> success
+10. Keystore debug fixe (JKS, SHA-1 stable pour la clé Maps) -> success
+11. Tests unitaires Flutter (preuve ISC — avant rm -rf src) -> failure
+12. Build APK (staging, debug, même job, pas d'upload) -> skipped
+13. Vérifier la signature des APK (apksigner) -> skipped
+14. Activer KVM (règle udev officielle) -> skipped
+15. Run actions/setup-node@v4 -> skipped
+16. Installer opencode (version de la box) -> skipped
+17. Valider le modèle (opencode/*-free) -> skipped
+18. Tests du harnais (syntaxe + contrats) -> skipped
+19. E2E multistop (opencode + API fallback) -> skipped
+20. Publier le diagnostic texte (non chiffré, sans captures) -> success
+21. Chiffrer les preuves -> success
+22. Run actions/upload-artifact@v4 -> success
+23. Publier le smoke log (masqué) -> success
+24. Résumé (PASS/FAIL seulement) -> success
+44. Post Run subosito/flutter-action@v2 -> success
+45. Post Run actions/setup-java@v4 -> success
+46. Post Run actions/checkout@v4 -> success
+47. Post Run actions/checkout@v4 -> success
+48. Post Run actions/checkout@v4 -> success
+49. Complete job -> success
+
+$ for id in 45100696324 45778554984 45782061889 45801376130 45059405073; do echo "== $id =="; curl -s -m 30 "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/$id/artifacts" | jq -r '.artifacts[]? | "\(.name)\t\(.size_in_bytes)"'; done
+== 45100696324 ==
+staging-e2e-evidence-encrypted	23000762
+staging-e2e-smoke-log	13433
+staging-e2e-diag-text	31683
+== 45778554984 ==
+staging-e2e-evidence-encrypted	337
+== 45782061889 ==
+staging-e2e-evidence-encrypted	337
+== 45801376130 ==
+staging-e2e-evidence-encrypted	337
+== 45059405073 ==
+staging-e2e-evidence-encrypted	337
+
+$ curl -s -m 30 -o /tmp/diag.zip -w '%{http_code} %{size_download}\n' -L "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/artifacts/$(curl -s -m 30 'https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs/45100696324/artifacts' | jq -r '.artifacts[] | select(.name=="staging-e2e-diag-text") | .id')/zip"; file /tmp/diag.zip; head -c 300 /tmp/diag.zip
+401 120
+/tmp/diag.zip: JSON text data
+{
+  "message": "Requires authentication",
+  "documentation_url": "https://docs.github.com/rest",
+  "status": "401"
+}
+
+$ env | cut -d= -f1 | sort | grep -iE 'emu|galass|oc_|fullrun|in_branch|token|github' 
+FULLRUN_STOP_AFTER_STEP
+FULLRUN_TARGET_AGENT
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci; grep -rl "emu-e2e\|artemis" --include='*.yml' --include='*.sh' --include='*.md' . 2>/dev/null | head -20
+./lifeos/rules/artemis.md
+./ci/TESTS-DIAG.md
+./ci/docs/galass-bugs-isa-locate-2026-11-25.md
+./ci/INVENTAIRE.md
+./ci/REPORT.md
+./ci/.github/workflows/_agent-run.yml
+./ci/.github/workflows/opencode-fullrun.yml
+./ci/opencode/tests/agent-run-livelog-test.sh
+./ci/opencode/tests/upstream-fullrun/with-emulators-test.sh
+./ci/opencode/emu-e2e.sh
+./ci/REVIEW-PR1.md
+./target/docs/BUGS.md
+./target/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+
+→ Read /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/rules/artemis.md
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci && grep -n "emu-e2e\|with_emulators\|artemis\|EMU_E2E" .github/workflows/opencode-fullrun.yml | head -40
+78:      with_emulators:
+79:        description: "Si true, opencode pilote les e2e via galass-emu-actions-pub (emu-e2e.sh, vrai staging). Défaut false."
+171:      WITH_EMULATORS: ${{ inputs.with_emulators }}
+903:            "$CI_DIR/opencode/emu-e2e.sh" \
+977:          # with_emulators : jeton CI_TOKEN hors d'opencode (fichier root 0600), état figé, sudoers strict.
+979:          # with_emulators=true échoue dès le premier `emu-e2e.sh run`.
+981:            [ -x "$CI_DIR/opencode/emu-e2e.sh" ] || { echo "::error::emu-e2e.sh absent : impossible d'activer with_emulators"; exit 1; }
+982:            [ -n "${CI_TOKEN:-}" ] || { echo "::error::secret CI_TOKEN absent : impossible d'activer with_emulators"; exit 1; }
+984:            printf '%s\n' "$CI_TOKEN" | sudo sh -c 'umask 077; cat > /opt/fullrun-live/emu-e2e.token'
+985:            # Chaînage : run e2e du lien précédent encore en vol → emu-e2e.sh run le reprend (root 0600).
+990:            sudo chown root:root /opt/fullrun-live/emu-e2e.token
+991:            sudo chmod 0600 /opt/fullrun-live/emu-e2e.token
+994:              printf 'EMU_E2E_MODEL=deepseek-v4.1-flash-free\n'
+995:              printf 'EMU_E2E_TIMEOUT_SEC=10800\n'
+996:              printf 'EMU_E2E_POLL_SEC=30\n'
+999:            } | sudo tee "$T/emu-e2e.state" >/dev/null
+1000:            sudo chown root:root "$T/emu-e2e.state"
+1001:            sudo chmod 0644 "$T/emu-e2e.state"
+1004:              printf 'Defaults!/opt/fullrun-tools/emu-e2e.sh env_reset\n'
+1005:              printf 'Defaults!/opt/fullrun-tools/emu-e2e.sh secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"\n'
+1006:              printf '%s ALL=(root) NOPASSWD: /opt/fullrun-tools/emu-e2e.sh run, /opt/fullrun-tools/emu-e2e.sh resolve-refs, /opt/fullrun-tools/emu-e2e.sh status [0-9]*\n' "$u"
+1007:            } | sudo tee /etc/sudoers.d/fullrun-emu-e2e >/dev/null
+1008:            sudo chmod 0440 /etc/sudoers.d/fullrun-emu-e2e
+1009:            sudo visudo -cf /etc/sudoers.d/fullrun-emu-e2e >/dev/null
+1284:          for tool in gitleaks redact-log.sh leaklog.sh progress.sh wippush.sh done_check.sh bench-capped preannot.sh autosave.sh emu-e2e.sh autosave-deny.txt log-recipient.txt; do
+1873:          IN_WITH_EMU: ${{ inputs.with_emulators == true && 'true' || 'false' }}
+2083:               -f with_emulators="${IN_WITH_EMU:-false}" \
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci && sed -n '880,930p' .github/workflows/opencode-fullrun.yml
+env:
+          ISA_STAMP_KEY: ${{ secrets.ISA_STAMP_KEY }}
+          BASE_SHA: ${{ steps.prep.outputs.base }}
+          GH_DISPATCH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_TOKEN: ${{ secrets.CI_TOKEN }}
+        run: |
+          set +x
+          T=/opt/fullrun-tools; L=/opt/fullrun-live
+          f="$RUNNER_TEMP/gitleaks.tgz"
+          curl -sSfL -o "$f" "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  $f" | sha256sum -c --quiet
+          mkdir -p "$RUNNER_TEMP/gl" && tar -xzf "$f" -C "$RUNNER_TEMP/gl" gitleaks
+          # /opt est en 0777 sur les runners hébergés (vu dans le log CI de galass-ci#14) : l'agent, qui tourne sous le même
+          # UID que ce step, pourrait renommer /opt/fullrun-tools et y mettre sa propre copie. On retire l'écriture
+          # groupe/autres ET on échoue en dur si elle subsiste (done_check.sh exige la même chose de chaque ancêtre).
+          sudo chmod go-w /opt
+          [ -z "$(find /opt -maxdepth 0 -perm /022)" ] || { echo "::error::/opt reste inscriptible par le groupe ou les autres"; exit 1; }
+          sudo install -d -o root -g root -m 0755 "$T" "$L"
+          sudo install -o root -g root -m 0755 "$RUNNER_TEMP/gl/gitleaks" "$CI_DIR/opencode/redact-log.sh" \
+            "$CI_DIR/opencode/leaklog.sh" "$CI_DIR/opencode/livelog.sh" "$CI_DIR/opencode/progress.sh" \
+            "$CI_DIR/opencode/wippush.sh" "$CI_DIR/opencode/done_check.sh" "$CI_DIR/opencode/done-check-call.sh" "$CI_DIR/opencode/checkpoint.sh" \
+            "$CI_DIR/opencode/bench-capped" \
+            "$CI_DIR/opencode/allowed-repos.sh" "$CI_DIR/opencode/merge-signed-carry.sh" \
+            "$CI_DIR/opencode/emu-e2e.sh" \
+            "$CI_DIR/opencode/preannot.sh" "$CI_DIR/opencode/autosave.sh" "$T/"
+          sudo install -o root -g root -m 0644 "$CI_DIR/opencode/log-recipient.txt" "$CI_DIR/opencode/autosave-deny.txt" "$T/"
+          # CLI de verdict lifeos (source unique du verdict lu par done_check.sh) : bundle autonome construit ici,
+          # copié en root avec un bun root — l'agent ne peut remplacer ni l'un ni l'autre pour fabriquer un PASS.
+          # done_check.sh n'accepte QUE ce couple. Bundle impossible à construire = échec en dur (pas d'avertissement).
+          V="$GITHUB_WORKSPACE/lifeos/LIFEOS/TOOLS/FullRunVerdict.ts"
+          if [ ! -f "$V" ]; then
+            echo "::error::lifeos@$IN_LIFEOS_REF sans LIFEOS/TOOLS/FullRunVerdict.ts : CLI de verdict introuvable (lifeos_ref >= 109e423 requis)"
+            exit 1
+          fi
+          BUNBIN=$(command -v bun) || { echo "::error::bun introuvable pour le CLI de verdict"; exit 1; }
+          bun build "$V" --target bun --outfile "$RUNNER_TEMP/FullRunVerdict.js" >/dev/null \
+            || { echo "::error::bun build du CLI de verdict en échec"; exit 1; }
+          sudo install -o root -g root -m 0644 "$RUNNER_TEMP/FullRunVerdict.js" "$T/FullRunVerdict.js"
+          sudo install -o root -g root -m 0755 "$BUNBIN" "$T/bun"
+          printf '# bunfig vide (root) : rien ne se précharge\n' >"$RUNNER_TEMP/bunfig.toml"
+          sudo install -o root -g root -m 0644 "$RUNNER_TEMP/bunfig.toml" "$T/bunfig.toml"; rm -f "$RUNNER_TEMP/bunfig.toml"
+          rm -f "$RUNNER_TEMP/FullRunVerdict.js"
+          [ "$(printf '{"status":"pass"}' | "$T/bun" --config="$T/bunfig.toml" "$T/FullRunVerdict.js")" = pass ] \
+            && [ "$(printf 'x' | "$T/bun" --config="$T/bunfig.toml" "$T/FullRunVerdict.js" || true)" = unknown ] \
+            || { echo "::error::CLI de verdict installé mais le test de fumée échoue"; exit 1; }
+          # (fin du CLI de verdict)
+          # Visible dans le PATH d'opencode (préambule : `bench-capped` sans chemin). Copie root,
+          # pas un lien : /opt/fullrun-tools n'est pas dans le PATH, et le binaire ne doit pas
+          # pouvoir être remplacé par l'agent.
+          sudo install -o root -g root -m 0755 "$T/bench-capped" /usr/local/bin/bench-capped
+          command -v bench-capped >/dev/null || { echo "::error::bench-capped absent du PATH"; exit 1; }
+
+$ curl -s -m 20 -o /dev/null -w '%{http_code}\n' "https://api.github.com/repos/LordThiouk/galass-ci"; curl -s -m 20 "https://api.github.com/repos/LordThiouk/galass-ci/actions/workflows" | jq -r '.workflows[]? | "\(.name)\t\(.path)"' 2>&1 | head
+200
+ISA human-tick	.github/workflows/isa-human-tick.yml
+
+$ env | grep -E '^GITHUB_(RUN_ID|WORKFLOW|REPOSITORY|JOB|RUN_NUMBER|REF|SHA)=' 
+(no output)
+
+$ curl -s -m 20 -o /dev/null -w 'lifeos-ci:%{http_code}\n' "https://api.github.com/repos/LordThiouk/lifeos-ci"; curl -s -m 20 "https://api.github.com/repos/LordThiouk/lifeos-ci/actions/workflows" | jq -r '.workflows[]? | "\(.id)\t\(.name)\t\(.path)"' 2>&1 | head
+lifeos-ci:200
+429994825	Agent run (lifeos-ci)	.github/workflows/_agent-run.yml
+429994827	Agent next (lifeos-ci)	.github/workflows/_next.yml
+429867982	CI scripts	.github/workflows/ci-scripts.yml
+429747386	CI	.github/workflows/ci.yml
+430176731	FullRun build-aditi-ui (lifeos-ci)	.github/workflows/fr-build-aditi-ui.yml
+430176733	FullRun build-anvil (lifeos-ci)	.github/workflows/fr-build-anvil.yml
+430176736	FullRun build-engineer (lifeos-ci)	.github/workflows/fr-build-engineer.yml
+430176738	FullRun build-forge-code (lifeos-ci)	.github/workflows/fr-build-forge-code.yml
+430176739	FullRun close-max (lifeos-ci)	.github/workflows/fr-close-max.yml
+430176741	FullRun assembly (lifeos-ci)	.github/workflows/fr-fullrun.yml
+
+$ curl -s -m 30 "https://api.github.com/repos/LordThiouk/lifeos-ci/actions/runs?per_page=25" | jq -r '.workflow_runs[] | "\(.id)\t\(.name)\t\(.display_title)\t\(.created_at)\t\(.status)\t\(.conclusion)"'
+45859637248	FullRun build-engineer lot-client-w0-device → Galass_backend@fullrun/lot-client-w0	FullRun build-engineer lot-client-w0-device → Galass_backend@fullrun/lot-client-w0	2026-11-26T16:32:00Z	in_progress	null
+45859633948	FullRun build-forge-code driver-f5-13c → Galass_Driver@feat/multistop-e2e-2026-11-15	FullRun build-forge-code driver-f5-13c → Galass_Driver@feat/multistop-e2e-2026-11-15	2026-11-26T16:31:59Z	in_progress	null
+45859633860	FullRun build-forge-code fr01-v1c → antenly@isa/fr-01-vera-2026-11-26	FullRun build-forge-code fr01-v1c → antenly@isa/fr-01-vera-2026-11-26	2026-11-26T16:31:59Z	completed	cancelled
+45859633152	FullRun build-forge-code fr04-v4-merge → antenly@isa/fr-04-vera-2026-11-26	FullRun build-forge-code fr04-v4-merge → antenly@isa/fr-04-vera-2026-11-26	2026-11-26T16:31:59Z	completed	cancelled
+45859632833	FullRun build-forge-code rider-apk-gradle → Galass_Rider@feat/multistop-e2e-2026-11-15	FullRun build-forge-code rider-apk-gradle → Galass_Rider@feat/multistop-e2e-2026-11-15	2026-11-26T16:31:58Z	completed	failure
+45854705973	FullRun build-forge-code fr01-v1c → antenly@isa/fr-01-vera-2026-11-26	FullRun build-forge-code fr01-v1c → antenly@isa/fr-01-vera-2026-11-26	2026-11-26T16:00:55Z	completed	failure
+45849144419	FullRun close-max rider-f434b-max → Galass_Rider@close/rider-f434b-max	FullRun close-max rider-f434b-max → Galass_Rider@close/rider-f434b-max	2026-11-26T15:26:38Z	completed	cancelled
+45849144333	FullRun build-engineer lot-client-w0-device → Galass_backend@fullrun/lot-client-w0	FullRun build-engineer lot-client-w0-device → Galass_backend@fullrun/lot-client-w0	2026-11-26T15:26:38Z	completed	failure
+45847515781	FullRun build-forge-code rider-apk-gradle → Galass_Rider@build/rider-apk-gradle	FullRun build-forge-code rider-apk-gradle → Galass_Rider@build/rider-apk-gradle	2026-11-26T15:17:00Z	completed	failure
+45847515212	FullRun build-forge-code fr04-v4-merge → antenly@isa/fr-04-vera-2026-11-26	FullRun build-forge-code fr04-v4-merge → antenly@isa/fr-04-vera-2026-11-26	2026-11-26T15:17:00Z	completed	failure
+45845322789	FullRun verify-silas rider-f429-silas → Galass_Rider@verify/rider-f429-silas	FullRun verify-silas rider-f429-silas → Galass_Rider@verify/rider-f429-silas	2026-11-26T15:04:11Z	completed	cancelled
+45845322748	FullRun verify-forge-audit rider-f429-forge → Galass_Rider@verify/rider-f429-forge	FullRun verify-forge-audit rider-f429-forge → Galass_Rider@verify/rider-f429-forge	2026-11-26T15:04:11Z	completed	cancelled
+45845322242	FullRun close-max rider-f434b-max → Galass_Rider@close/rider-f434b-max	FullRun close-max rider-f434b-max → Galass_Rider@close/rider-f434b-max	2026-11-26T15:04:11Z	completed	failure
+45845322081	FullRun verify-code-review rider-f429-cr → Galass_Rider@verify/rider-f429-cr	FullRun verify-code-review rider-f429-cr → Galass_Rider@verify/rider-f429-cr	2026-11-26T15:04:10Z	completed	failure
+45845317171	FullRun build-forge-code driver-f5-13c → Galass_Driver@build/driver-f5-13c	FullRun build-forge-code driver-f5-13c → Galass_Driver@build/driver-f5-13c	2026-11-26T15:04:09Z	completed	failure
+45845316555	FullRun build-forge-code rider-apk-gradle → Galass_Rider@build/rider-apk-gradle	FullRun build-forge-code rider-apk-gradle → Galass_Rider@build/rider-apk-gradle	2026-11-26T15:04:08Z	completed	failure
+45845316040	FullRun build-forge-code fr01-v1c → antenly@build/fr01-v1c	FullRun build-forge-code fr01-v1c → antenly@build/fr01-v1c	2026-11-26T15:04:08Z	completed	failure
+45845315701	FullRun build-forge-code fr04-v4-merge → antenly@isa/fr-04-vera-2026-11-26	FullRun build-forge-code fr04-v4-merge → antenly@isa/fr-04-vera-2026-11-26	2026-11-26T15:04:08Z	completed	failure
+45842270011	CI	lifeos-ci task smoke-usbox3 (pipe-smoke-main)	2026-11-26T14:45:52Z	completed	success
+45842096538	CI	fix(ci): proxy wstunnel/WSS pour modèles free depuis GitHub Actions	2026-11-26T14:44:51Z	completed	success
+45842094698	Task smoke-usbox3 → lifeos-ci@pipe-smoke-main	Task smoke-usbox3 → lifeos-ci@pipe-smoke-main	2026-11-26T14:44:50Z	completed	success
+45841929730	Task smoke-usbox2 → lifeos-ci@pipe-smoke-main	Task smoke-usbox2 → lifeos-ci@pipe-smoke-main	2026-11-26T14:43:49Z	completed	failure
+45841910060	CI	fix(ci): proxy wstunnel/WSS pour modèles free depuis GitHub Actions	2026-11-26T14:43:42Z	completed	cancelled
+45840688188	CI	fix(ci): proxy wstunnel/WSS pour modèles free depuis GitHub Actions	2026-11-26T14:36:17Z	completed	cancelled
+45839494834	Task smoke-old-0813 → lifeos-ci@pipe-smoke-main	Task smoke-old-0813 → lifeos-ci@pipe-smoke-main	2026-11-26T14:29:16Z	completed	failure
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci && ls .github/workflows/ && grep -n "with_emulators" .github/workflows/fr-build-engineer.yml 2>/dev/null | head
+_agent-run.yml
+_next.yml
+ci.yml
+fr-build-aditi-ui.yml
+fr-build-anvil.yml
+fr-build-engineer.yml
+fr-build-forge-code.yml
+fr-close-max.yml
+fr-fullrun.yml
+fr-plan-serena.yml
+fr-plan-vera.yml
+fr-verify-code-review.yml
+fr-verify-forge-audit.yml
+fr-verify-silas.yml
+opencode-fullrun.yml
+pipeline.yml
+task.yml
+
+$ curl -s -m 30 "https://api.github.com/repos/LordThiouk/lifeos-ci/actions/runs/45849144333/jobs" | jq -r '.jobs[] | "JOB: \(.name) -> \(.conclusion)\n" + ([.steps[] | "  \(.number). \(.name) -> \(.conclusion)"] | join("\n"))'
+JOB: run / run -> failure
+  1. Set up job -> success
+  2. Checkout lifeos-ci (outils) -> success
+  3. Outils de confiance figés (root, avant opencode) -> success
+  4. Validation des entrées -> success
+  5. Checkout du dépôt cible -> success
+  6. Checkout des dépôts supplémentaires -> success
+  7. Clone lifeos (lecture seule ou non selon lifeos_write) -> success
+  8. Enregistrer l'état de départ (root, hors portée de l'agent) -> success
+  9. Préparer le prompt (préambule + prompt + ISA) -> success
+  10. Installer opencode et gitleaks -> success
+  11. Installer age (journal en direct chiffré) -> success
+  12. Installer bun (agents FullRun) -> success
+  13. Préparer le socle ISA inscriptible (agents FullRun) -> success
+  14. Configurer opencode et git -> success
+  15. Préflight du lien (porte de départ, agent imposé) -> failure
+  16. Installer ffmpeg -> skipped
+  17. Journal en direct (démon root, jeton hors d'opencode) -> skipped
+  18. Push périodique des wip (démon root, jeton hors d'opencode) -> skipped
+  19. Protection mémoire (OOM, best-effort) -> skipped
+  20. Exécuter opencode (quota/erreur, bascule bornée) -> skipped
+  21. Statut opencode (publié hors de portée de l'agent) -> success
+  22. Porte gitleaks, garde-fou, push fast-forward et PR brouillon -> success
+  23. Statut final -> failure
+  24. Notification de fin -> success
+  46. Post Installer bun (agents FullRun) -> skipped
+  47. Post Checkout du dépôt cible -> success
+  48. Post Checkout lifeos-ci (outils) -> success
+  49. Complete job -> success
+JOB: next -> skipped
+
