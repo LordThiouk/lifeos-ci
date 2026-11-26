@@ -1645,3 +1645,44 @@ $ grep -n "share_plus\|sdk:" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-
 ---
 105:  setUpAll(loadGoldenFonts);
 
+$ find / -maxdepth 5 -type f -path "*flutter*/bin/flutter" 2>/dev/null | head -20; echo "=== version files ==="; ls -la /home/ubuntu/actions-runner/_work/_temp/ 2>/dev/null | head -30
+/opt/flutter/bin/flutter
+=== version files ===
+total 13240
+drwxr-xr-x 9 ubuntu ubuntu    4096 Nov 26 15:09 .
+drwxr-xr-x 7 ubuntu ubuntu    4096 Nov 26 15:09 ..
+-rw-r--r-- 1 ubuntu ubuntu    1345 Nov 26 15:09 18e9da94-04b0-4ad4-97fb-659ed551ee19.sh
+-rw-r--r-- 1 ubuntu ubuntu     106 Nov 26 15:09 1cc1a9b0-757b-4a42-8160-624b7636a957.sh
+-rw-r--r-- 1 ubuntu ubuntu    1615 Nov 26 15:09 27738543-a221-49b0-bdd7-4ed7fe88e43d.sh
+-rw-r--r-- 1 ubuntu ubuntu     828 Nov 26 15:09 450a17e9-3ec6-4c81-bbdc-b6557ba298e3.sh
+-rw-r--r-- 1 ubuntu ubuntu    2553 Nov 26 15:09 4c21fbb7-ca80-4bf3-b674-4093d3a3f204.sh
+-rw-r--r-- 1 ubuntu ubuntu    2016 Nov 26 15:09 53d49289-019e-488a-98f3-81c7cca2787e.sh
+-rw-r--r-- 1 ubuntu ubuntu    3074 Nov 26 15:09 87eb574c-64b3-452b-8ca1-31f5e330aee1.sh
+-rw-r--r-- 1 ubuntu ubuntu    2007 Nov 26 15:09 9cfa4ed0-9ab2-4171-87c4-727f41c2aadf.sh
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 15:09 _github_workflow
+drwxr-xr-x 2 ubuntu ubuntu   12288 Nov 26 15:09 _runner_file_commands
+-rw-r--r-- 1 ubuntu ubuntu     429 Nov 26 15:09 a9d2bfb0-00a5-46ca-8361-4e25c453f4e4.sh
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 15:09 age
+-rw-r--r-- 1 ubuntu ubuntu 5194720 Nov 26 15:09 age.tgz
+-rw-r--r-- 1 ubuntu ubuntu    2338 Nov 26 15:09 b8fe4dc6-362f-4da9-8eb4-f33621f3cc92.sh
+-rw-r--r-- 1 ubuntu ubuntu    2915 Nov 26 15:09 bbcbf416-9731-45a6-b5e9-ccffbe7ad18b.sh
+-rw-r--r-- 1 ubuntu ubuntu    2106 Nov 26 15:09 d1bd7427-3086-428e-859d-88cba4368543.sh
+-rw-r--r-- 1 ubuntu ubuntu    8663 Nov 26 15:09 e5b0cd25-b8fb-486c-8f83-993b5e59b2b5.sh
+-rw-r--r-- 1 ubuntu ubuntu     375 Nov 26 15:09 f9045869-64b9-4f37-a1a5-c3ed0a60092a.sh
+-rw-r--r-- 1 ubuntu ubuntu 8230402 Nov 26 15:09 gitleaks.tgz
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 15:09 gl
+-rw-r--r-- 1 ubuntu ubuntu     389 Nov 26 15:14 live.out
+drwxr-xr-x 4 ubuntu ubuntu    4096 Nov 26 15:09 npm-global
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 15:09 oc
+drwxr-xr-x 5 ubuntu ubuntu   12288 Nov 26 15:14 oc-agent
+-rw-r--r-- 1 ubuntu ubuntu     162 Nov 26 15:11 wip.out
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && timeout 300 flutter pub get 2>&1 | tail -20; echo "EXIT=$?"
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because share_plus 13.3.1 requires SDK version >=3.10.0 <4.0.0 and no versions of share_plus match >13.3.1 <14.0.0, share_plus ^13.3.1 is forbidden.
+So, because galassrider depends on share_plus ^13.3.1, version solving failed.
+Failed to update packages.
+EXIT=0
+
