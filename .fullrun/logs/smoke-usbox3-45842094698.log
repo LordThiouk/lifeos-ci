@@ -878,3 +878,17 @@ tRide.pickupLatitude.toString(),
     } finally {
       isLoading = false;
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git status --short --branch
+## feat/multistop-e2e-2026-11-15...origin/feat/multistop-e2e-2026-11-15
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "ISC-F5-19\|live.*location.*ride\|applyLiveDriverLocation" test 2>&1 | head -20
+test/unit/ride_map_live_location_test.dart:97:  group('ISC-F5-19 live driver location in ride', () {
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && flutter test test/unit/ride_map_live_location_test.dart 2>&1 | tail -40
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because device_info_plus 13.3.0 requires SDK version >=3.10.0 <4.0.0 and no versions of device_info_plus match >13.3.0 <14.0.0, device_info_plus ^13.3.0 is forbidden.
+So, because galass_driver depends on device_info_plus ^13.3.0, version solving failed.
+Failed to update packages.
+
