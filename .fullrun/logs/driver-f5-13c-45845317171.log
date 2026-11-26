@@ -7095,3 +7095,91 @@ $ grep -n "gradleMin\|gradleMax\|androidGradlePluginMin\|androidGradlePluginMax\
 1356:  JavaGradleCompat(javaMin: '17', javaMax: '18', gradleMin: '7.3'),
 1358:    javaMin: '16',
 
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+$ grep -rn "Potential fix" /tmp/flutter/packages/flutter_tools --include=*.kt --include=*.dart | head -20; echo "=== callers ==="; grep -rn "checkDependencyVersions\|skipDependencyChecks\|android-skip-build-dependency-validation" /tmp/flutter/packages/flutter_tools --include=*.kt --include=*.dart | head -30
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:390:                "Potential fix: Your project's minimum Android SDK version is typically defined in " +
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:424:                "Potential fix: Your project's minimum Android SDK version is typically defined in " +
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt:193:            "Potential fix: $potentialFix"
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt:205:            " to bypass this check.\n\nPotential fix: $potentialFix"
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt:219:            "Potential fix: $potentialFix"
+=== callers ===
+/tmp/flutter/packages/flutter_tools/test/src/android_common.dart:194:    if (skipChecking) '--android-skip-build-dependency-validation',
+/tmp/flutter/packages/flutter_tools/test/general.shard/runner/options/build_info_options_bundle_test.dart:43:        'android-skip-build-dependency-validation',
+/tmp/flutter/packages/flutter_tools/test/general.shard/android/gradle_errors_test.dart:1734:     Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check (unsupported; your build may fail).
+/tmp/flutter/packages/flutter_tools/test/general.shard/android/android_gradle_builder_test.dart:254:              '-PskipDependencyChecks=true',
+/tmp/flutter/packages/flutter_tools/test/general.shard/android/android_gradle_builder_test.dart:3406:              '-PskipDependencyChecks=true',
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:70:        DependencyVersionChecker.checkDependencyVersions(mockProject)
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:83:            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:103:        DependencyVersionChecker.checkDependencyVersions(mockProject)
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:123:            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:142:            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:163:        DependencyVersionChecker.checkDependencyVersions(mockProject)
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:174:            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:196:        DependencyVersionChecker.checkDependencyVersions(mockProject)
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:220:        DependencyVersionChecker.checkDependencyVersions(mockProject)
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:241:            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:259:            assertFailsWith<DependencyValidationException> { DependencyVersionChecker.checkDependencyVersions(mockProject) }
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:280:        DependencyVersionChecker.checkDependencyVersions(mockProject)
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:310:        DependencyVersionChecker.checkDependencyVersions(mockProject)
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:348:                DependencyVersionChecker.checkDependencyVersions(
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:387:                "Alternatively, use the flag \"--android-skip-build-dependency-validation\" to " +
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/DependencyVersionCheckerTest.kt:421:                "Alternatively, use the flag \"--android-skip-build-dependency-validation\" to " +
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginTest.kt:112:        every { DependencyVersionChecker.checkDependencyVersions(project) } just Runs
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginTest.kt:118:            DependencyVersionChecker.checkDependencyVersions(project)
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginTest.kt:138:        every { DependencyVersionChecker.checkDependencyVersions(project) } throws validationException
+/tmp/flutter/packages/flutter_tools/gradle/src/test/kotlin/FlutterPluginTest.kt:147:        every { DependencyVersionChecker.checkDependencyVersions(project) } throws unexpectedException
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt:120:    @JvmStatic fun checkDependencyVersions(project: Project) {
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt:192:            "\"--android-skip-build-dependency-validation\" to bypass this check.\n\n" +
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt:204:            "\nAlternatively, use the flag \"--android-skip-build-dependency-validation\"" +
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt:217:            "continue.\nAlternatively, use the flag \"--android-skip-build-dependency-validation\"" +
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/tasks/BaseFlutterTask.kt:124:    var skipDependencyChecks: Boolean? = null
+
+$ cd /tmp && zcat -f art*.gz 2>/dev/null | grep -n "Potential fix\|skip-build-dependency\|Validation\|Flutter.*minimum\|BUILD FAILED\|gradle-wrapper" | head -40
+4505:2026-11-26T10:32:08.6128584Z      Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+4507:2026-11-26T10:32:08.6129886Z      Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/android/gradle/wrapper/gradle-wrapper.properties. 
+4517:2026-11-26T10:32:08.6133294Z BUILD FAILED in 1m 9s
+
+$ cd /tmp && zcat -f art*.gz 2>/dev/null | sed -n '4480,4520p'
+2026-11-26T10:30:57.8069947Z rm -rf src
+2026-11-26T10:30:57.8098275Z shell: /usr/bin/bash -e {0}
+2026-11-26T10:30:57.8098456Z env:
+2026-11-26T10:30:57.8098746Z   BASE: ***
+2026-11-26T10:30:57.8098889Z   RIDER_ID: 106
+2026-11-26T10:30:57.8099038Z   DRIVER_ID: 23
+2026-11-26T10:30:57.8099222Z   OUT: e2e-out
+2026-11-26T10:30:57.8099380Z   RUN_DEADLINE_MIN: 90
+2026-11-26T10:30:57.8099553Z   APK_RIDER: apk/rider/app-debug.apk
+2026-11-26T10:30:57.8099772Z   APK_DRIVER: apk/driver/app-debug.apk
+2026-11-26T10:30:57.8100037Z   RIDER_TOKEN: ***
+2026-11-26T10:30:57.8100268Z   DRIVER_TOKEN: ***
+2026-11-26T10:30:57.8100511Z   DEV_TOKEN: ***
+2026-11-26T10:30:57.8100683Z   OPENCODE_VERSION: 1.19.4
+2026-11-26T10:30:57.8100860Z   OPENCODE_DISABLE_AUTOUPDATE: 1
+2026-11-26T10:30:57.8101040Z   ARTEMIS_DISABLE: 1
+2026-11-26T10:30:57.8101232Z   OC_MODEL: opencode/deepseek-v4.1-flash-free
+2026-11-26T10:30:57.8101918Z   OC_MODEL_CHAIN: opencode/mimo-v2.6-flash-free,opencode/glm-5.3-flash-free,opencode/minimax-m3.1-flash-free,opencode/longcat-2.5-free,opencode/iceman-free,opencode/flint-40b-free,opencode/nemotron-3.5-lightning-free,opencode/beam-free,opencode/inkling-2-small-free
+2026-11-26T10:30:57.8102582Z   STAGING_HOST: ***
+2026-11-26T10:30:57.8102768Z   GALASS_STAGING_URL: ***
+2026-11-26T10:30:57.8103009Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103336Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.21-2/x64
+2026-11-26T10:30:57.8103648Z   FLUTTER_ROOT: /opt/hostedtoolcache/flutter/stable-3.50.1-x64/flutter
+2026-11-26T10:30:57.8103912Z   PUB_CACHE: /home/runner/.pub-cache
+2026-11-26T10:30:57.8104116Z ##[endgroup]
+2026-11-26T10:32:08.6128584Z      Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.
+2026-11-26T10:32:08.6129077Z 
+2026-11-26T10:32:08.6129886Z      Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/android/gradle/wrapper/gradle-wrapper.properties. 
+2026-11-26T10:32:08.6131044Z      For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.
+2026-11-26T10:32:08.6131394Z 
+2026-11-26T10:32:08.6131398Z 
+2026-11-26T10:32:08.6131525Z * Try:
+2026-11-26T10:32:08.6131803Z > Run with --stacktrace option to get the stack trace.
+2026-11-26T10:32:08.6132189Z > Run with --info or --debug option to get more log output.
+2026-11-26T10:32:08.6132610Z > Run with --scan to generate a Build Scan (Powered by Develocity).
+2026-11-26T10:32:08.6132995Z > Get more help at https://help.gradle.org.
+2026-11-26T10:32:08.6133197Z 
+2026-11-26T10:32:08.6133294Z BUILD FAILED in 1m 9s
+2026-11-26T10:32:08.6133616Z Running Gradle task 'assembleDebug'...                             69.6s
+2026-11-26T10:32:08.6134074Z Gradle task assembleDebug failed with exit code 1
+2026-11-26T10:32:08.6146570Z ##[error]Process completed with exit code 1.
+
