@@ -528,6 +528,14 @@ jobs:
           agent_tmp="$RUNNER_TEMP/oc-agent"
           agent_home="$agent_tmp/home"
           mkdir -p "$agent_tmp" "$agent_home"
+          # Porte dure : jamais de repli silencieux sur l'agent par défaut.
+          # check-agent.sh affiche agent, fiche et mode, et échoue en ::error::.
+          if [ -n "$TARGET_AGENT" ]; then
+            bash "$TOOLS_DIR/opencode/check-agent.sh" \
+              "$RUNNER_TEMP/oc/opencode.json" \
+              "$agent_home/.claude/agents" \
+              "$TARGET_AGENT"
+          fi
           hf_env=()
           if [ -n "${HF_TOKEN:-}" ]; then
             hf_env+=(HF_TOKEN="$HF_TOKEN" HUGGING_FACE_HUB_TOKEN="$HF_TOKEN")
