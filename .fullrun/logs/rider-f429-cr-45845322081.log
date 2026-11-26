@@ -2055,3 +2055,59 @@ Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/
  testWidgets('ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING',
 
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && timeout 900 /home/ubuntu/actions-runner/_work/_temp/oc-agent/sdk/flutter/bin/flutter test test/widget/course_en_cours_contract_test.dart 2>&1 | tee /tmp/verify_f429_redbefore.log | tail -40; echo "PIPE_EXIT=${PIPESTATUS[0]}"
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+══╡ EXCEPTION CAUGHT BY SCHEDULER LIBRARY ╞═════════════════════════════════════════════════════════
+The following message was thrown:
+An animation is still running even after the widget tree was disposed.
+
+There was one transient callback left. The stack trace for when it was registered is as follows:
+── callback 6 ──
+#2      SchedulerBinding.scheduleFrameCallback (package:flutter/src/scheduler/binding.dart:619:49)
+#3      RelayoutWhenSystemFontsChangeMixin._scheduleSystemFontsUpdate (package:flutter/src/rendering/object.dart:4730:31)
+#4      _SystemFontsNotifier.notifyListeners (package:flutter/src/painting/binding.dart:194:15)
+#5      PaintingBinding.handleSystemMessage (package:flutter/src/painting/binding.dart:183:22)
+<asynchronous suspension>
+#6      BasicMessageChannel.setMessageHandler.<anonymous closure> (package:flutter/src/services/platform_channel.dart:257:36)
+<asynchronous suspension>
+#7      _DefaultBinaryMessenger.setMessageHandler.<anonymous closure> (package:flutter/src/services/binding.dart:664:22)
+<asynchronous suspension>
+(elided 2 frames from class _FrameCallbackEntry)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING [E]
+  Test failed. See exception logs above.
+  The test description was: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+  
+00:01 +0 -1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:01 +1 -1: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:01 +2 -1: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:01 +3 -1: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +4 -1: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +5 -1: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +6 -1: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:02 +7 -1: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:02 +8 -1: Some tests failed.
+
+Failing tests:
+  /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+PIPE_EXIT=1
+
+Rouge-avant reproduit à l'identique. Restauration puis re-run vert.
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git checkout -- test/widget/course_en_cours_contract_test.dart && grep -n "setUpAll" test/widget/course_en_cours_contract_test.dart && timeout 900 /home/ubuntu/actions-runner/_work/_temp/oc-agent/sdk/flutter/bin/flutter test --no-pub test/widget/course_en_cours_contract_test.dart 2>&1 | tee /tmp/verify_f429_green.log | tail -20; echo "PIPE_EXIT=${PIPESTATUS[0]}"
+105:  setUpAll(loadGoldenFonts);
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:01 +1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:01 +2: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:01 +3: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:01 +4: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +5: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +6: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +7: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:02 +8: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:02 +9: (tearDownAll)
+00:02 +9: All tests passed!
+PIPE_EXIT=0
+
