@@ -892,3 +892,22 @@ Because device_info_plus 13.3.0 requires SDK version >=3.10.0 <4.0.0 and no vers
 So, because galass_driver depends on device_info_plus ^13.3.0, version solving failed.
 Failed to update packages.
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline -5
+589a7d7 isa(driver): Papa confirme liste ISC-F5-17 (7 éléments figés)
+3fe5b84 wip(driver-f5-19): partial work (agent stopped)
+d088550 feat(ride): ISC-F5-19 live car marker + ride-context location ping
+e741e31 wip(autosave): arbre de travail
+889fdcc fix(build): device_info_plus ^13.3.0 pour file_picker 13 / win32 6
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && which flutter fvm dart 2>&1 | head -10; echo "==="; flutter --version 2>&1 | head -20
+/usr/local/bin/flutter
+/usr/local/bin/dart
+===
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && find . -name '*isatool*' -o -name '*ISATool*' 2>&1 | head -20
+(no output)
+
