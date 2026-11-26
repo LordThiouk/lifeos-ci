@@ -5138,3 +5138,125 @@ SHLVL=1
 TMPDIR=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent
 _=/usr/bin/env
 
+$ find /home/ubuntu -maxdepth 7 -type d -name "Galass_Driver" 2>/dev/null; find / -maxdepth 6 -type d -name "Galass_Driver" 2>/dev/null | head
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver
+/agent/repos/Galass_Driver
+
+$ R=/agent/repos/Galass_Driver; echo "branch:"; git -C $R rev-parse --abbrev-ref HEAD 2>/dev/null; git -C $R log --oneline -3 2>/dev/null; echo "=== wrapper ==="; cat $R/android/gradle/wrapper/gradle-wrapper.properties; echo "=== settings ==="; cat $R/android/settings.gradle.kts; echo "=== gradle.properties ==="; cat $R/android/gradle.properties
+branch:
+feat/multistop-e2e-2026-11-15
+bd77f91 docs(driver): verdict position voiture temps réel + ISC-F5-19
+7187e3a prompt: driver live location
+9208af6 fix(build): M3 retrait dead code stopsProgressText + import (Driver)
+=== wrapper ===
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+=== settings ===
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "8.11.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+}
+
+include(":app")
+=== gradle.properties ===
+org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError
+android.useAndroidX=true
+android.enableJetifier=true
+# This builtInKotlin flag was added automatically by Flutter migrator
+android.builtInKotlin=false
+# This newDsl flag was added automatically by Flutter migrator
+android.newDsl=false
+
+# Build speed (local Fastlane / incremental)
+org.gradle.caching=true
+org.gradle.parallel=true
+org.gradle.daemon=true
+org.gradle.configureondemand=true
+org.gradle.vfs.watch=true
+
+$ R=/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/Galass_Driver; echo "branch:"; git -C $R rev-parse --abbrev-ref HEAD 2>/dev/null; git -C $R log --oneline -5 2>/dev/null; echo "=== wrapper ==="; cat $R/android/gradle/wrapper/gradle-wrapper.properties 2>/dev/null; echo "=== settings ==="; cat $R/android/settings.gradle.kts 2>/dev/null; echo "=== gradle.properties ==="; cat $R/android/gradle.properties 2>/dev/null
+branch:
+fullrun/lot-client-w0
+9b34386 chore(release): 1.1.1+53
+3daa551 chore(release): 1.1.0+52
+7998299 fix(callkit): arm ride-details nav after accept so ACTIVE CTAs show
+c4a47aa checkpoint before checking out main
+027a5d6 feat(multistop): driver F4 stop ack, current-leg nav, and END gate
+=== wrapper ===
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+=== settings ===
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "8.11.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+}
+
+include(":app")
+=== gradle.properties ===
+org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError
+android.useAndroidX=true
+android.enableJetifier=true
+# This builtInKotlin flag was added automatically by Flutter migrator
+android.builtInKotlin=false
+# This newDsl flag was added automatically by Flutter migrator
+android.newDsl=false
+
+# Build speed (local Fastlane / incremental)
+org.gradle.caching=true
+org.gradle.parallel=true
+org.gradle.daemon=true
+org.gradle.configureondemand=true
+org.gradle.vfs.watch=true
+
