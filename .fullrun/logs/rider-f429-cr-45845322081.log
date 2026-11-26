@@ -2557,3 +2557,119 @@ b83aba6 test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
 dcb4bf0 fix(rider): F4-34 share one-shot gate across controller and FCM
 69e248d docs(isa): tick ISC-F4-21 with map test evidence
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log origin/verify/rider-f429-cr..HEAD --oneline && echo "---DIFF---" && git diff origin/verify/rider-f429-cr --stat
+de565ae verify(rider): F4-29 a-b PASS — contract 9/9, red-before reproduced
+---DIFF---
+ VERIFY-F429.md | 88 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 88 insertions(+)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && cat VERIFY-F429.md 2>/dev/null | head -120
+VERDICT: PASS
+
+# Verify F4-29 — ISC-F4-29 a-b (profil chauffeur RUNNING, fonts `setUpAll`)
+
+- Dépôt : `LordThiouk/Galass_Rider`
+- Branche vérifiée : `verify/rider-f429-cr`
+- Tête au moment de la vérification : `fcdd581e60af92159238d4adce16dcb5be550176`
+  (`merge(rider): F4-29 profil chauffeur RUNNING into feat`)
+- Date : 2026-11-26 (UTC)
+- Périmètre : uniquement ISC-F4-29 a-b — présence du bloc profil chauffeur
+  (avatar / nom / note) sur l'écran RUNNING, et chargement des fonts golden en
+  `setUpAll`. Aucun autre ISC évalué, aucun code corrigé, aucun golden régénéré,
+  `.fullrun` non touché.
+
+## Environnement
+
+Le Flutter système (`/opt/flutter`, 3.35.6 / Dart 3.9.2) ne peut pas résoudre le
+`pubspec.yaml` de la branche : `share_plus ^13.3.1` exige Dart `>=3.10.0`. La
+vérification a donc tourné avec **Flutter 3.50.1 stable / Dart 3.14.0**, la
+version citée par l'ISA pour ce périmètre :
+
+```
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ae9b586f34 (8 days ago) • 2026-11-18 17:01:07 -0800
+Engine • hash 51379e6df48ea8ee7205623b90fe66491cad8df3 (revision 4d35714800)
+Tools • Dart 3.14.0 • DevTools 2.61.0
+```
+
+`flutter pub get` OK. Les deux fichiers que le SDK a réécrits à cette occasion
+(`pubspec.lock`, `analysis_options.yaml`) ont été restaurés : l'arbre ne contient
+que ce rapport.
+
+## Test demandé — sortie collée
+
+```
+$ flutter test test/widget/course_en_cours_contract_test.dart
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:01 +1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:01 +2: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:01 +3: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:01 +4: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +5: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +6: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +7: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:01 +8: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:01 +9: (tearDownAll)
+00:01 +9: All tests passed!
+```
+
+Exit code `0`, **9/9 tests verts**, dont le test a-b :
+
+- `find.byType(DriverProfileWidget)` → `findsOneWidget` ;
+- `find.text(kGoldenDriverName)` (`Moussa Fall`) → `findsOneWidget`.
+
+## Rouge-avant (contrôle de non-tautologie)
+
+Reproduction locale du rouge documenté dans l'ISA, en retirant temporairement la
+ligne `setUpAll(loadGoldenFonts);` (fichier restauré à l'identique ensuite,
+`git diff` vide) :
+
+```
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+══╡ EXCEPTION CAUGHT BY SCHEDULER LIBRARY ╞══
+The following message was thrown:
+An animation is still running even after the widget tree was disposed.
+...
+#3  RelayoutWhenSystemFontsChangeMixin._scheduleSystemFontsUpdate (package:flutter/src/rendering/object.dart:4730:31)
+#4  _SystemFontsNotifier.notifyListeners (package:flutter/src/painting/binding.dart:194:15)
+...
+00:00 +0 -1: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING [E]
+00:02 +8 -1: Some tests failed.
+```
+
+Restauration de `setUpAll(loadGoldenFonts)` puis re-run → `9/9 All tests
+passed!` (sortie verte ci-dessus). Le correctif `fb2b0ff` est donc bien la
+condition du vert a-b, et l'échec est celui décrit dans l'ISA (`fontsChange`
+pendant le teardown du premier test).
+
+## Portée / limites
+
+- Vérification limitée au périmètre demandé (ISC-F4-29 a-b) ; les tests c-h,
+  F4-22, F4-25 à F4-28, F4-23 et F4-31 sont verts dans la même exécution mais
+  ne sont pas l'objet du verdict.
+- Aucun golden comparé ni régénéré : `test/goldens/` inchangé (`git status`
+  vide sur ce chemin).
+- `.fullrun/` non modifié.
+
+$ which flutter; ls /opt/flutter/bin/flutter 2>/dev/null; find / -name flutter -type f 2>/dev/null | head; echo "---"; cat /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/pubspec.yaml | grep -A2 environment
+/usr/local/bin/flutter
+/opt/flutter/bin/flutter
+/opt/flutter/bin/flutter
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/sdk/flutter/bin/flutter
+---
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+$ /opt/flutter/bin/flutter --version; echo "==="; /home/ubuntu/actions-runner/_work/_temp/oc-agent/sdk/flutter/bin/flutter --version
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+===
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ae9b586f34 (8 days ago) • 2026-11-18 17:01:07 -0800
+Engine • hash 51379e6df48ea8ee7205623b90fe66491cad8df3 (revision 4d35714800) (8 days ago) • 2026-11-18 01:50:07.000Z
+Tools • Dart 3.14.0 • DevTools 2.61.0
+
