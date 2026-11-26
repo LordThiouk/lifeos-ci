@@ -1858,3 +1858,14 @@ $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --o
 3fe5b84 wip(driver-f5-19): partial work (agent stopped)
 d088550 feat(ride): ISC-F5-19 live car marker + ride-context location ping
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git add MEMORY/WORK/20261006-galass-driver-multistop/ISA.md && git commit -m "isa(driver): tick ISC-F5-19 live car location in ride
+
+- Mark ISC-F5-19 checked via ISATool with evidence
+- Code/test already present on branch (d088550): RideMapController.applyLiveDriverLocation, RideDetailsController live GPS stream + driver/location-update ping, test/unit/ride_map_live_location_test.dart
+- Local flutter test blocked in CI env (Flutter 3.35.6/Dart 3.9.2, deps/pub cache unresolved); analyze --no-pub shows no F5-19-specific errors in touched files" 2>&1 | tail -20
+[feat/multistop-e2e-2026-11-15 eb3b8d8] isa(driver): tick ISC-F5-19 live car location in ride
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git status --short --branch
+## feat/multistop-e2e-2026-11-15...origin/feat/multistop-e2e-2026-11-15 [ahead 1]
+
