@@ -309,7 +309,11 @@ jobs:
         run: |
           set -euo pipefail
           url="https://github.com/LordThiouk/lifeos.git"
-          rm -rf lifeos
+          # Self-hosted : un run précédent peut laisser lifeos/ en a-w (lifeos_write=false).
+          if [ -e lifeos ]; then
+            chmod -R u+w lifeos 2>/dev/null || sudo chmod -R u+w lifeos
+            rm -rf lifeos || sudo rm -rf lifeos
+          fi
           if ! GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 \
                git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
                clone --depth 1 --branch "$LIFEOS_REF" "$url" lifeos >/dev/null 2>&1; then
