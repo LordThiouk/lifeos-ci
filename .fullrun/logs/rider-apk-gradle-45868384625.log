@@ -3923,3 +3923,18 @@ $ grep -n 'ISC-F5-19' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/targ
 322:- ISC-F5-19: flutter test test/unit/ride_map_live_location_test.dart -> 7/7 passed (Flutter 3.50.1); analyze 0 errors [@c526ef3]
 323:- ISC-F5-19: flutter test test/unit/ride_map_live_location_test.dart -> 7/7 passed (Flutter 3.50.1) ; flux GPS pendant RIDE_ACTIVE/RUNNING met a jour marker driver_location (marker_car.png) + camera follow throttle ; POST driver/location-update emis depuis contexte course (DashBoardRepo.updateLiveLocation, non gate online home) ; suite complete flutter test --no-pub -> 493/493 ; analyze 0 erreur (3 infos deprecated pre-existantes) ; aucun golden regenere ; .fullrun intact ; lifeos read-only [@9443d49]
 
+$ echo "== driver/location-update endpoint ==" && grep -rn "driverLocationUpdate" lib/core/utils/url_container.dart && echo "== POST updateLiveLocation ==" && grep -n "driverLocationUpdate\|Method.postMethod" lib/data/repo/dashboard/dashboard_repo.dart && echo "== call from ride context ==" && grep -n "updateLiveLocation" lib/data/controller/ride/ride_details/ride_details_controller.dart && echo "== marker_car asset ==" && grep -n "markerCar" lib/core/utils/my_icons.dart && echo "== driver_location marker ==" && grep -n "MarkerId('driver_location')" lib/data/controller/map/ride_map_controller.dart
+== driver/location-update endpoint ==
+74:  static const String driverLocationUpdate = 'driver/location-update';
+== POST updateLiveLocation ==
+31:      Method.postMethod,
+42:    String url = "${UrlContainer.baseUrl}${UrlContainer.driverLocationUpdate}";
+48:      Method.postMethod,
+66:      Method.postMethod,
+== call from ride context ==
+213:      final response = await locationRepo.updateLiveLocation(
+== marker_car asset ==
+5:  static const String markerCar = "assets/icon/marker_car.png"; // marker_car.png
+== driver_location marker ==
+279:          markerId: const MarkerId('driver_location'),
+
