@@ -5526,3 +5526,158 @@ allowed_repos_list() {
   for r in $ALLOWED_REPOS; do
     printf '%s\n' "$r"
 
+✗ env | sort | grep -iE "^(OC_|GITHUB|GH_|GALASS|EMU|OPENCODE|IN_|FULLRUN|CI|PATH|HOME)" ; echo "=====SUDO====="; sudo -n -H true 2>&1; echo "rc=$?"; sudo -n -l 2>&1 | head -20; echo "=====FULLRUN-LIVE====="; ls -la /opt/fullrun-live/ failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ head -150 /opt/lifeos-ci-tools/opencode/run-fullrun.sh
+#!/usr/bin/env bash
+# Lance opencode run sans jamais écrire sa sortie dans le log public du job, sous un moniteur :
+#  - silence : si le run ne montre plus aucune activité pendant OC_IDLE_MIN minutes, arrêt propre
+#    (code 125). L'activité n'est pas que la croissance de $OC_LOG : les fichiers de session
+#    comptent aussi (un sous-agent travaille sans écrire dans le flux principal) ; le CPU ne
+#    compte pas (un opencode figé garde un petit CPU de boucle d'événements).
+#  - erreur agent puis silence : dès qu'une ligne `[agent-error] type=timeout|empty|provider` paraît
+#    dans la passe, l'absence d'activité pendant OC_ERROR_IDLE_SEC (240 s par défaut) coupe la passe
+#    et déclenche le MÊME repli que le silence (même MAX_RESUMES, même `fallback=`). Indispensable en
+#    chaîne : le seuil normal de 20 min y consomme tout le temps restant avant le push. type=429 est
+#    exclu — le quota garde son comportement (repli au code de sortie, jamais une coupure anticipée).
+#  - plafond : à OC_DEADLINE_EPOCH (heure absolue, marge de push prise par le workflow), arrêt
+#    propre (code 124).
+# Reprise après un arrêt :
+#  - un `--continue` n'est plus cru sur parole : on sonde la session OC_CONTINUE_PROBE_SEC
+#    secondes (3 min par défaut). Si aucun token utile n'en sort, la piste est abandonnée et une
+#    session NEUVE (sans --continue) reprend avec un message qui rappelle l'état ISA / FullRun ;
+#  - le secours est une CHAÎNE (OC_MODEL_CHAIN, séparée par des virgules, renseignée par le garde du
+#    workflow). À la reprise n° i, m = chaîne[(i-1) % longueur], passé en `--model` ET en OC_MODEL_MAIN,
+#    puis réécrit dans $OC_AGENT_DIR/*.md pour que les sous-agents changent aussi ; chaque élément
+#    doit être `opencode/...-free` et différer du principal (sinon code 90) ;
+#  - sous-agent muet : le seuil de base est OC_IDLE_MIN*60 (le plafond OC_SUBAGENT_IDLE_SEC, ex. 480 s,
+#    ne s'applique que s'il est posé explicitement et le raccourcit alors) ; un seuil PAR AGENT plus long
+#    (OC_AGENT_IDLE_MIN, défaut Forge=40) prolonge l'attente de l'agent en cours, jamais l'inverse ; la
+#    coupure écrit `type=timeout` + `subagent_timeout=1` (verdict MANQUANT, jamais un pass) ;
+#  - fin anticipée : done_check.sh (copie figée /opt/fullrun-tools) vérifie Max PASS réel,
+#    hooks.log, vérificateurs OC_DONE_VERIFY, arbre propre et REPORT.md ; si ok et session inactive
+#    depuis OC_DONE_IDLE_SEC (180 s) : `arret=max_pass`, exit 0, aucune reprise ;
+#  - fin de tour : un `rc=0` d'opencode signifie « le tour est fini », PAS « le run est terminé ».
+#    Sans PASS de Max vérifié par done_check.sh, la passe est une reprise (`arret=tour-fini`) :
+#    une session neuve relit l'ISA et continue au lieu d'attendre une réponse humaine ;
+#  - reprises épuisées sans PASS : exit 127, jamais 0 ;
+#  - chaque échec écrit une ligne `[agent-error] type=timeout|empty|provider|429` (comptée par le
+#    workflow) ; jamais de secret ni de texte brut du modèle dans ces lignes.
+# Arrêt propre = SIGINT au groupe de processus d'opencode et à tous ses descendants, puis SIGKILL
+# après OC_KILL_GRACE secondes. La raison est décidée ici (code de sortie), jamais lue dans un
+# fichier qu'opencode pourrait écrire.
+# Codes : 0 ok (dont `arret=max_pass`), 124 plafond, 125 silence ou sous-agent muet, 126 réponses
+# vides épuisées, 127 fin de tour sans PASS (reprises épuisées), 90 environnement, 130 annulation ;
+# sinon code d'opencode (124/125 d'opencode lui-même deviennent 1 pour ne pas être confondus avec
+# une décision du moniteur).
+#
+# Variables obligatoires : TARGET_DIR (repli ANTENLY_DIR), OC_PROMPT_FILE, OC_LOG, OC_MODEL_MAIN, OC_DEADLINE_EPOCH,
+# OC_IDLE_MIN. Optionnelles : OC_BIN, OC_POLL_SEC, OC_KILL_GRACE, OC_IDLE_SEC (tests),
+# OC_ERROR_IDLE_SEC, OC_SUBAGENT_IDLE_SEC, OC_STALL_RESUMES, OC_CONTINUE_PROBE_SEC, OC_MODEL_CHAIN,
+# OC_STORE_DIR, OC_AGENT_DIR, OC_INTERNAL_LOG,
+# OC_INTERNAL_LOG_DIR, OC_HOOKS_LOG, OC_DONE_VERIFY, OC_ISA/OC_ISA_PATH, OC_REPORT,
+# OC_DONE_CHECK_SEC, OC_DONE_IDLE_SEC, OC_DONE_CHECK_BIN, OC_IDLE_CPU.
+# Statut ($OC_LOG.status) : main_rc, stall_resume, fallback=<modèle>, stall_rc, new_session,
+# new_rc, error=<type>, subagent_timeout, done_check=ok,
+# arret=max_pass|tour-fini|plafond|silence|vide|annulation.
+#
+# Signal « vrai FullRun » : le wrapper exporte LIFEOS_FULLRUN=1 dans son propre environnement
+# avant de lancer opencode. Ce signal n'est pas falsifiable par l'agent : il vit dans l'env du
+# processus opencode démarré ici, pas dans un fichier ni dans un `export` d'outil bash (le plugin
+# est déjà chargé). Un job qui n'appelle pas ce wrapper ne l'a donc pas. On ne pose jamais
+# FULLRUN_OFF. LIFEOS_HOOK_PROFILE=fullrun est posé par défaut s'il est absent.
+set +x
+set -uo pipefail
+export LIFEOS_FULLRUN=1
+export LIFEOS_HOOK_PROFILE="${LIFEOS_HOOK_PROFILE:-fullrun}"
+# TARGET_DIR (version galass) ou ANTENLY_DIR (version antenly) : les deux noms restent acceptés,
+# pour ne pas casser les tests/appelants historiques qui ne fournissent que l'un des deux.
+TARGET_DIR="${TARGET_DIR:-${ANTENLY_DIR:-}}"
+ANTENLY_DIR="${ANTENLY_DIR:-$TARGET_DIR}"
+: "${TARGET_DIR:?}" "${OC_PROMPT_FILE:?}" "${OC_LOG:?}" "${OC_MODEL_MAIN:?}" \
+  "${OC_DEADLINE_EPOCH:?}" "${OC_IDLE_MIN:?}"
+OC_BIN="${OC_BIN:-opencode}"
+POLL="${OC_POLL_SEC:-30}"; GRACE="${OC_KILL_GRACE:-60}"
+# Sous-agents qui échouent en « timed out » côté opencode : le principal continue, mais avec le MÊME modèle
+# (peut-être saturé ou sans quota). Au bout de OC_SUBAGENT_FAIL_MAX échecs dans une passe (défaut 2 ; 0 =
+# désactivé), la passe est coupée et la reprise change de modèle pour tous les agents, comme pour un silence.
+SUBFAIL_MAX="${OC_SUBAGENT_FAIL_MAX:-2}"
+[[ "$SUBFAIL_MAX" =~ ^[0-9]{1,2}$ ]] || { echo "OC_SUBAGENT_FAIL_MAX invalide" >&2; exit 90; }
+SUBFAIL_RE='Subagent failed[^[:cntrl:]]*(timed out|timeout)'
+[[ "$OC_DEADLINE_EPOCH" =~ ^[0-9]{9,11}$ ]] || { echo "OC_DEADLINE_EPOCH invalide" >&2; exit 90; }
+[[ "$OC_IDLE_MIN" =~ ^[0-9]{1,3}$ ]] || { echo "OC_IDLE_MIN invalide" >&2; exit 90; }
+# Clé de porte : start_step demandé (input du workflow), transmis à LifeOS par l'environnement d'opencode,
+# que l'agent ne peut pas modifier. C'est une demande : LifeOS ne l'ouvre que si les étapes avant sont
+# prouvées. Valeur inconnue (ou deploy) = refus ici ; vide = rien n'est exporté, comportement habituel.
+unset FULLRUN_START_STEP
+if [ -n "${OC_START_STEP:-}" ]; then
+  [[ "$OC_START_STEP" =~ ^(scaffold|completeness_pre|vera|serena|build|verify|max|close|[0-7])$ ]] \
+    || { echo "OC_START_STEP invalide" >&2; exit 90; }
+  export FULLRUN_START_STEP="$OC_START_STEP"
+fi
+# Même convention que start_step ci-dessus, pour un seul step (et un seul agent sur verify) à la
+# fois : la skill FullRunWorkflow (LordThiouk/lifeos) lit ces deux variables et les passe à
+# `FullRunPipeline.ts unit` via --stop-after-step/--agent. Vide = rien n'est exporté (run complet).
+unset FULLRUN_STOP_AFTER_STEP FULLRUN_TARGET_AGENT
+# Job borné à UNE étape : aucune reprise ne doit dérouler les étapes suivantes. La variable est
+# aussi transmise à LifeOS (FullRunWorkflow lit FULLRUN_STOP_AFTER_STEP), mais la garde CI ne peut
+# pas dépendre d'un agent : si la première passe ne rend pas le PASS de l'étape, le job s'arrête
+# (127, tour-fini) au lieu de relancer une session qui continuerait le pipeline.
+STOP_AFTER="${OC_STOP_AFTER_STEP:-}"
+if [ -n "$STOP_AFTER" ]; then
+  [[ "$STOP_AFTER" =~ ^(scaffold|completeness_pre|vera|serena|build|verify|max|close|[0-7])$ ]] \
+    || { echo "OC_STOP_AFTER_STEP invalide" >&2; exit 90; }
+  export FULLRUN_STOP_AFTER_STEP="$STOP_AFTER"
+fi
+if [ -n "${OC_TARGET_AGENT:-}" ]; then
+  [[ "$OC_TARGET_AGENT" =~ ^[A-Za-z][A-Za-z0-9_-]{0,39}$ ]] \
+    || { echo "OC_TARGET_AGENT invalide" >&2; exit 90; }
+  export FULLRUN_TARGET_AGENT="$OC_TARGET_AGENT"
+fi
+[[ "$POLL" =~ ^[0-9]{1,3}$ && "$POLL" -ge 1 ]] || POLL=30
+[[ "$GRACE" =~ ^[0-9]{1,3}$ ]] || GRACE=60
+# OC_STALL_RESUMES : nombre de reprises après un arrêt (défaut min(chaîne, 6)).
+# OC_CONTINUE_PROBE_SEC : durée de la sonde `--continue` (défaut 180 ; 0 = session neuve directe).
+PROBE_SEC="${OC_CONTINUE_PROBE_SEC:-180}"
+[[ "$PROBE_SEC" =~ ^[0-9]{1,4}$ ]] || PROBE_SEC=180
+# OC_MODEL_CHAIN : liste ordonnée de modèles de secours (« opencode/...-free », séparés par des
+# virgules) ; renseignée par le garde du workflow (défaut vert : mimo/iceman/nemotron/beam/hy4 si
+# l'input model_chain est vide — model_fallback, l'ancien input de repli, a été retiré). Chaque
+# élément doit être gratuit et différent du principal ; une chaîne vide après filtrage est une
+# erreur d'environnement (90). À la reprise n° i (1-based), m = chaîne[(i-1) % longueur].
+MODEL_CHAIN_RAW="${OC_MODEL_CHAIN:-}"
+CHAIN=()
+if [ -n "$MODEL_CHAIN_RAW" ]; then
+  IFS=',' read -r -a _chain_raw <<<"$MODEL_CHAIN_RAW"
+  for _m in "${_chain_raw[@]}"; do
+    _m="${_m#"${_m%%[![:space:]]*}"}"; _m="${_m%"${_m##*[![:space:]]}"}"
+    [ -n "$_m" ] || continue
+    [ "$_m" = "$OC_MODEL_MAIN" ] && continue          # le secours diffère toujours du principal
+    [[ "$_m" =~ ^opencode/[a-z0-9.-]+-free$ ]] || { echo "modèle de secours refusé : $_m" >&2; exit 90; }
+    CHAIN+=("$_m")
+  done
+  unset _chain_raw _m
+fi
+[ "${#CHAIN[@]}" -ge 1 ] || { echo "OC_MODEL_CHAIN vide (ou réduite au principal) : aucun secours" >&2; exit 90; }
+if [[ "${OC_STALL_RESUMES:-}" =~ ^[0-9]{1,2}$ ]]; then
+  MAX_RESUMES="${OC_STALL_RESUMES}"
+else
+  MAX_RESUMES="${#CHAIN[@]}"; [ "$MAX_RESUMES" -gt 6 ] && MAX_RESUMES=6
+fi
+# OC_IDLE_SEC : uniquement pour les tests locaux (délai court) ; en CI, OC_IDLE_MIN fait foi.
+IDLE_SEC=$(( OC_IDLE_MIN * 60 ))
+[[ "${OC_IDLE_SEC:-}" =~ ^[0-9]{1,5}$ ]] && IDLE_SEC="$OC_IDLE_SEC"
+# OC_ERROR_IDLE_SEC : délai court APRÈS une erreur agent (timeout/empty/provider) sans activité ;
+# 0 désactive. Seul ce délai est raccourci : le seuil de silence normal (IDLE_SEC/EFFECTIVE_IDLE) et
+# le repli 429 restent intacts. Valeur invalide = environnement refusé (90), jamais avalée.
+ERROR_IDLE_SEC="${OC_ERROR_IDLE_SEC:-240}"
+[[ "$ERROR_IDLE_SEC" =~ ^[0-9]{1,5}$ ]] || { echo "OC_ERROR_IDLE_SEC invalide" >&2; exit 90; }
+# Activité d'un sous-agent ou d'un outil lancé par l'agent : elle compte comme celle du parent
+# (voir active() : fichiers de session qui bougent ; CPU des processus ENFANTS de l'agent). La
+# coupure n'a donc lieu qu'après OC_IDLE_MIN minutes sans AUCUNE activité du parent ni des enfants :
+# un vrai blocage reste coupé, simplement plus tard (avant : min(OC_IDLE_MIN, 8 min) quoi qu'il
+# arrive, ce qui tuait un sous-agent ou un banc encore au travail). OC_SUBAGENT_IDLE_SEC reste un
+# plafond OPTIONNEL : posé explicitement, il raccourcit le seuil, mais l'activité continue de
+# remettre le compteur à zéro.
+
