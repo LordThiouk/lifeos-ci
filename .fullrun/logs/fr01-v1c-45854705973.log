@@ -16394,3 +16394,65 @@ Date:   Thu Nov 26 21:09:44 2026 +0000
  core/resources/views/admin/services/index.blade.php | 20 ++++++++++++++++++++
  1 file changed, 20 insertions(+)
 
+$ command -v php composer bun node npx; php -v 2>/dev/null | head -3
+/usr/local/bin/bun
+
+$ ls /usr/local/bin | head -50; ls /opt 2>/dev/null; ls ~/.nix-profile/bin 2>/dev/null | head; which nix 2>/dev/null; ls /nix 2>/dev/null | head
+age
+age-keygen
+anyos-setup
+anyos-setup.hash
+anyos-setup.version
+bench-capped
+bore
+bun
+chrome
+cloudflared
+configure-google-chrome
+configure-google-chrome.hash
+configure-google-chrome.sh.version
+configure-os-display
+configure-os-display.hash
+configure_os_display.sh.version
+cursor-agent-store-fuse
+cursor_agent_store_fuse_refresh_stamp
+cursor_agent_store_fuse_version
+dart
+flutter
+gh
+gitleaks
+google-chrome
+install-and-configure-themes
+install-and-configure-themes.hash
+install-cursor-artifact-directories
+install-cursor-artifact-directories.hash
+install-cursor-artifact-directories.sh.version
+install-fonts-and-fontconfig
+install-fonts-and-fontconfig.hash
+install-fonts-and-fontconfig.sh.version
+install-google-chrome
+install-google-chrome.hash
+install-google-chrome.sh.version
+install-locales
+install-locales.hash
+install-locales.sh.version
+install-remote-vnc-setup
+install-remote-vnc-setup.hash
+install-remote-vnc-setup.sh.version
+install-vnc-desktop-apt-packages
+install-vnc-desktop-apt-packages.hash
+install-vnc-desktop-apt-packages.sh.version
+install_and_configure_themes.sh.version
+nvm-init.sh
+opencode
+websockify
+websockify.hash
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+
