@@ -1566,3 +1566,33 @@ ls: cannot access '/home/ubuntu/flutter': No such file or directory
 ===
 /home/ubuntu/actions-runner/_work/_temp/oc-agent/home
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && flutter pub get 2>&1 | tail -30
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because device_info_plus 13.3.0 requires SDK version >=3.10.0 <4.0.0 and no versions of device_info_plus match >13.3.0 <14.0.0, device_info_plus ^13.3.0 is forbidden.
+So, because galass_driver depends on device_info_plus ^13.3.0, version solving failed.
+Failed to update packages.
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git add -u test/unit/tmp_probe_test.dart && git status --short
+D  test/unit/tmp_probe_test.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && dart format lib/data/controller/map/ride_map_controller.dart lib/data/controller/ride/ride_details/ride_details_controller.dart test/unit/ride_map_live_location_test.dart 2>&1 | tail -10
+Warning: Package resolution error when reading "analysis_options.yaml" file:
+Failed to resolve package URI "package:flutter_lints/flutter.yaml" in include.
+Formatted lib/data/controller/map/ride_map_controller.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file:
+Failed to resolve package URI "package:flutter_lints/flutter.yaml" in include.
+Formatted lib/data/controller/ride/ride_details/ride_details_controller.dart
+Warning: Package resolution error when reading "analysis_options.yaml" file:
+Failed to resolve package URI "package:flutter_lints/flutter.yaml" in include.
+Formatted test/unit/ride_map_live_location_test.dart
+Formatted 3 files (3 changed) in 0.33 seconds.
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && flutter analyze --no-pub lib/data/controller/map/ride_map_controller.dart lib/data/controller/ride/ride_details/ride_details_controller.dart 2>&1 | tail -5
+error • The method 'canLaunchUrl' isn't defined for the type 'RideDetailsController' • lib/data/controller/ride/ride_details/ride_details_controller.dart:920:15 • undefined_method
+  error • The method 'launchUrl' isn't defined for the type 'RideDetailsController' • lib/data/controller/ride/ride_details/ride_details_controller.dart:921:13 • undefined_method
+  error • Undefined name 'LaunchMode' • lib/data/controller/ride/ride_details/ride_details_controller.dart:921:34 • undefined_identifier
+
+452 issues found. (ran in 0.4s)
+
