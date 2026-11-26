@@ -1,0 +1,727 @@
+
+> Forge · deepseek-v4.1-flash-free
+
+
+> Forge · iceman-free
+
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+✱ Glob "**/ride_map_controller.dart" 1 match
+
+$ ls MEMORY/WORK/20261006-galass-driver-multistop 2>&1 | head -20
+ISA.html
+ISA.md
+
+$ git branch --show-current && echo "---" && git status --short
+feat/multistop-e2e-2026-11-15
+---
+
+✱ Glob "**/poly_line_map.dart" 1 match
+✱ Glob "**/forground_location_service.dart" 1 match
+→ Read lib/data/controller/map/ride_map_controller.dart
+→ Read lib/presentation/screens/ride_details/widgets/poly_line_map.dart
+→ Read lib/data/services/forground_location_service.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "#driver/location-update\|location-update\|maybePingServerLocation" --include='*.dart' | head -30
+test/unit/ride_map_live_location_test.dart:125:    test('RIDE_ACTIVE: emits driver/location-update from the ride context',
+lib/data/controller/ride/ride_details/ride_details_controller.dart:36:  /// `driver/location-update` sink. Injected in tests; otherwise built from
+lib/data/controller/ride/ride_details/ride_details_controller.dart:150:  /// `driver/location-update` pings from the ride context, independent of the
+lib/data/controller/ride/ride_details/ride_details_controller.dart:198:  /// Sends `driver/location-update` for the current ride, throttled by
+lib/data/controller/dashboard/dashboard_controller.dart:65:  Future<void> maybePingServerLocation(Position position) async {
+lib/core/utils/url_container.dart:74:  static const String driverLocationUpdate = 'driver/location-update';
+lib/presentation/screens/rides/home_screen/home_screen.dart:370:      unawaited(controller.maybePingServerLocation(position));
+lib/presentation/screens/rides/home_screen/home_screen.dart:384:      unawaited(controller.maybePingServerLocation(position));
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '1,240p' lib/data/controller/ride/ride_details/ride_details_controller.dart
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:galass_driver/core/helper/string_format_helper.dart';
+import 'package:galass_driver/core/helper/last_ping_store.dart';
+import 'package:galass_driver/core/helper/location_ping_policy.dart';
+import 'package:galass_driver/core/helper/server_rejection.dart';
+import 'package:galass_driver/core/route/route.dart';
+import 'package:galass_driver/core/utils/app_status.dart';
+import 'package:galass_driver/core/utils/my_strings.dart';
+import 'package:galass_driver/core/utils/util.dart';
+import 'package:galass_driver/data/controller/map/ride_map_controller.dart';
+import 'package:galass_driver/data/controller/ride/ride_meassage/ride_meassage_controller.dart';
+import 'package:galass_driver/data/model/authorization/authorization_response_model.dart';
+import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+import 'package:galass_driver/data/model/global/ride/multistop_stop_sync.dart';
+import 'package:galass_driver/data/model/global/ride/ride_event_merge.dart';
+import 'package:galass_driver/data/model/global/ride/ride_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_stop_progress.dart';
+import 'package:galass_driver/data/model/global/user/review_model.dart';
+import 'package:galass_driver/data/model/ride/ride_details_response_model.dart';
+import 'package:galass_driver/data/repo/dashboard/dashboard_repo.dart';
+import 'package:galass_driver/data/repo/ride/ride_repo.dart';
+import 'package:galass_driver/environment.dart';
+import 'package:galass_driver/presentation/components/snack_bar/show_custom_snackbar.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:galass_driver/presentation/screens/ride_details/widgets/payment_receive_dialog.dart';
+
+class RideDetailsController extends GetxController {
+  RideRepo repo;
+  RideMapController mapController;
+
+  /// `driver/location-update` sink. Injected in tests; otherwise built from
+  /// the ride repo's API client.
+  final DashBoardRepo locationRepo;
+
+  RideDetailsController({
+    required this.repo,
+    required this.mapController,
+    DashBoardRepo? locationRepo,
+  }) : locationRepo = locationRepo ?? DashBoardRepo(apiClient: repo.apiClient);
+
+  StreamSubscription<LatLng>? _driverLocationSubscription;
+  final LocationPingPolicy _rideLocationPingPolicy = LocationPingPolicy(
+    maxIntervalSeconds: Environment.driverLocationUpdateMaxIntervalSeconds,
+  );
+  DateTime? _lastRideLocationPingAt;
+
+  /// Test seam: replaces the Geolocator position stream.
+  @visibleForTesting
+  Stream<LatLng> Function()? driverLocationStreamForTest;
+
+  /// Test seam: lets a test advance the ping clock.
+  @visibleForTesting
+  DateTime Function() nowProvider = DateTime.now;
+
+  /// True while the ride screen listens to the GPS stream (ISC-F5-19).
+  bool get isLiveLocationTracking => _driverLocationSubscription != null;
+
+  /// The car only streams and pings while the ride is in progress.
+  bool get isRideInProgress =>
+      ride.status == AppStatus.RIDE_ACTIVE ||
+      ride.status == AppStatus.RIDE_RUNNING;
+
+  /// Sticky/list ACTIVE CTAs — exact status only (null/empty must not flash).
+  static bool showsActiveRideCtas(String? status) =>
+      status == AppStatus.RIDE_ACTIVE;
+
+  /// CallKit / re-open must not reuse a stale singleton with wrong status/map.
+  static RideDetailsController putFresh({
+    required RideRepo repo,
+    required RideMapController mapController,
+  }) {
+    if (Get.isRegistered<RideDetailsController>()) {
+      Get.delete<RideDetailsController>(force: true);
+    }
+    return Get.put(
+      RideDetailsController(repo: repo, mapController: mapController),
+    );
+  }
+
+  RideModel ride = RideModel(id: '-1');
+
+  bool isCashPaymentRequest = false;
+
+  /// One cash-payment modal at a time, app-wide.
+  ///
+  /// Static on purpose: [putFresh] replaces this controller every time the
+  /// details screen opens, so an instance flag cannot see the modal opened by
+  /// the previous instance — that is exactly how two stacked dialogs (and two
+  /// `acceptCashPayment` POSTs) were produced. The modal belongs to the
+  /// navigator, not to a controller instance.
+  // F3 (accepté non corrigé): les flags statiques ne sont pas remis à zéro au logout; risque faible, documenté dans l'ISA.
+  static bool _paymentDialogVisible = false;
+  static String? _paymentDialogRideId;
+
+  /// Context of the modal route currently on screen (null when no modal).
+  /// Stored so [dismissPaymentDialog] pops *that* route, never whatever route
+  /// happens to be on top.
+  static BuildContext? _paymentDialogContext;
+
+  /// Generation of the modal currently presented — incremented on every
+  /// presentation.
+  ///
+  /// F1: the state above belongs to ONE modal. Without this counter the
+  /// `whenComplete` of a replaced modal A released the state of the live modal
+  /// B (A closes after B opened), so `acceptPaymentRide` on B saw no context,
+  /// never popped it and left the driver stuck behind a dead modal. Every
+  /// cleanup below only runs while `gen == _paymentDialogGen`.
+  static int _paymentDialogGen = 0;
+
+  /// Ride whose cash request could not be shown yet (no `BuildContext`). Also
+  /// static: the request must survive a controller swap instead of being lost.
+  // F3 (accepté non corrigé): les flags statiques ne sont pas remis à zéro au logout; risque faible, documenté dans l'ISA.
+  static String? _pendingCashPaymentRideId;
+
+  @visibleForTesting
+  String? get pendingCashPaymentRideId => _pendingCashPaymentRideId;
+
+  @visibleForTesting
+  static void resetCashPaymentDialogStateForTest() {
+    _paymentDialogGen = 0;
+    _paymentDialogVisible = false;
+    _paymentDialogRideId = null;
+    _paymentDialogContext = null;
+    _pendingCashPaymentRideId = null;
+  }
+
+  /// UI END gate — false while multistop escales are pending.
+  bool get canEndRide => ride.canEndRide;
+
+  /// UI CONFIRM STOP — true while at least one escale is pending.
+  bool get canConfirmStop => ride.canConfirmStop;
+
+  void updateRide(RideModel newRide) {
+    ride = newRide;
+    if (isRideInProgress) {
+      startLiveLocationTracking();
+    } else {
+      stopLiveLocationTracking();
+    }
+    update();
+    printX('update ride from event');
+  }
+
+  /// Starts the in-ride GPS stream (ISC-F5-19): car marker + camera follow and
+  /// `driver/location-update` pings from the ride context, independent of the
+  /// home "online" state.
+  void startLiveLocationTracking() {
+    if (_driverLocationSubscription != null) return;
+    if (!isRideInProgress) return;
+    // Widget/unit tests must never open a real platform location stream; they
+    // inject [driverLocationStreamForTest] when they exercise this path.
+    if (Get.testMode && driverLocationStreamForTest == null) return;
+    try {
+      final stream =
+          (driverLocationStreamForTest ?? _defaultDriverLocationStream)();
+      _driverLocationSubscription = stream.listen(
+        handleDriverLocation,
+        onError: (Object error, StackTrace stackTrace) {
+          printX('[ride] live location stream error: $error');
+        },
+      );
+      printX('[ride] live location tracking started (ride=${ride.id})');
+    } catch (e) {
+      printX('[ride] live location tracking unavailable: $e');
+    }
+  }
+
+  Stream<LatLng> _defaultDriverLocationStream() =>
+      Geolocator.getPositionStream(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.bestForNavigation,
+          distanceFilter: 5,
+        ),
+      ).map((position) => LatLng(position.latitude, position.longitude));
+
+  void stopLiveLocationTracking() {
+    _driverLocationSubscription?.cancel();
+    _driverLocationSubscription = null;
+  }
+
+  /// One GPS fix: move the car marker, follow with the camera, ping the server.
+  @visibleForTesting
+  void handleDriverLocation(LatLng position) {
+    if (!isRideInProgress) {
+      // The ride ended while the stream was open: stop instead of pinging.
+      stopLiveLocationTracking();
+      return;
+    }
+    mapController.applyLiveDriverLocation(position);
+    unawaited(pingRideLocation(position));
+  }
+
+  /// Sends `driver/location-update` for the current ride, throttled by
+  /// [LocationPingPolicy] (same max interval as the foreground service).
+  Future<void> pingRideLocation(LatLng position) async {
+    if (!isRideInProgress) return;
+    final now = nowProvider();
+    if (!_rideLocationPingPolicy.shouldPing(
+      lastPingAt: _lastRideLocationPingAt,
+      now: now,
+    )) {
+      return;
+    }
+    // Throttle on the attempt, not on success: a failing backend must not turn
+    // every GPS fix into a POST.
+    _lastRideLocationPingAt = now;
+    try {
+      final response = await locationRepo.updateLiveLocation(
+        lat: position.latitude.toString(),
+        long: position.longitude.toString(),
+      );
+      printX('[ride] location ping HTTP=${response.statusCode} ride=${ride.id}');
+    } catch (e) {
+      printX('[ride] location ping error: $e');
+    }
+  }
+
+  @override
+  void onClose() {
+    stopLiveLocationTracking();
+    super.onClose();
+  }
+
+  /// Applies Pusher `STOP_COMPLETED` payload and retargets map to current_leg.
+  void applyStopCompleted(Map<String, dynamic> payload) {
+    MultistopStopSync.applyStopCompletedPayload(ride, payload);
+    loadMapForRide(ride);
+    update();
+  }
+
+  /// Targets map navigation to [RideModel] current_leg (pending stop or final dest).
+  void loadMapForRide(RideModel tRide) {
+    pickupLatLng = LatLng(
+      StringConverter.formatDouble(
+        tRide.pickupLatitude.toString(),
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '1,140p' lib/data/controller/dashboard/dashboard_controller.dart
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:galass_driver/core/route/route.dart';
+import 'package:galass_driver/core/utils/util.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:galass_driver/core/helper/location_ping_policy.dart';
+import 'package:galass_driver/core/helper/shared_preference_helper.dart';
+import 'package:galass_driver/core/helper/string_format_helper.dart';
+import 'package:galass_driver/core/utils/my_strings.dart';
+import 'package:galass_driver/data/model/authorization/authorization_response_model.dart';
+import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_model.dart';
+import 'package:galass_driver/data/model/dashboard/dashboard_response_model.dart';
+import 'package:galass_driver/data/model/global/user/global_driver_model.dart';
+import 'package:galass_driver/data/repo/dashboard/dashboard_repo.dart';
+import 'package:galass_driver/data/model/dispatch/dispatch_offer_ingress_event.dart';
+import 'package:galass_driver/data/services/dispatch_attempt_registry.dart';
+import 'package:galass_driver/data/services/dispatch_callkit_service.dart';
+import 'package:galass_driver/data/services/dispatch_offer_ingress.dart';
+import 'package:galass_driver/data/services/dispatch_offer_presenter.dart';
+import 'package:galass_driver/data/services/dispatch_offer_state.dart';
+import 'package:galass_driver/data/services/dispatch_lock_screen.dart';
+import 'package:galass_driver/data/services/full_screen_intent_permission.dart';
+import 'package:galass_driver/data/services/push_notification_service.dart';
+import 'package:galass_driver/environment.dart';
+import 'package:galass_driver/presentation/components/snack_bar/show_custom_snackbar.dart';
+import 'package:galass_driver/presentation/screens/dashboard/forground_task_widget.dart';
+
+import '../../../core/utils/url_container.dart';
+
+class DashBoardController extends GetxController {
+  DashBoardRepo repo;
+  DashBoardController({required this.repo});
+  String? profileImageUrl;
+  bool isLoading = true;
+  Position? currentPosition;
+  GoogleMapController? mapController;
+  String currentAddress = "${MyStrings.loading.tr}...";
+  Position? _lastAddressPosition;
+  DateTime? _lastAddressResolvedAt;
+  bool _didRemoteAddressLookup = false;
+  DateTime? _lastServerLocationPingAt;
+  final LocationPingPolicy _locationPingPolicy = LocationPingPolicy(
+    maxIntervalSeconds: Environment.driverLocationUpdateMaxIntervalSeconds,
+  );
+  bool userOnline = false;
+  String? nextPageUrl;
+  int page = 0;
+  bool isDriverVerified = true;
+  bool isVehicleVerified = true;
+
+  bool isVehicleVerificationPending = false;
+  bool isDriverVerificationPending = false;
+
+  String currency = '';
+  String currencySym = '';
+  String userImagePath = '';
+
+  /// Ping serveur si online + intervalle ≤30s (éligibilité dispatch backend).
+  Future<void> maybePingServerLocation(Position position) async {
+    if (!userOnline) {
+      return;
+    }
+    final now = DateTime.now();
+    if (!_locationPingPolicy.shouldPing(
+      lastPingAt: _lastServerLocationPingAt,
+      now: now,
+    )) {
+      return;
+    }
+    try {
+      final response = await repo.updateLiveLocation(
+        lat: position.latitude.toString(),
+        long: position.longitude.toString(),
+      );
+      printX(
+        '[dispatch] location ping HTTP=${response.statusCode} '
+        'lat=${position.latitude} lon=${position.longitude}',
+      );
+      if (response.statusCode == 200) {
+        _lastServerLocationPingAt = now;
+      }
+    } catch (e) {
+      printE('[dispatch] location ping error: $e');
+    }
+  }
+
+  Future<void> initialData({bool shouldLoad = true}) async {
+    isLoading = shouldLoad;
+    page = 0;
+    nextPageUrl;
+    currency = repo.apiClient.getCurrency();
+    currencySym = repo.apiClient.getCurrency(isSymbol: true);
+    update();
+    await Future.wait([fetchLocation(), loadData(shouldLoad: shouldLoad)]);
+    isLoading = false;
+    update();
+  }
+
+  GlobalDriverInfoModel driver = GlobalDriverInfoModel(id: '-1');
+
+  // Start location permission check but don't await yet
+  Future<void> fetchLocation() async {
+    bool hasPermission = await MyUtils.checkAppLocationPermission(
+      onsuccess: () {
+        initialData();
+      },
+    );
+    printX(hasPermission);
+    if (hasPermission) {
+      getCurrentLocationAddress();
+      update(); // Ensure UI reflects added location
+    }
+  }
+
+  Future<void> getCurrentLocationAddress() async {
+    try {
+      final GeolocatorPlatform geolocator = GeolocatorPlatform.instance;
+      currentPosition = await geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best,
+        ),
+      );
+
+      if (currentPosition != null) {
+        await refreshAddressIfNeeded(position: currentPosition!, force: true);
+        return;
+      }
+      update();
+    } catch (e) {
+      printX("Error: $e");
+      CustomSnackBar.error(
+        errorList: [MyStrings.somethingWentWrongWhileTakingLocation],
+      );
+    }
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '1,120p' lib/data/repo/dashboard/dashboard_repo.dart
+import 'package:galass_driver/core/utils/method.dart';
+import 'package:galass_driver/core/utils/url_container.dart';
+import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+import 'package:galass_driver/data/services/api_client.dart';
+
+class DashBoardRepo {
+  ApiClient apiClient;
+  DashBoardRepo({required this.apiClient});
+
+  Future<ResponseModel> getDashboardData({String page = '1'}) async {
+    String url = "${UrlContainer.baseUrl}${UrlContainer.dashBoardEndPoint}?page=$page";
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
+    return responseModel;
+  }
+
+  Future<ResponseModel> onlineStatus({
+    required String lat,
+    required String long,
+  }) async {
+    String url = "${UrlContainer.baseUrl}${UrlContainer.onlineStatus}";
+
+    Map<String, String> params = {'lat': lat, 'long': long};
+
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.postMethod,
+      params,
+      passHeader: true,
+    );
+    return responseModel;
+  }
+
+  Future<ResponseModel> updateLiveLocation({
+    required String lat,
+    required String long,
+  }) async {
+    String url = "${UrlContainer.baseUrl}${UrlContainer.driverLocationUpdate}";
+
+    Map<String, String> params = {'current_lat': lat, 'current_lot': long};
+
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.postMethod,
+      params,
+      passHeader: true,
+    );
+    return responseModel;
+  }
+
+  Future<ResponseModel> respondToOffer({
+    required String rideId,
+    required String action,
+  }) async {
+    String url = "${UrlContainer.baseUrl}${UrlContainer.offerRespond}";
+    Map<String, String> params = {
+      'ride_id': rideId,
+      'action': action,
+    };
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.postMethod,
+      params,
+      passHeader: true,
+      skipAuthSideEffects: true,
+    );
+    return responseModel;
+  }
+
+  Future<String?> getActualAddress(double lat, double lng) async {
+    final url = '${UrlContainer.getLocationByLatlng}?lat=$lat&lng=$lng';
+
+    final response = await apiClient.request(url, Method.getMethod, null);
+
+    if (response.statusCode == 200) {
+      final data = response.responseJson;
+      if (data['results'] != null && data['results'].isNotEmpty) {
+        for (var result in data['results']) {
+          final types = result['types'];
+          if (types != null && (types.contains('street_address') || types.contains('premise') || types.contains('subpremise') || types.contains('route') || types.contains('locality'))) {
+            return result['formatted_address'];
+          }
+        }
+        return data['results'][0]['formatted_address'];
+      }
+
+      if (data['plus_code']?['compound_code'] != null) {
+        return data['plus_code']['compound_code'];
+      }
+    }
+
+    return null;
+  }
+}
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && cat test/unit/ride_map_live_location_test.dart
+import 'dart:async';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:galass_driver/core/utils/app_status.dart';
+import 'package:galass_driver/core/utils/my_icons.dart';
+import 'package:galass_driver/core/utils/url_container.dart';
+import 'package:galass_driver/data/controller/map/ride_map_controller.dart';
+import 'package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+import 'package:galass_driver/data/model/global/ride/ride_model.dart';
+import 'package:galass_driver/data/repo/dashboard/dashboard_repo.dart';
+import 'package:galass_driver/data/repo/polyline/polyline_repo.dart';
+import 'package:galass_driver/data/repo/ride/ride_repo.dart';
+import 'package:galass_driver/data/services/api_client.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../helpers/recording_api_client.dart';
+
+class _MapRepo extends PolylineRepo {
+  _MapRepo({required super.apiClient});
+}
+
+class _RideRepo extends RideRepo {
+  _RideRepo({required super.apiClient});
+}
+
+typedef _Call = ({String uri, Map<String, dynamic>? params});
+
+class _CountingApiClient extends RecordingApiClient {
+  _CountingApiClient({required super.sharedPreferences});
+
+  final List<_Call> calls = [];
+
+  @override
+  Future<ResponseModel> request(
+    String uri,
+    String method,
+    Map<String, dynamic>? params, {
+    bool passHeader = false,
+    bool isOnlyAcceptType = false,
+    bool skipAuthSideEffects = false,
+    bool redactSensitiveLogs = false,
+  }) {
+    calls.add((uri: uri, params: params));
+    return super.request(
+      uri,
+      method,
+      params,
+      passHeader: passHeader,
+      isOnlyAcceptType: isOnlyAcceptType,
+      skipAuthSideEffects: skipAuthSideEffects,
+      redactSensitiveLogs: redactSensitiveLogs,
+    );
+  }
+
+  List<_Call> get locationPings => calls
+      .where((call) => call.uri.endsWith(UrlContainer.driverLocationUpdate))
+      .toList();
+}
+
+RideModel _ride(String status) => RideModel(id: 'ride-live-19', status: status);
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  late _CountingApiClient apiClient;
+  late RideMapController mapController;
+  late RideDetailsController details;
+  late StreamController<LatLng> positions;
+
+  setUp(() async {
+    Get.testMode = true;
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    apiClient = _CountingApiClient(sharedPreferences: prefs);
+    Get.put<ApiClient>(apiClient);
+    mapController = RideMapController(
+      polylineRepo: _MapRepo(apiClient: apiClient),
+    );
+    details = RideDetailsController(
+      repo: _RideRepo(apiClient: apiClient),
+      mapController: mapController,
+      locationRepo: DashBoardRepo(apiClient: apiClient),
+    );
+    Get.put(details);
+    positions = StreamController<LatLng>();
+    details.driverLocationStreamForTest = () => positions.stream;
+  });
+
+  tearDown(() async {
+    await positions.close();
+    Get.reset();
+  });
+
+  group('ISC-F5-19 live driver location in ride', () {
+    test('RIDE_ACTIVE: marker follows two successive GPS fixes', () async {
+      details.ride = _ride(AppStatus.RIDE_ACTIVE);
+      details.startLiveLocationTracking();
+      expect(details.isLiveLocationTracking, isTrue);
+
+      const first = LatLng(14.7000, -17.4500);
+      const second = LatLng(14.7010, -17.4510);
+
+      positions.add(first);
+      await pumpEventQueue();
+      expect(mapController.driverLatLng, first);
+
+      positions.add(second);
+      await pumpEventQueue();
+      expect(mapController.driverLatLng, second);
+      expect(mapController.driverLatLng, isNot(first));
+
+      final carMarkers = mapController
+          .getMarkers(
+            pickup: const LatLng(14.69, -17.44),
+            destination: const LatLng(14.72, -17.47),
+          )
+          .where((marker) => marker.markerId.value == 'driver_location');
+      expect(carMarkers, hasLength(1));
+      expect(carMarkers.single.position, second);
+    });
+
+    test('RIDE_ACTIVE: emits driver/location-update from the ride context',
+        () async {
+      details.ride = _ride(AppStatus.RIDE_ACTIVE);
+      details.startLiveLocationTracking();
+
+      const first = LatLng(14.7000, -17.4500);
+      positions.add(first);
+      await pumpEventQueue();
+
+      final pings = apiClient.locationPings;
+      expect(pings, hasLength(1));
+      expect(pings.single.uri,
+          '${UrlContainer.baseUrl}${UrlContainer.driverLocationUpdate}');
+      expect(pings.single.params, isNotNull);
+      expect(pings.single.params!['current_lat'], '${first.latitude}');
+      expect(pings.single.params!['current_lot'], '${first.longitude}');
+    });
+
+    test('RIDE_RUNNING: camera follows the live driver position', () async {
+      final cameraUpdates = <CameraUpdate>[];
+      mapController.cameraAnimatorForTest = cameraUpdates.add;
+      details.ride = _ride(AppStatus.RIDE_RUNNING);
+      details.startLiveLocationTracking();
+
+      const fix = LatLng(14.7110, -17.4520);
+      positions.add(fix);
+      await pumpEventQueue();
+
+      expect(cameraUpdates, isNotEmpty);
+      expect(cameraUpdates.first.toJson(), <Object>[
+        'newLatLng',
+        <double>[fix.latitude, fix.longitude],
+      ]);
+    });
+
+    test('no tracking or ping outside RIDE_ACTIVE/RIDE_RUNNING', () async {
+      details.ride = _ride(AppStatus.RIDE_COMPLETED);
+      details.startLiveLocationTracking();
+      expect(details.isLiveLocationTracking, isFalse);
+
+      await details.pingRideLocation(const LatLng(14.7, -17.45));
+      expect(apiClient.locationPings, isEmpty);
+    });
+
+    test('stops tracking once the ride leaves ACTIVE/RUNNING', () async {
+      details.ride = _ride(AppStatus.RIDE_ACTIVE);
+      details.startLiveLocationTracking();
+
+      const first = LatLng(14.7000, -17.4500);
+      positions.add(first);
+      await pumpEventQueue();
+      expect(details.isLiveLocationTracking, isTrue);
+
+      details.ride = _ride(AppStatus.RIDE_COMPLETED);
+      positions.add(const LatLng(14.7050, -17.4550));
+      await pumpEventQueue();
+
+      expect(details.isLiveLocationTracking, isFalse);
+      expect(mapController.driverLatLng, first);
+    });
+
+    test('location ping is throttled then sent after the interval', () async {
+      var now = DateTime(2026, 11, 26, 12);
+      details.nowProvider = () => now;
+      details.ride = _ride(AppStatus.RIDE_RUNNING);
+
+      const first = LatLng(14.7000, -17.4500);
+      await details.pingRideLocation(first);
+      expect(apiClient.locationPings, hasLength(1));
+
+      now = now.add(const Duration(seconds: 10));
+      await details.pingRideLocation(const LatLng(14.7010, -17.4510));
+      expect(apiClient.locationPings, hasLength(1));
+
+      now = now.add(const Duration(seconds: 25));
+      await details.pingRideLocation(const LatLng(14.7020, -17.4520));
+      expect(apiClient.locationPings, hasLength(2));
+    });
+
+    test('car marker uses the shared marker_car.png asset', () {
+      expect(MyIcons.markerCar, 'assets/icon/marker_car.png');
+    });
+  });
+}
+
