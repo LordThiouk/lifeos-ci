@@ -58,10 +58,10 @@ on:
         required: false
         default: "45"
       model:
-        description: "Modèle opencode à essayer en premier (défaut deepseek ; vide = ordre de models.txt)"
+        description: "Modèle opencode à essayer en premier (vide = ordre de models.txt)"
         type: string
         required: false
-        default: "opencode/deepseek-v4.1-flash-free"
+        default: ""
 
 permissions:
   contents: read
