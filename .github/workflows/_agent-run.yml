@@ -864,6 +864,17 @@ jobs:
               --poll "$SILENCE_POLL" \
               --grace "$SILENCE_GRACE" &
             watch_pid=$!
+            # Wrapper hors quotes simples : actionlint/shellcheck SC2016 refuse
+            # `bash -c '…$1…'` dans le workflow.
+            oc_wrap="$agent_tmp/oc-wrap.sh"
+            cat > "$oc_wrap" <<'WRAP'
+#!/usr/bin/env bash
+set -euo pipefail
+echo $$ > "$1"
+shift
+exec timeout "$@"
+WRAP
+            chmod +x "$oc_wrap"
             (cd target && env -i \
               PATH="/usr/local/bin:/usr/bin:/bin" \
               HOME="$agent_home" TMPDIR="$agent_tmp" LANG=C.UTF-8 \
@@ -872,8 +883,7 @@ jobs:
               "${hf_env[@]}" \
               "${proxy_env[@]}" \
               OPENCODE_CONFIG="$RUNNER_TEMP/oc/opencode.json" \
-              bash -c 'echo $$ > "$1"; shift; exec timeout "$@"' \
-              bash "$pid_file" "$remaining" opencode run --model "$m" \
+              "$oc_wrap" "$pid_file" "$remaining" opencode run --model "$m" \
               "${agent_args[@]}" \
               "Lis $RUNNER_TEMP/oc/prompt.md et exécute-le complètement.") 2>&1 | \
               tee -a "$live_log" > "$log"

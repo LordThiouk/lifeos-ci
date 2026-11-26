@@ -25,6 +25,7 @@ for needle in (
     'silence.flag',
     'Silence ${SILENCE_SEC}s sans sortie',
     'bascule vers le modèle suivant',
+    'oc-wrap.sh',
     'echo $$ > "$1"',
     'OPENCODE_HTTPS_PROXY',
     'proxy_env',
