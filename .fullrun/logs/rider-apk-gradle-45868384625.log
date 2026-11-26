@@ -3919,3 +3919,7 @@ verify exit=0
  MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
+$ grep -n 'ISC-F5-19' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | tail -2
+322:- ISC-F5-19: flutter test test/unit/ride_map_live_location_test.dart -> 7/7 passed (Flutter 3.50.1); analyze 0 errors [@c526ef3]
+323:- ISC-F5-19: flutter test test/unit/ride_map_live_location_test.dart -> 7/7 passed (Flutter 3.50.1) ; flux GPS pendant RIDE_ACTIVE/RUNNING met a jour marker driver_location (marker_car.png) + camera follow throttle ; POST driver/location-update emis depuis contexte course (DashBoardRepo.updateLiveLocation, non gate online home) ; suite complete flutter test --no-pub -> 493/493 ; analyze 0 erreur (3 infos deprecated pre-existantes) ; aucun golden regenere ; .fullrun intact ; lifeos read-only [@9443d49]
+
