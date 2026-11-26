@@ -7339,3 +7339,21 @@ Note : les modifications pré-existing non staged (controllers + `pubspec.yaml`/
 
 → Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
 Je vais lire le fichier demandé, puis exécuter son contenu.
+✗ git remote -v && git branch --show-current && git status --porcelain=v1 -b failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ git log --oneline -10
+98a6c77 VERIFY-F429: ISC-F4-29 a-b profil chauffeur RUNNING — PASS
+8302977 VERIFY-F429: ISC-F4-29 verification - PASS
+36a928b verify(rider): F4-29 a-b PASS — re-run Verify×3 (9/9, red-before)
+de565ae verify(rider): F4-29 a-b PASS — contract 9/9, red-before reproduced
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+b83aba6 test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+3a399e8 docs(isa): F4-34 rebuild evidence after Verify BLOCK
+
+✱ Glob "test/widget/course_en_cours_contract_test.dart" in . · 1 match
+Je vais d'abord inspecter l'environnement : dépôt courant, branche, état git, présence du test, et toute ISA référencée (ISC-F4-29).
+✱ Grep "ISC-F4-29" in /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci · 38 matches
