@@ -2081,3 +2081,27 @@ git log --format='%H%n%an <%ae>%n%s' -1; git status --short
 Papa Diop <76528706+LordThiouk@users.noreply.github.com>
 fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show --stat --format='%h %an %ae%n%s' HEAD; echo ===; git status --short --untracked-files=all | head; echo ===; git diff HEAD~1 --name-only
+8c28139 Papa Diop 76528706+LordThiouk@users.noreply.github.com
+fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+
+ CHANGELOG.md                                     | 4 ++++
+ android/gradle.properties                        | 3 ---
+ android/gradle/wrapper/gradle-wrapper.properties | 2 +-
+ android/settings.gradle.kts                      | 2 +-
+ 4 files changed, 6 insertions(+), 5 deletions(-)
+===
+===
+CHANGELOG.md
+android/gradle.properties
+android/gradle/wrapper/gradle-wrapper.properties
+android/settings.gradle.kts
+
+← Write /tmp/task_done.md
+Wrote file successfully.
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline -2 && git status -sb | head -2
+8c28139 fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+## build/rider-apk-gradle...origin/build/rider-apk-gradle [ahead 1]
+
