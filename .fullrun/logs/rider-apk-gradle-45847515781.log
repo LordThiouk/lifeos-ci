@@ -16586,3 +16586,7 @@ $ head -60 core/composer.json
     },
     "autoload-dev": {
 
+$ uname -m; php_needed=8.3; curl -s https://api.github.com/repos/crazywhalecc/static-php-cli/releases/latest | grep -oE '"tag_name": "[^"]*"' | head -2
+x86_64
+"tag_name": "2.8.5"
+
