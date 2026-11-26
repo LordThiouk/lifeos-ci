@@ -434,8 +434,17 @@ jobs:
       - name: Installer opencode et gitleaks
         run: |
           set -euo pipefail
-          npm install -g --no-fund --no-audit "opencode-ai@${OPENCODE_VERSION}" >/dev/null 2>&1
-          v=$(opencode --version | awk '{print $NF}')
+          # Prefix user (self-hosted n'a souvent pas le droit d'écrire /usr/lib) ;
+          # le binaire est ensuite figé dans /usr/local/bin (PATH de env -i).
+          npm_prefix="$RUNNER_TEMP/npm-global"
+          mkdir -p "$npm_prefix"
+          npm install -g --prefix "$npm_prefix" --no-fund --no-audit \
+            "opencode-ai@${OPENCODE_VERSION}"
+          oc_bin=$(find "$npm_prefix" -path '*/opencode-linux-x64/bin/opencode' -type f | head -1)
+          [ -n "$oc_bin" ] || oc_bin=$(find "$npm_prefix" -type f -name opencode | head -1)
+          [ -n "$oc_bin" ] || { echo "::error::binaire opencode introuvable après npm install"; exit 1; }
+          sudo install -o root -g root -m 0755 "$oc_bin" /usr/local/bin/opencode
+          v=$(/usr/local/bin/opencode --version | awk '{print $NF}')
           [ "$v" = "$OPENCODE_VERSION" ] || { echo "::error::opencode $v au lieu de $OPENCODE_VERSION"; exit 1; }
           f="$RUNNER_TEMP/gitleaks.tgz"
           curl -sSfL -o "$f" "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
