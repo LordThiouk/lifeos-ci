@@ -6718,3 +6718,70 @@ Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31
 Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
 Tools • Dart 3.9.2 • DevTools 2.48.0
 
+$ ls ~/.claude/LIFEOS/TOOLS/ 2>/dev/null | grep -i isa; echo "---"; ls ~/.claude/LIFEOS/TOOLS/ 2>/dev/null | head -40
+ISAGate.ts
+ISARender
+ISARender.ts
+ISATool.ts
+ISAToolHumanTick.test.ts
+ISAToolScopeLog.test.ts
+IsaFeatures.test.ts
+IsaFeatures.ts
+IsaFrontier.ts
+IsaReconcile.ts
+---
+ActivateImports.ts
+ActivityParser.ts
+AddBg.ts
+AgentSkillRouter.test.ts
+AgentSkillRouter.ts
+AgentTokenRollup.ts
+AgentWatchdog.ts
+AlgoPhase.ts
+AlgorithmPhaseReport.ts
+AmberCapture.ts
+AppleHealthImport.ts
+ApproveCurrentStateEntries.ts
+ArchDecisionHarvest.ts
+ArchitectureSummaryGenerator.ts
+AskFidelity.ts
+Banner.ts
+BannerMatrix.ts
+BannerNeofetch.ts
+BannerPrototypes.ts
+BannerRetro.ts
+BannerTokyo.ts
+BillingPathAssertion.ts
+BlockMessageGate.ts
+BlogDiscovery.ts
+BookmarkSweep.ts
+BridgeVerify.ts
+BudgetCheck.ts
+CaptureEnvelope.ts
+CarrierProbe.ts
+CheckCompleteness.test.ts
+CheckCompleteness.ts
+CheckFileBoundary.ts
+Checkpoint.ts
+ClipSource.ts
+CodexUpdate.ts
+CommitmentDetect.ts
+CommitmentLog.ts
+CommitmentSweep.ts
+ComputeGap.ts
+ConfigEvalOnChange.ts
+
+Le code ISC-F5-13 est déjà présent dans le widget (ligne 207: `bgColor: MyColor.redCancelTextColor` = `0xFFF93E2C` danger, distinct de `primaryButtonColor`), le test existe, et il y a déjà des commits git. Maintenant je dois **vérifier que tout passe réellement**. Lançons le test et cherchons l'ISATool.
+✱ Glob "**/ISATool*" 0 matches
+
+$ flutter test test/unit/multistop_end_gate_test.dart 2>&1
+Resolving dependencies...
+The current Flutter SDK version is 3.35.6.
+
+Because galass_driver depends on toastification >=3.1.0 which requires Flutter SDK version >=3.38.0, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try using the Flutter SDK version: 3.50.1. 
+Failed to update packages.
+
