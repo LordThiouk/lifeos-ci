@@ -3248,3 +3248,54 @@ $ git status --porcelain=v1 && git diff --stat HEAD && echo "---UNTRACKED---" &&
 test/unit/multistop_itinerary_test.dart
 
 J'ai maintenant une vision claire du code. Vérifions l'environnement Flutter et l'état git complet avant d'exécuter quoi que ce soit.
+$ grep -n "sdk\|timezone\|flutter" /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos-ci/target/pubspec.yaml 2>/dev/null; echo "====="; grep -n -A3 "timezone" /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos-ci/target/pubspec.lock | head -20
+=====
+grep: /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos-ci/target/pubspec.lock: No such file or directory
+
+$ ls /usr/local/ | head; ls /opt 2>/dev/null; ls ~/flutter* /opt/flutter* 2>/dev/null; find / -maxdepth 3 -name "flutter" -type d 2>/dev/null | head
+bin
+cargo
+etc
+games
+include
+lib
+man
+novnc
+rustup
+sbin
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+/opt/flutter:
+AUTHORS
+CHANGELOG.md
+CODEOWNERS
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+DEPS
+LICENSE
+PATENT_GRANT
+README.md
+TESTOWNERS
+analysis_options.yaml
+bin
+buildtools
+dartdoc_options.yaml
+dev
+docs
+engine
+examples
+flutter_console.bat
+packages
+pubspec.lock
+pubspec.yaml
+third_party
+version
+/opt/flutter
+/tmp/flutter
+
