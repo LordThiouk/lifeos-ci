@@ -5087,3 +5087,37 @@ index 251a4b82..6c790321 100755
 $ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && grep -B2 -A25 "sort_order" core/resources/views/admin/services/index.blade.php | grep -B2 -A25 'modal' | grep -B2 -A15 'sort_order\|is_visible' | head -30
 (no output)
 
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && grep -rn "422\|serviceError('not_found'" core/app/Services/Rider/RideService.php | head -10; echo "==="; grep -rn "not_found" core/app/Http/Helpers/helpers.php | head -10
+85:            return serviceError('not_found', trans('This service is currently unavailable'));
+196:            return serviceError('not_found', trans('The requested ride could not be found.'));
+222:            return serviceError('not_found', trans('The requested ride could not be found.'));
+264:            return serviceError('not_found', trans('Invalid bid'));
+314:            return serviceError('not_found', trans('Invalid bid'));
+346:            return serviceError('not_found', trans('Ride not found'));
+365:            return serviceError('not_found', trans('The ride not found'));
+448:            return serviceError('not_found', trans('The ride not found'));
+469:            return serviceError('not_found', trans('The pickup location is not inside any of our zones'));
+475:            return serviceError('not_found', trans('The destination location is not inside any of our zones'));
+===
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && grep -B2 -A15 "function serviceError" core/app/Http/Helpers/helpers.php | head -20
+}
+
+function serviceError(string $remark, string $message)
+{
+    return [
+        'remark' => $remark,
+        'status' => 'error',
+        'message' => $message
+    ];
+}
+
+
+function googleFormatResponse(mixed $data)
+{
+    return response()->json($data);
+}
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && git status --short
+(no output)
+
