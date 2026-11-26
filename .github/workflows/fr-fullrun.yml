@@ -394,25 +394,47 @@ jobs:
           set -euo pipefail
           next=$(( IN_ATTEMPT + 1 ))
           echo "Échec de la chaîne — relance depuis build (tentative ${next}/${IN_MAX})"
+          # Même règle que _next.yml : ne transmettre `model` que si le workflow
+          # visé (à la réf dispatchée) déclare l'entrée, sinon HTTP 422.
+          wf_src=$(gh api "repos/${GITHUB_REPOSITORY}/contents/.github/workflows/fr-fullrun.yml?ref=${GITHUB_REF_NAME}" \
+            -H "Accept: application/vnd.github.raw" 2>/dev/null || true)
+          declares_model=0
+          if printf '%s\n' "$wf_src" | awk '
+              /^  workflow_dispatch:[[:space:]]*(#.*)?$/ { wd=1; ini=0; next }
+              wd && /^  [^[:space:]]/ { wd=0; ini=0 }
+              wd && /^    inputs:[[:space:]]*(#.*)?$/ { ini=1; next }
+              wd && ini && /^    [^[:space:]]/ { ini=0 }
+              wd && ini && /^      model:[[:space:]]*(#.*)?$/ { found=1 }
+              END { exit(found ? 0 : 1) }
+            '; then
+            declares_model=1
+          fi
+          dispatch_args=(
+            -f target_repo="$IN_TARGET"
+            -f extra_repos="$IN_EXTRA"
+            -F lifeos_write="$LIFEOS_WRITE"
+            -f branch="$IN_BRANCH"
+            -f prompt_path="$IN_PROMPT"
+            -f isa_path="$IN_ISA"
+            -f job_name="$IN_JOB"
+            -f lifeos_ref="$LIFEOS_REF"
+            -f timeout_minutes="$IN_TIMEOUT_MIN"
+            -f start_phase=build
+            -f only="$IN_ONLY"
+            -f attempt="$next"
+            -f max_attempts="$IN_MAX"
+          )
+          if [ "$declares_model" -ne 1 ]; then
+            echo "model non transmis à fr-fullrun.yml (entrée absente sur $GITHUB_REF_NAME)"
+          elif [ -n "$IN_MODEL" ]; then
+            dispatch_args+=(-f model="$IN_MODEL")
+          fi
           attempt=1
           while :; do
             if out=$(gh workflow run fr-fullrun.yml \
               --repo "$GITHUB_REPOSITORY" \
               --ref "$GITHUB_REF_NAME" \
-              -f target_repo="$IN_TARGET" \
-              -f extra_repos="$IN_EXTRA" \
-              -F lifeos_write="$LIFEOS_WRITE" \
-              -f branch="$IN_BRANCH" \
-              -f prompt_path="$IN_PROMPT" \
-              -f isa_path="$IN_ISA" \
-              -f job_name="$IN_JOB" \
-              -f lifeos_ref="$LIFEOS_REF" \
-              -f timeout_minutes="$IN_TIMEOUT_MIN" \
-              -f model="$IN_MODEL" \
-              -f start_phase=build \
-              -f only="$IN_ONLY" \
-              -f attempt="$next" \
-              -f max_attempts="$IN_MAX" 2>&1); then
+              "${dispatch_args[@]}" 2>&1); then
               printf '%s\n' "$out"
               break
             fi
