@@ -1,0 +1,2910 @@
+
+> Max · deepseek-v4.1-flash-free
+
+→ Read /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md
+I'll start by reading the prompt file.
+
+$ pwd && ls -la && git status && git log --oneline -10 && git branch -a
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target
+total 272
+drwxr-xr-x 18 ubuntu ubuntu  4096 Nov 26 15:06 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:06 ..
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 15:06 .claude
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:06 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 15:06 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 15:06 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1046 Nov 26 15:06 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  1188 Nov 26 15:06 .mcp.json
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:06 .omc
+-rw-r--r--  1 ubuntu ubuntu  8995 Nov 26 15:06 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu  3781 Nov 26 15:06 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu  5284 Nov 26 15:06 CLAUDE.md
+-rw-r--r--  1 ubuntu ubuntu  1411 Nov 26 15:06 FIX_SUMMARY.md
+-rw-r--r--  1 ubuntu ubuntu  3977 Nov 26 15:06 GALASS_CONTEXT.md
+-rw-r--r--  1 ubuntu ubuntu   100 Nov 26 15:06 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 16647 Nov 26 15:06 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:06 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  8465 Nov 26 15:06 NIMBALYST_DEV_SETUP.md
+-rw-r--r--  1 ubuntu ubuntu    13 Nov 26 15:06 README.md
+-rw-r--r--  1 ubuntu ubuntu  8175 Nov 26 15:06 RIDER-MULTISTOP.md
+-rw-r--r--  1 ubuntu ubuntu  6602 Nov 26 15:06 SECURE_CREDENTIALS_SETUP.md
+-rw-r--r--  1 ubuntu ubuntu  3768 Nov 26 15:06 VERIFY-F434B.md
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:06 _ephemeral
+-rw-r--r--  1 ubuntu ubuntu  1580 Nov 26 15:06 analysis_options.yaml
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 15:06 android
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 15:06 assets
+-rw-r--r--  1 ubuntu ubuntu  4837 Nov 26 15:06 codemagic.yaml.deprecated
+-rw-r--r--  1 ubuntu ubuntu   265 Nov 26 15:06 devtools_options.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:06 diag
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:06 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:06 fastlane
+-rw-r--r--  1 ubuntu ubuntu   363 Nov 26 15:06 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 15:06 ios
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 15:06 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:06 prompts
+-rw-r--r--  1 ubuntu ubuntu 68546 Nov 26 15:06 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  3366 Nov 26 15:06 pubspec.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:06 scripts
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 15:06 test
+-rw-r--r--  1 ubuntu ubuntu   441 Nov 26 15:06 test_result.txt
+On branch close/rider-f434b-max
+Your branch is up to date with 'origin/close/rider-f434b-max'.
+
+nothing to commit, working tree clean
+e89027a verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+3a399e8 docs(isa): F4-34 rebuild evidence after Verify BLOCK
+2ec49c8 test(rider): F4-34 controller recreation, FCM dedup, cross-channel
+dcb4bf0 fix(rider): F4-34 share one-shot gate across controller and FCM
+69e248d docs(isa): tick ISC-F4-21 with map test evidence
+43e28ba fix(rider): F4-21 keep PENDING stops numbered, active leg only in ACTIVE/RUNNING
+3798ba2 docs(isa): consigner la décision Papa ISC-F5-16 (Rider carte jambe active)
+632862c docs(isa): consigner la décision Papa F4-34 C+B (2026-11-26)
+e4d93c0 docs(isa): F4-34 B+C decision and evidence
+61f2a29 feat(rider): F4-34 one-shot pick_up/arriving_soon alerts and FCM dedup
+* close/rider-f434b-max
+  remotes/origin/build/rider-apk-gradle
+  remotes/origin/build/rider-f429
+  remotes/origin/close/rider-f434b-max
+  remotes/origin/diag/arret-etape-galass-ci-2026-11-24
+  remotes/origin/diag/multistop-serena-porte-2026-11-23
+  remotes/origin/diag/porte-build-2026-11-24
+  remotes/origin/feat/multistop-e2e-2026-11-15
+  remotes/origin/feat/multistop-rider-close-2026-11-20
+  remotes/origin/feat/patrol-pilot
+  remotes/origin/feat/phone-number-login
+  remotes/origin/feat/rider-f434-2026-11-26
+  remotes/origin/feature/accessibility-plan
+  remotes/origin/feature/firebase-laravel-bridge
+  remotes/origin/fix/multistop-close
+  remotes/origin/fix/profile-bugs
+  remotes/origin/fix/profile-complete-prefill
+  remotes/origin/fix/rider-multistop-wip
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-23-45290781492
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r3-45305125203
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r5-45320422961
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r6-45334725976
+  remotes/origin/fullrun-logs/multistop-ui-gaps-vera-2026-11-23-45268880692
+  remotes/origin/fullrun-logs/rider-f429-cr-ll-45807711954
+  remotes/origin/fullrun-logs/rider-f429-forge-ll-45807712042
+  remotes/origin/fullrun-logs/rider-f429-silas-ll-45807712379
+  remotes/origin/fullrun-logs/rider-f434b-max-ll-45808727484
+  remotes/origin/fullrun-logs/rider-multistop-close-2-44832871010
+  remotes/origin/fullrun-logs/rider-multistop-close-3-44847122033
+  remotes/origin/fullrun-logs/rider-multistop-close-4-44854453615
+  remotes/origin/fullrun-logs/rider-multistop-close-44814973592
+  remotes/origin/fullrun-logs/rider-multistop-close-5-44865549101
+  remotes/origin/fullrun-logs/rider-multistop-close-6-44878329849
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44901958343
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44912440632
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44926692223
+  remotes/origin/fullrun-logs/ui-goldens-gate-rider-2026-11-23-45113355828
+  remotes/origin/fullrun-logs/ui-goldens-gate-rider-2026-11-23-45122523186
+  remotes/origin/fullrun-prompts
+  remotes/origin/main
+  remotes/origin/ovo-customizations
+  remotes/origin/test/service-option
+  remotes/origin/verify/rider-f429-cr
+  remotes/origin/verify/rider-f429-forge
+  remotes/origin/verify/rider-f429-silas
+  remotes/origin/verify/rider-f432-cr
+  remotes/origin/verify/rider-f432-emu-cr
+  remotes/origin/verify/rider-f432-emu-forge
+  remotes/origin/verify/rider-f432-emu-silas
+  remotes/origin/verify/rider-f432-forge
+  remotes/origin/verify/rider-f432-silas
+  remotes/origin/verify/rider-f434-cr
+  remotes/origin/verify/rider-f434-forge
+  remotes/origin/verify/rider-f434-silas
+  remotes/origin/verify/rider-f434b-cr
+  remotes/origin/verify/rider-f434b-forge
+  remotes/origin/verify/rider-f434b-silas
+
+$ ls -R MEMORY/WORK/20261006-galass-rider-multistop/ | head -50; echo ---; cat VERIFY-F434B.md
+MEMORY/WORK/20261006-galass-rider-multistop/:
+COMPLETENESS.yml
+ISA.md
+fullrun-carry.json
+---
+VERDICT: PASS
+
+# Vérification F4-34 (rebuild) — porte one-shot, dédup Pusher↔FCM, chemin iOS foreground
+
+Date : 2026-11-26
+Branche : `verify/rider-f434b-forge`
+Périmètre audité : `dcb4bf0` (lib) + `2ec49c8` (tests) + note ISA `3a399e8`.
+Rôle : audit de vérification uniquement. Aucun code modifié, aucun golden régénéré, ISA et `.fullrun` non touchés.
+
+## Points vérifiés
+
+- **Porte one-shot liée au `ride_id`** — `RideAlertOnce.shouldAlert` clé `ride_id::type` ; un couple déjà émis est un no-op, un nouveau `ride_id` ré-alerte. Clé vide (ride_id ou type inconnu) n'est pas dédupliquée. `lib/core/helper/ride_alert_once.dart:21-28`.
+- **Porte survivante à la recréation** — `RideAlertOnce.shared` est `static final` (process-wide), et `resetRideScopedControllers()` ne le réinitialise pas ; `PusherRideController` la référence à `lib/data/controller/pusher/pusher_ride_controller.dart:42`. Test dédié « the one-shot gate survives PusherRideController recreation » vert.
+- **Dédup Pusher↔FCM partagée** — `PushNotificationService` et `PusherRideController` utilisent la même `RideAlertOnce.shared` (`lib/data/services/push_notification_service.dart:28`, `lib/data/controller/pusher/pusher_ride_controller.dart:42`). La dédup FCM passe par `shouldPresentMessage` (`push_notification_service.dart:221-226`) avant tout `show`. Tests cross-canal (Pusher→FCM et FCM→Pusher) verts.
+- **Deux alertes distinctes qui coexistent** — la clé inclut le type (`pick_up` / `arriving_soon`) : B puis C produisent deux alertes, un doublon du même type est supprimé, un nouveau ride ré-alerte. Tests verts.
+- **Chemin iOS foreground** — `setForegroundNotificationPresentationOptions(alert/badge/sound: false)` (`push_notification_service.dart:297-307`) supprime l'auto-présentation FCM non déduplicable ; le `onMessage` présente la bannière via le `show` local partagé-gated, y compris pour les payloads `notification` (`push_notification_service.dart:196-213`). Recherche `setForegroundNotificationPresentationOptions` : un seul site d'appel dans `lib/`.
+
+## Points bloquants
+
+Aucun.
+
+## Notes non bloquantes
+
+- La dédup FCM dépend du payload backend contenant `ride_id` et un type (`type`/`act`/`event`) ; si ces clés manquent, `shouldAlert` autorise la bannière (pas de dédup). Hors dépôt Flutter (backend/Pusher).
+- La dédup client ne couvre que le chemin foreground ; les doublons de push en arrière-plan restent de la responsabilité backend.
+- `RideAlertOnce.shared` n'est jamais purgé ; l'ensemble grandit avec le nombre de courses du process (mémoire négligeable, aucun impact fonctionnel).
+
+## Commandes exécutées
+
+Environnement : Flutter 3.44.8 stable (Dart 3.12.2), `flutter pub get` OK.
+
+```
+$ flutter test test/unit/multistop_pusher_test.dart test/data/services/push_notification_service_test.dart
+00:00 +21: All tests passed!
+```
+
+```
+$ flutter test test/unit/multistop_pusher_test.dart
+00:00 +12: All tests passed!
+
+$ flutter test test/data/services/push_notification_service_test.dart
+00:00 +9: All tests passed!
+```
+
+```
+$ flutter test
+00:29 +311 ~2: All tests passed!
+```
+
+```
+$ flutter analyze lib/core/helper/ride_alert_once.dart lib/data/controller/pusher/pusher_ride_controller.dart lib/data/services/push_notification_service.dart test/unit/multistop_pusher_test.dart test/data/services/push_notification_service_test.dart
+Analyzing 5 items...
+No issues found! (ran in 16.2s)
+```
+
+## Conclusion
+
+Les trois points du périmètre F4-34 (porte one-shot liée au `ride_id`, dédup Pusher↔FCM partagée, chemin iOS foreground) sont implémentés, couverts par les tests unit des commits `dcb4bf0` / `2ec49c8`, et la suite complète ainsi que l'analyse statique sont vertes. **PASS**.
+
+$ ls .fullrun; echo ---; git log --oneline --all | head -30; echo ---; git diff --stat main...HEAD | tail -40
+multistop-ui-gaps-serena-2026-11-23_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r3_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r3_checkpoint.json
+multistop-ui-gaps-serena-2026-11-24-r5_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r5_checkpoint.json
+multistop-ui-gaps-serena-2026-11-24-r6_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r6_checkpoint.json
+multistop-ui-gaps-vera-2026-11-23_DONE.md
+multistop-ui-gaps-vera-2026-11-23_checkpoint.json
+---
+8330c8c chore(ci): journal en direct du run rider-f429-cr-ll (45807711954), 11:29 Dakar, clair — branche à supprimer après lecture
+3a89f8f chore(ci): journal en direct du run rider-f429-forge-ll (45807712042), 11:29 Dakar, clair — branche à supprimer après lecture
+847142b chore(ci): journal en direct du run rider-f429-silas-ll (45807712379), 11:29 Dakar, clair — branche à supprimer après lecture
+a53082c chore(ci): journal en direct du run rider-f434b-max-ll (45808727484), 11:26 Dakar, clair — branche à supprimer après lecture
+c596983 chore(ci): journal en direct du run rider-f429-cr-ll (45807711954), 11:19 Dakar, clair — branche à supprimer après lecture
+09761be chore(ci): journal en direct du run rider-f429-forge-ll (45807712042), 11:19 Dakar, clair — branche à supprimer après lecture
+f9fabf0 chore(ci): journal en direct du run rider-f429-silas-ll (45807712379), 11:19 Dakar, clair — branche à supprimer après lecture
+ac3426c chore(ci): journal en direct du run rider-f434b-max-ll (45808727484), 11:16 Dakar, clair — branche à supprimer après lecture
+db10e8e chore(ci): journal en direct du run rider-f429-cr-ll (45807711954), 11:09 Dakar, clair — branche à supprimer après lecture
+403ac38 chore(ci): journal en direct du run rider-f429-forge-ll (45807712042), 11:09 Dakar, clair — branche à supprimer après lecture
+d0810d1 chore(ci): journal en direct du run rider-f429-silas-ll (45807712379), 11:09 Dakar, clair — branche à supprimer après lecture
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+bc486ed docs(verify): F4-34 rebuild VERDICT PASS (one-shot gate, Pusher/FCM dedup, iOS foreground)
+90aceb9 verify(rider): F4-34 PASS after rebuild (gate shared, Pusher/FCM dedup, iOS FG)
+e89027a verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+b83aba6 test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+3a399e8 docs(isa): F4-34 rebuild evidence after Verify BLOCK
+2ec49c8 test(rider): F4-34 controller recreation, FCM dedup, cross-channel
+dcb4bf0 fix(rider): F4-34 share one-shot gate across controller and FCM
+69e248d docs(isa): tick ISC-F4-21 with map test evidence
+43e28ba fix(rider): F4-21 keep PENDING stops numbered, active leg only in ACTIVE/RUNNING
+3798ba2 docs(isa): consigner la décision Papa ISC-F5-16 (Rider carte jambe active)
+f827a7f docs(verify): F4-34 BLOCK — device unproven, iOS FCM dedup gap
+d0f71f7 docs(verify): F4-34 BLOCK — unit PASS, device ARTEMIS absent, contrat B+C non amendé
+f3328fb docs(verify): F4-34 audit — BLOCK device half, unit green
+632862c docs(isa): consigner la décision Papa F4-34 C+B (2026-11-26)
+e4d93c0 docs(isa): F4-34 B+C decision and evidence
+---
+fatal: ambiguous argument 'main...HEAD': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+
+$ grep -n "F4-34" -A 40 MEMORY/WORK/20261006-galass-rider-multistop/ISA.md | head -160
+149:| ISC-F4-34 | unit+manual | 2 alertes distinctes qui coexistent — (C) `pick_up` et (B) `arriving_soon` (geofence `live_location`) ; chacune one-shot par `ride_id`+type | 1 alerte par type et par course ; doublon du même type = 0 | flutter test test/unit/multistop_pusher_test.dart + ARTEMIS/e2e | literal |
+150-
+151-## Features
+152-
+153-### F0 · Cross-cutting
+154-
+155-Why: baseline et dual-write avant edits.
+156-
+157-- [x] ISC-F0-1: Dual-write ISA enfant — SHA256 identique repo et LifeOS au close de chaque phase.
+158-- [x] ISC-F0-2: `flutter test` / `flutter analyze` verts avant edits — inventorier warn préexistants.
+159-
+160-### F1 · Modèle & payload API
+161-
+162-Why: `stops[]` sérialisé correctement vers backend.
+163-
+164-- [x] ISC-F4-1: `CreateRideRequestModel` — champ `List<RideStopInput>? stops` ; `toMap()` émet `stops` si non vide.
+165-- [x] ISC-F4-2: Modèle ride response — parse `stops[]` depuis create/detail JSON (`sequence`, `location_label`, coords).
+166-
+167-### F2 · UI gestion arrêts (home / carte)
+168-
+169-Why: le rider compose l'itinéraire multi-escales.
+170-
+171-- [x] ISC-F4-3: UI **ajouter** arrêt intermédiaire (pin + label, max 3). *Code+UI ; device principal 2026-10-08.*
+172-- [x] ISC-F4-3.1: CTA **Ajouter un arrêt** visible **uniquement après** destination renseignée (pickup seul → CTA absent). *Device principal 2026-10-08.*
+173-- [x] ISC-F4-3.2: Au tap Arrêt / mode stop — picker et champ **vides** ; ne jamais préremplir avec la localisation destination. *Device principal 2026-10-08.*
+174-- [x] ISC-F4-3.3: Carte **composition** (home / location picker) — pins d'escales **numérotés** 1, 2, 3 (meilleure lecture d'ordre). *Device principal 2026-10-08. Hors scope ISC-F4-10.*
+175-- [x] ISC-F4-4: UI **supprimer** arrêt. *Code+UI ; device principal 2026-10-08.*
+176-- [x] ISC-F4-5: Ordre des arrêts **préservé** à l'ajout. *Supersédé UX par ISC-F4-5.1.*
+177-- [x] ISC-F4-5.1: UI **réordonner** — monter / descendre un arrêt dans la liste home ; `intermediateStops` + `sequence` payload reflètent le nouvel ordre ; fare refresh après reorder. *Device principal 2026-10-08.*
+178-
+179-### F7 · UX composition (principal objections 2026-10-07)
+180-
+181-Why: corriger les frictions home/carte avant ARTEMIS device F2.
+182-
+183-- [x] VER-1 build — Aditi (CTA, ↑↓, numéros carte) + Forge (`canShowAddStopCta`, empty ADD picker, `moveStopUp`/`Down`) ; **122/122** tests.
+184-- [x] VER-2 verify retry — Get.delete before SelectLocationController put (ISC-F4-3.2) ; `hasDestination` on `addIntermediateStop` + `commitPendingIntermediateStop` (ISC-F4-3.1) ; **125/125** tests.
+185-- [x] VER-3 Max — APPROVE code-leg ; FullRun feature lane **complete**.
+186-
+187-### F3 · Fare preview & create
+188-
+189-Why: tarif et création alignés API parent.
+--
+268:- [x] ISC-F4-34 (2026-11-25, Papa ; affinée 2026-11-26 : C+B) : **Deux alertes client distinctes par course, chacune one-shot par `ride_id`+type, qui coexistent (B puis C) : (C) au Pusher `pick_up` (chauffeur a appuyé sur prise en charge), type `pick_up` ; (B) « arrive bientôt » via geofence sur `live_location` (position F4-32), type `arriving_soon`. Un doublon du même type ne re-alerte pas ; les deux types pour la même course sont attendus. Aucun événement backend `driver_arrived` (option A écartée).** Existant aujourd'hui : le Pusher `pick_up` (émis par `POST driver/rides/start/{id}` côté Driver, cf. ISA Driver `20261002-galass-driver-dispatch-f4/ISA.md:342`) est bien routé (`global_pusher_controller.dart:22`) mais ne fait qu'un refresh sans son/vibration/notification locale (`pusher_ride_controller.dart:106-108`) ; `driver_assigned` est le seul event qui joue l'audio + vibre (`pusher_ride_controller.dart:180-183`), et il précède l'arrivée. Manque : aucun event d'arrivée (`driver_arrived` ou équivalent) n'est géré dans Rider (aucun case, aucun champ dédié dans `pusher_event_response_model.dart`), et `push_notification_service.dart:126-181` affiche chaque FCM `onMessage` avec `message.hashCode` sans dédoublonnage par course/type → deux pushes backend = deux bannières. Le signal in-app est donc one-shot par `ride_id`+type : (C) `pick_up` et (B) `arriving_soon` sont deux alertes distinctes qui coexistent pour une même course ; seuls les doublons du même couple `ride_id`+type sont supprimés. Le push FCM suit la même règle de dédup `ride_id`+type. [app: Rider + backend/Pusher · classe: produit manquant + doublon à prévenir · preuve: test unit séquence (B puis C = 2 alertes de types différents ; doublon du même type = no-op ; nouveau ride = ré-alerte ; hors geofence silencieux) + e2e device] Falsifier: doublon du même type pour le même `ride_id` (deux bannières pour `arriving_soon` ou pour `pick_up`), zéro alerte sur `pick_up` ou sur `arriving_soon`, une seule alerte au total quand B et C surviennent, ou dédup non clée par `ride_id`+type (une course suivante n'alerte plus).
+269-
+270-## Decisions
+271-
+272-- **2026-10-06** — FullRun build F4-10 carte — Forge : pins multi-arrêts + polyline waypoints + zoom ; 92/92 tests ; ISC-F4-10 [x].
+273-- **2026-10-06** — ISA sync (principal) — progress 10/14 ; suite 82/82 ; open: F4-3/4/5/8 ARTEMIS + Bridge-B3 staging.
+274-- **2026-10-06** — FullRun F4 build — Forge+Aditi `RideItineraryTimeline` ; ISC-F4-9 [x] ; 82/82 tests.
+275-- **2026-10-06** — Max F4 **pass** — GO-with-conditions ; ARTEMIS device pending ; 0 blockers. `{"status":"pass"}`
+276-- **2026-10-06** — Verify F4 **pass** — code-reviewer pass, Silas pass (0 blockers).
+277-- **2026-10-06** — Max F2+F3 **pass** — GO-with-conditions ; 0 blockers ; warnings: ordre visuel destination/arrêts, ISC-F4-3/4/5 OPEN (waive ARTEMIS), F4-9/Bridge-B3 deferred. `{"status":"pass"}`
+278-- **2026-10-06** — Verify F2+F3 **pass** (post-fix) — Silas pass, Forge audit pass, code-reviewer re-review pass ; fix buffer `pendingIntermediateStop` + clamp 3 ; 78/78 tests.
+279-- **2026-10-06** — Verify F2+F3 — Silas **pass** (0 blockers) ; Forge audit **pass** (warnings non-bloquants) ; code-reviewer **fail** — CRITICAL `select_location_controller`: `addIntermediateStop` à chaque pick en mode add → fix Forge requis.
+280-- **2026-10-06** — Principal waive : verify F2+F3 avant ARTEMIS device (ISC-F4-3/4/5 UI amount F4-8) — unit+analyze pass, manual device deferred.
+281-- **2026-10-06** — FullRun build F2+F3 — Forge controller/fare/create (74/74 tests) + Aditi UI (`intermediate_stop_row`, `location_pickup_widget`, strings FR) ; ISC-F4-3/4/5 UI compile pass, ARTEMIS device pending.
+282-- **2026-10-06** — Plan — F4 multi-stop (Serena) — build order F0→F1 modèles → F2 UI (`intermediateStops` séparé de `selectedLocations[0/1]`) → F3 fare/create → F4 timeline dynamique → F5 anti-régression ; dispatch map ui|code: F1/F3/F5 code→Forge/Marcus Webb ; F2/F4-9 ui→Aditi Sharma ; risques R1-R8. `{"status":"pass"}`
+283-- **2026-10-06** — FullRun step 1 — CheckCompleteness pass (anti-claims `Anti:` prefix fix).
+284-- **2026-10-06** — ISA enfant scaffolée depuis parent `20261006-galass-regression-multistop` (principal).
+285-- **2026-10-06** — v1 réordonnancement = ordre d'ajout (drag defer si UX lourde).
+286-- **2026-10-06** — Pas de modification flux dispatch/Pusher — stops = données create + affichage.
+287-- **2026-10-06** — **Pivot V2** (principal) — F6 progression rider ; attend F7 backend ; frais attente stop defer.
+288-- **2026-10-07** — **F7 backend livré (local)** — contrat figé : `completed_at`, `STOP_COMPLETED` sur `rider-user-{id}`, `next_leg.type` stop|destination. F6 peut démarrer. Prod parent bloquée jusqu'à l'ack driver.
+289-- **2026-10-07** — FullRun F6 restart — code partiellement annulé (`RideStopModel` sans `completedAt`, `markStopCompleted` absent) ; re-init feature lane F6 build.
+290-- **2026-10-07** — FullRun F6 build **pass** — Forge ISC-F4-11/12/14 + Aditi ISC-F4-13 ; 113/113 tests. `{"status":"pass"}`
+291-- **2026-10-07** — FullRun F6 verify **FAIL** — Silas fail (2 HIGH: client-stamped `completedAt` stops poll; OR-match id||sequence) ; code-reviewer pass ; Forge audit pass — retreat build.
+292-- **2026-10-07** — FullRun F6 build retry **pass** — Forge: `_lastServerAllStopsCompleted` gate poll ; markStopCompleted id-prefer ; 115/115. `{"status":"pass"}`
+293-- **2026-10-07** — FullRun F6 verify **pass** — Silas pass (0 blockers), code-reviewer APPROVE, Forge audit pass. `{"status":"pass"}`
+294-- **2026-10-07** — Max F6 **pass** — APPROVE code-leg ; ARTEMIS F4-13 + Bridge-B6 deferred ; 115/115. `{"status":"pass"}`
+295-- **2026-10-07** — **Principal objections UX F2** — (1) CTA ajout arrêt seulement après destination ; (2) picker arrêt vide + numéros 1..N sur carte composition ; (3) réordonnancement ↑↓ UI. Child ISCs `ISC-F4-3.1`/`3.2`/`3.3`/`5.1` ; Decision 2026-10-06 « reorder = ordre d'ajout » **supersédée** pour la composition home.
+296-- **2026-10-07** — FullRun F7 **build** started — Aditi UI + Forge controller ; session `db461d6e-9cd8-43aa-9a58-a534aa7b3f4e`.
+297-- **2026-10-07** — FullRun F7 build **pass** — Forge 3.1/3.2/5.1 + Aditi 3.1/3.3/5.1 UI ; 122/122. `{"status":"pass"}`
+298-- **2026-10-07** — FullRun F7 verify **FAIL** — Silas F7-CTA-1 (gate UI-only) ; code-reviewer HIGH Get.put stale SelectLocationController (ISC-F4-3.2 runtime) ; Forge audit pass — retreat execute.
+299-- **2026-10-07** — FullRun F7 fix **pass** — Forge: force-delete before put ; hasDestination on add/commit ; skip ADD pickup/dest info markers ; 125/125. `{"status":"pass"}`
+300-- **2026-10-07** — FullRun F7 verify **pass** — Silas pass, code-reviewer APPROVE, Forge audit pass ; Aikido SAST clean. `{"status":"pass"}`
+301-- **2026-10-07** — Max F7 **pass** — APPROVE code-leg ; ARTEMIS 3.3 + device UX deferred ; 125/125. `{"status":"pass"}`
+302-- **2026-10-08** — **Principal** — recherche chauffeur aussi : numéros d'arrêts (pas pins). Child `ISC-F4-10.1` ; ACTIVE/RUNNING restent F4-10 unnumbered.
+303-- **2026-10-08** — **Principal device** — Home (F4-3/3.1/3.2/3.3/4/5.1/8) + recherche (F4-10.1) + timeline (F4-9/13) **PASS**. Open: carte ACTIVE F4-10, Bridge-B3/B6, dual-write.
+304-- **2026-10-08** — **Release** — `1.0.9+105` / tag `v1.0.9` pushed ; https://github.com/LordThiouk/Galass_Rider/releases/tag/v1.0.9
+305-- **2026-10-08** — **Forge** — ISC-F4-10.1: `RideMapController.numberStopMarkers` + `shouldNumberStopMarkersForStatus(PENDING)` ; badges Canvas 1..3 ; wired from `ride_details_controller.loadMap`. ACTIVE/RUNNING unchanged.
+306-- 2026-10-09: refined: Principal clarifie — capture Driver = **référence UX seulement** ; réparation dans **Galass_Rider**. Cible course active post-acceptation : (1) **retirer le code sécurité / OTP** de l'UI suivi ; (2) timeline **nœud actif seul** (pickup → escale pending → destination), pas la liste complète des arrêts. Driver F5 hors scope de ce slice. ISC-F4-13 (timeline complété vs pending sur tous les nœuds) à **raffiner** en claim actif-only ; OTP display → nouvel ISC / Remaining Work avant code.
+307-- **2026-10-09**: refined: Post-accept Rider — **quitter l'UI recherche voiture** (animation searching) dès assignation / refresh ; montrer **ride détail** comme Driver : carte plein écran (déjà là) + bottom sheet détail (profil, stats, itinéraire actif, actions). Même shell d'écran, pas de second route. Driver = référence de layout (map + DraggableScrollableSheet).
+308-- **2026-10-09**: Principal confirme — **recherche chauffeur = uniquement pré-accept** (`RIDE_PENDING`). Dès accept (`RIDE_ACTIVE`+) : **zéro** UI recherche / animation voiture ; ride détail seulement (carte + sheet).
+--
+375:- **2026-11-25 — Papa — Carte Rider en course, assets partagés Driver et alerte unique arrivée/prise en charge (ISA-only, aucun code).** Trois claims ajoutés : `ISC-F4-32` (voiture chauffeur visible + `live_location` en ACTIVE/RUNNING ; aujourd'hui `poly_line_map.dart:41` commente `driverLatLng` et `getMarkers` n'émet donc jamais `driver_marker_id`, aucune position initiale dans `RideModel`/`GlobalDriverInfo`), `ISC-F4-33` (point bleu natif → pin personne Driver `assets/icon/map_marker_pickup.png` ; voiture Driver `assets/icon/marker_car.png` ; sha256 identiques dans les deux apps, Rider utilise encore `assets/images/map/marker_car.png`), `ISC-F4-34` (une seule alerte au premier de arrivée/`pick_up` ; `pick_up` Pusher existe mais est silencieux `pusher_ride_controller.dart:106-108`, aucun event d'arrivée géré, FCM sans dédup `push_notification_service.dart:126-181`). Le repo Galass_Driver n'est pas monté dans ce workspace : `assets/icon/marker_car.png` est prouvé par LifeOS `20261002-galass-driver-dispatch-f4/ISA.md:217,351` ; le pin utilisateur Driver doit être comparé sha256 au fichier Rider avant implémentation. Aucun ISC coché, aucun changement `lib/`/`test/` dans ce leg.
+376-- **2026-11-26 — Serena (architecture / plan de build) — vérification F4-28/F4-31 et découpage F13 (F4-32/33/34), ISA-only, aucun code.** Lecture seule de `target` + `extra/Galass_Driver` ; `flutter` absent de ce runner (aucun test exécuté ici, exécution déléguée à la CI Flutter). Seuils d'ISC **non réécrits** ; les écarts mesurés sont consignés ci-dessous.
+377-  - **F4-28 (SOS RUNNING) — vérifié par lecture, conforme.** `ride_details_bottom_sheet_widget.dart:347-376` bloc RUNNING, SOS rendu sans condition `:363-375` ; contrat `test/widget/course_en_cours_contract_test.dart:274-282` (`find.text(MyStrings.sos)`). L'écart historique « le SOS a disparu » n'était donc pas en RUNNING : l'état fautif était `RIDE_ACTIVE`, corrigé par `1a848b0` (Option B, Papa 2026-11-25) — bloc ACTIVE `:233-344`, SOS `:331-343` après « Annuler » `:321-329`. Aucun correctif à faire ; exécution du contrat déléguée à la CI.
+378-  - **F4-31 (planche ACTIVE) — vérifié par lecture, conforme.** Golden `test/goldens/rider/course_active_avant_prise_en_charge.png` présent, `sha256=[REDACTED:hex64]` (== valeur consignée le 2026-11-25) ; contrat `course_en_cours_contract_test.dart:284-306` : aucune `SearchingForRideAnimation` `:290-294`, aucun copy recherche `:295-299`, SOS présent `:300-305`. La moitié « CTA prise en charge » a bien été retirée du claim (Option B).
+379-  - **F4-32 (voiture visible via `live_location`) — cause racine corrigée, plan.** Le commentaire `driverLatLng` de `poly_line_map.dart:41` n'est **pas** la cause : `getMarkers` calcule `mkDriverLatLng = maybeDriverLatLng ?? driverLatLng` (`ride_map_controller.dart:456-462`) et émet `driver_marker_id` dès que le champ n'est plus `(0,0)` (`:466-489`) ; `updateDriverLocation` le pose (`:82-97`, init `:56`). La voiture manque donc parce que (a) l'event `live_location` doit atteindre `PusherRideController` monté (`ride_details_screen.dart:38-40`) sur `private-rider-user-{id}`, handler `pusher_ride_controller.dart:159-171` gardé ACTIVE/RUNNING `:163` et parsé `latitude`/`longitude` (`pusher_event_response_model.dart:123-124`), et (b) il n'existe aucune position initiale : `RideModel` n'a pas de lat/lng chauffeur et `GlobalDriverInfo` (`global_driver_model.dart:5`) non plus. Tâches : (1) Forge — passer `driverLatLng: controller.driverLatLng` explicitement dans `poly_line_map.dart:38-42` (satisfait le falsifier, même si fonctionnellement redondant) ; (2) Forge — test `test/unit/multistop_map_test.dart` : `updateDriverLocation(A)` → marker `driver_marker_id` en A, `updateDriverLocation(B)` → position B (2 events) ; (3) backend (hors repo, bloquant e2e) — confirmer/ajouter l'émission `live_location` vers `rider-user-{id}` avec `latitude`/`longitude` ; (4) optionnel — hydrater une position initiale si le backend ajoute lat/lng chauffeur. Preuve attendue : test unit ci-dessus + capture e2e voiture visible/mobile ACTIVE/RUNNING. Dépend de F4-33 (même fichier `poly_line_map.dart`).
+380-  - **F4-33 (pin personne + `marker_car` Driver) — mesuré, écart partiel.** Les octets sont **déjà identiques** : Rider `assets/images/map/marker_car.png` et Driver `assets/icon/marker_car.png` → `sha256 [REDACTED:hex64]` ; `assets/icon/map_marker_pickup.png` des deux apps → `sha256 [REDACTED:hex64]`. Donc « un des deux sha256 diffère » est **déjà faux** ; il ne reste que (a) `myLocationEnabled: true` côté Rider (`poly_line_map.dart:26`) vs `false` Driver (`extra/Galass_Driver/lib/presentation/screens/ride_details/widgets/poly_line_map.dart:35`), (b) aucun marker client dédié côté Rider (seul `pickup_marker_id` avec le pin personne, `ride_map_controller.dart:492-515`, icône `:696`), (c) chemin de la voiture Rider `MyImages.mapDriverMarker = assets/images/map/marker_car.png` (`my_images.dart:24`) vs Driver `MyIcons.markerCar = assets/icon/marker_car.png` (`extra/Galass_Driver/lib/core/utils/my_icons.dart:5`, chargé `ride_map_controller.dart:313`). **Ambiguïté à trancher (Papa)** : côté Driver le « pin personne » est le pickup passager, la position propre du chauffeur est la voiture ; côté Rider, soit (i) `myLocationEnabled:false` suffit car le pin pickup (personne) marque déjà le client, soit (ii) il faut un marker `user_marker_id` dédié à la position live (`AppLocationController.currentPosition`, `app_location_controller.dart:13`, permission via `home_controller.dart:103-106`) — le falsifier « aucun marker client n'est monté » penche pour (ii). Tâches : Forge (i/ii selon décision) + ajout d'un alias `assets/icon/marker_car.png` (copie octet-identique) si Papa maintient le falsifier de chemin. Preuve : `sha256sum` (déjà égal) + test widget (myLocationEnabled=false, marker client au pin personne) + capture e2e.
+381:  - **F4-34 (alertes distinctes `arriving_soon` + `pick_up`) — signal d'arrivée absent, plan historique (décision C+B fermée 2026-11-26).** `pick_up` est routé mais silencieux (`pusher_ride_controller.dart:106-108` → `_updateRideIfAvailable`) ; seul `driver_assigned` joue audio+vibration (`:180-183`) et précède l'arrivée. Aucun event d'arrivée n'existe (grep 0 ; champs `pusher_event_response_model.dart:42-58`), `activeEventList` (`global_pusher_controller.dart:22`) n'en a pas, et le FCM affiche chaque `onMessage` avec `message.hashCode` sans dédup (`push_notification_service.dart:126-206`, `:162`, `:193`). **Décision Papa du 2026-11-26 (Africa/Dakar) — FERMÉE : C + B, pas A.** (C) alerte unique au Pusher `pick_up` (bouton Driver prise en charge), one-shot par `ride_id`+type `pick_up` ; (B) alerte distincte « arrive bientôt » (geofence sur `live_location` / position F4-32), one-shot par `ride_id`+type `arriving_soon` ; les deux coexistent ; dédup FCM par `ride_id`+type ; aucun événement backend `driver_arrived`. Tâches : Forge — helper one-shot clé `ride_id` (premier de {arrivée, `pick_up`} joue `AudioUtils.playAudio`+`MyUtils.vibrate`, second no-op, nouveau ride ré-alerte) ; case/field d'arrivée si (A) ; dédup FCM par `ride_id`+type dans `push_notification_service.dart:126` (supprimer le 2e `show`). Preuve : `test/unit/multistop_pusher_test.dart` séquences arrivée→pick_up=1, pick_up→arrivée=1, nouveau ride=1 (spy audio/vibrate) + e2e device. Ne peut pas se fermer entièrement dans ce repo Flutter seul (partie backend/Pusher).
+382:- **2026-11-26 — F4-34 implémenté selon la décision Papa B+C (engineer, branche `feat/multistop-e2e-2026-11-15`).** (C) au Pusher `pick_up`, une alerte client one-shot (audio + vibration + notification locale) clé `ride_id`+type `pick_up` ; (B) sur `live_location` en `RIDE_ACTIVE`, geofence 300 m autour du pickup → alerte distincte type `arriving_soon`, one-shot par `ride_id`, sans remplacer C. Le helper `RideAlertOnce` est partagé avec la dédup FCM de `push_notification_service` (`ride_id`+`type`/`act`) : pas deux bannières pour le même couple. Aucun événement backend `driver_arrived` ajouté (hors périmètre B+C). Preuves : `flutter test test/unit/multistop_pusher_test.dart` 9/9 vert (B puis C = 2 types, doublons no-op, nouveau ride ré-alerte, hors geofence silencieux) ; suite complète `flutter test` 303 passed / 2 skipped ; `flutter analyze` des 5 fichiers touchés : no issues. Commit `61f2a29`.
+383:- **2026-11-26 (Africa/Dakar) — Papa — Décision F4-34 / F13 : C + B (pas A), deux alertes distinctes qui coexistent.** (C) alerte unique au Pusher `pick_up` (déclenché par le bouton Driver « prise en charge »), one-shot par `ride_id`+type `pick_up` ; (B) alerte distincte « arrive bientôt » (geofence sur `live_location` / position F4-32), one-shot par `ride_id`+type `arriving_soon`. Les deux types coexistent pour une même course (B puis C), aucune n'annule l'autre ; dédup FCM par `ride_id`+type ; aucun événement backend `driver_arrived` (option A écartée).
+384-- **2026-11-26 (Africa/Dakar) — Papa — Décision `ISC-F5-16` : le Rider est aussi/surtout porteur de la carte « jambe active » (ISA-only, aucun ISC coché).**
+385-  - **Portée** : `ISC-F5-16` ne porte pas seulement le Driver (`stopMarkers`) ; elle porte **aussi / surtout le Rider**.
+386-  - **Comportement attendu** : sur la **carte Rider** en multistop, mettre en avant **uniquement la jambe / l'arrêt actif**, comme le rendu Driver ; les autres arrêts de l'itinéraire ne sont pas mis en avant (estompés ou non distingués).
+387-  - **Écart actuel** : la carte Rider met en avant **tous** les arrêts de l'itinéraire — symétrie fausse avec le comportement attendu.
+388-  - **Alignement claim/plan `ISC-F5-16` ‖ `ISC-F4-21`** : même porteur `RideStopProgress` / markers ; la preuve Rider doit exiger **1 arrêt actif distinct** et **les autres estompés ou non mis en avant**, miroir du rendu Driver.
+389-  - Aucun ISC coché par cette décision ; aucune modification de `lib/`.
+390:- **2026-11-26 — F4-34 rebuild après Verify×3 BLOCK (Papa 2026-11-26).** Corrections code-only : (1) `RideAlertOnce.shared` (process-wide, clé `ride_id`+type) remplace l instance par contrôleur → la porte survit à `resetRideScopedControllers()` / recréation `PusherRideController`/`RideDetailsScreen` ; (2) `PusherRideController` et `PushNotificationService` partagent cette instance → un event Pusher et son push FCM pour le même couple ne produisent qu une bannière ; (3) iOS : `setForegroundNotificationPresentationOptions(alert/badge/sound: false)` + `show` local partagé-gated dans `onMessage`, donc la dédup couvre aussi le chemin notification foreground (plus seulement data-only). Tests unit ajoutés : recréation contrôleur, dédup FCM, cross-canal. Device/ARTEMIS hors leg (gate Papa), aucun golden régénéré.
+391-
+392-## Learning
+393-
+394-- 2026-10-09 | conjectured: Le fix multi-stop post-accept (OTP off + stop actif) se faisait dans Galass_Driver car la capture montrait l'UI chauffeur.
+395-  refuted by: Principal 2026-10-09 — « Je voulais simplement comparer ; répare dans workspace rider ».
+396-  learned: Driver sert de miroir UX ; le chantier code + ISA child reste Rider F4. Ne pas basculer le workspace sauf demande explicite Driver.
+397-  criterion now: Décision refine ci-dessus ; pas de code tant que les ISCs Rider ne sont pas mis à jour / grillés.
+398-- 2026-10-09 | conjectured: Les fixes post-accept restaient en Remaining Work sans claims.
+399-  refuted by: Principal — « Écris ces fix en isc ou features dans isa ».
+400-  learned: F8 formalise 15/16/17 + Anti-F4-3 ; code blocked until claims exist (now).
+401-  criterion now: ISC-F4-15, ISC-F4-16, ISC-F4-17, Anti-F4-3.
+402-- **2026-11-24 — Écart mesuré (Serena, lecture seule)** : `ISC-F4-31` est **insatisfiable sans `ISC-F4-28`** — `MyStrings.sos` n'existe qu'en RUNNING (`ride_details_bottom_sheet_widget.dart` l.366) et `pickupPassenger` est absent de `my_strings.dart` ; les assertions « SOS présent » et « CTA prise en charge » restent **rouges par construction**, seuils non réécrits, décision Papa attendue. Idem `ISC-F4-30` et `ISC-F5-18` : non fermables sur cette branche (accept golden hors branche). Mesures : Rider `course_en_cours_simple.png` == `course_en_cours_tous_arrets_faits.png` (`4794e22d…`) ; Driver `stop_1_active` == `stop_2_active` (`9a571b18…`).
+403-
+404-## Verification
+405-
+406-### F0 baseline (2026-10-06, Forge build leg F0+F1)
+407-
+408-- **ISC-F0-2** — `flutter test` pre-edit: **148 passed, 2 skipped, 1 failed** (pre-existing: `auth_service_test.dart` verifyOTP token persist). Not introduced by F1.
+409-- **ISC-F0-2** — `flutter analyze` pre-edit: **9 issues** (4 warnings unused_import, 5 info deprecated/file_names/depend_on_referenced_packages). Pre-existing.
+410-- **ISC-F0-1** — dual-write: Nix handles LifeOS mirror (Forge note).
+411-
+412-### F1 modèles (2026-10-06, Forge)
+413-
+414-- **ISC-F4-1** — `flutter test test/unit/multistop_request_model_test.dart`: **5/5 GREEN** (stops in toMap, RideStopInput contract keys).
+415-- **Anti-F4-1** — same file: omits `stops` key when null/empty; legacy fields unchanged.
+416-- **ISC-F4-2** — `flutter test test/unit/multistop_ride_model_test.dart`: **4/4 GREEN** (fromJson ordered stops, null when absent, RideStopModel fields, toJson round-trip).
+417-- **Anti-F4-2** — `flutter test test/unit/dispatch_f3_*`: **56/56 GREEN** post-F1.
+418-
+419-### F2 controller/picker + F3 fare/create (2026-10-06, Forge FullRun F2+F3)
+420-
+421-- **ISC-F4-5 (controller)** — `stopsFromIntermediate()` + `addIntermediateStop` preserve insertion order; v1 = ordre d'ajout (no drag). **pass** (code); UI ARTEMIS **OPEN** (Aditi).
+422-- **ISC-F4-6** — `flutter test test/unit/multistop_fare_test.dart`: **6/6 GREEN** (stops in fare payload, fullAddress labels, omit when empty).
+423-- **ISC-F4-7** — `flutter test test/unit/multistop_create_test.dart`: **3/3 GREEN** (stops[] API keys only, fullAddress alignment, omit when empty).
+424-- **ISC-F4-8 (controller)** — same fare test file: add/remove stop triggers `getRideFare`. **pass** (code); UI amount change **OPEN** (ARTEMIS).
+425-- **Anti-F4-2** — `flutter test test/unit/dispatch_f3_*`: **56/56 GREEN** post-F2+F3.
+426-- **Combined (post-F2+F3)** — **74/74 GREEN** (superseded by 82/82 post-F4).
+427-
+428-### F2 UI (2026-10-06, Aditi)
+429-
+430-- **ISC-F4-3/4/5** — `intermediate_stop_row.dart` + `location_pickup_widget.dart` ; `flutter analyze` 0 issue on 3 files ; **ARTEMIS pending** (add/remove/order on device).
+--
+473:- ISC-F4-34: flutter test test/unit/multistop_pusher_test.dart: 9/9 passed (B puis C = 2 alertes de types differents, 2e meme type no-op, nouveau ride re-alerte, hors geofence silencieux); flutter analyze 5 fichiers: no issues; flutter test complet 303 passed / 2 skipped [@61f2a29]
+474-- ISC-F4-21: flutter test test/unit/multistop_map_test.dart: 31/31 vert (actif distinct + autres estompes numerotes, PENDING F4-10.1 reste numerote); suite complete 304 passed / 2 skipped / 0 failed. [@43e28ba]
+475:- ISC-F4-34: flutter test test/unit/multistop_pusher_test.dart test/data/services/push_notification_service_test.dart: 21/21 passed (recréation contrôleur, dédup FCM ride_id+type, cross-canal Pusher<->FCM) ; flutter test complet 311 passed / 2 skipped / 0 failed ; flutter analyze 5 fichiers: No issues found ; commits dcb4bf0 (lib) et 2ec49c8 (tests). [@2ec49c8]
+476-
+477-## Remaining Work
+478-
+479-- [x] **F7 / F2 UX code-leg** — ISC-F4-3.1/3.2/3.3/5.1 CLOSED (verify pass 125/125).
+480-- [x] **ISC-F4-10.1** — numéros arrêts recherche chauffeur. *Code + device principal 2026-10-08.*
+481-- [x] **Device Home + recherche + timeline** — F4-3/3.1/3.2/3.3/4/5.1/8 + F4-10.1 + F4-9/13. *Principal 2026-10-08.*
+482-- [ ] **Device carte ACTIVE** — ISC-F4-10 pins sans numéros + polyline (si pas encore checké).
+483-- [ ] **Bridge-B3** — staging E2E : create 2 stops → GET detail ordre `ride_stops` identique (principal + curl).
+484-- [ ] **Dual-write SHA256** — repo `MEMORY/WORK/` ↔ LifeOS mirror au close (ISC-F0-1).
+485-- [x] **F6 V2** — code-leg CLOSED ; F4-13 device PASS ; Bridge-B6 staging still open.
+486-- [x] **Commit/push** — release 1.0.9+105 (principal 2026-10-08).
+487-- [x] Rider post-accept : timeline **active leg only** → **ISC-F4-17** (F8).
+488-- [x] Rider post-accept : retirer OTP UI → **ISC-F4-16** (F8).
+489-- [x] Rider post-accept : drop searching → **ISC-F4-15** + Anti-F4-3 (F8).
+490-- [ ] **F10 revue UI téléphone** — `ISC-F4-21` (carte arrêt actif vs estompé/numéroté), `ISC-F4-22` (retrait compteur, supersède `ISC-F4-20`, remplacé par le repère `content-desc`), `ISC-F4-23` (libellé destination finale réel), `ISC-F4-24` (test régression état neuf `RideMapController`). Aucun code tant que ces ISC ne sont pas construits (TDD rouge→vert).
+491-- [ ] **F11 méthode anti-régression UI** — `ISC-F4-25` (tuile notes restaurée), `ISC-F4-26` (bouton message autonome), `ISC-F4-27` (bloc liste arrêts, amende `ISC-F4-17`), `ISC-F4-28` (SOS, verrou + écart à situer), `ISC-F4-29` (contrat d'écran « Rider en course »). Le falsifier `test/widget/course_en_cours_contract_test.dart` doit être porté sur cette branche (il n'y est pas encore) et joué **rouge-avant**.
+
+$ git show --stat dcb4bf0 2ec49c8 3a399e8 e89027a 90aceb9 bc486ed | head -120
+commit dcb4bf0d3163be9a87291402f68842a8cd22768c
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 07:27:43 2026 +0000
+
+    fix(rider): F4-34 share one-shot gate across controller and FCM
+    
+    Move RideAlertOnce to a process-wide shared gate so a ride_id+type alert survives PusherRideController/RideDetailsScreen recreation and Pusher<->FCM cannot show two banners. Disable iOS FCM foreground auto-presentation so the shared-gated local show is the only banner path (covers notification payloads, not only data-only).
+
+ lib/core/helper/ride_alert_once.dart               |  9 +++++
+ .../controller/pusher/pusher_ride_controller.dart  |  4 +-
+ lib/data/services/push_notification_service.dart   | 44 ++++++++++++++--------
+ 3 files changed, 40 insertions(+), 17 deletions(-)
+
+commit 2ec49c8a06d4f509bcb39cb0c6b732caab3a7da4
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 07:27:46 2026 +0000
+
+    test(rider): F4-34 controller recreation, FCM dedup, cross-channel
+    
+    Add unit coverage for the one-shot gate surviving PusherRideController recreation, FCM banner dedup by ride_id+type, and cross-channel suppression between Pusher and FCM.
+
+ .../services/push_notification_service_test.dart   | 75 ++++++++++++++++++++
+ test/unit/multistop_pusher_test.dart               | 79 +++++++++++++++++++++-
+ 2 files changed, 153 insertions(+), 1 deletion(-)
+
+commit 3a399e86614d87ab619791030528ff09c53e006f
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 07:28:07 2026 +0000
+
+    docs(isa): F4-34 rebuild evidence after Verify BLOCK
+
+ MEMORY/WORK/20261006-galass-rider-multistop/ISA.md | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+commit e89027ae6f31cd7846cb13725fa33eead8f1aa85
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 08:19:09 2026 +0000
+
+    verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+
+ VERIFY-F434B.md | 58 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+
+commit 90aceb9ffc2dc9e10d15bd93039394b12cbd2920
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 08:20:09 2026 +0000
+
+    verify(rider): F4-34 PASS after rebuild (gate shared, Pusher/FCM dedup, iOS FG)
+
+ VERIFY-F434B.md | 63 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+
+commit bc486edad0ad254e72c8c762887351a2e7366b38
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 08:21:56 2026 +0000
+
+    docs(verify): F4-34 rebuild VERDICT PASS (one-shot gate, Pusher/FCM dedup, iOS foreground)
+
+ VERIFY-F434.md | 116 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 116 insertions(+)
+
+$ cat lib/core/helper/ride_alert_once.dart; echo '====='; cat lib/data/controller/pusher/pusher_ride_controller.dart
+import 'package:flutter/foundation.dart' show visibleForTesting;
+
+/// One-shot gate keyed by `ride_id` + alert `type` (ISC-F4-34).
+///
+/// The first alert of a given type for a given ride wins; any duplicate of the
+/// same pair is a no-op. A new ride carries a new `ride_id`, so it alerts again
+/// without an explicit reset. When either part of the key is unknown there is
+/// nothing to deduplicate and the alert is allowed.
+class RideAlertOnce {
+  RideAlertOnce();
+
+  /// Process-wide gate shared by the Pusher alert path and the FCM banner path.
+  ///
+  /// Sharing one instance keeps the gate alive across `PusherRideController` /
+  /// `RideDetailsScreen` recreation and prevents a Pusher alert and its FCM
+  /// duplicate from producing two banners for the same `ride_id`+type.
+  static final RideAlertOnce shared = RideAlertOnce();
+
+  final Set<String> _fired = <String>{};
+
+  bool shouldAlert({String? rideId, String? type}) {
+    final String id = (rideId ?? '').trim();
+    final String kind = (type ?? '').trim();
+    if (id.isEmpty || kind.isEmpty) {
+      return true;
+    }
+    return _fired.add('$id::$kind');
+  }
+
+  @visibleForTesting
+  bool hasAlerted({required String rideId, required String type}) {
+    return _fired.contains('${rideId.trim()}::${type.trim()}');
+  }
+
+  @visibleForTesting
+  void reset() {
+    _fired.clear();
+  }
+}
+=====
+import 'dart:math' as math;
+
+import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:galassrider/core/helper/ride_alert_once.dart';
+import 'package:galassrider/core/helper/shared_preference_helper.dart';
+import 'package:galassrider/core/helper/string_format_helper.dart';
+import 'dart:convert';
+import 'package:galassrider/core/route/route.dart';
+import 'package:galassrider/core/utils/app_status.dart';
+import 'package:galassrider/core/utils/audio_utils.dart';
+import 'package:galassrider/core/utils/my_strings.dart';
+import 'package:galassrider/core/utils/util.dart';
+import 'package:galassrider/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galassrider/data/model/general_setting/general_setting_response_model.dart';
+import 'package:galassrider/data/model/global/pusher/pusher_event_response_model.dart';
+import 'package:galassrider/data/services/push_notification_service.dart';
+import 'package:galassrider/data/services/pusher_service.dart';
+import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+import 'package:get/get.dart';
+import 'package:galassrider/data/controller/ride/ride_meassage/ride_meassage_controller.dart';
+import 'package:galassrider/data/services/api_client.dart';
+
+class PusherRideController extends GetxController {
+  ApiClient apiClient;
+  RideMessageController rideMessageController;
+  RideDetailsController rideDetailsController;
+  String rideID;
+  PusherRideController({
+    required this.apiClient,
+    required this.rideMessageController,
+    required this.rideDetailsController,
+    required this.rideID,
+  });
+
+  static const String pickUpAlertType = 'pick_up';
+  static const String arrivingSoonAlertType = 'arriving_soon';
+  static const double arrivingSoonRadiusMeters = 300;
+
+  // Shared with PushNotificationService so the gate survives controller
+  // recreation and dedupes across Pusher <-> FCM (ISC-F4-34).
+  final RideAlertOnce _rideAlertOnce = RideAlertOnce.shared;
+
+  @override
+  void onInit() {
+    super.onInit();
+    PusherManager().addListener(onEvent);
+  }
+
+  PusherConfig pusherConfig = PusherConfig();
+
+  /// Handle incoming Pusher events
+  void onEvent(PusherEvent event) {
+    try {
+      printD('Pusher Channel: ${event.channelName}');
+      printD('Pusher Event: ${event.eventName}');
+      if (event.data == null) return;
+
+      Map<String, dynamic> data = {};
+      try {
+        final decoded = jsonDecode(event.data);
+        if (decoded is! Map) {
+          printX('Invalid JSON: expected object');
+          return;
+        }
+        data = Map<String, dynamic>.from(decoded);
+      } catch (e) {
+        printX('Invalid JSON: $e');
+        return;
+      }
+
+      if (_isStopCompletedEvent(event.eventName)) {
+        data = _stopCompletedEnvelope(event, data);
+      }
+
+      final model = PusherResponseModel.fromJson(data);
+      final modifiedEvent = PusherResponseModel(
+        eventName: event.eventName,
+        channelName: event.channelName,
+        data: model.data,
+      );
+
+      updateEvent(modifiedEvent);
+    } catch (e) {
+      printX('onEvent error: $e');
+    }
+  }
+
+  /// Update UI or state based on event name
+  void updateEvent(PusherResponseModel event) {
+    final eventName = event.eventName?.toLowerCase();
+    printX('Handling event: $eventName');
+
+    switch (eventName) {
+      case 'online_payment_received':
+        _handleOnlinePayment(event);
+        break;
+
+      case 'message_received':
+        _handleMessageReceived(event);
+        break;
+
+      case 'live_location':
+        _handleLiveLocation(event);
+        break;
+
+      case 'driver_assigned':
+        _handleDriverAssigned(event);
+        break;
+
+      case 'cancel_ride':
+        _handleCancelRide(event);
+        break;
+
+      case 'cash_payment_received':
+        _handleCashPayment(event);
+        break;
+
+      case 'pick_up':
+        _handlePickUp(event);
+        break;
+
+      case 'ride_end':
+        _updateRideIfAvailable(event);
+        break;
+
+      case 'stop_completed':
+        _handleStopCompleted(event);
+        break;
+
+      default:
+        _updateRideIfAvailable(event);
+        break;
+    }
+  }
+
+  /// Handlers for each event type
+
+  String? _eventRideId(PusherResponseModel event) =>
+      event.data?.ride?.id ?? event.data?.rideId;
+
+  bool _isDifferentRide(PusherResponseModel event) {
+    final eventRideId = _eventRideId(event);
+    if (eventRideId != null && eventRideId != rideID) {
+      printX('Event for different ride: $eventRideId, current ride: $rideID');
+      return true;
+    }
+    return false;
+  }
+
+  void _handleOnlinePayment(PusherResponseModel event) {
+    if (_isDifferentRide(event)) {
+      return;
+    }
+    final eventRideId = _eventRideId(event);
+    printX('Online payment received for ride: $eventRideId');
+    openRideReview(eventRideId ?? '');
+  }
+
+  void _handleMessageReceived(PusherResponseModel eventResponse) {
+    if (eventResponse.data?.message != null) {
+      if (_isDifferentRide(eventResponse)) {
+        return;
+      }
+      if (isRideDetailsPage()) {
+        if (rideDetailsController.repo.apiClient.isNotificationAudioEnable()) {
+          MyUtils.vibrate();
+        }
+      }
+
+      rideMessageController.addEventMessage(eventResponse.data!.message!);
+    }
+  }
+
+  void _handleLiveLocation(PusherResponseModel eventResponse) {
+    if (_isDifferentRide(eventResponse)) {
+      return;
+    }
+    final status = rideDetailsController.ride.status;
+    final isActive = status == AppStatus.RIDE_ACTIVE.toString();
+    final isRunning = status == AppStatus.RIDE_RUNNING.toString();
+    if (!isActive && !isRunning) {
+      return;
+    }
+    final lat = StringConverter.formatDouble(eventResponse.data?.driverLatitude ?? '0', precision: 10);
+    final lng = StringConverter.formatDouble(eventResponse.data?.driverLongitude ?? '0', precision: 10);
+    final driverPosition = LatLng(lat, lng);
+    rideDetailsController.mapController.updateDriverLocation(
+      latLng: driverPosition,
+      isRunning: false,
+    );
+    if (isActive) {
+      _alertArrivingSoonIfNearPickup(eventResponse, driverPosition);
+    }
+  }
+
+  /// Option B (Papa 2026-11-26): a distinct "arriving soon" alert once the
+  /// driver enters the pickup geofence. One-shot per ride, independent of the
+  /// `pick_up` alert so both types can fire once each.
+  void _alertArrivingSoonIfNearPickup(
+    PusherResponseModel eventResponse,
+    LatLng driverPosition,
+  ) {
+    final pickup = _ridePickupLatLng();
+    if (pickup == null) {
+      return;
+    }
+    if (distanceMetersBetween(driverPosition, pickup) > arrivingSoonRadiusMeters) {
+      return;
+    }
+    _alertOnce(
+      rideId: _eventRideId(eventResponse) ?? rideID,
+      type: arrivingSoonAlertType,
+    );
+  }
+
+  /// Option C (Papa 2026-11-26): the driver pressed "start/pick up". Plays the
+  /// single client alert for this ride and type, then refreshes the ride.
+  void _handlePickUp(PusherResponseModel eventResponse) {
+    if (_isDifferentRide(eventResponse)) {
+      return;
+    }
+    _alertOnce(
+      rideId: _eventRideId(eventResponse) ?? rideID,
+      type: pickUpAlertType,
+    );
+    _updateRideIfAvailable(eventResponse);
+  }
+
+  void _alertOnce({required String rideId, required String type}) {
+    if (!_rideAlertOnce.shouldAlert(rideId: rideId, type: type)) {
+      return;
+    }
+    playRideAlert(rideId: rideId, type: type);
+  }
+
+  /// Audio + vibration + local notification for one ride alert. Overridable so
+  /// unit tests can observe the one-shot gate without platform channels.
+  @visibleForTesting
+  void playRideAlert({required String rideId, required String type}) {
+    AudioUtils.playAudio(apiClient.getNotificationAudio());
+    if (rideDetailsController.repo.apiClient.isNotificationAudioEnable()) {
+      MyUtils.vibrate();
+    }
+    final bool isPickUp = type == pickUpAlertType;
+    PushNotificationService.showLocalAlert(
+      title: isPickUp ? MyStrings.ridePickedUpTitle : MyStrings.rideArrivingSoonTitle,
+      body: isPickUp ? MyStrings.ridePickedUpBody : MyStrings.rideArrivingSoonBody,
+    );
+  }
+
+  LatLng? _ridePickupLatLng() {
+    final controllerPickup = rideDetailsController.pickupLatLng;
+    if (controllerPickup.latitude != 0 && controllerPickup.longitude != 0) {
+      return controllerPickup;
+    }
+    final ride = rideDetailsController.ride;
+    final lat = StringConverter.formatDouble(ride.pickupLatitude ?? '', precision: 16);
+    final lng = StringConverter.formatDouble(ride.pickupLongitude ?? '', precision: 16);
+    if (lat == 0 || lng == 0) {
+      return null;
+    }
+    return LatLng(lat, lng);
+  }
+
+  /// Great-circle distance in metres (pure Dart, no platform channel) used by
+  /// the "arriving soon" geofence.
+  @visibleForTesting
+  static double distanceMetersBetween(LatLng a, LatLng b) {
+    const double earthRadiusMeters = 6371000;
+    final double dLat = _toRadians(b.latitude - a.latitude);
+    final double dLng = _toRadians(b.longitude - a.longitude);
+    final double lat1 = _toRadians(a.latitude);
+    final double lat2 = _toRadians(b.latitude);
+    final double h = math.sin(dLat / 2) * math.sin(dLat / 2) +
+        math.cos(lat1) * math.cos(lat2) * math.sin(dLng / 2) * math.sin(dLng / 2);
+    return 2 * earthRadiusMeters * math.asin(math.min(1, math.sqrt(h)));
+  }
+
+  static double _toRadians(double degrees) => degrees * math.pi / 180.0;
+
+  void _handleDriverAssigned(PusherResponseModel eventResponse) {
+    if (_isDifferentRide(eventResponse)) {
+      return;
+    }
+    final data = eventResponse.data;
+    if (data == null) return;
+
+    AudioUtils.playAudio(apiClient.getNotificationAudio());
+    if (rideDetailsController.repo.apiClient.isNotificationAudioEnable()) {
+      MyUtils.vibrate();
+    }
+
+    rideDetailsController.updateDriverAssigned(
+      driverName: data.driverName ?? '',
+      avgRating: data.avgRating ?? '',
+      etaMinutes: data.etaMinutes ?? '',
+      ride: data.ride,
+    );
+    rideDetailsController.getRideDetails(rideID, shouldLoading: false);
+  }
+
+  void _handleCancelRide(PusherResponseModel eventResponse) {
+    if (_isDifferentRide(eventResponse)) {
+      return;
+    }
+    rideDetailsController.stopPendingPoll();
+    final ride = eventResponse.data?.ride;
+    if (ride != null) {
+      rideDetailsController.updateRide(ride);
+    }
+    rideDetailsController.getRideDetails(rideID, shouldLoading: false);
+  }
+
+  /// Sortie de l'écran de paiement, quel que soit le moyen d'encaissement. Un seul
+  /// endroit pour les deux : le rider doit atterrir sur la même fin de course.
+  @visibleForTesting
+  void openRideReview(String rideId) {
+    Get.offAndToNamed(RouteHelper.rideReviewScreen, arguments: rideId);
+  }
+
+  void _handleCashPayment(PusherResponseModel event) {
+    if (_isDifferentRide(event)) {
+      return;
+    }
+    // Le chauffeur a encaissé en espèces. Le rider n'a plus rien à payer : la modale
+    // « Sélectionnez un mode de paiement » doit disparaître et l'écran de fin de course
+    // s'ouvrir. Sans ça (run 44354825315) le rider restait bloqué sur la modale alors
+    // que la course était réglée — le paiement en ligne, lui, naviguait déjà.
+    rideDetailsController.updatePaymentRequested(isRequested: false);
+    _updateRideIfAvailable(event);
+    final eventRideId = _eventRideId(event);
+    printX('Cash payment received for ride: $eventRideId');
+    if (Get.currentRoute == RouteHelper.rideReviewScreen) {
+      return;
+    }
+    openRideReview(eventRideId ?? '');
+  }
+
+  bool _isStopCompletedEvent(String? eventName) =>
+      eventName?.toLowerCase() == 'stop_completed';
+
+  Map<String, dynamic> _stopCompletedEnvelope(
+    PusherEvent event,
+    Map<String, dynamic> decoded,
+  ) {
+    if (decoded['data'] is Map) {
+      final inner = Map<String, dynamic>.from(decoded['data'] as Map);
+      return {
+        'channelName': decoded['channelName'] ?? event.channelName,
+        'eventName': decoded['eventName'] ?? event.eventName,
+        'data': inner,
+      };
+    }
+
+    return {
+      'channelName': event.channelName,
+      'eventName': event.eventName,
+      'data': decoded,
+    };
+  }
+
+  String? _usableRideId(String? raw) {
+    final value = raw?.trim() ?? '';
+    if (value.isEmpty || value.toLowerCase() == 'null') {
+      return null;
+    }
+    return value;
+  }
+
+  void _handleStopCompleted(PusherResponseModel event) {
+    final data = event.data;
+    if (data == null) return;
+
+    final eventRideId =
+        _usableRideId(data.ride?.id) ?? _usableRideId(data.rideId);
+    if (eventRideId == null || eventRideId != rideID) {
+      return;
+    }
+
+    final stopId = data.stopId;
+    final sequence = data.stopSequence;
+
+    if (stopId == null && sequence == null) return;
+
+    rideDetailsController.markStopCompleted(
+      stopId: stopId,
+      sequence: sequence,
+    );
+  }
+
+  void _updateRideIfAvailable(PusherResponseModel eventResponse) {
+    if (_isDifferentRide(eventResponse)) {
+      return;
+    }
+    final ride = eventResponse.data?.ride;
+    if (ride != null) {
+      rideDetailsController.updateRide(ride);
+    }
+  }
+
+  /// Utility
+  bool isRideDetailsPage() => Get.currentRoute == RouteHelper.rideDetailsScreen;
+
+  @override
+  void onClose() {
+    PusherManager().removeListener(onEvent);
+    super.onClose();
+  }
+
+  Future<void> ensureConnection({String? channelName}) async {
+    try {
+      var userId = apiClient.sharedPreferences.getString(SharedPreferenceHelper.userIdKey) ?? '';
+      await PusherManager().checkAndInitIfNeeded(channelName ?? "private-rider-user-$userId");
+    } catch (e) {
+      printX("Error ensuring connection: $e");
+    }
+  }
+}
+
+$ cat lib/data/services/push_notification_service.dart
+import 'dart:convert';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart' as getx;
+import 'package:galassrider/core/helper/ride_alert_once.dart';
+import 'package:galassrider/core/helper/shared_preference_helper.dart';
+import 'package:galassrider/core/helper/string_format_helper.dart';
+import 'package:galassrider/core/utils/method.dart';
+import 'package:galassrider/core/utils/url_container.dart';
+import 'package:galassrider/data/services/api_client.dart';
+import 'package:path_provider/path_provider.dart';
+
+Future<void> _messageHandler(RemoteMessage message) async {
+  // Firebase is already initialized in main.dart
+}
+
+class PushNotificationService {
+  PushNotificationService({required this.apiClient});
+
+  final ApiClient apiClient;
+  static bool _tokenRefreshListenerRegistered = false;
+
+  // Shared with PusherRideController so a Pusher alert and its FCM duplicate
+  // never produce two banners for the same `ride_id`+type (ISC-F4-34).
+  final RideAlertOnce _rideAlertOnce = RideAlertOnce.shared;
+
+  Future<void> setupInteractedMessage() async {
+    FirebaseMessaging.onBackgroundMessage(_messageHandler);
+    final FirebaseMessaging messaging = FirebaseMessaging.instance;
+    await _requestPermissions();
+
+    await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    _registerTokenRefreshListener();
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      printX('onMessageOpenedApp ${message.toMap()}');
+    });
+
+    await enableIOSNotifications();
+    await registerNotificationListeners();
+  }
+
+  void _registerTokenRefreshListener() {
+    if (_tokenRefreshListenerRegistered) {
+      return;
+    }
+    _tokenRefreshListenerRegistered = true;
+
+    FirebaseMessaging.instance.onTokenRefresh.listen((String fcmToken) async {
+      if (fcmToken.isEmpty) {
+        return;
+      }
+      await apiClient.sharedPreferences.setString(
+        SharedPreferenceHelper.fcmDeviceKey,
+        fcmToken,
+      );
+      if (apiClient.getToken().isNotEmpty) {
+        await sendUpdatedToken(fcmToken);
+      }
+    });
+  }
+
+  Future<void> registerNotificationListeners() async {
+    final AndroidNotificationChannel channel = androidNotificationChannel();
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
+    const iOSSettings = DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+    );
+    const initSettings = InitializationSettings(
+      android: androidSettings,
+      iOS: iOSSettings,
+    );
+    await flutterLocalNotificationsPlugin.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (message) async {
+        try {
+          final dynamic rawPayload = message.payload;
+          final String? payloadString = rawPayload == null
+              ? null
+              : rawPayload is String
+                  ? rawPayload
+                  : jsonEncode(rawPayload);
+          printX('remarkNotification $payloadString');
+          if (payloadString != null && payloadString.isNotEmpty) {
+            final Map<dynamic, dynamic> payloadMap =
+                jsonDecode(payloadString) as Map<dynamic, dynamic>;
+            final Map<String, String> payload = payloadMap.map(
+              (key, value) => MapEntry(key.toString(), value.toString()),
+            );
+
+            printX('remarkNotification ${payload['for_app']}');
+            printX('remarkNotification ${payload['ride_id']}');
+            final String? remark = payload['for_app'];
+
+            if (remark != null && remark.isNotEmpty) {
+              final String route = remark.split('-')[0];
+              final String id = remark.split('-')[1];
+              getx.Get.toNamed(route, arguments: id);
+            }
+          }
+        } catch (e) {
+          if (kDebugMode) {
+            printX(e.toString());
+          }
+        }
+      },
+    );
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      final content = _notificationContent(message);
+      if (content.title == null && content.body == null) {
+        return;
+      }
+
+      // ISC-F4-34: never show two banners for the same ride + alert type. The
+      // gate is shared with the Pusher path and a new `ride_id` re-alerts.
+      if (!shouldPresentMessage(message)) {
+        return;
+      }
+
+      final String title = content.title ?? '';
+      final String body = content.body ?? '';
+      final AndroidNotification? android = message.notification?.android;
+
+      if (Platform.isAndroid) {
+        BigPictureStyleInformation? bigPictureStyle;
+        if (android?.imageUrl != null) {
+          try {
+            final Dio dio = Dio();
+            final Response<List<int>> response = await dio.get<List<int>>(
+              android!.imageUrl!,
+              options: Options(responseType: ResponseType.bytes),
+            );
+            if (response.data != null) {
+              final Uint8List bytes = Uint8List.fromList(response.data!);
+              final String localImagePath = await _saveImageLocally(bytes);
+              bigPictureStyle = BigPictureStyleInformation(
+                FilePathAndroidBitmap(localImagePath),
+                contentTitle: title,
+                summaryText: body,
+              );
+            }
+          } catch (e) {
+            if (kDebugMode) {
+              printX('notification image download failed: $e');
+            }
+          }
+        }
+
+        await flutterLocalNotificationsPlugin.show(
+          message.hashCode,
+          title,
+          body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channelDescription: channel.description,
+              icon: '@mipmap/ic_launcher',
+              playSound: true,
+              enableVibration: true,
+              enableLights: true,
+              fullScreenIntent: true,
+              priority: Priority.high,
+              styleInformation: bigPictureStyle ?? const BigTextStyleInformation(''),
+              importance: Importance.high,
+            ),
+          ),
+          payload: jsonEncode(message.data),
+        );
+        return;
+      }
+
+      if (Platform.isIOS) {
+        // FCM foreground auto-presentation is disabled in enableIOSNotifications
+        // so this shared-gated `show` is the only banner path. It covers both
+        // notification payloads and data-only messages (ISC-F4-34).
+        await flutterLocalNotificationsPlugin.show(
+          message.hashCode,
+          title,
+          body,
+          const NotificationDetails(
+            iOS: DarwinNotificationDetails(
+              presentAlert: true,
+              presentBadge: true,
+              presentSound: true,
+            ),
+          ),
+          payload: jsonEncode(message.data),
+        );
+      }
+    });
+  }
+
+  /// Whether this FCM message may produce a banner. Uses the gate shared with
+  /// the Pusher alert path (ISC-F4-34); exposed so the dedup can be unit-tested
+  /// without initializing Firebase.
+  @visibleForTesting
+  bool shouldPresentMessage(RemoteMessage message) {
+    return _rideAlertOnce.shouldAlert(
+      rideId: _messageRideId(message),
+      type: _messageType(message),
+    );
+  }
+
+  ({String? title, String? body}) _notificationContent(RemoteMessage message) {
+    final RemoteNotification? notification = message.notification;
+    final Map<String, dynamic> data = message.data;
+
+    final String? title = notification?.title ??
+        data['title']?.toString() ??
+        data['subject']?.toString();
+    final String? body = notification?.body ??
+        data['body']?.toString() ??
+        data['message']?.toString() ??
+        data['text']?.toString();
+
+    return (title: title, body: body);
+  }
+
+  String? _messageRideId(RemoteMessage message) {
+    final Map<String, dynamic> data = message.data;
+    final String value =
+        (data['ride_id'] ?? data['rideId'] ?? '').toString().trim();
+    return value.isEmpty ? null : value;
+  }
+
+  String? _messageType(RemoteMessage message) {
+    final Map<String, dynamic> data = message.data;
+    final String value =
+        (data['type'] ?? data['act'] ?? data['event'] ?? '').toString().trim();
+    return value.isEmpty ? null : value;
+  }
+
+  /// Shows an in-app ride alert as a local notification (audio and vibration
+  /// are handled by the caller). Uses the same high-importance channel as FCM.
+  static Future<void> showLocalAlert({
+    required String title,
+    required String body,
+  }) async {
+    final FlutterLocalNotificationsPlugin plugin =
+        FlutterLocalNotificationsPlugin();
+    final AndroidNotificationChannel channel = const AndroidNotificationChannel(
+      'high_importance_channel',
+      'High Importance Notifications',
+      description: 'This channel is used for important notifications.',
+      playSound: true,
+      enableVibration: true,
+      enableLights: true,
+      importance: Importance.high,
+    );
+    await plugin.show(
+      DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      title,
+      body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          channelDescription: channel.description,
+          importance: Importance.high,
+          priority: Priority.high,
+          playSound: true,
+          enableVibration: true,
+        ),
+        iOS: const DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+      ),
+    );
+  }
+
+  Future<void> enableIOSNotifications() async {
+    // Let the `onMessage` listener present every foreground banner instead of
+    // letting FCM auto-present notification payloads. Auto-presentation cannot
+    // be gated, so identical `ride_id`+type pushes would always show twice on
+    // iOS (ISC-F4-34). Manual `show` keeps the shared dedup authoritative.
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: false,
+      badge: false,
+      sound: false,
+    );
+  }
+
+  AndroidNotificationChannel androidNotificationChannel() =>
+      const AndroidNotificationChannel(
+        'high_importance_channel',
+        'High Importance Notifications',
+        description: 'This channel is used for important notifications.',
+        playSound: true,
+        enableVibration: true,
+        enableLights: true,
+        importance: Importance.high,
+      );
+
+  Future<void> _requestPermissions() async {
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+
+    if (Platform.isIOS || Platform.isMacOS) {
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              IOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(alert: true, badge: true, sound: true);
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              MacOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(alert: true, badge: true, sound: true);
+    } else if (Platform.isAndroid) {
+      final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+          flutterLocalNotificationsPlugin
+              .resolvePlatformSpecificImplementation<
+                  AndroidFlutterLocalNotificationsPlugin>();
+      await androidImplementation?.requestNotificationsPermission();
+    }
+  }
+
+  Future<String> _saveImageLocally(Uint8List bytes) async {
+    final directory = await getTemporaryDirectory();
+    final imagePath = '${directory.path}/notification_image.png';
+    final file = File(imagePath);
+    await file.writeAsBytes(bytes);
+    return imagePath;
+  }
+
+  /// Registers the current FCM token with Laravel after authentication.
+  Future<bool> sendUserToken() async {
+    if (apiClient.getToken().isEmpty) {
+      return false;
+    }
+
+    final String? fcmToken = await FirebaseMessaging.instance.getToken();
+    if (fcmToken == null || fcmToken.isEmpty) {
+      return false;
+    }
+
+    await apiClient.sharedPreferences.setString(
+      SharedPreferenceHelper.fcmDeviceKey,
+      fcmToken,
+    );
+    return sendUpdatedToken(fcmToken);
+  }
+
+  Future<bool> sendUpdatedToken(String deviceToken) async {
+    if (deviceToken.isEmpty) {
+      return false;
+    }
+
+    await apiClient.sharedPreferences.setString(
+      SharedPreferenceHelper.fcmDeviceKey,
+      deviceToken,
+    );
+
+    final String url =
+        '${UrlContainer.baseUrl}${UrlContainer.deviceTokenEndPoint}';
+    final Map<String, String> map = deviceTokenMap(deviceToken);
+
+    final response = await apiClient.request(
+      url,
+      Method.postMethod,
+      map,
+      passHeader: true,
+    );
+    return response.isSuccess && response.statusCode == 200;
+  }
+
+  Map<String, String> deviceTokenMap(String deviceToken) {
+    return {'token': deviceToken};
+  }
+}
+
+$ sed -n 1,240p test/unit/multistop_pusher_test.dart
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:galassrider/core/helper/ride_alert_once.dart';
+import 'package:galassrider/core/helper/shared_preference_helper.dart';
+import 'package:galassrider/core/utils/app_status.dart';
+import 'package:galassrider/data/controller/map/ride_map_controller.dart';
+import 'package:galassrider/data/controller/pusher/pusher_ride_controller.dart';
+import 'package:galassrider/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galassrider/data/controller/ride/ride_meassage/ride_meassage_controller.dart';
+import 'package:galassrider/data/model/global/app/ride_model.dart';
+import 'package:galassrider/data/model/global/pusher/pusher_event_response_model.dart';
+import 'package:galassrider/data/model/global/response_model/response_model.dart';
+import 'package:galassrider/data/model/ride/ride_stop_model.dart';
+import 'package:galassrider/data/repo/message/message_repo.dart';
+import 'package:galassrider/data/repo/ride/ride_repo.dart';
+import 'package:galassrider/data/services/api_client.dart';
+import 'package:galassrider/data/services/push_notification_service.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class PusherMockRideRepo implements RideRepo {
+  PusherMockRideRepo({required this.apiClient});
+
+  @override
+  final ApiClient apiClient;
+
+  int getRideDetailsCalls = 0;
+
+  @override
+  Future<ResponseModel> getRideDetails(String id) async {
+    getRideDetailsCalls++;
+    return ResponseModel(false, 'unused', 500, {});
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class PusherMockMessageRepo implements MessageRepo {
+  PusherMockMessageRepo({required this.apiClient});
+
+  @override
+  final ApiClient apiClient;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class PusherStubRideMapController extends RideMapController {
+  @override
+  void loadMap({
+    required LatLng pickup,
+    required LatLng destination,
+    List<LatLng> intermediateStops = const [],
+    bool? isRunning = false,
+    bool numberStopMarkers = false,
+  }) {}
+
+  @override
+  void updateDriverLocation({required LatLng latLng, required bool isRunning}) {}
+}
+
+/// Records the client alerts instead of touching audio/vibration/notification
+/// platform channels (ISC-F4-34).
+class RecordingPusherRideController extends PusherRideController {
+  RecordingPusherRideController({
+    required super.apiClient,
+    required super.rideMessageController,
+    required super.rideDetailsController,
+    required super.rideID,
+  });
+
+  final List<String> alerts = <String>[];
+
+  @override
+  void playRideAlert({required String rideId, required String type}) {
+    alerts.add(type);
+  }
+}
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  group('ISC-F4-12 STOP_COMPLETED payload', () {
+    test('fromJson reads ride_id, stop_id, sequence and ignores next_leg shape', () {
+      final data = EventData.fromJson({
+        'ride_id': 42,
+        'stop_id': 8,
+        'sequence': 2,
+        'next_leg': {'type': 'destination'},
+      });
+
+      expect(data.rideId, '42');
+      expect(data.stopId, '8');
+      expect(data.stopSequence, '2');
+    });
+
+    test('fromJson accepts next_leg type stop', () {
+      final data = EventData.fromJson({
+        'ride_id': '42',
+        'stop_id': '7',
+        'sequence': '1',
+        'next_leg': {'type': 'stop'},
+      });
+
+      expect(data.stopId, '7');
+      expect(data.stopSequence, '1');
+    });
+  });
+
+  group('ISC-F4-12 PusherRideController stop_completed', () {
+    late PusherMockRideRepo rideRepo;
+    late RideDetailsController rideDetailsController;
+    late PusherRideController pusherRideController;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({
+        SharedPreferenceHelper.notificationAudioEnableKey: '0',
+      });
+      final sharedPreferences = await SharedPreferences.getInstance();
+      Get.reset();
+      Get.testMode = true;
+      final apiClient = ApiClient(sharedPreferences: sharedPreferences);
+      Get.put<ApiClient>(apiClient);
+
+      rideRepo = PusherMockRideRepo(apiClient: apiClient);
+      rideDetailsController = RideDetailsController(
+        repo: rideRepo,
+        mapController: PusherStubRideMapController(),
+      );
+      rideDetailsController.rideId = '42';
+      rideDetailsController.ride = RideModel(
+        id: '42',
+        status: AppStatus.RIDE_RUNNING,
+        stops: [
+          RideStopModel(id: '7', sequence: '1', locationLabel: 'Pharmacie'),
+          RideStopModel(id: '8', sequence: '2', locationLabel: 'Marché'),
+        ],
+      );
+
+      pusherRideController = PusherRideController(
+        apiClient: apiClient,
+        rideMessageController: RideMessageController(
+          repo: PusherMockMessageRepo(apiClient: apiClient),
+        ),
+        rideDetailsController: rideDetailsController,
+        rideID: '42',
+      );
+    });
+
+    tearDown(() {
+      pusherRideController.onClose();
+      rideDetailsController.onClose();
+      Get.reset();
+    });
+
+    test('STOP_COMPLETED marks the matching stop without replacing the ride', () {
+      pusherRideController.updateEvent(
+        PusherResponseModel(
+          eventName: 'STOP_COMPLETED',
+          channelName: 'private-rider-user-1',
+          data: EventData(
+            rideId: '42',
+            stopId: '8',
+            stopSequence: '2',
+          ),
+        ),
+      );
+
+      expect(rideDetailsController.ride.id, '42');
+      expect(rideDetailsController.ride.stops![0].isCompleted, isFalse);
+      expect(rideDetailsController.ride.stops![1].isCompleted, isTrue);
+      expect(rideDetailsController.ride.stops![1].locationLabel, 'Marché');
+      expect(rideRepo.getRideDetailsCalls, 0);
+    });
+
+    test('ignores STOP_COMPLETED for a different ride id', () {
+      pusherRideController.updateEvent(
+        PusherResponseModel(
+          eventName: 'stop_completed',
+          channelName: 'private-rider-user-1',
+          data: EventData(
+            rideId: '99',
+            stopId: '8',
+            stopSequence: '2',
+          ),
+        ),
+      );
+
+      expect(rideDetailsController.ride.stops![0].isCompleted, isFalse);
+      expect(rideDetailsController.ride.stops![1].isCompleted, isFalse);
+    });
+
+    test('onEvent applies a flat payload that has no ride object', () {
+      pusherRideController.onEvent(
+        PusherEvent(
+          channelName: 'private-rider-user-1',
+          eventName: 'STOP_COMPLETED',
+          data: jsonEncode({
+            'ride_id': '42',
+            'stop_id': '7',
+            'sequence': 1,
+            'next_leg': {'type': 'stop'},
+          }),
+        ),
+      );
+
+      expect(rideDetailsController.ride.stops![0].isCompleted, isTrue);
+      expect(rideDetailsController.ride.stops![1].isCompleted, isFalse);
+      expect(rideRepo.getRideDetailsCalls, 0);
+    });
+
+    test('stop_completed is not a global navigation event', () {
+      final source = File(
+        'lib/data/controller/pusher/global_pusher_controller.dart',
+      ).readAsStringSync();
+      final listMatch = RegExp(
+        r'List<String>\s+activeEventList\s*=\s*\[(.*?)\];',
+        dotAll: true,
+      ).firstMatch(source);
+
+      expect(listMatch, isNotNull);
+      expect(listMatch!.group(1), isNot(contains('stop_completed')));
+    });
+  });
+
+  group('ISC-F4-34 one-shot arrival / pick_up alert', () {
+    late PusherMockRideRepo rideRepo;
+    late RideDetailsController rideDetailsController;
+    late RecordingPusherRideController pusherRideController;
+    late ApiClient apiClient;
+
+    const LatLng pickup = LatLng(14.7167, -17.4677);
+
+    setUp(() async {
+
+$ cat test/data/services/push_notification_service_test.dart; echo ====; which flutter dart || true; flutter --version 2>&1 | head -5
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:galassrider/core/helper/ride_alert_once.dart';
+import 'package:galassrider/core/helper/shared_preference_helper.dart';
+import 'package:galassrider/core/utils/method.dart';
+import 'package:galassrider/data/model/global/response_model/response_model.dart';
+import 'package:galassrider/data/services/api_client.dart';
+import 'package:galassrider/data/services/push_notification_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class _RecordingApiClient extends ApiClient {
+  _RecordingApiClient({required super.sharedPreferences});
+
+  int postCount = 0;
+  Map<String, dynamic>? lastParams;
+  bool succeedPost = true;
+
+  @override
+  Future<ResponseModel> request(
+    String uri,
+    String method,
+    Map<String, dynamic>? params, {
+    bool passHeader = false,
+    bool isOnlyAcceptType = false,
+  }) async {
+    if (method == Method.postMethod) {
+      postCount++;
+      lastParams = params;
+    }
+    return ResponseModel(succeedPost, 'ok', succeedPost ? 200 : 401, {});
+  }
+}
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  group('PushNotificationService.sendUpdatedToken', () {
+    late SharedPreferences prefs;
+    late _RecordingApiClient apiClient;
+    late PushNotificationService service;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({
+        SharedPreferenceHelper.accessTokenKey: 'test-access-token',
+      });
+      prefs = await SharedPreferences.getInstance();
+      apiClient = _RecordingApiClient(sharedPreferences: prefs);
+      service = PushNotificationService(apiClient: apiClient);
+    });
+
+    test('persists FCM token in SharedPreferences', () async {
+      await service.sendUpdatedToken('fcm-token-123');
+
+      expect(
+        prefs.getString(SharedPreferenceHelper.fcmDeviceKey),
+        'fcm-token-123',
+      );
+    });
+
+    test('POSTs token to save-device-token endpoint', () async {
+      await service.sendUpdatedToken('fcm-token-456');
+
+      expect(apiClient.postCount, 1);
+      expect(apiClient.lastParams, {'token': 'fcm-token-456'});
+    });
+
+    test('returns false for empty token', () async {
+      final success = await service.sendUpdatedToken('');
+
+      expect(success, isFalse);
+      expect(apiClient.postCount, 0);
+    });
+
+    test('returns false when API request fails', () async {
+      apiClient.succeedPost = false;
+
+      final success = await service.sendUpdatedToken('fcm-token-fail');
+
+      expect(success, isFalse);
+      expect(apiClient.postCount, 1);
+      expect(
+        prefs.getString(SharedPreferenceHelper.fcmDeviceKey),
+        'fcm-token-fail',
+      );
+    });
+  });
+
+  group('PushNotificationService.sendUserToken', () {
+    test('returns false when access token is missing', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final apiClient = _RecordingApiClient(sharedPreferences: prefs);
+      final service = PushNotificationService(apiClient: apiClient);
+
+      final success = await service.sendUserToken();
+
+      expect(success, isFalse);
+      expect(apiClient.postCount, 0);
+    });
+  });
+
+  group('PushNotificationService FCM dedup (ISC-F4-34)', () {
+    late _RecordingApiClient apiClient;
+    late PushNotificationService service;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      apiClient = _RecordingApiClient(sharedPreferences: prefs);
+      service = PushNotificationService(apiClient: apiClient);
+      RideAlertOnce.shared.reset();
+    });
+
+    tearDown(() {
+      RideAlertOnce.shared.reset();
+    });
+
+    test('shows the first message and drops a duplicate ride+type', () {
+      expect(
+        service.shouldPresentMessage(
+          RemoteMessage(data: {'ride_id': '42', 'type': 'pick_up'}),
+        ),
+        isTrue,
+      );
+      expect(
+        service.shouldPresentMessage(
+          RemoteMessage(data: {'ride_id': '42', 'type': 'pick_up'}),
+        ),
+        isFalse,
+      );
+    });
+
+    test('different alert types for the same ride both show', () {
+      expect(
+        service.shouldPresentMessage(
+          RemoteMessage(data: {'ride_id': '42', 'type': 'arriving_soon'}),
+        ),
+        isTrue,
+      );
+      expect(
+        service.shouldPresentMessage(
+          RemoteMessage(data: {'ride_id': '42', 'type': 'pick_up'}),
+        ),
+        isTrue,
+      );
+    });
+
+    test('a new ride re-alerts', () {
+      expect(
+        service.shouldPresentMessage(
+          RemoteMessage(data: {'ride_id': '42', 'type': 'pick_up'}),
+        ),
+        isTrue,
+      );
+      expect(
+        service.shouldPresentMessage(
+          RemoteMessage(data: {'ride_id': '43', 'type': 'pick_up'}),
+        ),
+        isTrue,
+      );
+    });
+
+    test('messages without ride_id or type are not deduplicated', () {
+      expect(
+        service.shouldPresentMessage(RemoteMessage(data: {'type': 'pick_up'})),
+        isTrue,
+      );
+      expect(
+        service.shouldPresentMessage(RemoteMessage(data: {'type': 'pick_up'})),
+        isTrue,
+      );
+    });
+  });
+}
+====
+/usr/local/bin/flutter
+/usr/local/bin/dart
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
+$ sed -n 240,520p test/unit/multistop_pusher_test.dart
+setUp(() async {
+      SharedPreferences.setMockInitialValues({
+        SharedPreferenceHelper.notificationAudioEnableKey: '0',
+      });
+      final sharedPreferences = await SharedPreferences.getInstance();
+      Get.reset();
+      Get.testMode = true;
+      RideAlertOnce.shared.reset();
+      apiClient = ApiClient(sharedPreferences: sharedPreferences);
+      Get.put<ApiClient>(apiClient);
+
+      rideRepo = PusherMockRideRepo(apiClient: apiClient);
+      rideDetailsController = RideDetailsController(
+        repo: rideRepo,
+        mapController: PusherStubRideMapController(),
+      );
+      rideDetailsController.rideId = '42';
+      rideDetailsController.pickupLatLng = pickup;
+      rideDetailsController.ride = RideModel(
+        id: '42',
+        status: AppStatus.RIDE_ACTIVE,
+      );
+
+      pusherRideController = RecordingPusherRideController(
+        apiClient: apiClient,
+        rideMessageController: RideMessageController(
+          repo: PusherMockMessageRepo(apiClient: apiClient),
+        ),
+        rideDetailsController: rideDetailsController,
+        rideID: '42',
+      );
+    });
+
+    tearDown(() {
+      pusherRideController.onClose();
+      rideDetailsController.onClose();
+      RideAlertOnce.shared.reset();
+      Get.reset();
+    });
+
+    test('geofence then pick_up fire one alert of each type; duplicates are no-ops',
+        () {
+      pusherRideController.updateEvent(
+        PusherResponseModel(
+          eventName: 'live_location',
+          channelName: 'private-rider-user-1',
+          data: EventData(
+            rideId: '42',
+            driverLatitude: '14.7168',
+            driverLongitude: '-17.4678',
+          ),
+        ),
+      );
+      expect(pusherRideController.alerts, [PusherRideController.arrivingSoonAlertType]);
+
+      pusherRideController.updateEvent(
+        PusherResponseModel(
+          eventName: 'pick_up',
+          channelName: 'private-rider-user-1',
+          data: EventData(rideId: '42'),
+        ),
+      );
+      expect(pusherRideController.alerts, [
+        PusherRideController.arrivingSoonAlertType,
+        PusherRideController.pickUpAlertType,
+      ]);
+
+      pusherRideController.updateEvent(
+        PusherResponseModel(
+          eventName: 'live_location',
+          channelName: 'private-rider-user-1',
+          data: EventData(
+            rideId: '42',
+            driverLatitude: '14.7168',
+            driverLongitude: '-17.4678',
+          ),
+        ),
+      );
+      pusherRideController.updateEvent(
+        PusherResponseModel(
+          eventName: 'PICK_UP',
+          channelName: 'private-rider-user-1',
+          data: EventData(rideId: '42'),
+        ),
+      );
+
+      expect(pusherRideController.alerts, [
+        PusherRideController.arrivingSoonAlertType,
+        PusherRideController.pickUpAlertType,
+      ]);
+    });
+
+    test('a live_location outside the pickup geofence does not alert', () {
+      pusherRideController.updateEvent(
+        PusherResponseModel(
+          eventName: 'live_location',
+          channelName: 'private-rider-user-1',
+          data: EventData(
+            rideId: '42',
+            driverLatitude: '14.8000',
+            driverLongitude: '-17.5000',
+          ),
+        ),
+      );
+
+      expect(pusherRideController.alerts, isEmpty);
+    });
+
+    test('the gate re-alerts for a new ride id', () {
+      final gate = RideAlertOnce();
+
+      expect(gate.shouldAlert(rideId: '42', type: 'pick_up'), isTrue);
+      expect(gate.shouldAlert(rideId: '42', type: 'pick_up'), isFalse);
+      expect(gate.shouldAlert(rideId: '42', type: 'arriving_soon'), isTrue);
+      expect(gate.shouldAlert(rideId: '43', type: 'pick_up'), isTrue);
+    });
+
+    test('the one-shot gate survives PusherRideController recreation', () {
+      pusherRideController.updateEvent(
+        PusherResponseModel(
+          eventName: 'pick_up',
+          channelName: 'private-rider-user-1',
+          data: EventData(rideId: '42'),
+        ),
+      );
+      expect(pusherRideController.alerts, [PusherRideController.pickUpAlertType]);
+
+      pusherRideController.onClose();
+      pusherRideController = RecordingPusherRideController(
+        apiClient: apiClient,
+        rideMessageController: RideMessageController(
+          repo: PusherMockMessageRepo(apiClient: apiClient),
+        ),
+        rideDetailsController: rideDetailsController,
+        rideID: '42',
+      );
+
+      pusherRideController.updateEvent(
+        PusherResponseModel(
+          eventName: 'pick_up',
+          channelName: 'private-rider-user-1',
+          data: EventData(rideId: '42'),
+        ),
+      );
+
+      expect(pusherRideController.alerts, isEmpty);
+    });
+
+    test('a Pusher alert suppresses the FCM banner for the same ride+type', () {
+      pusherRideController.updateEvent(
+        PusherResponseModel(
+          eventName: 'pick_up',
+          channelName: 'private-rider-user-1',
+          data: EventData(rideId: '42'),
+        ),
+      );
+      expect(pusherRideController.alerts, [PusherRideController.pickUpAlertType]);
+
+      final service = PushNotificationService(apiClient: apiClient);
+
+      expect(
+        service.shouldPresentMessage(
+          RemoteMessage(data: {'ride_id': '42', 'type': 'pick_up'}),
+        ),
+        isFalse,
+      );
+    });
+
+    test('an FCM banner suppresses the Pusher alert for the same ride+type', () {
+      final service = PushNotificationService(apiClient: apiClient);
+
+      expect(
+        service.shouldPresentMessage(
+          RemoteMessage(data: {'ride_id': '42', 'type': 'pick_up'}),
+        ),
+        isTrue,
+      );
+
+      pusherRideController.updateEvent(
+        PusherResponseModel(
+          eventName: 'pick_up',
+          channelName: 'private-rider-user-1',
+          data: EventData(rideId: '42'),
+        ),
+      );
+
+      expect(pusherRideController.alerts, isEmpty);
+    });
+  });
+}
+
+$ git log --oneline -8 --stat | head -60; echo ===; git status --porcelain; echo ===; grep -rn "pickupLatLng" lib/data/controller/ride/ride_details/ride_details_controller.dart | head; echo ===; grep -n "pickupLatitude\|pickupLongitude" lib/data/model/global/app/ride_model.dart
+e89027a verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+ VERIFY-F434B.md | 58 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+3a399e8 docs(isa): F4-34 rebuild evidence after Verify BLOCK
+ MEMORY/WORK/20261006-galass-rider-multistop/ISA.md | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+2ec49c8 test(rider): F4-34 controller recreation, FCM dedup, cross-channel
+ .../services/push_notification_service_test.dart   | 75 ++++++++++++++++++++
+ test/unit/multistop_pusher_test.dart               | 79 +++++++++++++++++++++-
+ 2 files changed, 153 insertions(+), 1 deletion(-)
+dcb4bf0 fix(rider): F4-34 share one-shot gate across controller and FCM
+ lib/core/helper/ride_alert_once.dart               |  9 +++++
+ .../controller/pusher/pusher_ride_controller.dart  |  4 +-
+ lib/data/services/push_notification_service.dart   | 44 ++++++++++++++--------
+ 3 files changed, 40 insertions(+), 17 deletions(-)
+69e248d docs(isa): tick ISC-F4-21 with map test evidence
+ MEMORY/WORK/20261006-galass-rider-multistop/ISA.md | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+43e28ba fix(rider): F4-21 keep PENDING stops numbered, active leg only in ACTIVE/RUNNING
+ lib/data/controller/map/ride_map_controller.dart |  8 ++++-
+ test/unit/multistop_map_test.dart                | 46 ++++++++++++++++++++++++
+ 2 files changed, 53 insertions(+), 1 deletion(-)
+3798ba2 docs(isa): consigner la décision Papa ISC-F5-16 (Rider carte jambe active)
+ MEMORY/WORK/20261006-galass-rider-multistop/ISA.md | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+632862c docs(isa): consigner la décision Papa F4-34 C+B (2026-11-26)
+ MEMORY/WORK/20261006-galass-rider-multistop/ISA.md | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+===
+===
+71:  LatLng pickupLatLng = const LatLng(0, 0);
+427:          pickupLatLng = LatLng(
+457:          'pickupLatLng>>> : ${pickupLatLng.latitude}, ${pickupLatLng.longitude} || ${ride.pickupLatitude}, ${ride.pickupLongitude}',
+466:            pickup: pickupLatLng,
+477:            pickup: pickupLatLng,
+===
+19:  String? pickupLatitude;
+20:  String? pickupLongitude;
+71:    this.pickupLatitude,
+72:    this.pickupLongitude,
+117:        pickupLatitude: json["pickup_latitude"].toString(),
+118:        pickupLongitude: json["pickup_longitude"].toString(),
+167:        "pickup_latitude": pickupLatitude,
+168:        "pickup_longitude": pickupLongitude,
+
+$ grep -rn "onMessage\b\|showLocalAlert\|enableIOSNotifications\|setForegroundNotificationPresentationOptions" lib | head -30; echo ===; sed -n 1,60p lib/core/utils/audio_utils.dart; echo ===; grep -n "vibrate" -A6 lib/core/utils/util.dart | head -20
+lib/data/controller/pusher/pusher_ride_controller.dart:246:    PushNotificationService.showLocalAlert(
+lib/data/services/push_notification_service.dart:51:    await enableIOSNotifications();
+lib/data/services/push_notification_service.dart:131:    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+lib/data/services/push_notification_service.dart:197:        // FCM foreground auto-presentation is disabled in enableIOSNotifications
+lib/data/services/push_notification_service.dart:259:  static Future<void> showLocalAlert({
+lib/data/services/push_notification_service.dart:297:  Future<void> enableIOSNotifications() async {
+lib/data/services/push_notification_service.dart:298:    // Let the `onMessage` listener present every foreground banner instead of
+lib/data/services/push_notification_service.dart:302:    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+===
+import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:galassrider/core/helper/string_format_helper.dart';
+import 'package:galassrider/data/services/api_client.dart';
+
+class AudioUtils {
+  static Future<void> playAudio(String path) async {
+    printX('isNotificationAudioEnable: $path');
+    if (Get.find<ApiClient>().isNotificationAudioEnable() == true) {
+      AudioPlayer player = AudioPlayer();
+      try {
+        await player.stop();
+        await player.setUrl(path);
+        await player.play();
+      } catch (e) {
+        printX(e);
+      }
+    }
+  }
+}
+===
+65:  static Future<void> vibrate() async {
+66-    final hasVibrator = await Vibration.hasVibrator();
+67-
+68-    if (Platform.isAndroid) {
+69-      // ✅ Android: use full vibration
+70-      if (hasVibrator) {
+71:        await Vibration.vibrate(duration: 800);
+72-      }
+73-    } else if (Platform.isIOS) {
+74-      // ✅ iOS: use haptic feedback instead
+75-      HapticFeedback.heavyImpact();
+76-    } else {
+77-      // ✅ Fallback for web or other platforms
+--
+79:        await Vibration.vibrate(duration: 500);
+80-      }
+81-    }
+82-  }
+83-
+84-  static void copy({required String text}) {
+
+$ flutter test test/unit/multistop_pusher_test.dart test/data/services/push_notification_service_test.dart 2>&1 | tail -30
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because share_plus 13.3.1 requires SDK version >=3.10.0 <4.0.0 and no versions of share_plus match >13.3.1 <14.0.0, share_plus ^13.3.1 is forbidden.
+So, because galassrider depends on share_plus ^13.3.1, version solving failed.
+Failed to update packages.
+
+$ ls /opt 2>/dev/null; ls ~/ ; which -a flutter; ls /usr/local 2>/dev/null; find / -maxdepth 4 -name "flutter" -type f 2>/dev/null | head
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+/usr/local/bin/flutter
+bin
+cargo
+etc
+games
+include
+lib
+man
+novnc
+rustup
+sbin
+share
+src
+/opt/flutter/bin/flutter
+
+$ git show dcb4bf0 -- lib/core/helper/ride_alert_once.dart lib/data/services/push_notification_service.dart lib/data/controller/pusher/pusher_ride_controller.dart | head -220
+commit dcb4bf0d3163be9a87291402f68842a8cd22768c
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 07:27:43 2026 +0000
+
+    fix(rider): F4-34 share one-shot gate across controller and FCM
+    
+    Move RideAlertOnce to a process-wide shared gate so a ride_id+type alert survives PusherRideController/RideDetailsScreen recreation and Pusher<->FCM cannot show two banners. Disable iOS FCM foreground auto-presentation so the shared-gated local show is the only banner path (covers notification payloads, not only data-only).
+
+diff --git a/lib/core/helper/ride_alert_once.dart b/lib/core/helper/ride_alert_once.dart
+index 63752e0..4469abe 100644
+--- a/lib/core/helper/ride_alert_once.dart
++++ b/lib/core/helper/ride_alert_once.dart
+@@ -7,6 +7,15 @@ import 'package:flutter/foundation.dart' show visibleForTesting;
+ /// without an explicit reset. When either part of the key is unknown there is
+ /// nothing to deduplicate and the alert is allowed.
+ class RideAlertOnce {
++  RideAlertOnce();
++
++  /// Process-wide gate shared by the Pusher alert path and the FCM banner path.
++  ///
++  /// Sharing one instance keeps the gate alive across `PusherRideController` /
++  /// `RideDetailsScreen` recreation and prevents a Pusher alert and its FCM
++  /// duplicate from producing two banners for the same `ride_id`+type.
++  static final RideAlertOnce shared = RideAlertOnce();
++
+   final Set<String> _fired = <String>{};
+ 
+   bool shouldAlert({String? rideId, String? type}) {
+diff --git a/lib/data/controller/pusher/pusher_ride_controller.dart b/lib/data/controller/pusher/pusher_ride_controller.dart
+index 1c90ad8..02bd9bd 100644
+--- a/lib/data/controller/pusher/pusher_ride_controller.dart
++++ b/lib/data/controller/pusher/pusher_ride_controller.dart
+@@ -37,7 +37,9 @@ class PusherRideController extends GetxController {
+   static const String arrivingSoonAlertType = 'arriving_soon';
+   static const double arrivingSoonRadiusMeters = 300;
+ 
+-  final RideAlertOnce _rideAlertOnce = RideAlertOnce();
++  // Shared with PushNotificationService so the gate survives controller
++  // recreation and dedupes across Pusher <-> FCM (ISC-F4-34).
++  final RideAlertOnce _rideAlertOnce = RideAlertOnce.shared;
+ 
+   @override
+   void onInit() {
+diff --git a/lib/data/services/push_notification_service.dart b/lib/data/services/push_notification_service.dart
+index de67ef3..5c352e9 100644
+--- a/lib/data/services/push_notification_service.dart
++++ b/lib/data/services/push_notification_service.dart
+@@ -22,7 +22,10 @@ class PushNotificationService {
+ 
+   final ApiClient apiClient;
+   static bool _tokenRefreshListenerRegistered = false;
+-  final RideAlertOnce _rideAlertOnce = RideAlertOnce();
++
++  // Shared with PusherRideController so a Pusher alert and its FCM duplicate
++  // never produce two banners for the same `ride_id`+type (ISC-F4-34).
++  final RideAlertOnce _rideAlertOnce = RideAlertOnce.shared;
+ 
+   Future<void> setupInteractedMessage() async {
+     FirebaseMessaging.onBackgroundMessage(_messageHandler);
+@@ -131,12 +134,9 @@ class PushNotificationService {
+         return;
+       }
+ 
+-      // ISC-F4-34: never show two banners for the same ride + alert type. A new
+-      // ride has a new `ride_id`, so it is not suppressed.
+-      if (!_rideAlertOnce.shouldAlert(
+-        rideId: _messageRideId(message),
+-        type: _messageType(message),
+-      )) {
++      // ISC-F4-34: never show two banners for the same ride + alert type. The
++      // gate is shared with the Pusher path and a new `ride_id` re-alerts.
++      if (!shouldPresentMessage(message)) {
+         return;
+       }
+ 
+@@ -194,12 +194,9 @@ class PushNotificationService {
+       }
+ 
+       if (Platform.isIOS) {
+-        // Notification payloads are shown by FCM presentation options; local
+-        // notifications are only needed for data-only messages in foreground.
+-        if (message.notification != null) {
+-          return;
+-        }
+-
++        // FCM foreground auto-presentation is disabled in enableIOSNotifications
++        // so this shared-gated `show` is the only banner path. It covers both
++        // notification payloads and data-only messages (ISC-F4-34).
+         await flutterLocalNotificationsPlugin.show(
+           message.hashCode,
+           title,
+@@ -217,6 +214,17 @@ class PushNotificationService {
+     });
+   }
+ 
++  /// Whether this FCM message may produce a banner. Uses the gate shared with
++  /// the Pusher alert path (ISC-F4-34); exposed so the dedup can be unit-tested
++  /// without initializing Firebase.
++  @visibleForTesting
++  bool shouldPresentMessage(RemoteMessage message) {
++    return _rideAlertOnce.shouldAlert(
++      rideId: _messageRideId(message),
++      type: _messageType(message),
++    );
++  }
++
+   ({String? title, String? body}) _notificationContent(RemoteMessage message) {
+     final RemoteNotification? notification = message.notification;
+     final Map<String, dynamic> data = message.data;
+@@ -287,10 +295,14 @@ class PushNotificationService {
+   }
+ 
+   Future<void> enableIOSNotifications() async {
++    // Let the `onMessage` listener present every foreground banner instead of
++    // letting FCM auto-present notification payloads. Auto-presentation cannot
++    // be gated, so identical `ride_id`+type pushes would always show twice on
++    // iOS (ISC-F4-34). Manual `show` keeps the shared dedup authoritative.
+     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+-      alert: true,
+-      badge: true,
+-      sound: true,
++      alert: false,
++      badge: false,
++      sound: false,
+     );
+   }
+
+$ /opt/flutter/bin/flutter --version 2>&1 | head -6; echo ===; cat pubspec.yaml | head -40; echo ===; grep -n "environment" -A4 pubspec.yaml
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+===
+name: galassrider
+description: galass is a complete ride-sharing solution.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.13+109
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+dependencies:
+
+  cached_network_image: ^3.4.1
+  connectivity_plus: ^7.0.0
+  coupon_uikit: ^0.2.1
+  cupertino_icons: ^1.0.8
+  custom_marker_builder: ^0.0.4
+  dio: ^5.9.0
+  dotted_border: ^3.1.0
+  file_picker: ^12.0.0
+  firebase_core: ^4.2.1
+  firebase_auth: ^6.5.0
+  firebase_messaging: ^16.0.4
+  flutter:
+    sdk: flutter
+  flutter_animate: ^4.5.2
+  flutter_inappwebview: ^6.1.5
+  flutter_local_notifications: ^19.5.0
+  flutter_rating_bar: ^4.0.1
+  flutter_spinkit: ^5.2.2
+  flutter_svg: ^2.2.2
+  flutter_widget_from_html: ^0.17.1
+  geocoding: ^4.0.0
+  geolocator: ^14.0.2
+  get: ^4.7.2
+  google_maps_flutter: ^2.14.0
+  google_sign_in: ^7.2.0
+  image_picker: ^1.2.1
+  in_app_review: ^2.0.11
+  intl: ^0.20.2
+  just_audio: 0.10.5
+===
+7:environment:
+8-  sdk: '>=3.5.0 <4.0.0'
+9-
+10-dependencies:
+11-
+
+$ git show 61f2a29 --stat; echo ===; git log --oneline --all -- lib/core/helper/ride_alert_once.dart
+commit 61f2a29d319bc37b62ec982f418b8b37785dbc87
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 06:17:03 2026 +0000
+
+    feat(rider): F4-34 one-shot pick_up/arriving_soon alerts and FCM dedup
+
+ lib/core/helper/ride_alert_once.dart               |  30 +++++
+ lib/core/utils/my_strings.dart                     |   4 +
+ .../controller/pusher/pusher_ride_controller.dart  | 121 ++++++++++++++++-
+ lib/data/services/push_notification_service.dart   |  65 +++++++++
+ test/unit/multistop_pusher_test.dart               | 145 +++++++++++++++++++++
+ 5 files changed, 358 insertions(+), 7 deletions(-)
+===
+dcb4bf0 fix(rider): F4-34 share one-shot gate across controller and FCM
+61f2a29 feat(rider): F4-34 one-shot pick_up/arriving_soon alerts and FCM dedup
+
+$ ls -la .dart_tool 2>/dev/null | head; grep -n '"share_plus"' -A3 .dart_tool/package_config.json 2>/dev/null; grep -n "share_plus" pubspec.lock | head; ls ~/.pub-cache/hosted/pub.dev 2>/dev/null | grep share_plus
+1683:  share_plus:
+1686:      name: share_plus
+1691:  share_plus_platform_interface:
+1694:      name: share_plus_platform_interface
+
+$ git log --oneline --all --name-only --pretty=format: | sort -u | grep -i "MAX-F434\|MAX-" | head; echo ===; git show 90aceb9:VERIFY-F434B.md | head -20; echo ===; git show bc486ed:VERIFY-F434.md | head -20
+.fullrun/logs/rider-f434b-max-ll-45808727484.log
+===
+VERDICT: PASS
+
+# Verify F4-34 — rebuild après Verify×3 BLOCK (2026-11-26)
+
+Agent : code-review · Branche : `verify/rider-f434b-cr` · Dépôt : Galass_Rider
+Périmètre : porte one-shot `ride_id`+type, dédup Pusher↔FCM partagée, chemin iOS foreground.
+Commits audités : `dcb4bf0` (lib), `2ec49c8` (tests), `3a399e8` (preuve ISA).
+Aucune correction, aucun golden régénéré, aucun push.
+
+## Points bloquants
+
+Aucun.
+
+## Vérifications exécutées (Flutter 3.44.8 / Dart 3.12.2)
+
+Sortie réelle (copiée telle quelle) :
+
+```
+=== F4-34 targeted ===
+flutter test test/unit/multistop_pusher_test.dart test/data/services/push_notification_service_test.dart
+===
+VERDICT: PASS
+
+# Vérification F4-34 (rebuild) — `verify/rider-f434b-silas`
+
+- Périmètre : **ISC-F4-34 uniquement**, tel que le rebuild du 2026-11-26 le
+  redéfinit — (1) porte one-shot clée `ride_id`+type qui survit à la
+  recréation de `PusherRideController` / `RideDetailsScreen`, (2) dédup
+  Pusher↔FCM partagée, (3) chemin iOS foreground (notification payloads
+  compris).
+- Dépôt : `LordThiouk/Galass_Rider`, branche `verify/rider-f434b-silas`,
+  HEAD `3a399e8` (= `feat/multistop-e2e-2026-11-15` @ tip ; `git diff
+  origin/feat/multistop-e2e-2026-11-15 HEAD` vide).
+- Code audité : `dcb4bf0` (lib) + `2ec49c8` (tests) + `3a399e8` (doc ISA).
+- Rôle : vérification seule. Aucune correction, aucun golden régénéré,
+  `ISA` et `.fullrun/` non modifiés, aucun push.
+
+## Points bloquants
+
+**Aucun point bloquant dans le périmètre du rebuild.** Les trois corrections
+annoncées par la décision ISA du 2026-11-26 sont présentes dans le code et
+
+$ git ls-tree -r --name-only origin/fullrun-logs/rider-f434b-max-ll-45808727484 | head -20
+.fullrun/logs/rider-f434b-max-ll-45808727484.log
+
+$ git log --all --oneline --grep="MAX-F434" ; echo ===; git ls-tree -r --name-only origin/verify/rider-f434b-forge | grep -i max
+===
+
+$ git show origin/fullrun-logs/rider-f434b-max-ll-45808727484:.fullrun/logs/rider-f434b-max-ll-45808727484.log | head -120
+> Max · deepseek-v4.1-flash-free
+
+$ sed -n 60,110p lib/data/controller/ride/ride_details/ride_details_controller.dart; echo ...; sed -n 400,480p lib/data/controller/ride/ride_details/ride_details_controller.dart; echo ===; grep -rn "resetRideScopedControllers\|PusherRideController(" lib | head -20
+bool get shouldShowDispatchSearch => shouldShowDispatchSearchFor(
+        status: ride.status,
+        awaitingInitialFetch: _awaitingInitialFetch,
+      );
+
+  RideModel ride = RideModel(id: '-1');
+  String currency = '';
+  String currencySym = '';
+  bool isLoading = true;
+  bool isPaymentRequested = false;
+  LatLng pickupLatLng = const LatLng(0, 0);
+  LatLng destinationLatLng = const LatLng(0, 0);
+  String rideId = '-1';
+  String serviceImagePath = '';
+  String brandImagePath = '';
+  String driverImagePath = '';
+  String driverTotalCompletedRide = '';
+  String assignedDriverName = '';
+  String assignedDriverRating = '';
+  String assignedEtaMinutes = '';
+  List<String> tipsList = [];
+
+  TextEditingController tipsController = TextEditingController();
+
+  void updateTips(String amount) {
+    final reject = XofMoneyHelper.tipsRejectReason(amount);
+    if (reject != XofAmountRejectReason.none) {
+      CustomSnackBar.error(
+        errorList: [XofMoneyHelper.rejectMessage(reject).tr],
+      );
+      return;
+    }
+    tipsController.text = XofMoneyHelper.normalizeTipsRaw(amount);
+    update();
+  }
+
+  void updatePaymentRequested({bool isRequested = true}) {
+    isPaymentRequested = isRequested;
+    update();
+  }
+
+  void updateRide(RideModel updatedRide) {
+    ride = updatedRide;
+    _seedDriverLocationFromRide(updatedRide);
+    _reconcileRideState(updatedRide);
+    update();
+    printD('Updated ride: $ride');
+  }
+
+  /// Seeds the car marker with the driver's last known position carried by
+...
+    update();
+
+    ResponseModel responseModel = await repo.getRideDetails(id);
+    if (requestGen != _rideDetailsRequestGeneration) {
+      return;
+    }
+
+    if (responseModel.statusCode == 200) {
+      RideDetailsResponseModel model = RideDetailsResponseModel.fromJson((responseModel.responseJson));
+      if (model.status == MyStrings.success) {
+        RideModel? tempRide = model.data?.ride;
+        if (tempRide != null) {
+          final responseRideId = tempRide.id?.trim() ?? '';
+          if (responseRideId.isNotEmpty && responseRideId != id) {
+            return;
+          }
+          if (ride.id == id &&
+              ride.id != '-1' &&
+              _shouldStopPendingPoll(ride.status) &&
+              !_shouldStopPendingPoll(tempRide.status)) {
+            return;
+          }
+          ride = tempRide;
+          _lastServerAllStopsCompleted = _allStopsCompleted(tempRide);
+          _serverStopsKnown = true;
+          _reconcileRideState(tempRide);
+          driverTotalCompletedRide = model.data?.driverTotalRide ?? '';
+          pickupLatLng = LatLng(
+            StringConverter.formatDouble(
+              tempRide.pickupLatitude.toString(),
+              precision: 16,
+            ),
+            StringConverter.formatDouble(
+              tempRide.pickupLongitude.toString(),
+              precision: 16,
+            ),
+          );
+          destinationLatLng = LatLng(
+            StringConverter.formatDouble(
+              tempRide.destinationLatitude.toString(),
+              precision: 16,
+            ),
+            StringConverter.formatDouble(
+              tempRide.destinationLongitude.toString(),
+              precision: 14,
+            ),
+          );
+          // ISC-F4-32: the backend already exposes the driver's last known
+          // position (`driver.current_lat` / `driver.current_lot`) in the ride
+          // details payload. Seed the car marker with it before the first
+          // `live_location` event; live events then keep it moving.
+          _seedDriverLocationFromRide(tempRide);
+        }
+        serviceImagePath = '${UrlContainer.domainUrl}/${model.data?.serviceImagePath ?? ''}';
+        brandImagePath = '${UrlContainer.domainUrl}/${model.data?.brandImagePath ?? ''}';
+        driverImagePath = '${UrlContainer.domainUrl}/${model.data?.driverImagePath}';
+        printD(
+          'pickupLatLng>>> : ${pickupLatLng.latitude}, ${pickupLatLng.longitude} || ${ride.pickupLatitude}, ${ride.pickupLongitude}',
+        );
+        printD(
+          'destinationLatLng>>> : ${destinationLatLng.latitude}, ${destinationLatLng.longitude} || ${ride.destinationLatitude}, ${ride.destinationLongitude}',
+        );
+        update();
+        final rideStops = ride.stops ?? const <RideStopModel>[];
+        if (rideStops.isNotEmpty) {
+          mapController.loadMapWithStopProgress(
+            pickup: pickupLatLng,
+            destination: destinationLatLng,
+            progress: RideStopProgress.fromStops(rideStops),
+            isRunning: ride.status == AppStatus.RIDE_RUNNING,
+            numberStopMarkers:
+                RideMapController.shouldNumberStopMarkersForStatus(
+              ride.status,
+            ),
+          );
+        } else {
+          mapController.loadMap(
+            pickup: pickupLatLng,
+            destination: destinationLatLng,
+            isRunning: ride.status == AppStatus.RIDE_RUNNING,
+            numberStopMarkers:
+===
+lib/data/controller/pusher/pusher_ride_controller.dart:29:  PusherRideController({
+lib/data/controller/home/home_controller.dart:242:          resetRideScopedControllers();
+lib/core/helper/ride_scoped_controller_reset.dart:7:void resetRideScopedControllers() {
+lib/presentation/screens/ride/ride_details_screen.dart:34:    resetRideScopedControllers();
+lib/presentation/screens/ride/ride_details_screen.dart:40:    Get.put(PusherRideController(apiClient: Get.find(), rideMessageController: Get.find(), rideDetailsController: Get.find(), rideID: widget.rideId));
+lib/presentation/screens/ride/ride_details_screen.dart:50:    resetRideScopedControllers();
+lib/presentation/screens/inbox/ride_message_screen.dart:49:    resetRideScopedControllers();
+lib/presentation/screens/inbox/ride_message_screen.dart:55:    Get.put(PusherRideController(apiClient: Get.find(), rideMessageController: Get.find(), rideDetailsController: Get.find(), rideID: widget.rideID));
+lib/presentation/screens/inbox/ride_message_screen.dart:66:    resetRideScopedControllers();
+
+$ grep -rn "ridePickedUpTitle\|rideArrivingSoonTitle\|ridePickedUpBody\|rideArrivingSoonBody" lib/core/utils/my_strings.dart; echo ===; grep -rn "setupInteractedMessage" lib | head; echo ===; sed -n 1,80p lib/data/model/global/pusher/pusher_event_response_model.dart
+107:  static const String rideArrivingSoonTitle = "Chauffeur proche";
+108:  static const String rideArrivingSoonBody = "Le chauffeur arrive bientôt au point de prise en charge";
+109:  static const String ridePickedUpTitle = "Course démarrée";
+110:  static const String ridePickedUpBody = "Votre chauffeur a démarré la course";
+===
+lib/data/services/push_notification_service.dart:30:  Future<void> setupInteractedMessage() async {
+lib/main.dart:62:    await PushNotificationService(apiClient: Get.find()).setupInteractedMessage();
+===
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+// To parse this JSON data, do
+//
+//     final pusherResponseModel = pusherResponseModelFromJson(jsonString);
+
+import 'dart:convert';
+
+import 'package:galassrider/data/model/global/app/app_service_model.dart';
+import 'package:galassrider/data/model/global/app/ride_message_model.dart';
+import 'package:galassrider/data/model/global/app/ride_model.dart';
+import 'package:galassrider/data/model/global/bid/bid_model.dart';
+
+PusherResponseModel pusherResponseModelFromJson(String str) => PusherResponseModel.fromJson(json.decode(str));
+
+class PusherResponseModel {
+  String? channelName;
+  String? eventName;
+  EventData? data;
+
+  PusherResponseModel({this.channelName, this.eventName, this.data});
+
+  PusherResponseModel copyWith({
+    String? channelName,
+    String? eventName,
+    EventData? data,
+  }) =>
+      PusherResponseModel(
+        channelName: channelName.toString(),
+        eventName: eventName.toString(),
+        data: data,
+      );
+
+  factory PusherResponseModel.fromJson(Map<String, dynamic> json) {
+    return PusherResponseModel(
+      channelName: json["channelName"].toString(),
+      eventName: json["eventName"].toString(),
+      data: EventData.fromJson(json["data"]),
+    );
+  }
+}
+
+class EventData {
+  String? remark;
+  String? userId;
+  String? driverId;
+  String? rideId;
+  String? driverTotalRide;
+  RideMessage? message;
+  String? driverLatitude;
+  String? driverLongitude;
+  RideModel? ride;
+  AppService? service;
+  BidModel? bid;
+  String? driverName;
+  String? avgRating;
+  String? etaMinutes;
+  String? stopId;
+  String? stopSequence;
+  EventData({
+    this.remark,
+    this.userId,
+    this.driverId,
+    this.rideId,
+    this.driverTotalRide,
+    this.message,
+    this.driverLatitude,
+    this.driverLongitude,
+    this.ride,
+    this.service,
+    this.bid,
+    this.driverName,
+    this.avgRating,
+    this.etaMinutes,
+    this.stopId,
+    this.stopSequence,
+  });
+
+  EventData copyWith({
+    String? channelName,
+    String? eventName,
+
+$ cat lib/core/helper/ride_scoped_controller_reset.dart; echo ===; sed -n 1,80p lib/presentation/screens/ride/ride_details_screen.dart; echo ===; grep -rn "RideDetailsController(" lib | head
+import 'package:get/get.dart';
+import 'package:galassrider/data/controller/map/ride_map_controller.dart';
+import 'package:galassrider/data/controller/pusher/pusher_ride_controller.dart';
+import 'package:galassrider/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galassrider/data/controller/ride/ride_meassage/ride_meassage_controller.dart';
+
+void resetRideScopedControllers() {
+  if (Get.isRegistered<PusherRideController>()) {
+    Get.delete<PusherRideController>(force: true);
+  }
+  if (Get.isRegistered<RideDetailsController>()) {
+    Get.delete<RideDetailsController>(force: true);
+  }
+  if (Get.isRegistered<RideMapController>()) {
+    Get.delete<RideMapController>(force: true);
+  }
+  if (Get.isRegistered<RideMessageController>()) {
+    Get.delete<RideMessageController>(force: true);
+  }
+}
+===
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:galassrider/core/helper/ride_scoped_controller_reset.dart';
+import 'package:galassrider/core/helper/string_format_helper.dart';
+import 'package:galassrider/core/utils/dimensions.dart';
+import 'package:galassrider/core/utils/my_animation.dart';
+import 'package:galassrider/core/utils/my_color.dart';
+import 'package:galassrider/data/controller/map/ride_map_controller.dart';
+import 'package:galassrider/data/controller/pusher/pusher_ride_controller.dart';
+import 'package:galassrider/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galassrider/data/controller/ride/ride_meassage/ride_meassage_controller.dart';
+import 'package:galassrider/data/repo/message/message_repo.dart';
+import 'package:galassrider/data/repo/ride/ride_repo.dart';
+import 'package:galassrider/presentation/screens/ride/widget/poly_line_map.dart';
+import 'package:galassrider/presentation/screens/ride/widget/ride_details_bottom_sheet_widget.dart';
+import 'package:toastification/toastification.dart';
+
+class RideDetailsScreen extends StatefulWidget {
+  final String rideId;
+
+  const RideDetailsScreen({super.key, required this.rideId});
+
+  @override
+  State<RideDetailsScreen> createState() => _RideDetailsScreenState();
+}
+
+class _RideDetailsScreenState extends State<RideDetailsScreen> {
+  DraggableScrollableController draggableScrollableController = DraggableScrollableController();
+
+  @override
+  void initState() {
+    resetRideScopedControllers();
+    Get.put(RideRepo(apiClient: Get.find()));
+    Get.put(RideMapController());
+    Get.put(MessageRepo(apiClient: Get.find()));
+    Get.put(RideMessageController(repo: Get.find()));
+    final controller = Get.put(RideDetailsController(repo: Get.find(), mapController: Get.find()));
+    Get.put(PusherRideController(apiClient: Get.find(), rideMessageController: Get.find(), rideDetailsController: Get.find(), rideID: widget.rideId));
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      controller.initialData(widget.rideId);
+      Get.find<PusherRideController>().ensureConnection();
+    });
+  }
+
+  @override
+  void dispose() {
+    resetRideScopedControllers();
+    super.dispose();
+  }
+
+  Future _zoomBasedOnExtent(double extent) async {
+    var controller = Get.find<RideMapController>();
+    var polylinePoints = controller.polylineCoordinates;
+    if (controller.mapController == null || polylinePoints.isEmpty) return;
+
+    controller.fitPolylineBounds(polylinePoints);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<RideDetailsController>(
+      builder: (controller) {
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.dark,
+          ),
+          child: PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (bool didPop, d) async {
+              if (didPop) return;
+              printE(Get.previousRoute);
+              Get.back();
+              toastification.dismissAll();
+            },
+            child: Scaffold(
+===
+lib/data/controller/ride/ride_details/ride_details_controller.dart:41:  RideDetailsController({required this.repo, required this.mapController});
+lib/presentation/screens/ride/ride_details_screen.dart:39:    final controller = Get.put(RideDetailsController(repo: Get.find(), mapController: Get.find()));
+lib/presentation/screens/inbox/ride_message_screen.dart:53:    final rideDetailsController = Get.put(RideDetailsController(mapController: Get.find(), repo: Get.find()));
+
+$ sed -n 40,90p lib/main.dart; echo ===; grep -rn "onMessage" -n lib | head; echo ===; grep -rn "class RideAlertOnce\|RideAlertOnce.shared" lib test | head
+PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
+  // Initialize the API client for network communication
+  await ApiClient.init();
+
+  // Load and initialize localization/language support
+  Map<String, Map<String, String>> languages = await di_service.init();
+
+  // Configure app UI to support all screen sizes
+  MyUtils.allScreen();
+
+  // Lock device orientation to portrait mode
+  MyUtils().stopLandscape();
+
+  // Initialize audio utilities (e.g., background music, sound effects)
+  AudioUtils();
+
+  try {
+    // Initialize push notification service and handle interaction messages
+    await PushNotificationService(apiClient: Get.find()).setupInteractedMessage();
+  } catch (e) {
+    // Print error to console if FCM setup fails
+    printX(e);
+  }
+
+  // Override HTTP settings (e.g., SSL certificate handling)
+  HttpOverrides.global = MyHttpOverrides();
+
+  // Set running ride status to false at app launch
+  RunningRideService.instance.setIsRunning(false);
+
+  tz.initializeTimeZones();
+
+  if (Platform.isAndroid) {
+    GoogleMapsFlutterAndroid().warmup();
+  }
+
+  await FirebaseAnalytics.instance.logAppOpen();
+  
+  // Launch the main application with loaded languages
+  runApp(OvoApp(languages: languages));
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => false;
+  }
+===
+lib/data/services/push_notification_service.dart:47:    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+lib/data/services/push_notification_service.dart:48:      printX('onMessageOpenedApp ${message.toMap()}');
+lib/data/services/push_notification_service.dart:131:    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+lib/data/services/push_notification_service.dart:298:    // Let the `onMessage` listener present every foreground banner instead of
+===
+lib/data/controller/pusher/pusher_ride_controller.dart:42:  final RideAlertOnce _rideAlertOnce = RideAlertOnce.shared;
+lib/data/services/push_notification_service.dart:28:  final RideAlertOnce _rideAlertOnce = RideAlertOnce.shared;
+lib/core/helper/ride_alert_once.dart:9:class RideAlertOnce {
+lib/core/helper/ride_alert_once.dart:17:  static final RideAlertOnce shared = RideAlertOnce();
+test/data/services/push_notification_service_test.dart:111:      RideAlertOnce.shared.reset();
+test/data/services/push_notification_service_test.dart:115:      RideAlertOnce.shared.reset();
+test/unit/multistop_pusher_test.dart:247:      RideAlertOnce.shared.reset();
+test/unit/multistop_pusher_test.dart:276:      RideAlertOnce.shared.reset();
+
+$ git show 61f2a29 -- lib/data/controller/pusher/pusher_ride_controller.dart | head -180
+commit 61f2a29d319bc37b62ec982f418b8b37785dbc87
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 06:17:03 2026 +0000
+
+    feat(rider): F4-34 one-shot pick_up/arriving_soon alerts and FCM dedup
+
+diff --git a/lib/data/controller/pusher/pusher_ride_controller.dart b/lib/data/controller/pusher/pusher_ride_controller.dart
+index d45fa81..1c90ad8 100644
+--- a/lib/data/controller/pusher/pusher_ride_controller.dart
++++ b/lib/data/controller/pusher/pusher_ride_controller.dart
+@@ -1,15 +1,20 @@
++import 'dart:math' as math;
++
+ import 'package:flutter/foundation.dart' show visibleForTesting;
+ import 'package:google_maps_flutter/google_maps_flutter.dart';
++import 'package:galassrider/core/helper/ride_alert_once.dart';
+ import 'package:galassrider/core/helper/shared_preference_helper.dart';
+ import 'package:galassrider/core/helper/string_format_helper.dart';
+ import 'dart:convert';
+ import 'package:galassrider/core/route/route.dart';
+ import 'package:galassrider/core/utils/app_status.dart';
+ import 'package:galassrider/core/utils/audio_utils.dart';
++import 'package:galassrider/core/utils/my_strings.dart';
+ import 'package:galassrider/core/utils/util.dart';
+ import 'package:galassrider/data/controller/ride/ride_details/ride_details_controller.dart';
+ import 'package:galassrider/data/model/general_setting/general_setting_response_model.dart';
+ import 'package:galassrider/data/model/global/pusher/pusher_event_response_model.dart';
++import 'package:galassrider/data/services/push_notification_service.dart';
+ import 'package:galassrider/data/services/pusher_service.dart';
+ import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+ import 'package:get/get.dart';
+@@ -28,6 +33,12 @@ class PusherRideController extends GetxController {
+     required this.rideID,
+   });
+ 
++  static const String pickUpAlertType = 'pick_up';
++  static const String arrivingSoonAlertType = 'arriving_soon';
++  static const double arrivingSoonRadiusMeters = 300;
++
++  final RideAlertOnce _rideAlertOnce = RideAlertOnce();
++
+   @override
+   void onInit() {
+     super.onInit();
+@@ -104,6 +115,9 @@ class PusherRideController extends GetxController {
+         break;
+ 
+       case 'pick_up':
++        _handlePickUp(event);
++        break;
++
+       case 'ride_end':
+         _updateRideIfAvailable(event);
+         break;
+@@ -160,16 +174,109 @@ class PusherRideController extends GetxController {
+     if (_isDifferentRide(eventResponse)) {
+       return;
+     }
+-    if (rideDetailsController.ride.status == AppStatus.RIDE_ACTIVE.toString() || rideDetailsController.ride.status == AppStatus.RIDE_RUNNING.toString()) {
+-      final lat = StringConverter.formatDouble(eventResponse.data?.driverLatitude ?? '0', precision: 10);
+-      final lng = StringConverter.formatDouble(eventResponse.data?.driverLongitude ?? '0', precision: 10);
+-      rideDetailsController.mapController.updateDriverLocation(
+-        latLng: LatLng(lat, lng),
+-        isRunning: false,
+-      );
++    final status = rideDetailsController.ride.status;
++    final isActive = status == AppStatus.RIDE_ACTIVE.toString();
++    final isRunning = status == AppStatus.RIDE_RUNNING.toString();
++    if (!isActive && !isRunning) {
++      return;
++    }
++    final lat = StringConverter.formatDouble(eventResponse.data?.driverLatitude ?? '0', precision: 10);
++    final lng = StringConverter.formatDouble(eventResponse.data?.driverLongitude ?? '0', precision: 10);
++    final driverPosition = LatLng(lat, lng);
++    rideDetailsController.mapController.updateDriverLocation(
++      latLng: driverPosition,
++      isRunning: false,
++    );
++    if (isActive) {
++      _alertArrivingSoonIfNearPickup(eventResponse, driverPosition);
++    }
++  }
++
++  /// Option B (Papa 2026-11-26): a distinct "arriving soon" alert once the
++  /// driver enters the pickup geofence. One-shot per ride, independent of the
++  /// `pick_up` alert so both types can fire once each.
++  void _alertArrivingSoonIfNearPickup(
++    PusherResponseModel eventResponse,
++    LatLng driverPosition,
++  ) {
++    final pickup = _ridePickupLatLng();
++    if (pickup == null) {
++      return;
++    }
++    if (distanceMetersBetween(driverPosition, pickup) > arrivingSoonRadiusMeters) {
++      return;
++    }
++    _alertOnce(
++      rideId: _eventRideId(eventResponse) ?? rideID,
++      type: arrivingSoonAlertType,
++    );
++  }
++
++  /// Option C (Papa 2026-11-26): the driver pressed "start/pick up". Plays the
++  /// single client alert for this ride and type, then refreshes the ride.
++  void _handlePickUp(PusherResponseModel eventResponse) {
++    if (_isDifferentRide(eventResponse)) {
++      return;
+     }
++    _alertOnce(
++      rideId: _eventRideId(eventResponse) ?? rideID,
++      type: pickUpAlertType,
++    );
++    _updateRideIfAvailable(eventResponse);
++  }
++
++  void _alertOnce({required String rideId, required String type}) {
++    if (!_rideAlertOnce.shouldAlert(rideId: rideId, type: type)) {
++      return;
++    }
++    playRideAlert(rideId: rideId, type: type);
++  }
++
++  /// Audio + vibration + local notification for one ride alert. Overridable so
++  /// unit tests can observe the one-shot gate without platform channels.
++  @visibleForTesting
++  void playRideAlert({required String rideId, required String type}) {
++    AudioUtils.playAudio(apiClient.getNotificationAudio());
++    if (rideDetailsController.repo.apiClient.isNotificationAudioEnable()) {
++      MyUtils.vibrate();
++    }
++    final bool isPickUp = type == pickUpAlertType;
++    PushNotificationService.showLocalAlert(
++      title: isPickUp ? MyStrings.ridePickedUpTitle : MyStrings.rideArrivingSoonTitle,
++      body: isPickUp ? MyStrings.ridePickedUpBody : MyStrings.rideArrivingSoonBody,
++    );
+   }
+ 
++  LatLng? _ridePickupLatLng() {
++    final controllerPickup = rideDetailsController.pickupLatLng;
++    if (controllerPickup.latitude != 0 && controllerPickup.longitude != 0) {
++      return controllerPickup;
++    }
++    final ride = rideDetailsController.ride;
++    final lat = StringConverter.formatDouble(ride.pickupLatitude ?? '', precision: 16);
++    final lng = StringConverter.formatDouble(ride.pickupLongitude ?? '', precision: 16);
++    if (lat == 0 || lng == 0) {
++      return null;
++    }
++    return LatLng(lat, lng);
++  }
++
++  /// Great-circle distance in metres (pure Dart, no platform channel) used by
++  /// the "arriving soon" geofence.
++  @visibleForTesting
++  static double distanceMetersBetween(LatLng a, LatLng b) {
++    const double earthRadiusMeters = 6371000;
++    final double dLat = _toRadians(b.latitude - a.latitude);
++    final double dLng = _toRadians(b.longitude - a.longitude);
++    final double lat1 = _toRadians(a.latitude);
++    final double lat2 = _toRadians(b.latitude);
++    final double h = math.sin(dLat / 2) * math.sin(dLat / 2) +
++        math.cos(lat1) * math.cos(lat2) * math.sin(dLng / 2) * math.sin(dLng / 2);
++    return 2 * earthRadiusMeters * math.asin(math.min(1, math.sqrt(h)));
++  }
++
++  static double _toRadians(double degrees) => degrees * math.pi / 180.0;
++
+   void _handleDriverAssigned(PusherResponseModel eventResponse) {
+     if (_isDifferentRide(eventResponse)) {
+       return;
+
+$ find / -maxdepth 8 -type d -name "flutter_local_notifications-*" 2>/dev/null | head; echo ===; find / -maxdepth 6 -type d -name ".pub-cache" 2>/dev/null | head
+===
+/home/ubuntu/.pub-cache
+
+
+> Max · mimo-v2.6-flash-free
+
+→ Read /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md
+
+> Max · iceman-free
+
