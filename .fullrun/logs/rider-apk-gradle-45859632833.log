@@ -14141,3 +14141,21 @@ $ for h in /home/ubuntu/actions-runner/_work/_temp/oc-agent/home /home/ubuntu/ac
 == /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home
 ❌ [provenance-mismatch] isa_stamp does not match content — the ISA was edited outside ISATool.ts (hand edit). Revert, or re-apply the change via ISATool.ts.
 
+$ for f in /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/MEMORY/STATE/isa-provenance.jsonl /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.claude/LIFEOS/MEMORY/STATE/isa-provenance.jsonl; do echo "== $f"; test -f "$f" && python3 -c "
+import json
+lines=[json.loads(l) for l in open('$f')]
+print('total',len(lines))
+for x in lines[-12:]: print(x.get('ts'),x.get('op'),x.get('path','').split('/')[-1],x.get('by'),x.get('stamp','')[:16])
+" || echo absent; done
+== /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/MEMORY/STATE/isa-provenance.jsonl
+total 2
+2026-11-26T17:39:46.638Z append:Decisions ISA.md claude hmac-sha256:7b66
+2026-11-26T18:03:52.629Z append:Decisions ISA.md claude hmac-sha256:4f28
+== /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.claude/LIFEOS/MEMORY/STATE/isa-provenance.jsonl
+total 5
+2026-11-26T17:49:33.473Z tick:ISC-F5-13 ISA.md claude hmac-sha256:eaed
+2026-11-26T17:49:33.480Z evidence:ISC-F5-13 ISA.md claude hmac-sha256:0f56
+2026-11-26T17:49:52.245Z replace ISA.md claude hmac-sha256:d96c
+2026-11-26T17:55:01.820Z tick:ISC-F5-13 ISA.md claude hmac-sha256:211b
+2026-11-26T17:55:01.826Z evidence:ISC-F5-13 ISA.md claude hmac-sha256:c91a
+
