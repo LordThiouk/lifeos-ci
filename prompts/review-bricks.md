@@ -1,0 +1,8 @@
+# Review of the FullRun bricks (lifeos-ci). Short run, commit the report RIGHT AWAY.
+
+Forbidden: push, `gh`, editing anything other than `REVIEW-BRICKS.md`. Author: `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`.
+
+1. `git fetch origin '+refs/heads/fr/*:refs/remotes/origin/fr/*'`. For each brick, read it with `git show origin/fr/brick-<n>:.github/workflows/fr-<n>.yml`. The bricks are: plan-serena, build-aditi-ui, build-engineer, build-anvil, build-forge-code, verify-code-review, verify-forge-audit, verify-silas, close-max. Also read `fr-fullrun.yml` (branch fr/brick-fullrun), `fr-plan-vera.yml` (main) and `_agent-run.yml` (branch fr/agent-run-inputs).
+2. Check each brick: valid YAML; `workflow_call` + `workflow_dispatch` with the same inputs + `chain`; the right agent/target_agent/stop_after_step/chain_phase (Serena→Architect 3 plan; Aditi→Designer 4; Engineer, Anvil, Forge 4 build; code-reviewer, Forge, Silas 5 verify; Max 6 close); `next` only if `inputs.chain && status == 'ok'`; no secret, no push; the inputs passed through to `_agent-run.yml` all exist there.
+3. Check `fr-fullrun.yml`: order vera → serena → 4 builds in parallel → code-review → forge-audit → silas → max; `start_phase`/`only` respected; on a verify or max failure, it loops back to build with `attempt < max_attempts`; empty inputs = full run with no stop. Note what is missing (e.g. `workflow_call` on fr-plan-vera).
+4. Write `REVIEW-BRICKS.md`: verdict `MERGE OK` or `BLOQUANT`, then a table per brick plus high/medium/low points with file:line. Commit with the message "review: briques fullrun". Stop.
