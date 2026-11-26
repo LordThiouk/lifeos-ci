@@ -3866,3 +3866,224 @@ plugins {
 
 include(":app")
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show ec07f3e --stat && echo "===DIFF===" && git show ec07f3e | head -200
+commit ec07f3edef1b8c96ac7b65113d12271bf2c89f91
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 18:42:24 2026 +0000
+
+    build(android): align Rider toolchain with Flutter 3.50.1
+    
+    - Downgrade Gradle wrapper 9.1.0 -> 8.14 (match Driver, accepted by Flutter 3.50.1)
+    - Downgrade AGP 9.0.1 -> 8.11.1
+    - Align Kotlin 2.2.20 -> 2.3.0 and Crashlytics plugin 3.0.7 -> 3.0.3
+    - Align gradle.properties with Driver-stable flags (keep android.enableJetifier=false)
+    
+    No lib/ changes. Not built locally (flutter build/gradlew forbidden on box).
+
+ android/gradle.properties                        | 19 ++++++++++++-------
+ android/gradle/wrapper/gradle-wrapper.properties |  2 +-
+ android/settings.gradle.kts                      |  6 +++---
+ 3 files changed, 16 insertions(+), 11 deletions(-)
+===DIFF===
+commit ec07f3edef1b8c96ac7b65113d12271bf2c89f91
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 18:42:24 2026 +0000
+
+    build(android): align Rider toolchain with Flutter 3.50.1
+    
+    - Downgrade Gradle wrapper 9.1.0 -> 8.14 (match Driver, accepted by Flutter 3.50.1)
+    - Downgrade AGP 9.0.1 -> 8.11.1
+    - Align Kotlin 2.2.20 -> 2.3.0 and Crashlytics plugin 3.0.7 -> 3.0.3
+    - Align gradle.properties with Driver-stable flags (keep android.enableJetifier=false)
+    
+    No lib/ changes. Not built locally (flutter build/gradlew forbidden on box).
+
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 0e4397f..bb6acb3 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -1,9 +1,14 @@
+-org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+-org.gradle.daemon=false
+-org.gradle.parallel=false
+-org.gradle.configureondemand=false
+-android.enableJetifier=false
++org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+ android.useAndroidX=true
+-android.newDsl=false
++android.enableJetifier=false
++# This builtInKotlin flag was added automatically by Flutter migrator
+ android.builtInKotlin=false
+-android.r8.proguardAndroidTxt.disallowed=false
++# This newDsl flag was added automatically by Flutter migrator
++android.newDsl=false
++
++# Build speed (local Fastlane / incremental)
++org.gradle.caching=true
++org.gradle.parallel=true
++org.gradle.daemon=true
++org.gradle.configureondemand=true
++org.gradle.vfs.watch=true
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..92992c4 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,12 +18,12 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+-    id("com.google.firebase.crashlytics") version("3.0.7") apply false
++    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+     // END: FlutterFire Configuration
+-    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
++    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+ }
+ 
+ include(":app")
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git rev-parse HEAD && echo "origin:" && git rev-parse origin/build/rider-apk-gradle && echo "---diff origin..HEAD---" && git diff origin/build/rider-apk-gradle..HEAD
+ec07f3edef1b8c96ac7b65113d12271bf2c89f91
+origin:
+fcdd581e60af92159238d4adce16dcb5be550176
+---diff origin..HEAD---
+diff --git a/VERIFY-F434B.md b/VERIFY-F434B.md
+new file mode 100644
+index 0000000..fe2a480
+--- /dev/null
++++ b/VERIFY-F434B.md
+@@ -0,0 +1,58 @@
++VERDICT: PASS
++
++# Vérification F4-34 (rebuild) — porte one-shot, dédup Pusher↔FCM, chemin iOS foreground
++
++Date : 2026-11-26
++Branche : `verify/rider-f434b-forge`
++Périmètre audité : `dcb4bf0` (lib) + `2ec49c8` (tests) + note ISA `3a399e8`.
++Rôle : audit de vérification uniquement. Aucun code modifié, aucun golden régénéré, ISA et `.fullrun` non touchés.
++
++## Points vérifiés
++
++- **Porte one-shot liée au `ride_id`** — `RideAlertOnce.shouldAlert` clé `ride_id::type` ; un couple déjà émis est un no-op, un nouveau `ride_id` ré-alerte. Clé vide (ride_id ou type inconnu) n'est pas dédupliquée. `lib/core/helper/ride_alert_once.dart:21-28`.
++- **Porte survivante à la recréation** — `RideAlertOnce.shared` est `static final` (process-wide), et `resetRideScopedControllers()` ne le réinitialise pas ; `PusherRideController` la référence à `lib/data/controller/pusher/pusher_ride_controller.dart:42`. Test dédié « the one-shot gate survives PusherRideController recreation » vert.
++- **Dédup Pusher↔FCM partagée** — `PushNotificationService` et `PusherRideController` utilisent la même `RideAlertOnce.shared` (`lib/data/services/push_notification_service.dart:28`, `lib/data/controller/pusher/pusher_ride_controller.dart:42`). La dédup FCM passe par `shouldPresentMessage` (`push_notification_service.dart:221-226`) avant tout `show`. Tests cross-canal (Pusher→FCM et FCM→Pusher) verts.
++- **Deux alertes distinctes qui coexistent** — la clé inclut le type (`pick_up` / `arriving_soon`) : B puis C produisent deux alertes, un doublon du même type est supprimé, un nouveau ride ré-alerte. Tests verts.
++- **Chemin iOS foreground** — `setForegroundNotificationPresentationOptions(alert/badge/sound: false)` (`push_notification_service.dart:297-307`) supprime l'auto-présentation FCM non déduplicable ; le `onMessage` présente la bannière via le `show` local partagé-gated, y compris pour les payloads `notification` (`push_notification_service.dart:196-213`). Recherche `setForegroundNotificationPresentationOptions` : un seul site d'appel dans `lib/`.
++
++## Points bloquants
++
++Aucun.
++
++## Notes non bloquantes
++
++- La dédup FCM dépend du payload backend contenant `ride_id` et un type (`type`/`act`/`event`) ; si ces clés manquent, `shouldAlert` autorise la bannière (pas de dédup). Hors dépôt Flutter (backend/Pusher).
++- La dédup client ne couvre que le chemin foreground ; les doublons de push en arrière-plan restent de la responsabilité backend.
++- `RideAlertOnce.shared` n'est jamais purgé ; l'ensemble grandit avec le nombre de courses du process (mémoire négligeable, aucun impact fonctionnel).
++
++## Commandes exécutées
++
++Environnement : Flutter 3.44.8 stable (Dart 3.12.2), `flutter pub get` OK.
++
++```
++$ flutter test test/unit/multistop_pusher_test.dart test/data/services/push_notification_service_test.dart
++00:00 +21: All tests passed!
++```
++
++```
++$ flutter test test/unit/multistop_pusher_test.dart
++00:00 +12: All tests passed!
++
++$ flutter test test/data/services/push_notification_service_test.dart
++00:00 +9: All tests passed!
++```
++
++```
++$ flutter test
++00:29 +311 ~2: All tests passed!
++```
++
++```
++$ flutter analyze lib/core/helper/ride_alert_once.dart lib/data/controller/pusher/pusher_ride_controller.dart lib/data/services/push_notification_service.dart test/unit/multistop_pusher_test.dart test/data/services/push_notification_service_test.dart
++Analyzing 5 items...
++No issues found! (ran in 16.2s)
++```
++
++## Conclusion
++
++Les trois points du périmètre F4-34 (porte one-shot liée au `ride_id`, dédup Pusher↔FCM partagée, chemin iOS foreground) sont implémentés, couverts par les tests unit des commits `dcb4bf0` / `2ec49c8`, et la suite complète ainsi que l'analyse statique sont vertes. **PASS**.
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 0e4397f..bb6acb3 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -1,9 +1,14 @@
+-org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+-org.gradle.daemon=false
+-org.gradle.parallel=false
+-org.gradle.configureondemand=false
+-android.enableJetifier=false
++org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+ android.useAndroidX=true
+-android.newDsl=false
++android.enableJetifier=false
++# This builtInKotlin flag was added automatically by Flutter migrator
+ android.builtInKotlin=false
+-android.r8.proguardAndroidTxt.disallowed=false
++# This newDsl flag was added automatically by Flutter migrator
++android.newDsl=false
++
++# Build speed (local Fastlane / incremental)
++org.gradle.caching=true
++org.gradle.parallel=true
++org.gradle.daemon=true
++org.gradle.configureondemand=true
++org.gradle.vfs.watch=true
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..92992c4 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,12 +18,12 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+-    id("com.google.firebase.crashlytics") version("3.0.7") apply false
++    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+     // END: FlutterFire Configuration
+-    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
++    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+ }
+ 
+ include(":app")
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline -- VERIFY-F434B.md && echo "---" && git ls-files VERIFY-F434B.md && echo "---status---" && git status --porcelain
+424957d verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+---
+VERIFY-F434B.md
+---status---
+
