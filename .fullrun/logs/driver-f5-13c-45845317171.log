@@ -3700,3 +3700,169 @@ Mission accomplie. Voici le bilan factuel de l'exécution complète du prompt :
 - ❌ **Pas** de build local (`flutter build` / `gradlew` interdits sur la box — validation attendue via CI Artemis).
 
 **État final** : arbre de travail propre, branche `build/rider-apk-gradle`, correctif en place et committé. ✅
+
+> Forge · beam-free
+
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls && git status && git log --oneline -5
+AGENTS.md
+CHANGELOG.md
+CLAUDE.md
+FIX_SUMMARY.md
+GALASS_CONTEXT.md
+Gemfile
+Gemfile.lock
+MEMORY
+NIMBALYST_DEV_SETUP.md
+README.md
+RIDER-MULTISTOP.md
+SECURE_CREDENTIALS_SETUP.md
+VERIFY-F434B.md
+_ephemeral
+analysis_options.yaml
+android
+assets
+codemagic.yaml.deprecated
+devtools_options.yaml
+diag
+docs
+fastlane
+firebase.json
+ios
+lib
+prompts
+pubspec.lock
+pubspec.yaml
+scripts
+test
+test_result.txt
+On branch build/rider-apk-gradle
+nothing to commit, working tree clean
+ec07f3e build(android): align Rider toolchain with Flutter 3.50.1
+424957d verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline -15 && echo "---" && git branch -a && echo "---STATUS---" && git status
+ec07f3e build(android): align Rider toolchain with Flutter 3.50.1
+424957d verify(rider): F4-34 rebuild PASS — one-shot gate, Pusher/FCM dedup, iOS foreground
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+b83aba6 test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+3a399e8 docs(isa): F4-34 rebuild evidence after Verify BLOCK
+2ec49c8 test(rider): F4-34 controller recreation, FCM dedup, cross-channel
+dcb4bf0 fix(rider): F4-34 share one-shot gate across controller and FCM
+69e248d docs(isa): tick ISC-F4-21 with map test evidence
+43e28ba fix(rider): F4-21 keep PENDING stops numbered, active leg only in ACTIVE/RUNNING
+3798ba2 docs(isa): consigner la décision Papa ISC-F5-16 (Rider carte jambe active)
+632862c docs(isa): consigner la décision Papa F4-34 C+B (2026-11-26)
+e4d93c0 docs(isa): F4-34 B+C decision and evidence
+---
+* build/rider-apk-gradle
+  feat/multistop-e2e-2026-11-15
+  remotes/origin/build/rider-apk-gradle
+  remotes/origin/build/rider-f429
+  remotes/origin/close/rider-f434b-max
+  remotes/origin/diag/arret-etape-galass-ci-2026-11-24
+  remotes/origin/diag/multistop-serena-porte-2026-11-23
+  remotes/origin/diag/porte-build-2026-11-24
+  remotes/origin/feat/multistop-e2e-2026-11-15
+  remotes/origin/feat/multistop-rider-close-2026-11-20
+  remotes/origin/feat/patrol-pilot
+  remotes/origin/feat/phone-number-login
+  remotes/origin/feat/rider-f434-2026-11-26
+  remotes/origin/feature/accessibility-plan
+  remotes/origin/feature/firebase-laravel-bridge
+  remotes/origin/fix/multistop-close
+  remotes/origin/fix/profile-bugs
+  remotes/origin/fix/profile-complete-prefill
+  remotes/origin/fix/rider-multistop-wip
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-23-45290781492
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r3-45305125203
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r5-45320422961
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r6-45334725976
+  remotes/origin/fullrun-logs/multistop-ui-gaps-vera-2026-11-23-45268880692
+  remotes/origin/fullrun-logs/rider-apk-gradle-45847515781
+  remotes/origin/fullrun-logs/rider-apk-gradle-45859632833
+  remotes/origin/fullrun-logs/rider-f429-cr-45845322081
+  remotes/origin/fullrun-logs/rider-f429-cr-ll-45807711954
+  remotes/origin/fullrun-logs/rider-f429-forge-45845322748
+  remotes/origin/fullrun-logs/rider-f429-forge-ll-45807712042
+  remotes/origin/fullrun-logs/rider-f429-silas-ll-45807712379
+  remotes/origin/fullrun-logs/rider-f434b-max-45845322242
+  remotes/origin/fullrun-logs/rider-f434b-max-ll-45808727484
+  remotes/origin/fullrun-logs/rider-multistop-close-2-44832871010
+  remotes/origin/fullrun-logs/rider-multistop-close-3-44847122033
+  remotes/origin/fullrun-logs/rider-multistop-close-4-44854453615
+  remotes/origin/fullrun-logs/rider-multistop-close-44814973592
+  remotes/origin/fullrun-logs/rider-multistop-close-5-44865549101
+  remotes/origin/fullrun-logs/rider-multistop-close-6-44878329849
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44901958343
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44912440632
+  remotes/origin/fullrun-logs/rider-multistop-close-7-44926692223
+  remotes/origin/fullrun-logs/ui-goldens-gate-rider-2026-11-23-45113355828
+  remotes/origin/fullrun-logs/ui-goldens-gate-rider-2026-11-23-45122523186
+  remotes/origin/fullrun-prompts
+  remotes/origin/main
+  remotes/origin/ovo-customizations
+  remotes/origin/test/service-option
+  remotes/origin/verify/rider-f429-cr
+  remotes/origin/verify/rider-f429-forge
+  remotes/origin/verify/rider-f429-silas
+  remotes/origin/verify/rider-f432-cr
+  remotes/origin/verify/rider-f432-emu-cr
+  remotes/origin/verify/rider-f432-emu-forge
+  remotes/origin/verify/rider-f432-emu-silas
+  remotes/origin/verify/rider-f432-forge
+  remotes/origin/verify/rider-f432-silas
+  remotes/origin/verify/rider-f434-cr
+  remotes/origin/verify/rider-f434-forge
+  remotes/origin/verify/rider-f434-silas
+  remotes/origin/verify/rider-f434b-cr
+  remotes/origin/verify/rider-f434b-forge
+  remotes/origin/verify/rider-f434b-silas
+---STATUS---
+On branch build/rider-apk-gradle
+nothing to commit, working tree clean
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && cat android/gradle/wrapper/gradle-wrapper.properties && echo "===SETTINGS===" && cat android/settings.gradle.kts
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+===SETTINGS===
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "8.11.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+}
+
+include(":app")
+
