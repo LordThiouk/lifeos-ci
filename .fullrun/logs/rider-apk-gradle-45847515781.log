@@ -9942,3 +9942,51 @@ core/tests/Feature/Admin/DriverApprovedSmsTest.php
 core/tests/Feature/Auth/DriverRegisterPhotoTest.php
 core/tests/Feature/Auth/DriverLegacyLoginTest.php
 
+$ cd /agent/repos/Galass_backend && find core/tests -type f -name "*.php" | grep -iE "Service"
+core/tests/Feature/Admin/HiddenServiceRideTest.php
+core/tests/Feature/Admin/ServiceOrderVisibilityTest.php
+core/tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php
+core/tests/Unit/Dispatch/DispatchServiceTest.php
+core/tests/Unit/Dispatch/DispatchPushServiceTest.php
+core/tests/Unit/Firebase/JwtServiceTest.php
+
+$ cd /agent/repos/Galass_backend/core && which php && php -v 2>&1 | head -3; echo "---"; ls vendor/bin 2>/dev/null | head; echo "---artisan---"; ls artisan
+---
+carbon
+carbon.bat
+patch-type-declarations
+patch-type-declarations.bat
+php-parse
+php-parse.bat
+phpunit
+phpunit.bat
+pint
+pint.bat
+---artisan---
+artisan
+
+$ ls /usr/bin/php* 2>/dev/null; find / -name "php" -type f 2>/dev/null | head; echo "PATH=$PATH"
+PATH=/usr/local/bin:/usr/bin:/bin
+
+$ find / -name "php[0-9]*" 2>/dev/null | head; echo "---"; ls /usr/bin/ | grep -i php; echo "---apt---"; ls /opt 2>/dev/null
+/agent/repos/Galass_backend-multistop/core/vendor/paragonie/sodium_compat/lib/php72compat_const.php
+/agent/repos/Galass_backend-multistop/core/vendor/paragonie/sodium_compat/lib/php84compat.php
+/agent/repos/Galass_backend-multistop/core/vendor/paragonie/sodium_compat/lib/php84compat_const.php
+/agent/repos/Galass_backend-multistop/core/vendor/paragonie/sodium_compat/lib/php72compat.php
+/agent/repos/Galass_backend/core/vendor/paragonie/sodium_compat/lib/php72compat_const.php
+/agent/repos/Galass_backend/core/vendor/paragonie/sodium_compat/lib/php84compat.php
+/agent/repos/Galass_backend/core/vendor/paragonie/sodium_compat/lib/php84compat_const.php
+/agent/repos/Galass_backend/core/vendor/paragonie/sodium_compat/lib/php72compat.php
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/vendor/paragonie/sodium_compat/lib/php72compat_const.php
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/core/vendor/paragonie/sodium_compat/lib/php84compat.php
+---
+---apt---
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+
