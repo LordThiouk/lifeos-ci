@@ -7194,3 +7194,66 @@ $ cd /tmp && zcat -f art*.gz 2>/dev/null | grep -n "minimum supported version\|Y
 
 ◈ Parallel Web Search "Firebase Crashlytics Gradle plugin 3.0.7 Android Gradle Plugin 9.0 compatibility "AGP 9""
 ◈ Parallel Web Search ""google-services" gradle plugin 4.3.15 AGP 9.0 incompatible NoSuchMethod Android Gradle Plugin 9"
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && cat android/.gitignore && echo "=== wrapper files tracked? ===" && git ls-files android/gradle android/gradlew* && echo "=== current props ===" && cat android/gradle/wrapper/gradle-wrapper.properties
+gradle-wrapper.jar
+/.gradle
+/captures/
+/gradlew
+/gradlew.bat
+/local.properties
+GeneratedPluginRegistrant.java
+.cxx/
+
+# Remember to never publicly share your keystore.
+# See https://flutter.dev/to/reference-keystore
+key.properties
+**/*.keystore
+**/*.jks
+=== wrapper files tracked? ===
+android/gradle/wrapper/gradle-wrapper.properties
+=== current props ===
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+
+$ grep -rn "validateJavaAndGradleAgpVersions" /tmp/flutter/packages/flutter_tools/lib --include=*.dart | grep -v test; echo "=== updateGradleWrapper ==="; grep -rn "fun updateGradleWrapper\|gradle-wrapper.properties\|distributionUrl" /tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart | head -20; grep -rn "updateGradleWrapper\|injectGradleWrapper" /tmp/flutter/packages/flutter_tools/lib/src --include=*.dart | grep -v test | head
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator.dart:142:    result.add(await project.android.validateJavaAndGradleAgpVersions());
+/tmp/flutter/packages/flutter_tools/lib/src/project.dart:970:  Future<ProjectValidatorResult> validateJavaAndGradleAgpVersions() async {
+=== updateGradleWrapper ===
+172:// 'distributionUrl=https\://services.gradle.org/distributions/gradle-7.4.2-all.zip'
+174:final distributionUrlRegex = RegExp(r'^\s*distributionUrl\s*=\s*.*\.zip', multiLine: true);
+180:  r'^\s*distributionUrl\s*=\s*https\\://services\.gradle\.org/distributions/gradle-([\d.]+)-(.*)\.zip',
+210:const gradleWrapperPropertiesFilename = 'gradle-wrapper.properties';
+261:    // Add the `gradle-wrapper.properties` file if it doesn't exist.
+278:distributionUrl=https\\://services.gradle.org/distributions/gradle-$gradleVersion-all.zip
+315:String? parseGradleVersionFromDistributionUrl(String? distributionUrl) {
+316:  if (distributionUrl == null) {
+319:  final List<String> zipParts = distributionUrl.split('-');
+326:/// Returns the gradle-wrapper.properties value from the passed in [directory].
+336:    final RegExpMatch? distributionUrl = distributionUrlRegex.firstMatch(wrapperFileContent);
+337:    if (distributionUrl != null) {
+338:      final String? gradleVersion = parseGradleVersionFromDistributionUrl(distributionUrl.group(0));
+346:      // If no distributionUrl log then treat as if there was no propertiesFile.
+356:/// Returns either the gradle-wrapper.properties value from the passed in
+/tmp/flutter/packages/flutter_tools/lib/src/flutter_cache.dart:428:    globals.gradleUtils?.injectGradleWrapperIfNeeded(tempDir);
+/tmp/flutter/packages/flutter_tools/lib/src/project.dart:1155:    globals.gradleUtils?.injectGradleWrapperIfNeeded(ephemeralDirectory);
+/tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart:231:    injectGradleWrapperIfNeeded(androidDir);
+/tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart:249:  void injectGradleWrapperIfNeeded(Directory directory) {
+/tmp/flutter/packages/flutter_tools/lib/src/commands/create_base.dart:531:      generatedCount += _injectGradleWrapper(project);
+/tmp/flutter/packages/flutter_tools/lib/src/commands/create_base.dart:709:  int _injectGradleWrapper(FlutterProject project) {
+
+→ Read /tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart [offset=225, limit=70]
+
+$ grep -rn "project_validator\|validateProject\|ProjectValidatorResult" /tmp/flutter/packages/flutter_tools/lib/src/commands/*.dart /tmp/flutter/packages/flutter_tools/lib/src/*.dart 2>/dev/null | grep -v "project_validator.dart\|project.dart" | head -20
+/tmp/flutter/packages/flutter_tools/lib/src/commands/create.dart:516:    validateProjectDir(overwrite: overwrite);
+/tmp/flutter/packages/flutter_tools/lib/src/commands/create_base.dart:236:  void validateProjectDir({bool overwrite = false}) {
+/tmp/flutter/packages/flutter_tools/lib/src/commands/create_base.dart:336:      final String? error = _validateProjectName(projectName);
+/tmp/flutter/packages/flutter_tools/lib/src/commands/create_base.dart:835:String? _validateProjectName(String projectName) {
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:7:class ProjectValidatorResult {
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:8:  const ProjectValidatorResult({
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:28:  static ProjectValidatorResult crash(Object exception, StackTrace trace) {
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:29:    return ProjectValidatorResult(
+
