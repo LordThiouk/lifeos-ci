@@ -4423,3 +4423,21 @@ google
 lifeos-ci-state
 lifeos-ci-tools
 
+$ /tmp/flutter/bin/flutter --version 2>&1 | head -3; echo "==="; find /tmp/flutter -path "*templates*" -name "gradle-wrapper.properties" 2>/dev/null; find /tmp/flutter -name "settings.gradle.kts" -path "*android*" 2>/dev/null | head
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ae9b586f34 (8 days ago) • 2026-11-18 17:01:07 -0800
+Engine • hash 51379e6df48ea8ee7205623b90fe66491cad8df3 (revision 4d35714800) (8 days ago) • 2026-11-18 01:50:07.000Z
+===
+/tmp/flutter/packages/integration_test/android/settings.gradle.kts
+/tmp/flutter/packages/integration_test/example/android/settings.gradle.kts
+/tmp/flutter/examples/hello_world/android/settings.gradle.kts
+/tmp/flutter/dev/integration_tests/pure_android_host_apps/host_app_kotlin_gradle_dsl/settings.gradle.kts
+/tmp/flutter/dev/integration_tests/display_cutout_rotation/android/settings.gradle.kts
+/tmp/flutter/dev/integration_tests/android_hardware_smoke_test/android/settings.gradle.kts
+/tmp/flutter/dev/integration_tests/deferred_components_test/android/settings.gradle.kts
+/tmp/flutter/dev/integration_tests/record_use_test_app/android/settings.gradle.kts
+
+$ find /tmp/flutter -path "*app_templates*" 2>/dev/null | head; echo "==="; find /tmp/flutter -name "settings.gradle.kts" 2>/dev/null | grep -i template; echo "===search app template==="; find /tmp/flutter -path "*android*" -name "build.gradle.kts" 2>/dev/null | grep -i template | head
+===
+===search app template===
+
