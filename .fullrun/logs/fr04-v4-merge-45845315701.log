@@ -8241,3 +8241,90 @@ f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
 fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
 f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
 
+$ tail -c 4000 /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log; echo; echo "=====WC====="; wc -l /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log
+/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..bfebd0b 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,7 +18,7 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+     id("com.google.firebase.crashlytics") version("3.0.7") apply false
+
+Le repo est bien **Galass_Rider** (`LordThiouk/Galass_Rider`), branche `build/rider-apk-gradle`. Un commit récent existe déjà (`8c28139 fix(android): aligner le toolchain...`). J'examine son contenu et l'état actuel des fichiers Android.
+$ echo "=====gradle-wrapper.properties=====" && cat android/gradle/wrapper/gradle-wrapper.properties && echo "=====settings.gradle.kts=====" && cat android/settings.gradle.kts
+=====gradle-wrapper.properties=====
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+=====settings.gradle.kts=====
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "8.11.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.7") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+}
+
+include(":app")
+
+$ ls -la /tmp/task_done.md 2>&1; echo "=====DIFF STAT vs BASE====="; git diff feat/multistop-e2e-2026-11-15..HEAD --stat; echo "=====ORIGIN STATE====="; git log --oneline -3 origin/build/rider-apk-gradle; echo "=====STATUS====="; git status --short; git log --oneline -3 HEAD
+-rw-r--r-- 1 ubuntu ubuntu 2057 Nov 26 17:15 /tmp/task_done.md
+=====DIFF STAT vs BASE=====
+ CHANGELOG.md                                     |  4 ++
+ VERIFY-F434B.md                                  | 58 ------------------------
+ android/gradle.properties                        |  3 --
+ android/gradle/wrapper/gradle-wrapper.properties |  2 +-
+ android/settings.gradle.kts                      |  2 +-
+ 5 files changed, 6 insertions(+), 63 deletions(-)
+=====ORIGIN STATE=====
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+=====STATUS=====
+8c28139 fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+
+
+=====WC=====
+8243 /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log
+
+Le fix semble déjà commité (`8c28139`). Je vérifie l'état complet : diff vs branche de base, contenu de `/tmp/task_done.md`, et contexte de la session.
