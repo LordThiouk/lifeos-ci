@@ -1166,3 +1166,127 @@ fastlane/metadata/ios/en-US/release_notes.txt:1:Corrections stabilité file_pick
 fastlane/metadata/android/fr-FR/changelogs/109.txt:3:- file_picker 12 AGP9/Kotlin + FilePicker API
 fastlane/metadata/android/en-US/changelogs/109.txt:3:- file_picker 12 AGP9/Kotlin + FilePicker API
 
+$ grep -rn "gradle\|AGP\|Kotlin 2\|CHANGELOG" test/ --include="*.dart" | head -20; echo ===; ls test/release test/unit 2>/dev/null | head -40
+test/release/release_docs_static_test.dart:10:  group('ISC-5 CHANGELOG.md', () {
+test/release/release_docs_static_test.dart:11:    test('CHANGELOG.md exists with Unreleased and 1.0.0 sections', () {
+test/release/release_docs_static_test.dart:12:      final changelog = File('$repoRoot/CHANGELOG.md');
+===
+test/release:
+bump_script_test.dart
+ci_hygiene_test.dart
+release_docs_static_test.dart
+release_script_test.dart
+
+test/unit:
+cash_payment_exit_test.dart
+dispatch_f3_create_ride_test.dart
+dispatch_f3_ghost_ui_test.dart
+dispatch_f3_hygiene_test.dart
+dispatch_f3_lifecycle_test.dart
+dispatch_f3_pusher_test.dart
+dispatch_f3_recreate_test.dart
+log_redaction_hygiene_test.dart
+login_controller_test.dart
+multistop_create_test.dart
+multistop_fare_test.dart
+multistop_itinerary_test.dart
+multistop_map_controller_reset_test.dart
+multistop_map_test.dart
+multistop_picker_test.dart
+multistop_post_accept_ui_test.dart
+multistop_progression_test.dart
+multistop_pusher_test.dart
+multistop_request_model_test.dart
+multistop_ride_model_test.dart
+multistop_running_sheet_test.dart
+multistop_strings_sweep_test.dart
+profile_complete_controller_test.dart
+registration_controller_test.dart
+release_hygiene_test.dart
+secure_session_storage_test.dart
+security_validators_test.dart
+string_converter_xof_format_test.dart
+version_sync_test.dart
+xof_anti_rating_precision_test.dart
+xof_money_helper_test.dart
+xof_offer_tips_gate_test.dart
+
+$ git checkout -b build/rider-apk-gradle origin/build/rider-apk-gradle 2>&1 | tail -3; git log --oneline -1; git status --short
+Switched to a new branch 'build/rider-apk-gradle'
+branch 'build/rider-apk-gradle' set up to track 'origin/build/rider-apk-gradle'.
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+
+$ sed -n '1,60p' test/release/ci_hygiene_test.dart
+import 'dart:io';
+
+import 'package:flutter_test/flutter_test.dart';
+
+/// Anti-2.1 — no active codemagic.yaml; only .deprecated allowed.
+/// ISA `galass-version-release-docs-180716`.
+void main() {
+  final repoRoot = Directory.current.path;
+
+  group('Anti-2.1 Codemagic yaml hygiene', () {
+    test('codemagic.yaml must not exist (active yaml forbidden)', () {
+      final active = File('$repoRoot/codemagic.yaml');
+      expect(
+        active.existsSync(),
+        isFalse,
+        reason: 'Anti-2.1: active codemagic.yaml is forbidden',
+      );
+    });
+
+    test('codemagic.yaml.deprecated must exist', () {
+      final deprecated = File('$repoRoot/codemagic.yaml.deprecated');
+      expect(
+        deprecated.existsSync(),
+        isTrue,
+        reason: 'Anti-2.1: deprecated yaml archive must remain',
+      );
+    });
+  });
+}
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -i 's|gradle-9\.1\.0-all\.zip|gradle-8.14-all.zip|' android/gradle/wrapper/gradle-wrapper.properties && sed -i 's|id("com.android.application") version "9\.0\.1" apply false|id("com.android.application") version "8.11.1" apply false|' android/settings.gradle.kts && git diff
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..bfebd0b 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,7 +18,7 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+     id("com.google.firebase.crashlytics") version("3.0.7") apply false
+
+→ Read android/gradle.properties
+Now remove the AGP 9-only Gradle flags (no-ops under AGP 8, and `newDsl`/`builtInKotlin` only exist in AGP 9).
+
+← Edit android/gradle.properties
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/android/gradle.properties
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/android/gradle.properties
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/android/gradle.properties
+@@ -3,7 +3,4 @@
+ org.gradle.parallel=false
+ org.gradle.configureondemand=false
+ android.enableJetifier=false
+ android.useAndroidX=true
+-android.newDsl=false
+-android.builtInKotlin=false
+-android.r8.proguardAndroidTxt.disallowed=false
+
+
