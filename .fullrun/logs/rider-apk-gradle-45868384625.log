@@ -331,3 +331,227 @@ android.r8.proguardAndroidTxt.disallowed=false
             android:requestLegacyExternalStorage="true"
             android:launchMode="singleTop"
 
+$ git ls-tree -r --name-only origin/fullrun-logs/rider-apk-gradle-45859632833 | head -30; echo ===; git ls-tree -r --name-only origin/fullrun-logs/rider-apk-gradle-45847515781 | head -30
+.fullrun/logs/rider-apk-gradle-45859632833.log
+===
+.fullrun/logs/rider-apk-gradle-45847515781.log
+
+$ git log --oneline -6 -- android/gradle.properties android/settings.gradle.kts android/gradle/wrapper/gradle-wrapper.properties; echo ====; git log -p -2 -- android/gradle.properties | head -80
+0eb0df0 fix(android): allow legacy proguard-android.txt for AGP 9 plugins
+3023819 fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+43e08b3 fix(android): bump AGP to 8.11.1 for Flutter CI
+a33e9a5 fix(android): Gradle 8.14 for Flutter bundleRelease CI
+8e7b0e5 feat: complete Firebase Crashlytics setup per official docs
+623fd83 Fix: disable Jetifier + split ABI build
+====
+commit 0eb0df09be4c30b08e0d58f0dcb7443cc771178c
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Thu Oct 8 02:38:14 2026 +0000
+
+    fix(android): allow legacy proguard-android.txt for AGP 9 plugins
+
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 5302212..0e4397f 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -6,3 +6,4 @@ android.enableJetifier=false
+ android.useAndroidX=true
+ android.newDsl=false
+ android.builtInKotlin=false
++android.r8.proguardAndroidTxt.disallowed=false
+
+commit 30238192e593a79f38bca07fa9165048f510ab6c
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Thu Oct 8 02:27:11 2026 +0000
+
+    fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 4c72eeb..5302212 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -4,3 +4,5 @@ org.gradle.parallel=false
+ org.gradle.configureondemand=false
+ android.enableJetifier=false
+ android.useAndroidX=true
++android.newDsl=false
++android.builtInKotlin=false
+
+$ git show 3023819 --stat; echo =====; git show 3023819; echo =====; git show 43e08b3; echo =====; git show a33e9a5; echo =====; git show 0eb0df0
+commit 30238192e593a79f38bca07fa9165048f510ab6c
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Thu Oct 8 02:27:11 2026 +0000
+
+    fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+
+ android/app/build.gradle.kts                     | 6 +++---
+ android/gradle.properties                        | 2 ++
+ android/gradle/wrapper/gradle-wrapper.properties | 2 +-
+ android/settings.gradle.kts                      | 4 ++--
+ 4 files changed, 8 insertions(+), 6 deletions(-)
+=====
+commit 30238192e593a79f38bca07fa9165048f510ab6c
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Thu Oct 8 02:27:11 2026 +0000
+
+    fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+
+diff --git a/android/app/build.gradle.kts b/android/app/build.gradle.kts
+index c5c2c29..79b0016 100644
+--- a/android/app/build.gradle.kts
++++ b/android/app/build.gradle.kts
+@@ -19,13 +19,13 @@ android {
+     ndkVersion = "29.0.14033849"
+ 
+     compileOptions {
+-        sourceCompatibility = JavaVersion.VERSION_11
+-        targetCompatibility = JavaVersion.VERSION_11
++        sourceCompatibility = JavaVersion.VERSION_17
++        targetCompatibility = JavaVersion.VERSION_17
+         isCoreLibraryDesugaringEnabled = true  
+     }
+ 
+     kotlinOptions {
+-        jvmTarget = JavaVersion.VERSION_11.toString()
++        jvmTarget = JavaVersion.VERSION_17.toString()
+     }
+ 
+     defaultConfig {
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 4c72eeb..5302212 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -4,3 +4,5 @@ org.gradle.parallel=false
+ org.gradle.configureondemand=false
+ android.enableJetifier=false
+ android.useAndroidX=true
++android.newDsl=false
++android.builtInKotlin=false
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index e4ef43f..2d428bf 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 253640a..9400a7e 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,12 +18,12 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "8.11.1" apply false
++    id("com.android.application") version "9.0.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+     id("com.google.firebase.crashlytics") version("3.0.7") apply false
+     // END: FlutterFire Configuration
+-    id("org.jetbrains.kotlin.android") version "2.1.0" apply false
++    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+ }
+ 
+ include(":app")
+=====
+commit 43e08b350d527e2ca8ecdc8ff692e25035a5ee53
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Thu Oct 8 02:10:51 2026 +0000
+
+    fix(android): bump AGP to 8.11.1 for Flutter CI
+
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 96dcd40..253640a 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,7 +18,7 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "8.9.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+     id("com.google.firebase.crashlytics") version("3.0.7") apply false
+=====
+commit a33e9a58e67908b08e125eda4147ff6f2a3415c3
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Fri Oct 2 21:54:30 2026 +0000
+
+    fix(android): Gradle 8.14 for Flutter bundleRelease CI
+    
+    chore(release): bump to 1.0.8+104
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index b47746e..c8cb962 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
+ 
+ ## [Unreleased]
+ 
++## [1.0.8] - 2026-10-02
++
++### Fixed
++
++- Android CI : Gradle wrapper 8.14 (minimum Flutter 8.14.0) pour `bundleRelease` Codemagic
++
+ ## [1.0.7] - 2026-10-02
+ 
+ ### Changed
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 02767eb..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.13-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/lib/environment.dart b/lib/environment.dart
+index 89525f6..7536c0a 100644
+--- a/lib/environment.dart
++++ b/lib/environment.dart
+@@ -1,7 +1,7 @@
+ class Environment {
+   /* ATTENTION Please update your desired data. */
+   static const String appName = 'Galass';
+-  static const String version = '1.0.7';
++  static const String version = '1.0.8';
+ 
+   //Language
+   // Default display name for the app's language (used in UI language selectors)
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 7420e59..2439ef1 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -3,7 +3,7 @@ description: galass is a complete ride-sharing solution.
+ 
+ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+ 
+-version: 1.0.7+103
++version: 1.0.8+104
+ environment:
+   sdk: '>=3.5.0 <4.0.0'
+ 
+=====
+commit 0eb0df09be4c30b08e0d58f0dcb7443cc771178c
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Thu Oct 8 02:38:14 2026 +0000
+
+    fix(android): allow legacy proguard-android.txt for AGP 9 plugins
+
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 5302212..0e4397f 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -6,3 +6,4 @@ android.enableJetifier=false
+ android.useAndroidX=true
+ android.newDsl=false
+ android.builtInKotlin=false
++android.r8.proguardAndroidTxt.disallowed=false
+
