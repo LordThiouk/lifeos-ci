@@ -1134,3 +1134,91 @@ find: ‘/proc/8/task/29/ns’: Permission denied
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git diff --name-only; echo "---"; git status --short
 ---
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show --name-only HEAD -- test/unit/ride_map_live_location_test.dart 2>&1 | head -5; echo "==="; git ls-tree HEAD test/unit/ride_map_live_location_test.dart 2>&1 | head -5
+===
+100644 blob 341f13db14518256103d33a912695cfc5f1d20d3	test/unit/ride_map_live_location_test.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls /home/ubuntu/.pub-cache 2>&1 | head -10; echo "==="; echo $PUB_CACHE 2>&1 | head -5
+README.md
+_temp
+active_roots
+hosted
+hosted-hashes
+===
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && find ~/.claude -name '*ISA*' -not -path '*/node_modules/*' 2>&1 | head -20
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/fixtures/ISA-goal-smoke.md
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISARender
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISAGate.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISARender.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/DOCUMENTATION/Isa/ISASystem.md
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/DOCUMENTATION/Isa/ISAFormat.md
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/DOCUMENTATION/Isa/ISAHtmlMirror.md
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/DOCUMENTATION/Isa/ISAHierarchy.md
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/hooks/ISARenderOnStop.hook.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/hooks/ISACloseGate.hook.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/hooks/ISAStaleWriteGuard.hook.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/hooks/ISAGate.hook.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/hooks/ISASync.hook.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/hooks/ISAFoldGate.hook.ts
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && flutter pub get --offline 2>&1 | tail -30
+Resolving dependencies...
+Because galass_driver depends on file_picker any which doesn't exist (could not find package file_picker in cache), version solving failed.
+
+Try again without --offline!
+Failed to update packages.
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "ISC-F5-19" MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | head -20
+151:| ISC-F5-19 | widget + integration | Pendant RIDE_ACTIVE/RUNNING, le marqueur voiture `driver_location` suit un flux GPS (≥2 positions successives) et une requête `POST driver/location-update` est émise depuis l'écran course ; icône = asset partagé `marker_car.png` | marqueur se déplace sur ≥2 positions ; ≥1 ping `driver/location-update` émis en course | flutter test test/unit/ride_map_live_location_test.dart + grep | cross: ISC-F4-32 (Rider) |
+229:- [ ] ISC-F5-19: **Pendant RIDE_ACTIVE et RIDE_RUNNING, la voiture du chauffeur est mise à jour en temps réel sur la carte Driver (flux GPS → marqueur voiture partagé `marker_car.png` → caméra) ET sa position est envoyée au backend (`POST driver/location-update`, broadcast Pusher côté Rider).** Audit code 2026-11-25 (lecture seule) : affichage **PARTIEL** — `ride_map_controller.dart` l.88/333-340 ne lit la position qu'une fois via `Geolocator.getCurrentPosition` au `loadMap`, le marqueur `driver_location` (l.209-222, icône `MyIcons.markerCar` = `assets/icon/marker_car.png`, l.313) reste figé, et la caméra ne cadre qu'à l'ouverture (`poly_line_map.dart` l.43-46, `ride_map_controller.dart` l.406-412) ; le suivi temps réel de la home (`home_screen.dart` l.376-388) est mis en pause dès l'ouverture de la course (`didPushNext` l.95-99). Envoi backend **PARTIEL** — aucun ping dédié course dans `ride_details_*` ; seul le service foreground envoie `driver/location-update` (`forground_location_service.dart` l.79-114/121-152, `dashboard_repo.dart` l.38-51, `url_container.dart` l.74), uniquement si le chauffeur est online (`forground_location_service.dart` l.34-39, `main.dart` l.121-126) ; `maybePingServerLocation` (`dashboard_controller.dart` l.65-91) est lui aussi coupé avec la home. Falsifier: un test widget/unit montre le marqueur `driver_location` qui change sur un flux GPS pendant RIDE_ACTIVE/RUNNING et une requête `driver/location-update` émise depuis l'écran course, ou une capture device où la voiture avance et la caméra suit. Cross: ISC-F4-32 (Rider). [app: Driver · classe: temps réel carte+backend · preuve: widget + grep]
+282:- **2026-11-25 — Papa (Dakar, 21:58)** : vérifier la position voiture en temps réel. Verdict code lecture seule — affichage Driver **PARTIEL** (marqueur `marker_car.png` figé, pas de flux GPS ni suivi caméra pendant RIDE_ACTIVE/RUNNING) et envoi backend **PARTIEL** (ping `driver/location-update` seulement via service foreground si online, pas de ping dédié course). Ajout `ISC-F5-19` (non coché), lié `ISC-F4-32` côté Rider ; aucun code `lib/`/`test/` modifié.
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '250,270p' MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+- **2026-10-09** — FullRun F5 build PASS (Marcus) : Anti-F5-3 lock + FG→lifecycle→respond + pending re-nav/flush ; 9/9+1/1 tests ; ISC-F5-11 device ≤3s OPEN (F5-D).
+- **2026-10-09** — FullRun F5 Serena **PASS** : build F5-A Anti lock → F5-B harden `_bringAppToForeground` → F5-C nav sous FG → F5-D device ≤3s. **Dispatch** : Anti-F5-3+ISC-F5-11 code → **Marcus** ; ISC-F5-11 device → **Aditi**/ARTEMIS (pas redesign CallKit). Risks : launchApp flaky, race stack, RTT vs budget 3s.
+- **2026-10-09** — Principal: **CallKit in ISA** — F5 + ISC-F5-11 / Anti-F5-3 (auto-open post-accept) ; sonnerie CallKit déjà OK device ; cross `20261002-galass-driver-dispatch-f4` GAP-1.
+- **2026-10-09** — Device principal (screenshot) : timeline F2 **OK** (pickup → Colobane → Medina → Yoff) ; labels bug **« Arrêt {number} »** (GetX `trParams` veut `@number`, pas `{number}`) — fix `my_strings` ; CallKit **arrive** ; auto-open post-accept → **ISC-F5-11 OPEN**.
+- **2026-10-07** — Principal: update ISA post-FullRun F4 — progress 9/15 ; Vision alignée V2 ; Learning Pusher ; Verification F5-10 8/8 ; Remaining Work device/bridge only.
+- **2026-10-07** — FullRun feature F4 **COMPLETE** (pipeline `status: complete`) — Max GO-with-conditions ; no ship until F7 prod ; ARTEMIS ISC-F5-7 device OPEN ; F4 code claims CLOSED.
+- **2026-10-07** — FullRun F4 Max **GO-with-conditions** `{"status":"pass"}` — no ship until F7 prod; ARTEMIS ISC-F5-7 device OPEN; F4 code claims CLOSED.
+- **2026-10-07** — FullRun F4 verify re-run PASS — code-reviewer/Silas/Forge `{"status":"pass"}`; Forge concerns defer END client until F7 prod. Advance → Max.
+- **2026-10-07** — FullRun F4 build retry PASS — Marcus: flat STOP_COMPLETED before fromJson; `_isDifferentRide` fail-close; nested stops guard; 8/8 pusher tests. END client-only defer until F7 prod.
+- **2026-10-07** — FullRun F4 verify FAIL — code-reviewer HIGH: flat STOP_COMPLETED never reaches handler (fromJson before unwrap). Silas HIGH: `_isDifferentRide` fail-open on empty ride_id; END client-only until F7 prod (defer deploy). Retreat → build retry Marcus.
+- **2026-10-07** — FullRun F4 build PASS — Marcus ISC-F5-6/8/9/10 + Aditi ISC-F5-7 ; 12/12 unit ; advance → verify.
+- **2026-10-07** — FullRun F4 resume: Cursor session rebound from Rider F6 verify → Driver F4 **build** (Serena already PASS). Nix abort self-coding; stubs partial → Marcus/Aditi own. Dispatch-only.
+- **2026-10-06** — FullRun step 5 verify re-run **pass** : code-reviewer pass ; Silas pass (3 LOW defer) ; Forge pass ; findings Max code **CLOSED**.
+- **2026-10-06** — Max findings fix (Marcus) : `parsedCoordinates()` + cap 25 + parse unifié `RideModel.parseStops` + label truncate + map filter ; **253/253** GREEN ; device claims OPEN.
+- **2026-10-06** — FullRun step 6 Max **GO-with-conditions** `{"status":"fail"}` : code+246/246 OK ; **BLOCK close** tant que ISC-F5-3/4/5 + Anti-F5-1 device + Bridge-B4 OPEN ; defer Forge coords-null→0,0 + cap stops[] v1.1.
+- **2026-10-06** — FullRun step 5 verify : code-reviewer **pass** ; Silas **pass** (MEDIUM defer cap stops[] v1.1) ; Forge **concerns** (defer: filtrer coords null→0,0 + unifier parse stops) ; **246/246** tests ; device ARTEMIS OPEN.
+- **2026-10-06** — Principal force advance build→verify (2026-10-06).
+- **2026-10-06** — FullRun F2 build PASS (Marcus resume) : map waypoints+markers, presenter stops[], timeline Aditi ; orphan supprimé ; **246/246** tests GREEN ; device ARTEMIS ISC-F5-3/4/5 OPEN.
+- **2026-10-06** — FullRun **feature F2** step Serena PASS : timeline N nœuds (`ride_itinerary_timeline`), map waypoints+markers, modal résumé + parse stops presenter ; v1 polyline complète (pas segment courant sans ack).
+- **2026-10-06** — FullRun step 4 — Marcus F1 build PASS : `ride_stop_model.dart`, `RideModel.stops`/`hasStops`, `multistop_ride_model_test` 4/4 + `multistop_regression_test` 3/3 ; suite **242/242** GREEN ; F2 UI + Anti-F5-1 device OPEN.
+- **2026-10-06** — FullRun step 3 — Serena plan PASS : build F0→F1 (`ride_stop_model`, `RideModel.stops`, tests) → F2 UI (`ride_itinerary_timeline`, map markers segment v1, modal résumé) → F3 anti-régression. **Dispatch map** : F5-1/2/4/Anti → **Marcus** ; F5-3/5 → **Aditi** + device ARTEMIS ; F0-1 → Nix ISA ; Bridge-B4 → device+opérateur staging.
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -B2 -A15 "ISC-F5-19" MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | tail -20
+- **2026-10-09** — Principal: CTA ACTIVE+RUNNING **après** itinéraire (pas avant) — revert ordre Aditi ; comportement inchangé.
+--
+- **2026-11-23 — Leg F6 enrichi (méthode anti-régression UI, Papa, ISA-only).** Les 4 régressions Driver listées dans la demande (CTA unique par état, « Terminer la course » distinct, « Annuler la course » dangereuse, repères d'arrêts sur la carte) sont **déjà entièrement couvertes** par ISC-F5-12/13/14/16 (ce leg F6, ci-dessus) — aucun nouvel ISC de correctif n'était nécessaire côté Driver. Ajouté ce tour : (1) exigence golden+e2e sur ISC-F5-12/13/14/16 (preuve renforcée, jamais affaiblie) ; (2) ISC-F5-17, contrat d'écran « Driver en course » — Papa n'a détaillé la liste de référence que pour l'écran Rider (point 3), donc la liste Driver (avatar+nom+note, message, appel, CTA unique, Annuler-danger, itinéraire, repères arrêts) est **dérivée du code lu** plutôt que d'une référence fournie — signalé comme point à confirmer/compléter par Papa. `progress` recompté 18/24 pour inclure ISC-F5-17. Aucun ISC existant cassé, aucune phase changée à la main, aucun code produit touché.
+- **2026-11-23 — Leg Vera (ISA-only, `feat/multistop-e2e-2026-11-15`)** : porté le contrat du repère invisible pour `ISC-F5-14` sur `galass.driver.stops=<done>/<total>` (miroir Rider `ISC-F4-22`, harnais `ISC-EMU-1`) ; consigné l'écart de phase `complete 18/18` alors que F6 n'est pas livré (ne pas corriger la phase à la main). Ajouté `ISC-F5-18` (trou planche) : les goldens `driver_ride_running_multistop_stop_1_active.png` et `..._stop_2_active.png` sont byte-identiques (sha256 `[REDACTED:hex64]`) ; cause code confirmée — `RideItineraryTimeline` ne rend pas `completedAt` et les CTA ont la même valeur à 0/1 arrêt terminé. `ISC-F5-15` infirmé visuellement par `driver_ride_running_multistop_all_stops_done.png` (destination réelle affichée) — garde maintenue, pas de correctif inventé. Aucun `lib/` modifié, aucun golden régénéré, aucun ISC coché.
+- **2026-11-25 — Papa (Dakar, 21:58)** : vérifier la position voiture en temps réel. Verdict code lecture seule — affichage Driver **PARTIEL** (marqueur `marker_car.png` figé, pas de flux GPS ni suivi caméra pendant RIDE_ACTIVE/RUNNING) et envoi backend **PARTIEL** (ping `driver/location-update` seulement via service foreground si online, pas de ping dédié course). Ajout `ISC-F5-19` (non coché), lié `ISC-F4-32` côté Rider ; aucun code `lib/`/`test/` modifié.
+- **2026-11-26 — Papa (Dakar) — OK regen goldens ride_details.** Cause racine : Artemis rendait sous Flutter **3.44.8** alors que les baselines goldens exigent **3.50.1** (README `test/goldens/driver/`). Fix : alignement Artemis sur 3.50.1 + régénération **sous Flutter 3.50.1 uniquement** via `flutter test --update-goldens test/goldens/driver/ride_details_golden_test.dart`, puis test de comparaison vert. Re-basés sur `feat/multistop-e2e-2026-11-15` après revue F6 : `driver_ride_running_multistop_stop_1_active.png` / `..._stop_2_active.png` (`62a8597774c3e541`, toujours identiques entre eux — trou ISC-F5-18 non refermé) et `driver_ride_running_multistop_all_stops_done.png` (`f28dc52958d8ecff`) ; `single_stop` et `ride_completed` inchangés vs baseline `main`. Aucun `lib/` produit touché, `.fullrun` intact, pas de push.
+- **2026-11-26 21:35 — Papa (Dakar) : ISC-F5-17 liste confirmée telle quelle.** Les 7 éléments obligatoires « Driver en course » (RIDE_RUNNING) sont figés : (1) avatar+nom+note, (2) bouton message, (3) bouton appel, (4) un seul CTA principal selon l'état (ISC-F5-12), (5) « Annuler la course » distinct-danger (ISC-F5-13), (6) bloc itinéraire pickup→arrêts→destination, (7) repères d'arrêts sur la carte (ISC-F5-16). Règle « ajouter sans retirer » inchangée. Débloque le golden `test/widget/course_en_cours_driver_contract_test.dart` — **ne coche pas** ISC-F5-17 (implémentation + preuve encore ouvertes).
+
+## Learning
+
+- 2026-10-07 | conjectured: `PusherResponseModel.fromJson` then switch would handle `STOP_COMPLETED` like other ride events
+refuted by: code-reviewer HIGH — F7 payload flat `{ride_id,stop_id,...}` has no nested `data` → fromJson throws → handler never runs
+learned: flat stop events must branch before envelope parse ; missing ride_id must fail-close on shared driver channel
+criterion now: ISC-F5-10 — `multistop_pusher_test.dart` 8/8 covers flat onEvent + fail-close + nested empty guard
+
+
+
+## Verification
+
+- ISC-F0-1: probe — SHA256 repo=LifeOS match close 2026-10-09 (dual-write)
+
