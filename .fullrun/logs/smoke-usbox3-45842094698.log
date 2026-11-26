@@ -4239,3 +4239,17 @@ See the link below for more information:
     }
     if (androidBuildInfo.releaseManifestEngineShellArgs != null) {
 
+$ ls -a /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/; echo ===; grep -rln "android-skip-build-dependency-validation\|rider-apk-gradle\|Build APK Rider" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci /home/ubuntu/actions-runner/_work/_actions 2>/dev/null | head -20
+.
+..
+ci
+lifeos
+target
+===
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/COMMIT_EDITMSG
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/logs/HEAD
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/logs/refs/heads/build/rider-apk-gradle
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/config
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/FETCH_HEAD
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/HEAD
+
