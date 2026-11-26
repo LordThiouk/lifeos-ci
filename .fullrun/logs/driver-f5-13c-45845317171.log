@@ -5798,3 +5798,89 @@ $ grep -n "flutter-version\|flutter_version\|3\.50\|3\.35\|matrix\|src/\$a\|apk\
 === git log of workflow ===
 33f9ab9 Merge fix/real-places : harnais e2e multistop déterministe (F19) (#6)
 
+$ sed -n '40,80p' /tmp/dvc_3501.kt; sed -n '183,225p' /tmp/dvc_3501.kt
+// The following messages represent best effort guesses at where a Flutter developer should
+    // look to upgrade a dependency that is below the corresponding threshold. Developers can
+    // change some of these locations, so they are not guaranteed to be accurate.
+    @VisibleForTesting internal fun getPotentialGradleFix(projectDirectory: String): String =
+        "Your project's gradle version is typically " +
+            "defined in the gradle wrapper file. By default, this can be found at " +
+            "$projectDirectory/gradle/wrapper/gradle-wrapper.properties. \n" +
+            "For more information, see https://docs.gradle.org/current/userguide/gradle_wrapper.html.\n"
+
+    // The potential java fix does not make use of the project directory,
+    // so it left as a constant.
+    @VisibleForTesting internal const val POTENTIAL_JAVA_FIX: String =
+        "The Java version used by Flutter can be " +
+            "set with `flutter config --jdk-dir=<path>`. \nFor more information about how Flutter " +
+            "chooses which version of Java to use, see the --jdk-dir section of the " +
+            "output of `flutter config -h`.\n"
+
+    @VisibleForTesting internal fun getPotentialAGPFix(projectDirectory: String): String =
+        "Your project's AGP version is typically " +
+            "defined in the plugins block of the `settings.gradle` file " +
+            "($projectDirectory/settings.gradle), by a plugin with the id of " +
+            "com.android.application. \nIf you don't see a plugins block, your project " +
+            "was likely created with an older template version. In this case it is most " +
+            "likely defined in the top-level build.gradle file " +
+            "($projectDirectory/build.gradle) by the following line in the dependencies" +
+            " block of the buildscript: \"classpath 'com.android.tools.build:gradle:<version>'\".\n"
+
+    @VisibleForTesting internal fun getPotentialKGPFix(projectDirectory: String): String =
+        "Your project's KGP version is typically " +
+            "defined in the plugins block of the `settings.gradle` file " +
+            "($projectDirectory/settings.gradle), by a plugin with the id of " +
+            "org.jetbrains.kotlin.android. \nIf you don't see a plugins block, your project " +
+            "was likely created with an older template version, in which case it is most " +
+            "likely defined in the top-level build.gradle file " +
+            "($projectDirectory/build.gradle) by the ext.kotlin_version property.\n"
+
+    @VisibleForTesting internal fun getPotentialSDKFix(projectDirectory: String): String =
+        "Your project's minimum Android SDK version is typically " +
+            "defined in the android block of the app-level `build.gradle(.kts)` file " +
+            "($projectDirectory/app/build.gradle(.kts))."
+
+    @VisibleForTesting internal fun getErrorMessage(
+        dependencyName: String,
+        versionString: String,
+        errorVersion: String,
+        potentialFix: String
+    ): String =
+        "Error: Your project's $dependencyName version ($versionString) is lower " +
+            "than Flutter's minimum supported version of $errorVersion. Please upgrade " +
+            "your $dependencyName version. \nAlternatively, use the flag " +
+            "\"--android-skip-build-dependency-validation\" to bypass this check.\n\n" +
+            "Potential fix: $potentialFix"
+
+    @VisibleForTesting internal fun getWarnMessage(
+        dependencyName: String,
+        versionString: String,
+        warnVersion: String,
+        potentialFix: String
+    ): String =
+        "Warning: Flutter support for your project's $dependencyName version " +
+            "($versionString) will soon be dropped. Please upgrade your $dependencyName " +
+            "version to a version of at least $warnVersion soon." +
+            "\nAlternatively, use the flag \"--android-skip-build-dependency-validation\"" +
+            " to bypass this check.\n\nPotential fix: $potentialFix"
+
+    @VisibleForTesting internal fun getFutureUnsupportedMajorVersionErrorMessage(
+        dependencyName: String,
+        versionString: String,
+        unsupportedMajorVersion: Int,
+        potentialFix: String
+    ): String =
+        "Error: Your project's $dependencyName version ($versionString) is not yet " +
+            "supported. Flutter does not support $dependencyName $unsupportedMajorVersion, " +
+            "and support will be added in a future Flutter release. Please downgrade your " +
+            "$dependencyName version to a version below $unsupportedMajorVersion.0.0 to " +
+            "continue.\nAlternatively, use the flag \"--android-skip-build-dependency-validation\"" +
+            " to bypass this check (unsupported; your build may fail).\n\n" +
+            "Potential fix: $potentialFix"
+
+    @VisibleForTesting
+    internal fun getFlavorSpecificMessage(
+        flavorName: String?,
+        dependencyName: String
+    ): String = dependencyName + (if (flavorName != null) " (flavor='$flavorName')" else "")
+
