@@ -3372,3 +3372,20 @@ Failed to update packages.
 $ flutter test --no-pub test/unit/ride_map_live_location_test.dart 2>&1
 Failed to find llvm-ar relative to LocalFile: '/usr/lib/llvm-18/bin/clang': LocalFile: '/usr/lib/llvm-18/bin/llvm-ar' doesn't exist.
 
+$ ls /usr/local/bin/ | grep -i -E 'flutter|dart|fvm' ; ls /opt 2>/dev/null; ls ~ 2>/dev/null | head; ls /usr/lib/llvm-18/bin/ 2>/dev/null | head -30; find / -maxdepth 3 -name 'llvm-ar' 2>/dev/null | head
+dart
+flutter
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+clang
+clang++
+clang-18
+clang-cpp
+/tmp/fake-llvm-bin/llvm-ar
+
