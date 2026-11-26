@@ -5729,3 +5729,41 @@ object DependencyVersionChecker {
 $ cd /agent/repos/Galass_Driver && find . -name "codemagic*" -o -name "*.yaml" | grep -i codemagic; echo "==="; cat codemagic.yaml 2>/dev/null | head -120
 ===
 
+$ find /agent/repos/Galass_Driver -name "codemagic*" 2>/dev/null; echo "==="; find /agent/repos/Galass_Rider -name "codemagic*" 2>/dev/null; echo "==="; ls /agent/repos/Galass_Rider
+===
+/agent/repos/Galass_Rider/Galass_Rider-merge/codemagic.yaml.deprecated
+/agent/repos/Galass_Rider/codemagic.yaml.deprecated
+===
+AGENTS.md
+CHANGELOG.md
+CLAUDE.md
+FIX_SUMMARY.md
+GALASS_CONTEXT.md
+Galass_Rider-merge
+Gemfile
+Gemfile.lock
+MEMORY
+NIMBALYST_DEV_SETUP.md
+README.md
+RIDER-MULTISTOP.md
+SECURE_CREDENTIALS_SETUP.md
+VERIFY-F434B.md
+_ephemeral
+analysis_options.yaml
+android
+assets
+codemagic.yaml.deprecated
+devtools_options.yaml
+diag
+docs
+fastlane
+firebase.json
+ios
+lib
+prompts
+pubspec.lock
+pubspec.yaml
+scripts
+test
+test_result.txt
+
