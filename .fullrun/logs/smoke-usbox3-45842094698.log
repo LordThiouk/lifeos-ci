@@ -7192,3 +7192,5 @@ $ cd /tmp && zcat -f art*.gz 2>/dev/null | grep -n "Build APK\|flutter build apk
 $ cd /tmp && zcat -f art*.gz 2>/dev/null | grep -n "minimum supported version\|Your project's gradle version\|Unsupported\|DependencyValidation" | head -20
 4507:2026-11-26T10:32:08.6129886Z      Potential fix: Your project's gradle version is typically defined in the gradle wrapper file. By default, this can be found at /home/runner/work/galass-emu-actions-pub/galass-emu-actions-pub/src/rider/android/gradle/wrapper/gradle-wrapper.properties.
 
+◈ Parallel Web Search "Firebase Crashlytics Gradle plugin 3.0.7 Android Gradle Plugin 9.0 compatibility "AGP 9""
+◈ Parallel Web Search ""google-services" gradle plugin 4.3.15 AGP 9.0 incompatible NoSuchMethod Android Gradle Plugin 9"
