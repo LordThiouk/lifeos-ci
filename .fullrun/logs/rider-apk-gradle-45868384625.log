@@ -725,3 +725,156 @@ void main() {
   });
 }
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "startLiveLocationTracking\|stopLiveLocationTracking\|isRideInProgress" lib/data/controller/ride/ride_details/ride_details_controller.dart | head -20
+64:  bool get isRideInProgress =>
+140:    if (isRideInProgress) {
+141:      startLiveLocationTracking();
+143:      stopLiveLocationTracking();
+152:  void startLiveLocationTracking() {
+154:    if (!isRideInProgress) return;
+181:  void stopLiveLocationTracking() {
+189:    if (!isRideInProgress) {
+191:      stopLiveLocationTracking();
+201:    if (!isRideInProgress) return;
+225:    stopLiveLocationTracking();
+335:          if (isRideInProgress) {
+336:            startLiveLocationTracking();
+338:            stopLiveLocationTracking();
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "startLiveLocationTracking" --include='*.dart' | head -20
+test/unit/ride_map_live_location_test.dart:100:      details.startLiveLocationTracking();
+test/unit/ride_map_live_location_test.dart:128:      details.startLiveLocationTracking();
+test/unit/ride_map_live_location_test.dart:147:      details.startLiveLocationTracking();
+test/unit/ride_map_live_location_test.dart:162:      details.startLiveLocationTracking();
+test/unit/ride_map_live_location_test.dart:171:      details.startLiveLocationTracking();
+lib/data/controller/ride/ride_details/ride_details_controller.dart:141:      startLiveLocationTracking();
+lib/data/controller/ride/ride_details/ride_details_controller.dart:152:  void startLiveLocationTracking() {
+lib/data/controller/ride/ride_details/ride_details_controller.dart:336:            startLiveLocationTracking();
+lib/presentation/screens/rides/home_screen/home_screen.dart:72:        _startLiveLocationTracking(controller);
+lib/presentation/screens/rides/home_screen/home_screen.dart:265:      _startLiveLocationTracking(controller);
+lib/presentation/screens/rides/home_screen/home_screen.dart:281:    _startLiveLocationTracking(controller);
+lib/presentation/screens/rides/home_screen/home_screen.dart:356:  Future<void> _startLiveLocationTracking(DashBoardController controller) async {
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '240,360p' lib/data/controller/ride/ride_details/ride_details_controller.dart
+tRide.pickupLatitude.toString(),
+        precision: 16,
+      ),
+      StringConverter.formatDouble(
+        tRide.pickupLongitude.toString(),
+        precision: 16,
+      ),
+    );
+    destinationLatLng = LatLng(
+      StringConverter.formatDouble(
+        tRide.destinationLatitude.toString(),
+        precision: 16,
+      ),
+      StringConverter.formatDouble(
+        tRide.destinationLongitude.toString(),
+        precision: 16,
+      ),
+    );
+
+    LatLng? currentLeg;
+    final intermediateStops = <LatLng>[];
+    if (tRide.hasStops) {
+      final next = tRide.nextLegCoordinates();
+      if (next != null) {
+        currentLeg = LatLng(next.lat, next.lng);
+      }
+      for (final stop in tRide.stops!) {
+        if (stop.isCompleted) {
+          continue;
+        }
+        final coords = stop.parsedCoordinates();
+        if (coords == null) {
+          continue;
+        }
+        final point = LatLng(coords.lat, coords.lng);
+        if (currentLeg != null &&
+            point.latitude == currentLeg.latitude &&
+            point.longitude == currentLeg.longitude) {
+          continue;
+        }
+        intermediateStops.add(point);
+      }
+    }
+
+    mapController.setStopMarkers(RideStopProgress.listFromRide(tRide));
+    mapController.loadMap(
+      pickup: pickupLatLng,
+      destination: destinationLatLng,
+      intermediateStops: intermediateStops,
+      currentLeg: currentLeg,
+    );
+  }
+
+  String currency = '';
+  String currencySym = '';
+  String userImageUrl = '';
+  bool isLoading = true;
+  bool isRunning = false;
+  LatLng pickupLatLng = const LatLng(0, 0);
+  LatLng destinationLatLng = const LatLng(0, 0);
+
+  Future<void> getRideDetails(String id, {bool shouldLoading = true}) async {
+    final rideId = StringConverter.normalizeDispatchRideId(id) ?? '';
+    currency = repo.apiClient.getCurrency();
+    currencySym = repo.apiClient.getCurrency(isSymbol: true);
+    isLoading = shouldLoading;
+    update();
+
+    if (rideId.isEmpty) {
+      isLoading = false;
+      update();
+      return;
+    }
+
+    try {
+      ResponseModel responseModel = await repo.getRideDetails(rideId);
+      if (responseModel.statusCode == 200) {
+        RideDetailsResponseModel model = RideDetailsResponseModel.fromJson(
+          (responseModel.responseJson),
+        );
+        if (model.status == MyStrings.success) {
+          RideModel? tRide = model.data?.ride;
+          userImageUrl = model.data?.userImagePath ?? '';
+          if (tRide != null) {
+            // F8: same rule as the Pusher events — the API response is the
+            // source of truth for what it carries, it does not wipe the rest
+            // (a wholesale replace erases every field a response omits, which
+            // this file already documents for `updateRide`).
+            ride = RideEventMerge.applyEvent(current: ride, event: tRide);
+            isRunning = ride.isRunning == '1' ? true : false;
+            update();
+            loadMapForRide(ride);
+          }
+          // ISC-F5-19: a ride loaded as ACTIVE/RUNNING starts the car stream;
+          // a ride that is no longer in progress stops it.
+          if (isRideInProgress) {
+            startLiveLocationTracking();
+          } else {
+            stopLiveLocationTracking();
+          }
+          if (ride.isRunning == "1" || ride.status == "1") {
+            await mapController.setCustomMarkerIcon(isRunning: true);
+          }
+          if (ride.paymentStatus == "3" && shouldLoading == true) {
+            onShowPaymentDialog(Get.context);
+          }
+          // A request received while no context existed is shown now, on this
+          // successful load, instead of being lost (H3).
+          consumePendingCashPayment();
+        } else {
+          CustomSnackBar.error(
+            errorList: model.message ?? [MyStrings.somethingWentWrong],
+          );
+        }
+      } else {
+        CustomSnackBar.error(errorList: [responseModel.message]);
+      }
+    } catch (e) {
+      printX(e);
+    } finally {
+      isLoading = false;
+
