@@ -6623,3 +6623,20 @@ MEMORY/WORK/20260801-galass-vehicle-image-pdf-doc/ISA.md
 MEMORY/WORK/20261002-galass-auto-dispatch/ISA.md
 MEMORY/WORK/20261006-galass-regression-multistop/ISA.md
 
+Je dois vérifier le nom exact du répertoire — l'affichage est ambigu.
+$ python3 -c "
+import os
+base='/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK'
+for x in sorted(os.listdir(base)):
+    print(repr(x))
+"
+'2026-11-22-galass-lot-client'
+'20260618-galass-wave-orange-money-payments'
+'20260619-galass-driver-runtime-fixes'
+'20260729-galass-seclists-offensive-pentest'
+'20260801-galass-vehicle-image-pdf-doc'
+'20261002-galass-auto-dispatch'
+'20261006-galass-regression-multistop'
+'20261013-galass-fcm-service-account-outside-webroot'
+'20261013-galass-security-general-setting-messages'
+
