@@ -2751,3 +2751,24 @@ SETUP DONE
 Failing tests:
   /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/diag_live_test.dart: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset
 
+$ python3 - << 'PY'
+p='/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/diag_live_test.dart'
+s=open(p).read()
+s=s.replace("  tearDown(() async {\n    await positions.close();\n    Get.reset();\n  });",
+            "  tearDown(() async {\n    print('TEARDOWN START');\n    await positions.close();\n    print('POSITIONS CLOSED');\n    Get.reset();\n    print('GET RESET DONE');\n  });")
+open(p,'w').write(s)
+PY
+cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_CACHE=/home/ubuntu/.pub-cache; export PATH=/tmp/flutter_sdk/flutter/bin:$PATH; timeout 40 flutter test test/unit/diag_live_test.dart --name "car marker uses the shared" 2>&1 | tail -25
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/diag_live_test.dart
+00:00 +0: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset
+SETUP DONE
+TEARDOWN START
+00:30 +0 -1: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+00:30 +0 -1: Some tests failed.
+
+Failing tests:
+  /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/diag_live_test.dart: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset
+
