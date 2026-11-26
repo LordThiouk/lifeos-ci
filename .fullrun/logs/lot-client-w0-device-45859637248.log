@@ -16946,3 +16946,27 @@ Route::namespace('Api\Driver')->prefix('driver')->group(function () {
 
         Route::post('register', 'RegisterController@register');
 
+# Todos
+[•] S-W1-01 ISC-3: vérifier gardes ipn/* + dev-token + suite security verte
+[ ] S-W1-02 ISC-4: docs/BUGS.md triage porté + rg OUVERT=0
+[ ] S-W1-03 ISC-10: approbation une étape (DriverOneStepApprovalTest vert)
+[ ] S-W1-04 ISC-10.1: refus si incomplet états inchangés
+[ ] S-W1-05 ISC-10.2: routes séparées + ManageDrivers vert
+[ ] S-W1-06 ISC-10.3: route/bouton Valider le chauffeur (partie Forge)
+[ ] S-W1-07 ISC-11: 1 SMS FR E.164 à la validation
+[ ] S-W1-08 ISC-11.1: 0 SMS si refus/déjà validé
+[ ] S-W1-09 ISC-11.2: SMS ≤160 sans données sensibles
+[ ] S-W1-10 ISC-11.3: échec SMS non bloquant + log
+[ ] S-W1-11 ISC-20: inscription photo 422 sans + stocke
+[ ] S-W1-12 ISC-20.2: chauffeur historique sans photo se connecte
+[ ] S-W1-13 ISC-30.2: passerelles Wave/OM + IPN inchangées (Payment vert)
+[ ] S-W1-14 ISC-40: colonnes ordre+visibilité migration+sql (ServiceOrderMigrationTest)
+[ ] S-W1-15 ISC-41: endpoint admin réordonner/afficher/masquer persiste (partie Forge)
+[ ] S-W1-16 ISC-42: API Rider ordre admin + masqués exclus (RiderServiceListOrderTest)
+[ ] S-W1-17 ISC-43: service masqué lisible sur course existante (HiddenServiceExistingRideTest)
+[ ] S-W1-18 ISC-44: service masqué → 422 création (HiddenServiceCreateRideTest)
+[ ] Corriger scaffolding/app minimal + vérifier toute la suite W1
+[ ] Coche ISC via ISATool.ts si preuve passe
+[ ] Écrire /home/ubuntu/actions-runner/_work/_temp/task_done.md
+
+C'est un travail multi-étapes. Je crée une liste de suivi et j'avance tâche par tâche en respectant `after:`, avec vérification réelle PHP.
