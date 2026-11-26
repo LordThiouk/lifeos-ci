@@ -5977,3 +5977,41 @@ android {
         targetSdk = 36
 === skip flags anywhere in Driver ===
 
+$ grep -rn "ProjectValidator\|allProjectValidators" /tmp/flutter/packages/flutter_tools/lib/src/commands/ 2>/dev/null | head -20; echo "=== runner/global ==="; grep -rn "ProjectValidator" /tmp/flutter/packages/flutter_tools/lib --include=*.dart | grep -v "project_validator.dart\|commands/" | head -20
+/tmp/flutter/packages/flutter_tools/lib/src/commands/analyze.dart:27:    required this._allProjectValidators,
+/tmp/flutter/packages/flutter_tools/lib/src/commands/analyze.dart:197:  final List<ProjectValidator> _allProjectValidators;
+/tmp/flutter/packages/flutter_tools/lib/src/commands/analyze.dart:213:  List<ProjectValidator> allProjectValidators() => _allProjectValidators;
+/tmp/flutter/packages/flutter_tools/lib/src/commands/analyze.dart:356:        allProjectValidators: _allProjectValidators,
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:16:    required this.allProjectValidators,
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:26:  final List<ProjectValidator> allProjectValidators;
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:41:    final results = <ProjectValidator, Future<List<ProjectValidatorResult>>>{};
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:44:    for (final ProjectValidator validator in allProjectValidators) {
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:52:              (List<ProjectValidatorResult> results) => results,
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:55:                return <ProjectValidatorResult>[ProjectValidatorResult.crash(exception, trace)];
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:65:      for (final Future<List<ProjectValidatorResult>> resultListFuture in results.values) {
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:66:        final List<ProjectValidatorResult> resultList = await resultListFuture;
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:79:      for (final ProjectValidator validator in results.keys) {
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:97:    List<ProjectValidatorResult>? results,
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:101:      for (final ProjectValidatorResult result in results) {
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:107:  String getStringResult(ProjectValidatorResult result) {
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:109:      StatusProjectValidator.warning => '[!]',
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:110:      StatusProjectValidator.error => '[✗]',
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:111:      StatusProjectValidator.crash => '[☠]',
+/tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:112:      StatusProjectValidator.info || StatusProjectValidator.success => '[✓]',
+=== runner/global ===
+/tmp/flutter/packages/flutter_tools/lib/src/project.dart:970:  Future<ProjectValidatorResult> validateJavaAndGradleAgpVersions() async {
+/tmp/flutter/packages/flutter_tools/lib/src/project.dart:971:    // Constructing ProjectValidatorResult happens here and not in
+/tmp/flutter/packages/flutter_tools/lib/src/project.dart:977:    return ProjectValidatorResult(
+/tmp/flutter/packages/flutter_tools/lib/src/project.dart:981:          ? StatusProjectValidator.success
+/tmp/flutter/packages/flutter_tools/lib/src/project.dart:982:          : StatusProjectValidator.error,
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:5:enum StatusProjectValidator { error, warning, success, crash, info }
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:7:class ProjectValidatorResult {
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:8:  const ProjectValidatorResult({
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:18:  final StatusProjectValidator status;
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:28:  static ProjectValidatorResult crash(Object exception, StackTrace trace) {
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:29:    return ProjectValidatorResult(
+/tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:32:      status: StatusProjectValidator.crash,
+/tmp/flutter/packages/flutter_tools/lib/executable.dart:239:    allProjectValidators: <ProjectValidator>[
+/tmp/flutter/packages/flutter_tools/lib/executable.dart:240:      GeneralInfoProjectValidator(),
+/tmp/flutter/packages/flutter_tools/lib/executable.dart:241:      VariableDumpMachineProjectValidator(
+
