@@ -1550,3 +1550,19 @@ $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git diff --
 test/unit/tmp_probe_test.dart | 93 -------------------------------------------
  1 file changed, 93 deletions(-)
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls /opt/flutter 2>&1 | head -10; echo "==="; ls /home/ubuntu/flutter 2>&1 | head -10; echo "==="; echo $HOME
+AUTHORS
+CHANGELOG.md
+CODEOWNERS
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+DEPS
+LICENSE
+PATENT_GRANT
+README.md
+TESTOWNERS
+===
+ls: cannot access '/home/ubuntu/flutter': No such file or directory
+===
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home
+
