@@ -1290,3 +1290,137 @@ Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/android/grad
 -android.r8.proguardAndroidTxt.disallowed=false
 
 
+$ cat test/release/release_docs_static_test.dart; echo ====; sed -n '1,20p' CHANGELOG.md
+import 'dart:io';
+
+import 'package:flutter_test/flutter_test.dart';
+
+/// ISC-4.1, ISC-5–8, ISC-10, Anti-3, Anti-4 — static release docs.
+/// ISA `galass-version-release-docs-180716`.
+void main() {
+  final repoRoot = Directory.current.path;
+
+  group('ISC-5 CHANGELOG.md', () {
+    test('CHANGELOG.md exists with Unreleased and 1.0.0 sections', () {
+      final changelog = File('$repoRoot/CHANGELOG.md');
+      expect(changelog.existsSync(), isTrue);
+      final content = changelog.readAsStringSync();
+      expect(content, contains('## [Unreleased]'));
+      expect(content, contains('## [1.0.0]'));
+    });
+  });
+
+  group('ISC-6 / ISC-7 CODEMAPS', () {
+    test('docs/CODEMAPS/INDEX.md exists', () {
+      final index = File('$repoRoot/docs/CODEMAPS/INDEX.md');
+      expect(index.existsSync(), isTrue);
+    });
+
+    test('at least 3 domain CODEMAPS md files excluding INDEX', () {
+      final codemapsDir = Directory('$repoRoot/docs/CODEMAPS');
+      expect(codemapsDir.existsSync(), isTrue);
+      final domainMaps = codemapsDir
+          .listSync()
+          .whereType<File>()
+          .where((f) {
+            final name = f.uri.pathSegments.last.toLowerCase();
+            return name.endsWith('.md') && name != 'index.md';
+          })
+          .toList();
+      expect(
+        domainMaps.length,
+        greaterThanOrEqualTo(3),
+        reason: 'ISC-7 requires ≥3 docs/CODEMAPS/*.md excluding INDEX',
+      );
+    });
+  });
+
+  group('ISC-4.1 / ISC-8 / ISC-10 RELEASE.md', () {
+    test('docs/RELEASE.md exists with required release keywords', () {
+      final release = File('$repoRoot/docs/RELEASE.md');
+      expect(release.existsSync(), isTrue);
+      final content = release.readAsStringSync();
+      final lower = content.toLowerCase();
+
+      expect(lower, contains('bump'), reason: 'ISC-8: bump step');
+      expect(lower, contains('changelog'), reason: 'ISC-8: changelog step');
+      expect(lower, contains('bitrise'), reason: 'ISC-4.1: Bitrise');
+      expect(lower, contains('codemagic'), reason: 'ISC-4.1: Codemagic');
+      expect(content, contains('pubspec.yaml'), reason: 'SoT = pubspec.yaml');
+      expect(
+        lower,
+        contains('flutter build'),
+        reason: 'ISC-8: flutter build verification',
+      );
+      expect(
+        lower,
+        contains('tag'),
+        reason: 'ISC-12: tag mirror release flow',
+      );
+      expect(
+        content.contains('vX.Y.Z') || content.contains('v*'),
+        isTrue,
+        reason: 'ISC-12: GitHub tag pattern vX.Y.Z / v*',
+      );
+    });
+
+    test('RELEASE.md does not treat hardcoded 1.0.0 as version SoT', () {
+      final release = File('$repoRoot/docs/RELEASE.md');
+      expect(release.existsSync(), isTrue);
+      final content = release.readAsStringSync();
+
+      expect(
+        content.contains('--build-name=1.0.0'),
+        isFalse,
+        reason: 'ISC-10: must not hardcode --build-name=1.0.0 as SoT',
+      );
+      expect(
+        content.contains('VERSION=1.0.0'),
+        isFalse,
+        reason: 'Anti-4: VERSION=1.0.0 must not be primary SoT instruction',
+      );
+    });
+  });
+}
+====
+# Changelog
+
+All notable changes to Galass Rider are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [1.0.13] - 2026-10-08
+
+### Fixed
+
+- file_picker 12 AGP9/Kotlin + FilePicker API
+
+### Added
+
+- Fastlane android build
+
+## [1.0.12] - 2026-10-08
+
+← Edit CHANGELOG.md
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/CHANGELOG.md
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/CHANGELOG.md
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/CHANGELOG.md
+@@ -6,8 +6,12 @@
+ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+ 
+ ## [Unreleased]
+ 
++### Fixed
++
++- Android : toolchain aligné sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.2.20) ; AGP 9.0.1 / Gradle 9.1.0 refusés par la validation CI
++
+ ## [1.0.13] - 2026-10-08
+ 
+ ### Fixed
+ 
+
+
