@@ -6951,3 +6951,147 @@ drwxrwxrwt   2 root   ubuntu       4096 Nov 26 04:55 .X11-unix
 -rw-------   1 ubuntu ubuntu         80 Nov 26 12:24 .git_signing_key_tmpkZpoP1
 -rw-------   1 ubuntu ubuntu         80 Nov 26 14:43 .git_signing_key_tmpm9U2a1
 
+$ grep -n "error\|warn\|Version\|Property\|gradleVersion\|agpVersion\|kgpVersion\|javaVersion\|fail\|throw" /tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt | head -80
+8:import com.android.build.api.AndroidPluginVersion
+11:import org.gradle.api.JavaVersion
+16: * Warns or errors on version ranges of dependencies required to build a Flutter Android app.
+21:object DependencyVersionChecker {
+82:    // Before updating any "error" version, ensure that you have updated the corresponding
+83:    // "warn" version for a full release to provide advanced warning. See
+88:    @VisibleForTesting internal val warnGradleVersion: Version = Version(9, 5, 0)
+90:    @VisibleForTesting internal val errorGradleVersion: Version = Version(9, 3, 1)
+92:    // Java error and warn should align with packages/flutter_tools/lib/src/android/gradle_utils.dart.
+93:    @VisibleForTesting internal val warnJavaVersion: JavaVersion = JavaVersion.VERSION_17
+95:    @VisibleForTesting internal val errorJavaVersion: JavaVersion = JavaVersion.VERSION_17
+97:    @VisibleForTesting internal val warnAGPVersion: AndroidPluginVersion = AndroidPluginVersion(9, 3, 1)
+99:    @VisibleForTesting internal val errorAGPVersion: AndroidPluginVersion = AndroidPluginVersion(9, 1, 1)
+101:    @VisibleForTesting internal val firstUnsupportedAGPMajorVersion: Int = 10
+103:    @VisibleForTesting internal val warnKGPVersion: Version = Version(2, 4, 20)
+105:    @VisibleForTesting internal val errorKGPVersion: Version = Version(2, 4, 10)
+110:    internal val warnMinSdkVersion: Int = 24
+113:    internal val errorMinSdkVersion: Int = 23
+120:    @JvmStatic fun checkDependencyVersions(project: Project) {
+121:        checkGradleVersion(VersionFetcher.getGradleVersion(project), project)
+122:        checkJavaVersion(VersionFetcher.getJavaVersion(), project)
+126:        val agpVersion: AndroidPluginVersion? = VersionFetcher.getAGPVersion(project)
+127:        if (agpVersion != null) {
+128:            checkAGPVersion(agpVersion, project)
+130:            project.logger.error(
+136:        val kgpVersion: Version? = VersionFetcher.getKGPVersion(project)
+137:        val usesBuiltInKotlin = FlutterPluginUtils.isBuiltInKotlinEnabled(project, agpVersion)
+139:        if (kgpVersion != null && !usesBuiltInKotlin) {
+140:            checkKGPVersion(kgpVersion, project)
+158:            val minSdkVersion = getMinSdkVersion(it)
+162:                        checkMinSdkVersion(minSdkVersion, rootDirPath, logger)
+181:    private fun getMinSdkVersion(it: Variant): MinSdkVersion = MinSdkVersion(it.name, it.minSdk.apiLevel)
+186:        errorVersion: String,
+190:            "than Flutter's minimum supported version of $errorVersion. Please upgrade " +
+198:        warnVersion: String,
+203:            "version to a version of at least $warnVersion soon." +
+207:    @VisibleForTesting internal fun getFutureUnsupportedMajorVersionErrorMessage(
+210:        unsupportedMajorVersion: Int,
+214:            "supported. Flutter does not support $dependencyName $unsupportedMajorVersion, " +
+216:            "$dependencyName version to a version below $unsupportedMajorVersion.0.0 to " +
+218:            " to bypass this check (unsupported; your build may fail).\n\n" +
+227:    @VisibleForTesting internal fun checkGradleVersion(
+228:        version: Version,
+231:        if (version < errorGradleVersion) {
+232:            val errorMessage: String =
+236:                    errorGradleVersion.toString(),
+239:            throw DependencyValidationException(errorMessage)
+240:        } else if (version < warnGradleVersion) {
+241:            val warnMessage: String =
+245:                    warnGradleVersion.toString(),
+248:            project.logger.error(warnMessage)
+252:    @VisibleForTesting internal fun checkJavaVersion(
+253:        version: JavaVersion,
+256:        if (version < errorJavaVersion) {
+257:            val errorMessage: String =
+261:                    errorJavaVersion.toString(),
+264:            throw DependencyValidationException(errorMessage)
+265:        } else if (version < warnJavaVersion) {
+266:            val warnMessage: String =
+270:                    warnJavaVersion.toString(),
+273:            project.logger.error(warnMessage)
+277:    @VisibleForTesting internal fun checkAGPVersion(
+278:        androidPluginVersion: AndroidPluginVersion,
+281:        if (androidPluginVersion.major >= firstUnsupportedAGPMajorVersion) {
+282:            val errorMessage: String =
+283:                getFutureUnsupportedMajorVersionErrorMessage(
+285:                    "${androidPluginVersion.major}.${androidPluginVersion.minor}.${androidPluginVersion.micro}",
+286:                    firstUnsupportedAGPMajorVersion,
+289:            throw DependencyValidationException(errorMessage)
+291:        if (androidPluginVersion < errorAGPVersion) {
+292:            val errorMessage: String =
+295:                    androidPluginVersion.toString(),
+296:                    errorAGPVersion.toString(),
+299:            throw DependencyValidationException(errorMessage)
+300:        } else if (androidPluginVersion < warnAGPVersion) {
+301:            val warnMessage: String =
+304:                    androidPluginVersion.toString(),
+305:                    warnAGPVersion.toString(),
+308:            project.logger.error(warnMessage)
+312:    @VisibleForTesting internal fun checkKGPVersion(
+
+$ grep -n "gradleMin\|gradleMax\|androidGradlePluginMin\|androidGradlePluginMax\|kotlinGradlePluginMin\|kotlinGradlePluginMax\|javaMin\|9\.5\.0\|9\.3\.1\|2\.4\.20\|7\.3" /tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart | head -60
+34:const templateDefaultGradleVersion = '9.5.0';
+40:const templateAndroidGradlePluginVersion = '9.3.1';
+41:const templateAndroidGradlePluginVersionForModule = '9.3.1';
+47:const templateKotlinGradlePluginVersion = '2.4.20';
+80:const maxKnownAndSupportedGradleVersion = '9.5.0';
+86:const maxKnownAndSupportedKgpVersion = '2.4.20';
+99:const maxKnownAgpVersionWithFullKotlinSupport = '9.3.1';
+591:  // Documented max is 2.4.20, using 2.4.29 covers patch versions.
+597:    // Documented max is 9.5.0, using 9.5.99 non inclusive covers patch versions.
+637:    return isWithinVersionRange(gradleV, min: '6.8.3', max: '7.3.3');
+709:  // Documented max is 2.4.20.
+710:  if (isWithinVersionRange(kgpV, min: '2.4.20', max: '2.4.29')) {
+711:    // Documented max is 9.3.1
+732:    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.12', inclusiveMax: false);
+737:    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.11', inclusiveMax: false);
+741:    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.7.2');
+826:    return isWithinVersionRange(gradleV, min: '9.3.1', max: maxKnownAndSupportedGradleVersion);
+832:    return isWithinVersionRange(gradleV, min: '9.5.0', max: maxKnownAndSupportedGradleVersion);
+837:    final bool validGradle = isWithinVersionRange(gradleV, min: '9.5.0', max: '100.00');
+889:  if (isWithinVersionRange(agpV, min: '7.3', max: '7.4', inclusiveMax: false)) {
+892:  if (isWithinVersionRange(agpV, min: '7.2', max: '7.3', inclusiveMax: false)) {
+893:    return isWithinVersionRange(gradleV, min: '7.3.3', max: maxKnownAndSupportedGradleVersion);
+988:      min: data.javaMin,
+995:        min: data.gradleMin,
+996:        max: data.gradleMax ?? '100.100',
+1016:    if (isWithinVersionRange(javaV, min: data.javaMin, max: data.javaMax, inclusiveMax: false)) {
+1064:      return isWithinVersionRange(javaV, min: data.javaMin, max: '100.100');
+1076:    if (isWithinVersionRange(javaV, min: data.javaMin, max: '100.100')) {
+1093:      minJavaVersion = data.javaMin;
+1102:      min: data.gradleMin,
+1146:    GradleForAgp(agpMin: '9.1.0', agpMax: '9.1.99', minRequiredGradle: '9.3.1'),
+1148:    GradleForAgp(agpMin: '9.3.0', agpMax: '9.3.99', minRequiredGradle: '9.5.0'),
+1258:// The [javaMax] is exclusive in terms of supporting the noted [gradleMin],
+1259:// whereas [javaMin] is inclusive.
+1264:    required this.javaMin,
+1266:    required this.gradleMin,
+1267:    this.gradleMax,
+1270:  final String javaMin;
+1272:  final String gradleMin;
+1273:  final String? gradleMax;
+1278:      other.javaMin == javaMin &&
+1280:      other.gradleMin == gradleMin &&
+1281:      other.gradleMax == gradleMax;
+1284:  int get hashCode => Object.hash(javaMin, javaMax, gradleMin, gradleMax);
+1288:    return '$javaMin, $javaMax, $gradleMin, $gradleMax';
+1295:// noted [javaMin] and [javaDefault] versions.
+1299:    required this.javaMin,
+1305:  final String javaMin;
+1313:      other.javaMin == javaMin &&
+1319:  int get hashCode => Object.hash(javaMin, javaDefault, agpMin, agpMax);
+1348:  JavaGradleCompat(javaMin: '25', javaMax: '26', gradleMin: '9.1.0'),
+1349:  JavaGradleCompat(javaMin: '24', javaMax: '25', gradleMin: '8.14'),
+1350:  JavaGradleCompat(javaMin: '23', javaMax: '24', gradleMin: '8.10'),
+1351:  JavaGradleCompat(javaMin: '22', javaMax: '23', gradleMin: '8.7'),
+1352:  JavaGradleCompat(javaMin: '21', javaMax: '22', gradleMin: '8.4'),
+1353:  JavaGradleCompat(javaMin: '20', javaMax: '21', gradleMin: '8.1'),
+1354:  JavaGradleCompat(javaMin: '19', javaMax: '20', gradleMin: '7.6'),
+1355:  JavaGradleCompat(javaMin: '18', javaMax: '19', gradleMin: '7.5'),
+1356:  JavaGradleCompat(javaMin: '17', javaMax: '18', gradleMin: '7.3'),
+1358:    javaMin: '16',
+
