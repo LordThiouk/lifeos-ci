@@ -6437,3 +6437,337 @@ drwxr-xr-x 9 ubuntu ubuntu   4096 Nov 26 18:20 ..
 -rw-r--r-- 1 ubuntu ubuntu   1757 Nov 26 18:20 prompt.md
 
 The branch already has a commit that looks related. Let me inspect it and the current Android files.
+$ tail -n 120 /home/ubuntu/actions-runner/_work/_temp/oc/opencode.log
+-rw-r--r--  1 ubuntu ubuntu   100 Nov 26 18:20 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 16647 Nov 26 18:20 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 18:20 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  8465 Nov 26 18:20 NIMBALYST_DEV_SETUP.md
+-rw-r--r--  1 ubuntu ubuntu    13 Nov 26 18:20 README.md
+-rw-r--r--  1 ubuntu ubuntu  8175 Nov 26 18:20 RIDER-MULTISTOP.md
+-rw-r--r--  1 ubuntu ubuntu  6602 Nov 26 18:20 SECURE_CREDENTIALS_SETUP.md
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 18:20 _ephemeral
+-rw-r--r--  1 ubuntu ubuntu  1580 Nov 26 18:20 analysis_options.yaml
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 18:55 android
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 18:20 assets
+-rw-r--r--  1 ubuntu ubuntu  4837 Nov 26 18:20 codemagic.yaml.deprecated
+-rw-r--r--  1 ubuntu ubuntu   265 Nov 26 18:20 devtools_options.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 18:20 diag
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 18:20 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 18:20 fastlane
+-rw-r--r--  1 ubuntu ubuntu   363 Nov 26 18:20 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 18:20 ios
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 18:20 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 18:20 prompts
+-rw-r--r--  1 ubuntu ubuntu 68546 Nov 26 18:20 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  3366 Nov 26 18:20 pubspec.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 18:20 scripts
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 18:20 test
+-rw-r--r--  1 ubuntu ubuntu   441 Nov 26 18:20 test_result.txt
+
+$ git show --stat --format=fuller 207d752 && echo "=====DIFF=====" && git show --format= 207d752
+commit 207d752e79f22d194e48ab53daefcd377e2fedf2
+Author:     Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+AuthorDate: Thu Nov 26 18:55:13 2026 +0000
+Commit:     Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+CommitDate: Thu Nov 26 18:55:13 2026 +0000
+
+    build(android): align Rider toolchain with Flutter 3.50.1
+    
+    - Downgrade Gradle wrapper 9.1.0 -> 8.14 (match Driver, accepted by Flutter 3.50.1)
+    - Downgrade AGP 9.0.1 -> 8.11.1
+    - Align Kotlin 2.2.20 -> 2.3.0 and Crashlytics plugin 3.0.7 -> 3.0.3
+    - Align gradle.properties with Driver-stable flags (keep android.enableJetifier=false)
+    
+    No lib/ changes. Not built locally (flutter build/gradlew forbidden on box).
+
+ android/gradle.properties                        | 19 ++++++++++++-------
+ android/gradle/wrapper/gradle-wrapper.properties |  2 +-
+ android/settings.gradle.kts                      |  6 +++---
+ 3 files changed, 16 insertions(+), 11 deletions(-)
+=====DIFF=====
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 0e4397f..bb6acb3 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -1,9 +1,14 @@
+-org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+-org.gradle.daemon=false
+-org.gradle.parallel=false
+-org.gradle.configureondemand=false
+-android.enableJetifier=false
++org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+ android.useAndroidX=true
+-android.newDsl=false
++android.enableJetifier=false
++# This builtInKotlin flag was added automatically by Flutter migrator
+ android.builtInKotlin=false
+-android.r8.proguardAndroidTxt.disallowed=false
++# This newDsl flag was added automatically by Flutter migrator
++android.newDsl=false
++
++# Build speed (local Fastlane / incremental)
++org.gradle.caching=true
++org.gradle.parallel=true
++org.gradle.daemon=true
++org.gradle.configureondemand=true
++org.gradle.vfs.watch=true
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..92992c4 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,12 +18,12 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+-    id("com.google.firebase.crashlytics") version("3.0.7") apply false
++    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+     // END: FlutterFire Configuration
+-    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
++    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+ }
+ 
+ include(":app")
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ && echo "=====TEMP=====" && ls -la /home/ubuntu/actions-runner/_work/_temp/oc/ 2>/dev/null
+total 20
+drwxr-xr-x  5 ubuntu ubuntu 4096 Nov 26 18:20 .
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 14:26 ..
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 14:26 ci
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 18:20 lifeos
+drwxr-xr-x 18 ubuntu ubuntu 4096 Nov 26 18:55 target
+=====TEMP=====
+total 364
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 18:20 .
+drwxr-xr-x 9 ubuntu ubuntu   4096 Nov 26 18:20 ..
+-rw------- 1 ubuntu ubuntu   9680 Nov 26 18:20 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu 343697 Nov 26 18:55 opencode.log
+-rw-r--r-- 1 ubuntu ubuntu   1757 Nov 26 18:20 prompt.md
+
+The branch already has a commit that looks related. Let me inspect it and the current Android files.
+
+$ echo "=== wrapper ===" && cat android/gradle/wrapper/gradle-wrapper.properties && echo "=== settings ===" && cat android/settings.gradle.kts && echo "=== gradle.properties ===" && cat android/gradle.properties && echo "=== app/build.gradle.kts ===" && cat android/app/build.gradle.kts && echo "=== build.gradle.kts ===" && cat android/build.gradle.kts
+=== wrapper ===
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+=== settings ===
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "8.11.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+}
+
+include(":app")
+=== gradle.properties ===
+org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+android.useAndroidX=true
+android.enableJetifier=false
+# This builtInKotlin flag was added automatically by Flutter migrator
+android.builtInKotlin=false
+# This newDsl flag was added automatically by Flutter migrator
+android.newDsl=false
+
+# Build speed (local Fastlane / incremental)
+org.gradle.caching=true
+org.gradle.parallel=true
+org.gradle.daemon=true
+org.gradle.configureondemand=true
+org.gradle.vfs.watch=true
+=== app/build.gradle.kts ===
+import java.util.Properties
+import java.io.FileInputStream
+
+
+plugins {
+    id("com.android.application")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    // END: FlutterFire Configuration
+    id("kotlin-android")
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+android {
+    namespace = "sn.galass.galassrider"
+    compileSdk = 36
+    ndkVersion = "29.0.14033849"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true  
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId = "sn.galass.galassrider"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        minSdk = flutter.minSdkVersion
+        targetSdk = 36
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    signingConfigs {
+        create("release") {
+            val keystorePath = System.getenv("CM_KEYSTORE_PATH")
+            if (keystorePath != null) {
+                // Codemagic CI
+                storeFile = file(keystorePath)
+                storePassword = System.getenv("CM_KEYSTORE_PASSWORD") ?: ""
+                keyAlias = System.getenv("CM_KEY_ALIAS") ?: ""
+                keyPassword = System.getenv("CM_KEY_PASSWORD") ?: ""
+            } else {
+                // Local — lire key.properties
+                val props = Properties()
+                val propsFile = rootProject.file("key.properties")
+                if (propsFile.exists()) props.load(FileInputStream(propsFile))
+                storeFile = props["storeFile"]?.let { file(it as String) }
+                storePassword = props["storePassword"] as? String ?: ""
+                keyAlias = props["keyAlias"] as? String ?: ""
+                keyPassword = props["keyPassword"] as? String ?: ""
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+dependencies {
+  coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+  // Jetpack Security for Android Keystore-backed encryption
+  implementation("androidx.security:security-crypto:1.1.0-alpha06")
+}
+
+flutter {
+    source = "../.."
+}
+=== build.gradle.kts ===
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
+rootProject.layout.buildDirectory.value(newBuildDir)
+
+subprojects {
+    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
+    project.layout.buildDirectory.value(newSubprojectBuildDir)
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register<Delete>("clean") {
+    delete(rootProject.layout.buildDirectory)
+}
+
+A commit with the exact target message already exists at HEAD. Let me verify whether it's a complete/correct prior attempt or something I need to fix. Let me inspect the log and current files.
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos && echo "=====CI=====" && ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci
+total 184
+dr-xr-xr-x  16 ubuntu ubuntu  4096 Nov 26 18:20 .
+drwxr-xr-x   5 ubuntu ubuntu  4096 Nov 26 18:20 ..
+dr-xr-xr-x   8 ubuntu ubuntu  4096 Nov 26 18:20 .git
+dr-xr-xr-x   4 ubuntu ubuntu  4096 Nov 26 18:20 .github
+-r--r--r--   1 ubuntu ubuntu   535 Nov 26 18:20 .gitignore
+-r--r--r--   1 ubuntu ubuntu   126 Nov 26 18:20 .sops.yaml
+-r--r--r--   1 ubuntu ubuntu  5502 Nov 26 18:20 CLAUDE.md
+-r--r--r--   1 ubuntu ubuntu  1487 Nov 26 18:20 ISA.md
+dr-xr-xr-x  14 ubuntu ubuntu  4096 Nov 26 18:20 LIFEOS
+dr-xr-xr-x   3 ubuntu ubuntu  4096 Nov 26 18:20 MEMORY
+-r--r--r--   1 ubuntu ubuntu   591 Nov 26 18:20 README.md
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 18:20 Workflows
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 18:20 agents
+-r--r--r--   1 ubuntu ubuntu   543 Nov 26 18:20 bun.lock
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 18:20 commands
+dr-xr-xr-x   5 ubuntu ubuntu  4096 Nov 26 18:20 hooks
+dr-xr-xr-x   7 ubuntu ubuntu  4096 Nov 26 18:20 opencode
+-r--r--r--   1 ubuntu ubuntu   383 Nov 26 18:20 package.json
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 18:20 rules
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 18:20 scripts
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 18:20 secrets
+-r--r--r--   1 ubuntu ubuntu 72246 Nov 26 18:20 settings.template.json
+dr-xr-xr-x 188 ubuntu ubuntu 12288 Nov 26 18:20 skills
+dr-xr-xr-x 236 ubuntu ubuntu 12288 Nov 26 18:20 skills-shared
+=====CI=====
+total 316
+drwxr-xr-x 8 ubuntu ubuntu   4096 Nov 26 14:26 .
+drwxr-xr-x 5 ubuntu ubuntu   4096 Nov 26 18:20 ..
+drwxr-xr-x 8 ubuntu ubuntu   4096 Nov 26 18:20 .git
+drwxr-xr-x 3 ubuntu ubuntu   4096 Nov 26 14:43 .github
+-rw-r--r-- 1 ubuntu ubuntu   3308 Nov 26 14:26 FIX-CI.md
+-rw-r--r-- 1 ubuntu ubuntu   1046 Nov 26 14:26 FIX-SERENA.md
+-rw-r--r-- 1 ubuntu ubuntu   5457 Nov 26 14:26 FIX-VERA-AUDIT.md
+-rw-r--r-- 1 ubuntu ubuntu  36081 Nov 26 14:26 INVENTAIRE.md
+-rw-r--r-- 1 ubuntu ubuntu   8699 Nov 26 14:26 README.md
+-rw-r--r-- 1 ubuntu ubuntu 145083 Nov 26 14:26 REPORT.md
+-rw-r--r-- 1 ubuntu ubuntu   4880 Nov 26 14:26 REVIEW-AGENTS-LOAD.md
+-rw-r--r-- 1 ubuntu ubuntu   1317 Nov 26 14:26 REVIEW-ASSEMBLE.md
+-rw-r--r-- 1 ubuntu ubuntu  12386 Nov 26 14:26 REVIEW-PR1.md
+-rw-r--r-- 1 ubuntu ubuntu   4480 Nov 26 14:26 REVIEW-PR20.md
+-rw-r--r-- 1 ubuntu ubuntu  26243 Nov 26 14:26 REVIEW.md
+-rw-r--r-- 1 ubuntu ubuntu   5457 Nov 26 14:26 TESTS-DIAG.md
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 14:26 docs
+-rw-r--r-- 1 ubuntu ubuntu    863 Nov 26 14:26 models.txt
+drwxr-xr-x 4 ubuntu ubuntu   4096 Nov 26 14:26 opencode
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 14:26 prompts
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 14:26 targets
+
+$ find /home/ubuntu/actions-runner/_work -maxdepth 6 \( -name 'gradle-wrapper.properties' -o -name 'settings.gradle.kts' \) -print 2>/dev/null
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/android/settings.gradle.kts
+
+Now let me find the Driver reference toolchain and read the lifeos context (read-only).
