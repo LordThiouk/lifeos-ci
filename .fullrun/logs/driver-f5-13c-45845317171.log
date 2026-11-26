@@ -5756,3 +5756,45 @@ drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 16:22 data
 drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 16:22 docs
 drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:22 engine
 
+$ ls -R /home/ubuntu/actions-runner/_work/_PipelineMapping 2>/dev/null | head -40; echo "=== search workflows ==="; grep -rln "rider-apk-gradle" /agent /home/ubuntu/actions-runner/_work/_PipelineMapping 2>/dev/null | head -10; echo "=== flutter build apk in yml anywhere ==="; grep -rln "flutter build apk" /agent /home/ubuntu/actions-runner/_work/_PipelineMapping 2>/dev/null | head
+/home/ubuntu/actions-runner/_work/_PipelineMapping:
+LordThiouk
+
+/home/ubuntu/actions-runner/_work/_PipelineMapping/LordThiouk:
+lifeos-ci
+
+/home/ubuntu/actions-runner/_work/_PipelineMapping/LordThiouk/lifeos-ci:
+PipelineFolder.json
+=== search workflows ===
+/agent/repos/Galass_Rider/.git/COMMIT_EDITMSG
+/agent/repos/Galass_Rider/.git/logs/HEAD
+/agent/repos/Galass_Rider/.git/HEAD
+=== flutter build apk in yml anywhere ===
+/agent/repos/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml
+/agent/repos/Galass_Rider/docs/RELEASE.md
+/agent/repos/Galass_Rider/Galass_Rider-merge/docs/RELEASE.md
+/agent/repos/Galass_Rider/Galass_Rider-merge/codemagic.yaml.deprecated
+/agent/repos/Galass_Rider/Galass_Rider-merge/.claude/PAI/MEMORY/WORK/galass-phone-auth-876543/ISA.md
+/agent/repos/Galass_Rider/codemagic.yaml.deprecated
+/agent/repos/Galass_Rider/.claude/PAI/MEMORY/WORK/galass-phone-auth-876543/ISA.md
+/agent/repos/Galass_Driver/MEMORY/WORK/20260613-galassdriver-firebase-phone-auth/ISA.md
+
+$ grep -n "flutter-version\|flutter_version\|3\.50\|3\.35\|matrix\|src/\$a\|apk\|strategy" -n /agent/repos/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml | head -40; echo "=== git log of workflow ==="; git -C /agent/repos/galass-emu-actions-pub log --oneline -5
+39:      APK_RIDER: apk/rider/app-debug.apk
+40:      APK_DRIVER: apk/driver/app-debug.apk
+70:        with: {flutter-version: "3.44.8", channel: stable, cache: true}
+128:            (cd src/$a && flutter pub get >/dev/null && flutter test)
+133:            (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+134:            mkdir -p apk/$a && cp src/$a/build/app/outputs/flutter-apk/app-debug.apk apk/$a/
+137:      - name: Vérifier la signature des APK (apksigner)
+139:          AS=$(ls -d "$ANDROID_HOME"/build-tools/*/ | sort -V | tail -1)apksigner
+148:            "$AS" verify --print-certs apk/$a/app-debug.apk | grep -E "Signer|SHA-1|DN"
+149:            got=$(sha1_of apk/$a/app-debug.apk)
+153:              cp apk/$a/app-debug.apk "apk/$a/app-unsigned.apk"
+155:                --ks-key-alias androiddebugkey --out apk/$a/app-debug.apk "apk/$a/app-unsigned.apk"
+156:              rm -f "apk/$a/app-unsigned.apk"
+157:              got=$(sha1_of apk/$a/app-debug.apk)
+164:          [ $rc -eq 0 ] && echo "SHA-1 APK = certificat Maps attendu" || echo "::warning::SHA-1 APK != certificat Maps (run poursuivi, voir apk-sha1)"
+=== git log of workflow ===
+33f9ab9 Merge fix/real-places : harnais e2e multistop déterministe (F19) (#6)
+
