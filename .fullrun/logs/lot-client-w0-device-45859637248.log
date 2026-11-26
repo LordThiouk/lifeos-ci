@@ -17502,3 +17502,27 @@ public function withdrawals() {
         return $query->where('status', Status::USER_BAN);
     }
 
+← Edit core/tests/Feature/Auth/DriverRegisterPhotoTest.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Auth/DriverRegisterPhotoTest.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Auth/DriverRegisterPhotoTest.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Auth/DriverRegisterPhotoTest.php
+@@ -47,8 +47,15 @@
+     $table->tinyInteger('profile_complete')->default(0);
+     $table->timestamps();
+ });
+ 
++Schema::create('rider_rules', function (Blueprint $table) {
++    $table->id();
++    $table->string('name')->nullable();
++    $table->unsignedTinyInteger('status')->default(1);
++    $table->timestamps();
++});
++
+ Schema::create('admin_notifications', function (Blueprint $table) {
+     $table->id();
+     $table->unsignedBigInteger('user_id')->default(0);
+     $table->unsignedBigInteger('driver_id')->default(0);
+
+
+`Driver` append `rules` sur routes `api/*` → table `rider_rules`. Ajoutons-la au scaffolding `DriverRegisterPhotoTest`.
