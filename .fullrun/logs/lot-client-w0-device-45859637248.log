@@ -9216,3 +9216,10 @@ $ grep -n -i -e 'dependency validation' -e 'too old' -e 'FAILURE' -e 'Gradle ver
 3261:- **Build/test local non exécuté** : `flutter build` / `gradlew` interdits sur la box (politique build). Validation attendue côté CI Artemis (Build APK Rider).
 3322:- **Build/test local non exécuté** : `flutter build` / `gradlew` interdits sur la box (politique build). Validation attendue côté CI Artemis (Build APK Rider).
 
+$ grep -RIl -e 'DependencyValidationException' -e 'Your Gradle version' -e 'supported version of Gradle' /tmp 2>/dev/null | head -30; echo "===LOG EXCERPT==="; sed -n '1060,1090p' /tmp/tmp.D8Us5rvQrl/r/.fullrun/logs/rider-apk-gradle-45868384625.log
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+
