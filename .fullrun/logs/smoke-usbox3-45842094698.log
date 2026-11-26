@@ -10299,3 +10299,11 @@ $ grep -rn "image" core/app/Http/Controllers/Api/Driver/Auth/RegisterController.
         return apiResponse("registration_success", "success", $notify,  $data);
     }
 
+$ grep -rn "profile_complete" core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php; echo "==="; grep -rn "profile_complete" core/app/Http/Controllers/Api/Driver  | head -20
+===
+core/app/Http/Controllers/Api/Driver/DriverController.php:265:        if ($driver->profile_complete == Status::YES) {
+core/app/Http/Controllers/Api/Driver/DriverController.php:310:        $driver->profile_complete = Status::YES;
+core/app/Http/Controllers/Api/Driver/DriverController.php:315:        return apiResponse("profile_completed", "success", $notify, [
+core/app/Http/Controllers/Api/Driver/Auth/FirebaseAuthController.php:136:            'profile_complete' => (int) $driver->profile_complete,
+core/app/Http/Controllers/Api/Driver/Auth/FirebaseAuthController.php:279:        $driver->profile_complete = Status::NO;
+
