@@ -1612,3 +1612,12 @@ Error: Undefined constant "Tests\Feature\Security\GLOB_BRACE"
 ERRORS!
 Tests: 37, Assertions: 757, Errors: 12.
 
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && grep -rn "display-warnings\|displayW\|'--" vendor/laravel/framework/src/Illuminate/Foundation/Console/TestCommand.php | head -30; echo "=== exit code"; php artisan test --filter=DeveloperTokenStatusTest >/dev/null 2>&1; echo "artisan exit=$?"; php vendor/bin/phpunit --filter=DeveloperTokenStatusTest >/dev/null 2>&1; echo "phpunit exit=$?"
+grep: vendor/laravel/framework/src/Illuminate/Foundation/Console/TestCommand.php: No such file or directory
+=== exit code
+artisan exit=0
+phpunit exit=0
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && f=$(find vendor/laravel -name "TestCommand.php" | head -1); echo $f; grep -n "args\|options\|display" "$f" | head -40
+grep: : No such file or directory
+
