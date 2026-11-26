@@ -3357,3 +3357,18 @@ class LocationPingPolicy {
 9:  static const int driverLocationUpdateMaxIntervalSeconds = 30; //Max seconds between GPS pings when online
 
 ✱ Grep "startLiveLocationTracking|stopLiveLocationTracking" in . · 19 matches
+→ Read lib/data/controller/ride/ride_details/ride_details_controller.dart [offset=280, limit=100]
+→ Read lib/presentation/screens/ride_details/ride_details_screen.dart [offset=60, limit=80]
+→ Read test/helpers/recording_api_client.dart
+
+$ flutter test test/unit/ride_map_live_location_test.dart 2>&1
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because device_info_plus 13.3.0 requires SDK version >=3.10.0 <4.0.0 and no versions of device_info_plus match >13.3.0 <14.0.0, device_info_plus ^13.3.0 is forbidden.
+So, because galass_driver depends on device_info_plus ^13.3.0, version solving failed.
+Failed to update packages.
+
+$ flutter test --no-pub test/unit/ride_map_live_location_test.dart 2>&1
+Failed to find llvm-ar relative to LocalFile: '/usr/lib/llvm-18/bin/clang': LocalFile: '/usr/lib/llvm-18/bin/llvm-ar' doesn't exist.
+
