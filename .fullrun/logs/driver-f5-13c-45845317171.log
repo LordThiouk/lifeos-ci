@@ -3249,3 +3249,48 @@ lifeos
 target
 
 Des commits `driver-f5-19` existent déjà. Je vérifie le code réel (`applyLiveDriverLocation`, ping `location-update`) et l'existence du commit `d088550`, plus le dépôt `lifeos/` séparé.
+$ git show --stat d088550
+commit d088550d1202ace21638aa476f50d9677a2b9e58
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:16:12 2026 +0000
+
+    feat(ride): ISC-F5-19 live car marker + ride-context location ping
+    
+    - RideMapController: applyLiveDriverLocation updates driver marker and follows camera with distance/interval throttle; test seam cameraAnimatorForTest
+    - RideDetailsController: start/stop live GPS stream on ACTIVE/RUNNING, ping driver/location-update via DashBoardRepo with LocationPingPolicy; updateRide syncs tracking
+    - ISA: mark ISC-F5-19 done with env-blocked test note
+    
+    Analyze --no-pub on touched files: 0 errors, 3 pre-existing deprecated_member_use infos.
+    Tests not runnable in env: Flutter 3.35.6/Dart 3.9.2 (timezone requires ^3.10), llvm-ar missing.
+
+ MEMORY/WORK/20261006-galass-driver-multistop/ISA.md                | 4 +++-
+ lib/data/controller/map/ride_map_controller.dart                   | 1 -
+ lib/data/controller/ride/ride_details/ride_details_controller.dart | 5 +++++
+ 3 files changed, 8 insertions(+), 2 deletions(-)
+
+$ which flutter dart bun node; flutter --version 2>/dev/null | head -5; dart --version 2>/dev/null
+/usr/local/bin/flutter
+/usr/local/bin/dart
+/usr/local/bin/bun
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+Dart SDK version: 3.9.2 (stable) (Wed Aug 27 03:49:40 2025 -0700) on "linux_x64"
+
+$ ls .dart_tool/ | head -20 && test -f .dart_tool/package_config.json && echo PACKAGE_CONFIG_OK || echo NO_PACKAGE_CONFIG
+flutter_build
+hooks_runner
+package_config.json
+package_graph.json
+version
+PACKAGE_CONFIG_OK
+
+→ Read test/unit/ride_map_live_location_test.dart
+
+$ wc -l lib/data/controller/map/ride_map_controller.dart lib/data/controller/ride/ride_details/ride_details_controller.dart
+635 lib/data/controller/map/ride_map_controller.dart
+  915 lib/data/controller/ride/ride_details/ride_details_controller.dart
+ 1550 total
+
+→ Read lib/data/controller/map/ride_map_controller.dart [limit=140]
