@@ -3778,3 +3778,28 @@ $ /tmp/flutter/bin/flutter test --no-pub test/unit/ride_map_live_location_test.d
 00:00 +6: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset
 00:00 +7: All tests passed!
 
+$ ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/ | head -30
+CLAUDE.md
+ISA.md
+LIFEOS
+MEMORY
+README.md
+Workflows
+agents
+bun.lock
+commands
+hooks
+opencode
+package.json
+rules
+scripts
+secrets
+settings.template.json
+skills
+skills-shared
+
+$ find /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos -maxdepth 3 -iname '*ISATool*' 2>/dev/null | head
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+
