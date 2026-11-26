@@ -65,7 +65,7 @@ on:
       chain:
         type: boolean
         required: false
-        default: true
+        default: false
   workflow_call:
     inputs:
       target_repo:
@@ -117,7 +117,7 @@ on:
       chain:
         type: boolean
         required: false
-        default: true
+        default: false
 
     outputs:
       status:
@@ -168,4 +168,5 @@ jobs:
       job_name: ${{ inputs.job_name }}
       lifeos_ref: ${{ inputs.lifeos_ref }}
       timeout_minutes: ${{ inputs.timeout_minutes }}
+      chain: true
     secrets: inherit
