@@ -2253,3 +2253,10 @@ $ P=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php; export PATH=$
 ERRORS!
 Tests: 37, Assertions: 757, Errors: 12.
 
+$ P=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php; printf '%s\n' '<?php file_put_contents("/tmp/shim.log", "loaded\n", FILE_APPEND); if (!defined("GLOB_BRACE")) { define("GLOB_BRACE", 4096); }' > $P/shim.php; rm -f /tmp/shim.log; export PHP_INI_SCAN_DIR=$P/ini.d; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php vendor/phpunit/phpunit/phpunit --configuration=phpunit.xml tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php 2>&1 | tail -5; echo "=== shim log:"; cat /tmp/shim.log 2>&1 | head -3; echo "count=$(wc -l < /tmp/shim.log 2>/dev/null)"
+/usr/bin/bash: line 1: php: command not found
+=== shim log:
+cat: /tmp/shim.log: No such file or directory
+/usr/bin/bash: line 1: /tmp/shim.log: No such file or directory
+count=
+
