@@ -6561,3 +6561,119 @@ Per the exploration agent: **"9/9 widget tests passed for ISC-F5-13 (cancel CTA 
 > Forge · nemotron-3.5-super-vl-free
 
 → Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+$ pwd && ls -la
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+total 192
+drwxr-xr-x 17 ubuntu ubuntu  4096 Nov 26 16:11 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:45 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 .archive
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 15:57 .dart_tool
+-rw-r--r--  1 ubuntu ubuntu 40391 Nov 26 15:57 .flutter-plugins-dependencies
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:44 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 16:08 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 15:44 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1079 Nov 26 15:44 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  7714 Nov 26 15:44 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu 14109 Nov 26 15:44 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu    70 Nov 26 15:44 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 15826 Nov 26 15:44 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  2970 Nov 26 15:44 README.md
+-rw-r--r--  1 ubuntu ubuntu  7229 Nov 26 16:11 SEARCH_SUMMARY.md
+-rw-r--r--  1 ubuntu ubuntu  1662 Nov 26 15:44 analysis_options.yaml
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:57 android
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 15:44 assets
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:57 build
+-rw-r--r--  1 ubuntu ubuntu   392 Nov 26 15:44 dart_test.yaml
+-rw-r--r--  1 ubuntu ubuntu   184 Nov 26 15:44 devtools_options.yaml
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 fastlane
+-rw-r--r--  1 ubuntu ubuntu   639 Nov 26 15:44 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 15:44 ios
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:44 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:44 prompts
+-rw-r--r--  1 ubuntu ubuntu  2809 Nov 26 16:12 pubspec.yaml
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 15:44 test
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 tool
+
+J'ai lu le fichier `prompt.md`. Le travail est une tâche Forge (`forge-code`) sur le dépôt `Galass_Driver`, branche `build/driver-f5-13c`, pour l'ISC-F5-13. Explorons d'abord l'environnement pour localiser le dépôt et l'ISA.
+$ ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target 2>/dev/null; echo "---MEMORY---"; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK 2>/dev/null
+AGENTS.md
+CHANGELOG.md
+Gemfile
+Gemfile.lock
+MEMORY
+README.md
+SEARCH_SUMMARY.md
+analysis_options.yaml
+android
+assets
+build
+dart_test.yaml
+devtools_options.yaml
+docs
+fastlane
+firebase.json
+ios
+lib
+prompts
+pubspec.yaml
+test
+tool
+---MEMORY---
+20260613-galassdriver-firebase-phone-auth
+20260709-galassdriver-fcm-push
+20260709-galassdriver-french-localization
+20260710-galassdriver-ride-message-display
+20260713-galassdriver-ride-message-getx-reuse
+20260715-galassdriver-fcm-apns-retry
+20260715-galassdriver-ride-message-definitive-fix
+20260715-galassdriver-ride-message-realign-initial
+20260716-galassdriver-store-release-ready
+20260718-galassdriver-apple-511-location-preprompt
+20260718-galassdriver-version-docs-release
+20260730-galassdriver-kyc-submit-spinner
+20260730-galassdriver-vehicle-verification-submit
+20261002-galass-driver-dispatch-f4
+20261006-galass-driver-multistop
+
+$ git status && echo "---BRANCH---" && git branch --show-current && echo "---LOG---" && git log --oneline -5
+On branch build/driver-f5-13c
+Your branch is ahead of 'origin/build/driver-f5-13c' by 2 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	deleted:    pubspec.lock
+	modified:   pubspec.yaml
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	SEARCH_SUMMARY.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+---BRANCH---
+build/driver-f5-13c
+---LOG---
+d3786a2 docs(isa): ISC-F5-13 preuve (test 9/9 + analyze)
+1e49ab5 test(driver): ISC-F5-13 Annuler course = danger distinct du CTA principal
+32607ee test(goldens): rebase ride_details sous Flutter 3.50.1 (regen F6)
+119fb0c feat(driver): ISC-F5-16 arrêt actif distinct + arrêts estompés numérotés
+505637e fix(driver): ISC-F5-12 CTA unique par état (confirm stop / terminer)
+
+→ Read MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+
+$ ls test/unit/ 2>/dev/null | head -50
+multistop_chat_ride_id_test.dart
+multistop_complete_stop_test.dart
+multistop_end_gate_test.dart
+multistop_offer_summary_test.dart
+multistop_pusher_test.dart
+multistop_regression_test.dart
+multistop_ride_model_test.dart
+multistop_strings_sweep_test.dart
+pusher_cash_payment_request_test.dart
+
+Je suis déjà dans le dépôt `Galass_Driver`. Vérifions l'état git, la branche, l'ISA et le fichier de test concerné.
