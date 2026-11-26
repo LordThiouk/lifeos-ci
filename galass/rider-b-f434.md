@@ -1,0 +1,6 @@
+# Rider build F4-33 (Papa 2026-11-26 00:42 Dakar) — mini build 3/3 (branche à part)
+
+Dépôt Galass_Rider, branche feat/rider-f434-2026-11-26 (partie de feat/multistop-e2e-2026-11-15 ; F4-33 tourne en parallèle sur celle-ci, ne touche pas poly_line_map.dart ni la carte). ISA : dossier MEMORY/WORK/20261006-galass-rider-multistop/ (plan Serena du 2026-11-26, F13).
+Décisions Papa : F4-33 = option ii (le chauffeur = voiture marker_car, le client = pin personne qui suit sa position live, comme la carte Driver) ; F4-34 = option C (pick_up seul, une notification client unique) ; F4-28 = B.
+Rôles : interface = Aditi Sharma ; logique et tests = Forge ou Engineer.
+Fais UNIQUEMENT F4-34 option C : au pusher `pick_up` (pusher_ride_controller.dart:106-108), une seule alerte client (AudioUtils.playAudio + MyUtils.vibrate + notification), helper one-shot clé ride_id (2e no-op, nouvelle course ré-alerte) ; dédup FCM par ride_id+type dans push_notification_service.dart:126 (supprimer le 2e show) ; aucun événement d arrivée. Preuve : test/unit/multistop_pusher_test.dart + flutter analyze. Coche l ISC via ISATool.ts avec preuve. Éléments multistop uniquement. Commits petits, auteur Papa Diop <76528706+LordThiouk@users.noreply.github.com>. Pas de git push. Ne touche pas .fullrun.
