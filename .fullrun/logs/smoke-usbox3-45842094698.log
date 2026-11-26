@@ -3817,3 +3817,9 @@ usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md
                                                  ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
   human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)
 
+$ ls -la assets/icon/marker_car.png && file assets/icon/marker_car.png
+-rw-r--r-- 1 ubuntu ubuntu 3440 Nov 26 21:46 assets/icon/marker_car.png
+assets/icon/marker_car.png: PNG image data, 84 x 144, 8-bit colormap, non-interlaced
+
+✱ Grep "setCustomMarkerIcon" in . · 8 matches
+7/7 verts. Je vérifie que l'asset `marker_car.png` existe réellement, que `driverIcon` est chargé (`setCustomMarkerIcon`), et le `loadMap`.
