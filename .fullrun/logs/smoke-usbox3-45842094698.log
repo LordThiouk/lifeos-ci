@@ -11343,3 +11343,22 @@ Date:   Thu Nov 26 17:59:22 2026 +0000
  MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md | 1 +
  1 file changed, 1 insertion(+)
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show 23e1ec12 -- MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+commit 23e1ec129b1d1830c8f3c7d43ab137dc3b2bac7b
+Author: Nix <nix@galass.local>
+Date:   Thu Nov 26 17:59:22 2026 +0000
+
+    wip(autosave): arbre de travail
+
+diff --git a/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md b/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+index 1099500e..12dc2e5b 100644
+--- a/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
++++ b/MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+@@ -500,6 +500,7 @@ Cause racine = écart de version Flutter, pas une régression du code : les base
+ Dispatch ou relance impossible depuis ce runner : `/opt/fullrun-tools/emu-e2e.sh` et le jeton `/opt/fullrun-live/emu-e2e.token` absents ; `OC_BRANCH=fullrun/lot-client-w0 /opt/lifeos-ci-tools/opencode/emu-e2e.sh resolve-refs|status|run` → `jeton GALASS_TOKEN inaccessible (fichier d'outil figé)` ; `gh`, `sudo` et `git push` interdits par la politique du run (lecture seule via l'API publique). Refs : `origin/feat/multistop-e2e-2026-11-15` présente localement sur Rider, Driver et emu ; sur GitHub elle répond 200 pour `galass-emu-actions-pub` (public) et 404 sans authentification pour `Galass_Rider`/`Galass_Driver` (privés) : ni leur présence réelle, ni les `rider_ref`/`driver_ref` effectivement dispatchés ne sont vérifiables d'ici.
+ Conséquence : S-W0-01…S-W0-07 (ISC-22, ISC-50, ISC-80 à ISC-84) restent **BLOQUÉS côté device, non cochés** ; `progress` inchangé (0/63) ; les preuves backend déjà consignées restent en place et ne sont pas refaites.
+ - **2026-11-26 — W0 device (Artemis) : BLOCK, aucun ISC coché.** Vérification API publique `galass-emu-actions-pub` (`artemis-staging-e2e.yml`) : runs récents emu `feat/multistop-e2e-2026-11-15` @ `81d149d4` — #150 `45778554984` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45778554984 (2026-11-26T07:52:21Z, failure, step 11 « Tests unitaires Flutter » failed, build/KVM/E2E skipped) ; #151 `45782061889` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45782061889 (2026-11-26T08:18:31Z, failure, step 11 failed) ; #152 `45801376130` https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130 (2026-11-26T10:26:37Z, failure). Run #152 : step 11 tests Flutter **success** (régression goldens/Flutter 3.44.8 corrigée sur cette tête), mais step 12 « Build APK (staging, debug, même job, pas d'upload) » **failure** ; étapes 13-19 (apksigner, KVM, opencode, E2E multistop) **skipped**. Artefacts publics : uniquement `staging-e2e-evidence-encrypted` (337 o) ; aucun `e2e-out/summary.md`, `report.json`, `ui/*.xml`, `smoke.log`. **Aucune capture ni logcat device produite** ; S-W0-01…S-W0-07 / ISC-22,50,80-84 restent non cochés. Cause step 12 non diagnostiquée ici (logs non téléchargeables sans authentification API ; pas de jeton GALASS_TOKEN, pas de dispatch possible depuis ce runner). Aucun W1+ entamé.
++- **2026-11-26 — W0 device (Artemis) : BLOCK confirmé par tentative de relance (tool deployé, jeton absent), aucun ISC coché.** Relance tentée via le tool figé `/opt/fullrun-tools/emu-e2e.sh resolve-refs` (deploiement du tool postérieur au 06:33Z, absent lors des tentatives precedentes) : refus immediat `jeton GALASS_TOKEN inaccessible (fichier d'outil figé)` — canon `/opt/fullrun-live/emu-e2e.token` absent, pas de `EMU_E2E_TOKEN_FILE` ; token Cursor `ghs_…` en place sur disque mais `401 Bad credentials`. Telechargement du journal run #152 (`GET repos/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/logs`) → `403` sans authentification : cause step 12 (Build APK) toujours indeterminante. Conséquence : S-W0-01…S-W0-07 / ISC-22,50,80-84 restent **BLOQUÉS côté device**, non cochés (`progress` inchangé, 0/63) ; aucun nouveau dispatch Artemis n'est possible depuis ce runner (prérequis jeton `GALASS_TOKEN` + logs API avec auth avant tout nouveau run). Aucun W1+ entamé.
+ 
+ ## Remaining Work
+
