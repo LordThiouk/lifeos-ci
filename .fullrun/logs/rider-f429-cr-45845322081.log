@@ -1086,3 +1086,51 @@ $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show --
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show --unified=3 d088550 -- lib/data/controller/ride/ride_details/ride_details_controller.dart | sed -n '260,360p'
 (no output)
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "stopLiveLocationTracking" lib/presentation/screens/ride_details 2>&1 | head -20
+lib/presentation/screens/ride_details/ride_details_screen.dart:108:      Get.find<RideDetailsController>().stopLiveLocationTracking();
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && flutter test --no-pub test/unit/ride_map_live_location_test.dart 2>&1 | tail -60
+Error: cannot run without a dependency on either "package:flutter_test" or "package:test". Ensure the following lines are present in your pubspec.yaml:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && find . -name '*isatool*' -not -path './.git/*' 2>&1 | head -20
+(no output)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline --all --max-count=5 -- 'test/unit/ride_map_live_location_test.dart'
+e741e31 wip(autosave): arbre de travail
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "device_info_plus" pubspec.yaml | head -5
+62:  device_info_plus: ^13.3.0
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls .dart_tool/package_config.json 2>&1 | head -5; echo "==="; echo $FLUTTER_ROOT 2>&1 | head -5
+ls: cannot access '.dart_tool/package_config.json': No such file or directory
+===
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && find / -name '*ISA*skill*' -not -path '*/proc/*' 2>&1 | head -20
+find: ‘/proc/tty/driver’: Permission denied
+find: ‘/proc/1/task/1/fd’: Permission denied
+find: ‘/proc/1/task/1/fdinfo’: Permission denied
+find: ‘/proc/1/task/1/ns’: Permission denied
+find: ‘/proc/1/fd’: Permission denied
+find: ‘/proc/1/map_files’: Permission denied
+find: ‘/proc/1/fdinfo’: Permission denied
+find: ‘/proc/1/ns’: Permission denied
+find: ‘/proc/8/task/8/fd’: Permission denied
+find: ‘/proc/8/task/8/fdinfo’: Permission denied
+find: ‘/proc/8/task/8/ns’: Permission denied
+find: ‘/proc/8/task/27/fd’: Permission denied
+find: ‘/proc/8/task/27/fdinfo’: Permission denied
+find: ‘/proc/8/task/27/ns’: Permission denied
+find: ‘/proc/8/task/28/fd’: Permission denied
+find: ‘/proc/8/task/28/fdinfo’: Permission denied
+find: ‘/proc/8/task/28/ns’: Permission denied
+find: ‘/proc/8/task/29/fd’: Permission denied
+find: ‘/proc/8/task/29/fdinfo’: Permission denied
+find: ‘/proc/8/task/29/ns’: Permission denied
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git diff --name-only; echo "---"; git status --short
+---
+
