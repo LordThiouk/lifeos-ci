@@ -400,3 +400,342 @@ drwxr-xr-x 18 ubuntu ubuntu  4096 Nov 26 16:32 ..
 -rw-r--r--  1 ubuntu ubuntu  6846 Nov 26 16:32 multistop-ui-gaps-vera-2026-11-23_DONE.md
 -rw-r--r--  1 ubuntu ubuntu  1223 Nov 26 16:32 multistop-ui-gaps-vera-2026-11-23_checkpoint.json
 
+$ cat CHANGELOG.md
+# Changelog
+
+All notable changes to Galass Rider are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [1.0.13] - 2026-10-08
+
+### Fixed
+
+- file_picker 12 AGP9/Kotlin + FilePicker API
+
+### Added
+
+- Fastlane android build
+
+## [1.0.12] - 2026-10-08
+
+### Fixed
+
+- AGP9 allow legacy proguard-android.txt for flutter_inappwebview
+
+## [1.0.11] - 2026-10-08
+
+### Fixed
+
+- Android Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1.0 for Flutter Codemagic CI
+
+## [1.0.9] - 2026-10-08
+
+### Added
+
+- Multi-stop rider : composition d'arrêts intermédiaires, payload `stops[]` fare/create, timeline d'itinéraire, progression `STOP_COMPLETED`, marqueurs numérotés sur recherche PENDING
+
+### Changed
+
+- Release 1.0.9+105
+
+## [1.0.8] - 2026-10-02
+
+### Fixed
+
+- Android CI : Gradle wrapper 8.14 (minimum Flutter 8.14.0) pour `bundleRelease` Codemagic
+
+## [1.0.7] - 2026-10-02
+
+### Changed
+
+- Release 1.0.7+103
+- Dispatch auto F3 : retrait enchères passager, create avec `recommend_amount`, handler Pusher `driver_assigned`, réconciliation API
+
+## [1.0.6] - 2026-07-24
+
+### Changed
+
+- Release 1.0.6+102
+- Update Android/iOS launcher icons and Flutter `assets/icon/app_icon.png`
+
+## [1.0.5] - 2026-07-21
+
+### Changed
+
+- Release 1.0.5+101
+
+### Fixed
+
+- Session drop after Home: reuse DI `ApiClient` singleton for Pusher auth / middleware / DI (empty secure token cache no longer triggers 401 to login)
+- Ignore auth side-effects on `pusher/auth` 401/`unauthenticated` so realtime auth failures do not wipe the session
+- Register Play App Signing SHA-1/SHA-256 in Firebase + refresh `google-services.json` OAuth client for Play Store installs
+
+## [1.0.4] - 2026-07-20
+
+### Changed
+
+- Release 1.0.4+100
+
+### Fixed
+
+- Android Phone Auth `missing client identifier`: register debug keystore SHA + OAuth client for `sn.galass.galassrider` via FlutterFire (`google-services.json`)
+
+## [1.0.3] - 2026-07-19
+
+### Changed
+
+- Align Android/iOS build number with production sequence: `1.0.3+99` (next after build 98)
+
+## [1.0.2] - 2026-07-18
+
+### Changed
+
+- Release 1.0.2+3
+
+## [1.0.1] - 2026-07-18
+
+### Changed
+
+- Release 1.0.1+2 (version SoT tooling + release.ps1 tag mirror flow)
+
+## [1.0.0] - 2026-07-18
+
+### Added
+
+- Baseline Galass Rider app (Flutter, Android + iOS)
+- Firebase Phone OTP -> Laravel `firebase-auth` session exchange
+- Ride request, map, payment (Wave / Orange Money) surfaces
+- Push notifications (FCM) and French (`fr_SN`) UI defaults
+- Version source of truth tooling:
+  - `scripts/bump_version.ps1` ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â SemVer+build bump, syncs `Environment.version`
+  - `scripts/read_version.ps1` ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â machine-readable `BUILD_NAME` / `BUILD_NUMBER`
+  - `scripts/release.ps1` ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â auto release: bump -> commit -> push -> tag `vX.Y.Z` -> push tag
+- `docs/RELEASE.md` ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â process 1->3->2->4 (pubspec -> GitHub tag -> Codemagic build -> artifact)
+- `docs/CODEMAPS/` ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â INDEX + app, auth, android, ios, ci
+- Release hygiene tests under `test/release/` and `test/unit/version_sync_test.dart`
+
+### Changed
+
+- Local `codemagic.yaml` deprecated -> `codemagic.yaml.deprecated` (builds via Codemagic/Bitrise console; version from `pubspec.yaml`)
+- Release flow: GitHub tag `vX.Y.Z` mirrors pubspec name; Codemagic trigger on tag `v*` (no CI build-number as SoT)
+
+$ git log --oneline -8 -- android/; echo ===; git log -p -3 --format='%h %s' -- android/gradle/wrapper/gradle-wrapper.properties | head -60; echo ===; ls -la android/gradle/wrapper/; ls -la android/
+3a3731e chore(e2e): align mobile working branch with multistop app code and tests
+0eb0df0 fix(android): allow legacy proguard-android.txt for AGP 9 plugins
+3023819 fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+43e08b3 fix(android): bump AGP to 8.11.1 for Flutter CI
+a33e9a5 fix(android): Gradle 8.14 for Flutter bundleRelease CI
+ae827fc chore(assets): update Android iOS and Flutter app icons
+87c5507 fix(auth): keep session after Home via ApiClient singleton and Play signing SHA
+faa24a7 fix(android): refresh google-services with Rider debug OAuth client
+===
+3023819 fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index e4ef43f..2d428bf 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+a33e9a5 fix(android): Gradle 8.14 for Flutter bundleRelease CI
+
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 02767eb..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.13-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+be7462f Initial commit
+
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+new file mode 100644
+index 0000000..02767eb
+--- /dev/null
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -0,0 +1,5 @@
++distributionBase=GRADLE_USER_HOME
++distributionPath=wrapper/dists
++zipStoreBase=GRADLE_USER_HOME
++zipStorePath=wrapper/dists
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.13-all.zip
+===
+total 12
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 16:32 .
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 16:32 ..
+-rw-r--r-- 1 ubuntu ubuntu  202 Nov 26 16:32 gradle-wrapper.properties
+total 32
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 16:32 .
+drwxr-xr-x 18 ubuntu ubuntu 4096 Nov 26 16:32 ..
+-rw-r--r--  1 ubuntu ubuntu  253 Nov 26 16:32 .gitignore
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:32 app
+-rw-r--r--  1 ubuntu ubuntu  515 Nov 26 16:32 build.gradle.kts
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 16:32 gradle
+-rw-r--r--  1 ubuntu ubuntu  339 Nov 26 16:32 gradle.properties
+-rw-r--r--  1 ubuntu ubuntu  959 Nov 26 16:32 settings.gradle.kts
+
+$ git show 43e08b3 --stat; git show 43e08b3 -- android/ | head -80; echo =====; git show 3023819 --stat; git show 3023819 -- android/ | head -160
+commit 43e08b350d527e2ca8ecdc8ff692e25035a5ee53
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Thu Oct 8 02:10:51 2026 +0000
+
+    fix(android): bump AGP to 8.11.1 for Flutter CI
+
+ android/settings.gradle.kts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+commit 43e08b350d527e2ca8ecdc8ff692e25035a5ee53
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Thu Oct 8 02:10:51 2026 +0000
+
+    fix(android): bump AGP to 8.11.1 for Flutter CI
+
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 96dcd40..253640a 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,7 +18,7 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "8.9.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+     id("com.google.firebase.crashlytics") version("3.0.7") apply false
+=====
+commit 30238192e593a79f38bca07fa9165048f510ab6c
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Thu Oct 8 02:27:11 2026 +0000
+
+    fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+
+ android/app/build.gradle.kts                     | 6 +++---
+ android/gradle.properties                        | 2 ++
+ android/gradle/wrapper/gradle-wrapper.properties | 2 +-
+ android/settings.gradle.kts                      | 4 ++--
+ 4 files changed, 8 insertions(+), 6 deletions(-)
+commit 30238192e593a79f38bca07fa9165048f510ab6c
+Author: Papa Diop <pirlothiouk@gmail.com>
+Date:   Thu Oct 8 02:27:11 2026 +0000
+
+    fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+
+diff --git a/android/app/build.gradle.kts b/android/app/build.gradle.kts
+index c5c2c29..79b0016 100644
+--- a/android/app/build.gradle.kts
++++ b/android/app/build.gradle.kts
+@@ -19,13 +19,13 @@ android {
+     ndkVersion = "29.0.14033849"
+ 
+     compileOptions {
+-        sourceCompatibility = JavaVersion.VERSION_11
+-        targetCompatibility = JavaVersion.VERSION_11
++        sourceCompatibility = JavaVersion.VERSION_17
++        targetCompatibility = JavaVersion.VERSION_17
+         isCoreLibraryDesugaringEnabled = true  
+     }
+ 
+     kotlinOptions {
+-        jvmTarget = JavaVersion.VERSION_11.toString()
++        jvmTarget = JavaVersion.VERSION_17.toString()
+     }
+ 
+     defaultConfig {
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 4c72eeb..5302212 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -4,3 +4,5 @@ org.gradle.parallel=false
+ org.gradle.configureondemand=false
+ android.enableJetifier=false
+ android.useAndroidX=true
++android.newDsl=false
++android.builtInKotlin=false
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index e4ef43f..2d428bf 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 253640a..9400a7e 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,12 +18,12 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "8.11.1" apply false
++    id("com.android.application") version "9.0.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+     id("com.google.firebase.crashlytics") version("3.0.7") apply false
+     // END: FlutterFire Configuration
+-    id("org.jetbrains.kotlin.android") version "2.1.0" apply false
++    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+ }
+ 
+ include(":app")
+
+$ cat android/.gitignore; echo ===; grep -n "gradle" .gitignore; echo ===; git ls-files android | head -40
+gradle-wrapper.jar
+/.gradle
+/captures/
+/gradlew
+/gradlew.bat
+/local.properties
+GeneratedPluginRegistrant.java
+.cxx/
+
+# Remember to never publicly share your keystore.
+# See https://flutter.dev/to/reference-keystore
+key.properties
+**/*.keystore
+**/*.jks
+===
+===
+android/.gitignore
+android/app/build.gradle.kts
+android/app/google-services.json
+android/app/src/debug/AndroidManifest.xml
+android/app/src/debug/res/xml/network_security_config.xml
+android/app/src/main/AndroidManifest.xml
+android/app/src/main/java/sn/galass/galassrider/security/CredentialManager.kt
+android/app/src/main/java/sn/galass/galassrider/security/CredentialSetup.kt
+android/app/src/main/kotlin/sn/galass/galassrider/MainActivity.kt
+android/app/src/main/res/README.md
+android/app/src/main/res/drawable-v21/launch_background.xml
+android/app/src/main/res/drawable/launch_background.xml
+android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
+android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+android/app/src/main/res/values-night/styles.xml
+android/app/src/main/res/values/styles.xml
+android/app/src/profile/AndroidManifest.xml
+android/build.gradle.kts
+android/gradle.properties
+android/gradle/wrapper/gradle-wrapper.properties
+android/settings.gradle.kts
+
