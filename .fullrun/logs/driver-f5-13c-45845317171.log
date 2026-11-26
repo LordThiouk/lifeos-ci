@@ -17776,3 +17776,39 @@ core/app/Repositories/ServiceRepo.php:9:        return Service::active()->visibl
         $paymentMethod = GatewayCurrency::whereHas('method', function ($gate) {
             $gate->active()->automatic();
 
+$ cat core/app/Repositories/ServiceRepo.php; sed -n '25,45p' core/app/Repositories/RideRepo.php; grep -n "Route::get('dashboard'\|->get('dashboard'" core/routes/api.php
+<?php
+
+namespace App\Repositories;
+
+use App\Models\Service;
+
+class ServiceRepo {
+    public function getServices() {
+        return Service::active()->visible()->ordered()->get();
+    }
+}
+        return Zone::active()->get();
+    }
+
+    public function getActiveServices(): Collection
+    {
+        return Service::active()->visible()->ordered()->get();
+    }
+
+    public function hasActiveRide($userId): bool
+    {
+        return Ride::where('user_id', $userId)->whereIn('status', [Status::RIDE_PENDING, Status::RIDE_ACTIVE])->exists();
+    }
+
+    public function findActiveService($serviceId, bool $visibleOnly = true): ?Service
+    {
+        $query = Service::active();
+        if ($visibleOnly) {
+            $query->visible();
+        }
+        return $query->find($serviceId);
+    }
+67:                Route::get('dashboard', 'dashboard');
+182:                    Route::get('dashboard', 'dashboard');
+
