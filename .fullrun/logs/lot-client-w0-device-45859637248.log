@@ -3865,3 +3865,10 @@ $ grep -n 'RIDE_ACTIVE\|RIDE_RUNNING' lib/core/utils/app_status.dart
 19:  static const String RIDE_ACTIVE = '2';
 20:  static const String RIDE_RUNNING = '3';
 
+$ grep -n 'apiClient' lib/data/repo/ride/ride_repo.dart | head -5
+10:  ApiClient apiClient;
+11:  RideRepo({required this.apiClient});
+15:    ResponseModel responseModel = await apiClient.request(
+30:    ResponseModel responseModel = await apiClient.request(
+41:    ResponseModel responseModel = await apiClient.request(
+
