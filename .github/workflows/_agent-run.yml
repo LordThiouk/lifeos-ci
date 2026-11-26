@@ -474,8 +474,15 @@ jobs:
           if [ -n "$TARGET_AGENT" ]; then
             agent_args+=(--agent "$TARGET_AGENT")
           fi
+          # `opencode run` n'a pas d'option --stop-after-step : cette consigne est lue
+          # par LifeOS via l'environnement (FULLRUN_STOP_AFTER_STEP), comme dans
+          # opencode/run-fullrun.sh. La passer en argument fait échouer opencode en < 1 s.
+          agent_env=()
           if [ -n "$STOP_AFTER_STEP" ]; then
-            agent_args+=(--stop-after-step "$STOP_AFTER_STEP")
+            agent_env+=(FULLRUN_STOP_AFTER_STEP="$STOP_AFTER_STEP")
+          fi
+          if [ -n "$TARGET_AGENT" ]; then
+            agent_env+=(FULLRUN_TARGET_AGENT="$TARGET_AGENT")
           fi
           logdir="$agent_home/.local/share/opencode/log"
           status="erreur"
@@ -491,6 +498,7 @@ jobs:
               PATH="/usr/local/bin:/usr/bin:/bin" \
               HOME="$agent_home" TMPDIR="$agent_tmp" LANG=C.UTF-8 \
               CHAIN_PHASE="$CHAIN_PHASE" \
+              "${agent_env[@]}" \
               "${hf_env[@]}" \
               OPENCODE_CONFIG="$RUNNER_TEMP/oc/opencode.json" \
               timeout "$secs" opencode run --model "$m" \
