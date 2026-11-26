@@ -9455,3 +9455,271 @@ $ find /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos -maxdepth 
 → Read lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
 ✱ Grep "Point de prise en charge" in . · 9 matches
 ✱ Grep "MyStrings\.destination" in lib · 5 matches
+
+$ head -80 /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+#!/usr/bin/env bun
+// ISATool.ts — l'outil exécutable du skill ISA (Scaffold / Append / Tick / Set / Adopt / Verify).
+// Toute écriture d'un ISA.md passe ici : l'outil recalcule progress M/N puis pose une empreinte
+// HMAC-SHA256 (frontmatter `isa_stamp`) que ISAGate vérifie en HARD. Une édition à la main
+// (Edit/Write/sed) casse l'empreinte → ISAGate `provenance-*`.
+import { readFileSync, writeFileSync, existsSync, mkdirSync, appendFileSync, chmodSync, realpathSync } from "node:fs";
+import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { dirname, join } from "node:path";
+import { headShort } from "./FullRunBuildGuard";
+import { parseScopeTag } from "./IsaFeatures";
+const HOME = process.env.HOME!;
+const STATE = join(HOME, ".claude/LIFEOS/MEMORY/STATE");
+const KEY = join(STATE, ".isa-stamp-key");
+const LEDGER = join(STATE, "isa-provenance.jsonl");
+const SCOPE_LOG = join(STATE, "isa-scope-tags.jsonl");
+const STAMP_RE = /^isa_stamp:.*\n/m;
+
+function key(create = false): Buffer | null {
+  if (!existsSync(KEY)) { if (!create) return null; mkdirSync(STATE, { recursive: true }); writeFileSync(KEY, randomBytes(32).toString("hex")); chmodSync(KEY, 0o600); }
+  const k = Buffer.from(readFileSync(KEY, "utf8").trim(), "hex"); if (k.length < 32) throw new Error("clé d'empreinte ISA invalide (< 32 octets)"); return k;
+}
+// l'empreinte ne vit que dans le frontmatter : une ligne `isa_stamp:` du corps n'est ni retirée ni lue
+const fmSplit = (t: string) => { const m = t.match(/^---\n[\s\S]*?\n---/); return m ? [m[0], t.slice(m[0].length)] : ["", t]; };
+export const unstamped = (t: string) => { const [f, b] = fmSplit(t); return f.replace(STAMP_RE, "") + b; };
+export function computeStamp(text: string, k = key()): string | null {
+  return k ? "hmac-sha256:" + createHmac("sha256", k).update(unstamped(text)).digest("hex") : null;
+}
+export function verifyStamp(text: string): { ok: boolean; code?: string; message?: string } {
+  const m = fmSplit(text)[0].match(/^isa_stamp:\s*(\S+)/m);
+  if (!m) return { ok: false, code: "provenance-missing", message: "no isa_stamp — this ISA was not written by the ISA skill tools (ISATool.ts). Hand edits are forbidden: re-write via `bun ~/.claude/LIFEOS/TOOLS/ISATool.ts`." };
+  const k = key(); if (!k) return { ok: false, code: "provenance-key-missing", message: "stamp key absent — cannot verify provenance." };
+  const want = Buffer.from(computeStamp(text, k)!), got = Buffer.from(m[1]);
+  if (want.length !== got.length || !timingSafeEqual(want, got)) return { ok: false, code: "provenance-mismatch", message: "isa_stamp does not match content — the ISA was edited outside ISATool.ts (hand edit). Revert, or re-apply the change via ISATool.ts." };
+  return { ok: true };
+}
+function fmSet(t: string, f: string, v: string): string {
+  const m = t.match(/^---\n([\s\S]*?)\n---/); if (!m) return `---\n${f}: ${v}\n---\n` + t;
+  const re = new RegExp(`^${f}:.*$`, "m");
+  const body = re.test(m[1]) ? m[1].replace(re, `${f}: ${v}`) : `${m[1]}\n${f}: ${v}`;
+  return t.replace(m[0], `---\n${body}\n---`);
+}
+const progress = (t: string) => { const b = (t.match(/^\s*- \[[ xX]\] (?:\*\*)?ISC-/gm) ?? []).length; const d = (t.match(/^\s*- \[[xX]\] (?:\*\*)?ISC-/gm) ?? []).length; return `${d}/${b}`; };
+// Marqueur de périmètre build `[scope:…]` : il sort des claims de la porte build. Toute écriture qui en pose un
+// (ligne ajoutée/modifiée dans l'ISA, ou argument de la commande) est journalisée — l'agent ne peut pas s'exclure
+// des claims sans laisser de trace relisible par le principal.
+function logScopeTags(path: string, op: string, before: string, after: string) {
+  const had = new Set(before.split("\n").filter((l) => l.includes("[scope:")).map((l) => l.trim()));
+  const added = after.split("\n").map((l) => l.trim()).filter((l) => l.includes("[scope:") && !had.has(l));
+  const inArgs = args.filter((a) => a.includes("[scope:"));
+  if (!added.length && !inArgs.length) return;
+  mkdirSync(STATE, { recursive: true });
+  appendFileSync(SCOPE_LOG, JSON.stringify({ ts: new Date().toISOString(), op, path, by: process.env.LIFEOS_HOST ?? process.env.LIFEOS_SESSION_ID ?? "unknown", added: added.map((l) => l.slice(0, 300)), args: inArgs.map((a) => a.slice(0, 300)) }) + "\n");
+  console.error(`ISATool: marqueur [scope:] écrit (${op}) — journalisé dans ${SCOPE_LOG.replace(HOME, "~")} ; il n'a d'effet sur la porte build que s'il existait à l'ouverture du run.`);
+}
+function save(path: string, text: string, op: string, stampOnly = false) {
+  const k = key(true)!; let t = unstamped(text);
+  if (!stampOnly && /^---\n[\s\S]*?\n---/.test(t)) { t = fmSet(t, "progress", progress(t)); t = fmSet(t, "updated", new Date().toISOString()); }
+  t = fmSet(t, "isa_stamp", "PENDING"); const s = computeStamp(t, k)!; t = t.replace(/^isa_stamp:.*$/m, `isa_stamp: ${s}`);
+  logScopeTags(path, op, unstamped(existsSync(path) ? readFileSync(path, "utf8") : ""), t);
+  mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, t);
+  appendFileSync(LEDGER, JSON.stringify({ ts: new Date().toISOString(), op, path: realpathSync(path), stamp: s, by: process.env.LIFEOS_HOST ?? (process.env.LIFEOS_SESSION_ID?.startsWith("ses_") ? "opencode" : "claude"), session: process.env.LIFEOS_SESSION_ID ?? "" }) + "\n");
+  console.log(`ISATool ${op} ok → ${path} (progress ${progress(t)}, ${s.slice(0, 24)}…)`);
+}
+// ── human-tick : coche d'une claim `[scope:human — raison]` par le principal, signée ─────────────────────────
+// Une claim humaine (ratification, acte de Papa) n'est jamais cochée par un agent : `tick` la laisserait passer
+// pour une preuve outil. `human-tick` exige la clé ISA_STAMP_KEY dans l'ENVIRONNEMENT (secret du principal ou de
+// la CI, jamais lu sur disque) et signe { ISA, claim, justification, auteur, horodatage } en HMAC-SHA256. La ligne
+// de Verification porte la signature : `human-verify` (ou verifyHumanTick) la recontrôle. Codes : 3 clé absente ou
+// invalide, 4 claim non `[scope:human]`, 1 entrée invalide (claim introuvable, déjà cochée, justification faible).
+export const HUMAN_TICK_EXIT = { INPUT: 1, NO_KEY: 3, NOT_HUMAN: 4 } as const;
+const escRe = (v: string) => v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/** Clé de signature humaine : hex, au moins 32 octets. `null` si absente, `"invalid"` si mal formée. */
+export function humanKeyFromEnv(env: Record<string, string | undefined> = process.env): Buffer | null | "invalid" {
+  const raw = (env.ISA_STAMP_KEY ?? "").trim();
+  if (!raw) return null;
+  if (!/^(?:[0-9a-fA-F]{2}){32,}$/.test(raw)) return "invalid";
+  return Buffer.from(raw, "hex");
+}
+/** La claim (ligne `idx`) est-elle `[scope:human — raison]`, sur sa ligne ou dans le titre `###` de son bloc ? */
+export function isHumanScoped(lines: string[], idx: number): boolean {
+
+$ grep -n "usage\|Usage\|command" /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts | head -40
+44:// (ligne ajoutée/modifiée dans l'ISA, ou argument de la commande) est journalisée — l'agent ne peut pas s'exclure
+118:  if (!cmd || !path) { console.log(`usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+144:    if (weakNote(note)) { console.error(`--${optName} trop faible (${note.trim().length} car.) : cite la commande et sa sortie pour une coche, la constatation de revue pour un décochage.`); process.exit(1); }
+179:  } else { console.error(`commande inconnue: ${cmd}`); process.exit(1); }
+
+Le code satisfait déjà la règle sur le nœud final. J'inspecte ISATool pour comprendre la commande « coche ».
+$ sed -n 110,185p /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+const args = process.argv.slice(2); const [cmd, path] = args;
+const opt = (n: string) => { const i = args.indexOf(`--${n}`); return i >= 0 ? args[i + 1] : undefined; };
+const need = (v: string | undefined, n: string) => { if (v === undefined) { console.error(`--${n} requis`); process.exit(1); } return v; };
+// Une preuve (ou une raison de décochage) tient en une phrase mesurable, pas en un jeton.
+const weakNote = (v: string) => { const s = v.trim(); return s.length < 20 || /^(?:todo|tbd|n\/?a|à faire|a faire|ok|done|passe|test|…)$/i.test(s); };
+const readIsa = () => { if (!existsSync(path)) { console.error(`introuvable: ${path}`); process.exit(1); } return readFileSync(path, "utf8"); };
+const fromFileOrText = () => opt("file") ? readFileSync(opt("file")!, "utf8") : need(opt("text"), "text");
+if (import.meta.main) {
+  if (!cmd || !path) { console.log(`usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+  scaffold --slug s --goal "…" [--title t]      crée l'ISA (sections Problem…Decisions)
+  append   --section "Claims" --text "…"|--file f  ajoute sous une section (créée si absente)
+  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+  set      --field phase --value build          frontmatter
+  replace  --old "…" --new "…"                  remplacement exact unique (corrections)
+  adopt                                          tamponne un ISA hérité (après relecture)
+  verify                                         contrôle l'empreinte (exit 2 si KO)
+  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)`); process.exit(1); }
+  if (cmd === "scaffold") {
+    if (existsSync(path)) { console.error("existe déjà — utilise append/set"); process.exit(1); }
+    const slug = need(opt("slug"), "slug"), goal = need(opt("goal"), "goal");
+    save(path, `---\ntask: ${opt("title") ?? slug}\nslug: ${slug}\nphase: observe\nprogress: 0/0\nprincipal_stated_goal: ${JSON.stringify(goal)}\nstarted: ${new Date().toISOString()}\n---\n\n## Problem\n\n## Vision\n\n## Out of Scope\n\n## Constraints\n\n## Goal\n\n${goal}\n\n## Claims\n\n## Test Strategy\n\n| isc | type | check | threshold | tool | anchors_to |\n|-----|------|-------|-----------|------|------------|\n\n## Features\n\n## Decisions\n\n## Verification\n`, "scaffold");
+  } else if (cmd === "append") {
+    let t = readIsa(); const sec = need(opt("section"), "section"); const add = fromFileOrText().replace(/\n+$/, "");
+    const re = new RegExp(`(^## ${sec.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$)([\\s\\S]*?)(?=^## |(?![\\s\\S]))`, "m");
+    t = re.test(t) ? t.replace(re, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${add}\n\n`) : `${t.replace(/\n+$/, "")}\n\n## ${sec}\n\n${add}\n`;
+    save(path, t, `append:${sec}`);
+  } else if (cmd === "tick" || cmd === "untick") {
+    let t = readIsa(); const isc = need(opt("isc"), "isc"); const re = new RegExp(`^(\\s*- )\\[[ xX]\\]( (?:\\*\\*)?${isc}\\b)`, "m");
+    if (!re.test(t)) { console.error(`${isc} introuvable`); process.exit(1); }
+    const optName = cmd === "tick" ? "evidence" : "reason";
+    const note = need(opt(optName), optName);
+    if (weakNote(note)) { console.error(`--${optName} trop faible (${note.trim().length} car.) : cite la commande et sa sortie pour une coche, la constatation de revue pour un décochage.`); process.exit(1); }
+    t = t.replace(re, `$1[${cmd === "tick" ? "x" : " "}]$2`);
+    save(path, t, `${cmd}:${isc}`); t = readFileSync(path, "utf8");
+    const re2 = /(^## Verification\s*$)([\s\S]*?)(?=^## |(?![\s\S]))/m;
+    const sha = cmd === "tick" ? headShort(path) : null;
+    const line = cmd === "tick" ? `- ${isc}: ${note}${sha ? ` [@${sha}]` : ""}` : `- ${isc}: NON VALIDÉ — ${note}`;
+    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`; save(path, t, `${cmd === "tick" ? "evidence" : "reason"}:${isc}`);
+  } else if (cmd === "human-tick" || cmd === "human-verify") {
+    const k = humanKeyFromEnv();
+    if (k === null) { console.error(`${cmd} refusé : ISA_STAMP_KEY absent de l'environnement — une coche humaine n'est jamais posée sans signature.`); process.exit(HUMAN_TICK_EXIT.NO_KEY); }
+    if (k === "invalid") { console.error(`${cmd} refusé : ISA_STAMP_KEY invalide (hexadécimal, au moins 32 octets attendus).`); process.exit(HUMAN_TICK_EXIT.NO_KEY); }
+    const isc = need(opt("isc"), "isc"); const t0 = readIsa();
+    if (cmd === "human-verify") { const r = verifyHumanTick(t0, isc, k, path); console.log(r.ok ? `✅ ${r.reason}` : `❌ ${r.reason}`); process.exit(r.ok ? 0 : 2); }
+    const evidence = need(opt("evidence"), "evidence").trim();
+    if (/[\r\n]/.test(evidence)) { console.error("--evidence tient sur une ligne."); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    if (weakNote(evidence)) { console.error(`--evidence trop faible (${evidence.length} car.) : dis ce que tu as constaté ou décidé, et où (document, réunion, revue).`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    const by = (opt("by") ?? process.env.LIFEOS_PRINCIPAL ?? process.env.USER ?? "principal").trim();
+    if (!/^[^,()[\]\n]{1,60}$/.test(by)) { console.error("--by invalide (1 à 60 caractères, sans virgule, parenthèse ni crochet)."); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    const lines = t0.split("\n"); const re = new RegExp(`^(\\s*- )\\[([ xX])\\]( (?:\\*\\*)?${escRe(isc)}\\b.*)$`);
+    const idx = lines.findIndex((l) => re.test(l));
+    if (idx < 0) { console.error(`${isc} introuvable`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    if (!isHumanScoped(lines, idx)) { console.error(`human-tick refusé : ${isc} n'est pas marquée [scope:human — raison] (sur sa ligne ou le titre ### de son bloc). Une claim de build se coche avec \`tick\` sur preuve outil.`); process.exit(HUMAN_TICK_EXIT.NOT_HUMAN); }
+    const m = lines[idx]!.match(re)!;
+    if (m[2] !== " ") { console.error(`${isc} est déjà cochée — rien à signer.`); process.exit(HUMAN_TICK_EXIT.INPUT); }
+    lines[idx] = `${m[1]}[x]${m[3]}`;
+    let t = lines.join("\n"); const at = new Date().toISOString();
+    const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(t, path), isc, claim: lines[idx]!.trim(), evidence, by, at };
+    const line = `- ${isc}: HUMAIN — ${evidence} (par ${by}, ${at}) [human-sig:${humanSig(payload, k)}]`;
+    const re2 = /(^## Verification\s*$)([\s\S]*?)(?=^## |(?![\s\S]))/m;
+    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`;
+    save(path, t, `human-tick:${isc}`);
+  } else if (cmd === "set") { save(path, fmSet(readIsa(), need(opt("field"), "field"), need(opt("value"), "value")), `set:${opt("field")}`);
+  } else if (cmd === "replace") { const t = readIsa(), o = need(opt("old"), "old"); if (t.split(o).length !== 2) { console.error("old doit apparaître exactement une fois"); process.exit(1); } save(path, t.replace(o, need(opt("new"), "new")), "replace");
+  } else if (cmd === "adopt") { save(path, readIsa(), "adopt", true); // empreinte seule : contenu inchangé
+  } else if (cmd === "verify") { const r = verifyStamp(readIsa()); console.log(r.ok ? "✅ provenance ok" : `❌ [${r.code}] ${r.message}`); process.exit(r.ok ? 0 : 2);
+  } else { console.error(`commande inconnue: ${cmd}`); process.exit(1); }
+}
+
+$ sed -n 215,235p MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+### F6 · Revue UI multistop téléphone (retours Papa, run e2e 45093391102, 2026-11-23)
+
+Why: revue des captures du bundle evidence déchiffré (lu, aucun secret recopié) + retours directs de Papa. Aucun correctif de code dans cette étape — ISC seulement. **Note : cette ISA est `phase: complete` / `18/18` close depuis 2026-10-09 ; cette section ajoute des claims non cochés sans changer `phase` ni cocher/décocher quoi que ce soit, sur instruction explicite. Signalé à Papa : la convention Algorithm (OPERATIONAL_RULES) prévoit normalement qu'un edit de corps ISA sur une tâche `complete` la fait revenir à `learn` — ici volontairement non appliqué.**
+
+- [x] ISC-F5-12: Une seule action principale par état — « Confirmer l'arrêt » quand un arrêt est actif, « Terminer la course » seulement après le dernier arrêt, visuellement distinct et sans avoir l'air désactivé. **Audit code (agent lecture seule, 2026-11-23)** : `ride_details_bottom_sheet_widget.dart` l.231-283 — « Terminer la course » est aujourd'hui **toujours rendu** dans le bloc RUNNING, seulement `isDisabled` (opacité 0.6 via `rounded_button.dart` l.59, même couleur primaire, même texte) ; les deux CTA sont donc visibles simultanément tant qu'une escale reste pending, un seul étant réellement actionnable. Falsifier: 2 CTA actionnables simultanément, ou « Terminer la course » encore visible+actif avant le dernier arrêt.
+- [x] ISC-F5-13: « Annuler la course » est clairement une action dangereuse, différente de l'action principale. **Audit code** : déjà vrai aujourd'hui (`bgColor: MyColor.redCancelTextColor` = `0xFFF93E2C`, l.217-225, vs couleur primaire par défaut du CTA principal) — ce claim verrouille ce comportement correct en régression plutôt que de supposer un bug.
+- [x] ISC-F5-14: Les compteurs « x/2 arrêt(s) terminé(s) » sont retirés de l'UI Driver, partout (staging et prod) ; **supersède ISC-F5-3** pour la partie compteur (la liste ordonnée des arrêts elle-même reste). **Audit code** : fonction `stopsProgressText` confirmée `ride_details_bottom_sheet_widget.dart` l.30-46, rendue l.92-98. Le harnais emu reçoit un repère invisible stable à la place — **contrat fixé 2026-11-23** : UN nœud `Semantics` invisible, `content-desc` exact `galass.driver.stops=<done>/<total>`, monté seulement si `ride.stops` non vide (miroir Rider `ISC-F4-22`, consommé par harnais `ISC-EMU-1`). Un `Key` widget seul ne suffit pas (invisible à `uiautomator dump`).
+- [x] ISC-F5-15: Après le dernier arrêt, le Driver n'affiche plus « Point de prise en charge » mais la vraie destination finale. **Audit code (2026-11-23)** : aucune occurrence de `MyStrings.pickUpLocation` trouvée sur le nœud final dans les écrans course active lus (`ride_destination_widget.dart`, `ride_itinerary_timeline.dart` — le dernier nœud utilise toujours `MyStrings.destination` + l'adresse réelle) ; **non vérifié à 100%** sur d'éventuels autres écrans (notification push, carte plein écran) — ce claim sert de garde-fou si un tel cas existe ou apparaît.
+- [x] ISC-F5-16: Le Driver affiche des repères d'arrêts sur la carte, avec l'arrêt actif mis en avant et les autres estompés+numérotés. **Audit code** : `ride_map_controller.dart` l.245-268 — tous les arrêts intermédiaires partagent aujourd'hui la même icône `destinationIcon` 40×40, **aucune numérotation**, **aucune distinction active/futur** ; `ISC-F5-4` (markers existants) est donc insuffisant tel quel pour ce besoin — ce claim l'étend plutôt que de le dupliquer. **Verrou de régression (méthode anti-régression 2026-11-23, Papa) : preuve golden + capture e2e ajoutées en exigence, jamais affaiblie.**
+- [ ] ISC-F5-17 (2026-11-23, méthode anti-régression Papa) : contrat d'écran « Driver en course » — éléments obligatoires dérivés du code actuel (avatar+nom+note, bouton message, bouton appel, CTA unique par état, Annuler=danger, bloc itinéraire, repères d'arrêts), chacun avec un test widget de présence, règle « ajouter sans retirer » (retrait = ligne ISA explicite validée par Papa). Papa n'a détaillé la liste de référence que pour l'écran Rider (point 3 de la demande) ; la liste Driver ci-dessus est dérivée du code lu, **à confirmer/compléter par Papa** si une référence précise existe pour le Driver aussi. [app: Driver · classe: contrat d'écran · preuve: golden]
+### F8 · Position voiture temps réel en course (Papa 2026-11-25)
+
+Why: Papa demande que la voiture du chauffeur se mette à jour en temps réel sur la carte Driver pendant RIDE_ACTIVE/RIDE_RUNNING et que sa position parte au backend pour que le Rider la voie.
+
+- [ ] ISC-F5-19: **Pendant RIDE_ACTIVE et RIDE_RUNNING, la voiture du chauffeur est mise à jour en temps réel sur la carte Driver (flux GPS → marqueur voiture partagé `marker_car.png` → caméra) ET sa position est envoyée au backend (`POST driver/location-update`, broadcast Pusher côté Rider).** Audit code 2026-11-25 (lecture seule) : affichage **PARTIEL** — `ride_map_controller.dart` l.88/333-340 ne lit la position qu'une fois via `Geolocator.getCurrentPosition` au `loadMap`, le marqueur `driver_location` (l.209-222, icône `MyIcons.markerCar` = `assets/icon/marker_car.png`, l.313) reste figé, et la caméra ne cadre qu'à l'ouverture (`poly_line_map.dart` l.43-46, `ride_map_controller.dart` l.406-412) ; le suivi temps réel de la home (`home_screen.dart` l.376-388) est mis en pause dès l'ouverture de la course (`didPushNext` l.95-99). Envoi backend **PARTIEL** — aucun ping dédié course dans `ride_details_*` ; seul le service foreground envoie `driver/location-update` (`forground_location_service.dart` l.79-114/121-152, `dashboard_repo.dart` l.38-51, `url_container.dart` l.74), uniquement si le chauffeur est online (`forground_location_service.dart` l.34-39, `main.dart` l.121-126) ; `maybePingServerLocation` (`dashboard_controller.dart` l.65-91) est lui aussi coupé avec la home. Falsifier: un test widget/unit montre le marqueur `driver_location` qui change sur un flux GPS pendant RIDE_ACTIVE/RUNNING et une requête `driver/location-update` émise depuis l'écran course, ou une capture device où la voiture avance et la caméra suit. Cross: ISC-F4-32 (Rider). [app: Driver · classe: temps réel carte+backend · preuve: widget + grep]
+
+## Decisions
+
+- **2026-10-09 23:49** — Principal: **tout confirmé** → ISA **CLOSED** `phase: complete` `progress: 18/18` (Features 16 + Bridge-B4/B6). Dual-write LifeOS SHA256 match.
+- **2026-10-09 23:47** — Principal: **tout confirmé device** → claims F2/F3/Bridge fermés ; Remaining Work `[x]`.
+- **2026-10-09 23:41** — Principal device: CallKit Accept → ride ACTIVE + CTA Prise en charge / Annuler **OK**. ISC-F5-11 device **CLOSED** ; Remaining Work Device F5 CallKit **[x]**.
+
+$ grep -n "ISC-F5-15" MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+146:| ISC-F5-15 | widget      | Après le dernier arrêt, aucun écran course active Driver n'affiche le libellé générique « Point de prise en charge » à la place de la destination réelle | texte rendu == adresse destination réelle, jamais `MyStrings.pickUpLocation` sur le nœud final | flutter test test/unit/multistop_itinerary_test.dart + golden + capture e2e (méthode anti-régression 2026-11-23) | literal |
+222:- [x] ISC-F5-15: Après le dernier arrêt, le Driver n'affiche plus « Point de prise en charge » mais la vraie destination finale. **Audit code (2026-11-23)** : aucune occurrence de `MyStrings.pickUpLocation` trouvée sur le nœud final dans les écrans course active lus (`ride_destination_widget.dart`, `ride_itinerary_timeline.dart` — le dernier nœud utilise toujours `MyStrings.destination` + l'adresse réelle) ; **non vérifié à 100%** sur d'éventuels autres écrans (notification push, carte plein écran) — ce claim sert de garde-fou si un tel cas existe ou apparaît.
+281:- **2026-11-23 — Leg Vera (ISA-only, `feat/multistop-e2e-2026-11-15`)** : porté le contrat du repère invisible pour `ISC-F5-14` sur `galass.driver.stops=<done>/<total>` (miroir Rider `ISC-F4-22`, harnais `ISC-EMU-1`) ; consigné l'écart de phase `complete 18/18` alors que F6 n'est pas livré (ne pas corriger la phase à la main). Ajouté `ISC-F5-18` (trou planche) : les goldens `driver_ride_running_multistop_stop_1_active.png` et `..._stop_2_active.png` sont byte-identiques (sha256 `[REDACTED:hex64]`) ; cause code confirmée — `RideItineraryTimeline` ne rend pas `completedAt` et les CTA ont la même valeur à 0/1 arrêt terminé. `ISC-F5-15` infirmé visuellement par `driver_ride_running_multistop_all_stops_done.png` (destination réelle affichée) — garde maintenue, pas de correctif inventé. Aucun `lib/` modifié, aucun golden régénéré, aucun ISC coché.
+319:- ISC-F5-15: flutter test test/unit/multistop_itinerary_test.dart -> 1/1 passed (Flutter 3.50.1) ; ride_details goldens 5/5 passed [@bbcf104]
+335:- [ ] **F6 revue UI téléphone** — ISC-F5-12 (CTA unique par état), ISC-F5-13 (Annuler = danger, verrou régression), ISC-F5-14 (retrait compteur, supersède ISC-F5-3 partie compteur, **contrat repère fixé 2026-11-23** : `Semantics` `galass.driver.stops=<done>/<total>`), ISC-F5-15 (pas de libellé générique au dernier arrêt ; **infirmé visuellement** sur `driver_ride_running_multistop_all_stops_done.png`, garde maintenue), ISC-F5-16 (markers actif/estompé+numéroté, étend ISC-F5-4), ISC-F5-17 (contrat d'écran « Driver en course », règle ajouter-sans-retirer), ISC-F5-18 (goldens stop1/stop2 actifs distincts — **mesuré identiques** aujourd'hui). Aucun code tant que ces ISC ne sont pas construits (TDD rouge→vert). Dépend des goldens `test/goldens/driver/` (depuis `main`, worktree séparé) et de la porte CI golden-diff (ISA harnais emu).
+
+$ flutter --version
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
+✱ Grep "pickupLocation|pickup_location" in lib · 29 matches
+
+$ which flutter; ls ~/.fvm 2>/dev/null; ls /opt 2>/dev/null | head; flutter --version 2>/dev/null | head -2
+/usr/local/bin/flutter
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+
+$ ls test/goldens/driver/ | head -30; cat test/goldens/driver/README.md 2>/dev/null | head -20
+README.md
+fixtures
+goldens
+harness
+home_golden_test.dart
+review_golden_test.dart
+ride_details_golden_test.dart
+# Goldens Driver — méthode anti-régression UI (Papa, 2026-11-23)
+
+Baseline d'images de référence pour les écrans Driver, générée **depuis `main`** — jamais depuis la
+branche de travail — dans un worktree détaché séparé, puis commitée ici. Les trois goldens multistop
+de la feuille « course en cours » ont été **re-basés sur `feat/multistop-e2e-2026-11-15` sous
+Flutter 3.50.1 le 2026-11-26** après revue F6 ; les autres restent la baseline `main`.
+
+## Outil et environnement figés
+
+| Réglage | Valeur |
+|---|---|
+| Outil | `golden_toolkit` 0.15.0 (même outil que le harnais Rider, pour rester comparables) |
+| SDK | **Flutter 3.50.1 · Dart 3.14.0** (obligatoire : Flutter 3.35.6 ne résout pas `timezone 0.11.0` qui exige Dart `^3.10.0`) |
+| Surface | 390 × 844 logique, device pixel ratio 1.0, `TargetPlatform.android` |
+| Polices | Inter chargée depuis `assets/fonts/` (8 fichiers) et **aliasée sur `Noto-sans`** — jamais la pile de polices de l'hôte |
+| Locale | `fr_SN` (traductions lues depuis `assets/lang/fr_SN.json`) |
+| Données | `fixtures/golden_fixtures.dart` : course/chauffeur/arrêts inventés, aucun UID de course, aucun numéro, aucune adresse réelle |
+| Réseau | aucun appel : repos et carte remplacés par des doubles ; les avatars retombent sur leur placeholder déterministe |
+| Commit `main` d'origine | **`9b34386`** (`9b34386f19ba93b331dc50e6b693f201e4f3bf06`, `chore(release): 1.1.1+53`) |
+
+$ /opt/flutter/bin/flutter --version 2>/dev/null | head -2; ls /opt/flutter/bin | head
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+cache
+dart
+dart.bat
+flutter
+flutter-dev
+flutter-dev.bat
+flutter.bat
+internal
+
+$ flutter test test/unit/multistop_itinerary_test.dart 2>&1 | tail -15
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because galass_driver depends on timezone 0.11.0 which requires SDK version ^3.10.0, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try using the Flutter SDK version: 3.50.1. 
+Failed to update packages.
+
+$ flutter test --no-pub test/unit/multistop_itinerary_test.dart 2>&1 | tail -15
+Failed to find llvm-ar relative to LocalFile: '/usr/lib/llvm-18/bin/clang': LocalFile: '/usr/lib/llvm-18/bin/llvm-ar' doesn't exist.
+
