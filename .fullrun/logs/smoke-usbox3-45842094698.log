@@ -1,0 +1,55 @@
+
+> code-reviewer · deepseek-v4.1-flash-free
+
+I'll read the prompt file first.
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+$ pwd && ls -la && git status --short --branch && git log --oneline -5
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+total 268
+drwxr-xr-x 18 ubuntu ubuntu  4096 Nov 26 15:09 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:09 ..
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 15:09 .claude
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:09 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 15:09 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 15:09 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1046 Nov 26 15:09 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  1188 Nov 26 15:09 .mcp.json
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:09 .omc
+-rw-r--r--  1 ubuntu ubuntu  8995 Nov 26 15:09 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu  3781 Nov 26 15:09 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu  5284 Nov 26 15:09 CLAUDE.md
+-rw-r--r--  1 ubuntu ubuntu  1411 Nov 26 15:09 FIX_SUMMARY.md
+-rw-r--r--  1 ubuntu ubuntu  3977 Nov 26 15:09 GALASS_CONTEXT.md
+-rw-r--r--  1 ubuntu ubuntu   100 Nov 26 15:09 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 16647 Nov 26 15:09 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:09 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  8465 Nov 26 15:09 NIMBALYST_DEV_SETUP.md
+-rw-r--r--  1 ubuntu ubuntu    13 Nov 26 15:09 README.md
+-rw-r--r--  1 ubuntu ubuntu  8175 Nov 26 15:09 RIDER-MULTISTOP.md
+-rw-r--r--  1 ubuntu ubuntu  6602 Nov 26 15:09 SECURE_CREDENTIALS_SETUP.md
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:09 _ephemeral
+-rw-r--r--  1 ubuntu ubuntu  1580 Nov 26 15:09 analysis_options.yaml
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 15:09 android
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 15:09 assets
+-rw-r--r--  1 ubuntu ubuntu  4837 Nov 26 15:09 codemagic.yaml.deprecated
+-rw-r--r--  1 ubuntu ubuntu   265 Nov 26 15:09 devtools_options.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:09 diag
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:09 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:09 fastlane
+-rw-r--r--  1 ubuntu ubuntu   363 Nov 26 15:09 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 15:09 ios
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 15:09 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:09 prompts
+-rw-r--r--  1 ubuntu ubuntu 68546 Nov 26 15:09 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  3366 Nov 26 15:09 pubspec.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:09 scripts
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 15:09 test
+-rw-r--r--  1 ubuntu ubuntu   441 Nov 26 15:09 test_result.txt
+## verify/rider-f429-cr...origin/verify/rider-f429-cr
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+b83aba6 test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+
