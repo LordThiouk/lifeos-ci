@@ -2162,3 +2162,57 @@ $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && sed -n
                 ->addPath($path)
                 ->addName($file)
 
+$ P=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php; env -u PHP_INI_SCAN_DIR $P/php --ini; ls -ld /usr/local/etc/php 2>&1; ls -ld /usr/local/etc 2>&1
+Configuration File (php.ini) Path: /usr/local/etc/php
+Loaded Configuration File:         (none)
+Scan for additional .ini files in: /usr/local/etc/php/conf.d
+Additional .ini files parsed:      (none)
+ls: cannot access '/usr/local/etc/php': No such file or directory
+drwxr-xr-x. 2 root root 4096 Oct 24 14:05 /usr/local/etc
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && grep -n "getDefaultEnv" -A 25 vendor/symfony/process/Process.php | head -40; echo "=== start env"; grep -n "env +\|+ \$this->env\|getenv()" vendor/symfony/process/Process.php | head
+331:        $env += '\\' === \DIRECTORY_SEPARATOR ? array_diff_ukey($this->getDefaultEnv(), $env, 'strcasecmp') : $this->getDefaultEnv();
+332-
+333-        if (\is_array($commandline = $this->commandline)) {
+334-            $commandline = array_values(array_map(strval(...), $commandline));
+335-        } else {
+336-            $commandline = $this->replacePlaceholders($commandline, $env);
+337-        }
+338-
+339-        if ('\\' === \DIRECTORY_SEPARATOR) {
+340-            $commandline = $this->prepareWindowsCommandLine($commandline, $env);
+341-        } elseif ($this->isSigchildEnabled()) {
+342-            // last exit code is output on the fourth pipe and caught to work around --enable-sigchild
+343-            $descriptors[3] = ['pipe', 'w'];
+344-
+345-            if (\is_array($commandline)) {
+346-                // exec is mandatory to deal with sending a signal to the process
+347-                $commandline = 'exec '.$this->buildShellCommandline($commandline);
+348-            }
+349-
+350-            // See https://unix.stackexchange.com/questions/71205/background-process-pipe-input
+351-            $commandline = '{ ('.$commandline.') <&3 3<&- 3>/dev/null & } 3<&0;';
+352-            $commandline .= 'pid=$!; echo $pid >&3; wait $pid 2>/dev/null; code=$?; echo $code >&3; exit $code';
+353-        }
+354-
+355-        $envPairs = [];
+356-        foreach ($env as $k => $v) {
+--
+1684:    private function getDefaultEnv(): array
+1685-    {
+1686-        $env = getenv();
+1687-        $env = ('\\' === \DIRECTORY_SEPARATOR ? array_intersect_ukey($env, $_SERVER, 'strcasecmp') : array_intersect_key($env, $_SERVER)) ?: $env;
+1688-
+1689-        return $_ENV + ('\\' === \DIRECTORY_SEPARATOR ? array_diff_ukey($env, $_ENV, 'strcasecmp') : $env);
+1690-    }
+1691-
+1692-    private function validateWindowsEnvBlockSize(array $envPairs): void
+1693-    {
+1694-        $block = implode("\0", $envPairs)."\0";
+1695-        @preg_replace('/./u', '', $block, -1, $blockLength)
+1696-            ?? preg_replace('/./', '', $block, -1, $blockLength);
+=== start env
+328:            $env += '\\' === \DIRECTORY_SEPARATOR ? array_diff_ukey($this->env, $env, 'strcasecmp') : $this->env;
+331:        $env += '\\' === \DIRECTORY_SEPARATOR ? array_diff_ukey($this->getDefaultEnv(), $env, 'strcasecmp') : $this->getDefaultEnv();
+1686:        $env = getenv();
+
