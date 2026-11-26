@@ -60,8 +60,10 @@ for tool in (
     "wippush.sh", "autosave.sh", "progress.sh", "checkpoint.sh", "done_check.sh",
     "emu-e2e.sh", "bench-capped", "autosave-deny.txt",
 ):
-    assert tool in freeze, "outil livelog non figé dans /opt/fullrun-tools : %r" % tool
-assert "/opt/fullrun-tools" in freeze, "répertoire /opt/fullrun-tools absent du gel"
+    assert tool in freeze, "outil livelog non figé dans FULLRUN_TOOLS : %r" % tool
+assert 'FULLRUN_TOOLS="/opt/fullrun-tools/$RUNNER_SLOT"' in freeze, \
+    "FULLRUN_TOOLS non isolé par RUNNER_SLOT"
+assert 'FT="$FULLRUN_TOOLS"' in freeze, "gel n'utilise pas FULLRUN_TOOLS"
 
 oc = steps[i_oc].get("run", "")
 assert 'live_log="$RUNNER_TEMP/oc/opencode.log"' in oc, \
