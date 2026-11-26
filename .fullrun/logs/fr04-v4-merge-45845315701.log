@@ -9228,3 +9228,178 @@ drwxr-xr-x 4 ubuntu ubuntu    4096 Nov 26 17:23 npm-global
 drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 17:23 oc
 drwxr-xr-x 4 ubuntu ubuntu   12288 Nov 26 17:34 oc-agent
 
+$ curl -sS --max-time 30 "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/runs?event=workflow_dispatch&per_page=8" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('total_count')); [print(r['id'], r['run_number'], r['name'], r['head_branch'], r['head_sha'][:12], r['status'], r['conclusion'], r['created_at']) for r in d.get('workflow_runs',[])]"
+175
+45801376130 152 artemis-staging-e2e feat/multistop-e2e-2026-11-15 81d149d48902 completed failure 2026-11-26T10:26:37Z
+45782061889 151 artemis-staging-e2e feat/multistop-e2e-2026-11-15 81d149d48902 completed failure 2026-11-26T08:18:31Z
+45778554984 150 artemis-staging-e2e feat/multistop-e2e-2026-11-15 81d149d48902 completed failure 2026-11-26T07:52:21Z
+45768119261 149 artemis-staging-e2e feat/multistop-e2e-2026-11-15 0cc7a5ca9395 completed failure 2026-11-26T06:25:42Z
+45766646463 148 artemis-staging-e2e feat/multistop-e2e-2026-11-15 0cc7a5ca9395 completed failure 2026-11-26T06:12:53Z
+45766264029 147 artemis-staging-e2e feat/multistop-e2e-2026-11-15 0cc7a5ca9395 completed cancelled 2026-11-26T06:09:37Z
+45765968957 146 artemis-staging-e2e fix/e2e-vision-chain 48174500ca7c completed cancelled 2026-11-26T06:07:00Z
+45765834688 145 artemis-staging-e2e main 33f9ab9891d6 completed cancelled 2026-11-26T06:05:47Z
+
+$ curl -sS --max-time 30 "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/branches?per_page=100" | python3 -c "import json,sys; d=json.load(sys.stdin); [print(b['name'], b['commit']['sha'][:12]) for b in d]" 2>&1 | head -40; echo "=====AUTH CHECK====="; curl -sS --max-time 20 -o /dev/null -w "%{http_code}" https://api.github.com/rate_limit; echo; cat /opt/lifeos-ci-tools/opencode/tests/upstream-fullrun/with-emulators-test.sh | sed -n '80,140p'
+feat/multistop-e2e-2026-11-15 81d149d48902
+feat/multistop-rider-close-2026-11-20 b4b0c912ff87
+fix/e2e-artemis-hang c6595eeec3f0
+fix/e2e-harness-wip 303acb7e5b82
+fix/e2e-offer-flow e48bddb4684a
+fix/e2e-smoke-log 96479f1df2a3
+fix/e2e-vision-chain 48174500ca7c
+fix/real-places 7bd4536146f7
+fix/staging-http-guard b14bde3300ce
+main 33f9ab9891d6
+=====AUTH CHECK=====
+200
+        printf '%s\n' '[{"databaseId":4242,"createdAt":"2099-01-01T00:00:00Z","status":"in_progress","conclusion":"","url":"https://example.test/4242","headBranch":"main"}]'
+        ;;
+      view)
+        id="${1:-}"
+        if printf '%s\n' "$*" | grep -q -- '--log-failed'; then
+          # Journal volontairement long, avec le jeton au milieu : l'outil doit le couper et le masquer.
+          i=1
+          while [ "$i" -le 200 ]; do
+            if [ "$i" -eq 195 ]; then
+              echo "fail line ${i} token=${EMU_E2E_FAKE_TOKEN:-secret} boom"
+            else
+              echo "fail line ${i} xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            fi
+            i=$((i + 1))
+          done
+        else
+          printf '%s\n' '{"status":"completed","conclusion":"failure","url":"https://example.test/4242","displayTitle":"e2e","headBranch":"main"}'
+        fi
+        ;;
+      *) exit 2 ;;
+    esac
+    ;;
+  *) exit 2 ;;
+esac
+MOCK
+chmod +x "$tmp/mock-gh"
+
+export EMU_E2E_GH="$tmp/mock-gh"
+export EMU_E2E_GH_LOG="$tmp/gh.log"
+export EMU_E2E_TOKEN_FILE="$tmp/token"
+export EMU_E2E_FAKE_TOKEN="$tok"
+export OC_BRANCH="feat/multi"
+export EMU_E2E_TIMEOUT_SEC=5
+export EMU_E2E_POLL_SEC=0
+export EMU_LOG_TAIL=20
+export EMU_LOG_WIDTH=120
+export GITHUB_ACTIONS=true
+
+refs=$(EMU_E2E_GH="$tmp/mock-gh" EMU_E2E_TOKEN_FILE="$tmp/token" OC_BRANCH="feat/multi" \
+  "$sh" resolve-refs)
+printf '%s\n' "$refs" | grep -qx 'rider_ref=feat/multi' || ko "rider_ref devrait être la branche de travail, obtenu : $refs"
+printf '%s\n' "$refs" | grep -qx 'driver_ref=main' || ko "driver_ref devrait retomber sur main, obtenu : $refs"
+printf '%s\n' "$refs" | grep -q 'Galass_Driver' || ko "resolve-refs doit signaler le fallback Driver"
+printf '%s\n' "$refs" | grep -Fq "$tok" && ko "jeton fuité dans resolve-refs"
+ok "resolve-refs : branche de travail ou main, sans fuite"
+
+# --- 3b. emu_ref (revue : galass-ci opencode/emu-e2e.sh l.361, --ref manquant) -
+# Le mock ci-dessus (api repos/*/branches/feat%2Fmulti) ne connaît QUE Rider ;
+# galass-emu-actions-pub n'a pas la branche de travail → repli main, comme Driver.
+refs2=$(EMU_E2E_GH="$tmp/mock-gh" EMU_E2E_TOKEN_FILE="$tmp/token" OC_BRANCH="feat/multi" \
+  "$sh" resolve-refs)
+printf '%s\n' "$refs2" | grep -qx 'emu_ref=main' \
+  || ko "emu_ref devrait retomber sur main (galass-emu-actions-pub sans la branche), obtenu : $refs2"
+ok "resolve-refs : emu_ref résolu (branche de travail ou main)"
+
+# Modèle non opencode/*-free refusé (avant tout appel réseau).
+if out=$(EMU_E2E_MODEL=gemini-2.5-flash "$sh" run 2>&1); then
+  ko "un modèle non *-free aurait dû être refusé"
+fi
+printf '%s' "$out" | grep -qi 'refusé' || ko "le refus de modèle doit être explicite"
+printf '%s' "$out" | grep -Fq "$tok" && ko "jeton fuité lors du refus de modèle"
+
+$ tok=$(grep -oE "ghs_[A-Za-z0-9_]+" /home/ubuntu/.config/gh/hosts.yml | head -1); echo "token_prefix=${tok:0:12}..."; curl -sS --max-time 20 -H "Authorization: Bearer ${tok}" -H "Accept: application/vnd.github+json" https://api.github.com/user | python3 -c "import json,sys; d=json.load(sys.stdin); print({k:d.get(k) for k in ('login','type','site_admin')})" 2>&1; echo "=====RATE LIMIT with auth====="; curl -sS --max-time 20 -H "Authorization: Bearer ${tok}" https://api.github.com/rate_limit | python3 -c "import json,sys; d=json.load(sys.stdin); c=d['resources']['core']; print({k:c[k] for k in ('limit','remaining','reset')})"
+token_prefix=ghs_1210556_...
+{'login': None, 'type': None, 'site_admin': None}
+=====RATE LIMIT with auth=====
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+KeyError: 'resources'
+
+$ command -v timeout; ls -la /usr/bin/timeout /usr/local/bin/timeout 2>&1; command -v gh; command -v python3; echo "=====EMU STATE FORMAT====="; sed -n '60,90p' /opt/lifeos-ci-tools/opencode/emu-e2e.sh
+/usr/bin/timeout
+ls: cannot access '/usr/local/bin/timeout': No such file or directory
+-rwxr-xr-x. 1 root root 39880 Aug 25 15:09 /usr/bin/timeout
+/usr/local/bin/gh
+/usr/bin/python3
+=====EMU STATE FORMAT=====
+}
+
+load_file_vars() {
+  local f="$1" line k v
+  [ -f "$f" ] || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      ''|\#*) continue ;;
+    esac
+    k="${line%%=*}"
+    v="${line#*=}"
+    case "$k" in
+      OC_BRANCH) OC_BRANCH="$v" ;;
+      EMU_E2E_MODEL) EMU_E2E_MODEL="$v" ;;
+      EMU_E2E_TIMEOUT_SEC) EMU_E2E_TIMEOUT_SEC="$v" ;;
+      EMU_E2E_POLL_SEC) EMU_E2E_POLL_SEC="$v" ;;
+      EMU_LOG_TAIL) EMU_LOG_TAIL="$v" ;;
+      EMU_LOG_WIDTH) EMU_LOG_WIDTH="$v" ;;
+      EMU_E2E_GH_TIMEOUT_SEC) EMU_E2E_GH_TIMEOUT_SEC="$v" ;;
+      *) ;;
+    esac
+  done < "$f"
+}
+
+# En CI (root + état figé) : ignorer les variables d'environnement injectables.
+# En test : EMU_E2E_STATE / l'environnement.
+load_config() {
+  OC_BRANCH="${OC_BRANCH:-${IN_BRANCH:-}}"
+  EMU_E2E_MODEL="${EMU_E2E_MODEL:-$DEFAULT_MODEL}"
+  EMU_E2E_TIMEOUT_SEC="${EMU_E2E_TIMEOUT_SEC:-$DEFAULT_TIMEOUT_SEC}"
+  EMU_E2E_POLL_SEC="${EMU_E2E_POLL_SEC:-$DEFAULT_POLL_SEC}"
+
+L'API GitHub est accessible. Je vérifie maintenant le jeton GitHub disponible pour le dispatch.
+$ grep -n "GALASS_TOKEN\|token" /opt/fullrun-tools/livelog.sh | head -30; echo "=====WIPPUSH TOKEN====="; grep -n "GALASS_TOKEN\|token\|TOKEN" /opt/fullrun-tools/wippush.sh | head -40
+9:# hors de portée d'opencode sans sudo. Le jeton (GALASS_TOKEN) arrive sur stdin quand
+81:  [ -n "$TOKEN" ] && auth=$(printf 'x-access-token:[REDACTED]' "$TOKEN" | base64 -w0)
+=====WIPPUSH TOKEN=====
+78:TOKEN=""
+119:  [ -n "$TOKEN" ] && auth=$(printf 'x-access-token:[REDACTED]' "$TOKEN" | base64 -w0)
+239:    if [ "${WIP_TOKEN_STDIN:-0}" = 1 ]; then IFS= read -r TOKEN || true; exec 0</dev/null; fi
+245:    if [ "${WIP_TOKEN_STDIN:-0}" = 1 ]; then IFS= read -r TOKEN || true; exec 0</dev/null; fi
+254:      if [ -n "$TOKEN" ]; then
+255:        printf '%s\n' "$TOKEN" | WIP_TOKEN_STDIN=1 timeout -k 5 "$PASS_TMO" bash "$self" once &
+257:        WIP_TOKEN_STDIN=0 timeout -k 5 "$PASS_TMO" bash "$self" once </dev/null &
+
+$ tok=$(grep -oE "ghs_[A-Za-z0-9_]+" /home/ubuntu/.config/gh/hosts.yml | head -1); curl -sS --max-time 20 -H "Authorization: Bearer ${tok}" -H "Accept: application/vnd.github+json" https://api.github.com/user; echo; echo "=====EMERGENCY?====="; ls -la /opt/fullrun-tools/ | grep -i token; echo "=====FULLRUN-TOOLS LIST====="; ls -la /opt/fullrun-tools/
+{
+  "message": "Bad credentials",
+  "documentation_url": "https://docs.github.com/rest",
+  "status": "401"
+}
+=====EMERGENCY?=====
+=====FULLRUN-TOOLS LIST=====
+total 21612
+drwxr-xr-x   2 root root     4096 Nov 26 17:27 .
+drwxr-xr-x. 10 root root     4096 Nov 26 17:26 ..
+-rwxr-xr-x   1 root root     3206 Nov 26 17:26 allowed-repos.sh
+-rw-r--r--   1 root root     1200 Nov 26 17:26 autosave-deny.txt
+-rwxr-xr-x   1 root root    11165 Nov 26 17:26 autosave.sh
+-rwxr-xr-x   1 root root     6310 Nov 26 17:26 bench-capped
+-rwxr-xr-x   1 root root     9449 Nov 26 17:26 checkpoint.sh
+-rwxr-xr-x   1 root root      823 Nov 26 17:26 done-check-call.sh
+-rwxr-xr-x   1 root root    17498 Nov 26 17:26 done_check.sh
+-rwxr-xr-x   1 root root    27597 Nov 26 17:26 emu-e2e.sh
+-rwxr-xr-x   1 root root 21958840 Nov 26 17:27 gitleaks
+-rw-r--r--   1 root root     1352 Nov 26 16:22 gitleaks.toml
+-rwxr-xr-x   1 root root     2870 Nov 26 17:26 leaklog.sh
+-rwxr-xr-x   1 root root    11227 Nov 26 17:26 livelog.sh
+-rw-r--r--   1 root root       63 Nov 26 17:26 log-recipient.txt
+-rwxr-xr-x   1 root root    10970 Nov 26 17:26 merge-signed-carry.sh
+-rwxr-xr-x   1 root root     6436 Nov 26 17:26 progress.sh
+-rwxr-xr-x   1 root root     4087 Nov 26 17:26 redact-log.sh
+-rwxr-xr-x   1 root root    14226 Nov 26 17:26 wippush.sh
+
