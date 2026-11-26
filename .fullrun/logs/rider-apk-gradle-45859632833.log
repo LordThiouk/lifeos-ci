@@ -9223,3 +9223,413 @@ $ grep -RIl -e 'DependencyValidationException' -e 'Your Gradle version' -e 'supp
 shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
 </shell_metadata>
 
+$ grep -n -i -e 'DependencyValidation' -e 'Your Gradle version' -e 'supported version of Gradle' -e 'errorGradleVersion' -e '9\.3\.1' /tmp/tmp.D8Us5rvQrl/r/.fullrun/logs/rider-apk-gradle-45868384625.log | head -60
+(no output)
+
+$ sed -n '75,110p' /tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart; echo "===820-860==="; sed -n '815,865p' /tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart; echo "===1035-1075==="; sed -n '1035,1080p' /tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart; echo "===1135-1180==="; sed -n '1135,1180p' /tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart
+// Update this when new versions of Gradle come out including minor versions
+// and should correspond to the maximum Gradle version we test in CI.
+//
+// Supported here means supported by the tooling for
+// flutter analyze --suggestions and does not imply broader flutter support.
+const maxKnownAndSupportedGradleVersion = '9.5.0';
+
+// Update this with new KGP versions come out including minor versions.
+//
+// Supported here means supported by the tooling for
+// flutter analyze --suggestions and does not imply broader flutter support.
+const maxKnownAndSupportedKgpVersion = '2.4.20';
+
+// Update this when new versions of AGP come out.
+//
+// Supported here means tooling is aware of this version's Java <-> AGP
+// compatibility.
+@visibleForTesting
+const maxKnownAndSupportedAgpVersion = '9.4';
+
+// Update this when new versions of AGP with Kotlin support come out.
+//
+// Supported here means supported by the tooling for
+// flutter analyze --suggestions and does not imply broader flutter support.
+const maxKnownAgpVersionWithFullKotlinSupport = '9.3.1';
+
+// Update this when new versions of AGP come out.
+const maxKnownAgpVersion = '9.4';
+
+// Supported here means tooling is aware of this versions
+// Java <-> AGP compatibility and does not imply broader flutter support.
+// For use in flutter see the code in:
+// flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt
+@visibleForTesting
+const oldestConsideredAgpVersion = '3.3.0';
+
+===820-860===
+  )) {
+    logger.printTrace('Gradle Version: $gradleV is too old.');
+    return false;
+  }
+
+  // Check highest supported version before checking unknown versions.
+  // https://developer.android.com/build/releases/agp-preview#android-gradle-plugin-compatibility
+  if (isWithinVersionRange(agpV, min: '9.0', max: '9.0.99')) {
+    return isWithinVersionRange(gradleV, min: '9.0', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '9.1.0', max: '9.1.99')) {
+    return isWithinVersionRange(gradleV, min: '9.3.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '9.2.0', max: '9.2.99')) {
+    return isWithinVersionRange(gradleV, min: '9.4.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '9.3.0', max: '9.3.99')) {
+    return isWithinVersionRange(gradleV, min: '9.5.0', max: maxKnownAndSupportedGradleVersion);
+  }
+  // Check if versions are newer than the max known versions.
+  if (isWithinVersionRange(agpV, min: maxKnownAndSupportedAgpVersion, max: '100.100')) {
+    // Assume versions we do not know about are valid but log.
+    final bool validGradle = isWithinVersionRange(gradleV, min: '9.5.0', max: '100.00');
+    logger.printTrace(
+      'Newer than known AGP version ($agpV), gradle ($gradleV).'
+      '\n Treating as valid configuration.',
+    );
+    return validGradle;
+  }
+
+  // Begin Known Gradle <-> AGP validation.
+  if (isWithinVersionRange(agpV, min: '8.13.0', max: '8.13.99')) {
+    return isWithinVersionRange(gradleV, min: '8.13', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.12.0', max: '8.12.99')) {
+    return isWithinVersionRange(gradleV, min: '8.13', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.11.0', max: '8.11.99')) {
+    return isWithinVersionRange(gradleV, min: '8.13', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.10.0', max: '8.10.99')) {
+    return isWithinVersionRange(gradleV, min: '8.11.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.9.0', max: '8.9.99')) {
+    return isWithinVersionRange(gradleV, min: '8.11.1', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.8.0', max: '8.8.99')) {
+    return isWithinVersionRange(gradleV, min: '8.10.2', max: maxKnownAndSupportedGradleVersion);
+  }
+  if (isWithinVersionRange(agpV, min: '8.7.0', max: '8.7.99')) {
+    return isWithinVersionRange(gradleV, min: '8.9', max: maxKnownAndSupportedGradleVersion);
+===1035-1075===
+  if (javaV == null || agpV == null) {
+    logger.printTrace('Java version or AGP version unknown ($javaV, $agpV).');
+    return false;
+  }
+
+  // Check if AGP version is too old to perform validation.
+  if (isWithinVersionRange(
+    agpV,
+    min: '1.0',
+    max: oldestDocumentedJavaAgpCompatibilityVersion,
+    inclusiveMax: false,
+  )) {
+    logger.printTrace('AGP Version: $agpV is too old to determine Java compatibility.');
+    return false;
+  }
+
+  if (isWithinVersionRange(
+    agpV,
+    min: maxKnownAndSupportedAgpVersion,
+    max: '100.100',
+    inclusiveMin: false,
+  )) {
+    logger.printTrace('AGP Version: $agpV is too new to determine Java compatibility.');
+    return true;
+  }
+
+  // Begin known Java <-> AGP evaluation.
+  for (final JavaAgpCompat data in _javaAgpCompatList) {
+    if (isWithinVersionRange(agpV, min: data.agpMin, max: data.agpMax)) {
+      return isWithinVersionRange(javaV, min: data.javaMin, max: '100.100');
+    }
+  }
+
+  logger.printTrace('Unknown Java-AGP compatibility $javaV, $agpV');
+  return false;
+}
+
+/// Returns compatibility information concerning the minimum AGP
+/// version for the specified Java version.
+JavaAgpCompat? getMinimumAgpVersionForJavaVersion(Logger logger, {required String javaV}) {
+  for (final JavaAgpCompat data in _javaAgpCompatList) {
+    if (isWithinVersionRange(javaV, min: data.javaMin, max: '100.100')) {
+      return data;
+    }
+  }
+
+===1135-1180===
+    GradleForAgp(agpMin: '8.3.0', agpMax: '8.3.99', minRequiredGradle: '8.4'),
+    GradleForAgp(agpMin: '8.4.0', agpMax: '8.4.99', minRequiredGradle: '8.6'),
+    GradleForAgp(agpMin: '8.5.0', agpMax: '8.6.99', minRequiredGradle: '8.7'),
+    GradleForAgp(agpMin: '8.7.0', agpMax: '8.7.99', minRequiredGradle: '8.9'),
+    GradleForAgp(agpMin: '8.8.0', agpMax: '8.8.99', minRequiredGradle: '8.10.2'),
+    GradleForAgp(agpMin: '8.9.0', agpMax: '8.9.99', minRequiredGradle: '8.11.1'),
+    GradleForAgp(agpMin: '8.10.0', agpMax: '8.10.99', minRequiredGradle: '8.11.1'),
+    GradleForAgp(agpMin: '8.11.0', agpMax: '8.11.99', minRequiredGradle: '8.14'),
+    GradleForAgp(agpMin: '8.12.0', agpMax: '8.12.99', minRequiredGradle: '8.14'),
+    GradleForAgp(agpMin: '8.13.0', agpMax: '8.13.99', minRequiredGradle: '8.14'),
+    GradleForAgp(agpMin: '9.0', agpMax: '9.0.99', minRequiredGradle: '9.1.0'),
+    GradleForAgp(agpMin: '9.1.0', agpMax: '9.1.99', minRequiredGradle: '9.3.1'),
+    GradleForAgp(agpMin: '9.2.0', agpMax: '9.2.99', minRequiredGradle: '9.4.1'),
+    GradleForAgp(agpMin: '9.3.0', agpMax: '9.3.99', minRequiredGradle: '9.5.0'),
+    // Assume if AGP is newer than this code knows about return the highest gradle
+    // version we know about.
+    GradleForAgp(
+      agpMin: maxKnownAgpVersion,
+      agpMax: maxKnownAgpVersion,
+      minRequiredGradle: maxKnownAndSupportedGradleVersion,
+    ),
+  ];
+  for (final data in compatList) {
+    if (isWithinVersionRange(agpV, min: data.agpMin, max: data.agpMax)) {
+      return data.minRequiredGradle;
+    }
+  }
+  if (isWithinVersionRange(agpV, min: maxKnownAgpVersion, max: '100.100')) {
+    return maxKnownAndSupportedGradleVersion;
+  }
+  throwToolExit('Unsupported Android Plugin version: $agpV.');
+}
+
+/// Overwrite local.properties in the specified Flutter project's Android
+/// sub-project, if needed.
+///
+/// If [requireAndroidSdk] is true (the default) and no Android SDK is found,
+/// this will fail with a [ToolExit].
+void updateLocalProperties({
+  required FlutterProject project,
+  Analytics? analytics,
+  AndroidSdk? androidSdk,
+  BuildInfo? buildInfo,
+  FileSystemUtils? fileSystemUtils,
+  Logger? logger,
+  bool requireAndroidSdk = true,
+
+$ sed -n '140,220p' /tmp/dvc_3501.kt; echo "===checkAGP/checkKGP==="; sed -n '260,360p' /tmp/dvc_3501.kt; echo "===FlutterGradlePlugin==="; grep -n -B 8 -A 12 'checkDependencyVersions' /tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/FlutterGradlePlugin.kt 2>/dev/null
+checkKGPVersion(kgpVersion, project)
+        } else {
+            project.logger.debug(
+                "Skipping Kotlin min-version enforcement because the project uses " +
+                    "AGP built-in Kotlin or does not apply KGP."
+            )
+        }
+    }
+
+    private fun configureMinSdkCheck(project: Project) {
+        val androidComponents =
+            project.extensions.findByType(AndroidComponentsExtension::class.java)
+        val rootDirPath = project.rootDir.path
+
+        androidComponents?.onVariants(
+            androidComponents.selector().all()
+        ) {
+            val taskName = generateMinSdkCheckTaskName(it)
+            val minSdkVersion = getMinSdkVersion(it)
+            val minSdkCheckTask =
+                project.tasks.register(taskName) {
+                    doLast {
+                        checkMinSdkVersion(minSdkVersion, rootDirPath, logger)
+                    }
+                }
+
+            project.afterEvaluate {
+                // Make assemble task depend on minSdkCheckTask for this variant.
+                project.tasks
+                    .named(generateAssembleTaskName(it))
+                    .configure {
+                        dependsOn(minSdkCheckTask)
+                    }
+            }
+        }
+    }
+
+    private fun generateAssembleTaskName(it: Variant) = "$ASSEMBLE_PREFIX${FlutterPluginUtils.capitalize(it.name)}"
+
+    private fun generateMinSdkCheckTaskName(it: Variant) = "${FlutterPluginUtils.capitalize(it.name)}$MIN_SDK_CHECK_TASK_POSTFIX"
+
+    private fun getMinSdkVersion(it: Variant): MinSdkVersion = MinSdkVersion(it.name, it.minSdk.apiLevel)
+
+    @VisibleForTesting internal fun getErrorMessage(
+        dependencyName: String,
+        versionString: String,
+        errorVersion: String,
+        potentialFix: String
+    ): String =
+        "Error: Your project's $dependencyName version ($versionString) is lower " +
+            "than Flutter's minimum supported version of $errorVersion. Please upgrade " +
+            "your $dependencyName version. \nAlternatively, use the flag " +
+            "\"--android-skip-build-dependency-validation\" to bypass this check.\n\n" +
+            "Potential fix: $potentialFix"
+
+    @VisibleForTesting internal fun getWarnMessage(
+        dependencyName: String,
+        versionString: String,
+        warnVersion: String,
+        potentialFix: String
+    ): String =
+        "Warning: Flutter support for your project's $dependencyName version " +
+            "($versionString) will soon be dropped. Please upgrade your $dependencyName " +
+            "version to a version of at least $warnVersion soon." +
+            "\nAlternatively, use the flag \"--android-skip-build-dependency-validation\"" +
+            " to bypass this check.\n\nPotential fix: $potentialFix"
+
+    @VisibleForTesting internal fun getFutureUnsupportedMajorVersionErrorMessage(
+        dependencyName: String,
+        versionString: String,
+        unsupportedMajorVersion: Int,
+        potentialFix: String
+    ): String =
+        "Error: Your project's $dependencyName version ($versionString) is not yet " +
+            "supported. Flutter does not support $dependencyName $unsupportedMajorVersion, " +
+            "and support will be added in a future Flutter release. Please downgrade your " +
+            "$dependencyName version to a version below $unsupportedMajorVersion.0.0 to " +
+            "continue.\nAlternatively, use the flag \"--android-skip-build-dependency-validation\"" +
+            " to bypass this check (unsupported; your build may fail).\n\n" +
+            "Potential fix: $potentialFix"
+
+===checkAGP/checkKGP===
+                    version.toString(),
+                    errorJavaVersion.toString(),
+                    POTENTIAL_JAVA_FIX
+                )
+            throw DependencyValidationException(errorMessage)
+        } else if (version < warnJavaVersion) {
+            val warnMessage: String =
+                getWarnMessage(
+                    JAVA_NAME,
+                    version.toString(),
+                    warnJavaVersion.toString(),
+                    POTENTIAL_JAVA_FIX
+                )
+            project.logger.error(warnMessage)
+        }
+    }
+
+    @VisibleForTesting internal fun checkAGPVersion(
+        androidPluginVersion: AndroidPluginVersion,
+        project: Project
+    ) {
+        if (androidPluginVersion.major >= firstUnsupportedAGPMajorVersion) {
+            val errorMessage: String =
+                getFutureUnsupportedMajorVersionErrorMessage(
+                    AGP_NAME,
+                    "${androidPluginVersion.major}.${androidPluginVersion.minor}.${androidPluginVersion.micro}",
+                    firstUnsupportedAGPMajorVersion,
+                    getPotentialAGPFix(project.rootDir.path)
+                )
+            throw DependencyValidationException(errorMessage)
+        }
+        if (androidPluginVersion < errorAGPVersion) {
+            val errorMessage: String =
+                getErrorMessage(
+                    AGP_NAME,
+                    androidPluginVersion.toString(),
+                    errorAGPVersion.toString(),
+                    getPotentialAGPFix(project.rootDir.path)
+                )
+            throw DependencyValidationException(errorMessage)
+        } else if (androidPluginVersion < warnAGPVersion) {
+            val warnMessage: String =
+                getWarnMessage(
+                    AGP_NAME,
+                    androidPluginVersion.toString(),
+                    warnAGPVersion.toString(),
+                    getPotentialAGPFix(project.rootDir.path)
+                )
+            project.logger.error(warnMessage)
+        }
+    }
+
+    @VisibleForTesting internal fun checkKGPVersion(
+        version: Version,
+        project: Project
+    ) {
+        if (version < errorKGPVersion) {
+            val errorMessage: String =
+                getErrorMessage(
+                    KGP_NAME,
+                    version.toString(),
+                    errorKGPVersion.toString(),
+                    getPotentialKGPFix(project.rootDir.path)
+                )
+            throw DependencyValidationException(errorMessage)
+        } else if (version < warnKGPVersion) {
+            val warnMessage: String =
+                getWarnMessage(
+                    KGP_NAME,
+                    version.toString(),
+                    warnKGPVersion.toString(),
+                    getPotentialKGPFix(project.rootDir.path)
+                )
+            project.logger.error(warnMessage)
+        }
+    }
+
+    @VisibleForTesting internal fun checkMinSdkVersion(
+        minSdkVersion: MinSdkVersion,
+        projectDirectory: String,
+        logger: Logger
+    ) {
+        // For Android SDK, only the major version is relevant, no need to do a full version check.
+        if (minSdkVersion.version < errorMinSdkVersion) {
+            val errorMessage: String =
+                getErrorMessage(
+                    getFlavorSpecificMessage(minSdkVersion.flavor, MIN_SDK_NAME),
+                    minSdkVersion.version.toString(),
+                    errorMinSdkVersion.toString(),
+                    getPotentialSDKFix(projectDirectory)
+                )
+            throw DependencyValidationException(errorMessage)
+        } else if (minSdkVersion.version < warnMinSdkVersion) {
+            val warnMessage: String =
+                getWarnMessage(
+                    getFlavorSpecificMessage(minSdkVersion.flavor, MIN_SDK_NAME),
+                    minSdkVersion.version.toString(),
+                    warnMinSdkVersion.toString(),
+                    getPotentialSDKFix(projectDirectory)
+                )
+            logger.error(warnMessage)
+===FlutterGradlePlugin===
+
+$ grep -rn 'checkDependencyVersions\|DependencyVersionChecker' /tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/ 2>/dev/null | head -30; echo "===GP FILES==="; for f in /tmp/gp_*.kt; do echo "--- $f"; grep -n -B 6 -A 10 'checkDependencyVersions\|DependencyVersionChecker' "$f" 2>/dev/null | head -40; done
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt:21:object DependencyVersionChecker {
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt:120:    @JvmStatic fun checkDependencyVersions(project: Project) {
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt:365:// Custom error for when DependencyVersionChecker finds a dependency out of
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/FlutterPlugin.kt:53:        // that unsupported dependency versions fail with DependencyVersionChecker's diagnostic
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/FlutterPlugin.kt:60:                DependencyVersionChecker.checkDependencyVersions(project)
+===GP FILES===
+--- /tmp/gp_FlutterExtension.kt
+--- /tmp/gp_FlutterGradlePlugin.kt
+--- /tmp/gp_FlutterPlugin.kt
+47-        this.project = project
+48-
+49-        FlutterPluginUtils.detectApplyingKotlinGradlePlugin(project)
+50-
+51-        // Validate that the provided Gradle, Java, AGP, and KGP versions are all within our
+52-        // supported range. This runs before any task registration or extension configuration so
+53:        // that unsupported dependency versions fail with DependencyVersionChecker's diagnostic
+54-        // rather than a runtime error when calling AGP or Gradle APIs.
+55-        val shouldSkipDependencyChecks: Boolean =
+56-            project.hasProperty("skipDependencyChecks") &&
+57-                project.properties["skipDependencyChecks"]?.toString()?.toBoolean() == true
+58-        if (!shouldSkipDependencyChecks) {
+59-            try {
+60:                DependencyVersionChecker.checkDependencyVersions(project)
+61-            } catch (e: DependencyValidationException) {
+62-                throw e
+63-            } catch (e: Exception) {
+64-                // Possible bug in dependency checking code - warn and do not block build.
+65-                project.logger.error(
+66-                    "Warning: Flutter was unable to detect project Gradle, Java, " +
+67-                        "AGP, and KGP versions. Skipping dependency version checking. Error was: " +
+68-                        e
+69-                )
+70-            }
+--- /tmp/gp_FlutterPluginUtils.kt
+--- /tmp/gp_VersionFetcher.kt
+
