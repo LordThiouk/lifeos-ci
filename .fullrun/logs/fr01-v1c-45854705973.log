@@ -6326,3 +6326,6 @@ Ces lignes renvoient aux ISC `Anti:` déjà numérotés ; elles ne sont ni coch�
 | ISC-23.1 | flutter-test | flutter test | passage en ligne refusé ; bannière visible | flutter test test/presentation/permissions/always_location_denied_test.dart | literal |
 
 Le nom est `2026-11-22-galass-lot-client` (tous des tirets). Je refais les lectures.
+$ D=/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client; grep -n "^#" "$D/ISA.md" | head -80
+grep: /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/ISA.md: No such file or directory
+
