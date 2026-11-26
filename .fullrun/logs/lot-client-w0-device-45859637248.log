@@ -3138,3 +3138,32 @@ $ git -C /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target show --sta
  MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
+✗ cat > /tmp/task_done.md << 'MD'
+# W0 device (Artemis) — lot-client
+
+- Dépôt: LordThiouk/Galass_backend
+- Branche: fullrun/lot-client-w0
+- SHA: 9a012ce2 (w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés)
+- ISA: MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md (progress 0/63, aucun ISC coché)
+
+## Vérification Artemis (API publique galass-emu-actions-pub, artemis-staging-e2e.yml)
+
+| Run | URL | created_at | head_sha (emu) | conclusion | step 11 tests Flutter | step 12 build APK | steps 13-19 (apksigner/KVM/opencode/E2E) | artefacts device |
+|---|---|---|---|---|---|---|---|---|
+| #150 45778554984 | https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45778554984 | 2026-11-26T07:52:21Z | 81d149d4 (feat/multistop-e2e-2026-11-15) | failure | failure | skipped | skipped | aucun (evidence encrypted 337o seulement) |
+| #151 45782061889 | https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45782061889 | 2026-11-26T08:18:31Z | 81d149d4 | failure | failure | skipped | skipped | aucun |
+| #152 45801376130 | https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130 | 2026-11-26T10:26:37Z | 81d149d4 | failure | **success** | **failure** | skipped | aucun (evidence encrypted 337o seulement) |
+
+## Résultat W0 (S-W0-01…S-W0-07 / ISC-22,50,80-84)
+
+- **BLOCK**. Aucune capture ni logcat device produit : aucun run n'a atteint KVM/E2E ; artefacts publics = `staging-e2e-evidence-encrypted` uniquement, pas de `e2e-out/summary.md`, `report.json`, `ui/*.xml`, `smoke.log`.
+- Run #152 montre la régression goldens/Flutter 3.44.8 corrigée (step 11 OK), mais échoue au build APK (step 12). Cause step 12 non diagnostiquée ici : logs GitHub Actions non téléchargeables sans authentification API ; `gh`/`GALASS_TOKEN`/sudo absents sur ce runner, aucun dispatch possible.
+- **Aucun ISC coché** (preuve device exigée non obtenue). Aucune modification W1+. Bugs multistop exclus.
+- Preuves backend partielles précédentes conservées dans l'ISA (ISC-80/81/82/84 notes), non refaites.
+
+## Contraintes respectées
+
+- Pas de git push/merge/gh/ssh/scp/sudo. Pas de modification `.fullrun`. Pas de secrets.
+MD
+ failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
