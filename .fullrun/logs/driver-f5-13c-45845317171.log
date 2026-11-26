@@ -17136,3 +17136,32 @@ $ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$
 filter=incomplete
   Tests:    2 passed (8 assertions)
 
+$ grep -n "function createErrorLog\|function createLog" -A 12 core/app/Notify/NotifyProcess.php
+251:    public function createErrorLog($message)
+252-    {
+253-        $adminNotification = new AdminNotification();
+254-        $adminNotification->user_id = 0;
+255-        $adminNotification->title = $message;
+256-        $adminNotification->click_url = '#';
+257-        $adminNotification->save();
+258-    }
+259-
+260-
+261-    /**
+262-     * Create the error log
+263-     *
+--
+266:    public function createLog($type)
+267-    {
+268-        $userColumn = $this->userColumn;
+269-        if ($this->user && $this->createLog) {
+270-            $notifyConfig = $this->notifyConfig;
+271-            $config = gs($notifyConfig);
+272-            $notificationLog = new NotificationLog();
+273-            if (@$this->user->id) {
+274-                $notificationLog->$userColumn = $this->user->id;
+275-            }
+276-            $notificationLog->notification_type = $type;
+277-            $notificationLog->sender = @$config->name ?? 'firebase';
+278-            $notificationLog->sent_from = $this->sentFrom;
+
