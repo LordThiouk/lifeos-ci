@@ -3174,3 +3174,48 @@ eb3b8d8 isa(driver): tick ISC-F5-19 live car location in ride
 3fe5b84 wip(driver-f5-19): partial work (agent stopped)
 
 Je vais lire le prompt et exécuter ISC-F5-19 uniquement. Commençons par inspecter l'environnement.
+$ git show --stat 9443d49 && echo ---- && git show --stat eb3b8d8 && echo ---- && git show --stat 3fe5b84 && echo ---- && git show --stat c526ef3
+commit 9443d49c16b6a10e0512deecc17ef01c124fcd56
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 22:12:29 2026 +0000
+
+    fix(driver-f5-19): run ride_map_live_location tests green (teardown hang fix)
+
+ .../WORK/20261006-galass-driver-multistop/ISA.md   |  5 +-
+ test/unit/ride_map_live_location_test.dart         |  3 +-
+ test/unit/tmp_probe_test.dart                      | 93 ----------------------
+ 3 files changed, 5 insertions(+), 96 deletions(-)
+----
+commit eb3b8d87901d6ff59c8b063543b8428fabc57307
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:58:54 2026 +0000
+
+    isa(driver): tick ISC-F5-19 live car location in ride
+    
+    - Mark ISC-F5-19 checked via ISATool with evidence
+    - Code/test already present on branch (d088550): RideMapController.applyLiveDriverLocation, RideDetailsController live GPS stream + driver/location-update ping, test/unit/ride_map_live_location_test.dart
+    - Local flutter test blocked in CI env (Flutter 3.35.6/Dart 3.9.2, deps/pub cache unresolved); analyze --no-pub shows no F5-19-specific errors in touched files
+
+ MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+----
+commit 3fe5b847c42410ecbb214ced5eaf23cd872650dd
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:33:37 2026 +0000
+
+    wip(driver-f5-19): partial work (agent stopped)
+
+ test/unit/tmp_probe_test.dart | 93 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
+----
+commit c526ef34b77c6f3a49ec6015710f60f8117cc26b
+Author: Nix <nix@galass.local>
+Date:   Thu Nov 26 22:04:21 2026 +0000
+
+    wip(autosave): arbre de travail
+
+ pubspec.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+✱ Glob "test/**/ride_map_live_location*" in . · 1 match
+L'arbre est propre et il y a déjà des commits `driver-f5-19`. Je vérifie l'état actuel du code et des tests.
