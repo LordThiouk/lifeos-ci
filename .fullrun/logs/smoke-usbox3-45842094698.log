@@ -6537,3 +6537,110 @@ $ grep -rn "# W1\|S-W1-1[2-8]" MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md |
 408:  | S-W1-18 | ISC-44 | backend | `core/app/Services/Rider/RideService.php:82-85` ; `core/app/Http/Controllers/Api/User/RideController.php:69` ; `core/app/Repositories/RideRepo.php:38-40` | Service masqué → 422 à la création | `php artisan test --filter=HiddenServiceCreateRideTest` | S-W1-14 | Forge |
 430:  | S-W2-R14 | Bridge-1 | backend+admin+Rider | `core/app/Http/Controllers/Admin/ServiceController.php:16-34` ; `core/app/Http/Controllers/Api/User/UserController.php:30` ; liste services Rider | Ordre admin = réponse API = liste Rider | `php artisan test --filter=RiderServiceListOrderTest` + capture | S-W1-14, S-W1-15, S-W1-16 | Forge ; Aditi |
 
+$ git show --stat 4ba56ea1 | tail -30
+commit 4ba56ea1e3d83d0e00a664e5e5ff9bc8bfcaacf2
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 18:25:03 2026 +0000
+
+    fix(admin): ISC-12 — clic Vehicle Pending → page pending
+    
+    Widget dashboard et compteur menu pointent vers vehicle.verify.pending
+    (vv=PENDING). Test AdminVehicleRedirectTest. ISA précisée par Papa.
+
+ MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md    | 13 ++---
+ .../app/Http/Controllers/Admin/AdminController.php |  1 +
+ .../Providers/GlobalVariablesServiceProvider.php   |  5 +-
+ .../ui/widget/group/dashboard/driver.blade.php     |  2 +-
+ .../Feature/Admin/AdminVehicleRedirectTest.php     | 63 ++++++++++++++++++++++
+ 5 files changed, 75 insertions(+), 9 deletions(-)
+
+$ cat core/resources/views/components/admin/ui/widget/group/dashboard/driver.blade.php
+@props(['widget'])
+<div class="row responsive-row">
+    <div class="col-xxl-3 col-sm-6">
+        <x-admin.ui.widget.four :url="route('admin.driver.all')" variant="primary" title="Total Driver" :value="$widget['total_driver']"
+            icon="las la-users" :currency="false" />
+    </div>
+    <div class="col-xxl-3 col-sm-6">
+        <x-admin.ui.widget.four :url="route('admin.driver.active')" variant="success" title="Active Driver" :value="$widget['active_driver']"
+            icon="las la-user-check" :currency="false" />
+    </div>
+    <div class="col-xxl-3 col-sm-6">
+        <x-admin.ui.widget.four :url="route('admin.driver.unverified')" variant="warning" title="Document Unnerified Driver" :value="$widget['document_unverified_driver']"
+            icon="la la-list" :currency="false" />
+    </div>
+    <div class="col-xxl-3 col-sm-6">
+        <x-admin.ui.widget.four :url="route('admin.driver.vehicle.verify.pending')" variant="danger" title="Vehicle Verify Pending" :value="$widget['vehicle_pending_driver']"
+            icon="las la-car" :currency="false" />
+    </div>
+</div>
+
+$ grep -rn "vehicle.verify.pending\|vehicle.unverified" core/resources/views/components/admin/ui/widget/group/dashboard/driver.blade.php core/app/Providers/GlobalVariablesServiceProvider.php core/app/Http/Controllers/Api/Driver/DriverController.php | head -30
+core/resources/views/components/admin/ui/widget/group/dashboard/driver.blade.php:16:        <x-admin.ui.widget.four :url="route('admin.driver.vehicle.verify.pending')" variant="danger" title="Vehicle Verify Pending" :value="$widget['vehicle_pending_driver']"
+core/app/Http/Controllers/Api/Driver/DriverController.php:491:        $adminNotification->click_url = urlPath('admin.driver.vehicle.verify.pending');
+
+$ sed -n '460,520p' core/app/Http/Controllers/Api/Driver/DriverController.php
+$vehicle            = new Vehicle();
+            $vehicle->driver_id = $driver->id;
+        }
+
+        $vehicle->model_id       = $model->id;
+        $vehicle->color_id       = $color->id;
+        $vehicle->year_id        = $year->id;
+        $vehicle->brand_id       = $brand->id;
+        $vehicle->service_id     = $service->id;
+        $vehicle->form_data      = $vehicleData;
+        $vehicle->vehicle_number = $request->vehicle_number;
+
+        if ($request->hasFile('image')) {
+            try {
+                $vehicle->image = fileUploader($request->image, getFilePath('vehicle'));
+            } catch (\Exception $exp) {
+                $notify[] = 'Couldn\'t upload your image';
+                return apiResponse("not_found", "error", $notify);
+            }
+        }
+
+        $vehicle->save();
+
+        $driver->service_id    = $request->service_id;
+        $driver->rider_rule_id = $request->rules ?? [];
+        $driver->vv            = Status::PENDING;
+        $driver->save();
+
+        $adminNotification            = new AdminNotification();
+        $adminNotification->driver_id = $driver->id;
+        $adminNotification->title     = 'Vehicle Verification';
+        $adminNotification->click_url = urlPath('admin.driver.vehicle.verify.pending');
+        $adminNotification->save();
+
+        $notify[] = 'Vehicle verification data submitted successfully';
+        return apiResponse("vehicle_info_submitted", "success", $notify);
+    }
+
+    public function submitProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'firstname' => 'required',
+            'lastname'  => 'required',
+            'image'     => ['nullable', 'image', new FileTypeValidate(['jpg', 'jpeg', 'png'])]
+        ], [
+            'firstname.required' => 'The first name field is required',
+            'lastname.required'  => 'The last name field is required'
+        ]);
+
+        if ($validator->fails()) {
+            return apiResponse("validation_error", "error", $validator->errors()->all());
+        }
+
+        $user            = auth()->user();
+        $user->firstname = $request->firstname;
+        $user->lastname  = $request->lastname;
+        $user->address   = $request->address;
+        $user->city      = $request->city;
+        $user->state     = $request->state;
+        $user->zip       = $request->zip;
+
+$ sed -n '1,140p' core/app/Services/Rider/RideService.php | sed -n '170,230p'
+(no output)
+
