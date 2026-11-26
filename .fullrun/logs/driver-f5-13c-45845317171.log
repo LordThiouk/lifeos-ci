@@ -5767,3 +5767,10 @@ scripts
 test
 test_result.txt
 
+$ cd /agent/repos/Galass_Driver && find . -path "*workflow*" -name "*.yml" -o -path "*workflow*" -name "*.yaml" 2>/dev/null | head; echo "==="; ls -la .github 2>/dev/null; find /agent/repos/Galass_Driver -name "*.yml" 2>/dev/null | head
+===
+/agent/repos/Galass_Driver/MEMORY/WORK/20261002-galass-driver-dispatch-f4/COMPLETENESS.yml
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && find . -path "*workflow*" -name "*.yml" 2>/dev/null | head; echo "==="; ls .github 2>/dev/null; find . -name "*.yml" 2>/dev/null | grep -i -E "build|apk|gradle" | head
+===
+
