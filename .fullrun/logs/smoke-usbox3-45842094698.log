@@ -1,0 +1,34 @@
+
+> build · big-pickle
+
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+$ git status --short --branch && git log --oneline -5 && date -u '+%Y-%m-%d %H:%M UTC'
+## pipe-smoke-main...origin/pipe-smoke-main
+0e4becf chore(smoke): prompt test post-#27
+8b17d2f fix(ci): silence 180s → bascule + catalogue free (#27)
+1a9540d fix(ci): oc-wrap.sh fichier (YAML cassé par heredoc)
+554ea53 fix(ci): éviter SC2016 actionlint sur le wrapper pid opencode
+b311f6f fix(ci): déclarer secret OPENCODE_HTTPS_PROXY (actionlint)
+2026-11-26 14:45 UTC
+
+✱ Glob "SMOKE.md" in . · 0 matches
+
+$ date -u '+%Y-%m-%d %H:%M UTC'
+2026-11-26 14:45 UTC
+
+← Write SMOKE.md
+Wrote file successfully.
+
+$ git add SMOKE.md && git commit -m "chore(smoke): pipe ok" && git status --short --branch && git log --oneline -2
+[pipe-smoke-main 683520d] chore(smoke): pipe ok
+ 1 file changed, 1 insertion(+)
+ create mode 100644 SMOKE.md
+## pipe-smoke-main...origin/pipe-smoke-main [ahead 1]
+683520d chore(smoke): pipe ok
+0e4becf chore(smoke): prompt test post-#27
+
+← Write /tmp/task_done.md
+Wrote file successfully.
+
+Terminé. Commit `683520d` (`chore(smoke): pipe ok`) créé sur `pipe-smoke-main` avec `SMOKE.md` contenant `ok 2026-11-26 14:45 UTC`. Aucun push, PR ou autre modification ; résumé écrit dans `/tmp/task_done.md`.
