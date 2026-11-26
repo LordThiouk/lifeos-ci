@@ -18125,3 +18125,75 @@ exit=0
 docs/BUGS.md
 
 S-W1-03..05,07..12,14,16,17,18 verts. S-W1-13 Payment vert. S-W1-01 vérifié. S-W1-02 : triage `c40c30de` porté, mais `rg OUVERT=0` global (W3) ne se déduit pas d'un W1-only. Lance la suite complète pour détecter régressions.
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core; php artisan test 2>&1 | tail -25
+113▕     public function test_create_rejects_stop_outside_zone_or_different_country(): void
+    114▕     {
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\MultiStop\MultiStopValidationTest > create rejects…    
+  Failed asserting that two strings are identical.
+  -'validation_error'
+  +'not_found'
+  
+
+  at tests/Feature/MultiStop/MultiStopValidationTest.php:139
+    135▕             ],
+    136▕         ]));
+    137▕ 
+    138▕         $responseOutside->assertStatus(422)
+  ➜ 139▕             ->assertJsonPath('remark', 'validation_error');
+    140▕ 
+    141▕         $responseOtherCountry = $this->userJson('POST', '/api/ride/create', $this->validMultiStopPayload([
+    142▕             'stops' => [
+    143▕                 ['latitude' => 5.30, 'longitude' => -4.00, 'location_label' => 'Abidjan stop'],
+
+
+  Tests:    13 failed, 281 passed (2026 assertions)
+  Duration: 14.56s
+
+$ grep -n "not_found\|validation_error" core/app/Services/Rider/RideService.php | head -20
+85:            return serviceError('not_found', trans('This service is currently unavailable'));
+196:            return serviceError('not_found', trans('The requested ride could not be found.'));
+222:            return serviceError('not_found', trans('The requested ride could not be found.'));
+264:            return serviceError('not_found', trans('Invalid bid'));
+314:            return serviceError('not_found', trans('Invalid bid'));
+346:            return serviceError('not_found', trans('Ride not found'));
+365:            return serviceError('not_found', trans('The ride not found'));
+448:            return serviceError('not_found', trans('The ride not found'));
+469:            return serviceError('not_found', trans('The pickup location is not inside any of our zones'));
+475:            return serviceError('not_found', trans('The destination location is not inside any of our zones'));
+479:            return serviceError('not_found', trans('The pickup address and destination address must be within the same country.'));
+620:            return serviceError('validation_error', trans('A maximum of 3 intermediate stops is allowed.'));
+632:                return serviceError('validation_error', trans('Invalid coordinates for stop :number.', ['number' => $index + 1]));
+638:                return serviceError('validation_error', trans('Duplicate coordinates are not allowed within the route.'));
+646:                return serviceError('validation_error', trans('Stop :number is not inside any active service zone.', ['number' => $index + 1]));
+650:                return serviceError('validation_error', trans('Stop :number must be in the same country as the pickup location.', ['number' => $index + 1]));
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core; php artisan test 2>&1 | grep -E 'FAILED|⨯' | head -40
+⨯ create ride triggers sync dispatch                                   0.02s  
+  ⨯ stored amount equals recommend amount plus penalty when offer amoun… 0.01s  
+  ⨯ create without offer amount uses recommend amount plus penalty       0.01s  
+  ⨯ create ride single stop emits dispatch offer                         0.02s  
+  ⨯ fare create detail dispatch multi stop journey                       0.03s  
+  ⨯ create without stops unchanged                                       0.03s  
+  ⨯ create with two stops persists ordered stops                         0.02s  
+  ⨯ ride detail includes ordered stops                                   0.02s  
+  ⨯ multi stop create emits dispatch offer                               0.02s  
+  ⨯ fare and distance sums segment distances for two stops               0.03s  
+  ⨯ recommend amount on create uses summed segment distance              0.02s  
+  ⨯ create rejects duplicate coordinates in route                        0.02s  
+  ⨯ create rejects stop outside zone or different country                0.02s  
+   FAILED  Tests\Feature\Dispatch\RideCreateForcesRecommendAmountTest > crea…   
+   FAILED  Tests\Feature\Dispatch\RideCreateForcesRecommendAmountTest > stor…   
+   FAILED  Tests\Feature\Dispatch\RideCreateForcesRecommendAmountTest > crea…   
+   FAILED  Tests\Feature\Integration\DispatchRideIntegrationTest > create ri…   
+   FAILED  Tests\Feature\Integration\MultiStopRideIntegrationTest > fare cre…   
+   FAILED  Tests\Feature\MultiStop\MultiStopCreateTest > create without stop…   
+   FAILED  Tests\Feature\MultiStop\MultiStopCreateTest > create with two sto…   
+   FAILED  Tests\Feature\MultiStop\MultiStopDetailTest > ride detail include…   
+   FAILED  Tests\Feature\MultiStop\MultiStopDispatchTest > multi stop create…   
+   FAILED  Tests\Feature\MultiStop\MultiStopFareTest > fare and distance sum…   
+   FAILED  Tests\Feature\MultiStop\MultiStopFareTest > recommend amount on c…   
+   FAILED  Tests\Feature\MultiStop\MultiStopValidationTest > create rejects…    
+   FAILED  Tests\Feature\MultiStop\MultiStopValidationTest > create rejects…
+
