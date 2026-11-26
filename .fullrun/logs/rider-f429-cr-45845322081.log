@@ -5277,3 +5277,18 @@ $ R=/agent/repos/galass-emu-actions-pub; git -C $R log --oneline -3; find $R -na
 === grep apk build ===
 /agent/repos/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml:133:            (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
 
+$ grep -rln "rider-apk-gradle" /agent/repos 2>/dev/null | head; echo "=== rider .github ==="; ls -R /agent/repos/Galass_Rider/.github 2>/dev/null | head -40; echo "=== workflow names with artemis/apk ==="; grep -rln "flutter build apk" /agent/repos 2>/dev/null | head -20
+/agent/repos/Galass_Rider/.git/COMMIT_EDITMSG
+/agent/repos/Galass_Rider/.git/logs/HEAD
+/agent/repos/Galass_Rider/.git/HEAD
+=== rider .github ===
+=== workflow names with artemis/apk ===
+/agent/repos/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml
+/agent/repos/Galass_Rider/docs/RELEASE.md
+/agent/repos/Galass_Rider/Galass_Rider-merge/docs/RELEASE.md
+/agent/repos/Galass_Rider/Galass_Rider-merge/codemagic.yaml.deprecated
+/agent/repos/Galass_Rider/Galass_Rider-merge/.claude/PAI/MEMORY/WORK/galass-phone-auth-876543/ISA.md
+/agent/repos/Galass_Rider/codemagic.yaml.deprecated
+/agent/repos/Galass_Rider/.claude/PAI/MEMORY/WORK/galass-phone-auth-876543/ISA.md
+/agent/repos/Galass_Driver/MEMORY/WORK/20260613-galassdriver-firebase-phone-auth/ISA.md
+
