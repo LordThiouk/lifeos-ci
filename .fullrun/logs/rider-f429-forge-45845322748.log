@@ -758,3 +758,16 @@ SHLVL=1
 TMPDIR=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent
 _=/usr/bin/env
 
+$ ls -la "$HOME" 2>/dev/null; echo ===; ls -la "$HOME/.local/bin" 2>/dev/null; echo ===; ls /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.local/bin/ 2>/dev/null; echo ===; find /home/ubuntu/actions-runner-3/_work/_temp -name uv -type f 2>/dev/null; find /home/ubuntu/actions-runner-2/_work/_temp -name uv -type f 2>/dev/null | head
+total 28
+drwxr-xr-x 7 ubuntu ubuntu 4096 Nov 26 16:22 .
+drwxr-xr-x 4 ubuntu ubuntu 4096 Nov 26 16:26 ..
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 16:22 .cache
+drwxr-xr-x 5 ubuntu ubuntu 4096 Nov 26 16:22 .claude
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 16:22 .config
+drwxr-xr-x 4 ubuntu ubuntu 4096 Nov 26 16:22 .local
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 16:22 .npm
+===
+===
+===
+
