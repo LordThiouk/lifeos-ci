@@ -6015,3 +6015,168 @@ $ grep -rn "ProjectValidator\|allProjectValidators" /tmp/flutter/packages/flutte
 /tmp/flutter/packages/flutter_tools/lib/executable.dart:240:      GeneralInfoProjectValidator(),
 /tmp/flutter/packages/flutter_tools/lib/executable.dart:241:      VariableDumpMachineProjectValidator(
 
+$ curl -sS -o /tmp/gu_3448.dart -w "%{http_code}\n" https://raw.githubusercontent.com/flutter/flutter/3.44.8/packages/flutter_tools/lib/src/android/gradle_utils.dart; grep -n "validateGradleAndKGP\|isWithinVersionRange(kgpV, min: '2.2\|max: '8.1\|max: '9\." /tmp/gu_3448.dart | head -30; echo "=== KGP 2.2.20 block ==="; grep -n "2.2.20" -A 3 /tmp/gu_3448.dart | head -20
+200
+553:bool validateGradleAndKGP(Logger logger, {required String? kgpV, required String? gradleV}) {
+589:    return isWithinVersionRange(gradleV, min: '7.6.3', max: '9.0.99', inclusiveMax: false);
+592:  if (isWithinVersionRange(kgpV, min: '2.2.20', max: '2.3.0')) {
+594:    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.14.99', inclusiveMax: false);
+596:  if (isWithinVersionRange(kgpV, min: '2.2.0', max: '2.2.10')) {
+598:    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.14.99', inclusiveMax: false);
+602:    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.12.99', inclusiveMax: false);
+606:    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.11', inclusiveMax: false);
+620:    return isWithinVersionRange(gradleV, min: '6.8.3', max: '8.1.1');
+703:    return isWithinVersionRange(agpV, min: '8.2.2', max: '9.0.99', inclusiveMax: false);
+708:    return isWithinVersionRange(agpV, min: '8.2.2', max: '8.14', inclusiveMax: false);
+711:  if (isWithinVersionRange(kgpV, min: '2.2.20', max: '2.3.0', inclusiveMax: false)) {
+713:    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.12', inclusiveMax: false);
+716:  if (isWithinVersionRange(kgpV, min: '2.2.0', max: '2.2.19')) {
+718:    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.11', inclusiveMax: false);
+735:    return isWithinVersionRange(agpV, min: '4.2.2', max: '8.1.0');
+803:  if (isWithinVersionRange(agpV, min: '9.0', max: '9.0.99')) {
+818:  if (isWithinVersionRange(agpV, min: '8.13.0', max: '8.13.99')) {
+821:  if (isWithinVersionRange(agpV, min: '8.12.0', max: '8.12.99')) {
+824:  if (isWithinVersionRange(agpV, min: '8.11.0', max: '8.11.99')) {
+827:  if (isWithinVersionRange(agpV, min: '8.10.0', max: '8.10.99')) {
+854:  if (isWithinVersionRange(agpV, min: '8.0.0', max: '8.1.99')) {
+=== KGP 2.2.20 block ===
+592:  if (isWithinVersionRange(kgpV, min: '2.2.20', max: '2.3.0')) {
+593-    // Documented max is 8.14, using 8.14.99 non inclusive covers patch versions.
+594-    return isWithinVersionRange(gradleV, min: '7.6.3', max: '8.14.99', inclusiveMax: false);
+595-  }
+--
+710:  // Documented max is 2.2.20
+711:  if (isWithinVersionRange(kgpV, min: '2.2.20', max: '2.3.0', inclusiveMax: false)) {
+712-    // Documented max is 8.11.1
+713-    return isWithinVersionRange(agpV, min: '7.3.1', max: '8.12', inclusiveMax: false);
+714-  }
+
+$ ls -la /tmp/artemis*; echo "=== wf ==="; head -60 /tmp/artemis-wf.yml; echo; grep -n "flutter-version\|build apk\|skip-build\|jobs:\|name:" /tmp/artemis-wf.yml | head -60
+-rw-r--r-- 1 ubuntu ubuntu 998821 Nov 26 10:41 /tmp/artemis-r3.gz
+-rw-r--r-- 1 ubuntu ubuntu      0 Nov 26 10:41 /tmp/artemis-r3.log
+-rw-r--r-- 1 ubuntu ubuntu  13383 Nov 26 07:03 /tmp/artemis-wf.yml
+
+/tmp/artemis-f432-fail:
+total 24
+drwxr-xr-x   3 ubuntu ubuntu  4096 Nov 26 06:21 .
+drwxrwxrwt. 37 root   root   16384 Nov 26 16:58 ..
+drwxr-xr-x   2 ubuntu ubuntu  4096 Nov 26 06:21 staging-e2e-evidence-encrypted
+
+/tmp/artemis-golden:
+total 32
+drwxr-xr-x   4 ubuntu ubuntu  4096 Nov 26 07:03 .
+drwxrwxrwt. 37 root   root   16384 Nov 26 16:58 ..
+drwx------   3 ubuntu ubuntu  4096 Nov 26 07:03 decrypted
+-rw-------   1 ubuntu ubuntu   114 Nov 26 07:03 evidence.tgz
+drwxr-xr-x   2 ubuntu ubuntu  4096 Nov 26 06:42 staging-e2e-evidence-encrypted
+=== wf ===
+name: artemis-staging-e2e
+
+on:
+  workflow_dispatch:
+    inputs:
+      rider_ref:
+        description: "Branche Galass_Rider"
+        default: "fix/multistop-close"
+        type: string
+      driver_ref:
+        description: "Branche Galass_Driver"
+        default: "fix/multistop-close"
+        type: string
+      model:
+        description: "Modèle CLI opencode (opencode/*-free, sans clé API)"
+        default: "opencode/deepseek-v4.1-flash-free"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: artemis-staging-e2e
+  cancel-in-progress: false
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      BASE: ${{ secrets.GALASS_STAGING_URL }}
+      RIDER_ID: "106"
+      DRIVER_ID: "23"
+      OUT: e2e-out
+      # Chaîne des échéances (vérifiée par e2e/tests) : watchdog 90 < step 100 < job 150.
+      # Le harnais rend son verdict partiel AVANT que le step soit coupé, et le step
+      # coupe AVANT que le job meure — les étapes `if: always()` (preuves) survivent.
+      RUN_DEADLINE_MIN: "90"
+      APK_RIDER: apk/rider/app-debug.apk
+      APK_DRIVER: apk/driver/app-debug.apk
+      RIDER_TOKEN: ${{ secrets.GALASS_E2E_RIDER_TOKEN }}
+      DRIVER_TOKEN: ${{ secrets.GALASS_E2E_DRIVER_TOKEN }}
+      DEV_TOKEN: ${{ secrets.GALASS_E2E_DEV_TOKEN }}
+      OPENCODE_VERSION: "1.19.4"
+      OPENCODE_DISABLE_AUTOUPDATE: "1"
+      ARTEMIS_DISABLE: "1"
+      OC_MODEL: ${{ inputs.model }}
+      OC_MODEL_CHAIN: "opencode/mimo-v2.6-flash-free,opencode/glm-5.3-flash-free,opencode/minimax-m3.1-flash-free,opencode/longcat-2.5-free,opencode/iceman-free,opencode/flint-40b-free,opencode/nemotron-3.5-lightning-free,opencode/beam-free,opencode/inkling-2-small-free"
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - name: Garde staging
+        run: |
+          python3 e2e/base_guard.py "$BASE"
+          case "$BASE" in *galassapp.com*) echo "BASE ne doit pas être la prod"; exit 1;; esac
+          h="${BASE#*://}"; h="${h%%[:/]*}"; echo "::add-mask::$h"
+          echo "STAGING_HOST=$h" >> "$GITHUB_ENV"
+          echo "GALASS_STAGING_URL=$BASE" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with: {repository: LordThiouk/Galass_Rider, ref: "${{ inputs.rider_ref }}", token: "${{ secrets.GALASS_REPO_TOKEN }}", path: src/rider, persist-credentials: false}
+
+1:name: artemis-staging-e2e
+26:jobs:
+52:      - name: Garde staging
+63:      - name: Libérer disque
+70:        with: {flutter-version: "3.44.8", channel: stable, cache: true}
+71:      - name: Licences Android + NDK
+77:      - name: Keystore debug fixe (JKS, SHA-1 stable pour la clé Maps)
+123:      - name: Tests unitaires Flutter (preuve ISC — avant rm -rf src)
+130:      - name: Build APK (staging, debug, même job, pas d'upload)
+133:            (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+137:      - name: Vérifier la signature des APK (apksigner)
+167:      - name: Activer KVM (règle udev officielle)
+178:      - name: Installer opencode (version de la box)
+187:      - name: Valider le modèle (opencode/*-free)
+193:      - name: Tests du harnais (syntaxe + contrats)
+200:      - name: E2E multistop (opencode + API fallback)
+214:      - name: Publier le diagnostic texte (non chiffré, sans captures)
+218:          name: staging-e2e-diag-text
+226:      - name: Chiffrer les preuves
+235:        with: {name: staging-e2e-evidence-encrypted, path: evidence.tgz.gpg, retention-days: 7}
+236:      - name: Publier le smoke log (masqué)
+239:        with: {name: staging-e2e-smoke-log, path: e2e/smoke.log, retention-days: 7, if-no-files-found: warn}
+240:      - name: Résumé (PASS/FAIL seulement)
+
+$ file /tmp/artemis-r3.gz; tar tzf /tmp/artemis-r3.gz 2>/dev/null | head -30 || gzip -l /tmp/artemis-r3.gz; echo "=== ci-logs ==="; ls -la /tmp/ci-logs | head -30
+/tmp/artemis-r3.gz: Unicode text, UTF-8 (with BOM) text, with very long lines (314), with escape sequences
+=== ci-logs ===
+total 128
+drwxr-xr-x   2 ubuntu ubuntu   4096 Nov 26 12:33 .
+drwxrwxrwt. 37 root   root    16384 Nov 26 16:58 ..
+-rw-r--r--   1 ubuntu ubuntu     99 Nov 26 12:33 job.log
+-rw-r--r--   1 ubuntu ubuntu 104684 Nov 26 12:33 job.zip
+
+$ grep -an "lower than Flutter\|minimum supported version\|Gradle version (\|AGP version\|45801376130\|Build APK" /tmp/artemis-r3.gz | head -30; echo "=== size/lines ==="; wc -l /tmp/artemis-r3.gz; head -c 600 /tmp/artemis-r3.gz
+4639:2026-11-26T10:32:10.7647514Z Artifact download URL: https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130/artifacts/15107422110
+=== size/lines ===
+4750 /tmp/artemis-r3.gz
+﻿2026-11-26T10:26:42.0075949Z Current runner version: '2.338.2'
+2026-11-26T10:26:42.0117677Z ##[group]Runner Image Provisioner
+2026-11-26T10:26:42.0118376Z Hosted Compute Agent
+2026-11-26T10:26:42.0118899Z Version: 20261111.635
+2026-11-26T10:26:42.0119385Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+2026-11-26T10:26:42.0120036Z Build Date: 2026-11-11T01:49:01Z
+2026-11-26T10:26:42.0120534Z Worker ID: {21ec2ff2-d548-42a4-8230-88f31c4a4d38}
+2026-11-26T10:26:42.0121124Z Region: centralus
+2026-11-26T10:26:42.0121544Z Cloud: Azure
+2026-11-26T10:26:42.0121978Z ##[endgroup]
+2026-11-26T10:26:42.
+
