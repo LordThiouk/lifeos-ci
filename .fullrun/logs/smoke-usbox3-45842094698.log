@@ -17130,3 +17130,9 @@ $ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$
 ::incomplete
    INFO  No tests found.
 
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core; echo '::incomplete'; php artisan test --filter='DriverOneStepApprovalTest::incomplete' 2>&1 | grep -E 'Tests:|No tests'; echo 'filter=incomplete'; php artisan test --filter=incomplete 2>&1 | grep -E 'Tests:|No tests'
+::incomplete
+   INFO  No tests found.
+filter=incomplete
+  Tests:    2 passed (8 assertions)
+
