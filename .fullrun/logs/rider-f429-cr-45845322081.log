@@ -5036,3 +5036,392 @@ ISC-F5-13 complété.
 
 I'll read the prompt file first.
 → Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+# Todos
+[•] Explorer le dépôt, la branche et l'ISA de la tâche
+[ ] Lire ISC-F5-13 et comprendre l'état actuel (Code, tests, goldens)
+[ ] Implémenter la correction: Annuler = couleur danger distincte du CTA principal, tout état
+[ ] Vérifier: flutter test + analyze fichiers touchés
+[ ] Cocher ISC-F5-13 via ISATool avec preuve
+[ ] Commiter sur la branche courante (pas de push) + écrire /tmp/task_done.md
+
+$ pwd && git status && echo "---BRANCH---" && git branch --show-current && echo "---LOG---" && git log --oneline -10
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+On branch build/driver-f5-13c
+Your branch is ahead of 'origin/build/driver-f5-13c' by 2 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+---BRANCH---
+build/driver-f5-13c
+---LOG---
+d3786a2 docs(isa): ISC-F5-13 preuve (test 9/9 + analyze)
+1e49ab5 test(driver): ISC-F5-13 Annuler course = danger distinct du CTA principal
+32607ee test(goldens): rebase ride_details sous Flutter 3.50.1 (regen F6)
+119fb0c feat(driver): ISC-F5-16 arrêt actif distinct + arrêts estompés numérotés
+505637e fix(driver): ISC-F5-12 CTA unique par état (confirm stop / terminer)
+bd77f91 docs(driver): verdict position voiture temps réel + ISC-F5-19
+7187e3a prompt: driver live location
+9208af6 fix(build): M3 retrait dead code stopsProgressText + import (Driver)
+fc2b822 wip(build): F5-14 Semantics content-desc galass.driver.stops
+ffa4ac9 wip(autosave): arbre de travail
+
+The task appears partially done already (2 commits ahead). Let me inspect what was done and the current state.
+$ echo "=== COMMIT 1e49ab5 ===" && git show --stat 1e49ab5 && echo "" && echo "=== COMMIT d3786a2 ===" && git show --stat d3786a2 && echo "" && echo "=== DIFF origin..HEAD ===" && git diff origin/build/driver-f5-13c..HEAD
+=== COMMIT 1e49ab5 ===
+commit 1e49ab5d12b54f8e6f54928858beef53c866aa38
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 16:01:45 2026 +0000
+
+    test(driver): ISC-F5-13 Annuler course = danger distinct du CTA principal
+
+ .../WORK/20261006-galass-driver-multistop/ISA.md   |   9 +-
+ .../widgets/ride_details_bottom_sheet_widget.dart  |   1 +
+ test/unit/multistop_end_gate_test.dart             | 192 ++++++++++++++-------
+ 3 files changed, 140 insertions(+), 62 deletions(-)
+
+=== COMMIT d3786a2 ===
+commit d3786a2002aa322f35b70ce1e31ce5ed230d41c6
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 16:06:32 2026 +0000
+
+    docs(isa): ISC-F5-13 preuve (test 9/9 + analyze)
+
+ MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+=== DIFF origin..HEAD ===
+diff --git a/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md b/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+index 78e86c7..46e6825 100644
+--- a/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
++++ b/MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+@@ -4,11 +4,11 @@ slug: 20261006-galass-driver-multistop
+ project: Galass_Driver
+ isa_kind: task
+ phase: complete
+-progress: 16/21
++progress: 17/21
+ algorithm: 8.20.2
+ isa_spec: 2.19.0
+ started: 2026-10-06T02:30:00Z
+-updated: 2026-11-26T07:50:27.608Z
++updated: 2026-11-26T16:06:17.111Z
+ parent: 20261006-galass-regression-multistop
+ principal_stated_goal: "Multi-stop driver V2 : CONFIRM STOP par escale, navigation segment courant, END seulement destination finale"
+ principal_stated_goal_source: parent
+@@ -16,7 +16,7 @@ principal_stated_goal_signal: 4
+ principal_stated_goal_locked: 2026-10-06T02:30:00Z
+ context_sufficient: true
+ interview_invoked: false
+-isa_stamp: hmac-sha256:[REDACTED:hex64]
++isa_stamp: hmac-sha256:[REDACTED:hex64]
+ ---
+ 
+ ## Problem
+@@ -217,7 +217,7 @@ Why: après Accept CallKit, le chauffeur doit atterrir dans l'app sur la course
+ Why: revue des captures du bundle evidence déchiffré (lu, aucun secret recopié) + retours directs de Papa. Aucun correctif de code dans cette étape — ISC seulement. **Note : cette ISA est `phase: complete` / `18/18` close depuis 2026-10-09 ; cette section ajoute des claims non cochés sans changer `phase` ni cocher/décocher quoi que ce soit, sur instruction explicite. Signalé à Papa : la convention Algorithm (OPERATIONAL_RULES) prévoit normalement qu'un edit de corps ISA sur une tâche `complete` la fait revenir à `learn` — ici volontairement non appliqué.**
+ 
+ - [x] ISC-F5-12: Une seule action principale par état — « Confirmer l'arrêt » quand un arrêt est actif, « Terminer la course » seulement après le dernier arrêt, visuellement distinct et sans avoir l'air désactivé. **Audit code (agent lecture seule, 2026-11-23)** : `ride_details_bottom_sheet_widget.dart` l.231-283 — « Terminer la course » est aujourd'hui **toujours rendu** dans le bloc RUNNING, seulement `isDisabled` (opacité 0.6 via `rounded_button.dart` l.59, même couleur primaire, même texte) ; les deux CTA sont donc visibles simultanément tant qu'une escale reste pending, un seul étant réellement actionnable. Falsifier: 2 CTA actionnables simultanément, ou « Terminer la course » encore visible+actif avant le dernier arrêt.
+-- [ ] ISC-F5-13: « Annuler la course » est clairement une action dangereuse, différente de l'action principale. **Audit code** : déjà vrai aujourd'hui (`bgColor: MyColor.redCancelTextColor` = `0xFFF93E2C`, l.217-225, vs couleur primaire par défaut du CTA principal) — ce claim verrouille ce comportement correct en régression plutôt que de supposer un bug.
++- [x] ISC-F5-13: « Annuler la course » est clairement une action dangereuse, différente de l'action principale. **Audit code** : déjà vrai aujourd'hui (`bgColor: MyColor.redCancelTextColor` = `0xFFF93E2C`, l.217-225, vs couleur primaire par défaut du CTA principal) — ce claim verrouille ce comportement correct en régression plutôt que de supposer un bug.
+ - [ ] ISC-F5-14: Les compteurs « x/2 arrêt(s) terminé(s) » sont retirés de l'UI Driver, partout (staging et prod) ; **supersède ISC-F5-3** pour la partie compteur (la liste ordonnée des arrêts elle-même reste). **Audit code** : fonction `stopsProgressText` confirmée `ride_details_bottom_sheet_widget.dart` l.30-46, rendue l.92-98. Le harnais emu reçoit un repère invisible stable à la place — **contrat fixé 2026-11-23** : UN nœud `Semantics` invisible, `content-desc` exact `galass.driver.stops=<done>/<total>`, monté seulement si `ride.stops` non vide (miroir Rider `ISC-F4-22`, consommé par harnais `ISC-EMU-1`). Un `Key` widget seul ne suffit pas (invisible à `uiautomator dump`).
+ - [ ] ISC-F5-15: Après le dernier arrêt, le Driver n'affiche plus « Point de prise en charge » mais la vraie destination finale. **Audit code (2026-11-23)** : aucune occurrence de `MyStrings.pickUpLocation` trouvée sur le nœud final dans les écrans course active lus (`ride_destination_widget.dart`, `ride_itinerary_timeline.dart` — le dernier nœud utilise toujours `MyStrings.destination` + l'adresse réelle) ; **non vérifié à 100%** sur d'éventuels autres écrans (notification push, carte plein écran) — ce claim sert de garde-fou si un tel cas existe ou apparaît.
+ - [x] ISC-F5-16: Le Driver affiche des repères d'arrêts sur la carte, avec l'arrêt actif mis en avant et les autres estompés+numérotés. **Audit code** : `ride_map_controller.dart` l.245-268 — tous les arrêts intermédiaires partagent aujourd'hui la même icône `destinationIcon` 40×40, **aucune numérotation**, **aucune distinction active/futur** ; `ISC-F5-4` (markers existants) est donc insuffisant tel quel pour ce besoin — ce claim l'étend plutôt que de le dupliquer. **Verrou de régression (méthode anti-régression 2026-11-23, Papa) : preuve golden + capture e2e ajoutées en exigence, jamais affaiblie.**
+@@ -315,6 +315,8 @@ criterion now: ISC-F5-10 — `multistop_pusher_test.dart` 8/8 covers flat onEven
+ - ISC-F5-12: cd target && flutter test test/unit/multistop_end_gate_test.dart -> 6/6 passed (3 widget ISC-F5-12: escale pending=Confirm seul, dernier arret=End seul vert, single-stop legacy=End seul) [@bd77f91]
+ - ISC-F5-16: flutter test test/data/controller/map/ride_map_multistop_test.dart -> 8/8 passed (3 tests ISC-F5-16 : arrêt actif distinct, autres arrêts numérotés+estompés, chemin legacy vide inchangé) [@505637e]
+ 
++- ISC-F5-13: flutter test test/unit/multistop_end_gate_test.dart -> 9/9 passed (3 widget ISC-F5-13); flutter analyze lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart test/unit/multistop_end_gate_test.dart -> 3 pre-existing info, 0 warning/error [@1e49ab5]
++
+ ## Remaining Work
+ 
+ - [x] **Re-verify labels** — hot reload / rebuild : « Arrêt 1 », « Arrêt 2 » (fix `@number` 2026-10-09).
+diff --git a/lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart b/lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+index fe42668..c7fcdf4 100644
+--- a/lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
++++ b/lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart
+@@ -197,6 +197,7 @@ class RideDetailsBottomSheetWidget extends StatelessWidget {
+                           ),
+                           spaceDown(Dimensions.space20),
+                           RoundedButton(
++                            key: const Key('driver_cancel_ride_cta'),
+                             text: MyStrings.cancelRide.tr,
+                             press: () {
+                               CustomBottomSheet(
+diff --git a/test/unit/multistop_end_gate_test.dart b/test/unit/multistop_end_gate_test.dart
+index 4f65bb1..8c45a44 100644
+--- a/test/unit/multistop_end_gate_test.dart
++++ b/test/unit/multistop_end_gate_test.dart
+@@ -65,6 +65,70 @@ RideModel _rideWithStops({required int completed}) => RideModel(
+       }),
+     );
+ 
++RideModel _activeRide() => RideModel(
++      id: '44',
++      status: AppStatus.RIDE_ACTIVE,
++      pickupLocation: 'Plateau, Dakar',
++      destination: 'Aéroport AIBD, Diass',
++      distance: '38.4',
++      duration: '52',
++      amount: '12500',
++    );
++
++RideModel _singleStopRunningRide() => RideModel(
++      id: '43',
++      status: AppStatus.RIDE_RUNNING,
++      pickupLocation: 'Plateau, Dakar',
++      destination: 'Aéroport AIBD, Diass',
++      distance: '38.4',
++      duration: '52',
++      amount: '12500',
++    );
++
++late RideDetailsController controller;
++
++Future<void> _setUpController() async {
++  Get.testMode = true;
++  Get.reset();
++  SharedPreferences.setMockInitialValues(<String, Object>{});
++  final prefs = await SharedPreferences.getInstance();
++  final apiClient = RecordingApiClient(sharedPreferences: prefs);
++  Get.put<ApiClient>(apiClient);
++  controller = Get.put<RideDetailsController>(
++    RideDetailsController(
++      repo: _NoopRideRepo(apiClient: apiClient),
++      mapController: _NoopMap(
++        polylineRepo: PolylineRepo(apiClient: apiClient),
++      ),
++    ),
++  );
++  controller.currency = 'FCFA';
++  controller.userImageUrl = '';
++  controller.isLoading = false;
++}
++
++Future<void> _pumpSheet(WidgetTester tester, RideModel ride) async {
++  controller.ride = ride;
++  await tester.pumpWidget(
++    GetMaterialApp(
++      home: Scaffold(
++        body: Align(
++          alignment: Alignment.bottomCenter,
++          child: SizedBox(
++            height: 560,
++            child: RideDetailsBottomSheetWidget(
++              scrollController: ScrollController(),
++              draggableScrollableController: DraggableScrollableController(),
++            ),
++          ),
++        ),
++      ),
++    ),
++  );
++  await tester.pump(const Duration(milliseconds: 100));
++  await tester.pump(const Duration(milliseconds: 100));
++}
++
+ void main() {
+   TestWidgetsFlutterBinding.ensureInitialized();
+ 
+@@ -111,56 +175,13 @@ void main() {
+   });
+ 
+   group('ISC-F5-12 — une seule action principale par état', () {
+-    late RideDetailsController controller;
+-
+-    setUp(() async {
+-      Get.testMode = true;
+-      Get.reset();
+-      SharedPreferences.setMockInitialValues(<String, Object>{});
+-      final prefs = await SharedPreferences.getInstance();
+-      final apiClient = RecordingApiClient(sharedPreferences: prefs);
+-      Get.put<ApiClient>(apiClient);
+-      controller = Get.put<RideDetailsController>(
+-        RideDetailsController(
+-          repo: _NoopRideRepo(apiClient: apiClient),
+-          mapController: _NoopMap(
+-            polylineRepo: PolylineRepo(apiClient: apiClient),
+-          ),
+-        ),
+-      );
+-      controller.currency = 'FCFA';
+-      controller.userImageUrl = '';
+-      controller.isLoading = false;
+-    });
++    setUp(_setUpController);
+ 
+     tearDown(Get.reset);
+ 
+-    Future<void> pumpSheet(WidgetTester tester, RideModel ride) async {
+-      controller.ride = ride;
+-      await tester.pumpWidget(
+-        GetMaterialApp(
+-          home: Scaffold(
+-            body: Align(
+-              alignment: Alignment.bottomCenter,
+-              child: SizedBox(
+-                height: 560,
+-                child: RideDetailsBottomSheetWidget(
+-                  scrollController: ScrollController(),
+-                  draggableScrollableController:
+-                      DraggableScrollableController(),
+-                ),
+-              ),
+-            ),
+-          ),
+-        ),
+-      );
+-      await tester.pump(const Duration(milliseconds: 100));
+-      await tester.pump(const Duration(milliseconds: 100));
+-    }
+-
+     testWidgets('escale(s) pending → « Confirmer l\'arrêt » seul',
+         (tester) async {
+-      await pumpSheet(tester, _rideWithStops(completed: 1));
++      await _pumpSheet(tester, _rideWithStops(completed: 1));
+ 
+       final confirm = find.byKey(const Key('driver_confirm_stop_cta'));
+       final end = find.byKey(const Key('driver_end_ride_cta'));
+@@ -173,7 +194,7 @@ void main() {
+ 
+     testWidgets('dernier arrêt → « Terminer la course » seul, style actif',
+         (tester) async {
+-      await pumpSheet(tester, _rideWithStops(completed: 3));
++      await _pumpSheet(tester, _rideWithStops(completed: 3));
+ 
+       final confirm = find.byKey(const Key('driver_confirm_stop_cta'));
+       final end = find.byKey(const Key('driver_end_ride_cta'));
+@@ -190,18 +211,7 @@ void main() {
+ 
+     testWidgets('course single-stop (sans stops[]) → « Terminer la course » seul, style legacy',
+         (tester) async {
+-      await pumpSheet(
+-        tester,
+-        RideModel(
+-          id: '43',
+-          status: AppStatus.RIDE_RUNNING,
+-          pickupLocation: 'Plateau, Dakar',
+-          destination: 'Aéroport AIBD, Diass',
+-          distance: '38.4',
+-          duration: '52',
+-          amount: '12500',
+-        ),
+-      );
++      await _pumpSheet(tester, _singleStopRunningRide());
+ 
+       expect(find.byKey(const Key('driver_confirm_stop_cta')), findsNothing);
+       final end = find.byKey(const Key('driver_end_ride_cta'));
+@@ -213,4 +223,70 @@ void main() {
+       expect(find.byType(RoundedButton), findsOneWidget);
+     });
+   });
++
++  group('ISC-F5-13 — « Annuler la course » reste danger, distinct du CTA principal', () {
++    const cancelKey = Key('driver_cancel_ride_cta');
++
++    setUp(_setUpController);
++
++    tearDown(Get.reset);
++
++    /// Couleur réellement peinte par [RoundedButton] : `bgColor ?? primary`
++    /// (cf. `rounded_button.dart`), pas seulement la valeur nullable du widget.
++    Color effectiveBg(RoundedButton button) =>
++        button.bgColor ?? MyColor.primaryButtonColor;
++
++    /// L'invariant, dans l'état actuellement rendu : si un CTA « Annuler la
++    /// course » existe, il est rouge danger et ne partage la couleur d'aucun
++    /// autre CTA affiché à côté de lui.
++    void expectCancelDangerAndDistinct(WidgetTester tester) {
++      final cancelFinder = find.byKey(cancelKey);
++      expect(cancelFinder, findsOneWidget);
++
++      final cancel = tester.widget<RoundedButton>(cancelFinder);
++      expect(cancel.bgColor, MyColor.redCancelTextColor);
++      expect(cancel.bgColor, isNot(MyColor.primaryButtonColor));
++      expect(cancel.isDisabled, isFalse);
++
++      final others = tester
++          .widgetList<RoundedButton>(find.byType(RoundedButton))
++          .where((button) => button.key != cancelKey)
++          .toList();
++      expect(others, isNotEmpty);
++      for (final other in others) {
++        expect(effectiveBg(other), isNot(cancel.bgColor));
++      }
++    }
++
++    testWidgets('RIDE_ACTIVE — CTA principal actif', (tester) async {
++      await _pumpSheet(tester, _activeRide());
++      expectCancelDangerAndDistinct(tester);
++    });
++
++    testWidgets('RIDE_ACTIVE — CTA principal en chargement', (tester) async {
++      controller.isStartBtnLoading = true;
++      await _pumpSheet(tester, _activeRide());
++      expectCancelDangerAndDistinct(tester);
++    });
++
++    testWidgets('tout état rendu — jamais un Annuler de la couleur du CTA principal',
++        (tester) async {
++      final rides = <String, RideModel>{
++        'RIDE_ACTIVE': _activeRide(),
++        'RIDE_RUNNING escale pending': _rideWithStops(completed: 1),
++        'RIDE_RUNNING dernier arrêt': _rideWithStops(completed: 3),
++        'RIDE_RUNNING single-stop': _singleStopRunningRide(),
++      };
++
++      var checkedStates = 0;
++      for (final ride in rides.values) {
++        await _pumpSheet(tester, ride);
++        if (find.byKey(cancelKey).evaluate().isEmpty) continue;
++        checkedStates++;
++        expectCancelDangerAndDistinct(tester);
++      }
++      // Garde-fou : le balayage a bien rencontré au moins un état avec Annuler.
++      expect(checkedStates, greaterThan(0));
++    });
++  });
+ }
+
+The work appears mostly complete from a prior (cancelled) run. Let me verify thoroughly — inspect the actual code, run the required tests/analyze, and validate the ISA state.
+$ echo "=== TREE TOP ===" && ls -la && echo "=== FLUTTER VERSION ===" && flutter --version 2>/dev/null | head -5 && echo "=== ISA TOOL? ===" && find . -iname '*isatool*' -o -iname 'isa*.dart' 2>/dev/null | head -20
+=== TREE TOP ===
+total 252
+drwxr-xr-x 17 ubuntu ubuntu  4096 Nov 26 15:57 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:45 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 .archive
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 15:57 .dart_tool
+-rw-r--r--  1 ubuntu ubuntu 40391 Nov 26 15:57 .flutter-plugins-dependencies
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:44 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 16:06 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 15:44 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1079 Nov 26 15:44 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  7714 Nov 26 15:44 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu 14109 Nov 26 15:44 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu    70 Nov 26 15:44 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 15826 Nov 26 15:44 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  2970 Nov 26 15:44 README.md
+-rw-r--r--  1 ubuntu ubuntu  1662 Nov 26 15:44 analysis_options.yaml
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:57 android
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 15:44 assets
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:57 build
+-rw-r--r--  1 ubuntu ubuntu   392 Nov 26 15:44 dart_test.yaml
+-rw-r--r--  1 ubuntu ubuntu   184 Nov 26 15:44 devtools_options.yaml
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 fastlane
+-rw-r--r--  1 ubuntu ubuntu   639 Nov 26 15:44 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 15:44 ios
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:44 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:44 prompts
+-rw-r--r--  1 ubuntu ubuntu 68359 Nov 26 15:44 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  2849 Nov 26 15:44 pubspec.yaml
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 15:44 test
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:44 tool
+=== FLUTTER VERSION ===
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+=== ISA TOOL? ===
+
