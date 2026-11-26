@@ -1817,3 +1817,12 @@ found True
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && bun /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts tick MEMORY/WORK/20261006-galass-driver-multistop/ISA.md --isc ISC-F5-19 --evidence "probe" 2>&1 | tail -20
 --evidence trop faible (5 car.) : cite la commande et sa sortie pour une coche, la constatation de revue pour un décochage.
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git restore lib/data/controller/map/ride_map_controller.dart lib/data/controller/ride/ride_details/ride_details_controller.dart test/unit/ride_map_live_location_test.dart && git status --short
+(no output)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && find /home/ubuntu/actions-runner -name 'package_config.json' 2>&1 | head -15
+(no output)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && find /home/ubuntu/.pub-cache/hosted -name '*flutter_test*' -type d 2>&1 | head -10
+/home/ubuntu/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.10
+
