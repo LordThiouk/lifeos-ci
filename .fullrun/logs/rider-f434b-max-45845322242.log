@@ -16170,3 +16170,227 @@ ISA.md
 fullrun-carry.json
 
 → Read MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+
+$ ls -la MEMORY/WORK/2026-11-22-galass-lot-client/ && find MEMORY -iname '*serena*' -o -iname '*W1*' | head -50
+total 112
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 20:52 .
+drwxr-xr-x 11 ubuntu ubuntu  4096 Nov 26 20:52 ..
+-rw-r--r--  1 ubuntu ubuntu   288 Nov 26 20:52 COMPLETENESS.yml
+-rw-r--r--  1 ubuntu ubuntu 97757 Nov 26 20:52 ISA.md
+-rw-r--r--  1 ubuntu ubuntu  3270 Nov 26 20:52 fullrun-carry.json
+MEMORY/WORK/20261002-galass-auto-dispatch/_ephemeral/F6-serena-blueprint.md
+MEMORY/WORK/20261002-galass-auto-dispatch/_ephemeral/F6-serena-fullrun-plan.md
+MEMORY/WORK/20261006-galass-regression-multistop/_ephemeral/F7-serena-plan.md
+
+$ cat MEMORY/WORK/2026-11-22-galass-lot-client/fullrun-carry.json MEMORY/WORK/2026-11-22-galass-lot-client/COMPLETENESS.yml && ls .fullrun/
+{
+  "payload": {
+    "v": 1,
+    "isa": "2026-11-22-galass-lot-client",
+    "head": "2aa0dcd1f4bf24c70d3929c180d498a5ac2fa7ff",
+    "steps": {
+      "1": {
+        "status": "pass",
+        "at": "2026-11-22T19:06:08Z",
+        "fp": "[REDACTED:hex64]",
+        "sha": "2aa0dcd1f4bf24c70d3929c180d498a5ac2fa7ff"
+      },
+      "2": {
+        "status": "pass",
+        "at": "2026-11-22T19:09:00Z",
+        "fp": "[REDACTED:hex64]",
+        "sha": "34b6e5ccbe2f8f55f722725e3285dc126e8c4117",
+        "criteriaIds": [
+          "Ajouter l'ISC enfant `ISC-N.1` dans l'IS\u000088a0cb85",
+          "Bridge-1\u0000a14776c5",
+          "Bridge-2\u0000b1fd2ee3",
+          "Bridge-4\u000086ea784e",
+          "Exécuter CheckCompleteness et l'audit Ve\u0000c961301b",
+          "ISC-1\u0000ff0488ab",
+          "ISC-10\u00003199ebfd",
+          "ISC-10\u00003d6f855b",
+          "ISC-10\u0000ac50bd76",
+          "ISC-10\u0000ba6f1be8",
+          "ISC-11\u0000385d9809",
+          "ISC-11\u0000424f2e8a",
+          "ISC-11\u000046a1e04c",
+          "ISC-11\u00005aa9508f",
+          "ISC-2\u0000c702f97b",
+          "ISC-20\u0000192535d6",
+          "ISC-20\u00005ea88e9f",
+          "ISC-20\u0000eed149ab",
+          "ISC-21\u0000303e1b9a",
+          "ISC-21\u00004099ac62",
+          "ISC-21\u00004aeb60a4",
+          "ISC-21\u00006dc7b287",
+          "ISC-21\u00007810b8c8",
+          "ISC-22\u0000631b566b",
+          "ISC-22\u00009568fc84",
+          "ISC-23\u000045016d95",
+          "ISC-23\u0000de5833cc",
+          "ISC-3\u0000e5b8a970",
+          "ISC-30\u00007424b311",
+          "ISC-4\u00002417faaa",
+          "ISC-40\u0000e17e6915",
+          "ISC-41\u00004348f5eb",
+          "ISC-42\u0000dbd5445f",
+          "ISC-43\u00000ed200bf",
+          "ISC-44\u0000ceffcc3d",
+          "ISC-5\u0000f3da2db0",
+          "ISC-50\u00004c04fa65",
+          "ISC-51\u00007ac349b3",
+          "ISC-52\u00001763b68e",
+          "ISC-53\u0000bfb9e94a",
+          "ISC-6\u0000311a5e2a",
+          "ISC-60\u000021f98366",
+          "ISC-61\u0000cc10c5b4",
+          "ISC-62\u00006f0dabe1",
+          "ISC-63\u00006381fa56",
+          "ISC-64\u000023a2beaa",
+          "ISC-65\u00001ce9a110",
+          "ISC-66\u000081cf834e",
+          "ISC-67\u0000d4a9ffea",
+          "ISC-68\u0000e6beb37a",
+          "ISC-69\u00001bd1e746",
+          "ISC-70\u0000105d467e",
+          "ISC-71\u000038750332",
+          "ISC-72\u0000b53eb02c",
+          "ISC-73\u0000db0faf0e",
+          "ISC-74\u00008fa33b12",
+          "ISC-75\u000016c2f59b",
+          "ISC-76\u00005c859cd5",
+          "ISC-80\u0000168ab501",
+          "ISC-80\u0000d8389405",
+          "ISC-81\u000008d8cc22",
+          "ISC-81\u00003d3bdaa7",
+          "ISC-82\u0000a2f1323d",
+          "ISC-82\u0000d0c991a8",
+          "ISC-83\u0000163e5ee9",
+          "ISC-83\u00003a67346a",
+          "ISC-83\u0000db672d51",
+          "ISC-84\u000010a56ca3",
+          "ISC-84\u0000e18f73c8",
+          "Miroir Linear de l'ISA, uniquement après\u0000086d550b",
+          "Scaffolder les ISAs enfants Rider et Dri\u00000dda3d80"
+        ]
+      }
+    }
+  },
+  "sig": "[REDACTED:hex64]"
+}
+status: pass
+substance: substantial
+required_sections:
+  Problem: present
+  Vision: present
+  Out of Scope: present
+  Constraints: present
+  Goal: present
+  Claims: present
+  Test Strategy: present
+  Features: present
+gaps:
+isc_quality:
+  total: 64
+  checked: 0
+  anti_criteria_count: 16
+galass-lot-client-w0_DONE.md
+
+$ grep -rn "S-W1-01" --include='*.md' --include='*.json' . 2>/dev/null | grep -v node_modules | head -20
+./MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md:391:  | S-W1-01 | ISC-3 | backend | `core/app/Http/Middleware/VerifyCsrfToken.php` (`ipn/*`), `core/routes/api.php` (`dev-token`) | Vérifier gardes inchangées | `grep "ipn/\*" core/app/Http/Middleware/VerifyCsrfToken.php` + `php artisan test --group=security` | — | Forge ; revue Silas |
+
+→ Read MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md [offset=338]
+
+$ git log --oneline 691864e -3 && echo ---- && git log --oneline 691864e..HEAD && echo ---- && git show --stat HEAD~5..HEAD | head -80
+691864eb w0(isc-84): S-W0-07 preuve backend partielle CASH_PAYMENT_RECEIVED horodaté ; ISC-84 non coché
+8a07570d w0(isc-83): S-W0-06 ancre R-6 vérifiée ; repro device/logcat bloquée
+142ec782 w0(isc-82): S-W0-05 ancres D-12 vérifiées ; tests single-offer verts ; e2e device bloqué
+----
+ba46cf67 fix(driver-register): S-W1-11 — photo absente renvoie 422
+b1a8d143 test(sms): S-W1-07/08/09/10 — capturer le vrai SMS envoyé
+074690f0 test(approval): S-W1-03/04/05 — rendre le mock SMS exécutable
+37c6c90f fix(ride): S-W1-18 service masque renvoie validation_error (422)
+c6fce121 feat(admin-services): S-W1-15 exposer ordre/visibilite dans le modal
+f55b012b docs(bugs): porter triage c40c30de pour prerequis S-W1-02/ISC-4
+dc0e4c6b fix(services): scopeVisible accepte null (legacy / tests)
+b4e54673 feat(lot-w1): salvage S-W1-03..18 from FullRun runner (php absent)
+4ba56ea1 fix(admin): ISC-12 — clic Vehicle Pending → page pending
+7c8b1fe9 wip(lot-client-w0-device): partial work (agent stopped)
+5a792372 w0(isa): restaurer empreinte ISATool apres ligne Decisions manuscrite — BLOCK inchange, ISC non cochés
+5fbbcfad w0(artemis): etat final BLOCK — run 152 sans captures/logcat ; ISC 22/50/80-84 non cochés
+3f67bd85 w0(artemis): préciser cause step 12 via logs API authentifiés ; ISC 22/50/80-84 non cochés
+23e1ec12 wip(autosave): arbre de travail
+9a012ce2 w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés
+3a071572 w0(artemis): BLOCK confirmé runs 148/149 — goldens Driver 4/4 sous 3.44.8 (baselines 3.50.1) ; ISC 22/50/80-84 non cochés
+5b62a92b w0(artemis): run 45768119261 échoue aux tests Flutter ; W0 device BLOQUÉ, ISC non cochés
+----
+commit ba46cf67ff962bdff377609353ca0be2b66817ca
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:29:12 2026 +0000
+
+    fix(driver-register): S-W1-11 — photo absente renvoie 422
+    
+    ISC-20 exige 422 sans photo ; les autres erreurs de validation conservent le code 200 historique de l'API.
+    
+    Preuve prévue : php artisan test --filter=DriverRegisterPhotoTest (ISC-20, 20.2).
+    
+    Non exécuté ici : binaire php absent du runner. ISC non coché.
+
+ core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php | 4 +++-
+ core/tests/Feature/Auth/DriverRegisterPhotoTest.php              | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+commit b1a8d143ba81baeb29cde0b2f01a42fc918d0848
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:28:52 2026 +0000
+
+    test(sms): S-W1-07/08/09/10 — capturer le vrai SMS envoyé
+    
+    Preuve prévue : php artisan test --filter=DriverApprovedSmsTest (ISC-11, 11.1, 11.2, 11.3).
+    
+    shouldAllowMockingProtectedMethods() requis par Mockery pour getMessage(); le destinataire et le texte sont désormais lus depuis le modèle Driver et le template persisté, au lieu de valeurs codées en dur.
+    
+    Non exécuté ici : binaire php absent du runner. ISC non coché.
+
+ core/tests/Feature/Admin/DriverApprovedSmsTest.php | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
+
+commit 074690f0c440b77de7a3ece8160e365e53b90b87
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:28:47 2026 +0000
+
+    test(approval): S-W1-03/04/05 — rendre le mock SMS exécutable
+    
+    Preuve prévue : php artisan test --filter=DriverOneStepApprovalTest (ISC-10, 10.1, 10.2).
+    
+    Non exécuté ici : binaire php absent du runner (aucun php, nix ni docker). ISC non coché : preuve outillée indisponible.
+
+ core/tests/Feature/Admin/DriverOneStepApprovalTest.php | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 37c6c90f110afeca3253a3794f81c4b654747b3a
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:10:46 2026 +0000
+
+    fix(ride): S-W1-18 service masque renvoie validation_error (422)
+    
+    findActiveService retourne null pour service masqué; remonter
+    validation_error permet à RideController de répondre 422. PHPUnit non
+    exécuté (php absent dans runner): php artisan test --filter=HiddenServiceCreateRideTest
+
+ core/app/Services/Rider/RideService.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit c6fce121a6ec1a0487a8a6e0fe221c80c4628359
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:09:44 2026 +0000
+
+    feat(admin-services): S-W1-15 exposer ordre/visibilite dans le modal
+    
+    Ajoute champs sort_order et is_visible au formulaire admin services
+    et alimente le JS edit/add. PHPUnit non exécuté (php absent dans runner):
+    php artisan test --filter=ServiceOrderVisibilityTest
+
+ core/resources/views/admin/services/index.blade.php | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
