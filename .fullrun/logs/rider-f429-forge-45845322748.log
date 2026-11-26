@@ -16590,3 +16590,108 @@ $ uname -m; php_needed=8.3; curl -s https://api.github.com/repos/crazywhalecc/st
 x86_64
 "tag_name": "2.8.5"
 
+$ curl -s https://dl.static-php.dev/static-php-cli/common/ | grep -oE 'php-8\.3[^"<]*' | head -20
+php-8.3.0-cli-linux-aarch64.tar.gz
+php-8.3.0-cli-linux-aarch64.tar.gz
+php-8.3.0-cli-linux-x86_64.tar.gz
+php-8.3.0-cli-linux-x86_64.tar.gz
+php-8.3.0-cli-macos-aarch64.tar.gz
+php-8.3.0-cli-macos-aarch64.tar.gz
+php-8.3.0-cli-macos-x86_64.tar.gz
+php-8.3.0-cli-macos-x86_64.tar.gz
+php-8.3.0-fpm-linux-aarch64.tar.gz
+php-8.3.0-fpm-linux-aarch64.tar.gz
+php-8.3.0-fpm-linux-x86_64.tar.gz
+php-8.3.0-fpm-linux-x86_64.tar.gz
+php-8.3.0-fpm-macos-aarch64.tar.gz
+php-8.3.0-fpm-macos-aarch64.tar.gz
+php-8.3.0-fpm-macos-x86_64.tar.gz
+php-8.3.0-fpm-macos-x86_64.tar.gz
+php-8.3.0-micro-linux-aarch64.tar.gz
+php-8.3.0-micro-linux-aarch64.tar.gz
+php-8.3.0-micro-linux-x86_64.tar.gz
+php-8.3.0-micro-linux-x86_64.tar.gz
+
+$ mkdir -p ~/bin/php83 && cd ~/bin/php83 && curl -sL -o php.tar.gz https://dl.static-php.dev/static-php-cli/common/php-8.3.0-cli-linux-x86_64.tar.gz && tar xzf php.tar.gz && ls
+php
+php.tar.gz
+
+$ ~/bin/php83/php -v && ~/bin/php83/php -m | head -60
+PHP 8.3.0 (cli) (built: Dec 23 2023 08:37:19) (NTS)
+Copyright (c) The PHP Group
+Zend Engine v4.3.0, Copyright (c) Zend Technologies
+[PHP Modules]
+bcmath
+bz2
+calendar
+Core
+ctype
+curl
+date
+dom
+exif
+fileinfo
+filter
+ftp
+gd
+gmp
+hash
+iconv
+json
+libxml
+mbstring
+mysqlnd
+openssl
+pcntl
+pcre
+PDO
+pdo_mysql
+pdo_sqlite
+Phar
+posix
+random
+redis
+Reflection
+session
+SimpleXML
+soap
+sockets
+SPL
+sqlite3
+standard
+tokenizer
+xml
+xmlreader
+xmlwriter
+zip
+zlib
+
+[Zend Modules]
+
+$ export PATH="$HOME/bin/php83:$PATH"; php artisan --version
+#!/usr/bin/env php
+
+   InvalidArgumentException 
+
+  Please provide a valid cache path.
+
+  at vendor/laravel/framework/src/Illuminate/View/Compilers/Compiler.php:67
+     63▕         $shouldCache = true,
+     64▕         $compiledExtension = 'php',
+     65▕     ) {
+     66▕         if (! $cachePath) {
+  ➜  67▕             throw new InvalidArgumentException('Please provide a valid cache path.');
+     68▕         }
+     69▕ 
+     70▕         $this->files = $files;
+     71▕         $this->cachePath = $cachePath;
+
+      +10 vendor frames 
+
+  11  app/Providers/BladeDirectivesServiceProvider.php:24
+      Illuminate\Support\Facades\Facade::__callStatic("if")
+      +7 vendor frames 
+
+  19  [internal]:0
+      Illuminate\Foundation\Application::Illuminate\Foundation\{closure}(Object(App\Providers\BladeDirectivesServiceProvider), "App\Providers\BladeDirectivesServiceProvider")
+
