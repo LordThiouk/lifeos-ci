@@ -5884,3 +5884,53 @@ $ sed -n '40,80p' /tmp/dvc_3501.kt; sed -n '183,225p' /tmp/dvc_3501.kt
         dependencyName: String
     ): String = dependencyName + (if (flavorName != null) " (flavor='$flavorName')" else "")
 
+$ grep -rn "Gradle 9\.\|AGP 9\.\|Flutter 3\.50" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target --include=*.md 2>/dev/null | grep -v CHANGELOG | head -20; echo "=== ci docs ==="; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/docs
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.fullrun/multistop-ui-gaps-serena-2026-11-24-r6_DONE.md:86:- **Bloquants Papa** (à trancher avant clôture) : (a) SOS en `RIDE_ACTIVE` — `ISC-F4-28`/`F4-31` ; (b) CTA « prise en charge » Rider inexistant → amender en `cancelRide` ? ; (c) F4-21 : accepter preuve unit + e2e (golden impossible) ? ; (d) autoriser la régénération des goldens (Rider 412×915 DPR2 / Flutter 3.44.8 ; Driver golden_toolkit 390×844 DPR1 / Flutter 3.50.1 — ne pas normaliser) ; (e) F5-12 : invariant structurel (recommandé) plutôt que palette désactivée globale.
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-rider-multistop/ISA.md:323:- **2026-11-23 — Les deux planches ne sont pas comparables telles quelles (contrainte pour la porte CI).** Rider : harnais maison, surface 412×915 DPR 2.0, Flutter 3.44.8, sans `golden_toolkit`. Driver : `golden_toolkit 0.15.0`, surface 390×844 DPR 1.0, Flutter 3.50.1. Une porte unique (`ISC-EMU-2/3`) doit donc fixer outil + version + surface **par app**, sinon un « écart » ne sera qu'un changement d'outil.
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-rider-multistop/ISA.md:476:- ISC-F4-29: flutter test test/widget/course_en_cours_contract_test.dart: 9/9 passed sous Flutter 3.50.1 — a-b (avatar, nom, note chauffeur) vert après chargement des fonts golden en `setUpAll` (le `fontsChange` du 1er test laissait un frame callback pendant au teardown, signalé « animation still running ») ; c-h verts, aucun golden régénéré. Commit fb2b0ff. [@fb2b0ff]
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/20261006-galass-rider-multistop/ISA.md:497:- [ ] **Porte CI : outil/version/surface par app** — Rider (harnais maison, 412×915, Flutter 3.44.8) et Driver (`golden_toolkit 0.15.0`, 390×844, Flutter 3.50.1) ne sont pas comparables tels quels ; à figer explicitement dans la porte golden-diff.
+=== ci docs ===
+galass-bugs-isa-locate-2026-11-25.md
+
+$ java -version 2>&1; echo "=== search failure text in repos ==="; grep -rln "lower than Flutter" /agent/repos/Galass_Rider /agent/repos/Galass_Driver /home/ubuntu/actions-runner/_work/lifeos-ci 2>/dev/null | head; grep -rn "45801376130" /agent/repos 2>/dev/null | grep -v "\.git" | head
+openjdk version "21.0.13.0.3" 2026-10-24
+OpenJDK Runtime Environment (build 21.0.13.0.3+1-1-24.04.1-Ubuntu)
+OpenJDK 64-Bit Server VM (build 21.0.13.0.3+1-1-24.04.1-Ubuntu, mixed mode, sharing)
+=== search failure text in repos ===
+
+$ for tag in 3.44.8 3.50.0; do echo "=== $tag"; curl -sS -o /tmp/dvc_$tag.kt -w "%{http_code}\n" https://raw.githubusercontent.com/flutter/flutter/$tag/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt; grep -n "warnGradleVersion\|errorGradleVersion\|warnAGPVersion\|errorAGPVersion\|errorKGPVersion" /tmp/dvc_$tag.kt; done
+=== 3.44.8
+200
+94:    @VisibleForTesting internal val warnGradleVersion: Version = Version(8, 14, 0)
+96:    @VisibleForTesting internal val errorGradleVersion: Version = Version(8, 7, 0)
+103:    @VisibleForTesting internal val warnAGPVersion: AndroidPluginVersion = AndroidPluginVersion(8, 11, 1)
+105:    @VisibleForTesting internal val errorAGPVersion: AndroidPluginVersion = AndroidPluginVersion(8, 6, 0)
+109:    @VisibleForTesting internal val errorKGPVersion: Version = Version(2, 0, 0)
+221:        if (version < errorGradleVersion) {
+226:                    errorGradleVersion.toString(),
+231:        } else if (version < warnGradleVersion) {
+236:                    warnGradleVersion.toString(),
+273:        if (androidPluginVersion < errorAGPVersion) {
+278:                    errorAGPVersion.toString(),
+283:        } else if (androidPluginVersion < warnAGPVersion) {
+288:                    warnAGPVersion.toString(),
+299:        if (version < errorKGPVersion) {
+304:                    errorKGPVersion.toString(),
+=== 3.50.0
+200
+94:    @VisibleForTesting internal val warnGradleVersion: Version = Version(9, 5, 0)
+96:    @VisibleForTesting internal val errorGradleVersion: Version = Version(9, 3, 1)
+103:    @VisibleForTesting internal val warnAGPVersion: AndroidPluginVersion = AndroidPluginVersion(9, 3, 1)
+105:    @VisibleForTesting internal val errorAGPVersion: AndroidPluginVersion = AndroidPluginVersion(9, 1, 1)
+111:    @VisibleForTesting internal val errorKGPVersion: Version = Version(2, 4, 10)
+243:        if (version < errorGradleVersion) {
+248:                    errorGradleVersion.toString(),
+253:        } else if (version < warnGradleVersion) {
+258:                    warnGradleVersion.toString(),
+306:        if (androidPluginVersion < errorAGPVersion) {
+311:                    errorAGPVersion.toString(),
+316:        } else if (androidPluginVersion < warnAGPVersion) {
+321:                    warnAGPVersion.toString(),
+332:        if (version < errorKGPVersion) {
+337:                    errorKGPVersion.toString(),
+
