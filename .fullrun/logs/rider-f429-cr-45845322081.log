@@ -4480,3 +4480,661 @@ class DisableBuiltInKotlinMigration extends ProjectMigrator {
   }
 }
 
+$ git ls-tree -r --name-only origin/fullrun-logs/rider-apk-gradle-45847515781 | head -50; echo "=== log? ==="; git show origin/fullrun-logs/rider-apk-gradle-45847515781 --stat | head -30
+.fullrun/logs/rider-apk-gradle-45847515781.log
+=== log? ===
+commit c52aacbfb81d1869f0744b2d747760d3f54f0d36
+Author: Nix <nix@galass.local>
+Date:   Thu Nov 26 16:29:53 2026 +0000
+
+    chore(ci): journal en direct du run rider-apk-gradle (45847515781), 16:29 Dakar, clair — branche à supprimer après lecture
+
+ ...705973.log => rider-apk-gradle-45847515781.log} | 204 +++++++++++++++++++++
+ 1 file changed, 204 insertions(+)
+
+$ git show origin/fullrun-logs/rider-apk-gradle-45847515781:.fullrun/logs/rider-apk-gradle-45847515781.log
+...output truncated...
+
+Full output saved to: /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.local/share/opencode/tool-output/tool_218c16d84001a2gP2Jlg83vQ0n
+
+  remotes/origin/close/fr04-v3-max
+  remotes/origin/close/fr04-v4-pending
+  remotes/origin/cursor/language-pass-slice-resume-b609
+  remotes/origin/docs/isa-cloture-2026-11-18
+  remotes/origin/eval/compare-engines-2026-11-25
+  remotes/origin/feat/fingerprint-engine-maison-2026-11-15
+  remotes/origin/feat/inventory-mytuner
+  remotes/origin/feat/mytuner-stream-scrape
+  remotes/origin/feat/relecture-2-overlay-2026-11-16
+  remotes/origin/fix/csv-import-and-no-media-test
+  remotes/origin/fix/inventory-allowlist-names
+  remotes/origin/fix/isc15-replay-speech-rule-2026-11-16
+  remotes/origin/fix/mytuner-discover
+  remotes/origin/fix/mytuner-names-only
+  remotes/origin/fix/orb-pagination-skip-stream-tests
+  remotes/origin/fullrun-logs/annotation-build-solo-45072495775
+  remotes/origin/fullrun-logs/annotation-build-solo2-45082420751
+  remotes/origin/fullrun-logs/annotation-build-solo3-45089775991
+  remotes/origin/fullrun-logs/annotation-cloture-build-45065572679
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44861841409
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44872185689
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44879646038
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44882169767
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44901760509
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44904821337
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44921694898
+  remotes/origin/fullrun-logs/annotation-cloture-review-v1-44924244371
+
+$ ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ | grep -i fr-01; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/2026-11-02-fr-01-ingestion-live/ 2>/dev/null || echo "DIR NOT FOUND"
+DIR NOT FOUND
+
+$ git log --oneline -3 origin/build/fr01-v1c 2>/dev/null; echo "---"; git rev-parse HEAD; echo "---"; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ | grep 2026-11
+1bbf95b docs(isa): fr-01 — V1 schéma et migrations, ISC-22/12/13 cochés
+f5a46c8 feat(ingest): S1.3 — fenêtres d'état et couverture horaire (ISC-13)
+ddfe5c5 feat(ingest): S1.2 — origine et client du pool d'URL (ISC-12)
+---
+1bbf95b097089c053d32f9923ee74b80990dd021
+---
+
+✱ Glob "**/2026-11-02-fr-01-ingestion-live/**" in /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci · 1 match
+
+$ ls -R /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci 2>/dev/null | head -60; echo ===; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/.github/workflows 2>/dev/null; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/.github/workflows 2>/dev/null
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci:
+FIX-CI.md
+FIX-SERENA.md
+FIX-VERA-AUDIT.md
+INVENTAIRE.md
+README.md
+REPORT.md
+REVIEW-AGENTS-LOAD.md
+REVIEW-ASSEMBLE.md
+REVIEW-PR1.md
+REVIEW-PR20.md
+REVIEW.md
+TESTS-DIAG.md
+docs
+models.txt
+opencode
+prompts
+targets
+
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/docs:
+galass-bugs-isa-locate-2026-11-25.md
+
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode:
+allowed-repos.sh
+autosave-deny.txt
+autosave.sh
+bench-capped
+check-agent.sh
+checkpoint.sh
+ci-preamble.md
+config
+done-check-call.sh
+done_check.sh
+emu-e2e.sh
+extra-repos.sh
+install-hook-profile.sh
+leaklog.sh
+lifeos-guard.sh
+livelog.sh
+log-recipient.txt
+merge-agents.sh
+merge-signed-carry.sh
+notify.sh
+oc-wrap.sh
+preannot.sh
+progress.sh
+quota.sh
+redact-log.sh
+run-fullrun.sh
+silence-watch.sh
+split-diff.sh
+step-agents.sh
+tests
+wippush.sh
+wstunnel-up.sh
+
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/config:
+opencode.json
+
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/tests:
+===
+capture.yml
+ci.yml
+inventory-pass2.yml
+inventory-probe.yml
+
+$ ls -la /tmp/*.md 2>/dev/null; cat /tmp/task_done.md 2>/dev/null; echo ===; env | grep -iE 'branch|task|job|fr01' | head -20
+-rw-r--r-- 1 ubuntu ubuntu   326 Nov 26 13:54 /tmp/PROMPT-SMOKE.md
+-rw-r--r-- 1 ubuntu ubuntu 28894 Feb  5  2025 /tmp/README.md
+-rw-r--r-- 1 ubuntu ubuntu  1738 Nov 26 16:20 /tmp/task_done.md
+# FR-04 Vague 4 — reprise `fr04-v4-merge`
+
+## État final
+- Branche : `isa/fr-04-vera-2026-11-26` @ HEAD `3d0735aefc3ad510e8881a02505fefe78449fbf7`
+- Les deux merges `--no-ff` demandés sont présents et corrects :
+  - `0734f23711ab1bc80e84aeac7b936f36f3e0c6a9` — `merge(fr04): Vague 4 L7 into isa` (parents `885009e` + `6002480`)
+  - `3d0735aefc3ad510e8881a02505fefe78449fbf7` — `merge(fr04): Vague 4 L9 into isa` (parents `0734f23` + `2c73957`)
+- Auteur/committer des deux commits : Papa Diop `<76528706+LordThiouk@users.noreply.github.com>`
+- Arbre de travail propre ; aucune modification de `main`, aucun push, aucun merge distant, `.fullrun` intact.
+
+## Résolution de conflit
+`api/src/antenly_api/eval/segmentation.py` conserve **L6 P95** (`load_boundary_p95`, `_boundary_lines`, seuils `p95_start_ms`/`p95_end_ms`) **et L7 par classe/station** (`evaluate_per_station`, `station_observations`, `held_out_control`, `--per-station`, payload `per_station`). Aucun marqueur de conflit résiduel. L9 (`test_threshold_state.py`, `scripts/check/fr04_threshold_state.py`) est bien appliqué. Aucune nouvelle fonctionnalité ajoutée.
+
+## Preuves exécutées
+- `uv run --project api pytest api/tests/segmentation/test_boundary_p95.py api/tests/segmentation/test_per_station.py api/tests/segmentation/test_threshold_state.py -q` → **54 passed in 0.16s**
+- `uv run --project api ruff check` sur les fichiers touchés (`__init__.py`, `metrics.py`, `segmentation.py`, `split.py`, `test_per_station.py`, `test_threshold_state.py`, `scripts/check/fr04_threshold_state.py`) → **All checks passed!**
+
+Note : `uv` n'étant pas sur le PATH, il a été invoqué depuis `/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.local/bin/uv`.
+===
+
+→ Read MEMORY/WORK/2026-11-02-fr-01-ingestion-live/ISA.md
+
+$ cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/opencode/ci-preamble.md 2>/dev/null | head -100
+# Contexte CI (galass-ci, GitHub Actions) — à lire avant le prompt FullRun
+
+Tu tournes sur un runner GitHub Actions public, pas sur la box. Suis le FullRun.
+
+- Dépôt de travail : le répertoire courant (`$TARGET_DIR`), checkout de `LordThiouk/$TARGET_REPO`
+  sur la branche `$OC_BRANCH`. Les chemins `/home/box/...` et `/workspace/...` du prompt
+  désignent ici `$HOME/...` et ce checkout (`/home/box` est un lien vers `$HOME`).
+- Dépôts supplémentaires : s'il y en a (`$EXTRA_REPOS`, vide si aucun), chacun est dans
+  `$EXTRA_ROOT/<nom>` (ex. `$EXTRA_ROOT/galass-emu-actions-pub`). Tu peux y lire et y
+  commiter, sur `$OC_BRANCH` uniquement. Tu ne pousses rien. Le journal `fullrun-logs`
+  reste dans le dépôt cible (`$TARGET_REPO`).
+- **Tu ne pousses rien.** Pas de `git push`, pas de `gh`, pas de PR, pas de commentaire : tu n'as
+  aucun jeton d'écriture. Fais des commits locaux sur `$OC_BRANCH` uniquement (jamais de
+  `git reset --hard`, `rebase`, `commit --amend` sur des commits déjà présents au départ :
+  l'historique doit rester une suite du SHA de départ). Le workflow pousse lui-même tes
+  commits sur `$OC_BRANCH` à la fin, sans force.
+- Ne change pas de branche, ne crée pas d'autre branche, ne touche pas à `.github/workflows/`.
+- **Logs publics, mais ta sortie n'y est jamais affichée.** N'écris quand même aucun secret
+  nulle part (fichiers, commits, rapport).
+- Rapport final : écris-le dans `$OC_REPORT` (hors dépôt). Le workflow le versionne dans
+  `.fullrun/${OC_JOB}_DONE.md` sur la branche. Mets-y : étapes faites, commits, compte des
+  tests, verdicts avec SHA, ISC cochés/total, ce qui reste et l'étape de reprise.
+- **Reprise.** Ce run peut être une relance. Avant d'agir, lis le bloc « ÉTAT DE REPRISE » s'il est
+  en fin de prompt, `.fullrun/${OC_JOB}_DONE.md` s'il existe et l'état de l'ISA sur la branche, puis
+  reprends à l'étape indiquée au lieu de tout refaire. Un verdict déjà obtenu et encore valable
+  n'est jamais redemandé.
+- **Point de reprise.** Après chaque étape validée (ISC cochée, banc rejoué, tests verts) :
+  `bash /opt/fullrun-tools/checkpoint.sh write --job $OC_JOB --step N --label "..." --summary "..."`
+  (N = dernière étape + 1, pas de saut). Après chaque verdict de Max, Silas ou Forge obtenu :
+  `bash /opt/fullrun-tools/checkpoint.sh verdict --job $OC_JOB --agent Max`. Ce second appel est
+  refusé si le verdict ne vient pas d'une vraie réponse du sous-agent : un PASS écrit par toi n'est
+  jamais un verdict.
+- **Preuve signée (carry), pas seulement le checkpoint.** Le point de reprise ci-dessus est un
+  indice pour toi ; la porte FullRun ne lit que `MEMORY/WORK/<slug>/fullrun-carry.json`. Après un
+  PASS vérifié d'une étape (Vera, Serena, build, verify…), exporte le carry signé :
+  `bun ~/.claude/LIFEOS/TOOLS/FullRunPipeline.ts step --direction advance` (ou
+  `advance --isa <ISA> --step N --result pass`). Sans cette écriture, l'étape suivante sera refusée
+  (« pas de verdict signé »). Pour serena : charge le skill ISA (`skill(name="ISA")`), écris le
+  plan / dispatch map dans `## Decisions` APRÈS le dispatch `Architect`, puis avance. Un
+  `checkpoint.sh write` ou un PASS dans le rapport ne remplace jamais le carry signé.
+- **Sauvegarde automatique.** Un démon (hors opencode) commite localement, avant chaque push de wip :
+  le report ISA et le point de reprise (`wip(carry)`), puis l'arbre de code filtré (`wip(autosave)`).
+  Ces commits sont normaux : ne les défais pas, ne les prends pas pour une clôture. `.env`, clés et keystores,
+  `google-services`, comptes de service, secrets PSP, builds et dépendances n'y entrent jamais ; un fichier qui fuit selon gitleaks reste non commité.
+- Modèles : principal et Forge `$OC_MODEL_MAIN`, Max `$OC_MODEL_MAX` (gratuits opencode).
+- Pas de VPS, pas de FreeLLM, pas de Mac. Pas de merge, pas de déploiement.
+
+## Preannot (seulement si le run en a besoin)
+
+Le preannot (`ci.yml`, job `preannot-ina` : vrai inaSpeechSegmenter + TensorFlow CPU) tourne
+sur GitHub, pas sur ce runner. Si ta tâche a besoin de ce verdict, appelle seulement :
+
+    /opt/fullrun-tools/preannot.sh run
+
+L'outil déclenche `ci.yml` sur `$OC_BRANCH` (toute la CI ; le job `preannot-ina` en fait partie),
+attend un délai borné, télécharge les artefacts éventuels dans le dossier du job et n'affiche
+qu'un verdict + un court extrait. Tu n'as aucun jeton : pas de `gh` toi-même, pas de copie du
+script.
+
+---
+
+## Contrat de prompt (non négociable)
+
+Dans cet ordre de priorité :
+
+1. Tu ne termines jamais ton tour par une question ni par une demande d'arbitrage : en CI personne ne répond, une question vaut abandon.
+2. Si une mesure contredit un ISC : consigne l'écart dans l'ISA (Log + claim), garde la garde en place, choisis l'option qui **ne réécrit pas** les seuils, commit, puis continue.
+3. Tout correctif annoncé comme non négociable est commité dans la même passe que l'annonce, et le rapport `.fullrun/<job>_DONE.md` est écrit avant la dernière phrase.
+
+Une fin de tour sans PASS vérifié n'est pas une fin de run : le moniteur relance une session
+neuve ; relis l'ISA et continue au lieu d'attendre une réponse humaine.
+
+---
+
+→ Read MEMORY/WORK/2026-11-02-fr-01-ingestion-live/ISA.md [offset=266]
+
+$ ls -la /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/.fullrun/ 2>/dev/null | head -30; echo ===; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-01-ingestion-live/
+===
+ISA.md
+
+$ ls migrations/postgres/ migrations/clickhouse/ 2>/dev/null; echo ===; ls api/tests/ingest/ 2>/dev/null; echo ===; ls api/src/antenly_api/eval/ 2>/dev/null; echo ===; ls scripts/ingest/ 2>/dev/null; echo ===; ls scripts/migrate.sh 2>/dev/null
+migrations/clickhouse/:
+001_init.sql
+002_rls.sql
+003_ingestion.sql
+
+migrations/postgres/:
+001_init.sql
+002_rls.sql
+003_ingestion.sql
+004_pool_origin.sql
+===
+conftest.py
+fixtures
+test_harness_fixtures.py
+test_ingest_coverage.py
+test_ingest_scripts.py
+test_open_catalogue.py
+test_stream_pool.py
+===
+__init__.py
+coverage.py
+===
+_common.py
+audit_gaps.py
+cost_report.py
+inventory_check.py
+soak_report.py
+uptime.py
+===
+scripts/migrate.sh
+
+$ git show --stat b4d7fcc ddfe5c5 f5a46c8 1bbf95b | head -80
+commit b4d7fccc844b3231288f285216d3f584849f6858
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 06:42:33 2026 +0000
+
+    feat(ingest): S1.1 — schéma chaîne du catalogue ouvert (ISC-22)
+    
+    Migration 003_ingestion.sql (posée au commit wip) : channel.origin,
+    provenance_type/at, media_type/at, cadence_window_s/interval_s/
+    audio_timeout_s, ingest_region, ingest_server, failover_of. Cette tâche
+    finalise la preuve ISC-22 (migration + test du catalogue ouvert).
+    
+    Preuves :
+    - ./scripts/migrate.sh -> 003_ingestion.sql already applied ; Done: schemas up to date
+    - cd api && uv run pytest tests/ingest/test_open_catalogue.py -q -> 3 passed
+
+ api/tests/ingest/{test_coverage.py => test_ingest_coverage.py} | 0
+ api/tests/ingest/test_open_catalogue.py                        | 4 +---
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+commit ddfe5c511022cc52ade323e1936c46211c5bed5c
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 06:42:46 2026 +0000
+
+    feat(ingest): S1.2 — origine et client du pool d'URL (ISC-12)
+    
+    Migration 004_pool_origin.sql (posée au commit wip) : source.origin
+    (catalogue|prive) + source.client, alignés sur STREAM_COLUMNS de
+    tools/inventory/pool.py et sur la console privée (origine « prive »).
+    Corrige l'horodatage du test (epoch 2026-11-25) pour la remarque datée.
+    
+    Preuves :
+    - ./scripts/migrate.sh -> 004_pool_origin.sql already applied
+    - cd api && uv run pytest tests/ingest/test_stream_pool.py -q -> 6 passed
+    - cd tools/inventory && uv run pytest -q -> 222 passed
+
+ api/tests/ingest/test_stream_pool.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit f5a46c833ddb6f4b5aef1da0b5197e147f58f5f4
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 06:42:52 2026 +0000
+
+    feat(ingest): S1.3 — fenêtres d'état et couverture horaire (ISC-13)
+    
+    Migration clickhouse/003_ingestion.sql (posée au commit wip) : tables
+    state_window (5 états, fenêtres de 10 s) et coverage_hour, appliquées par
+    scripts/migrate.sh. Corrige l'epoch du test (2026-11-25) et le pavage de
+    l'heure (359 pour unavailable), conforme ruff.
+    
+    Preuves :
+    - ./scripts/migrate.sh -> clickhouse 003_ingestion.sql already applied
+    - cd api && uv run python -m antenly_api.eval.coverage --window=10s --hourly
+      -> 2 chaînes-heures, 100 % des fenêtres classées, 0 trou
+         (98.89 % et 100.00 % de couverture)
+    - cd api && uv run pytest tests/ingest/test_ingest_coverage.py -q -> 5 passed
+    - suite ingest complète -> 45 passed
+
+ api/src/antenly_api/eval/coverage.py     | 32 +++++++++++++++-----------------
+ api/tests/ingest/test_ingest_coverage.py |  4 ++--
+ 2 files changed, 17 insertions(+), 19 deletions(-)
+
+commit 1bbf95b097089c053d32f9923ee74b80990dd021
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 06:43:21 2026 +0000
+
+    docs(isa): fr-01 — V1 schéma et migrations, ISC-22/12/13 cochés
+    
+    Vague V1 (S1.1 → S1.2 → S1.3) terminée et prouvée :
+    - S1.1 migration postgres 003 : channel.origin, provenance datée, media_type
+      daté, cadence par chaîne, région/serveur et failover_of (ISC-22).
+    - S1.2 migration postgres 004 : source.origin + source.client, alignés sur
+      STREAM_COLUMNS et la console privée (ISC-12).
+    - S1.3 migration clickhouse 003 : state_window (5 états, fenêtres 10 s) et
+      coverage_hour, agrégation horaire sans trou (ISC-13).
+    
+    Preuves :
+    - ./scripts/migrate.sh -> toutes les migrations already applied, Done.
+    - cd api && uv run pytest tests/ingest/test_open_catalogue.py -q -> 3 passed
+    - cd api && uv run pytest tests/ingest/test_stream_pool.py -q -> 6 passed
+    - cd api && uv run python -m antenly_api.eval.coverage --window=10s --hourly
+
+→ Read api/tests/ingest/test_open_catalogue.py
+→ Read api/src/antenly_api/eval/coverage.py
+
+$ grep -rnE "INSERT INTO channel|INSERT INTO CHANNEL" migrations/ 2>/dev/null; echo ===; grep -rniE "CHANNELS\s*=\s*\[|STATIONS\s*=\s*\[|CHANNEL_LIST|STATION_LIST" --include='*.py' --include='*.sql' --include='*.yml' --include='*.yaml' --include='*.json' --include='*.toml' --include='*.sh' . 2>/dev/null | grep -v node_modules | head -40
+===
+./scripts/corpus/tests/test_language_pass.py:120:    segments = language_pass.expected_parole_segments(segments_small, stations=["zikfm"])
+./scripts/corpus/tests/test_language_pass.py:126:        language_pass.expected_parole_segments(segments_small, stations=["nope"])
+./tools/inventory/tests/test_max_r3_fixes.py:134:    channels = [{"id": "c1", "name": "C1", "type": "radio"},
+./tools/inventory/tests/test_max_r3_fixes.py:240:    channels = [{"id": "tv1", "name": "TV 1", "type": "tv"}]
+./tools/inventory/tests/test_status_fields.py:71:    channels = [{"id": "walf-fm", "name": "Walf FM", "type": "radio"},
+./tools/inventory/tests/test_report_honesty.py:75:    channels = [{"id": "c1", "type": "radio"}, {"id": "c2", "type": "radio"},
+./api/tests/ingest/test_open_catalogue.py:44:    r"^\s*([A-Z][A-Z0-9_]*(?:CHANNELS?|STATIONS?|CHANNEL_LIST|STATION_LIST)[A-Z0-9_]*)"
+
+$ grep -rniE "^(CHANNELS|STATIONS|RADIO_STATIONS|TV_STATIONS|CHANNEL_LIST|STATION_LIST|KNOWN_CHANNELS|SEED_CHANNELS)\s*=" --include='*.py' . 2>/dev/null | head -30; echo ===; grep -rn "47" migrations/ tools/inventory/*.py 2>/dev/null | head -20
+./api/tests/annotation/test_coverage.py:36:STATIONS = frozenset(STATION_DURATIONS_MS)
+./api/tests/annotation/test_audit_review_probes.py:24:STATIONS = ("afiafm", "lovefm", "rfm", "rtsmatam", "sudfm", "zikfm")
+./api/tests/annotation/test_correction_rates.py:64:STATIONS = ("afiafm", "lovefm", "rfm", "rtsmatam", "sudfm", "zikfm")
+./api/tests/capture/test_handoff_v1.py:32:STATIONS = ("afiafm", "lovefm", "rfm", "rtsmatam", "sudfm", "zikfm")
+===
+tools/inventory/__init__.py:11:- report.py : REPORT.md + PRD-GAP.md honnêtes (47 = repère PRD, jamais critère).
+tools/inventory/discover.py:4:Familles agrégées (ISA 2026-11-02-channel-inventory-47) :
+tools/inventory/probe.py:271:    """GET avec plage courte (Range 0-2047), redirections suivies.
+tools/inventory/probe.py:276:        "User-Agent": UA, "Range": "bytes=0-2047", "Accept": "*/*"})
+tools/inventory/report.py:5:- 47 est le repère du PRD (docs/PRD.md lignes 11, 110, 324 et 338), jamais un
+tools/inventory/report.py:6:  critère ; l'écart est chiffré, daté, et « 47/47 » n'est JAMAIS annoncé
+tools/inventory/report.py:7:  sans 47 chaînes joignables prouvées (preuve < 7 jours, ffmpeg/GHA).
+tools/inventory/report.py:40:PRD_MARKER = 47
+tools/inventory/report.py:373:    """« 47/47 » n'est annoncé que si 47 chaînes joignables prouvées."""
+
+$ grep -rniE "ISC-22|ISC-13|liste en dur|trou d'heure|trou d.hour" /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/ci/ 2>/dev/null | head -30; echo ===; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/ 2>/dev/null; echo ===; ls /tmp/ 2>/dev/null | head -40
+===
+Galass_Driver
+Galass_Rider
+galass-emu-actions-pub
+===
+LICENSE
+PROMPT-SMOKE.md
+README.md
+actionlint
+actions-runner-2.log
+actions-runner-3.log
+actions-runner.log
+agent-store-fuse.log
+anyos-xstartup
+artemis-f432-fail
+artemis-golden
+artemis-r3.gz
+artemis-r3.log
+artemis-wf.yml
+bore
+bore-proxy.log
+bore-ws-pong.err
+bore-ws-pong.out
+bore-wstunnel.log
+bore.tgz
+capture-vnc-user-env
+capture-vnc-user-env.hash
+capture-vnc-user-env.version
+cf-tcp.log
+cf-ws.log
+check_mount.py
+check_mount2.py
+chisel
+chisel.tgz
+ci-logs
+cienv-pong.err
+cienv-pong.out
+cloudflared
+cloudflared-proxy.log
+clr-debug-pipe-154413-3580582-in
+clr-debug-pipe-154413-3580582-out
+clr-debug-pipe-48993-2879107-in
+clr-debug-pipe-48993-2879107-out
+clr-debug-pipe-57866-3121958-in
+clr-debug-pipe-57866-3121958-out
+
+$ grep -rniE "ISC-22|ISC-13|liste en dur|trou d'heure" /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/ 2>/dev/null | grep -v "2026-11-02-fr-01-ingestion-live/ISA.md" | head -30
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fingerprint-engine/ISA.md:65:| ISC-13 | metric | balayage du seuil de score sur notre propre banc étiqueté puis choix du point de rappel cible | seuil retenu sur notre banc (0 valeur importée d'un concurrent), documenté avec sa courbe rappel/précision | uv run python -m antenly_api.eval.fingerprint --sweep-threshold --report-curve | derived: seuil calibré maison |
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fingerprint-engine/ISA.md:74:| ISC-22 | schema | inspection de la provenance du match sur des résultats issus des deux origines | 100 % des résultats portent la provenance (catalogue client, contenu propre indexé) ; 0 résultat sans provenance | uv run pytest engine/tests/test_result_provenance.py | derived: provenance du match C-30 |
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fingerprint-engine/ISA.md:81:- ISC-8 à ISC-13 : même commande `antenly_api.eval.fingerprint --suite=known-10k` avec `--pitch=+-5pct`, `--noise=0dB`, `--frame-shift=+50`, `--speed=+-1pct`, `--engine=cqt --compare=landmark`, `--sweep-threshold --report-curve`.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fingerprint-engine/ISA.md:90:- ISC-22 → uv run pytest engine/tests/test_result_provenance.py — provenance sur 100 % des résultats
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fingerprint-engine/ISA.md:103:Satisfies: ISC-1 à ISC-14., ISC-15, ISC-16, ISC-17, ISC-18, ISC-19, ISC-20, ISC-21, ISC-22, ISC-23
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fingerprint-engine/ISA.md:117:- [ ] **ISC-13** — Le seuil de score d'appariement est calibré sur notre propre banc étiqueté, jamais importé d'un concurrent, et sa courbe rappel/précision est publiée avec la valeur retenue. · type: metric · check: balayage du seuil de score sur notre propre banc étiqueté puis choix du point de rappel cible · threshold: seuil retenu sur notre banc (0 valeur importée d'un concurrent), documenté avec sa courbe rappel/précision · tool: uv run python -m antenly_api.eval.fingerprint --sweep-threshold --report-curve · anchors_to: derived: seuil calibré maison
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fingerprint-engine/ISA.md:126:- [ ] **ISC-22** — Chaque résultat porte la provenance du match parmi catalogue client et contenu propre indexé ; aucun résultat n'est présenté sans provenance. · type: schema · check: inspection de la provenance sur des résultats issus des deux origines · threshold: 100 % des résultats portent la provenance, 0 résultat sans provenance · tool: uv run pytest engine/tests/test_result_provenance.py · anchors_to: derived: provenance du match C-30
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fingerprint-engine/ISA.md:136:- 2026-11-08 (correction REA B) : un second moteur d'empreinte à base de notes (CQT, sur les hauteurs plutôt que sur les pics spectraux) est planifié à côté du moteur landmark (ISC-12), parce que le pitch ±5 % est justement la faiblesse documentée de l'approche landmark : les deux moteurs sont mesurés séparément sur le même banc, puis fusionnés par union des candidats. Le seuil de score n'est jamais repris d'un concurrent : il est balayé sur notre banc étiqueté et sa courbe rappel/précision est publiée (ISC-13).
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fingerprint-engine/ISA.md:138:- 2026-11-08 (intégration ACR, constats C-07, C-09, C-30, C-36, N9, N10, N11, N19) : huit critères ajoutés. Double porte d'admission (C-07, ISC-15) et tolérance explicite par axe (C-09, ISC-16) parce que le score ne dit rien de la quantité de matière concordante et qu'une dérive fréquentielle produisait des matchs partiels silencieux. Une seule configuration d'extraction versionnée (N11, ISC-17) : deux jeux qui coexistent cassent toute comparaison. Facteur de paires par pic paramétré, mesuré avec son coût d'index (N9, ISC-18) et arbitrage densité/robustesse écrit (N10, ISC-19) : le gain de robustesse se paie en taille d'index, il ne se suppose pas. Portée temporelle déclarée par le format (N19, ISC-20). Plafond et budget du repli externe avec taux de résolution publié (C-36, ISC-21). Provenance du match portée par le résultat (C-30, ISC-22), pour qu'aucun repli ne se déguise en match catalogue.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:76:| ISC-13 | security | clé de kit sur un endpoint de tenant, révocation croisée d'une clé d'un autre tenant par un admin, puis clé révoquée sur son endpoint d'origine | 403 sur la surface étrangère, 401 au premier appel suivant la révocation, 0 fenêtre de grâce silencieuse, 404 sur une clé d'un autre tenant | cd api && uv run pytest tests/security/test_key_scope.py | derived: clé par surface C-24 |
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:84:Notes (probes re-joués au build ; à la clôture du 2026-11-18 seuls `tests/security` et les CLI ont été rejoués, ISC-22/23/24 restant sur la preuve du run du 2026-11-12 faute de stack Docker ; toutes les commandes pytest s'exécutent depuis api/) :
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:97:- ISC-13 → cd api && uv run pytest tests/security/test_key_scope.py — clé par surface, révocation immédiate
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:106:- ISC-22 → uv run pytest tests/integration/test_rls_postgres.py (depuis api/) — 0 ligne étrangère sur 1 000 requêtes, 0 écriture croisée, 4/4 tables en RLS forcée
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:112:- **Index hérité (archive, non canonique)** — le tableau ci-dessus et la section Verification décrivent la version précédente des claims, quand ISC-1, ISC-10 et ISC-16 étaient prouvés sur le banc SQLite et l'objet en mémoire. Les lignes ISC-1, ISC-10 et ISC-16 du tableau ne clôturent plus rien : la preuve de stack réelle est ISC-22, ISC-23 et ISC-24, et la preuve locale est la ligne Features d'ISC-1. Aucune coche ne s'appuie sur ce tableau. Contrat de parsing de la section Blockers : chaque entrée commence par « - [open] » ou « - [closed] », suivie d'un identifiant, et les entrées sont séparées par la séquence espace slash slash espace.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:128:- 2026-11-08 (intégration ACR, constats C-19, C-23, C-24, N6, N15, N20, N44) : sept critères ajoutés. Aucune réponse 2xx sans persistance vérifiée (C-19, ISC-11) — le constat le plus directement transposable en anti-critère, et le plus dangereux : une preuve de diffusion repose sur une configuration dont personne ne sait si elle existe. Trois refus distincts droit/quota/validation (C-24, ISC-12) et clé portée par une surface avec révocation immédiate (ISC-13). Droits par projet et par rôle (N44, ISC-14). Surface durcie : TLS, quota, validation stricte, 405, sérialisation déterministe (C-23, ISC-15), dont dépendent nos hashes et nos signatures. Registre de traitement et durée des données dérivées, avec sous-traitants et base légale (N15/N20, ISC-16) : aucune ISA ne portait ce registre, il vit ici plutôt que dans une nouvelle ISA pour ne pas multiplier les sources. Aucun champ sensible en journal (N6, ISC-17).
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:138:  - Dispatch map. Tout est code : aucun claim UI, Aditi Sharma non sollicitée, chaque claim code est attribué à Marcus Webb (Engineer) ou à Forge. ISC-1 et ISC-10a : storage.py et les deux probes de stockage. ISC-2 : intrusion_suite. ISC-3 et ISC-4 : app.py et matrice de rôles. ISC-5 : audit.py. ISC-6 et ISC-9 : audit_coverage.py, retention_audit.py et tests. ISC-7 et ISC-8 : tokens.py et app.py. ISC-11 et ISC-12 : app.py et refusals.py. ISC-13, ISC-14, ISC-18 : keys.py, roles.py, quota.py. ISC-15 et ISC-19 : SecurityConfig et les probes de surface et d'hygiène. ISC-16 : processing_registry.py. ISC-17 : logging_redaction.py et son branchement. Vérification : Silas Locke (auth, API, stockage, secrets), code-reviewer, Forge audit.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:145:  - Blockers OPEN, à corriger au build. B1 révocation croisée : POST /api/keys/{key_id}/revoke révoque la clé de n'importe quel tenant (admin A révoque B → 200, puis 401 pour B), non couvert par ISC-2/ISC-13 ; comparer key.tenant_id au principal, 404 hors tenant, cas ajouté à intrusion_suite et test_key_scope. B2 énumération : GET /api/admin/tenants rend tous les tenants à tout ADMIN car Role.ADMIN porte READ_ALL et MANAGE_TENANTS ; scoper la liste au tenant du principal et réserver READ_ALL à un scope plateforme explicite, aligner ROLE_POLICY et test_role_matrix. B3 main.py monte une FastAPI nue : create_app n'est servi nulle part ; monter create_app avec config, registre, db, audit et journal injectés, et ajouter une probe qui importe l'app servie et vérifie 403 sur une route sans politique. B4 allowlist Host du lot 3 absente du code ; ajouter SecurityConfig.allowed_hosts et le cas de surface, ou l'inscrire en Remaining Work nommé.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:148:  - Dispatch map. Tout est code, aucun claim UI, Aditi Sharma non sollicitée. ISC-1/ISC-10 : storage.py et les deux probes de stockage. ISC-2 : intrusion_suite (cas révocation croisée et énumération). ISC-3/ISC-4 : roles.py, app.py, main.py, test_role_matrix et test_default_deny. ISC-5 : audit.py. ISC-6/ISC-9 : audit_coverage.py, retention_audit.py et tests. ISC-7/ISC-8 : tokens.py et app.py. ISC-11/ISC-12 : app.py et refusals.py. ISC-13/ISC-14/ISC-18 : keys.py, roles.py, quota.py, app.py. ISC-15/ISC-19 : SecurityConfig, app.py, test_surface_hardening et test_server_hygiene. ISC-16 : processing_registry.py. ISC-17 : logging_redaction.py et son branchement sur les handlers. Vérification : Silas Locke (auth, API, stockage, secrets), code-reviewer, Forge audit.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:155:  - Dispatch map Serena : 27/27 code ou artefact, aucun claim UI, Aditi Sharma non sollicitée, les libellés français sont une projection backend. Marcus Webb : ISC-1 à ISC-15 et ISC-17 à ISC-19 (re-vérification) plus ISC-22, ISC-23, ISC-24, ISC-26. Forge : ISC-16, ISC-20, ISC-21, ISC-25, ISC-27, avec revue Marcus sur les sweeps. Vérification : Silas Locke (auth, API, stockage, secrets), code-reviewer, Forge audit, Max en scrutiny final. Partition anti-chevauchement : ISC-1 = bout-en-bout via l'adaptateur applicatif sur la vraie stack, ISC-10 = aucun chemin applicatif hors tenant, ISC-22/23/24 = les magasins eux-mêmes avec un client brut non privilégié.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:157:- Ratification Serena, second passage, task ses_e2ed3e943ffeN8bEvd6wnCHKOS, VERDICT PLAN À CORRIGER mais aucune correction architecturale. Faits vérifiés qu'elle apporte : beb5d61 n'est pas ancêtre de HEAD donc le merge se fera par identité de contenu et non par parenté, les trois chemins modifiés de #30 sont des sous-ensembles stricts de la branche donc rien ne se perd, et le harnais de #30 saute sur ANTENLY_DEV_STACK et non sur un nom inventé — sans quoi ISC-1, ISC-22, ISC-23 et ISC-24 pouvaient être verts à zéro exécution. Corrections appliquées : B-1 les quatre claims exigent 0 test ignoré et une connexion impossible fait échouer le probe, B-2 un seed du tenant B par table et un objet sous le préfixe B sont comptés avant le balayage sinon le probe échoue, B-3 fingerprint n'ayant pas de tenant_id le rôle tenant n'a aucun privilège dessus et sur tenant, vérifié par information_schema.role_table_grants, B-4 docker-compose.override.yml devient la couture fr-14 et les huit chemins de #30 restent intouchés, la config ClickHouse passant par une row policy à prédicat littéral par utilisateur au lieu d'un custom setting. Aussi adoptés : ISC-25 restreint à api/src et api/tests hors module de probe avec une exemption unique assertée, ISC-26 à 5 refus de démarrage énumérés, ISC-23 avec une seule policy AS RESTRICTIVE par couple table utilisateur et probe de non-élargissement par SET profile.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:158:- Serena, troisième passage, task ses_e2ecee112ffeNhoZV5ImUFo90p. B0 ratifié sur preuve : git diff --name-only contre beb5d61 est vide sur les huit chemins et le commit 07d14fa ne touche qu'eux. Ses trois derniers blockers sont appliqués à la lettre. ISC-1 est re-scopé sur l'adaptateur applicatif local, SQLite scopé plus objet en mémoire, parce qu'aucun adaptateur Postgres applicatif n'existe et qu'aucun lot ne le construisait — la preuve de stack réelle reste ISC-22, ISC-23 et ISC-24. Les quatre claims de magasin exigent désormais un contrôle positif : seed des deux tenants compté et N_A relu par table, sinon une policy qui refuse tout passerait verte. ISC-22 vérifie les privilèges par has_table_privilege et has_column_privilege plus relacl, et non par information_schema qui ne voit ni PUBLIC ni les grants de colonne. ISC-27 nomme le chemin littéral docs/security-audit-fr14-2026-11-12.md et croise la section Blockers, créée dans l'ISA avec cinq entrées, trois fermées (B-BRANCH, B-S3, B-DEPS) et deux ouvertes (B-CI, B-PENTEST). M-2 adopté sans fabriquer de faux constat : les BLOCKER de l'ISA sont listés avec statut et owner. Restent à appliquer sur l'ISA, sans effet sur le plan : M-6 les bannières marquant le tableau Test Strategy et la section Verification comme index hérité périmé, et M-7 la reformulation Out of Scope précisant que la stack de dev est montée pour la preuve puis détruite. Le plan est prêt pour le build selon la condition que Serena a elle-même énoncée.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:160:  - Decisions apres relecture du code du lot 1. La commande POSTGRES_RLS_DDL du banc local reste un exemple de forme et non le schema de production, elle pointe sur report seule table scopee du lot local, et la preuve des quatre tables d'ISC-22 viendra de la migration reelle. La phrase d'ISC-23 est corrigee, elle exige desormais une row policy restrictive a predicat litteral par utilisateur et non plus un reglage de session.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:163:- 2026-11-12 (run de reprise, preuve sur la vraie pile de dev) — la pile docker-compose de #30 a été montée et migrée (scripts/dev-migrate.sh) : Postgres 16.4, ClickHouse 24.8 et SeaweedFS 3.80. Les trois sondes de magasin passent sur cette pile, 26 passed et 0 skip sur les trois modules. ISC-22 : 9 tests, identité antenly_tenant NOSUPERUSER NOBYPASSRLS assertée, 4/4 tables RLS activée et forcée, 1 000 requêtes sous le tenant A, 0 ligne étrangère, écriture croisée refusée ; ISC-23 : 8 tests, utilisateur par tenant, row policy restrictive à prédicat littéral, 1 000 requêtes, 0 élargissement par SET profile, 3/3 policies ; ISC-24 : 9 tests, identités de tenant sans Admin, seed objet compté, objet A relu, lecture et écriture croisées refusées, énumération récursive sans objet du tenant B. DÉCISION D'ARCHITECTURE ISC-24 : SeaweedFS 3.80 contrôle List au bucket et non au préfixe (la condition s3:prefix est postérieure), le repli bucket-par-tenant est donc la variante livrée et prouvée — antenly-evidence reste le bucket d'administration de #30, chaque tenant reçoit son propre bucket et une identité bornée à Read/Write/List sur ce seul bucket. Le préfixe de clé n'est plus la frontière d'isolation du magasin objet.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:168:- 2026-11-18 (clôture, décision Papa) — ISA clôturée. PR #35 (branche `fullrun/fr-14-multi-tenant-roles`) mergée dans `main` le 2026-11-13T06:05:22Z, merge commit 8b39f5be2996f15dc352a483c0e35f8ce8908209. Preuves re-exécutées le 2026-11-18 : `tests/security` 253 passed ; CLI intrusion_suite 0 fuite, audit_coverage 100/100, retention_audit 1 825 jours lost 0, processing_registry gaps/drift vides, internal_audit 27 verdicts 0 violation. ISC-22/23/24 (stack réelle Postgres/ClickHouse/S3) non ré-exécutés ici faute de Docker : preuve enregistrée du run 2026-11-12 (26 passed, 0 skip) et tests d'intégration présents à HEAD. Provenance ré-adoptée via ISATool après relecture.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:172:2026-11-18 (revues de clôture) — Forge MODE: audit et Max rendent le verdict de clôture de cette ISA, et c'est la seconde passe indépendante annoncée par la décision du 2026-11-13. Constats de Forge adoptés : le titre des notes restreint les probes réellement rejoués à tests/security et aux CLI, en laissant ISC-22/23/24 sur la preuve du 2026-11-12, et la ligne Remaining Work sur les magasins réels ne prétend plus qu'ils ne sont jamais cochés. Constat rejeté : la contrainte 47 garde sa formulation d'origine, son arbitrage étant déjà tracé (Serena, troisième passage). Max rend PASS après ces deux corrections, sur les preuves rejouées le 2026-11-18 : tests/security 253 passed, intrusion_suite 0 fuite, audit_coverage 100/100, retention_audit lost 0, processing_registry sans gap, internal_audit 27 verdicts 0 violation, avec ISC-22/23/24 déclarés non rejoués.
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:186:Satisfies: ISC-1, ISC-2, ISC-3, ISC-4, ISC-5, ISC-6, ISC-7, ISC-8, ISC-9, ISC-10, ISC-11, ISC-12, ISC-13, ISC-14, ISC-15, ISC-16, ISC-17, ISC-18, ISC-19, ISC-20, ISC-21, ISC-22, ISC-23, ISC-24, ISC-25, ISC-26, ISC-27
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:188:- [x] ISC-1 — Une requête exécutée sous la connexion scopée d'un tenant ne retourne ni ne modifie aucune ligne d'un autre tenant, y compris par accès direct à la table de base. · type: security · check: sur l'adaptateur applicatif local, SQLite scopé plus objet en mémoire, seed local des tenants A et B avec lignes et objet, compteurs imprimés, relecture positive des lignes du tenant A par table, puis 1 000 lectures via l'adaptateur applicatif du tenant A dont un SELECT sans prédicat, 0 skip · threshold: seed A et seed B comptés et non nuls, N_A exact relu par table, 0 ligne étrangère sur 1 000 lectures, 0 écriture croisée acceptée et relecture propriétaire prouvant 0 effet, 0 skip — la preuve de magasin réel reste ISC-22, ISC-23 et ISC-24 · tool: cd api && uv run pytest tests/security/test_rls.py · anchors_to: literal
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:197:- [x] ISC-10 — L'isolation est portée par le stockage et non par la requête : la connexion scopée d'un tenant ne peut ni lire ni écrire la table de base partagée, et l'adaptateur objet refuse toute clé hors du périmètre de son tenant (bucket dédié dans la variante livrée, cf. ISC-24). · type: security · check: 1 000 appels via l'adaptateur de stockage du tenant A dont un SELECT sans prédicat, tentative d'écriture croisée, puis tentative de lecture et d'énumération d'une clé du tenant B par l'adaptateur objet · threshold: 0 ligne du tenant B sur 1 000 appels, 0 écriture croisée, 0 objet hors du périmètre du tenant y compris par énumération, la preuve de magasin elle-même étant renvoyée à ISC-22, ISC-23 et ISC-24 · tool: cd api && uv run pytest tests/security/test_storage_isolation.py · anchors_to: literal
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:200:- [x] ISC-13 — Une clé est portée par une surface : une clé de kit n'ouvre pas les endpoints de tenant, et une clé révoquée est refusée au premier appel suivant sans fenêtre de grâce ; la révocation est limitée au tenant du principal, une clé étrangère rend 404, cas couvert par test_key_scope et intrusion_suite. · type: security · check: clé de kit sur un endpoint de tenant, révocation croisée d'une clé d'un autre tenant par un admin, puis clé révoquée · threshold: 403 puis 401, 404 sur une clé d'un autre tenant, 0 fenêtre de grâce silencieuse · tool: cd api && uv run pytest tests/security/test_key_scope.py · anchors_to: derived: clé par surface C-24
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-02-fr-14-multi-tenant-roles/ISA.md:209:- [x] ISC-22 — Les tables de la PR #30 scopées par tenant dans Postgres (app_user, subscription, reference, report) sont protégées par RLS activée et forcée, prouvé sur la vraie stack de dev : la connexion du tenant A ne lit ni n'écrit aucune ligne du tenant B, y compris par accès direct à la table. · type: security · check: login réel en antenly_tenant, jamais en propriétaire ni par SET ROLE, assertion current_user avec rolsuper=false et rolbypassrls=false, jeu seedé par le rôle plateforme avec au moins une ligne du tenant B par table, puis 1 000 requêtes sous le tenant A sur les 4 tables, accès direct, tentative d'écriture croisée, et contrôle has_table_privilege et has_column_privilege pour fingerprint et tenant plus relacl pour PUBLIC, tous faux, reference en lecture tolérant tenant_id NULL et ses écritures exigeant le tenant, relecture positive des lignes du tenant A par table, sous ANTENLY_DEV_STACK=1 et 0 test ignoré · threshold: identité non privilégiée assertée, seed A et seed B comptés et non nuls, N_A exact relu par table, 0 ligne étrangère sur 1 000 requêtes, 0 écriture croisée acceptée, RLS activée et forcée sur 4/4 tables, 0 privilège du rôle tenant sur fingerprint et sur tenant, 0 skip · tool: uv run pytest tests/integration/test_rls_postgres.py (depuis api/) · anchors_to: literal
+
+$ which uv; ls api/pyproject.toml api/uv.lock 2>/dev/null; cat scripts/migrate.sh | head -100
+api/pyproject.toml
+api/uv.lock
+#!/usr/bin/env bash
+# Apply the SQL migrations to the running local stack.
+#
+# Idempotent: a migration that is already recorded with the same checksum is
+# skipped, and a modified migration is a hard error instead of a silent re-run.
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+COMPOSE=${COMPOSE:-docker compose}
+POSTGRES_SERVICE=${POSTGRES_SERVICE:-postgres}
+CLICKHOUSE_SERVICE=${CLICKHOUSE_SERVICE:-clickhouse}
+S3_SERVICE=${S3_SERVICE:-seaweedfs}
+S3_BUCKET=${S3_BUCKET:-antenly-evidence}
+
+die() {
+    printf 'migrate: %s\n' "$*" >&2
+    exit 1
+}
+
+if command -v sha256sum >/dev/null 2>&1; then
+    checksum() { sha256sum "$1" | awk '{print $1}'; }
+else
+    checksum() { shasum -a 256 "$1" | awk '{print $1}'; }
+fi
+
+$COMPOSE exec -T "$POSTGRES_SERVICE" true >/dev/null 2>&1 ||
+    die "postgres is not running — run 'make up' first"
+$COMPOSE exec -T "$CLICKHOUSE_SERVICE" true >/dev/null 2>&1 ||
+    die "clickhouse is not running — run 'make up' first"
+
+pg_query() {
+    $COMPOSE exec -T -e QUERY="$1" "$POSTGRES_SERVICE" sh -ec \
+        'psql -v ON_ERROR_STOP=1 -qAt -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "$QUERY"'
+}
+
+ch_query() {
+    $COMPOSE exec -T -e QUERY="$1" "$CLICKHOUSE_SERVICE" sh -ec \
+        'clickhouse-client --user "$CLICKHOUSE_USER" --password "$CLICKHOUSE_PASSWORD" --database "$CLICKHOUSE_DB" --query "$QUERY"'
+}
+
+pg_query "CREATE TABLE IF NOT EXISTS schema_migrations (
+    version text PRIMARY KEY,
+    checksum text NOT NULL,
+    applied_at timestamptz NOT NULL DEFAULT now()
+)" >/dev/null
+
+printf 'Postgres\n'
+for file in migrations/postgres/*.sql; do
+    [ -e "$file" ] || continue
+    version=$(basename "$file")
+    sum=$(checksum "$file")
+    applied=$(pg_query "SELECT checksum FROM schema_migrations WHERE version = '$version'")
+    if [ -n "$applied" ]; then
+        [ "$applied" = "$sum" ] ||
+            die "postgres migration $version changed after it was applied — run 'make reset'"
+        printf '  %-24s already applied\n' "$version"
+        continue
+    fi
+    printf '  %-24s applying\n' "$version"
+    {
+        cat "$file"
+        printf "\nINSERT INTO schema_migrations (version, checksum) VALUES ('%s', '%s');\n" "$version" "$sum"
+    } | $COMPOSE exec -T "$POSTGRES_SERVICE" sh -ec \
+        'psql -v ON_ERROR_STOP=1 -q -1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f -'
+done
+
+ch_query "CREATE TABLE IF NOT EXISTS schema_migrations (
+    version String,
+    checksum String,
+    applied_at DateTime DEFAULT now()
+) ENGINE = MergeTree ORDER BY version" >/dev/null
+
+printf 'ClickHouse\n'
+for file in migrations/clickhouse/*.sql; do
+    [ -e "$file" ] || continue
+    version=$(basename "$file")
+    sum=$(checksum "$file")
+    applied=$(ch_query "SELECT checksum FROM schema_migrations WHERE version = '$version' FORMAT TSV")
+    if [ -n "$applied" ]; then
+        [ "$applied" = "$sum" ] ||
+            die "clickhouse migration $version changed after it was applied — run 'make reset'"
+        printf '  %-24s already applied\n' "$version"
+        continue
+    fi
+    printf '  %-24s applying\n' "$version"
+    {
+        cat "$file"
+        printf "\nINSERT INTO schema_migrations (version, checksum) VALUES ('%s', '%s');\n" "$version" "$sum"
+    } | $COMPOSE exec -T "$CLICKHOUSE_SERVICE" sh -ec \
+        'clickhouse-client --user "$CLICKHOUSE_USER" --password "$CLICKHOUSE_PASSWORD" --database "$CLICKHOUSE_DB" --multiquery'
+done
+
+# The evidence bucket is part of the schema contract: FR-11 stores every
+# evidence bundle under it. Idempotent by design (creating an existing bucket
+# succeeds).
+$COMPOSE exec -T -e BUCKET="$S3_BUCKET" "$S3_SERVICE" sh -ec \
+    'printf "s3.bucket.create -name %s\n" "$BUCKET" | weed shell -master=localhost:9333 >/dev/null'
+
+printf 'Done: schemas up to date, bucket %s present.\n' "$S3_BUCKET"
+
+→ Read api/tests/ingest/test_ingest_coverage.py
+
+$ command -v uv || ls /home/ubuntu/.local/bin/uv /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.local/bin/uv /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/bin/uv 2>/dev/null; echo ===; command -v docker; docker compose version 2>/dev/null | head -1; echo ===; docker ps 2>/dev/null | head -10
+===
+===
+
+$ cat Makefile; echo ===; ls /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/ 2>/dev/null; ls /home/ubuntu/actions-runner-3/_work/_temp/ 2>/dev/null | head
+# Antenly — local development stack.
+#
+# One command to bring up the full infra described by docs/PRD.md, one command
+# to take it down. See docs/dev-stack.md for the details.
+
+SHELL := /bin/bash
+COMPOSE ?= docker compose
+
+.DEFAULT_GOAL := help
+.PHONY: help up down reset migrate test logs ps
+
+help: ## Show this help
+	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  %-8s %s\n", $$1, $$2}'
+
+up: ## Start the stack and wait for every healthcheck
+	$(COMPOSE) up -d --wait --wait-timeout 180
+
+down: ## Stop the stack (volumes are kept)
+	$(COMPOSE) down
+
+reset: ## Stop the stack and delete its volumes (destructive)
+	$(COMPOSE) down -v
+
+migrate: ## Apply Postgres and ClickHouse migrations, create the evidence bucket
+	./scripts/migrate.sh
+
+test: up migrate ## Run the API test suite against the running stack
+	cd api && ANTENLY_DEV_STACK=1 uv run pytest -q
+
+ps: ## Show container state
+	$(COMPOSE) ps
+
+logs: ## Follow the logs of every service
+	$(COMPOSE) logs -f
+===
+attempt.start
+home
+oc-tail
+oc.pid
+opencode
+run-deepseek-v4.1-flash-free.log
+run-mimo-v2.6-flash-free.log
+1c1cf979-7fc9-4708-8317-95aac1cc7e08.sh
+377913c8-cb50-412c-9797-1905c8904f1c.sh
+469956b0-c6ca-4cb5-8570-1610a945df31.sh
+500cb7e1-7f65-4c4d-8e01-f996c2b379a3.sh
+58fa9b85-aa87-483d-ba0b-b01aae4e9da7.sh
+60e14eca-f5ea-4b12-a52e-e7fb79e29ad0.sh
+6b80e79e-472c-4ac9-92bc-62a5f3472798.sh
+70dac146-47b2-468c-b767-cd4050f7daca.sh
+9cfead5e-4edf-4482-a7c0-867e296ab328.sh
+_github_workflow
+
+$ ls /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.local/bin/ 2>/dev/null; echo ===; find /home/ubuntu -maxdepth 4 -name 'uv' -type f 2>/dev/null | head; echo ===; find /home/ubuntu/actions-runner-3 -maxdepth 5 -name 'uv' 2>/dev/null | head; echo ===; type docker podman 2>&1; ls /var/run/docker.sock 2>&1
+===
+===
+/home/ubuntu/actions-runner-3/externals/node20/include/node/uv
+/home/ubuntu/actions-runner-3/externals/node24/include/node/uv
+===
+/usr/bin/bash: line 1: type: docker: not found
+/usr/bin/bash: line 1: type: podman: not found
+ls: cannot access '/var/run/docker.sock': No such file or directory
+
+$ cat /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md 2>/dev/null | head -5; ls -la /home/ubuntu/actions-runner-3/_work/_temp/oc/ 2>/dev/null; echo ===; env | sort | head -60
+# Contexte d exécution lifeos-ci
+
+- Job : fr01-v1c
+- Agent : forge-code
+- Dépôt cible : LordThiouk/antenly
+total 88
+drwxr-xr-x 2 ubuntu ubuntu  4096 Nov 26 16:22 .
+drwxr-xr-x 9 ubuntu ubuntu  4096 Nov 26 16:22 ..
+-rw------- 1 ubuntu ubuntu  9680 Nov 26 16:22 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu 58100 Nov 26 16:29 opencode.log
+-rw-r--r-- 1 ubuntu ubuntu  1408 Nov 26 16:22 prompt.md
+===
+AGENT=1
+CHAIN_PHASE=build
+FULLRUN_STOP_AFTER_STEP=4
+FULLRUN_TARGET_AGENT=Forge
+HF_TOKEN=[REDACTED:hf-token]
+HOME=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home
+HUGGING_FACE_HUB_TOKEN=[REDACTED:hf-token]
+LANG=C.UTF-8
+OPENCODE=1
+OPENCODE_CONFIG=/home/ubuntu/actions-runner-3/_work/_temp/oc/opencode.json
+OPENCODE_PID=157073
+PATH=/usr/local/bin:/usr/bin:/bin
+PWD=/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target
+SHLVL=1
+TMPDIR=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent
+_=/usr/bin/env
+
