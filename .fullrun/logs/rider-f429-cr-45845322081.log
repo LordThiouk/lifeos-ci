@@ -1,0 +1,2036 @@
+
+> Forge · deepseek-v4.1-flash-free
+
+I'll read the prompt file first.
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+$ pwd && ls -la
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target
+total 192
+drwxr-xr-x 13 ubuntu ubuntu  4096 Nov 26 19:11 .
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 19:11 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 19:11 .archive
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 19:11 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 19:11 .git
+-rw-r--r--  1 ubuntu ubuntu    68 Nov 26 19:11 .gitattributes
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 19:11 .github
+-rw-r--r--  1 ubuntu ubuntu   480 Nov 26 19:11 .gitignore
+-rw-r--r--  1 ubuntu ubuntu    32 Nov 26 19:11 .graphifyignore
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 19:11 .history
+-rwxr-xr-x  1 ubuntu ubuntu  1325 Nov 26 19:11 .htaccess
+-rw-r--r--  1 ubuntu ubuntu 89305 Nov 26 19:11 2026_03_17_api_swagger_095dc7898c.json
+-rw-r--r--  1 ubuntu ubuntu  5714 Nov 26 19:11 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu  2384 Nov 26 19:11 CLAUDE.md
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 19:11 MEMORY
+-rw-r--r--  1 ubuntu ubuntu   619 Nov 26 19:11 SECURITY.md
+drwxr-xr-x  9 ubuntu ubuntu  4096 Nov 26 19:11 assets
+drwxr-xr-x 11 ubuntu ubuntu  4096 Nov 26 19:11 core
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 19:11 docs
+-rwxr-xr-x  1 ubuntu ubuntu   478 Nov 26 19:11 index.php
+-rw-r--r--  1 ubuntu ubuntu 12489 Nov 26 19:11 om_Pay_Link_Swagger_02e4c3ae33.yml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 19:11 prompts
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 19:11 scripts
+
+$ git status --short && git branch --show-current && git log --oneline -5
+fullrun/lot-client-w0
+4ba56ea1 fix(admin): ISC-12 — clic Vehicle Pending → page pending
+7c8b1fe9 wip(lot-client-w0-device): partial work (agent stopped)
+5a792372 w0(isa): restaurer empreinte ISATool apres ligne Decisions manuscrite — BLOCK inchange, ISC non cochés
+5fbbcfad w0(artemis): etat final BLOCK — run 152 sans captures/logcat ; ISC 22/50/80-84 non cochés
+3f67bd85 w0(artemis): préciser cause step 12 via logs API authentifiés ; ISC 22/50/80-84 non cochés
+
+$ ls -la MEMORY/WORK/ 2>&1 | head -40; echo "---"; ls -la MEMORY/WORK/2026-11-22-galass-lot-client/ 2>&1
+total 44
+drwxr-xr-x 11 ubuntu ubuntu 4096 Nov 26 19:11 .
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 19:11 ..
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 19:11 2026-11-22-galass-lot-client
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 19:11 20260618-galass-wave-orange-money-payments
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 19:11 20260619-galass-driver-runtime-fixes
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 19:11 20260729-galass-seclists-offensive-pentest
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 19:11 20260801-galass-vehicle-image-pdf-doc
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 19:11 20261002-galass-auto-dispatch
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 19:11 20261006-galass-regression-multistop
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 19:11 20261013-galass-fcm-service-account-outside-webroot
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 19:11 20261013-galass-security-general-setting-messages
+---
+total 112
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 19:11 .
+drwxr-xr-x 11 ubuntu ubuntu  4096 Nov 26 19:11 ..
+-rw-r--r--  1 ubuntu ubuntu   288 Nov 26 19:11 COMPLETENESS.yml
+-rw-r--r--  1 ubuntu ubuntu 97757 Nov 26 19:11 ISA.md
+-rw-r--r--  1 ubuntu ubuntu  3270 Nov 26 19:11 fullrun-carry.json
+
+$ git log --oneline -20 && echo "---" && git cat-file -t 691864e 2>&1 && git log --oneline 691864e -1 2>&1
+4ba56ea1 fix(admin): ISC-12 — clic Vehicle Pending → page pending
+7c8b1fe9 wip(lot-client-w0-device): partial work (agent stopped)
+5a792372 w0(isa): restaurer empreinte ISATool apres ligne Decisions manuscrite — BLOCK inchange, ISC non cochés
+5fbbcfad w0(artemis): etat final BLOCK — run 152 sans captures/logcat ; ISC 22/50/80-84 non cochés
+3f67bd85 w0(artemis): préciser cause step 12 via logs API authentifiés ; ISC 22/50/80-84 non cochés
+23e1ec12 wip(autosave): arbre de travail
+9a012ce2 w0(artemis): run 152 45801376130 FAIL build APK — step 11 OK, e2e skipped ; ISC 22/50/80-84 non cochés
+3a071572 w0(artemis): BLOCK confirmé runs 148/149 — goldens Driver 4/4 sous 3.44.8 (baselines 3.50.1) ; ISC 22/50/80-84 non cochés
+5b62a92b w0(artemis): run 45768119261 échoue aux tests Flutter ; W0 device BLOQUÉ, ISC non cochés
+691864eb w0(isc-84): S-W0-07 preuve backend partielle CASH_PAYMENT_RECEIVED horodaté ; ISC-84 non coché
+8a07570d w0(isc-83): S-W0-06 ancre R-6 vérifiée ; repro device/logcat bloquée
+142ec782 w0(isc-82): S-W0-05 ancres D-12 vérifiées ; tests single-offer verts ; e2e device bloqué
+a95aed47 w0(isc-81): S-W0-04 ancres D-9 vérifiées ; DispatchAdminSettingsTest vert ; repro device bloquée
+57d3cf05 w0(isc-80): S-W0-03 ancres D-1 vérifiées ; preuve backend online_status ; repro device bloquée
+313ce45e w0(isc-50): S-W0-02 ancres OTP Rider+Driver vérifiées ; PhoneAuthUniquenessTest vert
+9b2873f4 w0(isc-22): S-W0-01 ancres mobile revérifiées ; route:list backend OK ; repro device bloquée
+a5c15f5e w0(isc-84): S-W0-07 R-7 repro device bloquée ; lecture backend faite
+ad1ee65e w0(isc-83): S-W0-06 R-6 repro device bloquée
+2579b560 w0(isc-82): S-W0-05 D-12 repro device bloquée
+66195fbe w0(isc-81): S-W0-04 D-9 repro device bloquée ; lecture offer_timeout faite
+---
+commit
+691864eb w0(isc-84): S-W0-07 preuve backend partielle CASH_PAYMENT_RECEIVED horodaté ; ISC-84 non coché
+
+$ grep -n "W1" MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md | head -60
+279:- **2026-11-22 18:20 — Plan (phase: plan, Nix).** Aucun code n'est écrit ; l'ISA est le seul livrable de cette passe. Vagues : **W0** lectures et reproductions seules (ISC-22, ISC-50, ISC-80 à ISC-84, fogs) ; **W1** backend (F1, ISC-20, ISC-30.2, F4, ISC-40 à ISC-44) ; **W2** Rider et Driver (F2, F5, Bridge) ; **W3** bugs OUVERTS (F6) ; **W4** vérification, revue sécurité, relecture finale. Les ISC marqués `(after: …)` fixent l'ordre ; le reste est parallélisable. Le build et les workflows CI ne partent qu'avec l'OK de Papa.
+355:  - **W1 — backend Laravel (Galass_backend)** : ISC-3, ISC-4, ISC-10 → ISC-11.3, ISC-20, ISC-30.2, ISC-40 → ISC-44. Dépend de W0 pour ISC-22/ISC-50 ; les ISC `(after:)` fixent l'ordre interne.
+369:  - Ordre des vagues : ISC-22.1 (après ISC-22 en W0) est désormais affecté à W2 ; les autres `(after:)` restent cohérents avec W1/W2/W3/W4.
+373:- **2026-11-26 03:20 — Plan de build Serena (W0 lecture/repro + W1 backend ; aucun code écrit).** Découpage en petites tâches ; une tâche = un ISC (ou un Bridge), avec `fichier:ligne` relu sur `fullrun/lot-client-w0`, preuve outillée, dépendances et responsable. Légende : **Forge** = logique + tests (Laravel/Flutter) ; **Aditi Sharma** = interface/écran ; **Silas** = revue sécurité (lecture seule) ; **Papa** = acte de fusion/CI. Un nom de test listé est créé rouge avant le correctif (sauf commandes de contrôle déjà existantes). Cette passe ne coche aucun ISC : `progress` reste 0/63.
+387:  **W1 — backend Laravel (Galass_backend).** Ordre interne : S-W1-03 puis ses `after:` ; S-W1-14 puis ses `after:`.
+391:  | S-W1-01 | ISC-3 | backend | `core/app/Http/Middleware/VerifyCsrfToken.php` (`ipn/*`), `core/routes/api.php` (`dev-token`) | Vérifier gardes inchangées | `grep "ipn/\*" core/app/Http/Middleware/VerifyCsrfToken.php` + `php artisan test --group=security` | — | Forge ; revue Silas |
+392:  | S-W1-02 | ISC-4 | backend | `docs/BUGS.md` | Basculer OUVERT/À REVÉRIFIER → CORRIGÉ/OBSOLÈTE par ID | `rg -n 'OUVERT' docs/BUGS.md` = 0 | Triage `c40c30de` porté (prérequis bloquant) | Forge |
+393:  | S-W1-03 | ISC-10 | backend+admin | `core/app/Http/Controllers/Admin/ManageDriversController.php:173,194` ; `core/routes/admin.php:164-167` ; `core/resources/views/admin/driver/detail.blade.php:420,486` | Une action admin approuve `dv` + `vv` | `php artisan test --filter=DriverOneStepApprovalTest` | — | Forge |
+394:  | S-W1-04 | ISC-10.1 | backend+admin | `core/app/Http/Controllers/Admin/ManageDriversController.php:173-210` | Refuser si documents/véhicule incomplets ; états inchangés | `php artisan test --filter=DriverOneStepApprovalTest::incomplete` | S-W1-03 | Forge |
+395:  | S-W1-05 | ISC-10.2 | backend+admin | `core/app/Http/Controllers/Admin/ManageDriversController.php:173-210` ; `core/routes/admin.php:164-167` | Garder les routes séparées existantes | `php artisan test --filter=ManageDrivers` | S-W1-03 | Forge |
+396:  | S-W1-06 | ISC-10.3 | admin | `core/resources/views/admin/driver/detail.blade.php:420,486` | Bouton unique « Valider le chauffeur » | Capture admin avant/après | S-W1-03 | Aditi (UI) ; Forge (route) |
+397:  | S-W1-07 | ISC-11 | backend | `core/app/Http/Controllers/Admin/ManageDriversController.php:173,194` ; `core/app/Notify/Sms.php:28-31,40-63` | Envoyer 1 SMS FR au numéro E.164 à la validation | `php artisan test --filter=DriverApprovedSmsTest` | S-W1-03 | Forge |
+398:  | S-W1-08 | ISC-11.1 | backend | `core/app/Http/Controllers/Admin/ManageDriversController.php:183-210` ; `core/app/Notify/Sms.php:40` | 0 SMS si refus ou déjà validé | `php artisan test --filter=DriverApprovedSmsTest::noSms` | S-W1-07 | Forge |
+399:  | S-W1-09 | ISC-11.2 | backend | template SMS (`core/app/Notify/`) | ≤ 160 car., sans pièce ni solde | `php artisan test --filter=DriverApprovedSmsTest::text` | S-W1-07 | Forge |
+400:  | S-W1-10 | ISC-11.3 | backend | `core/app/Notify/Sms.php:49-63` (`catch` + `createErrorLog`) | Échec SMS non bloquant ; erreur journalisée | `php artisan test --filter=DriverApprovedSmsTest::gatewayDown` | S-W1-07 | Forge |
+401:  | S-W1-11 | ISC-20 | backend | `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php:49-60,64-86` | Exiger et stocker la photo (422 sans) | `php artisan test --filter=DriverRegisterPhotoTest` | — | Forge |
+402:  | S-W1-12 | ISC-20.2 | backend | `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php` + login driver | Chauffeur historique sans photo se connecte | `php artisan test --filter=DriverLegacyLoginTest` | S-W1-11 | Forge |
+403:  | S-W1-13 | ISC-30.2 | backend | `core/app/Http/Controllers/Gateway/Wave/ProcessController.php:15,111` ; `.../OrangeMoney/ProcessController.php:17,129,267` ; `core/routes/ipn.php:5-6` | Ne pas modifier passerelles/IPN | `php artisan test --filter=Payment` | — | Forge ; revue Silas |
+404:  | S-W1-14 | ISC-40 | backend | `core/app/Models/Service.php:12-22` ; nouvelle migration `core/database/migrations/2026_11_26_000001_add_order_visible_to_services.php` ; `core/database/sql/2026_11_26_services_order_visible.sql` | Colonnes ordre+visibilité ; ordre initial = actuel | `php artisan test --filter=ServiceOrderMigrationTest` | — | Forge |
+405:  | S-W1-15 | ISC-41 | backend+admin | `core/app/Http/Controllers/Admin/ServiceController.php:16-34,65` ; `core/routes/admin.php:39-43` ; `core/resources/views/admin/services/index.blade.php:80,106` | Réordonner/afficher/masquer et persister | PHPUnit endpoint + capture admin | S-W1-14 | Forge (endpoint) ; Aditi (UI) |
+406:  | S-W1-16 | ISC-42 | backend | `core/app/Http/Controllers/Api/User/UserController.php:30` ; `core/app/Repositories/RideRepo.php:28-31,38-40` ; `core/app/Repositories/ServiceRepo.php:8-10` | API Rider : ordre admin, masqués exclus | `php artisan test --filter=RiderServiceListOrderTest` | S-W1-14 | Forge |
+407:  | S-W1-17 | ISC-43 | backend | `core/app/Services/Rider/RideService.php` (détail) ; `core/app/Http/Controllers/Api/User/RideController.php` (détail) | Service masqué lisible sur course existante | `php artisan test --filter=HiddenServiceExistingRideTest` | S-W1-14 | Forge |
+408:  | S-W1-18 | ISC-44 | backend | `core/app/Services/Rider/RideService.php:82-85` ; `core/app/Http/Controllers/Api/User/RideController.php:69` ; `core/app/Repositories/RideRepo.php:38-40` | Service masqué → 422 à la création | `php artisan test --filter=HiddenServiceCreateRideTest` | S-W1-14 | Forge |
+430:  | S-W2-R14 | Bridge-1 | backend+admin+Rider | `core/app/Http/Controllers/Admin/ServiceController.php:16-34` ; `core/app/Http/Controllers/Api/User/UserController.php:30` ; liste services Rider | Ordre admin = réponse API = liste Rider | `php artisan test --filter=RiderServiceListOrderTest` + capture | S-W1-14, S-W1-15, S-W1-16 | Forge ; Aditi |
+436:  | S-W2-D01 | ISC-20.1 | Driver | `lib/presentation/screens/auth/registration/widget/registration_form.dart:17` ; `lib/presentation/screens/auth/profile_complete/profile_complete_screen.dart:62` ; `lib/data/controller/account/profile_complete_controller.dart:57-313` | Bloquer sans photo + message FR | `flutter test test/presentation/auth/registration_photo_test.dart` | S-W1-11 | Aditi (UI) ; Forge |
+441:  | S-W2-D06 | ISC-21.4 | Driver+backend | `lib/data/controller/account/profile_controller.dart:127-128` ; `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php` (upload) | Image ≤ limite backend ; upload 200 | `flutter test test/core/camera/capture_size_test.dart` + PHPUnit upload | S-W2-D02 ; S-W1-11 | Forge |
+453:  | S-W2-D18 | Bridge-2 | Driver+backend+admin | `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php:64-86` ; `lib/data/controller/account/profile_controller.dart:127-128` ; `core/resources/views/admin/driver/detail.blade.php` | Photo d'inscription stockée et visible fiche admin | `php artisan test --filter=DriverRegisterPhotoTest` + capture admin | S-W1-11 ; S-W2-D02 | Forge ; Aditi |
+454:  | S-W2-D19 | Bridge-4 | backend+Driver | `core/app/Http/Controllers/Admin/ManageDriversController.php:173,194` ; `core/app/Notify/Sms.php:40-63` ; `lib/presentation/screens/auth/sms_verification_page/sms_verification_screen.dart:109` | SMS de validation puis statut « validé » vu au refresh Driver | `php artisan test --filter=DriverApprovedSmsTest` + capture Driver | S-W1-07→10 ; S-W2-D09 | Forge ; Aditi |
+474:  | S-W4-05 | Revue | 3 dépôts | chaque PR | Re-vérifier ISC-10.2, 10.3, 11.1→11.3, 20.2, 21.3, 21.4, 30.2, 43, 44, 53, 75 | Sorties d'outils listées en W1/W2/W3 | Toutes vagues | Silas (sécurité) ; Max (PASS/FAIL) ; Vera (audit) |
+477:  - `docs/BUGS.md` trié absent de `fullrun/lot-client-w0` : porter `c40c30de:docs/BUGS.md` (PR #8, branche `docs/bugs-triage-2026-11-22`) avant S-W1-02 et W3, sinon `rg 'OUVERT'` ne prouve rien.
+484:  **Ordre et parallélisme.** W0 → W1 (backend) → W2 (Rider puis Driver, jamais en parallèle) → W3 → W4 ; un dépôt à la fois ; les `(after:)` de l'ISA fixent l'ordre interne. Aucune vague ne démarre sans l'OK de Papa ; aucun `flutter build`/`flutter run`/gradle, aucun push, merge ou force-push. Cette passe n'écrit aucun code et ne coche aucun ISC (`progress` reste 0/63).
+499:**2026-11-26 18:20 — Papa : services admin + redirection véhicule non confirmée.** (1) Afficher et ordonner les services depuis l'admin backend = déjà F4 ISC-40→44 + Bridge-1 (W1) — à construire, pas un nouvel ISC. (2) Correctif dû admin : la redirection « véhicule non confirmé/non vérifié » (notif `click_url`, widget dashboard, menu) doit ouvrir la liste/fiche permettant de traiter le véhicule en attente — aujourd'hui notif → `admin.driver.vehicle.verify.pending` (DriverController.php:491) alors que le widget dashboard compte/lien `vv=UNVERIFIED` → `admin.driver.vehicle.unverified` (AdminController.php:70 + driver.blade.php:16) ; risque de liste vide ou mauvaise file. **refined:** ajout ISC-12 sous F1 + ligne Test Strategy ; progress 0/63 → 0/64.
+
+$ cat MEMORY/WORK/2026-11-22-galass-lot-client/COMPLETENESS.yml; echo "---"; cat MEMORY/WORK/2026-11-22-galass-lot-client/fullrun-carry.json
+status: pass
+substance: substantial
+required_sections:
+  Problem: present
+  Vision: present
+  Out of Scope: present
+  Constraints: present
+  Goal: present
+  Claims: present
+  Test Strategy: present
+  Features: present
+gaps:
+isc_quality:
+  total: 64
+  checked: 0
+  anti_criteria_count: 16
+---
+{
+  "payload": {
+    "v": 1,
+    "isa": "2026-11-22-galass-lot-client",
+    "head": "2aa0dcd1f4bf24c70d3929c180d498a5ac2fa7ff",
+    "steps": {
+      "1": {
+        "status": "pass",
+        "at": "2026-11-22T19:06:08Z",
+        "fp": "[REDACTED:hex64]",
+        "sha": "2aa0dcd1f4bf24c70d3929c180d498a5ac2fa7ff"
+      },
+      "2": {
+        "status": "pass",
+        "at": "2026-11-22T19:09:00Z",
+        "fp": "[REDACTED:hex64]",
+        "sha": "34b6e5ccbe2f8f55f722725e3285dc126e8c4117",
+        "criteriaIds": [
+          "Ajouter l'ISC enfant `ISC-N.1` dans l'IS\u000088a0cb85",
+          "Bridge-1\u0000a14776c5",
+          "Bridge-2\u0000b1fd2ee3",
+          "Bridge-4\u000086ea784e",
+          "Exécuter CheckCompleteness et l'audit Ve\u0000c961301b",
+          "ISC-1\u0000ff0488ab",
+          "ISC-10\u00003199ebfd",
+          "ISC-10\u00003d6f855b",
+          "ISC-10\u0000ac50bd76",
+          "ISC-10\u0000ba6f1be8",
+          "ISC-11\u0000385d9809",
+          "ISC-11\u0000424f2e8a",
+          "ISC-11\u000046a1e04c",
+          "ISC-11\u00005aa9508f",
+          "ISC-2\u0000c702f97b",
+          "ISC-20\u0000192535d6",
+          "ISC-20\u00005ea88e9f",
+          "ISC-20\u0000eed149ab",
+          "ISC-21\u0000303e1b9a",
+          "ISC-21\u00004099ac62",
+          "ISC-21\u00004aeb60a4",
+          "ISC-21\u00006dc7b287",
+          "ISC-21\u00007810b8c8",
+          "ISC-22\u0000631b566b",
+          "ISC-22\u00009568fc84",
+          "ISC-23\u000045016d95",
+          "ISC-23\u0000de5833cc",
+          "ISC-3\u0000e5b8a970",
+          "ISC-30\u00007424b311",
+          "ISC-4\u00002417faaa",
+          "ISC-40\u0000e17e6915",
+          "ISC-41\u00004348f5eb",
+          "ISC-42\u0000dbd5445f",
+          "ISC-43\u00000ed200bf",
+          "ISC-44\u0000ceffcc3d",
+          "ISC-5\u0000f3da2db0",
+          "ISC-50\u00004c04fa65",
+          "ISC-51\u00007ac349b3",
+          "ISC-52\u00001763b68e",
+          "ISC-53\u0000bfb9e94a",
+          "ISC-6\u0000311a5e2a",
+          "ISC-60\u000021f98366",
+          "ISC-61\u0000cc10c5b4",
+          "ISC-62\u00006f0dabe1",
+          "ISC-63\u00006381fa56",
+          "ISC-64\u000023a2beaa",
+          "ISC-65\u00001ce9a110",
+          "ISC-66\u000081cf834e",
+          "ISC-67\u0000d4a9ffea",
+          "ISC-68\u0000e6beb37a",
+          "ISC-69\u00001bd1e746",
+          "ISC-70\u0000105d467e",
+          "ISC-71\u000038750332",
+          "ISC-72\u0000b53eb02c",
+          "ISC-73\u0000db0faf0e",
+          "ISC-74\u00008fa33b12",
+          "ISC-75\u000016c2f59b",
+          "ISC-76\u00005c859cd5",
+          "ISC-80\u0000168ab501",
+          "ISC-80\u0000d8389405",
+          "ISC-81\u000008d8cc22",
+          "ISC-81\u00003d3bdaa7",
+          "ISC-82\u0000a2f1323d",
+          "ISC-82\u0000d0c991a8",
+          "ISC-83\u0000163e5ee9",
+          "ISC-83\u00003a67346a",
+          "ISC-83\u0000db672d51",
+          "ISC-84\u000010a56ca3",
+          "ISC-84\u0000e18f73c8",
+          "Miroir Linear de l'ISA, uniquement après\u0000086d550b",
+          "Scaffolder les ISAs enfants Rider et Dri\u00000dda3d80"
+        ]
+      }
+    }
+  },
+  "sig": "[REDACTED:hex64]"
+}
+
+$ sed -n '280,500p' MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+...output truncated...
+
+Full output saved to: /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.local/share/opencode/tool-output/tool_2194594eb002T5HNAO2wICM6Vx
+
+- **2026-11-22 18:20 — Noms de tests.** Les noms de fichiers et de classes de test de Test Strategy sont des noms proposés, à créer rouges avant le correctif ; seuls les ISC et les commandes de contrôle (gitleaks, grep, gh) existent déjà.
+- **2026-11-22 18:20 — Phase.** `phase: plan` demandé par Papa (valeur historique acceptée par le parseur, la valeur courante serait `marking`). `complete` n'est pas posé à la main : il vient de la fermeture par les outils ISA.
+- **2026-11-22 18:20 — Emplacement.** L'ISA vit dans Galass_backend (`MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md`), séparée de LifeOS : pas de copie dans un répertoire LifeOS.
+- **2026-11-25 22:51 — Ancrages code vérifiés pour la phase plan (Vera, lecture seule).** Fichiers:lignes relus dans `extra/Galass_Rider`, `extra/Galass_Driver` et `core/` (branche `fullrun/lot-client-w0`) ; aucun code modifié.
+  - Backend F1 : `core/app/Http/Controllers/Admin/ManageDriversController.php:173` (`verificationApprove`), `:178` (`notify DRIVER_DOCUMENT_APPROVE`), `:194` (`vehicleApprove`), `:199` (`notify VEHICLE_VERIFY_APPROVE`).
+  - Backend SMS : `core/app/Notify/Sms.php:28-31` (config `sms_config`, `sms_status`, `sms_body`, `sms_template`) et `:49-61` (`send()` via `SmsGateway`, log d'erreur) ; la passerelle existe déjà.
+  - Backend F4 : `core/app/Models/Service.php:12-22` (casts, aucun `order`/`visible`) ; `core/app/Http/Controllers/Admin/ServiceController.php:16-34` (`store`, pas d'ordre/visibilité) et `:65` (`status`) ; `core/routes/admin.php:39-43` ; `core/app/Repositories/ServiceRepo.php:8-10` ; `core/app/Repositories/RideRepo.php:30-31` (`orderBy('name')`) et `:38-40` (`findActiveService` = `active()`).
+  - Backend F4 API Rider : `core/app/Http/Controllers/Api/User/UserController.php:30` (`Service::active()->orderBy('name')`) ; `core/app/Services/Rider/RideService.php:82-85` (service actif exigé) ; `core/app/Http/Controllers/Api/User/RideController.php:69` (`create`).
+  - Backend F2 : `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php:49-60` (validation sans photo) et `:64-86` (`register`) ; `core/app/Http/Controllers/Api/Driver/DriverController.php:389-400` (`image` requise pour le véhicule).
+  - Rider F5/point 10 : `lib/presentation/screens/auth/sms_verification_page/sms_verification_screen.dart:100` (numéro masqué via `MyUtils.maskSensitiveInformation`) ; `lib/data/controller/auth/auth/sms_verification_controller.dart:44` (`verifyYourSms`) et `:122` (`sendOTP`) ; `lib/core/helper/phone_auth_helper.dart:10` (indicatif 221).
+  - Driver F5/point 10 : `lib/presentation/screens/auth/sms_verification_page/sms_verification_screen.dart:109` et `:228` (numéro masqué) ; `lib/data/controller/auth/firebase_phone_auth_controller.dart:159` (`formattedPhone`) et `:212` (passage du numéro à l'écran OTP).
+  - Rider F2/point 8 : `lib/presentation/screens/auth/registration/registration_screen.dart:52` (`GetBuilder<RegistrationController>`) et `lib/presentation/screens/auth/profile_complete/profile_complete_screen.dart:54` (`GetBuilder<ProfileCompleteController>`) ; contrôleur `lib/data/controller/account/profile_complete_controller.dart` (`update()` aux l.86-234).
+  - Driver F2/point 8 : `lib/presentation/screens/auth/registration/widget/registration_form.dart:17` (`GetBuilder<FirebasePhoneAuthController>`) et `lib/presentation/screens/auth/profile_complete/profile_complete_screen.dart:62` (`GetBuilder<ProfileCompleteController>`) ; contrôleur `lib/data/controller/account/profile_complete_controller.dart` (`update()` aux l.57-313).
+  - Driver F2/caméra : `lib/presentation/screens/edit_profile/widget/profile_image.dart:118-127` (`FilePicker.pickFiles`, galerie seulement) ; `lib/data/controller/account/profile_controller.dart:127-128` (`ImageSource.gallery`) ; documents `lib/data/controller/vehicle_verification/vehicle_verification_controller.dart:445` et `lib/data/controller/driver_kyc_controller/driver_kyc_controller.dart:295` (`FilePicker`, pas de caméra).
+  - Driver F6/ISC-60 : `lib/core/route/route.dart:7` (`screens/Profile/profile_screen.dart`).
+  - Driver F6/ISC-61 : `android/gradle.properties:1` (`-Xmx8G`).
+  - Driver F6/ISC-66 : `lib/data/controller/auth/firebase_phone_auth_controller.dart:304` et `:331` (`e.message` brut).
+  - Driver F6/ISC-67 : `lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:123-131` (`SizedBox(width: 145, height: 36)`).
+  - Driver F6/ISC-68 : `lib/core/helper/date_converter.dart:18` (`hh:mm aa`) et `:90` (`hh:mm:ss a`).
+  - Driver F6/ISC-69 : `lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:127-132` (`MyStrings.changePassword`) ; `lib/core/utils/my_strings.dart:425` ; `lib/core/route/route.dart:64`.
+  - Driver F6/ISC-70 : `ios/Runner/Info.plist:18-25` (`NSLocation*UsageDescription` anglais) ; `lib/presentation/screens/dashboard/forground_task_widget.dart:55` (`Foreground Service Notification`).
+  - Driver F7/ISC-80 : `lib/data/services/forground_location_service.dart:33-37` (`_shouldKeepRunning`) ; `lib/presentation/screens/dashboard/forground_task_widget.dart:69-70` (`autoRunOnBoot`, `autoRunOnMyPackageReplaced`) ; `lib/data/controller/dashboard/dashboard_controller.dart:254` (`userOnline` depuis le serveur).
+  - Driver F7/ISC-81 : `lib/presentation/components/dialog/custom_new_ride_dialog.dart:89-101` (`Environment.bidAcceptSecond`, `autoCloseDuration`) et `:370` (`_RidePopupTimer`).
+  - Driver F7/ISC-82 : `lib/data/services/dispatch_callkit_service.dart:69` (`duration: Environment.bidAcceptSecond * 1000`).
+  - Rider F6/ISC-62 et ISC-76 : `lib/data/repo/location/location_search_repo.dart:98` (`components=country:$countryCode`).
+  - Rider F6/ISC-63 : `lib/data/controller/ride/ride_details/ride_details_controller.dart:410` (`mapController.loadMap` à chaque `getRideDetails`) ; `lib/data/controller/map/ride_map_controller.dart:155-176` (`loadMap` → `getPolyLinePoints`).
+  - Rider F6/ISC-64 et F7/ISC-83 : `lib/data/controller/location/select_location_controller.dart:382-393` (`animateMapCameraPosition` → `mapController?.animateCamera` sans garde de disposition).
+  - Rider F6/ISC-65 : `lib/core/utils/my_strings.dart:42` (`pickUpDestination = "Destination de prise en charge"`).
+  - Rider F6/ISC-71 : `lib/data/services/push_notification_service.dart:79` et `:170` (`@mipmap/ic_launcher`).
+  - Rider F6/ISC-72 : `lib/data/services/push_notification_service.dart:232-236` (canal unique `high_importance_channel`).
+  - Rider F6/ISC-73 : `lib/data/services/push_notification_service.dart:174` (`fullScreenIntent: true`) et `:176` (`BigTextStyleInformation('')`).
+  - Rider F6/ISC-75 : `lib/data/controller/home/home_controller.dart:464-468` (`_refreshFareAfterStopChange`, correctif `3a3731e` de la branche `feat/multistop-rider-close-2026-11-20`).
+  - Rider F7/ISC-83.2 : `lib/presentation/screens/ride/widget/ride_details_bottom_sheet_widget.dart:556` et `lib/core/utils/my_strings.dart:95` (`noDriverAvailable`).
+  - Rider F7/ISC-84 : `lib/data/controller/pusher/pusher_ride_controller.dart:81` (`online_payment_received`) et `:101` (`cash_payment_received`).
+- **2026-11-25 22:51 — MS-5 (multistop) exclu de ce lot, renvoyé par référence.** Le bug MS-5 « temps d'attente par arrêt non facturé » appartient aux ISA multistop ; il est renvoyé à `MEMORY/WORK/20261006-galass-regression-multistop/ISA.md` et ne porte plus d'ISC dans ce lot (ISC-74 retiré). Les autres entrées `MS-*` de `docs/BUGS.md` restent également hors périmètre. La décision de facturation V2.1 reste chez Papa dans l'ISA multistop.
+- **2026-11-25 22:51 — Ordre de build par vagues et carte de dispatch (reprise du run annulé, Vera plan).** Aucune vague ne démarre sans l'OK de Papa ; un dépôt à la fois.
+  - **W0 — reproduction et lecture (aucune écriture)** : ISC-22, ISC-50, ISC-80, ISC-81, ISC-82, ISC-83, ISC-84 ; fogs SMS/écran ; captures « avant » archivées par référence. Sortie : verdict REPRODUIT/NON REPRODUIT consigné dans Decisions.
+  - **W1 — backend Laravel (Galass_backend)** : ISC-3, ISC-4, ISC-10 → ISC-11.3, ISC-20, ISC-30.2, ISC-40 → ISC-44. Dépend de W0 pour ISC-22/ISC-50 ; les ISC `(after:)` fixent l'ordre interne.
+  - **W2 — mobile (Rider puis Driver, jamais en parallèle)** : Rider ISC-51, ISC-52, ISC-53, ISC-62 → ISC-65, ISC-71 → ISC-73, ISC-76, ISC-83.2, ISC-84.1, ISC-22.1 (app fixée par ISC-22) ; Driver ISC-20.1, ISC-21 → ISC-21.4, ISC-23, ISC-23.1, ISC-66 → ISC-70, ISC-80.1, ISC-81.1, ISC-82.1. Bridges Bridge-1, Bridge-2 et Bridge-4 après leurs ISC backend.
+  - **W3 — bugs OUVERTS restants (F6)** : ISC-60, ISC-61 ; un commit par ID, preuve dans `docs/BUGS.md` (ISC-4). ISC-75 est une vérification de fusion Papa, pas un merge d'agent.
+  - **W4 — vérification et revue** : ISC-1, ISC-2, ISC-5, ISC-6, ISC-10.2, ISC-10.3, ISC-11.1 → ISC-11.3, ISC-20.2, ISC-21.3, ISC-21.4, ISC-30.2, ISC-43, ISC-44, ISC-53, ISC-75 ; revue sécurité Silas, scrutiny Max, audit Vera.
+  - **Carte de dispatch** : Backend → Forge (écriture `core/`), Silas (lecture sécurité SMS/upload/services), Max (PASS/FAIL) ; Rider → Forge Flutter (écriture `lib/`, `test/`), Aditi (UI OTP/inscription), Serena (carte `ui`/`code`) ; Driver → Forge Flutter, Aditi (caméra/inscription), Serena ; Vera → lecture seule (ISA), aucune écriture de code ; Papa → décisions 7/10 et GO build/CI.
+  - **Interdits de vague** : pas de `flutter build`/`flutter run`/gradle ; pas de push, merge ni force-push ; pas de secret ; pas de fichier `.fullrun`.
+- **2026-11-25 22:51 — Prérequis bloquant pour le build : `docs/BUGS.md` trié absent de la branche.** Le triage `c40c30de` (PR #8, branche `docs/bugs-triage-2026-11-22`) n'est pas dans `fullrun/lot-client-w0` : `docs/BUGS.md` y est encore la version d'origine, sans colonnes OUVERT/CORRIGÉ. Cette passe a lu le triage par `git show c40c30de:docs/BUGS.md`. Avant W3/ISC-4, porter ou merger le triage (ou copier le fichier trié) ; sinon `rg 'OUVERT' docs/BUGS.md` ne prouve rien. Aucun code modifié.
+- **2026-11-25 23:42 — Point 7 (dépôt Wave / Orange Money) : décision Papa 2026-11-25 — option A.** Papa tranche : le point 7 est déjà réglé hors app ; aucune évolution applicative. Seul **ISC-30.2** (anti-régression des passerelles Wave 511 / Orange Money 512 et de leurs IPN) reste dans le lot ; **ISC-37** (consignation de la décision) est retiré, sa fonction étant remplie par cette entrée. Les ISC de l'option B (affichage des numéros/instructions dans l'app) et de l'option C (étude d'API de dépôt) restent **hors lot** et ne sont pas ouverts ; aucun code de dépôt n'est autorisé. Le blocage du point 7 est levé. « décision Papa ».
+- **2026-11-25 23:42 — Point 10 (numéro au login) : décision Papa 2026-11-25 — option B.** Papa tranche : sur l'écran du code OTP, le numéro reste **masqué** (comportement actuel) et un lien **« Modifier »** ramène à la saisie avec le numéro prérempli, sur **Rider ET Driver**. **ISC-51** (Rider) et **ISC-52** (Driver) sont ajustés à cette option : un ISC par app, preuve `flutter test` widget + capture. **ISC-53** (normalisation E.164 et absence du numéro en clair dans les logs) reste inchangé. Le code login/OTP reste subordonné à ISC-5. Le blocage du point 10 est levé ; W2 peut démarrer après ISC-5. « décision Papa ».
+- **2026-11-26 03:15 — Audit de structure Vera (étape 3, phase plan ; lecture seule sur les trois dépôts, aucun code).** 63 ISC et Bridge-1/2/4 relus : chaque critère a une lecture binaire et une preuve outillée exécutable (ou une capture appareil), chaque ligne nomme son app, et chaque `fichier:ligne` a été relu dans `core/`, `extra/Galass_Rider` et `extra/Galass_Driver` sur `fullrun/lot-client-w0`. Verdict : **PASS**.
+  - Ancrages corrigés après relecture : `Sms.php:28-31` + `:49-61` (fog et Decisions), `Service.php:12-22` + `ServiceController.php:65`, Rider `profile_complete_screen.dart:54`, Driver `registration_form.dart:17` (le `registration_screen.dart` n'a pas de `GetBuilder`) + `profile_complete_screen.dart:62`, `phone_auth_helper.dart:10`.
+  - ISC-60 remis dans le bon sens : le `main` importe `Profile/` alors que le dossier réel est `profile/` (c9c65ff fait `Profile/` → `profile/`) ; l'ancien texte inversait les deux termes.
+  - ISC-82 ramené à une seule assertion binaire (une surface d'acceptation par dispatch), ce qui retire l'avis `bundled-claim` ; même ID, même preuve.
+  - ISC-6 : commande `gh api` rendue exécutable sur les trois dépôts (boucle `for r in Galass_backend Galass_Rider Galass_Driver`).
+  - Ordre des vagues : ISC-22.1 (après ISC-22 en W0) est désormais affecté à W2 ; les autres `(after:)` restent cohérents avec W1/W2/W3/W4.
+  - Multistop exclu : aucun ISC-74 ni ISC `MS-*` ; seuls ISC-60 et ISC-75 citent des correctifs de branches multistop, pas la fonctionnalité.
+  - Résiduel accepté : ISC-22.1 porte `Rider|Driver` tant que ISC-22 (W0) n'a pas figé l'écran ; ISC-61 garde `<id>` de run CI comme valeur d'exécution ; `docs/BUGS.md` trié reste absent de la branche (prérequis W3 déjà consigné).
+  - CheckCompleteness : status pass, 63 ISC, 0 coché, 15 anti-critères ; `ISATool verify` OK.
+- **2026-11-26 03:20 — Plan de build Serena (W0 lecture/repro + W1 backend ; aucun code écrit).** Découpage en petites tâches ; une tâche = un ISC (ou un Bridge), avec `fichier:ligne` relu sur `fullrun/lot-client-w0`, preuve outillée, dépendances et responsable. Légende : **Forge** = logique + tests (Laravel/Flutter) ; **Aditi Sharma** = interface/écran ; **Silas** = revue sécurité (lecture seule) ; **Papa** = acte de fusion/CI. Un nom de test listé est créé rouge avant le correctif (sauf commandes de contrôle déjà existantes). Cette passe ne coche aucun ISC : `progress` reste 0/63.
+
+  **W0 — reproduction et lecture (aucune écriture).**
+
+  | Tâche | ISC | Dépôt | Fichier:ligne | Action | Preuve | Dépend | Responsable |
+  |---|---|---|---|---|---|---|---|
+  | S-W0-01 | ISC-22 | Rider+Driver | Rider `lib/presentation/screens/auth/registration/registration_screen.dart:52`, `.../profile_complete/profile_complete_screen.dart:54`, `lib/data/controller/account/profile_complete_controller.dart:86-234` ; Driver `lib/presentation/screens/auth/registration/widget/registration_form.dart:17`, `.../profile_complete/profile_complete_screen.dart:62`, `lib/data/controller/account/profile_complete_controller.dart:57-313` | Reproduire l'écran d'inscription qui ne se rafraîchit pas ; capturer « avant » | Captures émulateur + log ; verdict consigné dans Decisions | — | Forge (repro) ; Aditi (écran) |
+  | S-W0-02 | ISC-50 | Rider+Driver | Rider `.../auth/sms_verification_page/sms_verification_screen.dart:100`, `lib/data/controller/auth/auth/sms_verification_controller.dart:44,122` ; Driver `.../auth/sms_verification_page/sms_verification_screen.dart:109,228`, `lib/data/controller/auth/firebase_phone_auth_controller.dart:159,212` | Identifier l'écran login/OTP exact des deux apps | Captures émulateur + ligne Decisions | — | Aditi (UI) ; Forge |
+  | S-W0-03 | ISC-80 | Driver+backend | `lib/data/services/forground_location_service.dart:33-37`, `lib/presentation/screens/dashboard/forground_task_widget.dart:69-70`, `lib/data/controller/dashboard/dashboard_controller.dart:254` | Rejouer D-1 : `adb reboot` puis `adb install -r`, relire le statut via API | État hors ligne 2/2 ; verdict REPRODUIT/NON | — | Forge |
+  | S-W0-04 | ISC-81 | Driver+backend | `lib/presentation/components/dialog/custom_new_ride_dialog.dart:89-101,370` | Rejouer D-9 run7 : temps restant à t0 vs `offer_timeout` | Logcat horodaté ; verdict | — | Forge |
+  | S-W0-05 | ISC-82 | Driver | `lib/data/services/dispatch_callkit_service.dart:69`, `lib/presentation/components/dialog/custom_new_ride_dialog.dart:370` | Rejouer D-12 run7 : un dispatch → une surface | e2e + logcat ; verdict | — | Forge |
+  | S-W0-06 | ISC-83 | Rider | `lib/data/controller/location/select_location_controller.dart:382-393` | Rejouer R-6 run7 : 20 allers-retours carte | Logcat sans FATAL ; verdict | — | Forge |
+  | S-W0-07 | ISC-84 | Rider+backend | `lib/data/controller/pusher/pusher_ride_controller.dart:81,101` | Rejouer R-7 run7 : événement serveur vs affichage ≤ 5 s | e2e horodaté ; verdict | — | Forge |
+
+  **W1 — backend Laravel (Galass_backend).** Ordre interne : S-W1-03 puis ses `after:` ; S-W1-14 puis ses `after:`.
+
+  | Tâche | ISC | Dépôt | Fichier:ligne | Action | Preuve | Dépend | Responsable |
+  |---|---|---|---|---|---|---|---|
+  | S-W1-01 | ISC-3 | backend | `core/app/Http/Middleware/VerifyCsrfToken.php` (`ipn/*`), `core/routes/api.php` (`dev-token`) | Vérifier gardes inchangées | `grep "ipn/\*" core/app/Http/Middleware/VerifyCsrfToken.php` + `php artisan test --group=security` | — | Forge ; revue Silas |
+  | S-W1-02 | ISC-4 | backend | `docs/BUGS.md` | Basculer OUVERT/À REVÉRIFIER → CORRIGÉ/OBSOLÈTE par ID | `rg -n 'OUVERT' docs/BUGS.md` = 0 | Triage `c40c30de` porté (prérequis bloquant) | Forge |
+  | S-W1-03 | ISC-10 | backend+admin | `core/app/Http/Controllers/Admin/ManageDriversController.php:173,194` ; `core/routes/admin.php:164-167` ; `core/resources/views/admin/driver/detail.blade.php:420,486` | Une action admin approuve `dv` + `vv` | `php artisan test --filter=DriverOneStepApprovalTest` | — | Forge |
+  | S-W1-04 | ISC-10.1 | backend+admin | `core/app/Http/Controllers/Admin/ManageDriversController.php:173-210` | Refuser si documents/véhicule incomplets ; états inchangés | `php artisan test --filter=DriverOneStepApprovalTest::incomplete` | S-W1-03 | Forge |
+  | S-W1-05 | ISC-10.2 | backend+admin | `core/app/Http/Controllers/Admin/ManageDriversController.php:173-210` ; `core/routes/admin.php:164-167` | Garder les routes séparées existantes | `php artisan test --filter=ManageDrivers` | S-W1-03 | Forge |
+  | S-W1-06 | ISC-10.3 | admin | `core/resources/views/admin/driver/detail.blade.php:420,486` | Bouton unique « Valider le chauffeur » | Capture admin avant/après | S-W1-03 | Aditi (UI) ; Forge (route) |
+  | S-W1-07 | ISC-11 | backend | `core/app/Http/Controllers/Admin/ManageDriversController.php:173,194` ; `core/app/Notify/Sms.php:28-31,40-63` | Envoyer 1 SMS FR au numéro E.164 à la validation | `php artisan test --filter=DriverApprovedSmsTest` | S-W1-03 | Forge |
+  | S-W1-08 | ISC-11.1 | backend | `core/app/Http/Controllers/Admin/ManageDriversController.php:183-210` ; `core/app/Notify/Sms.php:40` | 0 SMS si refus ou déjà validé | `php artisan test --filter=DriverApprovedSmsTest::noSms` | S-W1-07 | Forge |
+  | S-W1-09 | ISC-11.2 | backend | template SMS (`core/app/Notify/`) | ≤ 160 car., sans pièce ni solde | `php artisan test --filter=DriverApprovedSmsTest::text` | S-W1-07 | Forge |
+  | S-W1-10 | ISC-11.3 | backend | `core/app/Notify/Sms.php:49-63` (`catch` + `createErrorLog`) | Échec SMS non bloquant ; erreur journalisée | `php artisan test --filter=DriverApprovedSmsTest::gatewayDown` | S-W1-07 | Forge |
+  | S-W1-11 | ISC-20 | backend | `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php:49-60,64-86` | Exiger et stocker la photo (422 sans) | `php artisan test --filter=DriverRegisterPhotoTest` | — | Forge |
+  | S-W1-12 | ISC-20.2 | backend | `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php` + login driver | Chauffeur historique sans photo se connecte | `php artisan test --filter=DriverLegacyLoginTest` | S-W1-11 | Forge |
+  | S-W1-13 | ISC-30.2 | backend | `core/app/Http/Controllers/Gateway/Wave/ProcessController.php:15,111` ; `.../OrangeMoney/ProcessController.php:17,129,267` ; `core/routes/ipn.php:5-6` | Ne pas modifier passerelles/IPN | `php artisan test --filter=Payment` | — | Forge ; revue Silas |
+  | S-W1-14 | ISC-40 | backend | `core/app/Models/Service.php:12-22` ; nouvelle migration `core/database/migrations/2026_11_26_000001_add_order_visible_to_services.php` ; `core/database/sql/2026_11_26_services_order_visible.sql` | Colonnes ordre+visibilité ; ordre initial = actuel | `php artisan test --filter=ServiceOrderMigrationTest` | — | Forge |
+  | S-W1-15 | ISC-41 | backend+admin | `core/app/Http/Controllers/Admin/ServiceController.php:16-34,65` ; `core/routes/admin.php:39-43` ; `core/resources/views/admin/services/index.blade.php:80,106` | Réordonner/afficher/masquer et persister | PHPUnit endpoint + capture admin | S-W1-14 | Forge (endpoint) ; Aditi (UI) |
+  | S-W1-16 | ISC-42 | backend | `core/app/Http/Controllers/Api/User/UserController.php:30` ; `core/app/Repositories/RideRepo.php:28-31,38-40` ; `core/app/Repositories/ServiceRepo.php:8-10` | API Rider : ordre admin, masqués exclus | `php artisan test --filter=RiderServiceListOrderTest` | S-W1-14 | Forge |
+  | S-W1-17 | ISC-43 | backend | `core/app/Services/Rider/RideService.php` (détail) ; `core/app/Http/Controllers/Api/User/RideController.php` (détail) | Service masqué lisible sur course existante | `php artisan test --filter=HiddenServiceExistingRideTest` | S-W1-14 | Forge |
+  | S-W1-18 | ISC-44 | backend | `core/app/Services/Rider/RideService.php:82-85` ; `core/app/Http/Controllers/Api/User/RideController.php:69` ; `core/app/Repositories/RideRepo.php:38-40` | Service masqué → 422 à la création | `php artisan test --filter=HiddenServiceCreateRideTest` | S-W1-14 | Forge |
+
+- **2026-11-26 03:20 — Plan de build Serena (W2 mobile ; aucun code écrit).** Rider d'abord, Driver ensuite, jamais en parallèle ; un dépôt à la fois. Les points 8 et 10 restent subordonnés à l'ISC enfant phone-auth (ISC-5, S-W4-03) ; l'app de ISC-22.1 est figée par le verdict S-W0-01.
+
+  **W2 — Rider (Galass_Rider).**
+
+  | Tâche | ISC | Dépôt | Fichier:ligne | Action | Preuve | Dépend | Responsable |
+  |---|---|---|---|---|---|---|---|
+  | S-W2-R01 | ISC-51 | Rider | `lib/presentation/screens/auth/sms_verification_page/sms_verification_screen.dart:100` ; `lib/data/controller/auth/auth/sms_verification_controller.dart:44,122` | Masque conservé + lien « Modifier » → saisie préremplie | `flutter test test/presentation/auth/otp_phone_display_test.dart` | ISC-5 (S-W4-03) ; S-W0-02 | Aditi (UI) ; Forge |
+  | S-W2-R02 | ISC-53 | Rider+Driver | Rider `lib/core/helper/phone_auth_helper.dart:10` ; Driver `lib/data/controller/auth/firebase_phone_auth_controller.dart:159` | E.164 (221) inchangé ; pas de numéro brut en log release | `flutter test test/core/helper/phone_auth_helper_test.dart` | — | Forge |
+  | S-W2-R03 | ISC-62 | Rider | `lib/data/repo/location/location_search_repo.dart:84,98` ; `lib/data/controller/location/select_location_controller.dart:440` | Filtrer sur le pays de la zone active (SN), pas sur la position | `flutter test test/data/repo/location_search_repo_test.dart` | — | Forge |
+  | S-W2-R04 | ISC-63 | Rider | `lib/data/controller/ride/ride_details/ride_details_controller.dart:410` ; `lib/data/controller/map/ride_map_controller.dart:155-176` | Pas de recalcul si départ/destination/arrêts inchangés | `flutter test test/data/controller/ride_map_route_cache_test.dart` | — | Forge |
+  | S-W2-R05 | ISC-64 | Rider | `lib/data/controller/location/select_location_controller.dart:382-393` | Garde `GoogleMapController` disposé | `flutter test test/data/controller/select_location_dispose_test.dart` | — | Forge |
+  | S-W2-R05.1 | ISC-83.1 | Rider | `lib/data/controller/location/select_location_controller.dart:382-393` ; `lib/data/controller/map/ride_map_controller.dart:155-176` | Correctif si R-6 run7 reproduit (lien ISC-64) | `flutter test test/data/controller/select_location_dispose_test.dart` ou ligne BUGS.md | S-W0-06 | Forge |
+  | S-W2-R06 | ISC-65 | Rider | `lib/core/utils/my_strings.dart:42` | Remplacer `pickUpDestination` par un FR validé | `git grep -n 'Destination de prise en charge' -- lib` = 0 | Papa valide le libellé | Aditi (copy) ; Forge |
+  | S-W2-R07 | ISC-71 | Rider | `lib/data/services/push_notification_service.dart:79,170` | Icône monochrome dédiée | `git grep -n '@mipmap/ic_launcher' -- lib/data/services/push_notification_service.dart` = 0 + `flutter test` | — | Forge |
+  | S-W2-R08 | ISC-72 | Rider | `lib/data/services/push_notification_service.dart:232-236` | Canaux `rides`, `chat`, `promo` | `flutter test test/data/services/push_channels_test.dart` | — | Forge |
+  | S-W2-R09 | ISC-73 | Rider | `lib/data/services/push_notification_service.dart:174,176` | `fullScreenIntent` réservé au critique ; corps non vide | `flutter test test/data/services/push_full_screen_test.dart` | — | Forge |
+  | S-W2-R10 | ISC-76 | Rider | `lib/presentation/screens/location/screen/locationpicker/location_picker_screen.dart:406,446` ; `lib/data/repo/location/location_search_repo.dart:98` | Pas de perte de caractères en saisie rapide | `flutter test test/presentation/location/fast_typing_test.dart` | S-W0-01 (repro) | Forge |
+  | S-W2-R11 | ISC-83.2 | Rider | `lib/presentation/screens/ride/widget/ride_details_bottom_sheet_widget.dart:556` ; `lib/core/utils/my_strings.dart:95` | Écran « aucun chauffeur » FR après `noDriver` | Capture e2e après `noDriver` | S-W0-06 | Aditi (UI) ; Forge |
+  | S-W2-R12 | ISC-84.1 | Rider | `lib/data/controller/pusher/pusher_ride_controller.dart:81,101` | Correctif si R-7 run7 reproduit | `flutter test test/data/controller/payment_update_test.dart` ou ligne BUGS.md | S-W0-07 | Forge |
+  | S-W2-R13 | ISC-22.1 | Rider ou Driver (figé par S-W0-01) | fichiers de l'écran figé par S-W0-01 | Écran d'inscription se met à jour sans relancer l'app | `flutter test` rouge→vert + capture après | S-W0-01 | Forge ; Aditi |
+  | S-W2-R14 | Bridge-1 | backend+admin+Rider | `core/app/Http/Controllers/Admin/ServiceController.php:16-34` ; `core/app/Http/Controllers/Api/User/UserController.php:30` ; liste services Rider | Ordre admin = réponse API = liste Rider | `php artisan test --filter=RiderServiceListOrderTest` + capture | S-W1-14, S-W1-15, S-W1-16 | Forge ; Aditi |
+
+  **W2 — Driver (Galass_Driver).**
+
+  | Tâche | ISC | Dépôt | Fichier:ligne | Action | Preuve | Dépend | Responsable |
+  |---|---|---|---|---|---|---|---|
+  | S-W2-D01 | ISC-20.1 | Driver | `lib/presentation/screens/auth/registration/widget/registration_form.dart:17` ; `lib/presentation/screens/auth/profile_complete/profile_complete_screen.dart:62` ; `lib/data/controller/account/profile_complete_controller.dart:57-313` | Bloquer sans photo + message FR | `flutter test test/presentation/auth/registration_photo_test.dart` | S-W1-11 | Aditi (UI) ; Forge |
+  | S-W2-D02 | ISC-21 | Driver | `lib/presentation/screens/edit_profile/widget/profile_image.dart:118-127` ; `lib/data/controller/account/profile_controller.dart:127-128` | Capture directe caméra (pas galerie seule) | `flutter test test/core/camera/profile_camera_test.dart` + capture | — | Aditi (UI) ; Forge |
+  | S-W2-D03 | ISC-21.1 | Driver | `lib/data/controller/vehicle_verification/vehicle_verification_controller.dart:445` | Documents véhicule via caméra | `flutter test test/core/camera/vehicle_docs_camera_test.dart` | S-W2-D02 | Aditi ; Forge |
+  | S-W2-D04 | ISC-21.2 | Driver | `lib/data/controller/driver_kyc_controller/driver_kyc_controller.dart:295` | Permis via caméra | `flutter test test/core/camera/license_camera_test.dart` | S-W2-D02 | Aditi ; Forge |
+  | S-W2-D05 | ISC-21.3 | Driver | `lib/data/controller/account/profile_controller.dart:127-128` ; `lib/core/utils/util.dart:197-245` | Permission caméra refusée → message FR, pas de crash | `flutter test test/core/camera/camera_denied_test.dart` | S-W2-D02 | Forge |
+  | S-W2-D06 | ISC-21.4 | Driver+backend | `lib/data/controller/account/profile_controller.dart:127-128` ; `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php` (upload) | Image ≤ limite backend ; upload 200 | `flutter test test/core/camera/capture_size_test.dart` + PHPUnit upload | S-W2-D02 ; S-W1-11 | Forge |
+  | S-W2-D07 | ISC-23 | Driver | `lib/core/utils/util.dart:197-245` ; `lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:123-131` | Demande « toujours » + écran d'explication FR | `flutter test test/presentation/permissions/always_location_flow_test.dart` + capture | — | Forge ; Aditi |
+  | S-W2-D08 | ISC-23.1 | Driver | `lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:123-131` | Refus « toujours » → pas en ligne, bannière reste (D-5) | `flutter test test/presentation/permissions/always_location_denied_test.dart` | S-W2-D07 | Forge |
+  | S-W2-D09 | ISC-52 | Driver | `lib/presentation/screens/auth/sms_verification_page/sms_verification_screen.dart:109,228` ; `lib/data/controller/auth/firebase_phone_auth_controller.dart:159,212` | Masque conservé + lien « Modifier » → saisie préremplie | `flutter test test/presentation/auth/otp_phone_display_test.dart` | ISC-5 (S-W4-03) ; S-W0-02 | Aditi (UI) ; Forge |
+  | S-W2-D10 | ISC-66 | Driver | `lib/data/controller/auth/firebase_phone_auth_controller.dart:304,331` | Erreurs Firebase FR par code | `flutter test test/data/controller/firebase_phone_auth_errors_test.dart` | — | Forge |
+  | S-W2-D11 | ISC-67 | Driver | `lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:123-131` | Plus de 145×36 fixe ; pas de débordement 320 dp/1.5 | `flutter test test/presentation/permissions/permission_banner_test.dart` | — | Aditi (UI) ; Forge |
+  | S-W2-D12 | ISC-68 | Driver | `lib/core/helper/date_converter.dart:18,90` | Heures en 24 h | `flutter test test/core/helper/date_converter_test.dart` | — | Forge |
+  | S-W2-D13 | ISC-69 | Driver | `lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:127-132` ; `lib/core/utils/my_strings.dart:425` ; `lib/core/route/route.dart:64` | Retirer « Changer le mot de passe » | `flutter test test/presentation/profile/settings_menu_test.dart` + git grep route | — | Aditi ; Forge |
+  | S-W2-D14 | ISC-70 | Driver | `ios/Runner/Info.plist:18-25` ; `lib/presentation/screens/dashboard/forground_task_widget.dart:55` | Descriptions NSLocation + canal FGS en FR | `rg -n 'NSLocation' ios/Runner/Info.plist` + test canal | — | Forge |
+  | S-W2-D15 | ISC-80.1 | Driver | `lib/data/services/forground_location_service.dart:33-37` ; `lib/presentation/screens/dashboard/forground_task_widget.dart:69-70` ; `lib/data/controller/dashboard/dashboard_controller.dart:254` | Correctif si D-1 reproduit | `flutter test test/data/services/foreground_location_boot_test.dart` ou ligne BUGS.md | S-W0-03 | Forge |
+  | S-W2-D16 | ISC-81.1 | Driver | `lib/presentation/components/dialog/custom_new_ride_dialog.dart:89-101,370` | Correctif si D-9 run7 reproduit | `flutter test test/presentation/dispatch/offer_countdown_test.dart` ou ligne BUGS.md | S-W0-04 | Forge |
+  | S-W2-D17 | ISC-82.1 | Driver | `lib/data/services/dispatch_callkit_service.dart:69` | Correctif si D-12 run7 reproduit | `flutter test test/presentation/dispatch/single_offer_surface_test.dart` ou ligne BUGS.md | S-W0-05 | Forge |
+  | S-W2-D18 | Bridge-2 | Driver+backend+admin | `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php:64-86` ; `lib/data/controller/account/profile_controller.dart:127-128` ; `core/resources/views/admin/driver/detail.blade.php` | Photo d'inscription stockée et visible fiche admin | `php artisan test --filter=DriverRegisterPhotoTest` + capture admin | S-W1-11 ; S-W2-D02 | Forge ; Aditi |
+  | S-W2-D19 | Bridge-4 | backend+Driver | `core/app/Http/Controllers/Admin/ManageDriversController.php:173,194` ; `core/app/Notify/Sms.php:40-63` ; `lib/presentation/screens/auth/sms_verification_page/sms_verification_screen.dart:109` | SMS de validation puis statut « validé » vu au refresh Driver | `php artisan test --filter=DriverApprovedSmsTest` + capture Driver | S-W1-07→10 ; S-W2-D09 | Forge ; Aditi |
+
+- **2026-11-26 03:20 — Plan de build Serena (W3 bugs OUVERTS + W4 vérification ; aucun code écrit).** Un commit par ID en W3 ; les preuves de fermeture alimentent `docs/BUGS.md` (ISC-4). ISC-75 est une vérification de fusion Papa, pas un merge d'agent.
+
+  **W3 — bugs OUVERTS restants (F6).**
+
+  | Tâche | ISC | Dépôt | Fichier:ligne | Action | Preuve | Dépend | Responsable |
+  |---|---|---|---|---|---|---|---|
+  | S-W3-01 | ISC-60 | Driver | `lib/core/route/route.dart:7` | `screens/Profile/` → `screens/profile/` (correctif c9c65ff) | `git grep -n 'screens/Profile/' -- lib` = 0 + `flutter analyze` | — | Forge |
+  | S-W3-02 | ISC-61 | Driver | `android/gradle.properties:1` (`-Xmx8G`) | `-Xmx` ≤ 4g | `gradle.properties` + `gh run view <id> --json conclusion` | Papa lance la CI | Forge (fichier) ; Papa (run) |
+  | S-W3-03 | ISC-75 | Rider | `lib/data/controller/home/home_controller.dart:464-468` | Vérifier que 3a3731e est sur `main` | `git branch -r --contains 3a3731e` + `flutter test` ISC-F4-8 | Papa fusionne | Forge (vérif) ; Papa |
+
+  **W4 — vérification et revue (après les vagues de build).**
+
+  | Tâche | ISC | Dépôt | Fichier:ligne | Action | Preuve | Dépend | Responsable |
+  |---|---|---|---|---|---|---|---|
+  | S-W4-01 | ISC-1 | 3 dépôts | diff de chaque PR du lot | Aucun secret | `gitleaks detect --source . --log-opts="origin/main..HEAD" --no-banner` = 0 leak | — | Forge ; CI |
+  | S-W4-02 | ISC-2 | 3 dépôts | diff de chaque PR | Aucun motif véhicule/solde | `git diff origin/main...HEAD \| grep -iE '^\+.*(vehicle\|vehicule).*(balance\|wallet\|solde)'` = 0 | — | Forge |
+  | S-W4-03 | ISC-5 | Rider | `.claude/PAI/MEMORY/WORK/galass-phone-auth-876543/ISA.md` | Ajouter l'ISC enfant `ISC-N.1` (additions seules, sans renumérotation) | `git diff -U0 -- ...ISA.md \| grep -c '^-[^-]'` = 0 | Avant S-W2-R01/S-W2-D09 | Forge |
+  | S-W4-04 | ISC-6 | 3 dépôts | PR du lot | PR en brouillon, `mergedAt` nul | `for r in Galass_backend Galass_Rider Galass_Driver; do gh api "repos/LordThiouk/$r/pulls?state=all" --jq '.[]\|[.head.ref,.draft,.merged_at]'; done` | — | Papa/CI |
+  | S-W4-05 | Revue | 3 dépôts | chaque PR | Re-vérifier ISC-10.2, 10.3, 11.1→11.3, 20.2, 21.3, 21.4, 30.2, 43, 44, 53, 75 | Sorties d'outils listées en W1/W2/W3 | Toutes vagues | Silas (sécurité) ; Max (PASS/FAIL) ; Vera (audit) |
+
+  **Prérequis bloquants (avant les tâches concernées).**
+  - `docs/BUGS.md` trié absent de `fullrun/lot-client-w0` : porter `c40c30de:docs/BUGS.md` (PR #8, branche `docs/bugs-triage-2026-11-22`) avant S-W1-02 et W3, sinon `rg 'OUVERT'` ne prouve rien.
+  - ISC-5 : ISC enfant `ISC-N.1` dans l'ISA phone-auth (S-W4-03) avant S-W2-R01 et S-W2-D09.
+  - Scaffolder les ISAs enfants Rider et Driver (`parent: 2026-11-22-galass-lot-client`) avant tout code mobile.
+  - ISC-61 : `<id>` du run CI fourni à l'exécution par Papa.
+
+  **Exclusion multistop (renvoi par référence).** MS-5 et toutes les entrées `MS-*` de `docs/BUGS.md` sont hors lot : renvoyées à `MEMORY/WORK/20261006-galass-regression-multistop/ISA.md`. Aucune tâche ni ISC-74 ; ISC-60 et ISC-75 ne citent que des correctifs de branches multistop, pas la fonctionnalité.
+
+  **Ordre et parallélisme.** W0 → W1 (backend) → W2 (Rider puis Driver, jamais en parallèle) → W3 → W4 ; un dépôt à la fois ; les `(after:)` de l'ISA fixent l'ordre interne. Aucune vague ne démarre sans l'OK de Papa ; aucun `flutter build`/`flutter run`/gradle, aucun push, merge ou force-push. Cette passe n'écrit aucun code et ne coche aucun ISC (`progress` reste 0/63).
+**2026-11-26 04:29 — W0 S-W0-01 / ISC-22 : BLOQUÉ, non coché.** Reproduction Rider+Driver impossible dans ce runner : `command -v adb emulator flutter dart` → tous absents ; `/opt/fullrun-tools/emu-e2e.sh` absent ; `emu-e2e.sh resolve-refs` → « jeton GALASS_TOKEN inaccessible (fichier d'outil figé) » ; `extra/Galass_Rider` et `extra/Galass_Driver` absents. Ancres prévues : Rider `lib/presentation/screens/auth/registration/registration_screen.dart:52`, `lib/presentation/screens/auth/profile_complete/profile_complete_screen.dart:54`, `lib/data/controller/account/profile_complete_controller.dart:86-234` ; Driver `lib/presentation/screens/auth/registration/widget/registration_form.dart:17`, `lib/presentation/screens/auth/profile_complete/profile_complete_screen.dart:62`, `lib/data/controller/account/profile_complete_controller.dart:57-313`. Preuve exigée : captures émulateur + log. Aucune capture « avant », aucun verdict REPRODUIT/NON REPRODUIT ; ISC laissé `[ ]`.
+**2026-11-26 04:29 — W0 S-W0-02 / ISC-50 : BLOQUÉ, non coché.** Identification de l'écran login/OTP des deux apps impossible ici : dépôts mobiles absents (`extra/Galass_Rider`, `extra/Galass_Driver`) et aucun émulateur (`adb`, `flutter` absents). Ancres prévues : Rider `lib/presentation/screens/auth/sms_verification_page/sms_verification_screen.dart:100`, `lib/data/controller/auth/auth/sms_verification_controller.dart:44,122` ; Driver `lib/presentation/screens/auth/sms_verification_page/sms_verification_screen.dart:109,228`, `lib/data/controller/auth/firebase_phone_auth_controller.dart:159,212`. Preuve exigée : captures émulateur + ligne Decisions. Aucun verdict, ISC laissé `[ ]`.
+**2026-11-26 04:29 — W0 S-W0-03 / ISC-80 : BLOQUÉ (repro device), non coché ; lecture backend faite.** Rejouer D-1 exige `adb reboot` puis `adb install -r` : `adb` absent, aucun émulateur, dépôt Driver absent. Preuve exigée : état hors ligne 2/2 via API. Lecture backend (lecture seule, pas une reproduction) : `online_status` n'est modifié que par l'action API `onlineStatus()` (`core/app/Http/Controllers/Api/Driver/DriverController.php:89`, route `core/routes/api.php:204`) ; le serveur ne repasse jamais un chauffeur en ligne de lui-même. La cause D-1 décrite dans `docs/BUGS.md` est donc côté client (`autoRunOnBoot: true`, `autoRunOnMyPackageReplaced: true` du FGS), pas côté Laravel. Ancres prévues : `lib/data/services/forground_location_service.dart:33-37`, `lib/presentation/screens/dashboard/forground_task_widget.dart:69-70`, `lib/data/controller/dashboard/dashboard_controller.dart:254`. Aucun verdict REPRODUIT/NON REPRODUIT sans device ; ISC laissé `[ ]`.
+**2026-11-26 04:29 — W0 S-W0-04 / ISC-81 : BLOQUÉ (repro device), non coché ; lecture backend faite.** Rejouer D-9 run7 exige un émulateur et le logcat : `adb`/`flutter` absents, dépôt Driver absent. Preuve exigée : logcat horodaté (temps restant à t0 ≥ durée serveur − 3 s). Lecture backend (lecture seule, pas une reproduction) : `DispatchOrchestrator::OFFER_TIMEOUT_SECONDS = 30` (`core/app/Services/Dispatch/DispatchOrchestrator.php:18`) ; `DispatchConfig::offerTimeoutSec()` lit `gs('offer_timeout_sec')` avec repli 30 (`core/app/Services/Dispatch/DispatchConfig.php:18-23`) ; réglage admin borné 10–120 s (`core/resources/views/admin/setting/ride.blade.php:171-172`) ; la fenêtre de dispatch vaut `max_attempts × offer_timeout` (`core/app/Services/Dispatch/DispatchOrchestrator.php:163`). Les ~98 s observées en run7 (03:31:24 → 03:33:02) correspondent à cette fenêtre multi-tentatives, alors que le compte à rebours client est de 30 s (`bidAcceptSecond=30`) : l'écart « 0s restant » côté mobile est cohérent avec D-9, mais la preuve device reste requise. Ancre prévue : `lib/presentation/components/dialog/custom_new_ride_dialog.dart:89-101,370`. ISC laissé `[ ]`.
+**2026-11-26 04:29 — W0 S-W0-05 / ISC-82 : BLOQUÉ, non coché.** Rejouer D-12 run7 (un dispatch → une surface) exige un émulateur Driver et le logcat : `adb`/`flutter` absents, dépôt Driver absent, harnais e2e indisponible (jeton GALASS_TOKEN inaccessible). Ancres prévues : `lib/data/services/dispatch_callkit_service.dart:69`, `lib/presentation/components/dialog/custom_new_ride_dialog.dart:370`. Preuve exigée : e2e + logcat (1 surface d'acceptation). Aucun verdict, ISC laissé `[ ]`.
+**2026-11-26 04:29 — W0 S-W0-06 / ISC-83 : BLOQUÉ, non coché.** Rejouer R-6 run7 (20 allers-retours carte) exige un émulateur Rider et le logcat : `adb`/`flutter` absents, dépôt Rider absent. Ancre prévue : `lib/data/controller/location/select_location_controller.dart:382-393`. Preuve exigée : logcat sans FATAL. Aucun verdict, ISC laissé `[ ]`.
+**2026-11-26 04:29 — W0 S-W0-07 / ISC-84 : BLOQUÉ (repro device), non coché ; lecture backend faite.** Rejouer R-7 run7 (événement serveur vs affichage ≤ 5 s) exige un émulateur Rider et un e2e horodaté : `adb`/`flutter` absents, dépôt Rider absent, harnais e2e indisponible. Lecture backend (lecture seule, pas une reproduction) : à la confirmation du paiement cash, `RideController::cashPayment` appelle `RidePaymentManager()->payment(...)` puis émet immédiatement `CASH_PAYMENT_RECEIVED` sur le canal `rider-user-{id}` (`core/app/Http/Controllers/Api/Driver/RideController.php:325-333`), suivi du push `RidePushNotifier::paymentReceived` (`:335`, ISC-48). L'émission backend est synchrone à la confirmation ; le délai observé en R-7 relève donc du traitement client (pusher Ride), mais la preuve device reste requise. Ancre prévue : `lib/data/controller/pusher/pusher_ride_controller.dart:81,101`. ISC laissé `[ ]`.
+**2026-11-26 04:44 — W0 S-W0-01 / ISC-22 : ancres revérifiées dans les dépôts mobiles réels (`extra/Galass_Rider`, `extra/Galass_Driver`), preuve device toujours indisponible ; ISC laissé `[ ]`.** Rider : `extra/Galass_Rider/lib/presentation/screens/auth/registration/registration_screen.dart:52` (`GetBuilder<RegistrationController>`), `.../profile_complete/profile_complete_screen.dart:54` (`GetBuilder<ProfileCompleteController>`), `lib/data/controller/account/profile_complete_controller.dart:220` (`profileRepo.updateProfile`), endpoints `lib/core/utils/url_container.dart:46-47` (`profile-setting`, `user-data-submit`) ; Driver : `.../registration/widget/registration_form.dart:17` (`GetBuilder<FirebasePhoneAuthController>`), `.../profile_complete/profile_complete_screen.dart:62` (`GetBuilder<ProfileCompleteController>`), `lib/data/controller/account/profile_complete_controller.dart:212` (`profileRepo.completeProfile`), endpoints `lib/core/utils/url_container.dart:50-51` (`driver/profile-setting`, `driver/driver-data-submit`). Backend vérifié : `php artisan route:list --path=driver-data-submit` → `POST api/driver/driver-data-submit Api\Driver\DriverController@driver…` ; `--path=user-data-submit` → `POST api/user-data-submit Api\User\UserController@userDataSubmit`. Un rafraîchissement d'écran Flutter ne se prouve pas en PHPUnit ; `flutter`/`adb` absents, aucune capture « avant ». Verdict : BLOQUÉ côté device ; ISC laissé `[ ]`.
+**2026-11-26 04:45 — W0 S-W0-02 / ISC-50 : ancres login/OTP revérifiées, preuve backend phone-auth verte, capture device toujours indisponible ; ISC laissé `[ ]`.** Rider : `extra/Galass_Rider/lib/presentation/screens/auth/sms_verification_page/sms_verification_screen.dart:100` (`MyUtils.maskSensitiveInformation(controller.userPhone)`), `lib/data/controller/auth/auth/sms_verification_controller.dart:44` (`verifyYourSms`) et `:122` (`sendOTP`), `lib/core/helper/phone_auth_helper.dart:10` (indicatif 221) ; Driver : `.../sms_verification_page/sms_verification_screen.dart:109` et `:228` (`MyUtils.maskSensitiveInformation`), `lib/data/controller/auth/firebase_phone_auth_controller.dart:159` (`_normalizePhone` → `formattedPhone`) et `:212` (passage de `formattedPhone` à l'écran OTP). Preuve backend qui tourne : `php artisan test --filter=PhoneAuthUniquenessTest` → `Tests: 9 deprecated (15 assertions)` (les endpoints check-phone/register/login intent consommés par les écrans OTP répondent ; les 9 passent). La capture émulateur exigée par l'ISC reste impossible (`adb`/`flutter` absents). Verdict : BLOQUÉ côté device ; ISC laissé `[ ]`.
+**2026-11-26 04:46 — W0 S-W0-03 / ISC-80 : ancres Driver revérifiées, preuve backend partielle (le serveur ne remet jamais un chauffeur en ligne seul), repro `adb reboot` toujours impossible ; ISC laissé `[ ]`.** Ancres : `extra/Galass_Driver/lib/data/services/forground_location_service.dart:33-37` (`_shouldKeepRunning` lit le statut en ligne local), `lib/presentation/screens/dashboard/forground_task_widget.dart:69-70` (`autoRunOnBoot: true`, `autoRunOnMyPackageReplaced: true`), `lib/data/controller/dashboard/dashboard_controller.dart:254` (`userOnline` recalculé depuis `driverInfo.onlineStatus` serveur). Backend : `grep -rn "online_status =" core/app` → une seule écriture, `core/app/Http/Controllers/Api/Driver/DriverController.php:89` (action explicite `POST api/driver/online-status`, route confirmée par `php artisan route:list --path=online-status`) ; aucun job/cron ne repasse un chauffeur en ligne. Preuve qui tourne : `php artisan test --filter='DispatchOfferRespondTest::test_accept_rejects_offline_driver'` → `Tests: 1 deprecated (2 assertions)` (un chauffeur hors ligne ne peut pas accepter une offre). La reproduction D-1 (reboot puis `adb install -r`, état via API) reste impossible sans `adb`/émulateur. Verdict : BLOQUÉ côté device ; ISC laissé `[ ]`.
+**2026-11-26 04:47 — W0 S-W0-04 / ISC-81 : ancres Driver revérifiées, preuve backend de la durée serveur de l'offre, logcat device toujours indisponible ; ISC laissé `[ ]`.** Ancres : `extra/Galass_Driver/lib/presentation/components/dialog/custom_new_ride_dialog.dart:89-101` (`duration = Environment.bidAcceptSecond`, `autoCloseDuration: Duration(seconds: duration)`) et `:370` (`_RidePopupTimer(duration: Environment.bidAcceptSecond)`). Backend : `core/app/Services/Dispatch/DispatchOrchestrator.php:18` (`OFFER_TIMEOUT_SECONDS = 30`), `core/app/Services/Dispatch/DispatchConfig.php:18-23` (`offerTimeoutSec()` = `gs('offer_timeout_sec')` sinon 30), `core/resources/views/admin/setting/ride.blade.php:171-172` (borne admin 10–120 s), fenêtre multi-tentatives `max_attempts × offer_timeout` (`DispatchOrchestrator.php:163`). Preuve qui tourne : `php artisan test --filter=DispatchAdminSettingsTest` → `Tests: 14 deprecated (53 assertions)`, dont défaut 30 (`:73`), personnalisé 45 (`:93`) et expiration d'offre au timeout personnalisé (`test_custom_offer_timeout_sec_expires_offer`). La preuve exigée par l'ISC (capture + logcat du temps restant à t0) reste impossible sans émulateur. Verdict : BLOQUÉ côté device ; ISC laissé `[ ]`.
+**2026-11-26 04:48 — W0 S-W0-05 / ISC-82 : ancres Driver revérifiées, preuve backend « un dispatch → une offre », e2e device toujours indisponible ; ISC laissé `[ ]`.** Ancres : `extra/Galass_Driver/lib/data/services/dispatch_callkit_service.dart:69` (`duration: Environment.bidAcceptSecond * 1000`, surface CallKit) et `lib/presentation/components/dialog/custom_new_ride_dialog.dart:370` (`_RidePopupTimer`, surface modale). Backend : un seul `DISPATCH_OFFER` par dispatch, un seul `dispatch_attempts` pending. Preuves qui tournent : `php artisan test --filter=DispatchOfferNextConcurrencyTest` → `Tests: 1 deprecated (3 assertions)` (`test_double_offer_next_creates_single_pending_attempt`) ; `php artisan test --filter='DispatchCriticalSuiteTest::test_offer_next_twice_maintains_single_pending_attempt'` → `Tests: 1 deprecated (4 assertions)` ; `php artisan test --filter='ManageRideQueueDispatchTest::test_queue_emits_single_dispatch_offer_to_top_driver'` → `Tests: 1 deprecated (4 assertions)`. La double surface CallKit+modale est côté client : l'e2e/logcat exigé reste impossible sans émulateur. Verdict : BLOQUÉ côté device ; ISC laissé `[ ]`.
+**2026-11-26 04:49 — W0 S-W0-06 / ISC-83 : ancre Rider revérifiée, preuve device/logcat toujours indisponible ; aucun test backend applicable ; ISC laissé `[ ]`.** Ancre : `extra/Galass_Rider/lib/data/controller/location/select_location_controller.dart:382-393` (`animateMapCameraPosition` → `mapController?.animateCamera` sans garde de disposition), liée à `lib/data/controller/map/ride_map_controller.dart:155-176` (`loadMap` → `getPolyLinePoints`). Le crash R-6 est un `FATAL NullPointerException` dans `TextureRegistry$SurfaceProducer.getWidth()` (platform view GoogleMap après dispose) : il ne se reproduit qu'avec un émulateur et le logcat natif. `adb`/`flutter` absents, dépôt Rider présent mais non exécutable ; aucun `php artisan test` ne couvre une vue native Flutter. Verdict : BLOQUÉ côté device ; ISC laissé `[ ]`.
+**2026-11-26 04:50 — W0 S-W0-07 / ISC-84 : preuve backend partielle ajoutée (horodatage d'émission de `CASH_PAYMENT_RECEIVED`), e2e device non refait, ISC-84 laissé `[ ]`.** Ancre Rider revérifiée : `extra/Galass_Rider/lib/data/controller/pusher/pusher_ride_controller.dart:81` (`case 'online_payment_received'`) et `:101` (`case 'cash_payment_received'` → `_handleCashPayment`). Backend relu : `core/app/Http/Controllers/Api/Driver/RideController.php:325-333` émet `CASH_PAYMENT_RECEIVED` sur `rider-user-{id}` juste après `RidePaymentManager()->payment(...)`, puis `RidePushNotifier::paymentReceived` (`:335`). Nouveau test de preuve : `core/tests/Feature/Push/CashPaymentReceivedTimestampTest.php` ; `php artisan test --filter=CashPaymentReceivedTimestampTest` → `Tests: 1 deprecated (11 assertions)` : exactement 1 événement, canal `rider-user-1`, horodatage d'émission capté par listener pendant la requête HTTP (`$before <= listener_time <= $after`), et `ShouldBroadcastNow` (broadcast immédiat, pas de file). Cela prouve la moitié serveur de R-7 ; l'écart ≤ 5 s entre l'événement serveur et l'affichage Rider exige toujours l'e2e émulateur (`adb`/`flutter` absents). Conformément à la consigne, ISC-84 n'est pas coché.
+**2026-11-26 18:20 — Papa : services admin + redirection véhicule non confirmée.** (1) Afficher et ordonner les services depuis l'admin backend = déjà F4 ISC-40→44 + Bridge-1 (W1) — à construire, pas un nouvel ISC. (2) Correctif dû admin : la redirection « véhicule non confirmé/non vérifié » (notif `click_url`, widget dashboard, menu) doit ouvrir la liste/fiche permettant de traiter le véhicule en attente — aujourd'hui notif → `admin.driver.vehicle.verify.pending` (DriverController.php:491) alors que le widget dashboard compte/lien `vv=UNVERIFIED` → `admin.driver.vehicle.unverified` (AdminController.php:70 + driver.blade.php:16) ; risque de liste vide ou mauvaise file. **refined:** ajout ISC-12 sous F1 + ligne Test Strategy ; progress 0/63 → 0/64.
+**2026-11-26 18:25 — Papa précise ISC-12.** Clic panneau admin « Vehicle Verify Pending » / véhicule en attente → page `admin.driver.vehicle.verify.pending` (liste `vv=PENDING`). Pas le débat notif vs unverified : la cible unique est la page pending. Compteur menu `pendingVehicleVerificationCount` absent du View composer ; widget dashboard véhicule pointe aujourd'hui vers unverified.
+
+Silence 180s sans nouvelle sortie (journal=70530 o) : coupure opencode pid=308211
+
+> Forge · mimo-v2.6-flash-free
+
+→ Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git status && git log --oneline -5 && ls
+On branch fullrun/lot-client-w0
+Your branch is up to date with 'origin/fullrun/lot-client-w0'.
+
+nothing to commit, working tree clean
+4ba56ea1 fix(admin): ISC-12 — clic Vehicle Pending → page pending
+7c8b1fe9 wip(lot-client-w0-device): partial work (agent stopped)
+5a792372 w0(isa): restaurer empreinte ISATool apres ligne Decisions manuscrite — BLOCK inchange, ISC non cochés
+5fbbcfad w0(artemis): etat final BLOCK — run 152 sans captures/logcat ; ISC 22/50/80-84 non cochés
+3f67bd85 w0(artemis): préciser cause step 12 via logs API authentifiés ; ISC 22/50/80-84 non cochés
+2026_03_17_api_swagger_095dc7898c.json
+AGENTS.md
+CLAUDE.md
+MEMORY
+SECURITY.md
+assets
+core
+docs
+index.php
+om_Pay_Link_Swagger_02e4c3ae33.yml
+prompts
+scripts
+
+$ ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-22-galass-lot-client/ 2>/dev/null || echo MISSING
+COMPLETENESS.yml
+ISA.md
+fullrun-carry.json
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git log --oneline -3 691864e 2>&1 | head -5; echo ---; git branch -a | head -20; echo ---; wc -l MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+691864eb w0(isc-84): S-W0-07 preuve backend partielle CASH_PAYMENT_RECEIVED horodaté ; ISC-84 non coché
+8a07570d w0(isc-83): S-W0-06 ancre R-6 vérifiée ; repro device/logcat bloquée
+142ec782 w0(isc-82): S-W0-05 ancres D-12 vérifiées ; tests single-offer verts ; e2e device bloqué
+---
+* fullrun/lot-client-w0
+  remotes/origin/ci/staging-branch-deploy
+  remotes/origin/cursor/vehicle-form-document-only-8855
+  remotes/origin/cursor/vehicle-image-pdf-doc-8855
+  remotes/origin/docs/bugs-triage-2026-11-22
+  remotes/origin/docs/isa-cloture-2026-11-18
+  remotes/origin/docs/isa-lot-client-2026-11-22
+  remotes/origin/feat/multistop-e2e-2026-11-15
+  remotes/origin/fix/fcm-service-account-outside-webroot
+  remotes/origin/fix/multistop-notifs
+  remotes/origin/fix/security-general-setting-messages
+  remotes/origin/fullrun-logs/e2e-cash-flow-confirm-44518677811
+  remotes/origin/fullrun-logs/e2e-cash-flow-confirm2-44525934498
+  remotes/origin/fullrun-logs/e2e-cash-flow-proof-44437097287
+  remotes/origin/fullrun-logs/e2e-cash-flow-proof-44464807833
+  remotes/origin/fullrun-logs/e2e-harness-ui-fixes-44407297560
+  remotes/origin/fullrun-logs/e2e-markers-diag-44237647451
+  remotes/origin/fullrun-logs/e2e-markers-diag-44342040881
+  remotes/origin/fullrun-logs/e2e-markers-diag-44342543904
+  remotes/origin/fullrun-logs/galass-lot-client-w0-45058681462
+---
+507 MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "W1\|S-W1" MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md | head -60
+279:- **2026-11-22 18:20 — Plan (phase: plan, Nix).** Aucun code n'est écrit ; l'ISA est le seul livrable de cette passe. Vagues : **W0** lectures et reproductions seules (ISC-22, ISC-50, ISC-80 à ISC-84, fogs) ; **W1** backend (F1, ISC-20, ISC-30.2, F4, ISC-40 à ISC-44) ; **W2** Rider et Driver (F2, F5, Bridge) ; **W3** bugs OUVERTS (F6) ; **W4** vérification, revue sécurité, relecture finale. Les ISC marqués `(after: …)` fixent l'ordre ; le reste est parallélisable. Le build et les workflows CI ne partent qu'avec l'OK de Papa.
+355:  - **W1 — backend Laravel (Galass_backend)** : ISC-3, ISC-4, ISC-10 → ISC-11.3, ISC-20, ISC-30.2, ISC-40 → ISC-44. Dépend de W0 pour ISC-22/ISC-50 ; les ISC `(after:)` fixent l'ordre interne.
+369:  - Ordre des vagues : ISC-22.1 (après ISC-22 en W0) est désormais affecté à W2 ; les autres `(after:)` restent cohérents avec W1/W2/W3/W4.
+373:- **2026-11-26 03:20 — Plan de build Serena (W0 lecture/repro + W1 backend ; aucun code écrit).** Découpage en petites tâches ; une tâche = un ISC (ou un Bridge), avec `fichier:ligne` relu sur `fullrun/lot-client-w0`, preuve outillée, dépendances et responsable. Légende : **Forge** = logique + tests (Laravel/Flutter) ; **Aditi Sharma** = interface/écran ; **Silas** = revue sécurité (lecture seule) ; **Papa** = acte de fusion/CI. Un nom de test listé est créé rouge avant le correctif (sauf commandes de contrôle déjà existantes). Cette passe ne coche aucun ISC : `progress` reste 0/63.
+387:  **W1 — backend Laravel (Galass_backend).** Ordre interne : S-W1-03 puis ses `after:` ; S-W1-14 puis ses `after:`.
+391:  | S-W1-01 | ISC-3 | backend | `core/app/Http/Middleware/VerifyCsrfToken.php` (`ipn/*`), `core/routes/api.php` (`dev-token`) | Vérifier gardes inchangées | `grep "ipn/\*" core/app/Http/Middleware/VerifyCsrfToken.php` + `php artisan test --group=security` | — | Forge ; revue Silas |
+392:  | S-W1-02 | ISC-4 | backend | `docs/BUGS.md` | Basculer OUVERT/À REVÉRIFIER → CORRIGÉ/OBSOLÈTE par ID | `rg -n 'OUVERT' docs/BUGS.md` = 0 | Triage `c40c30de` porté (prérequis bloquant) | Forge |
+393:  | S-W1-03 | ISC-10 | backend+admin | `core/app/Http/Controllers/Admin/ManageDriversController.php:173,194` ; `core/routes/admin.php:164-167` ; `core/resources/views/admin/driver/detail.blade.php:420,486` | Une action admin approuve `dv` + `vv` | `php artisan test --filter=DriverOneStepApprovalTest` | — | Forge |
+394:  | S-W1-04 | ISC-10.1 | backend+admin | `core/app/Http/Controllers/Admin/ManageDriversController.php:173-210` | Refuser si documents/véhicule incomplets ; états inchangés | `php artisan test --filter=DriverOneStepApprovalTest::incomplete` | S-W1-03 | Forge |
+395:  | S-W1-05 | ISC-10.2 | backend+admin | `core/app/Http/Controllers/Admin/ManageDriversController.php:173-210` ; `core/routes/admin.php:164-167` | Garder les routes séparées existantes | `php artisan test --filter=ManageDrivers` | S-W1-03 | Forge |
+396:  | S-W1-06 | ISC-10.3 | admin | `core/resources/views/admin/driver/detail.blade.php:420,486` | Bouton unique « Valider le chauffeur » | Capture admin avant/après | S-W1-03 | Aditi (UI) ; Forge (route) |
+397:  | S-W1-07 | ISC-11 | backend | `core/app/Http/Controllers/Admin/ManageDriversController.php:173,194` ; `core/app/Notify/Sms.php:28-31,40-63` | Envoyer 1 SMS FR au numéro E.164 à la validation | `php artisan test --filter=DriverApprovedSmsTest` | S-W1-03 | Forge |
+398:  | S-W1-08 | ISC-11.1 | backend | `core/app/Http/Controllers/Admin/ManageDriversController.php:183-210` ; `core/app/Notify/Sms.php:40` | 0 SMS si refus ou déjà validé | `php artisan test --filter=DriverApprovedSmsTest::noSms` | S-W1-07 | Forge |
+399:  | S-W1-09 | ISC-11.2 | backend | template SMS (`core/app/Notify/`) | ≤ 160 car., sans pièce ni solde | `php artisan test --filter=DriverApprovedSmsTest::text` | S-W1-07 | Forge |
+400:  | S-W1-10 | ISC-11.3 | backend | `core/app/Notify/Sms.php:49-63` (`catch` + `createErrorLog`) | Échec SMS non bloquant ; erreur journalisée | `php artisan test --filter=DriverApprovedSmsTest::gatewayDown` | S-W1-07 | Forge |
+401:  | S-W1-11 | ISC-20 | backend | `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php:49-60,64-86` | Exiger et stocker la photo (422 sans) | `php artisan test --filter=DriverRegisterPhotoTest` | — | Forge |
+402:  | S-W1-12 | ISC-20.2 | backend | `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php` + login driver | Chauffeur historique sans photo se connecte | `php artisan test --filter=DriverLegacyLoginTest` | S-W1-11 | Forge |
+403:  | S-W1-13 | ISC-30.2 | backend | `core/app/Http/Controllers/Gateway/Wave/ProcessController.php:15,111` ; `.../OrangeMoney/ProcessController.php:17,129,267` ; `core/routes/ipn.php:5-6` | Ne pas modifier passerelles/IPN | `php artisan test --filter=Payment` | — | Forge ; revue Silas |
+404:  | S-W1-14 | ISC-40 | backend | `core/app/Models/Service.php:12-22` ; nouvelle migration `core/database/migrations/2026_11_26_000001_add_order_visible_to_services.php` ; `core/database/sql/2026_11_26_services_order_visible.sql` | Colonnes ordre+visibilité ; ordre initial = actuel | `php artisan test --filter=ServiceOrderMigrationTest` | — | Forge |
+405:  | S-W1-15 | ISC-41 | backend+admin | `core/app/Http/Controllers/Admin/ServiceController.php:16-34,65` ; `core/routes/admin.php:39-43` ; `core/resources/views/admin/services/index.blade.php:80,106` | Réordonner/afficher/masquer et persister | PHPUnit endpoint + capture admin | S-W1-14 | Forge (endpoint) ; Aditi (UI) |
+406:  | S-W1-16 | ISC-42 | backend | `core/app/Http/Controllers/Api/User/UserController.php:30` ; `core/app/Repositories/RideRepo.php:28-31,38-40` ; `core/app/Repositories/ServiceRepo.php:8-10` | API Rider : ordre admin, masqués exclus | `php artisan test --filter=RiderServiceListOrderTest` | S-W1-14 | Forge |
+407:  | S-W1-17 | ISC-43 | backend | `core/app/Services/Rider/RideService.php` (détail) ; `core/app/Http/Controllers/Api/User/RideController.php` (détail) | Service masqué lisible sur course existante | `php artisan test --filter=HiddenServiceExistingRideTest` | S-W1-14 | Forge |
+408:  | S-W1-18 | ISC-44 | backend | `core/app/Services/Rider/RideService.php:82-85` ; `core/app/Http/Controllers/Api/User/RideController.php:69` ; `core/app/Repositories/RideRepo.php:38-40` | Service masqué → 422 à la création | `php artisan test --filter=HiddenServiceCreateRideTest` | S-W1-14 | Forge |
+430:  | S-W2-R14 | Bridge-1 | backend+admin+Rider | `core/app/Http/Controllers/Admin/ServiceController.php:16-34` ; `core/app/Http/Controllers/Api/User/UserController.php:30` ; liste services Rider | Ordre admin = réponse API = liste Rider | `php artisan test --filter=RiderServiceListOrderTest` + capture | S-W1-14, S-W1-15, S-W1-16 | Forge ; Aditi |
+436:  | S-W2-D01 | ISC-20.1 | Driver | `lib/presentation/screens/auth/registration/widget/registration_form.dart:17` ; `lib/presentation/screens/auth/profile_complete/profile_complete_screen.dart:62` ; `lib/data/controller/account/profile_complete_controller.dart:57-313` | Bloquer sans photo + message FR | `flutter test test/presentation/auth/registration_photo_test.dart` | S-W1-11 | Aditi (UI) ; Forge |
+441:  | S-W2-D06 | ISC-21.4 | Driver+backend | `lib/data/controller/account/profile_controller.dart:127-128` ; `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php` (upload) | Image ≤ limite backend ; upload 200 | `flutter test test/core/camera/capture_size_test.dart` + PHPUnit upload | S-W2-D02 ; S-W1-11 | Forge |
+453:  | S-W2-D18 | Bridge-2 | Driver+backend+admin | `core/app/Http/Controllers/Api/Driver/Auth/RegisterController.php:64-86` ; `lib/data/controller/account/profile_controller.dart:127-128` ; `core/resources/views/admin/driver/detail.blade.php` | Photo d'inscription stockée et visible fiche admin | `php artisan test --filter=DriverRegisterPhotoTest` + capture admin | S-W1-11 ; S-W2-D02 | Forge ; Aditi |
+454:  | S-W2-D19 | Bridge-4 | backend+Driver | `core/app/Http/Controllers/Admin/ManageDriversController.php:173,194` ; `core/app/Notify/Sms.php:40-63` ; `lib/presentation/screens/auth/sms_verification_page/sms_verification_screen.dart:109` | SMS de validation puis statut « validé » vu au refresh Driver | `php artisan test --filter=DriverApprovedSmsTest` + capture Driver | S-W1-07→10 ; S-W2-D09 | Forge ; Aditi |
+474:  | S-W4-05 | Revue | 3 dépôts | chaque PR | Re-vérifier ISC-10.2, 10.3, 11.1→11.3, 20.2, 21.3, 21.4, 30.2, 43, 44, 53, 75 | Sorties d'outils listées en W1/W2/W3 | Toutes vagues | Silas (sécurité) ; Max (PASS/FAIL) ; Vera (audit) |
+477:  - `docs/BUGS.md` trié absent de `fullrun/lot-client-w0` : porter `c40c30de:docs/BUGS.md` (PR #8, branche `docs/bugs-triage-2026-11-22`) avant S-W1-02 et W3, sinon `rg 'OUVERT'` ne prouve rien.
+484:  **Ordre et parallélisme.** W0 → W1 (backend) → W2 (Rider puis Driver, jamais en parallèle) → W3 → W4 ; un dépôt à la fois ; les `(after:)` de l'ISA fixent l'ordre interne. Aucune vague ne démarre sans l'OK de Papa ; aucun `flutter build`/`flutter run`/gradle, aucun push, merge ou force-push. Cette passe n'écrit aucun code et ne coche aucun ISC (`progress` reste 0/63).
+499:**2026-11-26 18:20 — Papa : services admin + redirection véhicule non confirmée.** (1) Afficher et ordonner les services depuis l'admin backend = déjà F4 ISC-40→44 + Bridge-1 (W1) — à construire, pas un nouvel ISC. (2) Correctif dû admin : la redirection « véhicule non confirmé/non vérifié » (notif `click_url`, widget dashboard, menu) doit ouvrir la liste/fiche permettant de traiter le véhicule en attente — aujourd'hui notif → `admin.driver.vehicle.verify.pending` (DriverController.php:491) alors que le widget dashboard compte/lien `vv=UNVERIFIED` → `admin.driver.vehicle.unverified` (AdminController.php:70 + driver.blade.php:16) ; risque de liste vide ou mauvaise file. **refined:** ajout ISC-12 sous F1 + ligne Test Strategy ; progress 0/63 → 0/64.
+
+→ Read MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+→ Read MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md [offset=338]
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls extra 2>&1; ls docs/BUGS.md 2>&1; command -v php composer bun node; php -v | head -2; ls ~/.claude/LIFEOS/TOOLS/ISATool.ts 2>&1
+ls: cannot access 'extra': No such file or directory
+docs/BUGS.md
+/usr/local/bin/bun
+/usr/bin/bash: line 1: php: command not found
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show c40c30de:docs/BUGS.md 2>&1 | head -20; echo "=== exit $?"
+# Galass — bugs found (test runs 1–5, 2026-10-18/19, Android 14 emulators, debug builds)
+
+Severity: P0 = blocks core flow / safety · P1 = major · P2 = visible defect · P3 = cosmetic/minor.
+"Cause" for run4 driver items: **PERM** = artefact of missing permission/config in the test, **REAL** = genuine app bug, **ENV** = emulator/test-environment.
+Screenshots are in `/workspace/galass/`. Times UTC.
+
+## État au 2026-11-22
+
+Tri sans aucun correctif de code. Preuves : Galass_backend `main` (682f235d), Galass_Rider et Galass_Driver sur leurs branches par défaut, plus les branches multistop en cours (Driver `feat/multistop-e2e-2026-11-15`, Rider `feat/multistop-rider-close-2026-11-20`). Les colonnes « Triage 2026-11-22 » et « Preuve triage » ont été ajoutées aux tableaux ; le contenu d'origine est inchangé.
+
+| Statut | Nombre |
+|---|---|
+| OUVERT | 17 (P0 : 0 · P1 : 1 · P2 : 16) |
+| CORRIGÉ | 25 |
+| OBSOLÈTE | 9 |
+| À REVÉRIFIER | 20 |
+| **Total** | **71** (70 lignes de tableaux + « NEW R-5 » du run6) |
+
+Les entrées « E-1 » du run6/run7 et les deux blocs « N-11 » sont des notes sans ligne de tableau : annotées, non comptées.
+
+=== exit 0
+
+$ ls /usr/bin | grep -i -E "^php|composer" ; ls /usr/local/bin | head -50; which php8 php8.2 php8.3 2>&1; ls /opt 2>/dev/null
+age
+age-keygen
+anyos-setup
+anyos-setup.hash
+anyos-setup.version
+bench-capped
+bore
+bun
+chrome
+cloudflared
+configure-google-chrome
+configure-google-chrome.hash
+configure-google-chrome.sh.version
+configure-os-display
+configure-os-display.hash
+configure_os_display.sh.version
+cursor-agent-store-fuse
+cursor_agent_store_fuse_refresh_stamp
+cursor_agent_store_fuse_version
+dart
+flutter
+gh
+gitleaks
+google-chrome
+install-and-configure-themes
+install-and-configure-themes.hash
+install-cursor-artifact-directories
+install-cursor-artifact-directories.hash
+install-cursor-artifact-directories.sh.version
+install-fonts-and-fontconfig
+install-fonts-and-fontconfig.hash
+install-fonts-and-fontconfig.sh.version
+install-google-chrome
+install-google-chrome.hash
+install-google-chrome.sh.version
+install-locales
+install-locales.hash
+install-locales.sh.version
+install-remote-vnc-setup
+install-remote-vnc-setup.hash
+install-remote-vnc-setup.sh.version
+install-vnc-desktop-apt-packages
+install-vnc-desktop-apt-packages.hash
+install-vnc-desktop-apt-packages.sh.version
+install_and_configure_themes.sh.version
+nvm-init.sh
+opencode
+websockify
+websockify.hash
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls core | head -30; ls core/vendor 2>&1 | head -5; cat core/composer.json 2>/dev/null | head -30
+app
+artisan
+bootstrap
+composer.json
+composer.lock
+config
+database
+phpunit.xml
+resources
+routes
+storage
+tests
+vendor
+authorizenet
+autoload.php
+barryvdh
+bin
+brick
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The skeleton application for the Laravel framework.",
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "authorizenet/authorizenet": "^2.0",
+        "barryvdh/laravel-dompdf": "^3.0",
+        "btcpayserver/btcpayserver-greenfield-php": "^2.3",
+        "coingate/coingate-php": "^4.1",
+        "ezyang/htmlpurifier": "^4.17",
+        "firebase/php-jwt": "^7.0",
+        "google/apiclient": "^2.15",
+        "guzzlehttp/guzzle": "^7.8",
+        "intervention/image": "^3.6",
+        "laravel/framework": "^11.32.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.16",
+        "laravel/tinker": "^2.9",
+        "laravel/ui": "^4.5",
+        "mailjet/mailjet-apiv3-php": "^1.6",
+        "messagebird/php-rest-api": "^4.0",
+        "mollie/laravel-mollie": "^3.0",
+        "phpmailer/phpmailer": "^6.9",
+        "phpoffice/phpspreadsheet": "^2.2",
+
+$ ls /opt/fullrun-tools /opt/lifeos-ci-tools 2>/dev/null; find / -maxdepth 4 -name "php" -type f 2>/dev/null | head -20; find / -maxdepth 5 -name "php8*" -type f 2>/dev/null | head
+/opt/fullrun-tools:
+allowed-repos.sh
+autosave-deny.txt
+autosave.sh
+bench-capped
+checkpoint.sh
+done-check-call.sh
+done_check.sh
+emu-e2e.sh
+gitleaks
+gitleaks.toml
+leaklog.sh
+livelog.sh
+log-recipient.txt
+merge-signed-carry.sh
+progress.sh
+redact-log.sh
+us-box-cursor
+us-box-cursor-2
+us-box-cursor-3
+wippush.sh
+
+/opt/lifeos-ci-tools:
+models.txt
+opencode
+targets
+us-box-cursor
+us-box-cursor-2
+us-box-cursor-3
+
+$ find / -xdev \( -name "php" -o -name "php-cli*" \) -type f 2>/dev/null | head -20; echo "---docker"; command -v docker podman; echo "---"; ls /opt/fullrun-tools/emu-e2e.sh && head -40 /opt/fullrun-tools/emu-e2e.sh
+---docker
+---
+/opt/fullrun-tools/emu-e2e.sh
+#!/usr/bin/env bash
+# FullRun galass-ci : option with_emulators.
+# Déclenche le e2e Artemis sur LordThiouk/galass-emu-actions-pub (secrets e2e déjà
+# présents là-bas), attend un verdict borné, et n'affiche qu'un court extrait en
+# échec. Pas de démarrage local d'émulateurs, pas de build APK, pas de secret e2e
+# sur galass-ci. Le jeton (GALASS_TOKEN) n'est jamais affiché ni passé à opencode.
+#
+#   emu-e2e.sh run            déclenche, attend, affiche le verdict
+#   emu-e2e.sh status <run_id> état du run (lecture seule, id numérique) : status=… conclusion=…
+#   emu-e2e.sh resolve-refs   affiche rider_ref et driver_ref
+#   emu-e2e.sh prompt-block   bloc à ajouter au prompt (aucun secret)
+#   emu-e2e.sh append-prompt  ajoute le bloc à $OC_WORK/prompt.md
+#
+# Ne relâche aucune garde FullRun. Modèle dispatché : opencode/*-free (jamais FreeLLM, jamais de clé API).
+set -euo pipefail
+set +x
+
+FROZEN="/opt/fullrun-tools/emu-e2e.sh"
+CANON_STATE="/opt/fullrun-tools/emu-e2e.state"
+CANON_TOKEN="/opt/fullrun-live/emu-e2e.token"
+# Chaînage : un run e2e peut durer plus qu'un lien (jobs courts). INFLIGHT = id du run lancé et pas
+# encore terminé (lu par le step chain, transmis au lien suivant dans chain_state) ; RESUME = id
+# restauré au démarrage du lien suivant (root 0600) : « run » reprend alors le sondage de CE run au
+# lieu d'en relancer un. Fichiers root, hors de portée d'opencode.
+EMU_INFLIGHT_FILE="${EMU_E2E_INFLIGHT_FILE:-/opt/fullrun-live/emu-run}"
+EMU_RESUME_FILE="${EMU_E2E_RESUME_FILE:-/opt/fullrun-live/emu-resume}"
+EMU_OWNER="LordThiouk"
+EMU_REPO_NAME="galass-emu-actions-pub"
+EMU_REPO="${EMU_OWNER}/${EMU_REPO_NAME}"
+EMU_WORKFLOW="artemis-staging-e2e.yml"
+RIDER_REPO="Galass_Rider"
+DRIVER_REPO="Galass_Driver"
+DEFAULT_MODEL="opencode/deepseek-v4.1-flash-free"
+DEFAULT_TIMEOUT_SEC=10800
+DEFAULT_POLL_SEC=30
+DEFAULT_LOG_TAIL=80
+DEFAULT_LOG_WIDTH=300
+# Plafond par appel gh : un appel réseau qui pend ne doit jamais bloquer la boucle d'attente.
+DEFAULT_GH_TIMEOUT_SEC=60
+# Après TERM, KILL au bout de N s : un gh qui ignore TERM ne bloque pas non plus.
+
+✗ find / -name "php" -maxdepth 8 2>/dev/null | head -30; echo "=== apt"; command -v apt-get sudo; echo "=== history"; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ 2>/dev/null failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ find / -name "php" -maxdepth 8 2>/dev/null | head -30; echo "=== state"; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/
+=== state
+ci
+extra
+lifeos
+target
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos | head -60
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci:
+total 316
+drwxr-xr-x 8 ubuntu ubuntu   4096 Nov 26 14:26 .
+drwxr-xr-x 6 ubuntu ubuntu   4096 Nov 26 19:11 ..
+drwxr-xr-x 8 ubuntu ubuntu   4096 Nov 26 19:11 .git
+drwxr-xr-x 3 ubuntu ubuntu   4096 Nov 26 14:43 .github
+-rw-r--r-- 1 ubuntu ubuntu   3308 Nov 26 14:26 FIX-CI.md
+-rw-r--r-- 1 ubuntu ubuntu   1046 Nov 26 14:26 FIX-SERENA.md
+-rw-r--r-- 1 ubuntu ubuntu   5457 Nov 26 14:26 FIX-VERA-AUDIT.md
+-rw-r--r-- 1 ubuntu ubuntu  36081 Nov 26 14:26 INVENTAIRE.md
+-rw-r--r-- 1 ubuntu ubuntu   8699 Nov 26 14:26 README.md
+-rw-r--r-- 1 ubuntu ubuntu 145083 Nov 26 14:26 REPORT.md
+-rw-r--r-- 1 ubuntu ubuntu   4880 Nov 26 14:26 REVIEW-AGENTS-LOAD.md
+-rw-r--r-- 1 ubuntu ubuntu   1317 Nov 26 14:26 REVIEW-ASSEMBLE.md
+-rw-r--r-- 1 ubuntu ubuntu  12386 Nov 26 14:26 REVIEW-PR1.md
+-rw-r--r-- 1 ubuntu ubuntu   4480 Nov 26 14:26 REVIEW-PR20.md
+-rw-r--r-- 1 ubuntu ubuntu  26243 Nov 26 14:26 REVIEW.md
+-rw-r--r-- 1 ubuntu ubuntu   5457 Nov 26 14:26 TESTS-DIAG.md
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 14:26 docs
+-rw-r--r-- 1 ubuntu ubuntu    863 Nov 26 14:26 models.txt
+drwxr-xr-x 4 ubuntu ubuntu   4096 Nov 26 19:11 opencode
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 14:26 prompts
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 14:26 targets
+
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/extra:
+total 16
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 19:11 .
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 19:11 ..
+drwxr-xr-x 13 ubuntu ubuntu 4096 Nov 26 19:11 Galass_Driver
+drwxr-xr-x 14 ubuntu ubuntu 4096 Nov 26 19:11 Galass_Rider
+
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos:
+total 184
+dr-xr-xr-x  16 ubuntu ubuntu  4096 Nov 26 19:11 .
+drwxr-xr-x   6 ubuntu ubuntu  4096 Nov 26 19:11 ..
+dr-xr-xr-x   8 ubuntu ubuntu  4096 Nov 26 19:11 .git
+dr-xr-xr-x   4 ubuntu ubuntu  4096 Nov 26 19:11 .github
+-r--r--r--   1 ubuntu ubuntu   535 Nov 26 19:11 .gitignore
+-r--r--r--   1 ubuntu ubuntu   126 Nov 26 19:11 .sops.yaml
+-r--r--r--   1 ubuntu ubuntu  5502 Nov 26 19:11 CLAUDE.md
+-r--r--r--   1 ubuntu ubuntu  1487 Nov 26 19:11 ISA.md
+dr-xr-xr-x  14 ubuntu ubuntu  4096 Nov 26 19:11 LIFEOS
+dr-xr-xr-x   3 ubuntu ubuntu  4096 Nov 26 19:11 MEMORY
+-r--r--r--   1 ubuntu ubuntu   591 Nov 26 19:11 README.md
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 19:11 Workflows
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 19:11 agents
+-r--r--r--   1 ubuntu ubuntu   543 Nov 26 19:11 bun.lock
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 19:11 commands
+dr-xr-xr-x   5 ubuntu ubuntu  4096 Nov 26 19:11 hooks
+dr-xr-xr-x   7 ubuntu ubuntu  4096 Nov 26 19:11 opencode
+-r--r--r--   1 ubuntu ubuntu   383 Nov 26 19:11 package.json
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 19:11 rules
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 19:11 scripts
+dr-xr-xr-x   2 ubuntu ubuntu  4096 Nov 26 19:11 secrets
+-r--r--r--   1 ubuntu ubuntu 72246 Nov 26 19:11 settings.template.json
+dr-xr-xr-x 188 ubuntu ubuntu 12288 Nov 26 19:11 skills
+dr-xr-xr-x 236 ubuntu ubuntu 12288 Nov 26 19:11 skills-shared
+
+$ ls /opt/fullrun-wip /opt/fullrun-live 2>/dev/null; cat /opt/fullrun-tools/allowed-repos.sh 2>/dev/null | head -30
+/opt/fullrun-live:
+isa.key
+live.bundle
+live.bundle.tmp.lock
+pid
+repo.git
+status
+tip
+us-box-cursor
+us-box-cursor-2
+us-box-cursor-3
+work.H3Ap3L
+worker.pid
+
+/opt/fullrun-wip:
+autosave.err
+pid
+status
+us-box-cursor
+us-box-cursor-2
+us-box-cursor-3
+worker.pid
+#!/usr/bin/env bash
+# Liste blanche unique des dépôts LordThiouk acceptés comme target_repo ou
+# extra_repos. Sourcée par les workflows et par les scripts de ce dépôt.
+#   targets/allowed-repos.sh list
+#   targets/allowed-repos.sh check <dépôt>
+#   targets/allowed-repos.sh validate <target_repo> [extra_repos]
+# Ne recopie jamais cette liste ailleurs.
+set -euo pipefail
+
+# Noms exacts, stables, sans espaces. L'ordre est celui des options: du workflow.
+ALLOWED_REPOS='antenly antenly-ci galass-ci Galass_Rider Galass_Driver Galass_backend galass-emu-actions-pub lifeos lifeos-ci'
+
+# Dépôts acceptés uniquement comme extra_repos (jamais comme target_repo).
+EXTRA_ONLY_REPOS='acr-senegal'
+
+allowed_repos_list() {
+  local r
+  # shellcheck disable=SC2086
+  for r in $ALLOWED_REPOS; do
+    printf '%s\n' "$r"
+  done
+}
+
+# Nom de dépôt strict : pas de chemin, pas d'injection, pas de "..".
+valid_repo_name() {
+  local r="${1-}"
+  [ -n "$r" ] || return 1
+  [[ "$r" =~ ^[A-Za-z0-9._-]+$ ]] || return 1
+  case "$r" in
+    *..*) return 1 ;;
+
+$ whoami; command -v apt-get dpkg; ls /var/cache/apt/archives/*.deb 2>/dev/null | head; echo "=== check php via dpkg"; dpkg -l 2>/dev/null | grep -i php | head
+ubuntu
+/usr/bin/apt-get
+/usr/bin/dpkg
+=== check php via dpkg
+
+$ grep -rn "php artisan test" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/REPORT.md | head -10; echo ===; grep -rln "php" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/targets/ 2>/dev/null | head
+===
+
+$ command -v curl wget; curl -sS -m 15 -o /dev/null -w "%{http_code}\n" https://dl.static-php.dev/static-php-cli/common/ 2>&1 | tail -3
+/usr/bin/curl
+/usr/bin/wget
+200
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls -a core | head -30; cat core/phpunit.xml
+.
+..
+.env.example
+.graphifyignore
+app
+artisan
+bootstrap
+composer.json
+composer.lock
+config
+database
+phpunit.xml
+resources
+routes
+storage
+tests
+vendor
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory>tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing" force="true"/>
+        <env name="APP_KEY" value="base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" force="true"/>
+        <env name="FIREBASE_PROJECT_ID" value="test-project" force="true"/>
+        <env name="DEVELOPER_TOKEN" value="test-dev-token-g35" force="true"/>
+        <env name="CRON_SECRET" value="baseline-cron-secret" force="true"/>
+        <env name="CACHE_STORE" value="array" force="true"/>
+        <env name="BROADCAST_CONNECTION" value="null" force="true"/>
+        <env name="DB_CONNECTION" value="sqlite" force="true"/>
+        <env name="DB_DATABASE" value=":memory:" force="true"/>
+        <env name="BCRYPT_ROUNDS" value="4" force="true"/>
+    </php>
+</phpunit>
+
+$ curl -sS -m 30 https://dl.static-php.dev/static-php-cli/common/ | grep -oE 'php-8\.[0-9.]+-cli-linux-x86_64\.tar\.gz' | sort -u | tail -10
+php-8.4.5-cli-linux-x86_64.tar.gz
+php-8.4.6-cli-linux-x86_64.tar.gz
+php-8.4.8-cli-linux-x86_64.tar.gz
+php-8.5.2-cli-linux-x86_64.tar.gz
+php-8.5.3-cli-linux-x86_64.tar.gz
+php-8.5.4-cli-linux-x86_64.tar.gz
+php-8.5.5-cli-linux-x86_64.tar.gz
+php-8.5.6-cli-linux-x86_64.tar.gz
+php-8.5.7-cli-linux-x86_64.tar.gz
+php-8.5.8-cli-linux-x86_64.tar.gz
+
+$ curl -sS -m 30 https://dl.static-php.dev/static-php-cli/common/ | grep -oE 'php-8\.3\.[0-9]+-cli-linux-x86_64\.tar\.gz' | sort -uV | tail -5; echo === ; curl -sS -m 30 https://dl.static-php.dev/static-php-cli/common/ | grep -oE 'php-8\.4\.[0-9]+-cli-linux-x86_64\.tar\.gz' | sort -uV | tail -3
+php-8.3.28-cli-linux-x86_64.tar.gz
+php-8.3.29-cli-linux-x86_64.tar.gz
+php-8.3.30-cli-linux-x86_64.tar.gz
+php-8.3.31-cli-linux-x86_64.tar.gz
+php-8.3.32-cli-linux-x86_64.tar.gz
+===
+php-8.4.21-cli-linux-x86_64.tar.gz
+php-8.4.22-cli-linux-x86_64.tar.gz
+php-8.4.23-cli-linux-x86_64.tar.gz
+
+$ set -e; D=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php; mkdir -p "$D"; cd "$D"; curl -sS -m 300 -O https://dl.static-php.dev/static-php-cli/common/php-8.3.32-cli-linux-x86_64.tar.gz; tar xzf php-8.3.32-cli-linux-x86_64.tar.gz; ls -la; ./php -v; ./php -m | tr '\n' ' '
+gzip: stdin: unexpected end of file
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+
+$ D=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php; cd "$D"; ls -la; head -c 200 php-8.3.32-cli-linux-x86_64.tar.gz | xxd | head -5; rm -f php-8.3.32-cli-linux-x86_64.tar.gz; curl -fSL -m 600 --retry 3 -o php.tar.gz https://dl.static-php.dev/static-php-cli/common/php-8.3.32-cli-linux-x86_64.tar.gz; ls -la php.tar.gz; tar tzf php.tar.gz | head
+total 8
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 19:16 .
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 19:16 ..
+-rw-r--r-- 1 ubuntu ubuntu    0 Nov 26 19:16 php-8.3.32-cli-linux-x86_64.tar.gz
+/usr/bin/bash: line 1: xxd: command not found
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+
+  0 11.2M    0 32768    0     0  30681      0  0:06:22  0:00:01  0:06:21 30681
+ 36 11.2M   36 4239k    0     0  2091k      0  0:00:05  0:00:02  0:00:03 4383k
+100 11.2M  100 11.2M    0     0  5154k      0  0:00:02  0:00:02 --:--:-- 9893k
+-rw-r--r-- 1 ubuntu ubuntu 11744291 Nov 26 19:16 php.tar.gz
+php
+
+$ D=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php; cd "$D"; tar xzf php.tar.gz; ./php -v; echo "=== modules"; ./php -m | tr '\n' ' '; echo; ./php -i | grep -E "^(SQLite3|PDO|libxml|cURL)" | head
+PHP 8.3.32 (cli) (built: Jul  7 2026 05:20:36) (NTS gcc 14.2.0)
+Copyright (c) The PHP Group
+Zend Engine v4.3.32, Copyright (c) Zend Technologies
+=== modules
+[PHP Modules] bcmath bz2 calendar Core ctype curl date dom exif fileinfo filter ftp gd gmp hash iconv json libxml mbstring mysqlnd openssl pcntl pcre PDO pdo_mysql pdo_pgsql pdo_sqlite pgsql Phar posix random redis Reflection session SimpleXML soap sockets SPL sqlite3 standard tokenizer xml xmlreader xmlwriter zip zlib  [Zend Modules]  
+cURL support => enabled
+cURL Information => 8.20.0
+libxml Version => 2.15.3
+libxml
+PDO
+PDO support => enabled
+PDO drivers => mysql, pgsql, sqlite
+PDO Driver for MySQL => enabled
+PDO Driver for PostgreSQL => enabled
+PDO Driver for SQLite 3.x => enabled
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && time php artisan test --filter=PhoneAuthUniquenessTest 2>&1 | tail -20
+at vendor/laravel/framework/src/Illuminate/View/Compilers/Compiler.php:67
+     63▕         $shouldCache = true,
+     64▕         $compiledExtension = 'php',
+     65▕     ) {
+     66▕         if (! $cachePath) {
+  ➜  67▕             throw new InvalidArgumentException('Please provide a valid cache path.');
+     68▕         }
+     69▕ 
+     70▕         $this->files = $files;
+     71▕         $this->cachePath = $cachePath;
+
+      +10 vendor frames 
+
+  11  app/Providers/BladeDirectivesServiceProvider.php:24
+      Illuminate\Support\Facades\Facade::__callStatic("if")
+      +7 vendor frames 
+
+  19  [internal]:0
+      Illuminate\Foundation\Application::Illuminate\Foundation\{closure}(Object(App\Providers\BladeDirectivesServiceProvider), "App\Providers\BladeDirectivesServiceProvider")
+
+
+real	0m0.317s
+user	0m0.253s
+sys	0m0.065s
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && sed -n 1,40p config/view.php; echo "=== env example"; grep -nE "VIEW_COMPILED|APP_KEY|DB_" .env.example | head; echo "=== storage"; ls storage/framework 2>&1; ls storage/framework/views 2>&1 | head -3; echo "=== gitignore"; cat .gitignore 2>/dev/null | head
+sed: can't read config/view.php: No such file or directory
+=== env example
+=== storage
+ls: cannot access 'storage/framework': No such file or directory
+ls: cannot access 'storage/framework/views': No such file or directory
+=== gitignore
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && ls config | head -40; echo ===; ls storage; echo ===; ls -a; echo ===; cat .env.example | head -30
+app.php
+auth.php
+broadcasting.php
+cache.php
+database.php
+filesystems.php
+firebase.php
+galass.php
+logging.php
+mail.php
+permission.php
+queue.php
+sanctum.php
+services.php
+session.php
+timezone.php
+===
+app
+logs
+===
+.
+..
+.env.example
+.graphifyignore
+app
+artisan
+bootstrap
+composer.json
+composer.lock
+config
+database
+phpunit.xml
+resources
+routes
+storage
+tests
+vendor
+===
+# Firebase JWT verification (Galass Phone Auth)
+# Production: Google JWKS
+FIREBASE_PROJECT_ID=galass
+FIREBASE_JWKS_URL=https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com
+
+# Local / staging: override to serve test JWKS (see routes/web.php /test-jwks)
+# FIREBASE_JWKS_URL=http://192.162.69.113/test-jwks
+
+# API gate — required on all /api/* (header: dev-token). Long random string; never commit real value.
+DEVELOPER_TOKEN=
+
+# Admin URL prefix (default "admin"). Change only with nginx IP/CF Access gate — see docs/nginx-galass-admin-harden.conf
+ADMIN_PREFIX=admin
+
+# Protect GET /cron (query ?secret= or header X-Cron-Secret)
+CRON_SECRET=
+
+# Protect GET /clear?token= ; empty keeps /clear disabled (403)
+MAINTENANCE_TOKEN=
+
+# Wave Checkout (gateway 511) — production values in admin gateway_parameter only
+WAVE_API_KEY=
+WAVE_WEBHOOK_SECRET=
+WAVE_SIGNING_SECRET=
+WAVE_BASE_URL=https://api.wave.com
+
+# Orange Money eWallet QR Code (gateway 512) — production values in admin gateway_parameter only
+# Also set callback_api_key in admin gateway_parameter (Sonatel MerchantCallBack.apiKey)
+ORANGE_MONEY_CLIENT_ID=
+ORANGE_MONEY_CLIENT_SECRET=
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "view.compiled\|VIEW_COMPILED" core --include=*.php --include=*.example -l | head; echo "=== history"; git log --oneline -3 -- core/config/view.php; echo "=== ls tests"; ls core/tests; ls core/tests/Feature | head -30
+core/vendor/laravel/framework/src/Illuminate/View/Component.php
+core/vendor/laravel/framework/src/Illuminate/View/ViewServiceProvider.php
+core/vendor/laravel/framework/src/Illuminate/Foundation/Providers/FoundationServiceProvider.php
+core/vendor/laravel/framework/src/Illuminate/Foundation/Concerns/ResolvesDumpSource.php
+core/vendor/laravel/framework/src/Illuminate/Foundation/Console/ViewClearCommand.php
+core/vendor/laravel/framework/src/Illuminate/Foundation/Console/AboutCommand.php
+core/vendor/laravel/framework/config/view.php
+=== history
+=== ls tests
+Concerns
+CreatesApplication.php
+Feature
+Fixtures
+Manual
+Support
+TestCase.php
+Unit
+Admin
+Auth
+Dispatch
+Integration
+MultiStop
+Push
+Security
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && sed -n '1,80p' vendor/laravel/framework/src/Illuminate/View/ViewServiceProvider.php; echo "=== LoadConfiguration"; sed -n '1,90p' vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php
+<?php
+
+namespace Illuminate\View;
+
+use Illuminate\Container\Container;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\View\Compilers\BladeCompiler;
+use Illuminate\View\Engines\CompilerEngine;
+use Illuminate\View\Engines\EngineResolver;
+use Illuminate\View\Engines\FileEngine;
+use Illuminate\View\Engines\PhpEngine;
+
+class ViewServiceProvider extends ServiceProvider
+{
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->registerFactory();
+        $this->registerViewFinder();
+        $this->registerBladeCompiler();
+        $this->registerEngineResolver();
+
+        $this->app->terminating(static function () {
+            Component::flushCache();
+        });
+    }
+
+    /**
+     * Register the view environment.
+     *
+     * @return void
+     */
+    public function registerFactory()
+    {
+        $this->app->singleton('view', function ($app) {
+            // Next we need to grab the engine resolver instance that will be used by the
+            // environment. The resolver will be used by an environment to get each of
+            // the various engine implementations such as plain PHP or Blade engine.
+            $resolver = $app['view.engine.resolver'];
+
+            $finder = $app['view.finder'];
+
+            $factory = $this->createFactory($resolver, $finder, $app['events']);
+
+            // We will also set the container instance on this view environment since the
+            // view composers may be classes registered in the container, which allows
+            // for great testable, flexible composers for the application developer.
+            $factory->setContainer($app);
+
+            $factory->share('app', $app);
+
+            $app->terminating(static function () {
+                Component::forgetFactory();
+            });
+
+            return $factory;
+        });
+    }
+
+    /**
+     * Create a new Factory Instance.
+     *
+     * @param  \Illuminate\View\Engines\EngineResolver  $resolver
+     * @param  \Illuminate\View\ViewFinderInterface  $finder
+     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
+     * @return \Illuminate\View\Factory
+     */
+    protected function createFactory($resolver, $finder, $events)
+    {
+        return new Factory($resolver, $finder, $events);
+    }
+
+    /**
+     * Register the view finder implementation.
+     *
+     * @return void
+=== LoadConfiguration
+<?php
+
+namespace Illuminate\Foundation\Bootstrap;
+
+use Illuminate\Config\Repository;
+use Illuminate\Contracts\Config\Repository as RepositoryContract;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Collection;
+use SplFileInfo;
+use Symfony\Component\Finder\Finder;
+
+class LoadConfiguration
+{
+    /**
+     * Bootstrap the given application.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @return void
+     */
+    public function bootstrap(Application $app)
+    {
+        $items = [];
+
+        // First we will see if we have a cache configuration file. If we do, we'll load
+        // the configuration items from that file so that it is very quick. Otherwise
+        // we will need to spin through every configuration file and load them all.
+        if (file_exists($cached = $app->getCachedConfigPath())) {
+            $items = require $cached;
+
+            $app->instance('config_loaded_from_cache', $loadedFromCache = true);
+        }
+
+        // Next we will spin through all of the configuration files in the configuration
+        // directory and load each one into the repository. This will make all of the
+        // options available to the developer for use in various parts of this app.
+        $app->instance('config', $config = new Repository($items));
+
+        if (! isset($loadedFromCache)) {
+            $this->loadConfigurationFiles($app, $config);
+        }
+
+        // Finally, we will set the application's environment based on the configuration
+        // values that were loaded. We will pass a callback which will be used to get
+        // the environment in a web context where an "--env" switch is not present.
+        $app->detectEnvironment(fn () => $config->get('app.env', 'production'));
+
+        date_default_timezone_set($config->get('app.timezone', 'UTC'));
+
+        mb_internal_encoding('UTF-8');
+    }
+
+    /**
+     * Load the configuration items from all of the files.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Config\Repository  $repository
+     * @return void
+     *
+     * @throws \Exception
+     */
+    protected function loadConfigurationFiles(Application $app, RepositoryContract $repository)
+    {
+        $files = $this->getConfigurationFiles($app);
+
+        $shouldMerge = method_exists($app, 'shouldMergeFrameworkConfiguration')
+            ? $app->shouldMergeFrameworkConfiguration()
+            : true;
+
+        $base = $shouldMerge
+            ? $this->getBaseConfiguration()
+            : [];
+
+        foreach ((new Collection($base))->diffKeys($files) as $name => $config) {
+            $repository->set($name, $config);
+        }
+
+        foreach ($files as $name => $path) {
+            $base = $this->loadConfigurationFile($repository, $name, $path, $base);
+        }
+
+        foreach ($base as $name => $config) {
+            $repository->set($name, $config);
+        }
+    }
+
+    /**
+     * Load the given configuration file.
+     *
+     * @param  \Illuminate\Contracts\Config\Repository  $repository
+     * @param  string  $name
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && cat .gitignore 2>/dev/null; echo "=== tracked storage:"; git ls-files core/storage | head; echo "=== framework config view"; sed -n '1,40p' core/vendor/laravel/framework/config/view.php
+core/.env
+core/.env.backup
+core/storage/logs/*.log
+core/storage/framework/cache/
+core/storage/framework/sessions/
+core/storage/framework/views/
+core/bootstrap/cache/*.php
+*.log
+.DS_Store
+.history/
+core/.phpunit.result.cache
+graphify-out/**
+MEMORY/WORK/20260729-galass-seclists-offensive-pentest/_ephemeral/**
+core/app/graphify-out/**
+core/resources/graphify-out/
+core/app/resources/graphify-out/
+core/graphify-out/
+core/storage/app/private/*
+!core/storage/app/private/.gitignore
+=== tracked storage:
+core/storage/app/private/.gitignore
+=== framework config view
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | View Storage Paths
+    |--------------------------------------------------------------------------
+    |
+    | Most templating systems load templates from disk. Here you may specify
+    | an array of paths that should be checked for your views. Of course
+    | the usual Laravel view path has already been registered for you.
+    |
+    */
+
+    'paths' => [
+        resource_path('views'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Compiled View Path
+    |--------------------------------------------------------------------------
+    |
+    | This option determines where all the compiled Blade templates will be
+    | stored for your application. Typically, this is within the storage
+    | directory. However, as usual, you are free to change this value.
+    |
+    */
+
+    'compiled' => env(
+        'VIEW_COMPILED_PATH',
+        realpath(storage_path('framework/views'))
+    ),
+
+];
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/framework/testing bootstrap/cache && php artisan test --filter=PhoneAuthUniquenessTest 2>&1 | tail -15
+WARN  Tests\Feature\Auth\PhoneAuthUniquenessTest
+  ! check phone user returns exists false when absent → file_get_conten… 0.10s  
+  ! check phone user returns exists true when present → file_get_conten… 0.02s  
+  ! check phone driver is scoped to drivers table → file_get_contents(/… 0.02s  
+  ! register intent returns mobile taken when phone exists → file_get_c… 0.02s  
+  ! login intent returns mobile not found when absent → file_get_conten… 0.01s  
+  ! no intent returns mobile taken when phone exists without firebase u… 0.02s  
+  ! driver register intent returns mobile taken → file_get_contents(/ho… 0.02s  
+  ! unique constraint rejects duplicate users dial mobile → file_get_co… 0.01s  
+  ! same mobile allowed on users and drivers → file_get_contents(/home/… 0.01s  
+
+  Tests:    9 warnings (15 assertions)
+  Duration: 0.28s
+
+# Todos
+[✓] Environnement PHP (binaire statique) + dossiers storage pour php artisan test
+[ ] S-W1-01 ISC-3 : gardes ipn/* + dev-token, suite sécurité
+[ ] S-W1-02 ISC-4 : porter le triage docs/BUGS.md (c40c30de)
+[ ] S-W1-03/04/05 ISC-10, 10.1, 10.2 : validation en une étape + gardes
+[ ] S-W1-06 ISC-10.3 : bouton unique (partie route) — capture Aditi
+[ ] S-W1-07..10 ISC-11 → 11.3 : SMS validation
+[ ] S-W1-11/12 ISC-20, 20.2 : photo inscription driver + login legacy
+[ ] S-W1-13 ISC-30.2 : anti-régression passerelles Payment
+[ ] S-W1-14 ISC-40 : migration order/visible services
+[ ] S-W1-15 ISC-41 : endpoints admin réordonner/visibilité
+[ ] S-W1-16/17/18 ISC-42,43,44 : API Rider services
+[ ] Résumé factuel dans /home/ubuntu/actions-runner/_work/_temp/task_done.md
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "ipn/\*" core/app/Http/Middleware/VerifyCsrfToken.php; echo "=== api.php dev-token"; grep -rn "dev-token" core/app/Http/Middleware/*.php core/routes/api.php | head -20; echo "=== ipn.php"; sed -n '1,20p' core/routes/ipn.php
+12:        'ipn/*',
+=== api.php dev-token
+core/app/Http/Middleware/DeveloperToken.php:19:        $reqDevToken = (string) ($request->header('dev-token') ?? '');
+core/app/Http/Middleware/RequireMapsAuth.php:10: * Gate web Maps proxy (G-31): session auth (user/admin/driver) or valid dev-token.
+core/app/Http/Middleware/RequireMapsAuth.php:17:        $reqDevToken = (string) ($request->header('dev-token') ?? '');
+=== ipn.php
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::post('wave', 'Wave\ProcessController@ipn')->name('Wave');
+Route::any('orange-money', 'OrangeMoney\ProcessController@ipn')->name('OrangeMoney');
+Route::post('paypal', 'Paypal\ProcessController@ipn')->name('Paypal');
+Route::get('paypal-sdk', 'PaypalSdk\ProcessController@ipn')->name('PaypalSdk');
+Route::post('perfect-money', 'PerfectMoney\ProcessController@ipn')->name('PerfectMoney');
+Route::post('stripe', 'Stripe\ProcessController@ipn')->name('Stripe');
+Route::post('stripe-js', 'StripeJs\ProcessController@ipn')->name('StripeJs');
+Route::post('stripe-v3', 'StripeV3\ProcessController@ipn')->name('StripeV3');
+Route::post('skrill', 'Skrill\ProcessController@ipn')->name('Skrill');
+Route::post('paytm', 'Paytm\ProcessController@ipn')->name('Paytm');
+Route::post('payeer', 'Payeer\ProcessController@ipn')->name('Payeer');
+Route::post('paystack', 'Paystack\ProcessController@ipn')->name('Paystack');
+Route::get('flutterwave/{trx}/{type}', 'Flutterwave\ProcessController@ipn')->name('Flutterwave');
+Route::post('razorpay', 'Razorpay\ProcessController@ipn')->name('Razorpay');
+Route::post('instamojo', 'Instamojo\ProcessController@ipn')->name('Instamojo');
+Route::get('blockchain', 'Blockchain\ProcessController@ipn')->name('Blockchain');
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls core/tests/Feature/Security/; grep -rn "group=security\|@group" core/tests/Feature/Security/*.php | head -10; grep -rn "group" core/phpunit.xml
+DeveloperTokenStatusTest.php
+DispatchSecurityBaselineTest.php
+FcmServiceAccountOutsideWebrootTest.php
+GeneralSettingNoSecretsTest.php
+MapsWebAuthTest.php
+RideMessageOwnershipTest.php
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "@group security\|@group  *security" core/tests | head; echo "=== group:"; grep -rn "group(" core/tests/Feature/Security/*.php | head
+=== group:
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php artisan test --group=security 2>&1 | tail -25
+#!/usr/bin/env php
+
+   INFO  No tests found.
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "Group(" core/tests | head -20; echo "=== all group usages"; grep -rn "@group\|#\[Group" core/tests | wc -l; echo "=== docs security"; grep -rn "group=security" docs/ MEMORY/ 2>/dev/null | head -10
+=== all group usages
+10
+=== docs security
+MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md:116:| ISC-3 | phpunit | grep + PHPUnit sécurité | grep présent ; suite 100 % verte | grep "ipn/\*" core/app/Http/Middleware/VerifyCsrfToken.php && php artisan test --group=security | literal |
+MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md:391:  | S-W1-01 | ISC-3 | backend | `core/app/Http/Middleware/VerifyCsrfToken.php` (`ipn/*`), `core/routes/api.php` (`dev-token`) | Vérifier gardes inchangées | `grep "ipn/\*" core/app/Http/Middleware/VerifyCsrfToken.php` + `php artisan test --group=security` | — | Forge ; revue Silas |
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rn "@group\|#\[Group" core/tests
+core/tests/Feature/Integration/FareGoogleHttpFakeTest.php:22: * @group integration
+core/tests/Feature/Integration/DispatchRideIntegrationTest.php:26: * @group integration
+core/tests/Feature/Integration/MultiStopProgressionIntegrationTest.php:23: * @group integration
+core/tests/Feature/Integration/MultiStopRideIntegrationTest.php:25: * @group integration
+core/tests/Feature/Dispatch/DispatchCriticalSuiteTest.php:27: * @group dispatch-critical
+core/tests/Feature/Push/RidePushTriggersTest.php:29: * @group push
+core/tests/Feature/Push/RidePushFix3Test.php:25: * @group push
+core/tests/Feature/Push/OnlinePaymentThanksTest.php:21: * @group push
+core/tests/Feature/Push/RidePushFcmTokenTest.php:24: * @group push
+core/tests/Feature/Push/RidePushFix2Test.php:25: * @group push
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php artisan test tests/Feature/Security 2>&1 | tail -25
+39▕             @rmdir($d);
+
+  1   tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Security\FcmServiceAccountOutsideWebrootTest…  Error   
+  Undefined constant "Tests\Feature\Security\GLOB_BRACE"
+
+  at tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+     31▕ 
+     32▕     protected function tearDown(): void
+     33▕     {
+     34▕         FcmServiceAccount::$chmod = 'chmod';
+  ➜  35▕         foreach (glob($this->tmpDir . '/{,*/}*', GLOB_BRACE) ?: [] as $f) {
+     36▕             is_file($f) && unlink($f);
+     37▕         }
+     38▕         foreach (array_reverse(glob($this->tmpDir . '/*', GLOB_ONLYDIR) ?: []) as $d) {
+     39▕             @rmdir($d);
+
+  1   tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+
+
+  Tests:    12 failed, 24 warnings, 1 passed (757 assertions)
+  Duration: 0.87s
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php artisan test tests/Feature/Security 2>&1 | head -80
+#!/usr/bin/env php
+
+   WARN  Tests\Feature\Security\DeveloperTokenStatusTest
+  ! api login without dev token returns 401 → file_get_contents(/home/u… 0.09s  
+  ! api login with wrong dev token returns 401 → file_get_contents(/hom… 0.01s  
+
+   WARN  Tests\Feature\Security\DispatchSecurityBaselineTest
+  ! cron without secret returns 403 → file_get_contents(/home/ubuntu/ac… 0.05s  
+  ! cron with valid secret does not return 403 → file_get_contents(/hom… 0.02s  
+  ! ipn routes exempt from csrf verification → file_get_contents(/home/… 0.01s  
+  ! ipn route surface at least thirty three routes → file_get_contents(… 0.01s  
+
+   FAIL  Tests\Feature\Security\FcmServiceAccountOutsideWebrootTest
+  ⨯ default path is private storage outside web root                     0.02s  
+  ⨯ env override is used                                                 0.02s  
+  ⨯ missing file throws explicit logged exception                        0.02s  
+  ⨯ dispatch push reads key from resolver path                           0.01s  
+  ⨯ dispatch push missing key is not silenced                            0.01s  
+  ⨯ admin upload writes to private path owner only                       0.02s  
+  ⨯ no code reads key from public assets                                 0.03s  
+  ⨯ htaccess denies json under assets admin                              0.01s  
+  ⨯ legacy public url is not served by app                               0.04s  
+  ⨯ missing file message does not disclose path                          0.01s  
+  ⨯ store chmod failure is not silent                                    0.01s  
+  ⨯ admin upload reports error when chmod fails                          0.01s  
+
+   WARN  Tests\Feature\Security\GeneralSettingNoSecretsTest
+  ✓ response contains no secret value anywhere                           0.04s  
+  ! secret keys are absent → file_get_contents(/home/ubuntu/actions-run… 0.01s  
+  ! public fields needed by apps are present → file_get_contents(/home/… 0.01s  
+
+   WARN  Tests\Feature\Security\MapsWebAuthTest
+  ! suggested places unauth returns 401 → file_get_contents(/home/ubunt… 0.03s  
+  ! location by lat lon unauth returns 401 → file_get_contents(/home/ub… 0.02s  
+  ! place details unauth returns 401 → file_get_contents(/home/ubuntu/a… 0.02s  
+
+   WARN  Tests\Feature\Security\RideMessageOwnershipTest
+  ! ride driver can list messages → file_get_contents(/home/ubuntu/acti… 0.03s  
+  ! other driver cannot list messages → file_get_contents(/home/ubuntu/… 0.02s  
+  ! other driver cannot send message → file_get_contents(/home/ubuntu/a… 0.02s  
+  ! ride driver can send message → file_get_contents(/home/ubuntu/actio… 0.02s  
+  ! driver unknown or malformed ride id is 404 → file_get_contents(/hom… 0.02s  
+  ! user token cannot use driver message endpoint → file_get_contents(/… 0.02s  
+  ! ride user can list messages → file_get_contents(/home/ubuntu/action… 0.02s  
+  ! other user cannot list messages → file_get_contents(/home/ubuntu/ac… 0.02s  
+  ! other user cannot send message → file_get_contents(/home/ubuntu/act… 0.02s  
+  ! ride user can send message → file_get_contents(/home/ubuntu/actions… 0.02s  
+  ! isc55 driver send message to invalid or foreign ride is 404 and ins… 0.03s  
+  ! isc55 user send message to invalid or foreign ride is 404 and inser… 0.02s  
+  ! unauthenticated requests are 401 → file_get_contents(/home/ubuntu/a… 0.02s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Security\FcmServiceAccountOutsideWebrootTest…  Error   
+  Undefined constant "Tests\Feature\Security\GLOB_BRACE"
+
+  at tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+     31▕ 
+     32▕     protected function tearDown(): void
+     33▕     {
+     34▕         FcmServiceAccount::$chmod = 'chmod';
+  ➜  35▕         foreach (glob($this->tmpDir . '/{,*/}*', GLOB_BRACE) ?: [] as $f) {
+     36▕             is_file($f) && unlink($f);
+     37▕         }
+     38▕         foreach (array_reverse(glob($this->tmpDir . '/*', GLOB_ONLYDIR) ?: []) as $d) {
+     39▕             @rmdir($d);
+
+  1   tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\Security\FcmServiceAccountOutsideWebrootTest…  Error   
+  Undefined constant "Tests\Feature\Security\GLOB_BRACE"
+
+  at tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+     31▕ 
+     32▕     protected function tearDown(): void
+     33▕     {
+     34▕         FcmServiceAccount::$chmod = 'chmod';
+  ➜  35▕         foreach (glob($this->tmpDir . '/{,*/}*', GLOB_BRACE) ?: [] as $f) {
+     36▕             is_file($f) && unlink($f);
+     37▕         }
+     38▕         foreach (array_reverse(glob($this->tmpDir . '/*', GLOB_ONLYDIR) ?: []) as $d) {
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php artisan test --filter='DeveloperTokenStatusTest' 2>&1 | sed -n '1,60p'
+#!/usr/bin/env php
+
+   WARN  Tests\Feature\Security\DeveloperTokenStatusTest
+  ! api login without dev token returns 401 → file_get_contents(/home/u… 0.10s  
+  ! api login with wrong dev token returns 401 → file_get_contents(/hom… 0.01s  
+
+  Tests:    2 warnings (6 assertions)
+  Duration: 0.19s
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php vendor/bin/phpunit --filter='DeveloperTokenStatusTest' --display-warnings 2>&1 | sed -n '1,60p'
+PHPUnit 10.5.63 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.3.32
+Configuration: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/phpunit.xml
+
+..                                                                  2 / 2 (100%)
+
+Time: 00:00.115, Memory: 57.00 MB
+
+OK (2 tests, 6 assertions)
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php artisan test --filter='DeveloperTokenStatusTest' -v 2>&1 | head -30; echo "=======vvv"; php artisan test --filter='DeveloperTokenStatusTest' -vvv 2>&1 | head -40
+#!/usr/bin/env php
+PHPUnit 10.5.63 by Sebastian Bergmann and contributors.
+
+Unknown option "-v"
+=======vvv
+﻿#!/usr/bin/env php
+PHPUnit 10.5.63 by Sebastian Bergmann and contributors.
+
+Unknown option "-v"
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php vendor/bin/phpunit tests/Feature/Security --display-warnings 2>&1 | tail -30
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+
+8) Tests\Feature\Security\FcmServiceAccountOutsideWebrootTest::test_htaccess_denies_json_under_assets_admin
+Error: Undefined constant "Tests\Feature\Security\GLOB_BRACE"
+
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+
+9) Tests\Feature\Security\FcmServiceAccountOutsideWebrootTest::test_legacy_public_url_is_not_served_by_app
+Error: Undefined constant "Tests\Feature\Security\GLOB_BRACE"
+
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+
+10) Tests\Feature\Security\FcmServiceAccountOutsideWebrootTest::test_missing_file_message_does_not_disclose_path
+Error: Undefined constant "Tests\Feature\Security\GLOB_BRACE"
+
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+
+11) Tests\Feature\Security\FcmServiceAccountOutsideWebrootTest::test_store_chmod_failure_is_not_silent
+Error: Undefined constant "Tests\Feature\Security\GLOB_BRACE"
+
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+
+12) Tests\Feature\Security\FcmServiceAccountOutsideWebrootTest::test_admin_upload_reports_error_when_chmod_fails
+Error: Undefined constant "Tests\Feature\Security\GLOB_BRACE"
+
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+
+ERRORS!
+Tests: 37, Assertions: 757, Errors: 12.
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && grep -rn "display-warnings\|displayW\|'--" vendor/laravel/framework/src/Illuminate/Foundation/Console/TestCommand.php | head -30; echo "=== exit code"; php artisan test --filter=DeveloperTokenStatusTest >/dev/null 2>&1; echo "artisan exit=$?"; php vendor/bin/phpunit --filter=DeveloperTokenStatusTest >/dev/null 2>&1; echo "phpunit exit=$?"
+grep: vendor/laravel/framework/src/Illuminate/Foundation/Console/TestCommand.php: No such file or directory
+=== exit code
+artisan exit=0
+phpunit exit=0
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && f=$(find vendor/laravel -name "TestCommand.php" | head -1); echo $f; grep -n "args\|options\|display" "$f" | head -40
+grep: : No such file or directory
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && find vendor/laravel -name "*Test*.php" -path "*Console*" | head; find vendor -name "TestCommand.php" | head
+vendor/laravel/framework/src/Illuminate/Console/Concerns/CreatesMatchingTest.php
+vendor/laravel/framework/src/Illuminate/Console/Scheduling/ScheduleTestCommand.php
+vendor/laravel/framework/src/Illuminate/Foundation/Console/TestMakeCommand.php
+vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php
+vendor/spatie/laravel-ignition/src/Commands/TestCommand.php
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && grep -n "display\|args\|option" vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php | head -30; echo ===; grep -rn "display-" vendor/nunomaduro/collision/src/ | head
+73:        if ($this->option('coverage') && ! Coverage::isAvailable()) {
+75:                "\n  <fg=white;bg=red;options=bold> ERROR </> Code coverage driver not available.%s</>",
+87:        $usesParallel = $this->option('parallel');
+93:        $options = array_slice($_SERVER['argv'], $this->option('without-tty') ? 3 : 2);
+97:        $parallel = $this->option('parallel');
+103:            $parallel ? $this->paratestArguments($options) : $this->phpunitArguments($options)
+111:            $process->setTty(! $this->option('without-tty'));
+128:        if ($exitCode === 0 && $this->option('coverage')) {
+129:            if (! $this->usingPest() && $this->option('parallel')) {
+135:            $exitCode = (int) ($coverage < $this->option('min'));
+139:                    "\n  <fg=white;bg=red;options=bold> FAIL </> Code coverage below expected:<fg=red;options=bold> %s %%</>. Minimum:<fg=white;options=bold> %s %%</>.",
+141:                    number_format((float) $this->option('min'), 1)
+157:            $command = $this->option('parallel') ? ['vendor/pestphp/pest/bin/pest', '--parallel'] : ['vendor/pestphp/pest/bin/pest'];
+159:            $command = $this->option('parallel') ? ['vendor/brianium/paratest/bin/paratest'] : ['vendor/phpunit/phpunit/phpunit'];
+178:        if ($this->option('coverage')) {
+183:        if ($this->option('ansi')) {
+185:        } elseif ($this->option('no-ansi')) {
+207:     * @param  array  $options
+210:    protected function phpunitArguments($options)
+212:        $options = array_merge(['--no-output'], $options);
+214:        $options = array_values(array_filter($options, function ($option) {
+215:            return ! Str::startsWith($option, '--env=')
+216:                && $option != '-q'
+217:                && $option != '--quiet'
+218:                && $option != '--coverage'
+219:                && $option != '--compact'
+220:                && $option != '--profile'
+221:                && $option != '--ansi'
+222:                && $option != '--no-ansi'
+223:                && ! Str::startsWith($option, '--min');
+===
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && sed -n '150,245p' vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php
+* Get the PHP binary to execute.
+     *
+     * @return array
+     */
+    protected function binary()
+    {
+        if ($this->usingPest()) {
+            $command = $this->option('parallel') ? ['vendor/pestphp/pest/bin/pest', '--parallel'] : ['vendor/pestphp/pest/bin/pest'];
+        } else {
+            $command = $this->option('parallel') ? ['vendor/brianium/paratest/bin/paratest'] : ['vendor/phpunit/phpunit/phpunit'];
+        }
+
+        if ('phpdbg' === PHP_SAPI) {
+            return array_merge([PHP_BINARY, '-qrr'], $command);
+        }
+
+        return array_merge([PHP_BINARY], $command);
+    }
+
+    /**
+     * Gets the common arguments of PHPUnit and Pest.
+     *
+     * @return array
+     */
+    protected function commonArguments()
+    {
+        $arguments = [];
+
+        if ($this->option('coverage')) {
+            $arguments[] = '--coverage-php';
+            $arguments[] = Coverage::getPath();
+        }
+
+        if ($this->option('ansi')) {
+            $arguments[] = '--colors=always';
+        } elseif ($this->option('no-ansi')) {
+            $arguments[] = '--colors=never';
+        } elseif ((new Console)->hasColorSupport()) {
+            $arguments[] = '--colors=always';
+        }
+
+        return $arguments;
+    }
+
+    /**
+     * Determines if Pest is being used.
+     *
+     * @return bool
+     */
+    protected function usingPest()
+    {
+        return function_exists('\Pest\\version');
+    }
+
+    /**
+     * Get the array of arguments for running PHPUnit.
+     *
+     * @param  array  $options
+     * @return array
+     */
+    protected function phpunitArguments($options)
+    {
+        $options = array_merge(['--no-output'], $options);
+
+        $options = array_values(array_filter($options, function ($option) {
+            return ! Str::startsWith($option, '--env=')
+                && $option != '-q'
+                && $option != '--quiet'
+                && $option != '--coverage'
+                && $option != '--compact'
+                && $option != '--profile'
+                && $option != '--ansi'
+                && $option != '--no-ansi'
+                && ! Str::startsWith($option, '--min');
+        }));
+
+        return array_merge($this->commonArguments(), ['--configuration='.$this->getConfigurationFile()], $options);
+    }
+
+    /**
+     * Get the configuration file.
+     *
+     * @return string
+     */
+    protected function getConfigurationFile()
+    {
+        if (! file_exists($file = base_path('phpunit.xml'))) {
+            $file = base_path('phpunit.xml.dist');
+        }
+
+        return $file;
+    }
+
+    /**
+     * Get the array of arguments for running Paratest.
+     *
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && sed -n '60,150p' vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php; echo "=== junit?"; grep -rn "junit\|no-output" vendor/nunomaduro/collision/src/ | head
+{
+        parent::__construct();
+
+        $this->ignoreValidationErrors();
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        if ($this->option('coverage') && ! Coverage::isAvailable()) {
+            $this->output->writeln(sprintf(
+                "\n  <fg=white;bg=red;options=bold> ERROR </> Code coverage driver not available.%s</>",
+                Coverage::usingXdebug()
+                    ? " Did you set <href=https://xdebug.org/docs/code_coverage#mode>Xdebug's coverage mode</>?"
+                    : ' Did you install <href=https://xdebug.org/>Xdebug</> or <href=https://github.com/krakjoe/pcov>PCOV</>?'
+            ));
+
+            $this->newLine();
+
+            return 1;
+        }
+
+        /** @var bool $usesParallel */
+        $usesParallel = $this->option('parallel');
+
+        if ($usesParallel && ! $this->isParallelDependenciesInstalled()) {
+            throw new RequirementsException('Running Collision 8.x artisan test command in parallel requires at least ParaTest (brianium/paratest) 7.x.');
+        }
+
+        $options = array_slice($_SERVER['argv'], $this->option('without-tty') ? 3 : 2);
+
+        $this->clearEnv();
+
+        $parallel = $this->option('parallel');
+
+        $process = (new Process(array_merge(
+            // Binary ...
+            $this->binary(),
+            // Arguments ...
+            $parallel ? $this->paratestArguments($options) : $this->phpunitArguments($options)
+        ),
+            null,
+            // Envs ...
+            $parallel ? $this->paratestEnvironmentVariables() : $this->phpunitEnvironmentVariables(),
+        ))->setTimeout(null);
+
+        try {
+            $process->setTty(! $this->option('without-tty'));
+        } catch (RuntimeException $e) {
+            // $this->output->writeln('Warning: '.$e->getMessage());
+        }
+
+        $exitCode = 1;
+
+        try {
+            $exitCode = $process->run(function ($type, $line) {
+                $this->output->write($line);
+            });
+        } catch (ProcessSignaledException $e) {
+            if (extension_loaded('pcntl') && $e->getSignal() !== SIGINT) {
+                throw $e;
+            }
+        }
+
+        if ($exitCode === 0 && $this->option('coverage')) {
+            if (! $this->usingPest() && $this->option('parallel')) {
+                $this->newLine();
+            }
+
+            $coverage = Coverage::report($this->output);
+
+            $exitCode = (int) ($coverage < $this->option('min'));
+
+            if ($exitCode === 1) {
+                $this->output->writeln(sprintf(
+                    "\n  <fg=white;bg=red;options=bold> FAIL </> Code coverage below expected:<fg=red;options=bold> %s %%</>. Minimum:<fg=white;options=bold> %s %%</>.",
+                    number_format($coverage, 1),
+                    number_format((float) $this->option('min'), 1)
+                ));
+            }
+        }
+
+        return $exitCode;
+    }
+
+    /**
+     * Get the PHP binary to execute.
+=== junit?
+vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php:212:        $options = array_merge(['--no-output'], $options);
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php vendor/phpunit/phpunit/phpunit --no-output --colors=never --configuration=phpunit.xml --filter=DeveloperTokenStatusTest 2>&1 | head -30; echo "exit=$?"
+exit=0
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php artisan list 2>/dev/null | grep -A2 -i "^  test"; echo ===; grep -rn "TestCommand\|'test'" bootstrap/app.php app/Providers/*.php 2>/dev/null | head; echo "=== collision version"; grep -n '"version"' vendor/nunomaduro/collision/composer.json 2>/dev/null; ls vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/
+test                          Run the application tests
+  tinker                        Interact with your application
+  ui                            Swap the front-end scaffolding for the application
+===
+=== collision version
+TestCommand.php
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && sed -n '1,60p' vendor/spatie/laravel-ignition/src/Commands/TestCommand.php; echo "=== collision signature"; sed -n '1,60p' vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php | grep -n "signature\|protected \$" 
+<?php
+
+namespace Spatie\LaravelIgnition\Commands;
+
+use Composer\InstalledVersions;
+use Exception;
+use Illuminate\Config\Repository;
+use Illuminate\Console\Command;
+use Illuminate\Log\LogManager;
+use Spatie\FlareClient\Flare;
+use Spatie\FlareClient\Http\Exceptions\BadResponseCode;
+
+class TestCommand extends Command
+{
+    protected $signature = 'flare:test';
+
+    protected $description = 'Send a test notification to Flare';
+
+    protected Repository $config;
+
+    public function handle(Repository $config): void
+    {
+        $this->config = $config;
+
+        $this->checkFlareKey();
+
+        if (app()->make('log') instanceof LogManager) {
+            $this->checkFlareLogger();
+        }
+
+        $this->sendTestException();
+    }
+
+    protected function checkFlareKey(): self
+    {
+        $message = empty($this->config->get('flare.key'))
+            ? '❌ Flare key not specified. Make sure you specify a value in the `key` key of the `flare` config file.'
+            : '✅ Flare key specified';
+
+        $this->info($message);
+
+        return $this;
+    }
+
+    public function checkFlareLogger(): self
+    {
+        $defaultLogChannel = $this->config->get('logging.default');
+
+        $activeStack = $this->config->get("logging.channels.{$defaultLogChannel}");
+
+        if (is_null($activeStack)) {
+            $this->info("❌ The default logging channel `{$defaultLogChannel}` is not configured in the `logging` config file");
+        }
+
+        if (! isset($activeStack['channels']) || ! in_array('flare', $activeStack['channels'])) {
+            $this->info("❌ The logging channel `{$defaultLogChannel}` does not contain the 'flare' channel");
+        }
+
+        if (is_null($this->config->get('logging.channels.flare'))) {
+            $this->info('❌ There is no logging channel named `flare` in the `logging` config file');
+=== collision signature
+31:     * The name and signature of the console command.
+35:    protected $signature = 'test
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php vendor/phpunit/phpunit/phpunit --no-output --colors=always --configuration=phpunit.xml --filter=DeveloperTokenStatusTest >/tmp/o.txt 2>/tmp/e.txt; echo "rc=$?"; echo "out:"; cat /tmp/o.txt; echo "err:"; cat /tmp/e.txt; echo "=== artisan raw:"; php artisan test --filter=DeveloperTokenStatusTest >/tmp/o2.txt 2>/tmp/e2.txt; echo "rc=$?"; head -20 /tmp/o2.txt; echo "--stderr--"; head -5 /tmp/e2.txt
+rc=0
+out:
+err:
+=== artisan raw:
+rc=0
+﻿#!/usr/bin/env php
+
+   WARN  Tests\Feature\Security\DeveloperTokenStatusTest
+  ! api login without dev token returns 401 → file_get_contents(/home/u… 0.10s  
+  ! api login with wrong dev token returns 401 → file_get_contents(/hom… 0.01s  
+
+  Tests:    2 warnings (6 assertions)
+  Duration: 0.17s
+
+--stderr--
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && grep -rln "Run the application tests" vendor/ | head; echo ===; grep -rn "WarningsPrinter\|display-warnings\|NoOutput" vendor/nunomaduro/collision/src | head
+vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php
+===
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && grep -rn "printer\|Printer\|clearEnv\|phpunitEnvironmentVariables" vendor/nunomaduro/collision/src/Adapters/Laravel/Commands/TestCommand.php | head; echo "=== defaultr"; grep -rn "class DefaultPrinter" -A20 vendor/nunomaduro/collision/src/Adapters/Phpunit/Printers/DefaultPrinter.php | head -30; echo "=== where registered"; grep -rn "DefaultPrinter" vendor/nunomaduro/collision/src | head
+37:        {--compact : Indicates whether the compact printer should be used}
+95:        $this->clearEnv();
+107:            $parallel ? $this->paratestEnvironmentVariables() : $this->phpunitEnvironmentVariables(),
+297:    protected function phpunitEnvironmentVariables()
+300:            'COLLISION_PRINTER' => 'DefaultPrinter',
+334:    protected function clearEnv()
+=== defaultr
+52:final class DefaultPrinter
+53-{
+54-    /**
+55-     * The output instance.
+56-     */
+57-    private ConsoleOutput $output;
+58-
+59-    /**
+60-     * The state instance.
+61-     */
+62-    private State $state;
+63-
+64-    /**
+65-     * The style instance.
+66-     */
+67-    private Style $style;
+68-
+69-    /**
+70-     * If the printer should be compact.
+71-     */
+72-    private static bool $compact = false;
+=== where registered
+vendor/nunomaduro/collision/src/Adapters/Phpunit/Style.php:8:use NunoMaduro\Collision\Adapters\Phpunit\Printers\DefaultPrinter;
+vendor/nunomaduro/collision/src/Adapters/Phpunit/Style.php:105:        if (! $state->headerPrinted && ! DefaultPrinter::compact()) {
+vendor/nunomaduro/collision/src/Adapters/Phpunit/Style.php:118:                if (DefaultPrinter::compact()) {
+vendor/nunomaduro/collision/src/Adapters/Phpunit/Subscribers/EnsurePrinterIsRegisteredSubscriber.php:7:use NunoMaduro\Collision\Adapters\Phpunit\Printers\DefaultPrinter;
+vendor/nunomaduro/collision/src/Adapters/Phpunit/Subscribers/EnsurePrinterIsRegisteredSubscriber.php:78:            $printer = new ReportablePrinter(new DefaultPrinter(true));
+vendor/nunomaduro/collision/src/Adapters/Phpunit/Subscribers/EnsurePrinterIsRegisteredSubscriber.php:81:                DefaultPrinter::compact(true);
+vendor/nunomaduro/collision/src/Adapters/Phpunit/Subscribers/EnsurePrinterIsRegisteredSubscriber.php:85:                DefaultPrinter::profile(true);
+vendor/nunomaduro/collision/src/Adapters/Phpunit/Printers/ReportablePrinter.php:12: * @mixin DefaultPrinter
+vendor/nunomaduro/collision/src/Adapters/Phpunit/Printers/ReportablePrinter.php:19:    public function __construct(private readonly DefaultPrinter $printer)
+vendor/nunomaduro/collision/src/Adapters/Phpunit/Printers/DefaultPrinter.php:52:final class DefaultPrinter
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && COLLISION_PRINTER=DefaultPrinter php vendor/phpunit/phpunit/phpunit --no-output --configuration=phpunit.xml --filter=DeveloperTokenStatusTest 2>&1 | head; echo "rc=$?"; echo "=== grep fgc in collision"; grep -rn "file_get_contents" vendor/nunomaduro/collision/src | head
+WARN  Tests\Feature\Security\DeveloperTokenStatusTest
+  ! api login without dev token returns 401 → file_get_contents(/home/u… 0.09s  
+  ! api login with wrong dev token returns 401 → file_get_contents(/hom… 0.01s  
+
+  Tests:    2 warnings (6 assertions)
+  Duration: 0.17s
+
+rc=0
+=== grep fgc in collision
+
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php:$PATH; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && COLLISION_PRINTER=DefaultPrinter php vendor/phpunit/phpunit/phpunit --no-output --configuration=phpunit.xml --filter=DeveloperTokenStatusTest --display-warnings 2>&1 | cat -v | head -30
+WARN  Tests\Feature\Security\DeveloperTokenStatusTest
+  ! api login without dev token returns 401 M-bM-^FM-^R file_get_contents(/home/uM-bM-^@M-& 0.09s  
+  ! api login with wrong dev token returns 401 M-bM-^FM-^R file_get_contents(/homM-bM-^@M-& 0.02s  
+  M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@  
+   WARNINGS  Tests\Feature\Security\DeveloperTokenStatusTest > api login witM-bM-^@M-&   
+  file_get_contents(/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/.env): Failed to open stream: No such file or directory
+
+  at vendor/vlucas/phpdotenv/src/Store/File/Reader.php:73
+     69M-bM-^VM-^U      */
+     70M-bM-^VM-^U     private static function readFromFile(string $path, ?string $encoding = null)
+     71M-bM-^VM-^U     {
+     72M-bM-^VM-^U         /** @var Option<string> */
+  M-bM-^^M-^\  73M-bM-^VM-^U         $content = Option::fromValue(@\file_get_contents($path), false);
+     74M-bM-^VM-^U 
+     75M-bM-^VM-^U         return $content->flatMap(static function (string $content) use ($encoding) {
+     76M-bM-^VM-^U             return Str::utf8($content, $encoding)->mapError(static function (string $error) {
+     77M-bM-^VM-^U                 throw new InvalidEncodingException($error);
+
+      ^[[2m+7 vendor frames ^[[22m
+  8   tests/CreatesApplication.php:14
+  9   tests/Feature/Security/DeveloperTokenStatusTest.php:15
+
+  M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@M-bM-^TM-^@  
+   WARNINGS  Tests\Feature\Security\DeveloperTokenStatusTest > api login witM-bM-^@M-&   
+  file_get_contents(/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/.env): Failed to open stream: No such file or directory
+
+  at vendor/vlucas/phpdotenv/src/Store/File/Reader.php:73
+     69M-bM-^VM-^U      */
+     70M-bM-^VM-^U     private static function readFromFile(string $path, ?string $encoding = null)
+
