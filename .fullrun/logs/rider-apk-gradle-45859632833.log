@@ -3803,3 +3803,17 @@ $ find /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos -maxdepth 3 
 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
 /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
 
+$ bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts --help 2>&1 | head -50
+usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+  scaffold --slug s --goal "…" [--title t]      crée l'ISA (sections Problem…Decisions)
+  append   --section "Claims" --text "…"|--file f  ajoute sous une section (créée si absente)
+  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+  set      --field phase --value build          frontmatter
+  replace  --old "…" --new "…"                  remplacement exact unique (corrections)
+  adopt                                          tamponne un ISA hérité (après relecture)
+  verify                                         contrôle l'empreinte (exit 2 si KO)
+  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)
+
