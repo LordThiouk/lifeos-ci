@@ -1433,3 +1433,21 @@ if (import.meta.main) {
   } else { console.error(`commande inconnue: ${cmd}`); process.exit(1); }
 }
 
+$ ls -la ~/.claude/LIFEOS/MEMORY/STATE/.isa-stamp-key 2>&1; echo ---; grep -n "headShort" ~/.claude/LIFEOS/TOOLS/FullRunBuildGuard.ts | head; sed -n "$(grep -n 'export function headShort' ~/.claude/LIFEOS/TOOLS/FullRunBuildGuard.ts | cut -d: -f1),+12p" ~/.claude/LIFEOS/TOOLS/FullRunBuildGuard.ts
+ls: cannot access '/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/MEMORY/STATE/.isa-stamp-key': No such file or directory
+---
+33:export function headShort(isaPath: string): string | null {
+export function headShort(isaPath: string): string | null {
+  const r = git(dirname(isaPath), ["rev-parse", "--short=7", "HEAD"]);
+  const out = r.out.trim();
+  return r.rc === 0 && /^[0-9a-f]{7,40}$/.test(out) ? out : null;
+}
+
+const SHA_RE = /\[@([0-9a-f]{7,40})\]/g;
+
+/** Dernier `[@sha]` de la ligne de preuve `- ISC-N: …`, ou null (preuve sans sha). */
+export function proofSha(isaText: string, isc: string): string | null {
+  const esc = isc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const lines = isaText
+    .split("\n")
+
