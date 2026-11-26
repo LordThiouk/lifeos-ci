@@ -7109,3 +7109,21 @@ Got dependencies!
 167 packages have newer versions incompatible with dependency constraints.
 Try `flutter pub outdated` for more information.
 
+Dépendances résolues avec Flutter 3.50.1. Maintenant, lançons le test ISC-F5-13.
+$ /tmp/flutter/bin/flutter test test/unit/multistop_end_gate_test.dart 2>&1
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_end_gate_test.dart
+00:00 +0: RideModel multistop end gate canEndRide true when no stops
+00:00 +1: RideModel multistop end gate canEndRide false while a stop is pending
+00:00 +2: RideModel multistop end gate canEndRide true when all stops completed
+00:00 +3: ISC-F5-12 — une seule action principale par état escale(s) pending → « Confirmer l'arrêt » seul
+00:00 +4: ISC-F5-12 — une seule action principale par état dernier arrêt → « Terminer la course » seul, style actif
+00:00 +5: ISC-F5-12 — une seule action principale par état course single-stop (sans stops[]) → « Terminer la course » seul, style legacy
+00:00 +6: ISC-F5-13 — « Annuler la course » reste danger, distinct du CTA principal RIDE_ACTIVE — CTA principal actif
+00:00 +7: ISC-F5-13 — « Annuler la course » reste danger, distinct du CTA principal RIDE_ACTIVE — CTA principal en chargement
+00:00 +8: ISC-F5-13 — « Annuler la course » reste danger, distinct du CTA principal tout état rendu — jamais un Annuler de la couleur du CTA principal
+00:01 +9: All tests passed!
+
+Tous les tests passent (9/9), dont les 3 tests ISC-F5-13. Maintenant, `flutter analyze` sur les fichiers touchés, puis je passe à l'ISATool pour cocher ISC-F5-13.
+✗ /tmp/flutter/bin/flutter analyze lib/presentation/screens/ride_details/widgets/ride_details_bottom_sheet_widget.dart test/unit/multistop_end_gate_test.dart 2>&1 failed
+Error: NotFound: FileSystem.access (/home/ubuntu-actions-runner/_work/lifeos-ci/lifeos-ci/target)
+Typo dans le chemin. Corrigeons et relançons l'analyse.
