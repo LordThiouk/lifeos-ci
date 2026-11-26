@@ -7439,3 +7439,122 @@ Error: File not found: /home/ubuntu/actions-runner/_temp/oc/prompt.md
 → Read /home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
 • Explore Rider repo structure Explore Agent
 Let me explore the repository structure to understand what needs to be aligned.
+✓ Explore Rider repo structure Explore Agent
+→ Read android/gradle/wrapper/gradle-wrapper.properties
+→ Read android/settings.gradle.kts
+✱ Glob "android/**/*.gradle*" in . · 3 matches
+→ Read pubspec.yaml
+Let me verify the current state of the Android toolchain files directly.
+→ Read android/app/build.gradle.kts
+✱ Glob "android/**/gradle-wrapper*" in . · 1 match
+
+$ git log --oneline -10
+207d752 build(android): align Rider toolchain with Flutter 3.50.1
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+b83aba6 test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+3a399e8 docs(isa): F4-34 rebuild evidence after Verify BLOCK
+2ec49c8 test(rider): F4-34 controller recreation, FCM dedup, cross-channel
+dcb4bf0 fix(rider): F4-34 share one-shot gate across controller and FCM
+69e248d docs(isa): tick ISC-F4-21 with map test evidence
+
+$ git status
+On branch build/rider-apk-gradle
+nothing to commit, working tree clean
+
+$ git diff HEAD
+(no output)
+
+$ git show 207d752 --stat
+commit 207d752e79f22d194e48ab53daefcd377e2fedf2
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 18:55:13 2026 +0000
+
+    build(android): align Rider toolchain with Flutter 3.50.1
+    
+    - Downgrade Gradle wrapper 9.1.0 -> 8.14 (match Driver, accepted by Flutter 3.50.1)
+    - Downgrade AGP 9.0.1 -> 8.11.1
+    - Align Kotlin 2.2.20 -> 2.3.0 and Crashlytics plugin 3.0.7 -> 3.0.3
+    - Align gradle.properties with Driver-stable flags (keep android.enableJetifier=false)
+    
+    No lib/ changes. Not built locally (flutter build/gradlew forbidden on box).
+
+ android/gradle.properties                        | 19 ++++++++++++-------
+ android/gradle/wrapper/gradle-wrapper.properties |  2 +-
+ android/settings.gradle.kts                      |  6 +++---
+ 3 files changed, 16 insertions(+), 11 deletions(-)
+
+$ git show 207d752
+commit 207d752e79f22d194e48ab53daefcd377e2fedf2
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 18:55:13 2026 +0000
+
+    build(android): align Rider toolchain with Flutter 3.50.1
+    
+    - Downgrade Gradle wrapper 9.1.0 -> 8.14 (match Driver, accepted by Flutter 3.50.1)
+    - Downgrade AGP 9.0.1 -> 8.11.1
+    - Align Kotlin 2.2.20 -> 2.3.0 and Crashlytics plugin 3.0.7 -> 3.0.3
+    - Align gradle.properties with Driver-stable flags (keep android.enableJetifier=false)
+    
+    No lib/ changes. Not built locally (flutter build/gradlew forbidden on box).
+
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 0e4397f..bb6acb3 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -1,9 +1,14 @@
+-org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+-org.gradle.daemon=false
+-org.gradle.parallel=false
+-org.gradle.configureondemand=false
+-android.enableJetifier=false
++org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+ android.useAndroidX=true
+-android.newDsl=false
++android.enableJetifier=false
++# This builtInKotlin flag was added automatically by Flutter migrator
+ android.builtInKotlin=false
+-android.r8.proguardAndroidTxt.disallowed=false
++# This newDsl flag was added automatically by Flutter migrator
++android.newDsl=false
++
++# Build speed (local Fastlane / incremental)
++org.gradle.caching=true
++org.gradle.parallel=true
++org.gradle.daemon=true
++org.gradle.configureondemand=true
++org.gradle.vfs.watch=true
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..92992c4 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,12 +18,12 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+-    id("com.google.firebase.crashlytics") version("3.0.7") apply false
++    id("com.google.firebase.crashlytics") version("3.0.3") apply false
+     // END: FlutterFire Configuration
+-    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
++    id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+ }
+ 
+ include(":app")
+
+→ Read android/gradle.properties
