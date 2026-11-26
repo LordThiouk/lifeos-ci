@@ -2428,3 +2428,62 @@ Failing tests:
   /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/ride_map_live_location_test.dart: ISC-F5-19 live driver location in ride location ping is throttled then sent after the interval
   /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/ride_map_live_location_test.dart: ISC-F5-19 live driver location in ride no tracking or ping outside RIDE_ACTIVE/RIDE_RUNNING
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_CACHE=/home/ubuntu/.pub-cache; export PATH=/tmp/flutter_sdk/flutter/bin:$PATH; flutter test test/unit/ride_map_live_location_test.dart 2>&1 | grep -A30 "no tracking or ping\|throttled then sent\|shared marker_car" | head -120
+00:00 +3: ISC-F5-19 live driver location in ride no tracking or ping outside RIDE_ACTIVE/RIDE_RUNNING
+00:30 +3 -1: ISC-F5-19 live driver location in ride no tracking or ping outside RIDE_ACTIVE/RIDE_RUNNING [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+00:30 +3 -1: ISC-F5-19 live driver location in ride stops tracking once the ride leaves ACTIVE/RUNNING
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   printX (package:galass_driver/core/helper/string_format_helper.dart:224:7)
+│ #1   RideDetailsController.startLiveLocationTracking (package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart:167:7)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 [ride] live location tracking started (ride=ride-live-19)
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   printX (package:galass_driver/core/helper/string_format_helper.dart:224:7)
+│ #1   RideDetailsController.pingRideLocation (package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart:217:7)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 [ride] location ping HTTP=200 ride=ride-live-19
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+00:30 +4 -1: ISC-F5-19 live driver location in ride location ping is throttled then sent after the interval
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   printX (package:galass_driver/core/helper/string_format_helper.dart:224:7)
+│ #1   RideDetailsController.pingRideLocation (package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart:217:7)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 [ride] location ping HTTP=200 ride=ride-live-19
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+│ #0   printX (package:galass_driver/core/helper/string_format_helper.dart:224:7)
+│ #1   RideDetailsController.pingRideLocation (package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart:217:7)
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+│ 💡 [ride] location ping HTTP=200 ride=ride-live-19
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+01:00 +4 -2: ISC-F5-19 live driver location in ride location ping is throttled then sent after the interval [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+01:00 +4 -2: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset
+01:30 +4 -3: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+01:30 +4 -3: Some tests failed.
+
+Failing tests:
+  /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/ride_map_live_location_test.dart: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset
+  /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/ride_map_live_location_test.dart: ISC-F5-19 live driver location in ride location ping is throttled then sent after the interval
+  /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/ride_map_live_location_test.dart: ISC-F5-19 live driver location in ride no tracking or ping outside RIDE_ACTIVE/RIDE_RUNNING
+
+→ Read test/helpers/recording_api_client.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "RIDE_ACTIVE\|RIDE_RUNNING\|RIDE_COMPLETED\|RIDE_CANCELED" lib/core/utils/app_status.dart
+18:  static const String RIDE_COMPLETED = '1';
+19:  static const String RIDE_ACTIVE = '2';
+20:  static const String RIDE_RUNNING = '3';
+21:  static const String RIDE_CANCELED = '9';
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "markerCar" lib/core/utils/my_icons.dart
+5:  static const String markerCar = "assets/icon/marker_car.png"; // marker_car.png
+
