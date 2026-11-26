@@ -3298,3 +3298,61 @@ $ wc -l lib/data/controller/map/ride_map_controller.dart lib/data/controller/rid
 → Read lib/data/controller/map/ride_map_controller.dart [offset=240, limit=110]
 → Read lib/data/controller/ride/ride_details/ride_details_controller.dart [limit=240]
 ✱ Grep "updateLiveLocation" in . · 9 matches
+→ Read lib/data/repo/dashboard/dashboard_repo.dart
+
+$ cat lib/core/helper/location_ping_policy.dart && grep -n "driverLocationUpdateMaxIntervalSeconds" lib/environment.dart
+/// Result of a server location ping attempt.
+enum LocationPingSendOutcome {
+  /// HTTP 200 — backend stamped `location_updated_at`.
+  success,
+
+  /// Network/5xx/429 — keep foreground service alive and retry.
+  transientFailure,
+
+  /// 401/unauthenticated — stop service; session invalid.
+  fatalFailure,
+}
+
+LocationPingSendOutcome resolveLocationPingSendOutcome({
+  int? statusCode,
+  bool networkError = false,
+  String? remark,
+}) {
+  if (networkError) {
+    return LocationPingSendOutcome.transientFailure;
+  }
+  if (statusCode == 200) {
+    if (remark == 'unauthenticated') {
+      return LocationPingSendOutcome.fatalFailure;
+    }
+    return LocationPingSendOutcome.success;
+  }
+  if (statusCode == 401) {
+    return LocationPingSendOutcome.fatalFailure;
+  }
+  return LocationPingSendOutcome.transientFailure;
+}
+
+bool shouldStopForegroundOnPingOutcome(LocationPingSendOutcome outcome) =>
+    outcome == LocationPingSendOutcome.fatalFailure;
+
+bool shouldAdvancePingClock(LocationPingSendOutcome outcome) =>
+    outcome == LocationPingSendOutcome.success;
+
+class LocationPingPolicy {
+  const LocationPingPolicy({required this.maxIntervalSeconds});
+
+  final int maxIntervalSeconds;
+
+  bool shouldPing({
+    required DateTime? lastPingAt,
+    required DateTime now,
+  }) {
+    if (lastPingAt == null) {
+      return true;
+    }
+    return now.difference(lastPingAt).inSeconds >= maxIntervalSeconds;
+  }
+}
+9:  static const int driverLocationUpdateMaxIntervalSeconds = 30; //Max seconds between GPS pings when online
+
