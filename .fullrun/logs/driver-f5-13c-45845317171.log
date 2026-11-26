@@ -6640,3 +6640,57 @@ $ grep -rn "kotlinOptions" /tmp/flutter/packages/flutter_tools --include=*.kts -
 75:        jvmTarget.set(JvmTarget.JVM_11)
 
 ◈ Parallel Web Search "Kotlin Gradle plugin kotlinOptions DSL removed 2.3.0 compilerOptions replacement android"
+
+$ grep -n "_javaGradleCompatList\s*=" -A 30 /tmp/gu_3501.dart | head -45; echo "=== java-agp list ==="; grep -n "_javaAgpCompatList\s*=" -A 30 /tmp/gu_3501.dart | head -45; echo "=== isWithinVersionRange def ==="; grep -n "bool isWithinVersionRange" -A 12 /tmp/gu_3501.dart
+1347:var _javaGradleCompatList = const <JavaGradleCompat>[
+1348-  JavaGradleCompat(javaMin: '25', javaMax: '26', gradleMin: '9.1.0'),
+1349-  JavaGradleCompat(javaMin: '24', javaMax: '25', gradleMin: '8.14'),
+1350-  JavaGradleCompat(javaMin: '23', javaMax: '24', gradleMin: '8.10'),
+1351-  JavaGradleCompat(javaMin: '22', javaMax: '23', gradleMin: '8.7'),
+1352-  JavaGradleCompat(javaMin: '21', javaMax: '22', gradleMin: '8.4'),
+1353-  JavaGradleCompat(javaMin: '20', javaMax: '21', gradleMin: '8.1'),
+1354-  JavaGradleCompat(javaMin: '19', javaMax: '20', gradleMin: '7.6'),
+1355-  JavaGradleCompat(javaMin: '18', javaMax: '19', gradleMin: '7.5'),
+1356-  JavaGradleCompat(javaMin: '17', javaMax: '18', gradleMin: '7.3'),
+1357-  JavaGradleCompat(
+1358-    javaMin: '16',
+1359-    javaMax: '17',
+1360-    gradleMin: '7.0',
+1361-    gradleMax: maxGradleVersionForJavaPre17,
+1362-  ),
+1363-  JavaGradleCompat(
+1364-    javaMin: '15',
+1365-    javaMax: '16',
+1366-    gradleMin: '6.7',
+1367-    gradleMax: maxGradleVersionForJavaPre17,
+1368-  ),
+1369-  JavaGradleCompat(
+1370-    javaMin: '14',
+1371-    javaMax: '15',
+1372-    gradleMin: '6.3',
+1373-    gradleMax: maxGradleVersionForJavaPre17,
+1374-  ),
+1375-  JavaGradleCompat(
+1376-    javaMin: '13',
+1377-    javaMax: '14',
+=== java-agp list ===
+1418:var _javaAgpCompatList = const <JavaAgpCompat>[
+1419-  JavaAgpCompat(
+1420-    javaMin: '17',
+1421-    javaDefault: '17',
+1422-    agpMin: '8.0',
+1423-    agpMax: maxKnownAndSupportedAgpVersion,
+1424-  ),
+1425-  JavaAgpCompat(javaMin: '11', javaDefault: '11', agpMin: '7.0', agpMax: '7.4'),
+1426-  JavaAgpCompat(
+1427-    // You may use JDK 1.7 with AGP 4.2, but we treat 1.8 as the default since
+1428-    // it is used by default for this AGP version and lower versions of Java
+1429-    // are deprecated for executing Gradle.
+1430-    javaMin: '1.8',
+1431-    javaDefault: '1.8',
+1432-    agpMin: '4.2',
+1433-    agpMax: '4.2',
+1434-  ),
+1435-];
+=== isWithinVersionRange def ===
+
