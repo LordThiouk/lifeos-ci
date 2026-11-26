@@ -87,3 +87,4 @@ appliquée à la relance `fr-fullrun.yml` (job `loop`).
 - `_next.yml` : job `next` conditionné à `inputs.chain` (+ sortie immédiate si `chain != true`), propagation de `chain=true` au lien suivant, dispatch sur la même réf (`--ref "$GITHUB_REF_NAME"`) au lieu de `main`.
 - `fr-fullrun.yml` reste l'assemblage FullRun complet et passe `chain: false` à ses briques (il orchestre via `needs`/`gate`/`loop`) ; le chaînage `_next` ne sert qu'à une chaîne complète lancée explicitement avec `chain=true`.
 - Vérifié : `yaml.safe_load` des 17 workflows OK, `bash -n` des scripts `_next.yml` et `loop` OK, aucun `default: true` restant sur `chain`.
+- Correctif (2026-11-26) : les 10 workflows d'étape passent `chain: ${{ inputs.chain }}` (au lieu de `chain: true`) au job `next`, donc le chaînage ne repart que si `chain=true` est explicitement demandé.
