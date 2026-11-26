@@ -2514,3 +2514,219 @@ $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_
 00:00 +10: RideModel.parseStops cap truncates to maxCountPerRide after sort by sequence
 00:00 +11: All tests passed!
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_CACHE=/home/ubuntu/.pub-cache; export PATH=/tmp/flutter_sdk/flutter/bin:$PATH; timeout 60 flutter test test/unit/ride_map_live_location_test.dart --name "car marker uses the shared" > /tmp/testout.txt 2>&1; echo "exit $?"; tail -40 /tmp/testout.txt
+exit 1
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/ride_map_live_location_test.dart
+00:00 +0: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset
+00:30 +0 -1: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+00:30 +0 -1: Some tests failed.
+
+Failing tests:
+  /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/ride_map_live_location_test.dart: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -rl "Get.reset()" test/ | head; echo "---"; grep -rn "driverLocationStreamForTest" lib/
+test/goldens/driver/ride_details_golden_test.dart
+test/goldens/driver/home_golden_test.dart
+test/goldens/driver/review_golden_test.dart
+test/data/controller/driver_kyc_controller/driver_kyc_controller_test.dart
+test/data/controller/pusher/global_pusher_debug_smoke_test.dart
+test/data/controller/vehicle_verification/vehicle_verification_controller_test.dart
+test/data/controller/ride/ride_meassage/ride_message_getx_freshness_test.dart
+test/data/controller/ride/ride_details/ride_details_controller_lifecycle_test.dart
+test/data/controller/dashboard/pending_dispatch_poll_test.dart
+test/data/controller/dashboard/dispatch_offer_implicit_decline_test.dart
+---
+lib/data/controller/ride/ride_details/ride_details_controller.dart:54:  Stream<LatLng> Function()? driverLocationStreamForTest;
+lib/data/controller/ride/ride_details/ride_details_controller.dart:156:    // inject [driverLocationStreamForTest] when they exercise this path.
+lib/data/controller/ride/ride_details/ride_details_controller.dart:157:    if (Get.testMode && driverLocationStreamForTest == null) return;
+lib/data/controller/ride/ride_details/ride_details_controller.dart:160:          (driverLocationStreamForTest ?? _defaultDriverLocationStream)();
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '1,80p' test/data/controller/ride/ride_details/ride_details_controller_lifecycle_test.dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:galass_driver/core/utils/app_status.dart';
+import 'package:galass_driver/data/controller/map/ride_map_controller.dart';
+import 'package:galass_driver/data/controller/ride/ride_details/ride_details_controller.dart';
+import 'package:galass_driver/data/model/global/ride/ride_model.dart';
+import 'package:galass_driver/data/repo/polyline/polyline_repo.dart';
+import 'package:galass_driver/data/repo/ride/ride_repo.dart';
+import 'package:galass_driver/data/services/api_client.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../helpers/recording_api_client.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  tearDown(() {
+    Get.reset();
+  });
+
+  group('RideDetailsController lifecycle (CallKit CTA)', () {
+    test('showsActiveRideCtas gates only on RIDE_ACTIVE', () {
+      expect(RideDetailsController.showsActiveRideCtas(AppStatus.RIDE_ACTIVE), isTrue);
+      expect(RideDetailsController.showsActiveRideCtas(AppStatus.RIDE_PENDING), isFalse);
+      expect(RideDetailsController.showsActiveRideCtas(AppStatus.RIDE_RUNNING), isFalse);
+      expect(RideDetailsController.showsActiveRideCtas(null), isFalse);
+      expect(RideDetailsController.showsActiveRideCtas(''), isFalse);
+    });
+
+    test('putFresh replaces stale singleton so CallKit open is not reused', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final client = RecordingApiClient(sharedPreferences: prefs);
+      Get.put<ApiClient>(client);
+      final rideRepo = RideRepo(apiClient: client);
+      final map = RideMapController(
+        polylineRepo: PolylineRepo(apiClient: client),
+      );
+
+      final stale = Get.put(
+        RideDetailsController(repo: rideRepo, mapController: map),
+      );
+      stale.ride = RideModel(id: '99', status: AppStatus.RIDE_PENDING);
+      stale.isLoading = false;
+
+      final fresh = RideDetailsController.putFresh(
+        repo: rideRepo,
+        mapController: map,
+      );
+
+      expect(identical(fresh, stale), isFalse);
+      expect(fresh.ride.id, '-1');
+      expect(fresh.isLoading, isTrue);
+      expect(RideDetailsController.showsActiveRideCtas(fresh.ride.status), isFalse);
+    });
+
+    test('getRideDetails with empty rideId does not keep stale ACTIVE false forever', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final client = RecordingApiClient(sharedPreferences: prefs);
+      Get.put<ApiClient>(client);
+      final rideRepo = RideRepo(apiClient: client);
+      final map = RideMapController(
+        polylineRepo: PolylineRepo(apiClient: client),
+      );
+      final controller = RideDetailsController(repo: rideRepo, mapController: map);
+      controller.ride = RideModel(id: '1', status: AppStatus.RIDE_PENDING);
+      controller.isLoading = false;
+
+      await controller.getRideDetails('');
+
+      expect(controller.isLoading, isFalse);
+      // Empty id must not pretend success; status stays non-ACTIVE.
+      expect(RideDetailsController.showsActiveRideCtas(controller.ride.status), isFalse);
+    });
+  });
+}
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && sed -n '1,80p' lib/data/repo/dashboard/dashboard_repo.dart
+import 'package:galass_driver/core/utils/method.dart';
+import 'package:galass_driver/core/utils/url_container.dart';
+import 'package:galass_driver/data/model/global/response_model/response_model.dart';
+import 'package:galass_driver/data/services/api_client.dart';
+
+class DashBoardRepo {
+  ApiClient apiClient;
+  DashBoardRepo({required this.apiClient});
+
+  Future<ResponseModel> getDashboardData({String page = '1'}) async {
+    String url = "${UrlContainer.baseUrl}${UrlContainer.dashBoardEndPoint}?page=$page";
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.getMethod,
+      null,
+      passHeader: true,
+    );
+    return responseModel;
+  }
+
+  Future<ResponseModel> onlineStatus({
+    required String lat,
+    required String long,
+  }) async {
+    String url = "${UrlContainer.baseUrl}${UrlContainer.onlineStatus}";
+
+    Map<String, String> params = {'lat': lat, 'long': long};
+
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.postMethod,
+      params,
+      passHeader: true,
+    );
+    return responseModel;
+  }
+
+  Future<ResponseModel> updateLiveLocation({
+    required String lat,
+    required String long,
+  }) async {
+    String url = "${UrlContainer.baseUrl}${UrlContainer.driverLocationUpdate}";
+
+    Map<String, String> params = {'current_lat': lat, 'current_lot': long};
+
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.postMethod,
+      params,
+      passHeader: true,
+    );
+    return responseModel;
+  }
+
+  Future<ResponseModel> respondToOffer({
+    required String rideId,
+    required String action,
+  }) async {
+    String url = "${UrlContainer.baseUrl}${UrlContainer.offerRespond}";
+    Map<String, String> params = {
+      'ride_id': rideId,
+      'action': action,
+    };
+    ResponseModel responseModel = await apiClient.request(
+      url,
+      Method.postMethod,
+      params,
+      passHeader: true,
+      skipAuthSideEffects: true,
+    );
+    return responseModel;
+  }
+
+  Future<String?> getActualAddress(double lat, double lng) async {
+    final url = '${UrlContainer.getLocationByLatlng}?lat=$lat&lng=$lng';
+
+    final response = await apiClient.request(url, Method.getMethod, null);
+
+    if (response.statusCode == 200) {
+      final data = response.responseJson;
+
+$ cat > /tmp/min_live_test.dart << 'EOF'
+import 'package:flutter_test/flutter_test.dart';
+import 'package:galass_driver/core/utils/my_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  tearDown(() => Get.reset());
+
+  test('asset', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    print('prefs ok');
+    expect(MyIcons.markerCar, 'assets/icon/marker_car.png');
+  });
+}
+EOF
+cp /tmp/min_live_test.dart /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/min_live_test.dart
+cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_CACHE=/home/ubuntu/.pub-cache; export PATH=/tmp/flutter_sdk/flutter/bin:$PATH; timeout 60 flutter test test/unit/min_live_test.dart 2>&1 | tail -20
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/min_live_test.dart
+00:00 +0: asset
+prefs ok
+00:00 +1: All tests passed!
+
