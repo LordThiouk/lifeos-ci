@@ -16913,3 +16913,29 @@ wc: /opt/fullrun-live/isa.key: Permission denied
 $ env | grep -iE 'isa|stamp|key' | sed 's/=.*/=<set>/'
 (no output)
 
+$ grep -n "STAMP_KEY\|stamp key\|isa.key\|ISA_STAMP" ~/.claude/LIFEOS/TOOLS/ISATool.ts | head -20
+31:  const k = key(); if (!k) return { ok: false, code: "provenance-key-missing", message: "stamp key absent — cannot verify provenance." };
+66:// pour une preuve outil. `human-tick` exige la clé ISA_STAMP_KEY dans l'ENVIRONNEMENT (secret du principal ou de
+74:  const raw = (env.ISA_STAMP_KEY ?? "").trim();
+128:                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+129:  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)`); process.exit(1); }
+153:    if (k === null) { console.error(`${cmd} refusé : ISA_STAMP_KEY absent de l'environnement — une coche humaine n'est jamais posée sans signature.`); process.exit(HUMAN_TICK_EXIT.NO_KEY); }
+154:    if (k === "invalid") { console.error(`${cmd} refusé : ISA_STAMP_KEY invalide (hexadécimal, au moins 32 octets attendus).`); process.exit(HUMAN_TICK_EXIT.NO_KEY); }
+
+$ grep -n "function key" -A8 ~/.claude/LIFEOS/TOOLS/ISATool.ts | head -14
+18:function key(create = false): Buffer | null {
+19-  if (!existsSync(KEY)) { if (!create) return null; mkdirSync(STATE, { recursive: true }); writeFileSync(KEY, randomBytes(32).toString("hex")); chmodSync(KEY, 0o600); }
+20-  const k = Buffer.from(readFileSync(KEY, "utf8").trim(), "hex"); if (k.length < 32) throw new Error("clé d'empreinte ISA invalide (< 32 octets)"); return k;
+21-}
+22-// l'empreinte ne vit que dans le frontmatter : une ligne `isa_stamp:` du corps n'est ni retirée ni lue
+23-const fmSplit = (t: string) => { const m = t.match(/^---\n[\s\S]*?\n---/); return m ? [m[0], t.slice(m[0].length)] : ["", t]; };
+24-export const unstamped = (t: string) => { const [f, b] = fmSplit(t); return f.replace(STAMP_RE, "") + b; };
+25-export function computeStamp(text: string, k = key()): string | null {
+26-  return k ? "hmac-sha256:" + createHmac("sha256", k).update(unstamped(text)).digest("hex") : null;
+
+$ grep -n "const KEY\|const STATE\|KEY =" ~/.claude/LIFEOS/TOOLS/ISATool.ts | head -5; grep -n "env.ISA_STAMP_KEY" ~/.claude/LIFEOS/TOOLS/ISATool.ts | head -3
+12:const STATE = join(HOME, ".claude/LIFEOS/MEMORY/STATE");
+13:const KEY = join(STATE, ".isa-stamp-key");
+74:  const raw = (env.ISA_STAMP_KEY ?? "").trim();
+129:  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)`); process.exit(1); }
+
