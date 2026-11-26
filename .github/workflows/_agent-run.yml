@@ -156,9 +156,21 @@ jobs:
           # TARGET_REPO du run) et non de opencode/ (liste Galass historique).
           FT=/opt/fullrun-tools; FL=/opt/fullrun-live
           sudo install -d -o root -g root -m 0755 "$FT" "$FL"
-          sudo install -o root -g root -m 0755 ci/opencode/livelog.sh ci/opencode/leaklog.sh \
-            ci/opencode/redact-log.sh ci/targets/allowed-repos.sh "$FT/"
-          sudo install -o root -g root -m 0644 ci/opencode/log-recipient.txt "$FT/"
+          # Même jeu d'outils figés que opencode-fullrun (mini FullRun) : livelog, wippush/autosave,
+          # progress, checkpoint, done_check, emu-e2e — hors de portée de l'agent.
+          sudo install -o root -g root -m 0755 \
+            ci/opencode/livelog.sh ci/opencode/leaklog.sh ci/opencode/redact-log.sh \
+            ci/opencode/wippush.sh ci/opencode/autosave.sh ci/opencode/progress.sh \
+            ci/opencode/checkpoint.sh ci/opencode/done_check.sh ci/opencode/done-check-call.sh \
+            ci/opencode/emu-e2e.sh ci/opencode/merge-signed-carry.sh \
+            ci/opencode/bench-capped \
+            ci/targets/allowed-repos.sh "$FT/"
+          sudo install -o root -g root -m 0644 \
+            ci/opencode/log-recipient.txt ci/opencode/autosave-deny.txt "$FT/"
+          # Visible dans le PATH d'opencode (préambule : `bench-capped` sans chemin).
+          sudo install -o root -g root -m 0755 "$FT/bench-capped" /usr/local/bin/bench-capped
+          command -v bench-capped >/dev/null \
+            || { echo "::error::bench-capped absent du PATH"; exit 1; }
           sudo chown -R root:root "$T" "$STATE_DIR" "$FT" "$FL"
           sudo chmod -R go-w "$T" "$STATE_DIR" "$FT" "$FL"
           sudo find "$T" -type f -exec chmod 0644 {} +
@@ -400,6 +412,12 @@ jobs:
           elif grep -q 'MEMORY/WORK/' "$pfile"; then
             echo "::warning::le prompt référence un dossier ISA mais isa_path est vide"
           fi
+          # Reprise : checkpoint versionné sur la branche (copie figée, comme opencode-fullrun).
+          if [ -s "target/.fullrun/${IN_JOB}_checkpoint.json" ] \
+            && [ ! -L "target/.fullrun" ] \
+            && [ ! -L "target/.fullrun/${IN_JOB}_checkpoint.json" ]; then
+            { echo; bash /opt/fullrun-tools/checkpoint.sh resume-text --job "$IN_JOB" --repo "$GITHUB_WORKSPACE/target" | head -c 6000; } >> "$pfile" || true
+          fi
 
       - name: Installer opencode et gitleaks
         run: |
@@ -482,6 +500,13 @@ jobs:
           mkdir -p "$agent_home/.claude/LIFEOS/MEMORY/STATE"
           if [ ! -e /home/box ] && [ ! -L /home/box ]; then
             sudo ln -s "$agent_home" /home/box
+          fi
+          # Profil hooks FullRun (comme opencode-fullrun) — pas pour task.
+          if [ "${IN_AGENT:-}" != task ]; then
+            oc_cfg="$agent_home/.config/opencode"
+            mkdir -p "$oc_cfg"
+            bash "$TOOLS_DIR/opencode/install-hook-profile.sh" "$GITHUB_WORKSPACE/lifeos" "$oc_cfg" \
+              || echo "::warning::install-hook-profile incomplet (lifeos sans hook-profiles ?)"
           fi
           echo "Socle ISA prêt : bun $(/usr/local/bin/bun --version), ~/.claude/LIFEOS/TOOLS"
 
@@ -599,11 +624,7 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
           ffmpeg -version | head -1
 
-      # Journal en direct : un démon root pousse toutes les 10 min un instantané masqué du
-      # journal opencode sur fullrun-logs/<job>-<run> du dépôt CIBLE du run (jamais antenly
-      # en dur) ; chiffré avec age si gitleaks y trouve encore un secret. Le jeton lui arrive
-      # sur stdin : il n'est ni dans l'environnement d'opencode, ni dans un fichier, ni dans
-      # une URL. Facultatif : un échec ici n'arrête jamais le run.
+      # Journal en direct : démon root ; mini FullRun = intervalle 2 min (fullrun reste 10).
       - name: Journal en direct (démon root, jeton hors d'opencode)
         id: live
         continue-on-error: true
@@ -628,17 +649,17 @@ jobs:
             sudo chmod 0644 "$T/gitleaks.toml"
             gcfg="$T/gitleaks.toml"
           fi
-          # Clé ISA pour le masquage : root, 0600, hors de portée de l'agent.
           if [ -n "${ISA_STAMP_KEY:-}" ]; then
             printf '%s' "$ISA_STAMP_KEY" | sudo sh -c 'umask 077; cat > /opt/fullrun-live/isa.key'
           fi
           LOGB="fullrun-logs/${IN_JOB}-${RUN_ID}"
-          # shellcheck disable=SC2024 # sortie d'état du démon dans un fichier du runner : voulu
+          # shellcheck disable=SC2024
           printf '%s\n' "$PUSH_TOKEN" | sudo -n env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$L" \
             LIVE_STATE="$L" LIVE_LOG="$OC_LOG" LIVE_JOB="$IN_JOB" LIVE_RUN="$RUN_ID" \
             TARGET_REPO="$TARGET_REPO" \
             LIVE_GITLEAKS="$T/gitleaks" LIVE_GL_CONFIG="$gcfg" LIVE_ISA_KEY_FILE="$L/isa.key" \
             LIVE_READ_UID="$(id -u)" LIVE_READ_GID="$(id -g)" LIVE_TOKEN_STDIN=1 \
+            LIVE_FIRST=30 LIVE_INTERVAL=120 \
             setsid -f nice -n 0 "$T/livelog.sh" daemon > "$RUNNER_TEMP/live.out" 2>&1 &
           ok=0
           for _ in 1 2 3 4 5 6 7 8 9 10; do
@@ -647,11 +668,65 @@ jobs:
             sleep 1
           done
           [ "$ok" = 1 ] || { echo "::warning::démon du journal en direct non démarré : le run continue sans"; exit 0; }
-          # Le superviseur survit à une saturation mémoire : opencode et le runner passent avant lui.
           echo -500 | sudo -n tee "/proc/$pid/oom_score_adj" >/dev/null 2>&1 || true
           echo "branch=$LOGB" >> "$GITHUB_OUTPUT"
-          echo "- Journal en direct : branche \`$LOGB\` de $TARGET_REPO, instantané toutes les 10 min (chiffré si secret probable)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Journal en direct : branche \`$LOGB\` de $TARGET_REPO, instantané toutes les 2 min" >> "$GITHUB_STEP_SUMMARY"
           echo "Journal en direct démarré → $TARGET_REPO@$LOGB"
+
+      # Push périodique wip + autosave (comme opencode-fullrun) : un timeout ne perd plus les commits.
+      - name: Push périodique des wip (démon root, jeton hors d'opencode)
+        id: wip
+        continue-on-error: true
+        env:
+          PUSH_TOKEN: ${{ secrets.CI_TOKEN }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set +x
+          T=/opt/fullrun-tools; L=/opt/fullrun-wip
+          [[ "$IN_JOB" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$ && "$RUN_ID" =~ ^[0-9]{1,20}$ ]] \
+            || { echo "::warning::job ou run invalide : pas de push périodique"; exit 0; }
+          [ -n "${PUSH_TOKEN:-}" ] || { echo "::warning::CI_TOKEN absent : pas de push périodique"; exit 0; }
+          [ -x "$T/wippush.sh" ] && [ -x "$T/gitleaks" ] \
+            || { echo "::warning::wippush/gitleaks absents : pas de push périodique"; exit 0; }
+          [ -f "$STATE_DIR/bases" ] || { echo "::warning::bases absent : pas de push périodique"; exit 0; }
+          BASE_SHA=$(awk -F'\t' -v r="$TARGET_REPO" '$1==r {print $3; exit}' "$STATE_DIR/bases")
+          [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "::warning::BASE_SHA invalide : pas de push périodique"; exit 0; }
+          gcfg=""; [ -f "$T/gitleaks.toml" ] && gcfg="$T/gitleaks.toml"
+          sudo -n install -d -o root -g root -m 0755 "$L" \
+            || { echo "::warning::dossier wip root inaccessible"; exit 0; }
+          # shellcheck disable=SC2024
+          printf '%s\n' "$PUSH_TOKEN" | sudo -n env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$L" \
+            WIP_STATE="$L" WIP_REPO="$GITHUB_WORKSPACE/target" WIP_BRANCH="$IN_BRANCH" \
+            WIP_JOB="$IN_JOB" WIP_RUN="$RUN_ID" TARGET_REPO="$TARGET_REPO" \
+            WIP_BASE_SHA="$BASE_SHA" WIP_GITLEAKS="$T/gitleaks" WIP_GL_CONFIG="$gcfg" \
+            WIP_ISA_KEY_FILE=/opt/fullrun-live/isa.key WIP_TOKEN_STDIN=1 \
+            WIP_AUTOSAVE_DENY="$T/autosave-deny.txt" \
+            IN_WIP_PUSH_MIN=15 \
+            setsid -f nice -n 0 "$T/wippush.sh" daemon > "$RUNNER_TEMP/wip.out" 2>&1 &
+          ok=0
+          for _ in 1 2 3 4 5 6 7 8 9 10; do
+            pid=$(sudo -n cat "$L/pid" 2>/dev/null || true)
+            if [[ "$pid" =~ ^[0-9]{1,9}$ ]] && sudo -n kill -0 "$pid" 2>/dev/null; then ok=1; break; fi
+            sleep 1
+          done
+          [ "$ok" = 1 ] || { echo "::warning::démon wippush non démarré : le run continue sans"; exit 0; }
+          echo -500 | sudo -n tee "/proc/$pid/oom_score_adj" >/dev/null 2>&1 || true
+          echo "- Push wip : branche \`$IN_BRANCH\` toutes les 15 min (autosave + gitleaks)" >> "$GITHUB_STEP_SUMMARY"
+          echo "Push périodique des wip démarré (15 min)"
+
+      - name: Protection mémoire (OOM, best-effort)
+        continue-on-error: true
+        run: |
+          set +x
+          for p in $(pgrep -f '[R]unner.Worker' 2>/dev/null || true); do
+            echo -500 | sudo -n tee "/proc/$p/oom_score_adj" >/dev/null 2>&1 || true
+          done
+          for f in /opt/fullrun-live/pid /opt/fullrun-wip/pid; do
+            p=$(sudo -n cat "$f" 2>/dev/null || true)
+            if [[ "$p" =~ ^[0-9]{1,9}$ ]]; then
+              echo -500 | sudo -n tee "/proc/$p/oom_score_adj" >/dev/null 2>&1 || true
+            fi
+          done
 
       # C3 : opencode tourne avec un environnement vidé (env -i) et un HOME/TMPDIR
       # dédiés. Il n'hérite ni de GITHUB_ENV, ni de GITHUB_OUTPUT, ni de
@@ -665,6 +740,7 @@ jobs:
         env:
           HF_TOKEN: ${{ (inputs.target_repo == 'antenly' || inputs.target_repo == 'antenly-ci') && secrets.HF_TOKEN || '' }}
           MODEL_NORM: ${{ steps.validate.outputs.model_norm }}
+          LIVE_BRANCH: ${{ steps.live.outputs.branch }}
         run: |
           set -euo pipefail
           agent_tmp="$RUNNER_TEMP/oc-agent"
@@ -717,6 +793,14 @@ jobs:
           live_log="$RUNNER_TEMP/oc/opencode.log"
           mkdir -p "$RUNNER_TEMP/oc"
           : > "$live_log"
+          # Suivi filtré (comme opencode-fullrun) : mini = toutes les 2 min.
+          OC_START=$(date +%s)
+          export OC_LOG="$live_log" TARGET_DIR="$GITHUB_WORKSPACE/target" OC_START
+          export OC_PROGRESS_INTERVAL=120
+          [ -n "${LIVE_BRANCH:-}" ] && export OC_LIVE_BRANCH="$LIVE_BRANCH"
+          [ -n "${IN_ISA:-}" ] && export OC_ISA_PATH="$GITHUB_WORKSPACE/target/$IN_ISA"
+          /opt/fullrun-tools/progress.sh start || true
+          /opt/fullrun-tools/progress.sh loop & progress_mon=$!
           status="erreur"
           used=""
           switched=0
@@ -823,6 +907,14 @@ jobs:
           done
           # Filet : opencode encore vivant ne doit plus écrire pendant les contrôles.
           pkill -KILL -f '(^|[ /])opencode run ' 2>/dev/null || true
+          case "$status" in
+            ok) stop_prog=ok ;;
+            timeout) stop_prog=plafond ;;
+            *) stop_prog=erreur ;;
+          esac
+          kill "$progress_mon" 2>/dev/null || true
+          wait "$progress_mon" 2>/dev/null || true
+          /opt/fullrun-tools/progress.sh once fin "$stop_prog" || true
           if [ -s "$agent_tmp/oc-tail" ]; then
             sudo install -o root -g root -m 0644 "$agent_tmp/oc-tail" "$STATE_DIR/oc-tail"
           else

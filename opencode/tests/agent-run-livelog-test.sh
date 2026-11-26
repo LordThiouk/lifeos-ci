@@ -47,13 +47,19 @@ for needle in (
     'LIVE_LOG="$OC_LOG"',
     'LIVE_READ_UID="$(id -u)"',
     "sudo -n env -i",
+    "LIVE_FIRST=30",
+    "LIVE_INTERVAL=120",
 ):
     assert needle in run, "démon livelog incomplet : %r absent" % needle
 assert "antenly" not in run.lower(), "livelog ne doit pas cibler antenly en dur"
 assert "TARGET_REPO" in run, "livelog ne cible pas le dépôt cible du run"
 
 freeze = steps[idx("Outils de confiance figés")].get("run", "")
-for tool in ("livelog.sh", "leaklog.sh", "redact-log.sh", "allowed-repos.sh", "log-recipient.txt"):
+for tool in (
+    "livelog.sh", "leaklog.sh", "redact-log.sh", "allowed-repos.sh", "log-recipient.txt",
+    "wippush.sh", "autosave.sh", "progress.sh", "checkpoint.sh", "done_check.sh",
+    "emu-e2e.sh", "bench-capped", "autosave-deny.txt",
+):
     assert tool in freeze, "outil livelog non figé dans /opt/fullrun-tools : %r" % tool
 assert "/opt/fullrun-tools" in freeze, "répertoire /opt/fullrun-tools absent du gel"
 

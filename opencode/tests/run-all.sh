@@ -9,6 +9,7 @@ here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 TESTS=(
   agent-run-livelog-test.sh
   agent-run-preflight-test.sh
+  agent-run-wippush-test.sh
   agents-load-test.sh
   allowed-repos-test.sh
   allowed-repos-lifeos-test.sh
