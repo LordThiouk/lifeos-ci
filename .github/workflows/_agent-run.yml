@@ -105,7 +105,10 @@ env:
 jobs:
   run:
     if: github.actor == 'LordThiouk'
-    runs-on: ubuntu-latest
+    # Free models opencode : muets depuis ubuntu-latest (ASN GH), OK depuis US.
+    # Runner label us-box = box US (self-hosted). Repli GH-hosted : retirer us-box
+    # et poser OPENCODE_WSTUNNEL_URL (stream toujours fragile depuis GH).
+    runs-on: [self-hosted, linux, x64, us-box]
     timeout-minutes: 110
     permissions:
       contents: read
