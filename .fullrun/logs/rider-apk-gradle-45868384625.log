@@ -3216,3 +3216,80 @@ org.gradle.vfs.watch=true
 75:        jvmTarget.set(JvmTarget.JVM_11)
 80:    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 
+Le Driver référence confirme : Gradle 8.14, AGP 8.11.1, Crashlytics 3.0.3, Kotlin 2.3.0 — exactement ce que le commit `ec07f3e` a aligné. Je compare les `gradle.properties` et l'état du repo Driver/Rider.
+$ git status --porcelain=v1; echo "=====DIFF STAT vs ec07f3e====="; git diff ec07f3e --stat; echo "=====DIFF FULL====="; git diff ec07f3e | head -60; echo "=====FULLRUN LOGS DIR====="; find /home/ubuntu -maxdepth 6 -type d -name "fullrun-logs" 2>/dev/null | head
+=====DIFF STAT vs ec07f3e=====
+=====DIFF FULL=====
+=====FULLRUN LOGS DIR=====
+
+$ find / -maxdepth 7 -type d -name "*fullrun*" 2>/dev/null | grep -v proc | head; echo "=====TASK_DONE====="; ls -la /tmp/task_done.md 2>/dev/null; cat /tmp/task_done.md 2>/dev/null; echo "=====FULLRUN LOGS IN REPO====="; find /home/ubuntu/actions-runner/_work -maxdepth 4 -type d -name "fullrun-logs" 2>/dev/null
+/opt/fullrun-live
+/opt/fullrun-tools
+/opt/fullrun-wip
+/opt/lifeos-ci-tools/opencode/tests/upstream-fullrun
+/tmp/lifeos-ci-agents/opencode/tests/upstream-fullrun
+/tmp/tmp.WdpYtHwz3p/r/.fullrun
+/tmp/tmp.WdpYtHwz3p/r/.git/refs/heads/fullrun-logs
+/tmp/ll-lot/.fullrun
+/tmp/ll-lot/.git/logs/refs/heads/fullrun-logs
+/tmp/ll-lot/.git/refs/heads/fullrun-logs
+=====TASK_DONE=====
+-rw-r--r-- 1 ubuntu ubuntu 1761 Nov 26 18:42 /tmp/task_done.md
+# task_done — Rider APK Gradle toolchain align (Flutter 3.50.1)
+
+- Repo: `LordThiouk/Galass_Rider` (workspace: `/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target`)
+- Branch: `build/rider-apk-gradle` (from `feat/multistop-e2e-2026-11-15` @ `424957d`)
+- Commit: `ec07f3e` — `build(android): align Rider toolchain with Flutter 3.50.1`
+- Author: `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`
+- Push: **none** (interdit). Merge: **none**.
+
+## Changements (Android toolchain uniquement, pas de `lib/`)
+
+Aligné sur Driver (vert APK sous Artemis/Flutter 3.50.1) :
+
+| Fichier | Avant | Après |
+|---|---:|---:|
+| `android/gradle/wrapper/gradle-wrapper.properties` | Gradle 9.1.0 | Gradle 8.14 |
+| `android/settings.gradle.kts` | AGP 9.0.1, Kotlin 2.2.20, Crashlytics 3.0.7 | AGP 8.11.1, Kotlin 2.3.0, Crashlytics 3.0.3 |
+| `android/gradle.properties` | jvmargs 6g/1g, daemon/parallel/configureondemand off, jetifier off, r8.proguard disallowed | Driver-stable flags: jvmargs 8G/4G/512m+UTF-8, caching/parallel/daemon/configureondemand/vfs.watch on, `android.enableJetifier=false` conservé |
+
+Non modifié : `android/app/build.gradle.kts`, `android/build.gradle.kts`, `lib/`, `.fullrun`, goldens.
+
+## Vérification
+
+- `git diff --stat`: 3 files changed, 16 insertions(+), 11 deletions(-).
+- **Build/test local non exécuté** : `flutter build` / `gradlew` interdits sur la box (politique build). Validation attendue côté CI Artemis (Build APK Rider).
+
+## Risques / notes
+
+- Downgrade AGP 9.x -> 8.11.1 + Gradle 9.1 -> 8.14 : attendu compatible Flutter 3.50.1 (réf Driver). À confirmer par CI.
+- `android.enableJetifier=false` conservé (était déjà false sur Rider) ; Driver est à `true` mais le changement n'est pas nécessaire ici.
+=====FULLRUN LOGS IN REPO=====
+
+$ cat /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ 2>/dev/null | head; ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/ 2>/dev/null; echo "====="; ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/MEMORY/WORK/ 2>/dev/null | tail -20
+total 12
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 18:20 .
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 18:20 ..
+dr-xr-xr-x 46 ubuntu ubuntu 4096 Nov 26 18:20 WORK
+=====
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 20261006-galass-regression-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 20261006-galass-rider-multistop
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 amber-ledger-wire-inputs
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 conveyor-p3-stage-runner
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 conveyor-p4-approve
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 cursor-algo-follow-test-20260728
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-auth-login-register-gate-110701
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-dashboard-499-loop-710204
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-francisation-sn-840301
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-ios-recaptcha-crash-507205
+dr-xr-xr-x  3 ubuntu ubuntu 4096 Nov 26 18:20 galass-phone-auth-876543
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-push-notifications-619402
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-ride-payment-post-739201
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-rider-security-complete-120712
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-rider-stable-final-110711
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-rider-store-submission-20260703
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-version-release-docs-180716
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-vps-startup-storm-710203
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 galass-webview-payment-482910
+dr-xr-xr-x  2 ubuntu ubuntu 4096 Nov 26 18:20 hybrid-smoke-20260728
+
