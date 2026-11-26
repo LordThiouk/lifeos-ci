@@ -1,0 +1,5 @@
+# Galass lot client — build W1 backend (2026-11-26)
+
+Dépôt Galass_backend, branche fullrun/lot-client-w0, tête 691864e (W0 soldé côté backend ; repros device S-W0-01..07 bloquées emu — ne les refais pas). ISA : MEMORY/WORK/2026-11-22-galass-lot-client/, plan Serena **W1**.
+Fais UNIQUEMENT les tâches Forge W1 backend dans l'ordre du plan (S-W1-01…S-W1-18), en respectant les `after:` (S-W1-03 puis suite ; S-W1-14 puis suite). Prérequis S-W1-02 : si `docs/BUGS.md` absente, porte `c40c30de:docs/BUGS.md` (PR #8) avant de traiter ISC-4. Parties Aditi pures (captures UI S-W1-06 / partie UI S-W1-15) : fais la partie Forge/route/endpoint ; laisse la capture UI pour Aditi plus tard. Commit après chaque tâche, `php artisan test --filter …` dans le message. Coche ISC via ISATool.ts seulement si la preuve passe.
+Ne commence pas W2. Pas de revue. Bugs multistop exclus. Pas de secrets PSP. Auteur Papa Diop <76528706+LordThiouk@users.noreply.github.com>. Pas de git push. Ne touche pas .fullrun. extra_repos lecture : Galass_Rider, Galass_Driver.
