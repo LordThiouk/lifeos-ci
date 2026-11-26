@@ -2911,3 +2911,55 @@ IsaReconcile.ts
 ISA.html
 ISA.md
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts --help 2>&1 | head -40
+usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+  scaffold --slug s --goal "…" [--title t]      crée l'ISA (sections Problem…Decisions)
+  append   --section "Claims" --text "…"|--file f  ajoute sous une section (créée si absente)
+  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+  set      --field phase --value build          frontmatter
+  replace  --old "…" --new "…"                  remplacement exact unique (corrections)
+  adopt                                          tamponne un ISA hérité (après relecture)
+  verify                                         contrôle l'empreinte (exit 2 si KO)
+  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+                                                 ISA_STAMP_KEY (env) ; exit 3 sans clé, 4 si non [scope:human]
+  human-verify --isc ISC-3                       recontrôle la signature humaine (env ISA_STAMP_KEY ; exit 2 si KO)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts tick --isc ISC-F5-19 --evidence "flutter test test/unit/ride_map_live_location_test.dart -> 7/7 passed (Flutter 3.50.1); analyze 0 errors on touched files" MEMORY/WORK/20261006-galass-driver-multistop/ISA.md 2>&1 | tail -20
+introuvable: --isc
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "tick" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts | head -30
+64:// ── human-tick : coche d'une claim `[scope:human — raison]` par le principal, signée ─────────────────────────
+65:// Une claim humaine (ratification, acte de Papa) n'est jamais cochée par un agent : `tick` la laisserait passer
+66:// pour une preuve outil. `human-tick` exige la clé ISA_STAMP_KEY dans l'ENVIRONNEMENT (secret du principal ou de
+93:export interface HumanTickPayload { v: 1; op: "human-tick"; isa: string; isc: string; claim: string; evidence: string; by: string; at: string }
+105:  const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(text, isaPath), isc, claim: lines[idx]!.trim(), evidence: m[1]!, by: m[2]!, at: m[3]! };
+118:  if (!cmd || !path) { console.log(`usage: ISATool.ts <scaffold|append|tick|untick|set|replace|adopt|verify> <ISA.md> [opts]
+121:  tick     --isc ISC-3 --evidence "…"           coche sur preuve outil mesurée (Verification)
+122:  untick   --isc ISC-3 --reason "…"             dé-coche avec la raison (refus de revue)
+127:  human-tick --isc ISC-3 --evidence "…" [--by nom]  coche une claim [scope:human — raison], signée avec
+139:  } else if (cmd === "tick" || cmd === "untick") {
+142:    const optName = cmd === "tick" ? "evidence" : "reason";
+145:    t = t.replace(re, `$1[${cmd === "tick" ? "x" : " "}]$2`);
+148:    const sha = cmd === "tick" ? headShort(path) : null;
+149:    const line = cmd === "tick" ? `- ${isc}: ${note}${sha ? ` [@${sha}]` : ""}` : `- ${isc}: NON VALIDÉ — ${note}`;
+150:    t = re2.test(t) ? t.replace(re2, (_m, h, b) => `${h}${b.replace(/\n+$/, "")}\n${line}\n\n`) : `${t.trimEnd()}\n\n## Verification\n\n${line}\n`; save(path, t, `${cmd === "tick" ? "evidence" : "reason"}:${isc}`);
+151:  } else if (cmd === "human-tick" || cmd === "human-verify") {
+165:    if (!isHumanScoped(lines, idx)) { console.error(`human-tick refusé : ${isc} n'est pas marquée [scope:human — raison] (sur sa ligne ou le titre ### de son bloc). Une claim de build se coche avec \`tick\` sur preuve outil.`); process.exit(HUMAN_TICK_EXIT.NOT_HUMAN); }
+170:    const payload: HumanTickPayload = { v: 1, op: "human-tick", isa: isaSlug(t, path), isc, claim: lines[idx]!.trim(), evidence, by, at };
+174:    save(path, t, `human-tick:${isc}`);
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && bun /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts tick MEMORY/WORK/20261006-galass-driver-multistop/ISA.md --isc ISC-F5-19 --evidence "flutter test test/unit/ride_map_live_location_test.dart -> 7/7 passed (Flutter 3.50.1); analyze 0 errors" 2>&1 | tail -20
+ISATool tick:ISC-F5-19 ok → MEMORY/WORK/20261006-galass-driver-multistop/ISA.md (progress 20/21, hmac-sha256:76290d1ae8df…)
+ISATool evidence:ISC-F5-19 ok → MEMORY/WORK/20261006-galass-driver-multistop/ISA.md (progress 20/21, hmac-sha256:8fa1b3a1d111…)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git status --short
+M MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+ M test/unit/ride_map_live_location_test.dart
+D  test/unit/tmp_probe_test.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git diff --stat
+MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | 5 +++--
+ test/unit/ride_map_live_location_test.dart          | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
