@@ -911,3 +911,66 @@ Tools • Dart 3.9.2 • DevTools 2.48.0
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && find . -name '*isatool*' -o -name '*ISATool*' 2>&1 | head -20
 (no output)
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show --stat 3fe5b84 --name-only
+commit 3fe5b847c42410ecbb214ced5eaf23cd872650dd
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:33:37 2026 +0000
+
+    wip(driver-f5-19): partial work (agent stopped)
+
+test/unit/tmp_probe_test.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show --stat d088550 --name-only
+commit d088550d1202ace21638aa476f50d9677a2b9e58
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 21:16:12 2026 +0000
+
+    feat(ride): ISC-F5-19 live car marker + ride-context location ping
+    
+    - RideMapController: applyLiveDriverLocation updates driver marker and follows camera with distance/interval throttle; test seam cameraAnimatorForTest
+    - RideDetailsController: start/stop live GPS stream on ACTIVE/RUNNING, ping driver/location-update via DashBoardRepo with LocationPingPolicy; updateRide syncs tracking
+    - ISA: mark ISC-F5-19 done with env-blocked test note
+    
+    Analyze --no-pub on touched files: 0 errors, 3 pre-existing deprecated_member_use infos.
+    Tests not runnable in env: Flutter 3.35.6/Dart 3.9.2 (timezone requires ^3.10), llvm-ar missing.
+
+MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+lib/data/controller/map/ride_map_controller.dart
+lib/data/controller/ride/ride_details/ride_details_controller.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git diff --name-only HEAD~2..HEAD -- 2>&1 | head -30
+MEMORY/WORK/20261006-galass-driver-multistop/ISA.md
+test/unit/tmp_probe_test.dart
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -B2 -A30 "ISC-F5-19" MEMORY/WORK/20261006-galass-driver-multistop/ISA.md | grep -B5 -A15 "ISC-F5-19" | head -30
+| ISC-F5-18 | widget      | Les deux références RUNNING « arrêt 1 actif » et « arrêt 2 actif » sont distinctes (sha256 différents) et rendent visiblement l'état complété vs actif pour refléter `completedAt`/progression. **Mesure 2026-11-23** : les deux PNG sont byte-identiques (sha256 `[REDACTED:hex64]`) car `RideItineraryTimeline` n'affiche pas `completedAt` et les CTA `canConfirmStop`/`canEndRide` ont la même valeur à 0/1 arrêt terminé — trou de planche **et** de rendu, non falsifiable aujourd'hui. | sha256(a) ≠ sha256(b) ; style actif/complété distinct | sha256sum test/goldens/driver/goldens/driver_ride_running_multistop_stop_*_active.png + golden widget | ISC-F5-16 |
+| Bridge-B7 | integration | e2e verte couvrant les arrêts ET les points UI (b/c/d/e) avec captures Driver et Rider comparées côte à côte — **étendu 2026-11-23 : zéro écart golden non accepté** (cf. ISA harnais emu) | PASS | ARTEMIS + galass-emu-actions-pub run | cross: 20261006-galass-rider-multistop |
+| ISC-F5-19 | widget + integration | Pendant RIDE_ACTIVE/RUNNING, le marqueur voiture `driver_location` suit un flux GPS (≥2 positions successives) et une requête `POST driver/location-update` est émise depuis l'écran course ; icône = asset partagé `marker_car.png` | marqueur se déplace sur ≥2 positions ; ≥1 ping `driver/location-update` émis en course | flutter test test/unit/ride_map_live_location_test.dart + grep | cross: ISC-F4-32 (Rider) |
+
+## Features
+
+
+
+### F0 · Cross-cutting
+
+Why: baseline avant edits.
+
+- [x] ISC-F0-1: Dual-write ISA enfant — SHA256 repo = LifeOS au close phase.
+- [x] ISC-F0-2: `flutter test` / `flutter analyze` verts avant edits.
+
+
+
+### F1 · Modèle données
+--
+- [x] ISC-F5-4: Carte v1 — **markers** arrêts intermédiaires + polyline ou highlight segment courant.
+- [x] ISC-F5-5: Modal offre ou prefetch detail — **résumé** multi-stop (ex. « 2 arrêts » + premier label).
+--
+Why: Papa demande que la voiture du chauffeur se mette à jour en temps réel sur la carte Driver pendant RIDE_ACTIVE/RIDE_RUNNING et que sa position parte au backend pour que le Rider la voie.
+
+- [ ] ISC-F5-19: **Pendant RIDE_ACTIVE et RIDE_RUNNING, la voiture du chauffeur est mise à jour en temps réel sur la carte Driver (flux GPS → marqueur voiture partagé `marker_car.png` → caméra) ET sa position est envoyée au backend (`POST driver/location-update`, broadcast Pusher côté Rider).** Audit code 2026-11-25 (lecture seule) : affichage **PARTIEL** — `ride_map_controller.dart` l.88/333-340 ne lit la position qu'une fois via `Geolocator.getCurrentPosition` au `loadMap`, le marqueur `driver_location` (l.209-222, icône `MyIcons.markerCar` = `assets/icon/marker_car.png`, l.313) reste figé, et la caméra ne cadre qu'à l'ouverture (`poly_line_map.dart` l.43-46, `ride_map_controller.dart` l.406-412) ; le suivi temps réel de la home (`home_screen.dart` l.376-388) est mis en pause dès l'ouverture de la course (`didPushNext` l.95-99). Envoi backend **PARTIEL** — aucun ping dédié course dans `ride_details_*` ; seul le service foreground envoie `driver/location-update` (`forground_location_service.dart` l.79-114/121-152, `dashboard_repo.dart` l.38-51, `url_container.dart` l.74), uniquement si le chauffeur est online (`forground_location_service.dart` l.34-39, `main.dart` l.121-126) ; `maybePingServerLocation` (`dashboard_controller.dart` l.65-91) est lui aussi coupé avec la home. Falsifier: un test widget/unit montre le marqueur `driver_location` qui change sur un flux GPS pendant RIDE_ACTIVE/RUNNING et une requête `driver/location-update` émise depuis l'écran course, ou une capture device où la voiture avance et la caméra suit. Cross: ISC-F4-32 (Rider). [app: Driver · classe: temps réel carte+backend · preuve: widget + grep]
+
+## Decisions
+
+- **2026-10-09 23:49** — Principal: **tout confirmé** → ISA **CLOSED** `phase: complete` `progress: 18/18` (Features 16 + Bridge-B4/B6). Dual-write LifeOS SHA256 match.
+- **2026-10-09 23:47** — Principal: **tout confirmé device** → claims F2/F3/Bridge fermés ; Remaining Work `[x]`.
+
