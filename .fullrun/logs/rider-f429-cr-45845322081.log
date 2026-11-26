@@ -6628,3 +6628,15 @@ tasks.register<Delete>("clean") {
 /tmp/flutter/packages/flutter_tools/templates/app/android.tmpl/settings.gradle.kts.tmpl
 /tmp/flutter/packages/flutter_tools/templates/plugin/android.tmpl/settings.gradle.kts.tmpl
 
+$ grep -rn "kotlinOptions" /tmp/flutter/packages/flutter_tools --include=*.kts --include=*.tmpl --include=*.md --include=*.dart 2>/dev/null | head -20; echo "=== driver kotlin block ==="; grep -n "kotlin\|compilerOptions\|jvmTarget\|JvmTarget" /agent/repos/Galass_Driver/android/app/build.gradle.kts
+/tmp/flutter/packages/flutter_tools/test/general.shard/android/android_project_migration_test.dart:84:    kotlinOptions {
+/tmp/flutter/packages/flutter_tools/test/general.shard/android/android_project_migration_test.dart:142:    kotlinOptions {
+/tmp/flutter/packages/flutter_tools/templates/plugin/pigeon/messages.dart.tmpl:37:    kotlinOptions: KotlinOptions(package: '{{androidIdentifier}}'),
+=== driver kotlin block ===
+3:import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+11:    id("kotlin-android")
+73:kotlin {
+74:    compilerOptions {
+75:        jvmTarget.set(JvmTarget.JVM_11)
+
+◈ Parallel Web Search "Kotlin Gradle plugin kotlinOptions DSL removed 2.3.0 compilerOptions replacement android"
