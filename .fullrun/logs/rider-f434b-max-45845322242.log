@@ -1,0 +1,1114 @@
+
+> Forge · deepseek-v4.1-flash-free
+
+I'll read the prompt file first.
+→ Read /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md
+
+$ pwd && ls -la && git status --short | head -50 && git log --oneline -5 && git branch -a | head -20
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target
+total 268
+drwxr-xr-x 18 ubuntu ubuntu  4096 Nov 26 15:21 .
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 15:21 ..
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 15:06 .claude
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:06 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 15:22 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 15:06 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1046 Nov 26 15:06 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  1188 Nov 26 15:06 .mcp.json
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:06 .omc
+-rw-r--r--  1 ubuntu ubuntu  8995 Nov 26 15:06 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu  3781 Nov 26 15:06 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu  5284 Nov 26 15:06 CLAUDE.md
+-rw-r--r--  1 ubuntu ubuntu  1411 Nov 26 15:06 FIX_SUMMARY.md
+-rw-r--r--  1 ubuntu ubuntu  3977 Nov 26 15:06 GALASS_CONTEXT.md
+-rw-r--r--  1 ubuntu ubuntu   100 Nov 26 15:06 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 16647 Nov 26 15:06 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:06 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  8465 Nov 26 15:06 NIMBALYST_DEV_SETUP.md
+-rw-r--r--  1 ubuntu ubuntu    13 Nov 26 15:06 README.md
+-rw-r--r--  1 ubuntu ubuntu  8175 Nov 26 15:06 RIDER-MULTISTOP.md
+-rw-r--r--  1 ubuntu ubuntu  6602 Nov 26 15:06 SECURE_CREDENTIALS_SETUP.md
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:06 _ephemeral
+-rw-r--r--  1 ubuntu ubuntu  1580 Nov 26 15:06 analysis_options.yaml
+drwxr-xr-x  4 ubuntu ubuntu  4096 Nov 26 15:06 android
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 15:06 assets
+-rw-r--r--  1 ubuntu ubuntu  4837 Nov 26 15:06 codemagic.yaml.deprecated
+-rw-r--r--  1 ubuntu ubuntu   265 Nov 26 15:06 devtools_options.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:06 diag
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:06 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 15:06 fastlane
+-rw-r--r--  1 ubuntu ubuntu   363 Nov 26 15:06 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 15:06 ios
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 15:06 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:06 prompts
+-rw-r--r--  1 ubuntu ubuntu 68546 Nov 26 15:06 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  3366 Nov 26 15:06 pubspec.yaml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:06 scripts
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 15:06 test
+-rw-r--r--  1 ubuntu ubuntu   441 Nov 26 15:06 test_result.txt
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+35788d2 docs(isa): F4-29 a-b green evidence (contract 9/9)
+fb2b0ff fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+b83aba6 test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+* verify/rider-f429-forge
+  remotes/origin/build/rider-apk-gradle
+  remotes/origin/build/rider-f429
+  remotes/origin/close/rider-f434b-max
+  remotes/origin/diag/arret-etape-galass-ci-2026-11-24
+  remotes/origin/diag/multistop-serena-porte-2026-11-23
+  remotes/origin/diag/porte-build-2026-11-24
+  remotes/origin/feat/multistop-e2e-2026-11-15
+  remotes/origin/feat/multistop-rider-close-2026-11-20
+  remotes/origin/feat/patrol-pilot
+  remotes/origin/feat/phone-number-login
+  remotes/origin/feat/rider-f434-2026-11-26
+  remotes/origin/feature/accessibility-plan
+  remotes/origin/feature/firebase-laravel-bridge
+  remotes/origin/fix/multistop-close
+  remotes/origin/fix/profile-bugs
+  remotes/origin/fix/profile-complete-prefill
+  remotes/origin/fix/rider-multistop-wip
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-23-45290781492
+  remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r3-45305125203
+
+$ ls test/widget/ | head -40; echo "---"; which flutter; flutter --version 2>&1 | head -5
+course_en_cours_contract_test.dart
+---
+/usr/local/bin/flutter
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
+$ find . -iname "*.md" -path "*WORK*" | head -20; echo "---"; ls .claude 2>/dev/null; find . -iname "*multistop*" -o -iname "*f4-29*" | head -30
+./MEMORY/WORK/20261002-galass-rider-dispatch-f3/_ephemeral/F0-bid-inventory.md
+./MEMORY/WORK/20261002-galass-rider-dispatch-f3/ISA.md
+./MEMORY/WORK/20261006-galass-rider-multistop/ISA.md
+./.claude/PAI/MEMORY/WORK/galass-webview-payment-482910/ISA.md
+./.claude/PAI/MEMORY/WORK/galass-rider-stable-final-110711/ISA.md
+./.claude/PAI/MEMORY/WORK/galass-rider-stable-final-110711/F4-SMOKE-MATRIX.md
+./.claude/PAI/MEMORY/WORK/galass-rider-stable-final-110711/F3-DEVICE-CHECKLIST.md
+./.claude/PAI/MEMORY/WORK/galass-francisation-sn-840301/ISA.md
+./.claude/PAI/MEMORY/WORK/galass-auth-login-register-gate-110701/ISA.md
+./.claude/PAI/MEMORY/WORK/galass-vps-startup-storm-710203/PLAN.md
+./.claude/PAI/MEMORY/WORK/galass-vps-startup-storm-710203/ISA.md
+./.claude/PAI/MEMORY/WORK/galass-vps-startup-storm-710203/CLAUDE_CODE_HANDOFF.md
+./.claude/PAI/MEMORY/WORK/galass-ride-payment-post-739201/ISA.md
+./.claude/PAI/MEMORY/WORK/galass-rider-store-submission-20260703/STORE_CHECKLIST.md
+./.claude/PAI/MEMORY/WORK/galass-rider-store-submission-20260703/ISA.md
+./.claude/PAI/MEMORY/WORK/galass-rider-store-submission-20260703/EMAIL_SURFACE_AUDIT.md
+./.claude/PAI/MEMORY/WORK/galass-rider-store-submission-20260703/IOS-app-store-submission-checklist.md
+./.claude/PAI/MEMORY/WORK/galass-rider-security-complete-120712/ISA.md
+./.claude/PAI/MEMORY/WORK/galass-rider-security-complete-120712/F6-DEVICE-CHECKLIST.md
+./.claude/PAI/MEMORY/WORK/galass-phone-auth-876543/_ephemeral/feat-firebase-setup.md
+---
+PAI
+plan.md
+plugins
+./test/goldens/rider/composition_multistop.png
+./test/unit/multistop_map_test.dart
+./test/unit/multistop_request_model_test.dart
+./test/unit/multistop_post_accept_ui_test.dart
+./test/unit/multistop_strings_sweep_test.dart
+./test/unit/multistop_map_controller_reset_test.dart
+./test/unit/multistop_pusher_test.dart
+./test/unit/multistop_ride_model_test.dart
+./test/unit/multistop_fare_test.dart
+./test/unit/multistop_progression_test.dart
+./test/unit/multistop_running_sheet_test.dart
+./test/unit/multistop_create_test.dart
+./test/unit/multistop_itinerary_test.dart
+./test/unit/multistop_picker_test.dart
+./.fullrun/multistop-ui-gaps-serena-2026-11-24-r5_checkpoint.json
+./.fullrun/multistop-ui-gaps-vera-2026-11-23_checkpoint.json
+./.fullrun/multistop-ui-gaps-serena-2026-11-23_DONE.md
+./.fullrun/multistop-ui-gaps-serena-2026-11-24-r3_checkpoint.json
+./.fullrun/multistop-ui-gaps-serena-2026-11-24-r3_DONE.md
+./.fullrun/multistop-ui-gaps-serena-2026-11-24-r5_DONE.md
+./.fullrun/multistop-ui-gaps-serena-2026-11-24-r6_DONE.md
+./.fullrun/multistop-ui-gaps-vera-2026-11-23_DONE.md
+./.fullrun/multistop-ui-gaps-serena-2026-11-24-r6_checkpoint.json
+./MEMORY/WORK/20261006-galass-rider-multistop
+./.git/logs/refs/remotes/origin/feat/multistop-e2e-2026-11-15
+./.git/logs/refs/remotes/origin/feat/multistop-rider-close-2026-11-20
+./.git/logs/refs/remotes/origin/diag/multistop-serena-porte-2026-11-23
+./.git/logs/refs/remotes/origin/fix/rider-multistop-wip
+./.git/logs/refs/remotes/origin/fix/multistop-close
+./.git/logs/refs/remotes/origin/fullrun-logs/multistop-ui-gaps-serena-2026-11-24-r6-45334725976
+
+$ grep -n "F4-29\|ISC-F4-29" MEMORY/WORK/20261006-galass-rider-multistop/ISA.md | head -40
+143:| ISC-F4-29 | widget | Contrat d'écran « Rider en course » (RIDE_RUNNING, référence Papa 2026-11-23) — présence testée individuellement de chacun : avatar, nom+note, plaque, « Any pickup notes? » à gauche du bouton appel sur la même ligne, bouton message, distance/temps/tarif, bloc « Lieu de prise en charge »/« Destination », bouton SOS. Règle « ajouter sans retirer » : retirer un de ces éléments exige une ligne ISA explicite validée par Papa | 8 assertions `find.byKey`/`find.text` toutes vertes, une par élément listé | flutter test test/widget/course_en_cours_contract_test.dart (golden) | ISC-F4-25, ISC-F4-26, ISC-F4-27, ISC-F4-28 |
+251:- [x] ISC-F4-29 (2026-11-23, méthode anti-régression Papa) : contrat d'écran « Rider en course » — 8 éléments obligatoires listés par Papa, chacun avec un test widget de présence, règle « ajouter sans retirer » (retrait = ligne ISA explicite validée par Papa). [app: Rider · classe: contrat d'écran · preuve: golden]
+317:- **2026-11-23 — Port F10/F11 depuis la branche de clôture (leg Vera, ISA-only).** Les claims `ISC-F4-21`…`ISC-F4-29` et `Bridge-B7` vivaient uniquement sur `feat/multistop-rider-close-2026-11-20` (ISA phase `learn`, 28/39) ; ils sont portés ici **texte inchangé**, avec leurs lignes Test Strategy, pour que le travail multi-arrêts ait un seul ISA de référence. Aucun ISC coché, aucune phase changée à la main, aucun gate affaibli. Le falsifier du contrat (`test/widget/course_en_cours_contract_test.dart`, 162 lignes, rouge par conception) est porté dans le même mouvement : sans lui, `ISC-F4-25/26/27/29` n'ont aucune preuve exécutable dans ce dépôt.
+325:- **2026-11-24 — Plan — Corrections des écarts UI multistop : Rider F10/F11/F12 + Driver F6 + harnais EMU-1 (Serena, dispatch `ses_df45f7a2fffeved4WBcaUjg5MT`, audit lecture seule ; 1er verdict fail → 14 corrections appliquées, re-audit).** Périmètre : `ISC-F4-21`–`ISC-F4-27`, `ISC-F4-29`–`ISC-F4-31`, `ISC-F5-12`–`ISC-F5-14`, `ISC-F5-16`–`ISC-F5-18`, `ISC-EMU-1`. **Hors correction** : `ISC-F4-28` (SOS — aucun correctif proposé, rattaché à F4-31/`RIDE_ACTIVE`, attente Papa) et `ISC-F5-15` (infirmé visuellement → test de garde seul). Plan détaillé : `.fullrun/multistop-ui-gaps-serena-2026-11-23_DONE.md`, amendé par les points ci-dessous.
+333:  - **F4-29** : 8 assertions de présence **et** ordre notes↔call dans la `Row` (l.654-756) ; la plaque exige `driver.vehicleData.vehicleNumber` non vide (`driver_profile_widget.dart` l.130-137) → paramètre **optionnel** `vehicleNumber` (défaut `null`, fixtures goldens inchangées) passé seulement dans le contrat.
+342:  - **Carte de dispatch ui|code** : F4-27 ui=Aditi Sharma / code+tests=Forge · F4-21 ui=Aditi Sharma / code+tests=Forge · F5-16 ui=Aditi Sharma / code+tests=Forge · F4-24 code=Forge · F4-25 ui=Aditi Sharma · F4-26 ui=Aditi Sharma / code=Forge · F4-22 ui=Aditi Sharma / code+tests=Forge · F5-14 ui=Aditi Sharma / code+tests=Forge · F5-12 ui=Aditi Sharma / tests=Marcus Webb · F5-13 tests=Forge · F5-17 code+tests=Marcus Webb · F4-23 ui=Aditi Sharma / tests=Forge · F4-29 ui=Aditi Sharma / tests=Forge · EMU-1 code=Forge · F4-30 et F5-18 accept Papa (aucun code) · F4-31 ui=Aditi Sharma (capture) / contrat=Forge.
+343:  - **Ordre de build** : flips de tests (F4-18/20/17/F4-10.1) → F4-27, F4-24, F4-21, F5-16 ‖ Driver `test/widget/` → F4-25, F4-26 → F4-22, F5-14 → EMU-1 → F5-12, F5-13 → F4-23 → F4-29, F5-17 → F4-30/F5-18 (accept Papa) → F4-31 (mesure) → verify/Max → Bridge-B7.
+349:  - **Périmètre et carte `ui|code` (trou comblé)** : **18 ISC** = F4-21..27, F4-29..31, F5-12..18, EMU-1. Ligne manquante ajoutée : **F5-15 tests=Forge/Marcus Webb, aucun code produit** (garde de régression ; ISC infirmé visuellement, garde maintenue).
+351:  - **F4-29 (API de fixture)** : `vehicleNumber` optionnel (défaut `null`) est ajouté **uniquement** au fixture de test `goldenDriver()` dans `test/goldens/rider/golden_fixtures.dart` l.66-75, jamais comme paramètre de `lib/` ; les goldens existants restent inchangés (fixture par défaut sans plaque).
+360:  - **`ISC-F4-29` (contrat écran)** : passer de 2 à 8 assertions (avatar+plaque, nom+note, message, appel, ordre notes↔appel dans la **même `Row`**, distance/temps/tarif, bloc itinéraire complet, SOS) ; `vehicleNumber` **optionnel défaut `null`** ajouté **uniquement** au fixture `goldenDriver()` (`test/goldens/rider/golden_fixtures.dart`), jamais à `lib/` — goldens existants inchangés.
+371:  - **Carte de dispatch ui | code et ordre de build** : (1) `RideStopProgress` + porteur Rider + `dimmedStopIconFor`/`stopIconStyleAt` + fix cache numéroté → Marcus Webb ; (2) `StopsProgressSemantics` + chemin réservé `ui.sh` + tests marqueurs → Marcus Webb ; (3) câblage `loadMapWithStopProgress` + tri → Marcus Webb ; (4) flips F4-25/26/27 → Aditi Sharma ; (5) montage F4-22 + F4-29 (8 assertions) + F4-23 `maxLines` → Aditi Sharma ; (6) `F4-24` test de reset → Marcus Webb ; (7) F5-12/F5-13/F5-17 (`primaryRideActionFor`, contrat Driver) → Aditi Sharma ; (8) F5-16 `stopMarkers` + dédoublonnage pin → Marcus Webb ; (9) F5-18 `completedAt` timeline Driver → Aditi Sharma ; (10) F4-30/F4-31 goldens + mesure → Aditi Sharma puis accept Papa. Risque transverse : aucun test Flutter n'est exécutable sur ce runner (`flutter: command not found`) → tout « vert » se produit en CI Android/iOS, jamais affirmé ici.
+466:- ISC-F4-29: flutter test test/widget/course_en_cours_contract_test.dart: ISC-F4-29 c-h vert, 8 assertions (avatar, nom+note, plaque DK-1234-AB, notes a gauche de l appel, message, distance/temps/tarif, itineraire complet, SOS); commit b931549 [@6894c02]
+476:- ISC-F4-29: flutter test test/widget/course_en_cours_contract_test.dart: 9/9 passed sous Flutter 3.50.1 — a-b (avatar, nom, note chauffeur) vert après chargement des fonts golden en `setUpAll` (le `fontsChange` du 1er test laissait un frame callback pendant au teardown, signalé « animation still running ») ; c-h verts, aucun golden régénéré. Commit fb2b0ff. [@fb2b0ff]
+477:- ISC-F4-29 (re-run rider-f429): rouge-avant reproduit en retirant `setUpAll(loadGoldenFonts)` → test a-b échoue (« An animation is still running … RelayoutWhenSystemFontsChangeMixin._scheduleSystemFontsUpdate ») ; restauration puis `flutter test test/widget/course_en_cours_contract_test.dart` → 9/9 vert ; suite complète `flutter test` → 311 passed / 2 skipped / 0 failed ; arbre propre (aucun golden régénéré, `.fullrun` intact). [@35788d2]
+493:- [ ] **F11 méthode anti-régression UI** — `ISC-F4-25` (tuile notes restaurée), `ISC-F4-26` (bouton message autonome), `ISC-F4-27` (bloc liste arrêts, amende `ISC-F4-17`), `ISC-F4-28` (SOS, verrou + écart à situer), `ISC-F4-29` (contrat d'écran « Rider en course »). Le falsifier `test/widget/course_en_cours_contract_test.dart` doit être porté sur cette branche (il n'y est pas encore) et joué **rouge-avant**.
+
+→ Read test/widget/course_en_cours_contract_test.dart
+
+$ ls test/goldens/rider/ | head -30; echo "---"; sed -n 1,120p test/goldens/rider/golden_harness.dart
+README.md
+accueil.png
+choix_service.png
+composition_multistop.png
+course_active_avant_prise_en_charge.png
+course_en_cours_simple.png
+course_en_cours_stop1_actif.png
+course_en_cours_stop1_fait.png
+course_en_cours_tous_arrets_faits.png
+course_terminee.png
+failures
+golden_fixtures.dart
+golden_harness.dart
+notation.png
+rider_en_recherche.png
+rider_home_golden_test.dart
+rider_rating_golden_test.dart
+rider_ride_sheet_golden_test.dart
+---
+// Golden harness for Galass Rider UI regression capture.
+//
+// Design decisions (see test/goldens/rider/README.md and the ISA):
+//   * No third-party golden package. `golden_toolkit` is unmaintained and its
+//     `loadAppFonts` only wraps the same `FontLoader` calls used here; the
+//     capture itself is pure `flutter_test` (`matchesGoldenFile`), which
+//     compares byte-exact decoded pixels through `LocalFileComparator`: any
+//     single differing pixel fails the test. There is no tolerance knob.
+//   * Fixed device: 390x844 logical px at DPR 2.0, text scale 1.0, locale
+//     fr_SN. No MediaQuery inheritance from the host: the surface is rebuilt
+//     from constants so a capture cannot drift with the machine running it.
+//   * Fonts come from `assets/fonts/` (Satoshi) plus the Material/Cupertino
+//     icon fonts: a capture never falls back to a host system font.
+//   * Test data lives in `golden_fixtures.dart`, is fully synthetic and has no
+//     real ride id, driver phone or coordinate from production.
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:galassrider/core/utils/style.dart';
+
+/// Capture surface, in logical pixels — the Pixel-class device the e2e emulator
+/// runs on (`412 x 915`), so goldens and e2e captures frame the same viewport.
+/// Not `390 x 844` : at 390 the pre-existing pickup-notes tile overflows by
+/// 7.2 px (`ride_details_bottom_sheet_widget.dart` Row, fixed by ISC-F4-25),
+/// which would bake overflow stripes into the baseline.
+const Size kGoldenSurface = Size(412, 915);
+
+/// Device pixel ratio baked into every golden.
+const double kGoldenDevicePixelRatio = 2.0;
+
+/// Locale of the capture (the app ships fr_SN by default).
+const Locale kGoldenLocale = Locale('fr', 'SN');
+
+const Map<String, List<String>> _satoshiWeights = <String, List<String>>{
+  'Satoshi': <String>[
+    'assets/fonts/Satoshi-Light.otf',
+    'assets/fonts/Satoshi-LightItalic.otf',
+    'assets/fonts/Satoshi-Regular.otf',
+    'assets/fonts/Satoshi-Italic.otf',
+    'assets/fonts/Satoshi-Medium.otf',
+    'assets/fonts/Satoshi-MediumItalic.otf',
+    'assets/fonts/Satoshi-Bold.otf',
+    'assets/fonts/Satoshi-BoldItalic.otf',
+    'assets/fonts/Satoshi-Black.otf',
+    'assets/fonts/Satoshi-BlackItalic.otf',
+  ],
+};
+
+bool _platformStubsInstalled = false;
+
+/// Stubs the two platform channels every image widget touches, and makes every
+/// HTTP image request return the same 1x1 PNG. Without this a capture would
+/// depend on the host (path_provider is unavailable in a widget test and the
+/// network is real).
+void installGoldenPlatformStubs() {
+  if (_platformStubsInstalled) return;
+  final messenger =
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+  for (final channel in <String>[
+    'plugins.flutter.io/path_provider',
+    'plugins.flutter.io/path_provider_android',
+  ]) {
+    messenger.setMockMethodCallHandler(MethodChannel(channel), (call) async {
+      return '/tmp/golden-cache';
+    });
+  }
+  HttpOverrides.global = _GoldenHttpOverrides();
+  _platformStubsInstalled = true;
+}
+
+class _GoldenHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) => _GoldenHttpClient();
+}
+
+/// Minimal 1x1 transparent PNG returned for every image URL.
+final Uint8List _goldenPngBytes = Uint8List.fromList(<int>[
+  0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D,
+  0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+  0x08, 0x06, 0x00, 0x00, 0x00, 0x1F, 0x15, 0xC4, 0x89, 0x00, 0x00, 0x00,
+  0x0A, 0x49, 0x44, 0x41, 0x54, 0x78, 0x9C, 0x63, 0x00, 0x01, 0x00, 0x00,
+  0x05, 0x00, 0x01, 0x0D, 0x0A, 0x2D, 0xB4, 0x00, 0x00, 0x00, 0x00, 0x49,
+  0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82,
+]);
+
+class _GoldenHttpClient implements HttpClient {
+  @override
+  bool autoUncompress = true;
+  @override
+  Duration? connectionTimeout;
+  @override
+  Duration idleTimeout = const Duration(seconds: 1);
+  @override
+  int? maxConnectionsPerHost;
+  @override
+  String? userAgent;
+
+  @override
+  Future<HttpClientRequest> openUrl(String method, Uri url) async =>
+      _GoldenHttpRequest(url, _goldenPngBytes);
+
+  @override
+  Future<HttpClientRequest> getUrl(Uri url) => openUrl('get', url);
+
+  @override
+  Future<HttpClientRequest> postUrl(Uri url) => openUrl('post', url);
+
+  @override
+  Future<HttpClientRequest> putUrl(Uri url) => openUrl('put', url);
+
+  @override
+  Future<HttpClientRequest> deleteUrl(Uri url) => openUrl('delete', url);
+
+  @override
+  Future<HttpClientRequest> patchUrl(Uri url) => openUrl('patch', url);
+
+$ flutter test test/widget/course_en_cours_contract_test.dart 2>&1 | tail -60
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because share_plus 13.3.1 requires SDK version >=3.10.0 <4.0.0 and no versions of share_plus match >13.3.1 <14.0.0, share_plus ^13.3.1 is forbidden.
+So, because galassrider depends on share_plus ^13.3.1, version solving failed.
+Failed to update packages.
+
+$ grep -n "sdk:" pubspec.yaml; echo "---"; ls -d /opt/*flutter* /usr/local/*flutter* ~/*flutter* /home/ubuntu/*flutter* 2>/dev/null; echo "---"; ls ~/fvm 2>/dev/null; which fvm; echo "---"; find / -maxdepth 4 -name "flutter" -type f 2>/dev/null | head
+8:  sdk: '>=3.5.0 <4.0.0'
+24:    sdk: flutter
+70:    sdk: flutter
+---
+/opt/flutter
+---
+---
+/opt/flutter/bin/flutter
+
+$ ls -la /opt/flutter/bin/cache/dart-sdk/version 2>/dev/null && cat /opt/flutter/bin/cache/dart-sdk/version 2>/dev/null; echo "---"; /opt/flutter/bin/flutter --version 2>&1 | head -5; echo "---"; ls -la /usr/local/bin/flutter
+-rw-r--r-- 1 ubuntu ubuntu 6 Oct  7  2025 /opt/flutter/bin/cache/dart-sdk/version
+3.9.2
+---
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+---
+lrwxrwxrwx 1 root root 24 Nov 26 07:05 /usr/local/bin/flutter -> /opt/flutter/bin/flutter
+
+$ grep -n "share_plus" -A3 pubspec.yaml; echo "---LOCK---"; grep -n "share_plus" -A6 pubspec.lock; echo "---"; ls -la .dart_tool 2>/dev/null | head; echo "---"; grep -n "share_plus" -B2 -A6 .dart_tool/package_config.json 2>/dev/null | head -20
+49:  share_plus: ^13.3.1
+50-  shared_preferences: ^2.5.3
+51-  sheet: ^1.0.0
+52-  shimmer: ^3.0.0
+---LOCK---
+1683:  share_plus:
+1684-    dependency: "direct main"
+1685-    description:
+1686:      name: share_plus
+1687-      sha256: [REDACTED:hex64]
+1688-      url: "https://pub.dev"
+1689-    source: hosted
+1690-    version: "13.3.1"
+1691:  share_plus_platform_interface:
+1692-    dependency: transitive
+1693-    description:
+1694:      name: share_plus_platform_interface
+1695-      sha256: "[REDACTED:hex64]"
+1696-      url: "https://pub.dev"
+1697-    source: hosted
+1698-    version: "7.2.0"
+1699-  shared_preferences:
+1700-    dependency: "direct main"
+---
+---
+
+$ ls -a | grep -i "fvm\|flutter"; find . -maxdepth 3 -name "*.yaml" -o -maxdepth 3 -name "*.yml" | grep -i "workflow\|github" | head; echo "---"; grep -rn "3\.50\|flutter-version\|FLUTTER_VERSION" --include="*.yaml" --include="*.yml" --include="*.md" . 2>/dev/null | grep -v "^./MEMORY" | head -20
+---
+./.fullrun/multistop-ui-gaps-serena-2026-11-24-r6_DONE.md:86:- **Bloquants Papa** (à trancher avant clôture) : (a) SOS en `RIDE_ACTIVE` — `ISC-F4-28`/`F4-31` ; (b) CTA « prise en charge » Rider inexistant → amender en `cancelRide` ? ; (c) F4-21 : accepter preuve unit + e2e (golden impossible) ? ; (d) autoriser la régénération des goldens (Rider 412×915 DPR2 / Flutter 3.44.8 ; Driver golden_toolkit 390×844 DPR1 / Flutter 3.50.1 — ne pas normaliser) ; (e) F5-12 : invariant structurel (recommandé) plutôt que palette désactivée globale.
+
+$ ls ~/.pub-cache/hosted/pub.dev 2>/dev/null | grep -i "share_plus" | head; echo "---net---"; timeout 15 curl -sI https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json | head -3; echo "exit=$?"
+---net---
+HTTP/2 200 
+x-guploader-uploadid: AFy3sg1T6TaQYjwj91qL5XXLMK0QosXZQv50feDb2ath_Ao4ueStDhakAlkND3pl1oz04xkQx4giY0g
+x-goog-generation: 1795134394097945
+exit=0
+
+$ git show --stat b83aba6 | head -40; echo "===="; git log -1 --format=%B b83aba6; echo "===="; git show --stat fb2b0ff | head -20; git log -1 --format=%B fb2b0ff
+commit b83aba638559be730aab49c946540ea5eb30ffe9
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 08:17:16 2026 +0000
+
+    test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+
+ test/goldens/rider/accueil.png                     | Bin 106650 -> 106694 bytes
+ test/goldens/rider/choix_service.png               | Bin 44217 -> 44207 bytes
+ test/goldens/rider/composition_multistop.png       | Bin 136374 -> 136404 bytes
+ .../rider/course_active_avant_prise_en_charge.png  | Bin 78559 -> 78605 bytes
+ test/goldens/rider/course_en_cours_simple.png      | Bin 78134 -> 78140 bytes
+ test/goldens/rider/course_en_cours_stop1_actif.png | Bin 110456 -> 110452 bytes
+ test/goldens/rider/course_en_cours_stop1_fait.png  | Bin 110396 -> 110393 bytes
+ .../rider/course_en_cours_tous_arrets_faits.png    | Bin 109361 -> 109360 bytes
+ test/goldens/rider/course_terminee.png             | Bin 77029 -> 77079 bytes
+ test/goldens/rider/notation.png                    | Bin 68798 -> 68853 bytes
+ test/goldens/rider/rider_en_recherche.png          | Bin 51457 -> 51486 bytes
+ 11 files changed, 0 insertions(+), 0 deletions(-)
+====
+test(goldens): rebase rider sous Flutter 3.50.1 (regen Artemis)
+
+====
+commit fb2b0ffd9ab0c9ff8446a40943e292d03fde4337
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 10:20:14 2026 +0000
+
+    fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+
+ test/widget/course_en_cours_contract_test.dart | 5 +++++
+ 1 file changed, 5 insertions(+)
+fix(test): load golden fonts in setUpAll so F4-29 a-b is green
+
+$ timeout 60 curl -s https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json -o /tmp/releases_linux.json && python3 -c "
+import json
+d=json.load(open('/tmp/releases_linux.json'))
+for r in d['releases']:
+    if r['version'].startswith('3.50') or r['version'].startswith('3.44'):
+        print(r['version'], r['channel'], r['dart_sdk_version'], r['archive'])
+" | head -20
+3.50.1 stable 3.14.0 stable/linux/flutter_linux_3.50.1-stable.tar.xz
+3.50.0 stable 3.14.0 stable/linux/flutter_linux_3.50.0-stable.tar.xz
+3.50.0-0.4.pre beta 3.14.0 (build 3.14.0-315.3.beta) beta/linux/flutter_linux_3.50.0-0.4.pre-beta.tar.xz
+3.50.0-0.3.pre beta 3.14.0 (build 3.14.0-315.3.beta) beta/linux/flutter_linux_3.50.0-0.3.pre-beta.tar.xz
+3.50.0-0.2.pre beta 3.14.0 (build 3.14.0-315.3.beta) beta/linux/flutter_linux_3.50.0-0.2.pre-beta.tar.xz
+3.50.0-0.1.pre beta 3.14.0 (build 3.14.0-315.1.beta) beta/linux/flutter_linux_3.50.0-0.1.pre-beta.tar.xz
+3.44.9 stable 3.12.2 stable/linux/flutter_linux_3.44.9-stable.tar.xz
+3.44.8 stable 3.12.2 stable/linux/flutter_linux_3.44.8-stable.tar.xz
+3.44.7 stable 3.12.2 stable/linux/flutter_linux_3.44.7-stable.tar.xz
+3.44.6 stable 3.12.2 stable/linux/flutter_linux_3.44.6-stable.tar.xz
+3.44.5 stable 3.12.2 stable/linux/flutter_linux_3.44.5-stable.tar.xz
+3.44.4 stable 3.12.2 stable/linux/flutter_linux_3.44.4-stable.tar.xz
+3.44.3 stable 3.12.2 stable/linux/flutter_linux_3.44.3-stable.tar.xz
+3.44.2 stable 3.12.2 stable/linux/flutter_linux_3.44.2-stable.tar.xz
+3.44.1 stable 3.12.1 stable/linux/flutter_linux_3.44.1-stable.tar.xz
+3.44.0 stable 3.12.0 stable/linux/flutter_linux_3.44.0-stable.tar.xz
+3.44.0-0.3.pre beta 3.12.0 (build 3.12.0-327.4.beta) beta/linux/flutter_linux_3.44.0-0.3.pre-beta.tar.xz
+3.44.0-0.2.pre beta 3.12.0 (build 3.12.0-327.3.beta) beta/linux/flutter_linux_3.44.0-0.2.pre-beta.tar.xz
+3.44.0-0.1.pre beta 3.12.0 (build 3.12.0-327.1.beta) beta/linux/flutter_linux_3.44.0-0.1.pre-beta.tar.xz
+
+$ df -h /home/ubuntu | tail -1; nproc; free -g | head -2
+/dev/vdc        254G   24G  230G  10% /
+4
+               total        used        free      shared  buff/cache   available
+Mem:              15           7           1           0           7           7
+
+$ mkdir -p /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk && cd /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk && time curl -sSL -o flutter_3.50.1.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.50.1-stable.tar.xz && ls -lh flutter_3.50.1.tar.xz
+real	0m19.031s
+user	0m0.790s
+sys	0m3.127s
+-rw-r--r-- 1 ubuntu ubuntu 1.5G Nov 26 15:23 flutter_3.50.1.tar.xz
+
+$ cd /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk && tar xf flutter_3.50.1.tar.xz && /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/flutter/bin/flutter --version 2>&1 | head -8
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ae9b586f34 (8 days ago) • 2026-11-18 17:01:07 -0800
+Engine • hash 51379e6df48ea8ee7205623b90fe66491cad8df3 (revision 4d35714800) (8 days ago) • 2026-11-18 01:50:07.000Z
+Tools • Dart 3.14.0 • DevTools 2.61.0
+The Flutter CLI developer tool uses Google Analytics to report usage and diagnostic
+data along with package dependencies, and crash reporting to send basic crash
+reports. This data is used to help improve the Dart platform, Flutter framework,
+and related tools.
+
+$ export PATH=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/flutter/bin:$PATH; flutter --version | head -1; flutter pub get 2>&1 | tail -20
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+  vector_graphics_compiler 1.2.2 (1.3.7 available)
+> vector_math 2.4.4 (was 2.2.0)
+  vibration 3.1.8 (3.2.1 available)
+  video_player 2.11.1 (2.14.1 available)
+  video_player_android 2.9.5 (2.13.0 available)
+  video_player_avfoundation 2.9.6 (2.12.5 available)
+  video_player_platform_interface 6.7.0 (6.9.0 available)
+  vm_service 15.2.0 (15.4.0 available)
+  wakelock_plus 1.8.0 (1.8.2 available)
+  web 1.1.1 (1.1.2 available)
+  webview_flutter 4.13.1 (4.14.1 available)
+  webview_flutter_android 4.12.0 (4.14.1 available)
+  webview_flutter_wkwebview 3.25.1 (3.27.2 available)
+  windows_file_picker 1.3.0 (2.0.2 available)
+  xml 6.6.1 (7.1.0 available)
+  yaml 3.1.3 (3.1.4 available)
+Changed 7 dependencies!
+171 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Upgrading analysis_options.yaml to exclude build and platform directories.
+
+$ git status --short
+M analysis_options.yaml
+ M pubspec.lock
+
+$ git diff --stat; git diff analysis_options.yaml
+analysis_options.yaml |  4 ++++
+ pubspec.lock          | 34 +++++++++++++++++++++-------------
+ 2 files changed, 25 insertions(+), 13 deletions(-)
+diff --git a/analysis_options.yaml b/analysis_options.yaml
+index f741767..a28edeb 100644
+--- a/analysis_options.yaml
++++ b/analysis_options.yaml
+@@ -12,6 +12,10 @@ analyzer:
+     must_be_immutable: ignore
+     constant_identifier_names: ignore
+     use_build_context_synchronously: ignore
++  exclude:
++    - build/**
++    - android/**
++    - ios/**
+ include: package:flutter_lints/flutter.yaml
+ formatter:
+   page_width: 500
+
+$ git checkout -- analysis_options.yaml pubspec.lock && git status --short && echo "clean-check-done"
+clean-check-done
+
+$ export PATH=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/flutter/bin:$PATH; flutter test --no-pub test/widget/course_en_cours_contract_test.dart 2>&1 | tail -60
+00:00 +0: loading /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:01 +1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:01 +2: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:01 +3: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:01 +4: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +5: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +6: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +7: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:02 +8: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:02 +9: (tearDownAll)
+00:02 +9: All tests passed!
+
+$ export PATH=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/flutter/bin:$PATH; flutter test --no-pub test/widget/course_en_cours_contract_test.dart --plain-name 'ISC-F4-29 a-b' 2>&1 | tail -20; echo "EXIT=${PIPESTATUS[0]}"
+00:00 +0: loading /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:00 +1: (tearDownAll)
+00:00 +1: All tests passed!
+EXIT=0
+
+$ grep -rn "kGoldenDriverName\|kGoldenDriverRating" test/goldens/rider/golden_fixtures.dart | head; echo "---"; grep -rn "DriverProfileWidget(" lib/ | head
+16:const String kGoldenDriverName = 'Moussa Fall';
+---
+lib/presentation/screens/ride/widget/ride_details_bottom_sheet_widget.dart:308:                      DriverProfileWidget(
+lib/presentation/screens/ride/widget/ride_details_bottom_sheet_widget.dart:349:                      DriverProfileWidget(
+lib/presentation/screens/ride/widget/ride_details_bottom_sheet_widget.dart:438:                      DriverProfileWidget(
+lib/presentation/screens/ride/widget/ride_details_bottom_sheet_widget.dart:521:                      DriverProfileWidget(
+lib/presentation/screens/location/widgets/driver_profile_widget.dart:18:  DriverProfileWidget({
+
+$ git status --short; echo "---untracked-all---"; git status --porcelain --untracked-files=all | head -20; echo "---fullrun---"; git status --porcelain .fullrun; echo "---head---"; git rev-parse HEAD; git log -1 --format='%H %s'
+---untracked-all---
+---fullrun---
+---head---
+fcdd581e60af92159238d4adce16dcb5be550176
+fcdd581e60af92159238d4adce16dcb5be550176 merge(rider): F4-29 profil chauffeur RUNNING into feat
+
+$ ls VERIFY-*.md 2>/dev/null; echo "none-or-list-above"; ls .fullrun | head
+none-or-list-above
+multistop-ui-gaps-serena-2026-11-23_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r3_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r3_checkpoint.json
+multistop-ui-gaps-serena-2026-11-24-r5_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r5_checkpoint.json
+multistop-ui-gaps-serena-2026-11-24-r6_DONE.md
+multistop-ui-gaps-serena-2026-11-24-r6_checkpoint.json
+multistop-ui-gaps-vera-2026-11-23_DONE.md
+multistop-ui-gaps-vera-2026-11-23_checkpoint.json
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && cat > /tmp/pg.sh <<'EOF'
+export PATH=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/flutter/bin:$PATH
+flutter pub get >/tmp/pubget.log 2>&1
+git diff pubspec.lock | head -80
+EOF
+bash /tmp/pg.sh
+diff --git a/pubspec.lock b/pubspec.lock
+index 97bda7d..c085e27 100644
+--- a/pubspec.lock
++++ b/pubspec.lock
+@@ -157,10 +157,10 @@ packages:
+     dependency: transitive
+     description:
+       name: clock
+-      sha256: [REDACTED:hex64]
++      sha256: [REDACTED:hex64]
+       url: "https://pub.dev"
+     source: hosted
+-    version: "1.1.2"
++    version: "1.1.3"
+   code_assets:
+     dependency: transitive
+     description:
+@@ -1280,6 +1280,14 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "6.1.0"
++  listen:
++    dependency: transitive
++    description:
++      name: listen
++      sha256: "[REDACTED:hex64]"
++      url: "https://pub.dev"
++    source: hosted
++    version: "1.0.1"
+   logger:
+     dependency: "direct main"
+     description:
+@@ -1308,10 +1316,10 @@ packages:
+     dependency: transitive
+     description:
+       name: matcher
+-      sha256: [REDACTED:hex64]
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "0.12.19"
++    version: "0.12.20"
+   material_color_utilities:
+     dependency: transitive
+     description:
+@@ -1324,10 +1332,10 @@ packages:
+     dependency: transitive
+     description:
+       name: meta
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "1.18.0"
++    version: "1.19.0"
+   mime:
+     dependency: transitive
+     description:
+@@ -1857,10 +1865,10 @@ packages:
+     dependency: transitive
+     description:
+       name: stack_trace
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "1.12.1"
++    version: "1.12.2"
+   stream_channel:
+     dependency: transitive
+     description:
+@@ -1905,10 +1913,10 @@ packages:
+     dependency: transitive
+     description:
+       name: test_api
+-      sha256: "[REDACTED:hex64]"
++      sha256: "[REDACTED:hex64]"
+       url: "https://pub.dev"
+     source: hosted
+-    version: "0.7.11"
+
+$ tail -8 pubspec.lock; echo "===restore==="; git checkout -- pubspec.lock analysis_options.yaml; tail -8 pubspec.lock; export PATH=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/flutter/bin:$PATH; flutter pub get --enforce-lockfile 2>&1 | tail -15; echo "EXIT=$?"
+name: zoom_tap_animation
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+sdks:
+  dart: ">=3.13.0-0 <4.0.0"
+  flutter: ">=3.44.0"
+===restore===
+      name: zoom_tap_animation
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+sdks:
+  dart: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
+  web 1.1.1 (1.1.2 available)
+  webview_flutter 4.13.1 (4.14.1 available)
+  webview_flutter_android 4.12.0 (4.14.1 available)
+  webview_flutter_wkwebview 3.25.1 (3.27.2 available)
+  windows_file_picker 1.3.0 (2.0.2 available)
+  xml 6.6.1 (7.1.0 available)
+  yaml 3.1.3 (3.1.4 available)
+Would change 7 dependencies.
+171 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Unable to satisfy `pubspec.yaml` using `pubspec.lock`.
+
+To update `pubspec.lock` run `flutter pub get` without
+`--enforce-lockfile`.
+Failed to update packages.
+EXIT=0
+
+$ export PATH=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/flutter/bin:$PATH; flutter pub get >/tmp/pubget3501.log 2>&1; echo "pubget_exit=$?"; flutter test --no-pub test/widget/course_en_cours_contract_test.dart > /tmp/test3501_full.log 2>&1; echo "full_exit=$?"; flutter test --no-pub test/widget/course_en_cours_contract_test.dart --plain-name 'ISC-F4-29 a-b' > /tmp/test3501_ab.log 2>&1; echo "ab_exit=$?"; tail -14 /tmp/test3501_full.log; echo "=== AB ==="; cat /tmp/test3501_ab.log
+pubget_exit=0
+full_exit=0
+ab_exit=0
+00:00 +0: loading /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:00 +1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:00 +2: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:00 +3: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:01 +4: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +5: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +6: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +7: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:01 +8: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:01 +9: (tearDownAll)
+00:01 +9: All tests passed!
+=== AB ===
+00:00 +0: loading /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:00 +1: (tearDownAll)
+00:00 +1: All tests passed!
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && git checkout -- pubspec.lock analysis_options.yaml && git status --short; cd /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk && time curl -sSL -o flutter_3.44.8.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.44.8-stable.tar.xz && mkdir -p f3448 && tar xf flutter_3.44.8.tar.xz -C f3448 && f3448/flutter/bin/flutter --version | head -4
+real	0m8.772s
+user	0m0.738s
+sys	0m3.853s
+
+┌─────────────────────────────────────────────────────────┐
+│ A new version of Flutter is available!                  │
+│                                                         │
+Unhandled exception:
+FileSystemException: writeFrom failed, path = '' (OS Error: Broken pipe, errno = 32)
+#0      _RandomAccessFile.writeFromSync (dart:io/file_impl.dart:999:7)
+#1      _StdConsumer.addStream.<anonymous closure> (dart:io/stdio.dart:328:17)
+#2      _rootRunUnary (dart:async/zone_root.dart:56:13)
+#3      _CustomZone.runUnary (dart:async/zone.dart:733:19)
+#4      _CustomZone.runUnaryGuarded (dart:async/zone.dart:633:7)
+#5      _BufferingStreamSubscription._sendData (dart:async/stream_impl.dart:381:11)
+#6      _BufferingStreamSubscription._add (dart:async/stream_impl.dart:312:7)
+#7      _SyncStreamControllerDispatch._sendData (dart:async/stream_controller.dart:798:19)
+#8      _StreamController._add (dart:async/stream_controller.dart:663:7)
+#9      _StreamController.add (dart:async/stream_controller.dart:618:5)
+#10     _StreamSinkImpl.add (dart:io/io_sink.dart:155:17)
+#11     _IOSinkImpl.write (dart:io/io_sink.dart:293:5)
+#12     _StdSink._write (dart:io/stdio.dart:431:13)
+#13     _StdSink.write (dart:io/stdio.dart:440:33)
+#14     Stdio._stdioWrite.<anonymous closure> (package:flutter_tools/src/base/io.dart:328:14)
+#15     asyncGuard.<anonymous closure> (package:flutter_tools/src/base/async_guard.dart:108:32)
+#16     _rootRun (dart:async/zone_root.dart:35:13)
+#17     _CustomZone.run (dart:async/zone.dart:726:19)
+#18     _runZoned (dart:async/zone_api.dart:166:6)
+#19     runZonedGuarded (dart:async/zone_api.dart:152:12)
+#20     asyncGuard (package:flutter_tools/src/base/async_guard.dart:106:3)
+#21     Stdio._stdioWrite (package:flutter_tools/src/base/io.dart:326:5)
+#22     Stdio.stdoutWrite (package:flutter_tools/src/base/io.dart:312:7)
+#23     StdoutLogger.writeToStdOut (package:flutter_tools/src/base/logger.dart:551:48)
+#24     _generateBox (package:flutter_tools/src/base/logger.dart:685:10)
+#25     StdoutLogger.printBox (package:flutter_tools/src/base/logger.dart:540:5)
+#26     VersionFreshnessValidator.run (package:flutter_tools/src/version.dart:1323:12)
+<asynchronous suspension>
+#27     FlutterCommandRunner.runCommand.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:451:11)
+<asynchronous suspension>
+#28     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#29     FlutterCommandRunner.runCommand (package:flutter_tools/src/runner/flutter_command_runner.dart:431:5)
+<asynchronous suspension>
+#30     FlutterCommandRunner.run.<anonymous closure> (package:flutter_tools/src/runner/flutter_command_runner.dart:307:33)
+<asynchronous suspension>
+#31     run.<anonymous closure>.<anonymous closure> (package:flutter_tools/runner.dart:104:11)
+<asynchronous suspension>
+#32     AppContext.run.<anonymous closure> (package:flutter_tools/src/base/context.dart:154:19)
+<asynchronous suspension>
+#33     main (package:flutter_tools/executable.dart:103:3)
+<asynchronous suspension>
+
+$ cd /home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/f3448 && ./flutter/bin/flutter --version 2>&1 | sed -n 1,4p
+Flutter 3.44.8 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision 058e0af2c2 (4 months ago) • 2026-07-23 10:56:21 -0700
+Engine • hash 13ffd72b2f9a5ca4db2a74ea52d5353ec2e8f939 (revision 0cd610717b) (4 months ago) • 2026-07-23 16:11:34.000Z
+Tools • Dart 3.12.2 • DevTools 2.57.0
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && export PATH=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/f3448/flutter/bin:$PATH && flutter --version | sed -n 1p && flutter pub get --enforce-lockfile > /tmp/pubget3448.log 2>&1; echo "pubget_exit=$?"; tail -5 /tmp/pubget3448.log; git status --short
+Flutter 3.44.8 • channel stable • https://github.com/flutter/flutter.git
+pubget_exit=0
+  xml 6.6.1 (7.1.0 available)
+  yaml 3.1.3 (3.1.4 available)
+Got dependencies!
+176 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && export PATH=/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/f3448/flutter/bin:$PATH && flutter test --no-pub test/widget/course_en_cours_contract_test.dart > /tmp/test3448_full.log 2>&1; echo "full_exit=$?"; flutter test --no-pub test/widget/course_en_cours_contract_test.dart --plain-name 'ISC-F4-29 a-b' > /tmp/test3448_ab.log 2>&1; echo "ab_exit=$?"; tail -14 /tmp/test3448_full.log; echo "=== AB ==="; cat /tmp/test3448_ab.log; git status --short
+full_exit=0
+ab_exit=0
+00:00 +0: loading /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:00 +1: ISC-F4-29 c-h — les 8 éléments du contrat sont présents
+00:00 +2: ISC-F4-22 — repère Semantics galass.rider.stops, compteur retiré
+00:00 +3: ISC-F4-25 — tuile « Des notes pour la prise en charge ? » visible en RUNNING
+00:00 +4: ISC-F4-26 — bouton message autonome à côté du bouton appel
+00:01 +5: ISC-F4-27 — bloc prise en charge/destination = liste complète
+00:01 +6: ISC-F4-28 — verrou : bouton SOS toujours rendu en RUNNING
+00:01 +7: ISC-F4-23 — après le dernier arrêt, la destination réelle est rendue
+00:01 +8: ISC-F4-31 — RIDE_ACTIVE : SOS présent, aucune UI recherche
+00:01 +9: (tearDownAll)
+00:01 +9: All tests passed!
+=== AB ===
+00:00 +0: loading /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/test/widget/course_en_cours_contract_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: ISC-F4-29 a-b — profil chauffeur (avatar, nom, note) en RUNNING
+00:00 +1: (tearDownAll)
+00:00 +1: All tests passed!
+
+$ sed -n 260,360p lib/presentation/screens/ride/widget/ride_details_bottom_sheet_widget.dart
+MyUtils.copy(
+                                    text: ride.otp ?? '',
+                                  );
+                                },
+                                child: Row(
+                                  children: [
+                                    ...'${ride.otp}'.split('').asMap().entries.map(
+                                      (entry) {
+                                        final index = entry.key;
+                                        final e = entry.value;
+                                        final isLast =
+                                            index == (ride.otp?.length ?? 0) - 1;
+
+                                        return Padding(
+                                          padding: EdgeInsetsDirectional.only(
+                                            end: isLast ? 0 : Dimensions.space10,
+                                          ),
+                                          child: InnerShadowContainer(
+                                            width: 40,
+                                            height: 50,
+                                            backgroundColor: MyColor.neutral50,
+                                            borderRadius: Dimensions.largeRadius,
+                                            blur: 6,
+                                            offset: Offset(3, 3),
+                                            shadowColor: MyColor.colorBlack
+                                                .withValues(alpha: 0.04),
+                                            isShadowTopLeft: true,
+                                            isShadowBottomRight: true,
+                                            child: Center(
+                                              child: HeaderText(
+                                                text: e,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      spaceDown(Dimensions.space20),
+                    ],
+                    if (ride.driver != null) ...[
+                      spaceDown(Dimensions.space5),
+                      DriverProfileWidget(
+                        driver: ride.driver,
+                        driverImage: '${controller.driverImagePath}/${ride.driver?.avatar ?? ''}',
+                        serviceImage: '${controller.serviceImagePath}/${ride.service?.image ?? ''}',
+                        totalCompletedRide: controller.driverTotalCompletedRide,
+                      ),
+                    ],
+                    spaceDown(Dimensions.space30),
+                    //messages or call widget
+                    buildMessageOrCallWidget(ride),
+                    spaceDown(Dimensions.space20),
+                    buildRideLocationAndDestinationWidget(ride),
+                    spaceDown(Dimensions.space30),
+                    RoundedButton(
+                      text: MyStrings.cancelRide.tr,
+                      press: () {
+                        CustomBottomSheet(
+                          child: const RideCancelBottomSheetBody(),
+                        ).customBottomSheet(context);
+                      },
+                      bgColor: MyColor.redCancelTextColor,
+                    ),
+                    spaceDown(Dimensions.space15),
+                    RoundedButton(
+                      text: MyStrings.sos,
+                      bgColor: MyColor.redCancelTextColor,
+                      isLoading: controller.isSosLoading,
+                      press: () {
+                        CustomBottomSheet(
+                          child: RideDetailsSosBottomSheetBody(
+                            controller: controller,
+                            id: ride.id ?? '-1',
+                          ),
+                        ).customBottomSheet(context);
+                      },
+                    ),
+                  ],
+
+                  //Running Ride
+                  if (ride.status == AppStatus.RIDE_RUNNING) ...[
+                    if (ride.driver != null) ...[
+                      DriverProfileWidget(
+                        driver: ride.driver,
+                        driverImage: '${controller.driverImagePath}/${ride.driver?.avatar ?? ''}',
+                        serviceImage: '${controller.serviceImagePath}/${ride.service?.image ?? ''}',
+                        totalCompletedRide: controller.driverTotalCompletedRide,
+                      ),
+                      spaceDown(Dimensions.space25),
+                      buildMessageOrCallWidget(ride),
+                      spaceDown(Dimensions.space25),
+                    ],
+                    buildRideCounterWidget(ride, currency),
+                    spaceDown(Dimensions.space15),
+
+$ git ls-files assets/fonts | head -12; echo "---"; grep -n "loadGoldenFonts\|pumpGoldenSurface" -A12 test/goldens/rider/golden_harness.dart | sed -n 1,60p
+assets/fonts/Satoshi-Black.otf
+assets/fonts/Satoshi-BlackItalic.otf
+assets/fonts/Satoshi-Bold.otf
+assets/fonts/Satoshi-BoldItalic.otf
+assets/fonts/Satoshi-Italic.otf
+assets/fonts/Satoshi-Light.otf
+assets/fonts/Satoshi-LightItalic.otf
+assets/fonts/Satoshi-Medium.otf
+assets/fonts/Satoshi-MediumItalic.otf
+assets/fonts/Satoshi-Regular.otf
+---
+196:Future<void> loadGoldenFonts() async {
+197-  if (_fontsLoaded) return;
+198-  TestWidgetsFlutterBinding.ensureInitialized();
+199-  installGoldenPlatformStubs();
+200-
+201-  for (final entry in _satoshiWeights.entries) {
+202-    final loader = FontLoader(entry.key);
+203-    var added = 0;
+204-    for (final asset in entry.value) {
+205-      final data = await _tryLoadAsset(asset);
+206-      if (data == null) continue;
+207-      loader.addFont(Future<ByteData>.value(data));
+208-      added++;
+--
+257:  await loadGoldenFonts();
+258:  await pumpGoldenSurface(tester, child, extraPumps: extraPumps, pumpStep: pumpStep);
+259-  await expectLater(find.byType(MaterialApp), matchesGoldenFile(goldenPath));
+260-}
+261-
+262-/// Captures the already-pumped tree (assertions first, capture last).
+263-Future<void> captureGolden(WidgetTester tester, String goldenPath) async {
+264-  await expectLater(find.byType(MaterialApp), matchesGoldenFile(goldenPath));
+265-}
+266-
+267-/// Pumps [child] on the fixed surface without capturing (probe helper).
+268:Future<void> pumpGoldenSurface(
+269-  WidgetTester tester,
+270-  Widget child, {
+271-  int extraPumps = 2,
+272-  Duration pumpStep = const Duration(milliseconds: 100),
+273-}) async {
+274-  tester.view.devicePixelRatio = kGoldenDevicePixelRatio;
+275-  tester.view.physicalSize = Size(
+276-    kGoldenSurface.width * kGoldenDevicePixelRatio,
+277-    kGoldenSurface.height * kGoldenDevicePixelRatio,
+278-  );
+279-  addTearDown(tester.view.resetPhysicalSize);
+280-  addTearDown(tester.view.resetDevicePixelRatio);
+--
+311:  await loadGoldenFonts();
+312-  tester.view.devicePixelRatio = kGoldenDevicePixelRatio;
+313-  tester.view.physicalSize = Size(
+314-    kGoldenSurface.width * kGoldenDevicePixelRatio,
+315-    kGoldenSurface.height * kGoldenDevicePixelRatio,
+316-  );
+317-  addTearDown(tester.view.resetPhysicalSize);
+318-  addTearDown(tester.view.resetDevicePixelRatio);
+319-  await tester.pumpWidget(
+320-    GetMaterialApp(
+321-      debugShowCheckedModeBanner: false,
+322-      locale: kGoldenLocale,
+323-      theme: ThemeData(fontFamily: fontName),
+
+$ ls -a | grep github; find . -maxdepth 2 -name "*.yml" -o -maxdepth 2 -name "*.yaml" | head
+./analysis_options.yaml
+./pubspec.yaml
+./devtools_options.yaml
+
+← Write VERIFY-F429.md
+Wrote file successfully.
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && git status --short && git add VERIFY-F429.md && git -c user.name='Papa Diop' -c user.email='76528706+LordThiouk@users.noreply.github.com' commit --author='Papa Diop <76528706+LordThiouk@users.noreply.github.com>' -m 'docs(verify): F4-29 a-b PASS (contract 9/9, 3.44.8 + 3.50.1)' && git log -1 --format='%H%n%an <%ae>%n%s' && git status --short
+?? VERIFY-F429.md
+[verify/rider-f429-forge e8d7a97] docs(verify): F4-29 a-b PASS (contract 9/9, 3.44.8 + 3.50.1)
+ 1 file changed, 100 insertions(+)
+ create mode 100644 VERIFY-F429.md
+e8d7a97c000bdca587ad64c638f81a571e0981f9
+Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+docs(verify): F4-29 a-b PASS (contract 9/9, 3.44.8 + 3.50.1)
+
+← Write /tmp/task_done.md
+Wrote file successfully.
+
+$ cd /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target && git status --short && git show --stat --oneline HEAD | head -10 && head -1 VERIFY-F429.md && grep -c "" VERIFY-F429.md
+e8d7a97 docs(verify): F4-29 a-b PASS (contract 9/9, 3.44.8 + 3.50.1)
+ VERIFY-F429.md | 100 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
+VERDICT: PASS
+100
+
+## Rapport de vérification — F4-29
+
+**VERDICT : PASS**
+
+### Exécution
+- Périmètre : ISC-F4-29 a-b (profil chauffeur en `RIDE_RUNNING`)
+- Tête vérifiée : `fcdd581` (`merge(rider): F4-29 profil chauffeur RUNNING into feat`)
+- Test ciblé : `flutter test ... --plain-name 'ISC-F4-29 a-b'` → **1/1 passed**
+- Fichier complet : `flutter test test/widget/course_en_cours_contract_test.dart` → **9/9 passed** (a-b, c-h, F4-22, F4-25, F4-26, F4-27, F4-28, F4-23, F4-31)
+
+### Point d'environnement (traité, sans toucher au dépôt)
+Le SDK préinstallé (**Flutter 3.35.6 / Dart 3.9.2**) ne peut pas résoudre les dépendances (`share_plus 13.3.1` exige Dart ≥ 3.10). J'ai donc installé hors dépôt deux toolchains dans `_work/_temp` :
+- **Flutter 3.44.8 / Dart 3.12.2** — cohérente avec le `pubspec.lock` commité (`--enforce-lockfile` OK) → **9/9 vert**
+- **Flutter 3.50.1 / Dart 3.14.0** — baseline ISA (goldens rebasés `b83aba6`) → **9/9 vert**
+
+Les `pubspec.lock` / `analysis_options.yaml` modifiés par `pub get` ont été restaurés (`git checkout --`), rien de tel n'est commité.
+
+### Preuve non vacuité
+Le test (a) exige `find.byType(DriverProfileWidget)` et (b) `find.text('Moussa Fall')`, tous deux `findsOneWidget` ; le chemin de production est confirmé en `ride_details_bottom_sheet_widget.dart` l.343-355 (branche `RIDE_RUNNING` → `driver != null` → `DriverProfileWidget`). Fonts chargées une fois via `setUpAll(loadGoldenFonts)`.
+
+### Commit
+- `e8d7a97` — auteur **Papa Diop <76528706+LordThiouk@users.noreply.github.com>**, un seul fichier : `VERIFY-F429.md` (1re ligne `VERDICT: PASS`)
+- Aucun correctif, aucun golden régénéré, `.fullrun/` intact, arbre propre
+- Aucun push / merge ; résumé dans `/tmp/task_done.md`
+
+### Observation hors périmètre (non bloquante)
+Le `pubspec.lock` reste résolu pour 3.44.8 alors que les goldens Rider sont rebasés sous 3.50.1 : `--enforce-lockfile` échoue sous 3.50.1 (7 deps transitives épinglées SDK). Sans effet sur ISC-F4-29 a-b (aucune comparaison pixel).
+
+> Forge · mimo-v2.6-flash-free
+
+→ Read /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md
+
+$ pwd && git status && git branch --show-current && git log --oneline -3
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target
+On branch verify/rider-f429-forge
+Your branch is ahead of 'origin/verify/rider-f429-forge' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+verify/rider-f429-forge
+e8d7a97 docs(verify): F4-29 a-b PASS (contract 9/9, 3.44.8 + 3.50.1)
+fcdd581 merge(rider): F4-29 profil chauffeur RUNNING into feat
+f98e963 docs(isa): F4-29 a-b re-run evidence (red-before + 9/9 + full suite)
+
+$ ls test/widget/course_en_cours_contract_test.dart 2>&1; which flutter; flutter --version 2>&1 | head -3
+test/widget/course_en_cours_contract_test.dart
+/usr/local/bin/flutter
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+
+✗ git remote -v; ls VERIFY-F429.md 2>&1; ls .fullrun 2>&1; git show --stat HEAD | head -20 failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ ls -la VERIFY-F429.md 2>&1; ls -la .fullrun 2>&1; git show --stat HEAD | head -20
+-rw-r--r-- 1 ubuntu ubuntu 6079 Nov 26 15:28 VERIFY-F429.md
+total 76
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 15:06 .
+drwxr-xr-x 20 ubuntu ubuntu  4096 Nov 26 15:28 ..
+-rw-r--r--  1 ubuntu ubuntu 13696 Nov 26 15:06 multistop-ui-gaps-serena-2026-11-23_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  5537 Nov 26 15:06 multistop-ui-gaps-serena-2026-11-24-r3_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  1238 Nov 26 15:06 multistop-ui-gaps-serena-2026-11-24-r3_checkpoint.json
+-rw-r--r--  1 ubuntu ubuntu  7949 Nov 26 15:06 multistop-ui-gaps-serena-2026-11-24-r5_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  2877 Nov 26 15:06 multistop-ui-gaps-serena-2026-11-24-r5_checkpoint.json
+-rw-r--r--  1 ubuntu ubuntu  8931 Nov 26 15:06 multistop-ui-gaps-serena-2026-11-24-r6_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  1513 Nov 26 15:06 multistop-ui-gaps-serena-2026-11-24-r6_checkpoint.json
+-rw-r--r--  1 ubuntu ubuntu  6846 Nov 26 15:06 multistop-ui-gaps-vera-2026-11-23_DONE.md
+-rw-r--r--  1 ubuntu ubuntu  1223 Nov 26 15:06 multistop-ui-gaps-vera-2026-11-23_checkpoint.json
+commit e8d7a97c000bdca587ad64c638f81a571e0981f9
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 15:28:31 2026 +0000
+
+    docs(verify): F4-29 a-b PASS (contract 9/9, 3.44.8 + 3.50.1)
+
+ VERIFY-F429.md | 100 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
+
+→ Read VERIFY-F429.md
+→ Read test/widget/course_en_cours_contract_test.dart
+
+$ ls /home/ubuntu/actions-runner-3/_work/_temp/ 2>/dev/null; ls -d /home/ubuntu/actions-runner-3/_work/_temp/*flutter* /home/ubuntu/actions-runner-3/_work/_temp/*/*flutter* 2>/dev/null; cat pubspec.lock | tail -8; git status --porcelain
+0a3978ec-8fba-48c4-9073-1ee4c674d62a.sh
+275137e2-4ca9-41ea-b0d9-856f31bbd611.sh
+28b16a16-b8d6-480b-b295-729b811832e9.sh
+2907ace8-ed8c-42f3-afd7-38820f94fbbd.sh
+5de94a32-bacc-41e7-af36-c84eb0719d1d.sh
+6345df8d-6beb-45a2-9b3a-88e260aa1e7f.sh
+65393985-c5d3-4109-9914-20c9ee4adb0c.sh
+8066f5ec-0212-4630-a121-c0f50c88a826.sh
+80bd1cb4-c329-4317-a204-2ac13db98b08.sh
+9827bc22-4f99-427d-9088-19841abd7038.sh
+_github_workflow
+_runner_file_commands
+a86b2676-416a-41aa-aa44-98a45225d7e3.sh
+a998d47c-3012-4025-ac37-71c8a9401196.sh
+age
+age.tgz
+c9290e05-e9c0-47cf-b2a1-bd0d7b67f019.sh
+f5eeb5ea-906c-4ae6-8b22-46c296697883.sh
+gitleaks.tgz
+gl
+live.out
+npm-global
+oc
+oc-agent
+wip.out
+      name: zoom_tap_animation
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+sdks:
+  dart: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+$ find /home/ubuntu/actions-runner-3/_work/_temp -maxdepth 3 -iname '*flutter*' 2>/dev/null | head; find /opt /usr/local -maxdepth 3 -iname '*flutter*' 2>/dev/null | head; ls -d ~/flutter* ~/fvm* 2>/dev/null; find / -maxdepth 4 -name 'flutter' -type d 2>/dev/null | head -20
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/flutter_3.44.8.tar.xz
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/flutter_3.50.1.tar.xz
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/sdk/flutter
+/home/ubuntu/actions-runner-3/_work/_temp/oc-agent/home/.flutter
+/opt/flutter
+/opt/flutter/docs/Flutter-Self-Service-Index.md
+/opt/flutter/flutter_console.bat
+/opt/flutter/bin/flutter-dev.bat
+/opt/flutter/bin/flutter.bat
+/opt/flutter/bin/flutter-dev
+/opt/flutter/bin/flutter
+/opt/flutter/packages/flutter_web_plugins
+/opt/flutter/packages/flutter_localizations
+/opt/flutter/packages/flutter_tools
+/opt/flutter
+/opt/flutter/packages/flutter
+/home/ubuntu/.config/flutter
+
