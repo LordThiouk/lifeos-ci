@@ -12495,3 +12495,29 @@ SQL
 
 (no output)
 
+← Edit core/app/Models/Service.php
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Service.php
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Service.php
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Service.php
+@@ -18,6 +18,18 @@
+         'intercity_max_fare'        => 'double',
+         'intercity_recommend_fare'  => 'double',
+         'intercity_fare_commission' => 'double',
+         'status'                    => 'integer',
++        'sort_order'                => 'integer',
++        'is_visible'                => 'boolean',
+     ];
++
++    public function scopeVisible($query)
++    {
++        return $query->where('is_visible', true);
++    }
++
++    public function scopeOrdered($query)
++    {
++        return $query->orderBy('sort_order')->orderBy('id');
++    }
+ }
+
+
