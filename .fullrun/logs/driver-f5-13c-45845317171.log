@@ -4293,3 +4293,23 @@ $ grep -rn "validateJavaAndGradleAgpVersions\|ProjectValidatorResult\b" /tmp/flu
 /tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:111:      StatusProjectValidator.crash => '[☠]',
 /tmp/flutter/packages/flutter_tools/lib/src/commands/validate_project.dart:112:      StatusProjectValidator.info || StatusProjectValidator.success => '[✓]',
 
+$ grep -rn "allProjectValidators\|ValidateProjectCommand\|validators" /tmp/flutter/packages/flutter_tools/lib/src --include=*.dart | grep -v "project_validator.dart\|validate_project.dart" | head -30
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:90:  List<DoctorValidator> get validators;
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:101:  List<DoctorValidator>? _validators;
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:116:  List<DoctorValidator> get validators {
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:117:    if (_validators != null) {
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:118:      return _validators!;
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:121:    return _validators = <DoctorValidator>[
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:208:  List<DoctorValidator> get validators {
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:209:    return DoctorValidatorsProvider._instance.validators;
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:213:  /// objects in [validators].
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:223:          ).validators
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:224:        : validators;
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:276:    for (final DoctorValidator validator in validators) {
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:408:            // Ensure that all of the subvalidators in the group have
+/tmp/flutter/packages/flutter_tools/lib/src/doctor.dart:862:/// Wrapper for doctor to run multiple times with PII and without, running the validators only once.
+/tmp/flutter/packages/flutter_tools/lib/src/commands/analyze.dart:27:    required this._allProjectValidators,
+/tmp/flutter/packages/flutter_tools/lib/src/commands/analyze.dart:197:  final List<ProjectValidator> _allProjectValidators;
+/tmp/flutter/packages/flutter_tools/lib/src/commands/analyze.dart:213:  List<ProjectValidator> allProjectValidators() => _allProjectValidators;
+/tmp/flutter/packages/flutter_tools/lib/src/commands/analyze.dart:356:        allProjectValidators: _allProjectValidators,
+
