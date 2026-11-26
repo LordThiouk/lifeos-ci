@@ -14254,3 +14254,105 @@ Index: /tmp/task_done.md
  
 
 
+← Edit /tmp/task_done.md
+Index: /tmp/task_done.md
+===================================================================
+--- /tmp/task_done.md
++++ /tmp/task_done.md
+@@ -37,5 +37,12 @@
+ 
+ ## CheckCompleteness & Audit
+ 
+ - CheckCompleteness exécuté le 2026-11-26 : status **pass**, 63 ISC, 0 coché.
+-- Audit Vera (étape 3, phase plan) : **PASS** — 63 ISC et Bridge-1/2/4 relus, chaque critère a une preuve outillée exécutable ou une capture appareil, chaque `fichier:ligne` relu dans `core/`, `extra/Galass_Rider`, `extra/Galass_Driver` sur `fullrun/lot-client-w0`.
+\ No newline at end of file
++- Audit Vera (étape 3, phase plan) : **PASS** — 63 ISC et Bridge-1/2/4 relus, chaque critère a une preuve outillée exécutable ou une capture appareil, chaque `fichier:ligne` relu dans `core/`, `extra/Galass_Rider`, `extra/Galass_Driver` sur `fullrun/lot-client-w0`.
++
++## Vérification indépendante (reprise 2026-11-26 18:17Z)
++
++- Relevé API public `galass-emu-actions-pub/actions/workflows/artemis-staging-e2e.yml/runs` : **total_count 152**, plus récent #152 `45801376130` (2026-11-26T10:26:37Z, `failure`, `feat/multistop-e2e-2026-11-15` @ `81d149d4`). Aucun run nouveau depuis la dernière consignation : BLOCK confirmé, aucune capture/logcat device exploitable pour W0.
++- `progress: 0/63` ; 63 claims ISC, 0 cochée ; ISC-22/50/80–84 toutes `[ ]` (vérifié par analyse du fichier). Aucun `tick` ISATool effectué.
++- Défaut corrigé : la ligne Decisions ajoutée dans le commit `5fbbcfad` l'avait été hors ISATool, cassant `isa_stamp` (`provenance-mismatch`, casserait ISAGate). Réparation via `bun ISATool.ts adopt` (contenu inchangé, seule l'empreinte est recalculée), puis `ISATool.ts verify` → ✅ provenance ok (commit `5a792372`).
++- Aucun secret ajouté ; gitleaks sur le diff → « no leaks found ». `.fullrun` intact, pas de push, ni merge, ni `gh`/`ssh`/`scp`, ni W1+.
+\ No newline at end of file
+
+
+→ Read /tmp/task_done.md
+
+$ git status --short --branch && git log -2 --format='%h %s' && HOME=/home/ubuntu/actions-runner/_work/_temp/oc-agent/home bun /home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts verify MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
+## fullrun/lot-client-w0...origin/fullrun/lot-client-w0 [ahead 1]
+5a792372 w0(isa): restaurer empreinte ISATool apres ligne Decisions manuscrite — BLOCK inchange, ISC non cochés
+5fbbcfad w0(artemis): etat final BLOCK — run 152 sans captures/logcat ; ISC 22/50/80-84 non cochés
+✅ provenance ok
+
+← Edit /tmp/task_done.md
+Index: /tmp/task_done.md
+===================================================================
+--- /tmp/task_done.md
++++ /tmp/task_done.md
+@@ -10,9 +10,9 @@
+ - Run **#152** `45801376130` : https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130
+   - Tête : `feat/multistop-e2e-2026-11-15` @ `81d149d4`
+   - Conclusion : **failure**
+   - Step 11 Flutter tests : **success** (478 tests passed)
+-   - Step 12 Build APK : **failure** (`BUILD FAILED in 1m 9s`, `assembleDebug exit 1`, message Gradle renvoyant au wrapper `src/rider/android/gradle/wrapper/gradle-wrapper.properties`). Le log authentifié montre `FLUTTER_ROOT=…/stable-3.50.1-x64` mais la sortie du build est tronquée par `tail -n 15` : cause exacte non déterminable ici.
++  - Step 12 Build APK : **failure** (`BUILD FAILED in 1m 9s`, `assembleDebug exit 1`, message Gradle renvoyant au wrapper `src/rider/android/gradle/wrapper/gradle-wrapper.properties`). Le log authentifié montre `FLUTTER_ROOT=…/stable-3.50.1-x64` mais la sortie du build est tronquée par `tail -n 15` : cause exacte non déterminable ici.
+   - Steps 13–19 (apksigner, KVM, opencode, E2E multistop) : **skipped**
+   - Artéfacts : uniquement `staging-e2e-evidence-encrypted` (337 o)
+   - **Aucun** `e2e-out/summary.md`, `report.json`, `ui/*.xml`, `smoke.log` → **aucune capture ni logcat device**
+ 
+
+
+← Edit /tmp/task_done.md
+Index: /tmp/task_done.md
+===================================================================
+--- /tmp/task_done.md
++++ /tmp/task_done.md
+@@ -21,9 +21,9 @@
+ - Runs **#139/#141/#142/#143** contiennent des captures/logcat (`ui/34-driver-offer-with-stops.xml`, `diag/dbg-stop1-a1-ok.logcat`, `smoke.log`, etc.) mais sur `feat/multistop-rider-close-2026-11-20` (refs hors consigne) avec verdict **FAIL** et points multistop (B1–B7) : **non réutilisés** pour W0, bugs multistop exclus.
+ 
+ ## Cause racine du blocage
+ 
+-- **Flutter version mismatch** : workflow `artemis-staging-e2e.yml` épingle **3.44.8** alors que les goldens baselines ont été posées sous **3.50.1** (`df372db`, 2026-11-23). Les 4 goldens `test/goldens/driver/ride_details_golden_test.dart` échouent sous 3.44.8 mais passent sous 3.50.1.
++- **Blocage successif sur Artemis** : (1) runs #148/#151 : 4 goldens Driver posés sous Flutter **3.50.1** (`df372db`) échouent sous **3.44.8** épinglé par le workflow ; (2) run #152 : step 11 vert mais **Build APK** échoue (`assembleDebug exit 1`), steps E2E skippés — cause exacte non déterminable (sortie tronquée). Correction à trancher par Papa hors W0.
+ - **GALASS_TOKEN absent** : nécessaire pour dispatcher le workflow Artemis ; seul un token de lecture seule (`push=false`) est disponible sur ce runner, pas de `gh` push, pas de `/opt/fullrun-live/emu-e2e.token`.
+ - **Outils runner absents** : `adb`, `flutter`, `emu-e2e.sh` ne sont pas installés dans ce runner.
+ 
+ ## Décision W0
+
+
+# Todos
+[✓] Explorer le workspace, l'ISA lot-client et les dépôts fournis
+[✓] Identifier les tâches W0 (S-W0-01…07 / ISC-22, 50, 80–84) et les preuves device exigées
+[✓] Exécuter/consulter Artemis E2E et collecter run id, URL, captures et logcat
+[✓] Mettre à jour l'ISA (preuves, Decisions/BLOCK) et cocher les ISC validés via ISATool.ts
+[✓] Committer le travail validé sur fullrun/lot-client-w0 et écrire /tmp/task_done.md
+
+📋 SUMMARY: W0 device (Artemis) reste BLOCK : aucune capture/logcat, aucun ISC coché ; j'ai restauré l'empreinte ISA et commité sur `fullrun/lot-client-w0`.
+
+🔍 ANALYSIS: Relevé API indépendant : `artemis-staging-e2e.yml` plafonne à 152 runs, le dernier étant #152 `45801376130` (10:26:37Z, `failure`, `feat/multistop-e2e-2026-11-15` @ `81d149d4`, https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130). Step 11 vert (478 tests), step 12 `Build APK` en échec (`assembleDebug exit 1`), steps 13–19 skippés ; aucun artefact `e2e-out/*`, `ui/*.xml` ni `smoke.log`. Les captures des runs #139/#141/#142/#143 sont sur des refs hors consigne et des points multistop → non réutilisables. Défaut découvert : la ligne Decisions du commit `5fbbcfad` avait été ajoutée hors ISATool, invalidant `isa_stamp` (`provenance-mismatch`, ISAGate en échec).
+
+⚡ ACTIONS: Vérification API publique ; contrôle `progress: 0/63` et des 7 ISC (tous `[ ]`) ; `bun ISATool.ts adopt` puis `verify` → provenance ok ; gitleaks sans fuite ; commit `5a79237262958131989e443ad9882eafd082eb25` (auteur Papa Diop) ; rédaction de `/tmp/task_done.md`.
+
+✅ RESULTS: BLOCK consigné dans Decisions avec l'id et l'URL du run ; zéro `tick` ISATool ; zéro W1+ ; `.fullrun` intact ; aucun push/merge/gh/ssh/scp ; branche `ahead 1`, arbre propre.
+
+📊 STATUS: W0 device non validé côté preuve — prerequisite à Papa : corriger le build APK et fournir un jeton de dispatch ; l'ISA est maintenant intègre et vérifiable.
+
+📁 CAPTURE: SHA final `5a792372` (précédent `5fbbcfad`) ; run Artemis #152 `45801376130` ; `progress 0/63`; ISC-22/50/80–84 non cochés ; `ISATool.ts verify` ✅.
+
+➡️ NEXT: Papa arbitre la correction du workflow Artemis et redispache un run avec captures/logcat avant toute coche ISC ; W1 reste verrouillé.
+
+📖 STORY EXPLANATION:
+1. Le prompt exigeait uniquement W0 device, preuve Artemis à l'appui, sans toucher aux preuves backend ni à W1+.
+2. Les passes précédentes avaient déjà documenté le BLOCK dans Decisions avec le run #152 et ses artefacts absents.
+3. J'ai revérifié l'API : toujours 152 runs, aucun nouveau run, donc aucune preuve device apparue.
+4. Les 7 ISC cibles sont restées non cochées, conformément à la consigne « pas de coche sans preuve device ».
+5. J'ai détecté une régression d'outillage : l'empreinte HMAC de l'ISA cassée par une édition manuelle.
+6. J'ai réparé uniquement l'empreinte via `ISATool.ts adopt`, contenu W0 inchangé, puis vérifié la provenance.
+7. Le tout est commité en local sous l'auteur imparti, sans secret ni opération distante, et résumé dans `/tmp/task_done.md`.
+8. Le blocage fonctionnel demeure entier : sans captures ni logcat, W0 ne peut pas être clos — c'est un prérequis humain, pas un manque de code.
+
+🎯 COMPLETED: W0 BLOCK confirmé, ISA restaurée, commit local sans push.
+
+> Engineer · tidepool-alpha-free
+
