@@ -7257,3 +7257,193 @@ $ grep -rn "project_validator\|validateProject\|ProjectValidatorResult" /tmp/flu
 /tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:28:  static ProjectValidatorResult crash(Object exception, StackTrace trace) {
 /tmp/flutter/packages/flutter_tools/lib/src/project_validator_result.dart:29:    return ProjectValidatorResult(
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && echo "=== settings.gradle.kts ===" && cat android/settings.gradle.kts && echo "=== gradle.properties ===" && cat android/gradle.properties && echo "=== minSdk (grep) ===" && grep -n "minSdk\|targetSdk\|compileSdk\|ndkVersion\|kotlinOptions\|jvmTarget\|sourceCompatibility\|targetCompatibility" android/app/build.gradle.kts
+=== settings.gradle.kts ===
+pluginManagement {
+    val flutterSdkPath = run {
+        val properties = java.util.Properties()
+        file("local.properties").inputStream().use { properties.load(it) }
+        val flutterSdkPath = properties.getProperty("flutter.sdk")
+        require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+        flutterSdkPath
+    }
+
+    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+    id("com.android.application") version "8.11.1" apply false
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services") version("4.3.15") apply false
+    id("com.google.firebase.crashlytics") version("3.0.7") apply false
+    // END: FlutterFire Configuration
+    id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+}
+
+include(":app")
+=== gradle.properties ===
+org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+org.gradle.daemon=false
+org.gradle.parallel=false
+org.gradle.configureondemand=false
+android.enableJetifier=false
+android.useAndroidX=true
+=== minSdk (grep) ===
+18:    compileSdk = 36
+19:    ndkVersion = "29.0.14033849"
+22:        sourceCompatibility = JavaVersion.VERSION_17
+23:        targetCompatibility = JavaVersion.VERSION_17
+27:    kotlinOptions {
+28:        jvmTarget = JavaVersion.VERSION_17.toString()
+36:        minSdk = flutter.minSdkVersion
+37:        targetSdk = 36
+
+$ sed -n '108,180p' /tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt; echo "=== 310-400 ==="; sed -n '310,375p' /tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt
+// Non inclusive.
+    @VisibleForTesting
+    internal val warnMinSdkVersion: Int = 24
+
+    @VisibleForTesting
+    internal val errorMinSdkVersion: Int = 23
+
+    /**
+     * Checks if the project's Android build time dependencies are each within the respective
+     * version range that we support. When we can't find a version for a given dependency
+     * we treat it as within the range for the purpose of this check.
+     */
+    @JvmStatic fun checkDependencyVersions(project: Project) {
+        checkGradleVersion(VersionFetcher.getGradleVersion(project), project)
+        checkJavaVersion(VersionFetcher.getJavaVersion(), project)
+
+        configureMinSdkCheck(project)
+
+        val agpVersion: AndroidPluginVersion? = VersionFetcher.getAGPVersion(project)
+        if (agpVersion != null) {
+            checkAGPVersion(agpVersion, project)
+        } else {
+            project.logger.error(
+                "Warning: unable to detect project AGP version. Skipping " +
+                    "version checking. \nThis may be because you have applied AGP after the Flutter Gradle Plugin."
+            )
+        }
+
+        val kgpVersion: Version? = VersionFetcher.getKGPVersion(project)
+        val usesBuiltInKotlin = FlutterPluginUtils.isBuiltInKotlinEnabled(project, agpVersion)
+
+        if (kgpVersion != null && !usesBuiltInKotlin) {
+            checkKGPVersion(kgpVersion, project)
+        } else {
+            project.logger.debug(
+                "Skipping Kotlin min-version enforcement because the project uses " +
+                    "AGP built-in Kotlin or does not apply KGP."
+            )
+        }
+    }
+
+    private fun configureMinSdkCheck(project: Project) {
+        val androidComponents =
+            project.extensions.findByType(AndroidComponentsExtension::class.java)
+        val rootDirPath = project.rootDir.path
+
+        androidComponents?.onVariants(
+            androidComponents.selector().all()
+        ) {
+            val taskName = generateMinSdkCheckTaskName(it)
+            val minSdkVersion = getMinSdkVersion(it)
+            val minSdkCheckTask =
+                project.tasks.register(taskName) {
+                    doLast {
+                        checkMinSdkVersion(minSdkVersion, rootDirPath, logger)
+                    }
+                }
+
+            project.afterEvaluate {
+                // Make assemble task depend on minSdkCheckTask for this variant.
+                project.tasks
+                    .named(generateAssembleTaskName(it))
+                    .configure {
+                        dependsOn(minSdkCheckTask)
+                    }
+            }
+        }
+    }
+
+    private fun generateAssembleTaskName(it: Variant) = "$ASSEMBLE_PREFIX${FlutterPluginUtils.capitalize(it.name)}"
+
+    private fun generateMinSdkCheckTaskName(it: Variant) = "${FlutterPluginUtils.capitalize(it.name)}$MIN_SDK_CHECK_TASK_POSTFIX"
+
+=== 310-400 ===
+    }
+
+    @VisibleForTesting internal fun checkKGPVersion(
+        version: Version,
+        project: Project
+    ) {
+        if (version < errorKGPVersion) {
+            val errorMessage: String =
+                getErrorMessage(
+                    KGP_NAME,
+                    version.toString(),
+                    errorKGPVersion.toString(),
+                    getPotentialKGPFix(project.rootDir.path)
+                )
+            throw DependencyValidationException(errorMessage)
+        } else if (version < warnKGPVersion) {
+            val warnMessage: String =
+                getWarnMessage(
+                    KGP_NAME,
+                    version.toString(),
+                    warnKGPVersion.toString(),
+                    getPotentialKGPFix(project.rootDir.path)
+                )
+            project.logger.error(warnMessage)
+        }
+    }
+
+    @VisibleForTesting internal fun checkMinSdkVersion(
+        minSdkVersion: MinSdkVersion,
+        projectDirectory: String,
+        logger: Logger
+    ) {
+        // For Android SDK, only the major version is relevant, no need to do a full version check.
+        if (minSdkVersion.version < errorMinSdkVersion) {
+            val errorMessage: String =
+                getErrorMessage(
+                    getFlavorSpecificMessage(minSdkVersion.flavor, MIN_SDK_NAME),
+                    minSdkVersion.version.toString(),
+                    errorMinSdkVersion.toString(),
+                    getPotentialSDKFix(projectDirectory)
+                )
+            throw DependencyValidationException(errorMessage)
+        } else if (minSdkVersion.version < warnMinSdkVersion) {
+            val warnMessage: String =
+                getWarnMessage(
+                    getFlavorSpecificMessage(minSdkVersion.flavor, MIN_SDK_NAME),
+                    minSdkVersion.version.toString(),
+                    warnMinSdkVersion.toString(),
+                    getPotentialSDKFix(projectDirectory)
+                )
+            logger.error(warnMessage)
+        }
+    }
+}
+
+// Custom error for when DependencyVersionChecker finds a dependency out of
+// the defined support range.
+@VisibleForTesting internal class DependencyValidationException(
+    message: String? = null,
+    cause: Throwable? = null
+) : Exception(message, cause)
+
+/**
+ * Represents the minimum Android SDK version for a specific product flavor.
+ *
+ * @param flavor The product flavor name, or null for the default configuration.
+
