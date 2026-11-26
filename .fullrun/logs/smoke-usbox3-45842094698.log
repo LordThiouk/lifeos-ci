@@ -6829,3 +6829,125 @@ $ curl -sS "https://dl.google.com/dl/android/maven2/com/google/gms/google-servic
   </versioning>
 </metadata>
 
+## Objective
+- Read `/home/ubuntu/actions-runner/_work/_temp/oc/prompt.md` and execute it fully: align Galass_Rider's Android toolchain so the `Build APK Rider` step passes under Flutter 3.50.1 (Artemis run `45801376130`), without `lib/` changes, no `flutter build`/`gradlew` on the box, no push/merge, commit as Papa Diop, and write a factual summary to `/tmp/task_done.md`.
+
+## Important Details
+- Repo checkout: `/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target` (LordThiouk/Galass_Rider), base branch `feat/multistop-e2e-2026-11-15` (origin tip `fcdd581`), target branch `build/rider-apk-gradle`.
+- Bash deny rules: `git push*`, `git merge*`, `gh *`, `ssh *`, `scp *`, `sudo *`, `*git remote*`, `*http.extraheader*` — avoid these patterns (a plain `bash` call containing `git remote -v` was rejected).
+- Task author's stated target: Gradle **8.14** + AGP ~8.11 "calqué sur Driver" — this is now known to be **wrong** (see verified evidence below).
+- A prior agent attempt in this same job already committed `8c28139 fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)` (author Papa Diop) and wrote `/tmp/task_done.md`; working tree is clean, branch is 1 commit ahead of origin. That commit is in the wrong direction.
+- Verified from real Flutter 3.50.1 source (clone at `/tmp/flutter`, tag `3.50.1` = `ae9b586f34a`, plus raw fetches to `/tmp/gu_3501.dart`, `/tmp/dvc_3501.kt`):
+  - `DependencyVersionChecker.kt` (Gradle-side, runs on every `flutter build apk` unless `-PskipDependencyChecks=true`): errorGradleVersion **9.3.1**, errorAGPVersion **9.1.1**, errorKGPVersion **2.4.10**, errorJava **17**; warn thresholds 9.5.0 / 9.3.1 / 2.4.20.
+  - `gradle_utils.dart` tool-side validators (`project.dart` → `validateJavaAndGradleAgpVersions`, only via `flutter analyze`/`flutter validate`, NOT `flutter build`): AGP 9.3.x→Gradle ≥9.5.0; AGP 9.1.x→Gradle ≥9.3.1; KGP 2.4.20→Gradle 8.5..<9.5.99, AGP 8.2.2..<9.3.99; Java 17→Gradle ≥7.3 (unbounded), AGP 8.0..9.4.
+  - Flutter 3.50.1 template defaults: `templateDefaultGradleVersion='9.5.0'`, `templateAndroidGradlePluginVersion='9.3.1'`, `templateKotlinGradlePluginVersion='2.4.20'`, `compileSdkVersionInt=36`, `ndkVersion='28.2.13676358'`.
+  - Migrations `DisableNewDslMigration` / `DisableBuiltInKotlinMigration` unconditionally re-add `android.newDsl=false` and `android.builtInKotlin=false` to `gradle.properties` on every build — so removing them (done in `8c28139`) is pointless.
+- Decisive CI log found: `/tmp/artemis-r3.gz` (plain text, run **45801376130**, repo `LordThiouk/galass-emu-actions-pub`): `flutter-version: 3.50.1`, `JAVA_HOME` Temurin **17.0.21**, build command `flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15` (no `--android-skip-build-dependency-validation`), then `Potential fix: ...gradle/wrapper/gradle-wrapper.properties`, `Alternatively, use the flag "--android-skip-build-dependency-validation" to bypass this check.`, `BUILD FAILED`, `##[error]Process completed with exit code 1`. So the **Gradle-side DependencyVersionChecker is the actual gate**.
+- Local workflow reference: `/tmp/artemis-wf.yml` (`artemis-staging-e2e`, currently shows `flutter-version: 3.44.8` but the failing run used 3.50.1); installs NDK `29.0.14033849` and `28.2.13676358` via sdkmanager.
+- Driver reference (read-only): `/agent/repos/Galass_Driver` (branch `feat/multistop-e2e-2026-11-15`) has Gradle 8.14 / AGP 8.11.1 / Kotlin 2.3.0 / crashlytics 3.0.3, `android.builtInKotlin=false` + `android.newDsl=false`, and migrated `kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_11) } }` (no `kotlinOptions`). Public GitHub `LordThiouk/Galass_Driver` returns 404.
+- Other version history in Rider: `43e08b3` AGP 8.11.1, `a33e9a5` Gradle 8.14, `3023819` Kotlin 2.2.20/AGP 9.0.1/Gradle 9.1.0, `0eb0df0` added `android.r8.proguardAndroidTxt.disallowed=false`.
+- Kotlin 2.4.20 official matrix (kotlinlang.org): Gradle 7.6.3–9.7.0, AGP 8.5.2–9.3.1 → matches the template combo.
+- Constraints from prompt: no `lib/` changes, no golden regeneration, don't touch `.fullrun`, don't change Firebase plugin versions (`google-services 4.3.15`, `crashlytics 3.0.7`), commit author `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`, no push.
+
+## Work State
+### Completed
+- Prompt file read; environment/repo/history mapped.
+- Identified that commit `8c28139` (Gradle 8.14 / AGP 8.11.1 / Kotlin 2.2.20 + gradle.properties flag removals + CHANGELOG entry) is **incorrect** — Gradle 8.14 < 9.3.1 will still fail Flutter 3.50.1's `DependencyVersionChecker`.
+- Retrieved and parsed the actual Artemis `45801376130` failure log confirming the Gradle-side check as the failure point.
+- Verified all candidate version combos offline against Flutter 3.50.1 validators and JetBrains KGP matrix.
+- Confirmed `android/.gitignore` ignores `gradlew` / `gradle-wrapper.jar` (pre-existing, unrelated).
+- Ran predecessor's `/tmp/check_toolchain.py` (7/7 PASS — but built on the wrong 8.14 assumption) and `git diff --check` (OK).
+
+### Active
+- Re-doing the toolchain alignment with the correct target: **Gradle 9.5.0 + AGP 9.3.1 + Kotlin/KGP 2.4.20** (Flutter 3.50.1 template combo; zero errors/warnings under both validators), or fallback minimal set `9.3.1 / 9.1.1 / 2.4.20` (passes with 3 non-fatal warnings).
+- Still pending: decide/handle the `android/app/build.gradle.kts` `kotlinOptions { jvmTarget = JavaVersion.VERSION_17.toString() }` block → migrate to `kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }` (mirrors Driver and Flutter 3.50.1 template; `kotlinOptions` is deprecated at ERROR level since Kotlin 2.2/2.3).
+
+### Blocked
+- Cannot run `flutter build` or `gradlew` on the box (explicitly forbidden), so no live build verification is possible.
+- Lifeos-ci workflow defining job `rider-apk-gradle` is not available locally (no `.github` in `lifeos-ci/` or `target/`), so exact build command assumed from `/tmp/artemis-r3.gz`.
+- AGP 9.x compatibility of `com.google.gms.google-services 4.3.15` and `com.google.firebase.crashlytics 3.0.7` unverified (must not change those versions per prompt).
+
+## Next Move
+1. Revert/supersede `8c28139`'s direction: set `android/gradle/wrapper/gradle-wrapper.properties` → `gradle-9.5.0-all.zip`, `android/settings.gradle.kts` → AGP `9.3.1` + Kotlin `2.4.20` (keep gms 4.3.15 / crashlytics 3.0.7), restore the three `android/gradle.properties` flags (`android.newDsl=false`, `android.builtInKotlin=false`, `android.r8.proguardAndroidTxt.disallowed=false`).
+2. Migrate `kotlinOptions {}` → `kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_17) } }` in `android/app/build.gradle.kts`, re-run a static validator (update `/tmp/check_toolchain.py` to the 3.50.1 thresholds), amend/recommit with author Papa Diop and a factual commit message, then rewrite `/tmp/task_done.md` (correcting the previous note) and optionally update the `CHANGELOG.md` `[Unreleased]` entry.
+
+## Relevant Files
+- `/home/ubuntu/actions-runner/_work/_temp/oc/prompt.md`: the task prompt (rules + target).
+- `android/gradle/wrapper/gradle-wrapper.properties`: currently `gradle-8.14-all.zip` (wrong); needs 9.5.0.
+- `android/settings.gradle.kts`: currently AGP `8.11.1`, Kotlin `2.2.20`, gms `4.3.15`, crashlytics `3.0.7`; needs AGP 9.3.1 + Kotlin 2.4.20.
+- `android/gradle.properties`: predecessor removed 3 AGP-9 flags that must be restored.
+- `android/app/build.gradle.kts`: `kotlinOptions` block, `compileSdk 36`, `ndkVersion 29.0.14033849`, Java 17 — needs `compilerOptions` migration.
+- `CHANGELOG.md`: contains the (now incorrect) entry added by `8c28139`.
+- `/tmp/artemis-r3.gz`: real CI log of run 45801376130 proving the failing check and CI environment.
+- `/tmp/gu_3501.dart`, `/tmp/dvc_3501.kt`, `/tmp/flutter/.../DependencyVersionChecker.kt`: authoritative Flutter 3.50.1 validation thresholds.
+- `/tmp/check_toolchain.py`: static validator script (must be updated to 3.50.1 minima).
+- `/tmp/task_done.md`: summary file required by the prompt (currently contains the wrong 8.14 narrative).
+- `/agent/repos/Galass_Driver/android/{settings.gradle.kts,gradle.properties,app/build.gradle.kts}`: read-only Driver reference for the alignment.
+Continue if you have next steps, or stop and ask for clarification if you are unsure how to proceed.
+$ find /tmp/flutter -name "DependencyVersionChecker.kt" 2>/dev/null; echo "---"; find /tmp/flutter -name "gradle_utils.dart" -path "*gradle*" 2>/dev/null | head
+/tmp/flutter/packages/flutter_tools/gradle/src/main/kotlin/DependencyVersionChecker.kt
+---
+/tmp/flutter/packages/flutter_tools/lib/src/android/gradle_utils.dart
+
+$ ls -la /tmp/ 2>/dev/null | head -60
+total 1592452
+drwxrwxrwt. 37 root   root        16384 Nov 26 17:07 .
+drwxr-xr-x. 25 root   root         4096 Nov 26 04:55 ..
+drwxrwxrwt   2 ubuntu ubuntu       4096 Nov 26 04:55 .ICE-unix
+-r--r--r--   1 ubuntu ubuntu         11 Nov 26 04:55 .X1-lock
+drwxrwxrwt   2 root   ubuntu       4096 Nov 26 04:55 .X11-unix
+-rw-------   1 ubuntu ubuntu     514960 Nov 26 12:17 .bun-1000-71b650bef1b3e52c.node
+-rw-------   1 ubuntu ubuntu   12846400 Nov 26 12:17 .bun-1000-89812e6e6a68aaeb.so
+-rw-------   1 ubuntu ubuntu         80 Nov 26 07:08 .git_signing_key_tmp0ZGbAx
+-rw-------   1 ubuntu ubuntu         80 Nov 26 10:42 .git_signing_key_tmp0dd6Ht
+-rw-------   1 ubuntu ubuntu         80 Nov 26 05:15 .git_signing_key_tmp0zEvie
+-rw-------   1 ubuntu ubuntu         80 Nov 26 07:15 .git_signing_key_tmp128YfY
+-rw-------   1 ubuntu ubuntu         80 Nov 26 07:28 .git_signing_key_tmp1tD7oh
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:24 .git_signing_key_tmp2t6ULC
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:02 .git_signing_key_tmp2vGvad
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:32 .git_signing_key_tmp38ULAK
+-rw-------   1 ubuntu ubuntu         80 Nov 26 05:51 .git_signing_key_tmp3NDlXE
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:26 .git_signing_key_tmp4CN4T3
+-rw-------   1 ubuntu ubuntu         80 Nov 26 05:17 .git_signing_key_tmp5Vu5et
+-rw-------   1 ubuntu ubuntu         80 Nov 26 11:31 .git_signing_key_tmp9fenzV
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:38 .git_signing_key_tmpAhg9Ff
+-rw-------   1 ubuntu ubuntu         80 Nov 26 07:29 .git_signing_key_tmpB6Ejyn
+-rw-------   1 ubuntu ubuntu         80 Nov 26 14:07 .git_signing_key_tmpCG0llF
+-rw-------   1 ubuntu ubuntu         80 Nov 26 10:58 .git_signing_key_tmpCOoRnp
+-rw-------   1 ubuntu ubuntu         80 Nov 26 08:05 .git_signing_key_tmpEmIdFp
+-rw-------   1 ubuntu ubuntu         80 Nov 26 15:31 .git_signing_key_tmpH37Vcn
+-rw-------   1 ubuntu ubuntu         80 Nov 26 05:45 .git_signing_key_tmpHMIZfv
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:38 .git_signing_key_tmpIMF92L
+-rw-------   1 ubuntu ubuntu         80 Nov 26 07:30 .git_signing_key_tmpIQVHkg
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:25 .git_signing_key_tmpJSbCWR
+-rw-------   1 ubuntu ubuntu         80 Nov 26 05:33 .git_signing_key_tmpJsGM6V
+-rw-------   1 ubuntu ubuntu         80 Nov 26 05:41 .git_signing_key_tmpKwRMOl
+-rw-------   1 ubuntu ubuntu         80 Nov 26 07:29 .git_signing_key_tmpLR1UqC
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:16 .git_signing_key_tmpOBllB3
+-rw-------   1 ubuntu ubuntu         80 Nov 26 15:31 .git_signing_key_tmpOm42mv
+-rw-------   1 ubuntu ubuntu         80 Nov 26 07:34 .git_signing_key_tmpPPOGps
+-rw-------   1 ubuntu ubuntu         80 Nov 26 05:21 .git_signing_key_tmpPkxcyJ
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:04 .git_signing_key_tmpQ9kHSp
+-rw-------   1 ubuntu ubuntu         80 Nov 26 10:04 .git_signing_key_tmpQwsLb9
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:16 .git_signing_key_tmpRyvz2T
+-rw-------   1 ubuntu ubuntu         80 Nov 26 10:26 .git_signing_key_tmpS6zrD9
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:19 .git_signing_key_tmpSiDxoo
+-rw-------   1 ubuntu ubuntu         80 Nov 26 10:26 .git_signing_key_tmpTHYz6v
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:28 .git_signing_key_tmpU5rXGz
+-rw-------   1 ubuntu ubuntu         80 Nov 26 14:26 .git_signing_key_tmpZ59JRe
+-rw-------   1 ubuntu ubuntu         80 Nov 26 05:35 .git_signing_key_tmpZVJmOA
+-rw-------   1 ubuntu ubuntu         80 Nov 26 12:34 .git_signing_key_tmpbPurpa
+-rw-------   1 ubuntu ubuntu         80 Nov 26 07:29 .git_signing_key_tmpbS4xPV
+-rw-------   1 ubuntu ubuntu         80 Nov 26 10:13 .git_signing_key_tmpbUxJva
+-rw-------   1 ubuntu ubuntu         80 Nov 26 14:05 .git_signing_key_tmpcai21j
+-rw-------   1 ubuntu ubuntu         80 Nov 26 12:22 .git_signing_key_tmpcyfm0g
+-rw-------   1 ubuntu ubuntu         80 Nov 26 05:28 .git_signing_key_tmpd2QgN2
+-rw-------   1 ubuntu ubuntu         80 Nov 26 12:58 .git_signing_key_tmpdDrI77
+-rw-------   1 ubuntu ubuntu         80 Nov 26 12:33 .git_signing_key_tmpdW0u6o
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:20 .git_signing_key_tmpdYfjRB
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:44 .git_signing_key_tmpgj0QEP
+-rw-------   1 ubuntu ubuntu         80 Nov 26 06:43 .git_signing_key_tmpiXYjGt
+-rw-------   1 ubuntu ubuntu         80 Nov 26 08:04 .git_signing_key_tmpkMtYVQ
+-rw-------   1 ubuntu ubuntu         80 Nov 26 12:24 .git_signing_key_tmpkZpoP1
+-rw-------   1 ubuntu ubuntu         80 Nov 26 14:43 .git_signing_key_tmpm9U2a1
+
