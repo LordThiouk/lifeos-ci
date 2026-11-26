@@ -5614,3 +5614,26 @@ Replace deprecated kotlinOptions with compilerOptions and JvmTarget.JVM_11 in ap
 
 Co-authored-by: Cursor <cursoragent@cursor.com>
 
+$ git log --oneline -12 -- android/gradle/wrapper/gradle-wrapper.properties; echo "=== settings history ==="; git log --oneline -12 -- android/settings.gradle.kts; echo "=== gradle.properties history ==="; git log --oneline -8 -- android/gradle.properties
+8c28139 fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+3023819 fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+a33e9a5 fix(android): Gradle 8.14 for Flutter bundleRelease CI
+be7462f Initial commit
+=== settings history ===
+8c28139 fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+3023819 fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+43e08b3 fix(android): bump AGP to 8.11.1 for Flutter CI
+8e7b0e5 feat: complete Firebase Crashlytics setup per official docs
+be7462f Initial commit
+=== gradle.properties history ===
+8c28139 fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+0eb0df0 fix(android): allow legacy proguard-android.txt for AGP 9 plugins
+3023819 fix(android): Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1 for Flutter CI
+623fd83 Fix: disable Jetifier + split ABI build
+61d350e Fix: increase Gradle JVM heap space
+be7462f Initial commit
+
+$ grep -rn "45801376130\|Gradle 9\.1\|AGP 9\.0\|gradle-9\.1" --include=*.md . 2>/dev/null | grep -v "^./.fullrun" | head -20
+./CHANGELOG.md:12:- Android : toolchain aligné sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.2.20) ; AGP 9.0.1 / Gradle 9.1.0 refusés par la validation CI
+./CHANGELOG.md:34:- Android Kotlin 2.2.20, AGP 9.0.1, Gradle 9.1.0 for Flutter Codemagic CI
+
