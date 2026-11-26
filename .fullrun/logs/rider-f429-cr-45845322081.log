@@ -5488,3 +5488,212 @@ MyUtils.vibrate();
     );
     if (files.isEmpty) return;
 
+Let me check the other files:
+$ sed -n '50,65p' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/support/ticket_details_controller.dart
+String noFileChosen = MyStrings.noFileChosen;
+  String chooseFile = MyStrings.chooseFile;
+
+  String ticketImagePath = "";
+
+  void pickFile() async {
+    final List<PlatformFile> files = await FilePicker.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx'],
+    );
+    if (files.isEmpty) return;
+
+    if (attachmentList.length < 5) {
+      final path = files.single.path;
+
+$ sed -n '30,50p' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/support/new_ticket_controller.dart
+bool isRtl = false;
+
+  List<File> attachmentList = [];
+  void pickFile() async {
+    final List<PlatformFile> files = await FilePicker.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx'],
+    );
+
+    if (files.isEmpty) return;
+    for (var i = 0; i < files.length; i++) {
+      if (attachmentList.length < 5) {
+        final path = files[i].path;
+        if (path == null || path.isEmpty) continue;
+        final file = File(path);
+        if (!SecurityValidators.isUploadWithinLimit(file)) {
+          CustomSnackBar.error(errorList: [MyStrings.fileTooLarge.tr]);
+          continue;
+        }
+
+$ sed -n '165,180p' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/account/profile_controller.dart
+isLoading = false;
+    update();
+  }
+
+  void openGallery(BuildContext context) async {
+    final List<PlatformFile> files = await FilePicker.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg', 'jpeg'],
+    );
+    if (files.isEmpty) {
+      update();
+      return;
+    }
+    final path = files.single.path;
+
+$ sed -n '115,130p' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/presentation/screens/edit_profile/widget/profile_image.dart
+),
+      ),
+    );
+  }
+
+  void _openGallery(BuildContext context) async {
+    final List<PlatformFile> files = await FilePicker.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg', 'jpeg'],
+    );
+    if (files.isEmpty) return;
+    final path = files.single.path;
+    if (path == null || path.isEmpty) return;
+    final file = File(path);
+    if (!SecurityValidators.isUploadWithinLimit(file)) {
+
+← Edit lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
+@@ -111,14 +111,14 @@
+   update();
+ }
+ 
+ void pickFile() async {
+-  final List<PlatformFile> files = await FilePicker.pickFiles(
++  final FilePickerResult? result = await FilePicker.pickFiles(
+     allowMultiple: false,
+     type: FileType.custom,
+     allowedExtensions: ['jpg', 'png', 'jpeg'],
+   );
+-  if (files.isEmpty) return;
++  if (result == null || result.files.isEmpty) return;
+ 
+   final path = files.single.path;
+   if (path == null || path.isEmpty) return;
+ 
+
+
+Now I'll fix the 5 files to be compatible with file_picker 11.x. The fix is to change the return type handling:
+$ grep -n "files" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
+120:    if (result == null || result.files.isEmpty) return;
+122:    final path = files.single.path;
+
+← Edit lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
+@@ -118,9 +118,9 @@
+   allowedExtensions: ['jpg', 'png', 'jpeg'],
+ );
+ if (result == null || result.files.isEmpty) return;
+ 
+-final path = files.single.path;
++final path = result!.files.single.path;
+ if (path == null || path.isEmpty) return;
+ 
+ final file = File(path);
+ if (!SecurityValidators.isUploadWithinLimit(file)) {
+
+
+← Edit lib/data/controller/support/ticket_details_controller.dart
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/support/ticket_details_controller.dart
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/support/ticket_details_controller.dart
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/support/ticket_details_controller.dart
+@@ -53,17 +53,17 @@
+ 
+ String ticketImagePath = "";
+ 
+ void pickFile() async {
+-  final List<PlatformFile> files = await FilePicker.pickFiles(
++  final FilePickerResult? result = await FilePicker.pickFiles(
+     allowMultiple: false,
+     type: FileType.custom,
+     allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx'],
+   );
+-  if (files.isEmpty) return;
++  if (result == null || result.files.isEmpty) return;
+ 
+   if (attachmentList.length < 5) {
+-    final path = files.single.path;
++    final path = result!.files.single.path;
+     if (path == null || path.isEmpty) return;
+     final file = File(path);
+     if (!SecurityValidators.isUploadWithinLimit(file)) {
+       CustomSnackBar.error(errorList: [MyStrings.fileTooLarge.tr]);
+
+
+← Edit lib/data/controller/support/new_ticket_controller.dart
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/support/new_ticket_controller.dart
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/support/new_ticket_controller.dart
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/support/new_ticket_controller.dart
+@@ -31,18 +31,18 @@
+ bool isRtl = false;
+ 
+ List<File> attachmentList = [];
+ void pickFile() async {
+-  final List<PlatformFile> files = await FilePicker.pickFiles(
++  final FilePickerResult? result = await FilePicker.pickFiles(
+     allowMultiple: true,
+     type: FileType.custom,
+     allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx'],
+   );
+ 
+-  if (files.isEmpty) return;
+-  for (var i = 0; i < files.length; i++) {
++  if (result == null || result.files.isEmpty) return;
++  for (var i = 0; i < result!.files.length; i++) {
+     if (attachmentList.length < 5) {
+-      final path = files[i].path;
++      final path = result!.files[i].path;
+       if (path == null || path.isEmpty) continue;
+       final file = File(path);
+       if (!SecurityValidators.isUploadWithinLimit(file)) {
+         CustomSnackBar.error(errorList: [MyStrings.fileTooLarge.tr]);
+
+
+← Edit lib/data/controller/account/profile_controller.dart
+Index: /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/account/profile_controller.dart
+===================================================================
+--- /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/account/profile_controller.dart
++++ /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/lib/data/controller/account/profile_controller.dart
+@@ -167,18 +167,18 @@
+   update();
+ }
+ 
+ void openGallery(BuildContext context) async {
+-  final List<PlatformFile> files = await FilePicker.pickFiles(
++  final FilePickerResult? result = await FilePicker.pickFiles(
+     allowMultiple: false,
+     type: FileType.custom,
+     allowedExtensions: ['png', 'jpg', 'jpeg'],
+   );
+-  if (files.isEmpty) {
++  if (result == null || result.files.isEmpty) {
+     update();
+     return;
+   }
+-  final path = files.single.path;
++  final path = result!.files.single.path;
+   if (path == null || path.isEmpty) {
+     update();
+     return;
+   }
+
+
