@@ -1483,3 +1483,157 @@ You can try the following suggestion to make the pubspec resolve:
 * Try using the Flutter SDK version: 3.50.1. 
 Failed to update packages.
 
+$ flutter --version 2>&1 | head -5; echo ---; which -a flutter; echo ---; ls /opt 2>/dev/null; ls ~/flutter 2>/dev/null; cat .fvmrc 2>/dev/null; cat pubspec.yaml | head -30
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+---
+/usr/local/bin/flutter
+---
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+name: galass_driver
+description: galass is a complete ride-sharing solution.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.1.1+60
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+dependencies:
+  cached_network_image: ^3.4.1
+  connectivity_plus: ^7.1.1
+  cupertino_icons: ^1.0.9
+  dio: ^5.9.2
+  dotted_border: ^3.1.0
+  file_picker: ^11.0.2
+  firebase_core: ^4.8.0
+  firebase_auth: ^6.5.0
+  firebase_messaging: ^16.2.1
+  firebase_crashlytics: ^5.0.2
+  flutter:
+    sdk: flutter
+  flutter_animate: ^4.5.2
+  flutter_foreground_task: ^9.2.2
+  flutter_inappwebview: ^6.1.5
+  flutter_local_notifications: ^21.0.0
+  flutter_polyline_points: ^3.1.0
+  flutter_rating_bar: ^4.0.1
+  flutter_secure_storage: ^10.2.0
+
+$ ls /opt/lifeos-ci-tools 2>/dev/null | head -30; echo ---; ls /opt/lifeos-ci-state 2>/dev/null | head -30; echo ---; cat /opt/lifeos-ci-state/* 2>/dev/null | head -40
+models.txt
+opencode
+targets
+---
+bases
+---
+Galass_Rider	target	fcdd581e60af92159238d4adce16dcb5be550176
+
+$ ls /opt/flutter; echo ---; ls /opt/fullrun-live 2>/dev/null | head; echo ---; find / -maxdepth 4 -name "flutter" -type f 2>/dev/null | head; echo ---; ls /usr/local/lib 2>/dev/null | head
+AUTHORS
+CHANGELOG.md
+CODEOWNERS
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+DEPS
+LICENSE
+PATENT_GRANT
+README.md
+TESTOWNERS
+analysis_options.yaml
+bin
+buildtools
+dartdoc_options.yaml
+dev
+docs
+engine
+examples
+flutter_console.bat
+packages
+pubspec.lock
+pubspec.yaml
+third_party
+version
+---
+isa.key
+live.bundle
+pid
+repo.git
+status
+tip
+worker.pid
+---
+/opt/flutter/bin/flutter
+---
+python3.12
+
+$ /opt/flutter/bin/flutter --version 2>&1 | head -5; echo ---; cat /opt/flutter/version 2>/dev/null; ls -la /usr/local/bin/flutter
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+---
+3.35.6lrwxrwxrwx 1 root root 24 Nov 26 07:05 /usr/local/bin/flutter -> /opt/flutter/bin/flutter
+
+$ git log --oneline -5 -- pubspec.lock; echo ---; grep -n -A3 "^  timezone:" pubspec.lock; echo ---; ls -la .dart_tool 2>/dev/null | head
+0f12ed5 wip(autosave): arbre de travail
+c9c65ff chore(e2e): align mobile working branch with multistop app code and tests
+51dcaab feat(dispatch): F7 CallKit ingress, verify fixes, iOS GO-with-conditions
+0e1bf67 chore: pin dotenv constraint and refresh pubspec.lock
+c436154 feat(release): version SSoT tooling, docs, CODEMAPS, and one-shot release
+---
+1911:  timezone:
+1912-    dependency: "direct main"
+1913-    description:
+1914-      name: timezone
+---
+
+$ git show 32607ee --stat | head -20; echo ---; git diff 505637e 32607ee -- pubspec.lock | head -30
+commit 32607ee0881be90690ac8022debcb6a16d89b972
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 07:50:33 2026 +0000
+
+    test(goldens): rebase ride_details sous Flutter 3.50.1 (regen F6)
+
+ MEMORY/WORK/20261006-galass-driver-multistop/ISA.md |   3 ++-
+ test/goldens/driver/README.md                       |  18 +++++++++++-------
+ ...driver_ride_running_multistop_all_stops_done.png | Bin 37989 -> 38065 bytes
+ .../driver_ride_running_multistop_stop_1_active.png | Bin 36375 -> 37632 bytes
+ .../driver_ride_running_multistop_stop_2_active.png | Bin 36375 -> 37632 bytes
+ 5 files changed, 13 insertions(+), 8 deletions(-)
+---
+
+$ sed -n '1908,1925p' pubspec.lock
+url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
+  timezone:
+    dependency: "direct main"
+    description:
+      name: timezone
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.11.0"
+  toastification:
+    dependency: "direct main"
+    description:
+      name: toastification
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+
+$ ls -la .dart_tool 2>/dev/null; echo ---; cat .dart_tool/package_config.json 2>/dev/null | head -5; echo ---; ls ~/.pub-cache/hosted/pub.dev/ 2>/dev/null | grep -i timezone
+---
+---
+
