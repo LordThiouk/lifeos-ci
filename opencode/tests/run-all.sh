@@ -10,6 +10,8 @@ TESTS=(
   agent-run-livelog-test.sh
   agent-run-preflight-test.sh
   agent-run-wippush-test.sh
+  agent-run-silence-test.sh
+  silence-watch-test.sh
   agents-load-test.sh
   allowed-repos-test.sh
   allowed-repos-lifeos-test.sh

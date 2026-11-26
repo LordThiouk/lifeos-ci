@@ -1,5 +1,9 @@
 # Modèles opencode gratuits, par ordre de priorité (un par ligne).
 # Toute ligne non vide et non commentée doit respecter ^opencode/[a-z0-9.-]+-free$
+#
+# deepseek + mimo saturent souvent le quota free en parallèle ; iceman / nemotron /
+# beam / hy4 sont les secours. Le garde-fou silence (~180 s sans sortie) bascule
+# avant le plafond pour que ces secours aient encore du temps.
 opencode/deepseek-v4.1-flash-free
 opencode/mimo-v2.6-flash-free
 opencode/iceman-free
