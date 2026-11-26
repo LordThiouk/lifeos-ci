@@ -5260,3 +5260,20 @@ org.gradle.daemon=true
 org.gradle.configureondemand=true
 org.gradle.vfs.watch=true
 
+$ ls /agent/repos/ 2>/dev/null; ls /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/extra/ 2>/dev/null; find /agent -maxdepth 3 -name "*.yml" -path "*action*" 2>/dev/null | head
+Galass_Driver
+Galass_Rider
+Galass_backend
+Galass_backend-multistop
+antenly
+galass-emu-actions-pub
+Galass_Driver
+Galass_Rider
+galass-emu-actions-pub
+
+$ R=/agent/repos/galass-emu-actions-pub; git -C $R log --oneline -3; find $R -name "*.yml" | head -30; echo "=== grep apk build ==="; grep -rn "flutter build apk\|skip-build-dependency\|skipDependencyChecks" $R --include=*.yml --include=*.sh | head -30
+33f9ab9 Merge fix/real-places : harnais e2e multistop déterministe (F19) (#6)
+/agent/repos/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml
+=== grep apk build ===
+/agent/repos/galass-emu-actions-pub/.github/workflows/artemis-staging-e2e.yml:133:            (cd src/$a && flutter pub get >/dev/null && flutter build apk --debug --dart-define=API_BASE_URL="$BASE" 2>&1 | tail -n 15; test -f build/app/outputs/flutter-apk/app-debug.apk && (unzip -p build/app/outputs/flutter-apk/app-debug.apk "META-INF/*.RSA" 2>/dev/null | openssl pkcs7 -inform DER -print_certs 2>/dev/null | openssl x509 -noout -fingerprint -sha1 || true))
+
