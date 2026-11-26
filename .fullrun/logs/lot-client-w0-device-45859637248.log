@@ -2260,3 +2260,11 @@ cat: /tmp/shim.log: No such file or directory
 /usr/bin/bash: line 1: /tmp/shim.log: No such file or directory
 count=
 
+$ P=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php; export PATH=$P:$PATH; export PHP_INI_SCAN_DIR=$P/ini.d; rm -f /tmp/shim.log; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php vendor/phpunit/phpunit/phpunit --configuration=phpunit.xml tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php 2>&1 | tail -5; echo "=== shim log count: $(wc -l < /tmp/shim.log 2>/dev/null)"
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php:258
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/tests/Feature/Security/FcmServiceAccountOutsideWebrootTest.php:35
+
+ERRORS!
+Tests: 12, Assertions: 652, Errors: 12.
+=== shim log count: 1
+
