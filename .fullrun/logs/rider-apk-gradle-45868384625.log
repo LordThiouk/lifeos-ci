@@ -3651,3 +3651,12 @@ lrwxrwxrwx. 1 root root 24 Mar 30  2024 /usr/bin/clang -> ../lib/llvm-18/bin/cla
 lrwxrwxrwx. 1 root root 26 Mar 30  2024 /usr/bin/clang++ -> ../lib/llvm-18/bin/clang++
 lrwxrwxrwx. 1 root root 24 May 27  2024 /usr/bin/clang-18 -> ../lib/llvm-18/bin/clang
 
+$ ls -la /usr/lib/llvm-18/bin/ | head -40
+total 148
+drwxr-xr-x. 2 root root   4096 Nov 11 01:52 .
+drwxr-xr-x. 5 root root   4096 Nov 11 01:52 ..
+-rwxr-xr-x. 1 root root 140592 May 27  2024 clang
+lrwxrwxrwx. 1 root root      5 May 27  2024 clang++ -> clang
+lrwxrwxrwx. 1 root root      5 May 27  2024 clang-18 -> clang
+lrwxrwxrwx. 1 root root      5 May 27  2024 clang-cpp -> clang
+
