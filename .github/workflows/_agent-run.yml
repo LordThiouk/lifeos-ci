@@ -88,6 +88,8 @@ env:
   BUN_VERSION: "1.4.4"
   GITLEAKS_VERSION: "8.30.1"
   GITLEAKS_SHA256: "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
+  AGE_VERSION: "1.2.1"
+  AGE_SHA256: "7df45a6cc87d4da11cc03a539a7470c15b1041ab2b396af088fe9990f7c79d50"
   # Copies root-owned, hors de l'espace de travail de l'agent (C1).
   TOOLS_DIR: /opt/lifeos-ci-tools
   # État de sécurité écrit avant opencode, root-owned, non modifiable par l'agent (C3).
@@ -149,15 +151,25 @@ jobs:
           sudo cp -a ci/opencode "$T/opencode"
           sudo cp -a ci/targets "$T/targets"
           sudo install -o root -g root -m 0644 ci/models.txt "$T/models.txt"
-          sudo chown -R root:root "$T" "$STATE_DIR"
-          sudo chmod -R go-w "$T" "$STATE_DIR"
+          # Journal en direct : copie root dans /opt/fullrun-tools, même modèle que
+          # opencode-fullrun.yml. allowed-repos.sh vient de targets/ (liste lifeos-ci,
+          # TARGET_REPO du run) et non de opencode/ (liste Galass historique).
+          FT=/opt/fullrun-tools; FL=/opt/fullrun-live
+          sudo install -d -o root -g root -m 0755 "$FT" "$FL"
+          sudo install -o root -g root -m 0755 ci/opencode/livelog.sh ci/opencode/leaklog.sh \
+            ci/opencode/redact-log.sh ci/targets/allowed-repos.sh "$FT/"
+          sudo install -o root -g root -m 0644 ci/opencode/log-recipient.txt "$FT/"
+          sudo chown -R root:root "$T" "$STATE_DIR" "$FT" "$FL"
+          sudo chmod -R go-w "$T" "$STATE_DIR" "$FT" "$FL"
           sudo find "$T" -type f -exec chmod 0644 {} +
           sudo find "$T" -type f -name '*.sh' -exec chmod 0755 {} +
           sudo find "$T" -type f \( -name bench-capped -o -name gitleaks \) -exec chmod 0755 {} +
           # Preuve : aucun fichier de confiance n'appartient à l'utilisateur du runner.
           [ -z "$(find "$T" -user "$(id -u)" -print -quit)" ] \
             || { echo "::error::des outils figés appartiennent encore au runner"; exit 1; }
-          echo "Outils figés dans $T (root, non modifiables par opencode)"
+          [ -z "$(find "$FT" -user "$(id -u)" -print -quit)" ] \
+            || { echo "::error::des outils du journal en direct appartiennent encore au runner"; exit 1; }
+          echo "Outils figés dans $T et $FT (root, non modifiables par opencode)"
 
       - name: Validation des entrées
         id: validate
@@ -402,7 +414,25 @@ jobs:
           sudo install -o root -g root -m 0755 "$RUNNER_TEMP/gl/gitleaks" /usr/local/bin/gitleaks
           # Copie figée utilisée par la porte post-opencode (jamais le PATH de l'agent).
           sudo install -o root -g root -m 0755 "$RUNNER_TEMP/gl/gitleaks" "$TOOLS_DIR/opencode/gitleaks"
+          # Copie figée pour le démon du journal en direct (/opt/fullrun-tools, même modèle
+          # que opencode-fullrun.yml).
+          sudo install -o root -g root -m 0755 "$RUNNER_TEMP/gl/gitleaks" /opt/fullrun-tools/gitleaks
           gitleaks version
+
+      # Chiffrement des instantanés du journal en direct quand gitleaks trouve encore
+      # un secret après masquage (leaklog.sh). Facultatif : sans age, livelog ne pousse
+      # que les instantanés en clair, jamais un secret.
+      - name: Installer age (journal en direct chiffré)
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          f="$RUNNER_TEMP/age.tgz"
+          curl -sSfL -o "$f" "https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz"
+          echo "${AGE_SHA256}  $f" | sha256sum -c --quiet
+          tar -xzf "$f" -C "$RUNNER_TEMP" age/age age/age-keygen
+          sudo install -m 0755 "$RUNNER_TEMP/age/age" /usr/local/bin/age
+          sudo install -m 0755 "$RUNNER_TEMP/age/age-keygen" /usr/local/bin/age-keygen
+          age --version
 
       - name: Installer bun (agents FullRun)
         if: ${{ inputs.agent != 'task' }}
@@ -522,6 +552,60 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
           ffmpeg -version | head -1
 
+      # Journal en direct : un démon root pousse toutes les 10 min un instantané masqué du
+      # journal opencode sur fullrun-logs/<job>-<run> du dépôt CIBLE du run (jamais antenly
+      # en dur) ; chiffré avec age si gitleaks y trouve encore un secret. Le jeton lui arrive
+      # sur stdin : il n'est ni dans l'environnement d'opencode, ni dans un fichier, ni dans
+      # une URL. Facultatif : un échec ici n'arrête jamais le run.
+      - name: Journal en direct (démon root, jeton hors d'opencode)
+        id: live
+        continue-on-error: true
+        env:
+          PUSH_TOKEN: ${{ secrets.CI_TOKEN }}
+          ISA_STAMP_KEY: ${{ secrets.ISA_STAMP_KEY }}
+          RUN_ID: ${{ github.run_id }}
+          OC_LOG: ${{ runner.temp }}/oc/opencode.log
+        run: |
+          set +x
+          T=/opt/fullrun-tools; L=/opt/fullrun-live
+          [[ "$IN_JOB" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$ && "$RUN_ID" =~ ^[0-9]{1,20}$ ]] \
+            || { echo "::warning::job ou run invalide : pas de journal en direct"; exit 0; }
+          [ -n "${PUSH_TOKEN:-}" ] || { echo "::warning::CI_TOKEN absent : pas de journal en direct"; exit 0; }
+          [ -x "$T/livelog.sh" ] && [ -x "$T/gitleaks" ] \
+            || { echo "::warning::outils du journal en direct absents : pas de journal en direct"; exit 0; }
+          mkdir -p "$RUNNER_TEMP/oc"
+          : > "$OC_LOG"
+          gcfg=""
+          if git -C target cat-file -e "HEAD:.gitleaks.toml" 2>/dev/null; then
+            git -C target show "HEAD:.gitleaks.toml" | sudo tee "$T/gitleaks.toml" >/dev/null
+            sudo chmod 0644 "$T/gitleaks.toml"
+            gcfg="$T/gitleaks.toml"
+          fi
+          # Clé ISA pour le masquage : root, 0600, hors de portée de l'agent.
+          if [ -n "${ISA_STAMP_KEY:-}" ]; then
+            printf '%s' "$ISA_STAMP_KEY" | sudo sh -c 'umask 077; cat > /opt/fullrun-live/isa.key'
+          fi
+          LOGB="fullrun-logs/${IN_JOB}-${RUN_ID}"
+          # shellcheck disable=SC2024 # sortie d'état du démon dans un fichier du runner : voulu
+          printf '%s\n' "$PUSH_TOKEN" | sudo -n env -i PATH=/usr/local/bin:/usr/bin:/bin HOME="$L" \
+            LIVE_STATE="$L" LIVE_LOG="$OC_LOG" LIVE_JOB="$IN_JOB" LIVE_RUN="$RUN_ID" \
+            TARGET_REPO="$TARGET_REPO" \
+            LIVE_GITLEAKS="$T/gitleaks" LIVE_GL_CONFIG="$gcfg" LIVE_ISA_KEY_FILE="$L/isa.key" \
+            LIVE_READ_UID="$(id -u)" LIVE_READ_GID="$(id -g)" LIVE_TOKEN_STDIN=1 \
+            setsid -f nice -n 0 "$T/livelog.sh" daemon > "$RUNNER_TEMP/live.out" 2>&1 &
+          ok=0
+          for _ in 1 2 3 4 5 6 7 8 9 10; do
+            pid=$(sudo -n cat "$L/pid" 2>/dev/null || true)
+            if [[ "$pid" =~ ^[0-9]{1,9}$ ]] && sudo -n kill -0 "$pid" 2>/dev/null; then ok=1; break; fi
+            sleep 1
+          done
+          [ "$ok" = 1 ] || { echo "::warning::démon du journal en direct non démarré : le run continue sans"; exit 0; }
+          # Le superviseur survit à une saturation mémoire : opencode et le runner passent avant lui.
+          echo -500 | sudo -n tee "/proc/$pid/oom_score_adj" >/dev/null 2>&1 || true
+          echo "branch=$LOGB" >> "$GITHUB_OUTPUT"
+          echo "- Journal en direct : branche \`$LOGB\` de $TARGET_REPO, instantané toutes les 10 min (chiffré si secret probable)" >> "$GITHUB_STEP_SUMMARY"
+          echo "Journal en direct démarré → $TARGET_REPO@$LOGB"
+
       # C3 : opencode tourne avec un environnement vidé (env -i) et un HOME/TMPDIR
       # dédiés. Il n'hérite ni de GITHUB_ENV, ni de GITHUB_OUTPUT, ni de
       # GITHUB_PATH, ni de $RUNNER_TEMP. Son résultat est déposé en root dans
@@ -581,6 +665,11 @@ jobs:
             agent_env+=(FULLRUN_TARGET_AGENT="$TARGET_AGENT")
           fi
           logdir="$agent_home/.local/share/opencode/log"
+          # Journal en direct : le démon lit ce fichier stable (tee), pas les journaux
+          # par modèle dont le nom n'est connu qu'à l'exécution.
+          live_log="$RUNNER_TEMP/oc/opencode.log"
+          mkdir -p "$RUNNER_TEMP/oc"
+          : > "$live_log"
           status="erreur"
           used=""
           switched=0
@@ -609,8 +698,9 @@ jobs:
               OPENCODE_CONFIG="$RUNNER_TEMP/oc/opencode.json" \
               timeout "$remaining" opencode run --model "$m" \
               "${agent_args[@]}" \
-              "Lis $RUNNER_TEMP/oc/prompt.md et exécute-le complètement.") > "$log" 2>&1
-            rc=$?
+              "Lis $RUNNER_TEMP/oc/prompt.md et exécute-le complètement.") 2>&1 | \
+              tee -a "$live_log" > "$log"
+            rc=${PIPESTATUS[0]}
             set -e
             # Conserve une trace masquée : le brut reste dans RUNNER_TEMP (agent),
             # la copie root-owned est publiée plus bas pour le statut.
