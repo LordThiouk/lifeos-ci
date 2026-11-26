@@ -17326,3 +17326,11 @@ S-W1-03/04 + S-W1-07..10 verts. `ManageDrivers` filter sans test. Vérifions rou
 Wrote file successfully.
 
 S-W1-05 : pas de `ManageDriversTest`. Crée `ManageDriversTest` vérifiant routes séparées + `approve.all`, filtre `ManageDrivers`.
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core; php artisan test --filter=ManageDrivers 2>&1 | tail -8
+PASS  Tests\Feature\Admin\ManageDriversTest
+  ✓ separate approval and rejection routes remain                        0.08s  
+  ✓ approve all is separate from separate routes                         0.01s  
+
+  Tests:    2 passed (7 assertions)
+  Duration: 0.14s
+
