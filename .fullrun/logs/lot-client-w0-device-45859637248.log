@@ -15284,3 +15284,13 @@ $table->text('sms_body')->nullable();
         ]);
     }
 
+$ grep -n "approve.all\|function.*Approve\|language\|Language::" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Controllers/Admin/ManageDriversController.php | head -40
+173:    public function verificationApprove($id) {
+208:    private function sendDriverApprovedSms(Driver $driver): void
+223:    private function ensureDriverApprovedSmsTemplate(): void
+255:    public function vehicleApprove($id) {
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && grep -rn "approve.all\|approveAll\|approve_all" app/ routes/ | head
+app/Http/Controllers/Admin/ManageDriversController.php:183:    public function approveAll($id) {
+routes/admin.php:169:        Route::post('approve-all/{id}', 'approveAll')->name('approve.all');
+
