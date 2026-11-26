@@ -7740,3 +7740,15 @@ clr-debug-pipe-286739-4479516-in
 clr-debug-pipe-286739-4479516-out
 
 ✱ Glob "prompt.md" in /home/ubuntu/actions-runner · 0 matches
+✱ Glob "**/prompt.md" in /tmp · 1 match
+✗ Glob "**/prompt.md" failed in /home/ubuntu/actions-runner/_work/lifeos-ci/target
+Error: ripgrep execution failed
+
+$ sleep 2; ls -la /home/ubuntu/actions-runner/_work/_temp/oc/
+total 444
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 18:58 .
+drwxr-xr-x 9 ubuntu ubuntu   4096 Nov 26 18:20 ..
+-rw------- 1 ubuntu ubuntu   9680 Nov 26 18:20 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu 429918 Nov 26 19:04 opencode.log
+
+→ Read /tmp/tmp.rYsFqYqu6a/oc/prompt.md
