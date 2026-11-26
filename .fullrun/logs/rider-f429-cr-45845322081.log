@@ -18244,3 +18244,6 @@ Failed asserting that 422 is identical to 200.
   Tests:    1 failed (1 assertions)
   Duration: 0.17s
 
+$ export PATH=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH; cd core; php artisan test --filter=MultiStopCreateTest::test_create_without_stops_unchanged 2>&1 | grep -iE 'remark|not_found|message' | head -5
+82▕             ->assertJsonPath('remark', 'ride_create_success');
+
