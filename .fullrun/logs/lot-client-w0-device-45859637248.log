@@ -2779,3 +2779,89 @@ plugins {
 include(":app")
 
 Le working tree est propre, sur la branche `build/rider-apk-gradle`. Attention : le dernier commit est déjà `ec07f3e build(android): align Rider toolchain with Flutter 3.50.1`. Je vérifie son contenu et l'état actuel des fichiers.
+✗ git log --oneline -20 --all --decorate | head -40; echo "====="; git log --oneline -10 build/rider-apk-gradle; echo "====="; git merge-base build/rider-apk-gradle feat/multistop-e2e-2026-11-15; git log --oneline -3 feat/multistop-e2e-2026-11-15 failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ ls -la /home/ubuntu/actions-runner/_work/lifeos-ci/; echo "====="; ls -la /home/ubuntu/actions-runner/_work/_temp/ | head -30
+total 12
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 14:26 .
+drwxr-xr-x 7 ubuntu ubuntu 4096 Nov 26 18:20 ..
+drwxr-xr-x 5 ubuntu ubuntu 4096 Nov 26 18:20 lifeos-ci
+=====
+total 13232
+drwxr-xr-x 9 ubuntu ubuntu    4096 Nov 26 18:20 .
+drwxr-xr-x 7 ubuntu ubuntu    4096 Nov 26 18:20 ..
+-rw-r--r-- 1 ubuntu ubuntu    3074 Nov 26 18:20 0927ba96-6a24-4fbc-88b0-7f162ebcf95a.sh
+-rw-r--r-- 1 ubuntu ubuntu     375 Nov 26 18:20 0f2d1aac-f856-495c-991d-85d8b609318a.sh
+-rw-r--r-- 1 ubuntu ubuntu     106 Nov 26 18:20 123de9ee-c41a-4c93-9f33-628d81fa411d.sh
+-rw-r--r-- 1 ubuntu ubuntu     828 Nov 26 18:20 1dd3df03-64b8-4c7e-bac4-08b622674606.sh
+-rw-r--r-- 1 ubuntu ubuntu    1615 Nov 26 18:20 2086c064-e55e-4a0f-af66-2886a97512e5.sh
+-rw-r--r-- 1 ubuntu ubuntu    2106 Nov 26 18:20 46b57790-58e0-4bcd-ba61-7220141d1406.sh
+-rw-r--r-- 1 ubuntu ubuntu    2338 Nov 26 18:20 5ab1986e-4389-48ce-9a5c-b3893a90687d.sh
+-rw-r--r-- 1 ubuntu ubuntu     429 Nov 26 18:20 73ffd2c5-b81f-44f5-89a8-3df06206c483.sh
+-rw-r--r-- 1 ubuntu ubuntu    1345 Nov 26 18:20 7fc57a83-cb2a-495a-9a37-98b7e4b8f446.sh
+-rw-r--r-- 1 ubuntu ubuntu    2007 Nov 26 18:20 877d323a-390c-4590-b206-3556ad720eaa.sh
+-rw-r--r-- 1 ubuntu ubuntu    2016 Nov 26 18:20 8afffe5d-fc36-4c5b-9a94-b08cfcb4baff.sh
+-rw-r--r-- 1 ubuntu ubuntu    8663 Nov 26 18:20 9b7b47a0-4449-49d0-b413-82944d929184.sh
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:20 _github_workflow
+drwxr-xr-x 2 ubuntu ubuntu   12288 Nov 26 18:20 _runner_file_commands
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:20 age
+-rw-r--r-- 1 ubuntu ubuntu 5194720 Nov 26 18:20 age.tgz
+-rw-r--r-- 1 ubuntu ubuntu    2553 Nov 26 18:20 db855c49-d1d1-4f61-99b1-3ab73c97e27f.sh
+-rw-r--r-- 1 ubuntu ubuntu    2915 Nov 26 18:20 dc05f5b7-4aea-4535-8e97-271bc8437d07.sh
+-rw-r--r-- 1 ubuntu ubuntu 8230402 Nov 26 18:20 gitleaks.tgz
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:20 gl
+-rw-r--r-- 1 ubuntu ubuntu    1274 Nov 26 18:43 live.out
+drwxr-xr-x 4 ubuntu ubuntu    4096 Nov 26 18:20 npm-global
+drwxr-xr-x 2 ubuntu ubuntu    4096 Nov 26 18:20 oc
+drwxr-xr-x 4 ubuntu ubuntu    4096 Nov 26 18:42 oc-agent
+-rw-r--r-- 1 ubuntu ubuntu     256 Nov 26 18:37 wip.out
+
+Le commit `ec07f3e` existe déjà et contient l'alignement demandé. Je vérifie l'historique complet, la relation aux branches et les logs de run pour comprendre la situation.
+✗ git log --oneline -10 build/rider-apk-gradle && echo "=====MERGE-BASE=====" && git merge-base build/rider-apk-gradle feat/multistop-e2e-2026-11-15 && echo "=====FEAT-TIP=====" && git log --oneline -3 feat/multistop-e2e-2026-11-15 failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ ls -la /home/ubuntu/actions-runner/_work/_temp/oc/ /home/ubuntu/actions-runner/_work/_temp/oc-agent/ 2>/dev/null; echo "=====LIVE.OUT====="; cat /home/ubuntu/actions-runner/_work/_temp/live.out; echo "=====WIP.OUT====="; cat /home/ubuntu/actions-runner/_work/_temp/wip.out
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/:
+total 13260
+drwxr-xr-x 4 ubuntu ubuntu     4096 Nov 26 18:42 .
+drwxr-xr-x 9 ubuntu ubuntu     4096 Nov 26 18:20 ..
+-rw------- 1 ubuntu ubuntu   514960 Nov 26 18:20 .bun-1000-71b650bef1b3e52c.node
+-rw------- 1 ubuntu ubuntu 12846400 Nov 26 18:20 .bun-1000-89812e6e6a68aaeb.so
+-rw-r--r-- 1 ubuntu ubuntu        0 Nov 26 18:42 attempt.start
+drwxr-xr-x 7 ubuntu ubuntu     4096 Nov 26 18:20 home
+-rw-r--r-- 1 ubuntu ubuntu        0 Nov 26 18:42 oc-tail
+-rw-r--r-- 1 ubuntu ubuntu        7 Nov 26 18:42 oc.pid
+drwxr-xr-x 2 ubuntu ubuntu     4096 Nov 26 18:20 opencode
+-rw-r--r-- 1 ubuntu ubuntu    25404 Nov 26 18:42 redacted.log
+-rw-r--r-- 1 ubuntu ubuntu       46 Nov 26 18:20 run-deepseek-v4.1-flash-free.log
+-rw-r--r-- 1 ubuntu ubuntu    15021 Nov 26 18:43 run-flint-40b-free.log
+-rw-r--r-- 1 ubuntu ubuntu    25749 Nov 26 18:42 run-iceman-free.log
+-rw-r--r-- 1 ubuntu ubuntu   108696 Nov 26 18:37 run-mimo-v2.6-flash-free.log
+
+/home/ubuntu/actions-runner/_work/_temp/oc/:
+total 176
+drwxr-xr-x 2 ubuntu ubuntu   4096 Nov 26 18:20 .
+drwxr-xr-x 9 ubuntu ubuntu   4096 Nov 26 18:20 ..
+-rw------- 1 ubuntu ubuntu   9680 Nov 26 18:20 opencode.json
+-rw-r--r-- 1 ubuntu ubuntu 149674 Nov 26 18:43 opencode.log
+-rw-r--r-- 1 ubuntu ubuntu   1757 Nov 26 18:20 prompt.md
+=====LIVE.OUT=====
+[journal en direct] 18:20 Dakar · démarré (toutes les 120 s) → fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:21 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:23 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:25 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:27 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:29 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:31 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:33 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:35 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:37 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:39 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:41 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+[journal en direct] 18:43 Dakar · envoyé (clair) sur fullrun-logs/rider-apk-gradle-45868384625
+=====WIP.OUT=====
+[suivi] démarré (toutes les 900 s) → feat/multistop-e2e-2026-11-15 · 18:20 Dakar
+[suivi] wip non poussé : copie de contrôle impossible, on réessaie · 18:22 Dakar
+[suivi] wip non poussé : copie de contrôle impossible, on réessaie · 18:37 Dakar
+
