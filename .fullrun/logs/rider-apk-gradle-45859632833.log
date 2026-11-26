@@ -2797,3 +2797,39 @@ before close
 One or more uncaught errors occurred shutting down:
   Bad state: Cannot add event while adding stream.
 
+$ cat > /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/min_stream_test.dart << 'EOF'
+import 'dart:async';
+import 'package:flutter_test/flutter_test.dart';
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  test('stream close', () async {
+    final sc = StreamController<int>();
+    print('before close');
+    sc.close();
+    print('after close');
+  });
+}
+EOF
+cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_CACHE=/home/ubuntu/.pub-cache; export PATH=/tmp/flutter_sdk/flutter/bin:$PATH; timeout 30 flutter test test/unit/min_stream_test.dart 2>&1 | tail -15
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/min_stream_test.dart
+00:00 +0: stream close
+before close
+after close
+00:00 +1: All tests passed!
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && python3 - << 'PY'
+p='test/unit/ride_map_live_location_test.dart'
+s=open(p).read()
+s=s.replace("  tearDown(() async {\n    await positions.close();\n    Get.reset();\n  });",
+            "  tearDown(() async {\n    details.stopLiveLocationTracking();\n    positions.close();\n    Get.reset();\n  });")
+open(p,'w').write(s)
+print('done')
+PY
+grep -n "tearDown" -A4 test/unit/ride_map_live_location_test.dart
+done
+92:  tearDown(() async {
+93-    details.stopLiveLocationTracking();
+94-    positions.close();
+95-    Get.reset();
+96-  });
+
