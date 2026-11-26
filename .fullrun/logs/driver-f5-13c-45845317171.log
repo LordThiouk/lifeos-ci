@@ -14018,3 +14018,85 @@ WAVE_BASE_URL=https://api.wave.com
 ORANGE_MONEY_CLIENT_ID=
 ORANGE_MONEY_CLIENT_SECRET=
 
+$ which php php8.1 php8.2 php8.3 php8.4 2>/dev/null; ls /usr/bin/php* 2>/dev/null; echo "---"; find / -name "php" -type f 2>/dev/null | head
+---
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin/php
+
+$ ls -la /home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin/; /home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin/php -v 2>&1 | head
+total 12
+drwxr-xr-x 2 ubuntu ubuntu 4096 Nov 26 19:31 .
+drwxr-xr-x 6 ubuntu ubuntu 4096 Nov 26 19:31 ..
+-rwxr-xr-x 1 ubuntu ubuntu  313 Nov 26 19:31 php
+PHP 8.3.6 (cli) (built: Nov 18 2026 23:42:07) (NTS)
+Copyright (c) The PHP Group
+Zend Engine v4.3.6, Copyright (c) Zend Technologies
+
+$ cat /home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin/php
+#!/usr/bin/env bash
+export PHPRC=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/etc/php/8.3/cli
+export PHP_INI_SCAN_DIR=/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/etc/php/8.3/cli/conf.d
+exec /home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/php83/usr/bin/php8.3 "$@"
+
+$ export PATH="/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH"; php -v; echo "---composer---"; which composer 2>/dev/null; find / -name "composer.phar" 2>/dev/null | head; echo "---artisan---"; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/artisan
+PHP 8.3.6 (cli) (built: Nov 18 2026 23:42:07) (NTS)
+Copyright (c) The PHP Group
+Zend Engine v4.3.6, Copyright (c) Zend Technologies
+---composer---
+---artisan---
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/artisan
+
+$ export PATH="/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH"; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && ls vendor/bin 2>/dev/null; echo "---"; ls vendor 2>/dev/null | head; echo "---phpunit---"; find . -name "phpunit" -type f 2>/dev/null | head
+carbon
+carbon.bat
+patch-type-declarations
+patch-type-declarations.bat
+php-parse
+php-parse.bat
+phpunit
+phpunit.bat
+pint
+pint.bat
+psysh
+psysh.bat
+sail
+sail.bat
+var-dump-server
+var-dump-server.bat
+yaml-lint
+yaml-lint.bat
+---
+authorizenet
+autoload.php
+barryvdh
+bin
+brick
+btcpayserver
+carbonphp
+coingate
+composer
+dflydev
+---phpunit---
+./vendor/phpunit/phpunit/phpunit
+./vendor/bin/phpunit
+
+$ export PATH="/home/ubuntu/actions-runner/_work/_temp/oc-agent/opencode/phpbin:$PATH"; cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core && php artisan test --filter=Payment 2>&1 | tail -20
+✓ isc66 payment data carries ordered stops                             0.03s  
+  ✓ online payment received payload carries ordered stops                0.04s  
+
+   PASS  Tests\Feature\Push\CashPaymentReceivedTimestampTest
+  ✓ cash payment received is emitted synchronously with a timestamp      0.04s  
+
+   PASS  Tests\Feature\Push\OnlinePaymentThanksTest
+  ✓ i9 first transition to paid sends thanks once                        0.03s  
+  ✓ i9 second callback sends no push                                     0.03s  
+  ✓ i9 fcm http error does not break payment confirmation                0.04s  
+  ✓ i9 notifier exception does not break payment confirmation            0.03s  
+  ✓ i9 cash payment sends no thanks                                      0.03s  
+  ✓ i9 ride end online pending text unchanged                            0.03s  
+
+   PASS  Tests\Feature\Push\RidePushTriggersTest
+  ✓ isc48 exactly one rider push on cash payment received                0.05s  
+
+  Tests:    16 passed (84 assertions)
+  Duration: 0.73s
+
