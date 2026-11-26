@@ -9023,3 +9023,196 @@ $ cat /tmp/flutter/version 2>/dev/null; echo "---"; grep -n 'maxKnownAndSupporte
 245:                    warnGradleVersion.toString(),
 246:                    getPotentialGradleFix(project.rootDir.path)
 
+$ sed -n '80,140p' /tmp/dvc_3501.kt; echo "===CHECK GRADLE==="; sed -n '220,260p' /tmp/dvc_3501.kt; echo "===FLUTTER GIT==="; git -C /tmp/flutter describe --tags --always 2>/dev/null; git -C /tmp/flutter log -1 --format='%H %cd %s' 2>/dev/null
+// The following versions define our support policy for Gradle, Java, AGP, and KGP.
+    // Before updating any "error" version, ensure that you have updated the corresponding
+    // "warn" version for a full release to provide advanced warning. See
+    // flutter.dev/go/android-dependency-versions for more.
+    // Advice for maintainers for other areas of code that are impacted are documented
+    // in packages/flutter_tools/lib/src/android/README.md.
+
+    @VisibleForTesting internal val warnGradleVersion: Version = Version(9, 5, 0)
+
+    @VisibleForTesting internal val errorGradleVersion: Version = Version(9, 3, 1)
+
+    // Java error and warn should align with packages/flutter_tools/lib/src/android/gradle_utils.dart.
+    @VisibleForTesting internal val warnJavaVersion: JavaVersion = JavaVersion.VERSION_17
+
+    @VisibleForTesting internal val errorJavaVersion: JavaVersion = JavaVersion.VERSION_17
+
+    @VisibleForTesting internal val warnAGPVersion: AndroidPluginVersion = AndroidPluginVersion(9, 3, 1)
+
+    @VisibleForTesting internal val errorAGPVersion: AndroidPluginVersion = AndroidPluginVersion(9, 1, 1)
+
+    @VisibleForTesting internal val firstUnsupportedAGPMajorVersion: Int = 10
+
+    @VisibleForTesting internal val warnKGPVersion: Version = Version(2, 4, 20)
+
+    @VisibleForTesting internal val errorKGPVersion: Version = Version(2, 4, 10)
+
+    // If this value is changed, then make sure to change the documentation on https://docs.flutter.dev/reference/supported-platforms
+    // Non inclusive.
+    @VisibleForTesting
+    internal val warnMinSdkVersion: Int = 24
+
+    @VisibleForTesting
+    internal val errorMinSdkVersion: Int = 23
+
+    /**
+     * Checks if the project's Android build time dependencies are each within the respective
+     * version range that we support. When we can't find a version for a given dependency
+     * we treat it as within the range for the purpose of this check.
+     */
+    @JvmStatic fun checkDependencyVersions(project: Project) {
+        checkGradleVersion(VersionFetcher.getGradleVersion(project), project)
+        checkJavaVersion(VersionFetcher.getJavaVersion(), project)
+
+        configureMinSdkCheck(project)
+
+        val agpVersion: AndroidPluginVersion? = VersionFetcher.getAGPVersion(project)
+        if (agpVersion != null) {
+            checkAGPVersion(agpVersion, project)
+        } else {
+            project.logger.error(
+                "Warning: unable to detect project AGP version. Skipping " +
+                    "version checking. \nThis may be because you have applied AGP after the Flutter Gradle Plugin."
+            )
+        }
+
+        val kgpVersion: Version? = VersionFetcher.getKGPVersion(project)
+        val usesBuiltInKotlin = FlutterPluginUtils.isBuiltInKotlinEnabled(project, agpVersion)
+
+        if (kgpVersion != null && !usesBuiltInKotlin) {
+            checkKGPVersion(kgpVersion, project)
+===CHECK GRADLE===
+
+    @VisibleForTesting
+    internal fun getFlavorSpecificMessage(
+        flavorName: String?,
+        dependencyName: String
+    ): String = dependencyName + (if (flavorName != null) " (flavor='$flavorName')" else "")
+
+    @VisibleForTesting internal fun checkGradleVersion(
+        version: Version,
+        project: Project
+    ) {
+        if (version < errorGradleVersion) {
+            val errorMessage: String =
+                getErrorMessage(
+                    GRADLE_NAME,
+                    version.toString(),
+                    errorGradleVersion.toString(),
+                    getPotentialGradleFix(project.rootDir.path)
+                )
+            throw DependencyValidationException(errorMessage)
+        } else if (version < warnGradleVersion) {
+            val warnMessage: String =
+                getWarnMessage(
+                    GRADLE_NAME,
+                    version.toString(),
+                    warnGradleVersion.toString(),
+                    getPotentialGradleFix(project.rootDir.path)
+                )
+            project.logger.error(warnMessage)
+        }
+    }
+
+    @VisibleForTesting internal fun checkJavaVersion(
+        version: JavaVersion,
+        project: Project
+    ) {
+        if (version < errorJavaVersion) {
+            val errorMessage: String =
+                getErrorMessage(
+                    JAVA_NAME,
+                    version.toString(),
+===FLUTTER GIT===
+3.50.1
+ae9b586f34a8443573f82ef57c3bf914a908cbf7 Thu Nov 19 01:01:07 2026 +0000 [3.50] Changelog for 3.50.1 (#196936)
+
+Le toolchain retenu mérite vérification : Flutter 3.50.1 semble exiger Gradle ≥ 9.3.1. Je creuse la vraie cause de l'échec Artemis.
+$ grep -RIl --include='*.log' --include='*.txt' --include='*.out' -e 'Build APK Rider' -e 'Dependency validation failed' -e 'Your Gradle version is too old' /tmp /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci 2>/dev/null | head -40
+/tmp/tmp.D8Us5rvQrl/r/.fullrun/logs/rider-apk-gradle-45868384625.log
+
+$ grep -n -i -e 'dependency validation' -e 'too old' -e 'FAILURE' -e 'Gradle version' -e 'AGP version' -e 'KGP version' -e 'Build APK Rider' /tmp/tmp.D8Us5rvQrl/r/.fullrun/logs/rider-apk-gradle-45868384625.log | head -80
+592:896:152	45801376130	feat/multistop-e2e-2026-11-15	81d149d4	2026-11-26T10:26:37Z	completed	failure	workflow_dispatch
+593:897:151	45782061889	feat/multistop-e2e-2026-11-15	81d149d4	2026-11-26T08:18:31Z	completed	failure	workflow_dispatch
+594:898:150	45778554984	feat/multistop-e2e-2026-11-15	81d149d4	2026-11-26T07:52:21Z	completed	failure	workflow_dispatch
+595:899:149	45768119261	feat/multistop-e2e-2026-11-15	0cc7a5ca	2026-11-26T06:25:42Z	completed	failure	workflow_dispatch
+596:900:148	45766646463	feat/multistop-e2e-2026-11-15	0cc7a5ca	2026-11-26T06:12:53Z	completed	failure	workflow_dispatch
+597:905:143	45100696324	feat/multistop-rider-close-2026-11-20	da9814d1	2026-11-23T02:31:24Z	completed	failure	workflow_dispatch
+599:948:e2e	failure
+600:960:   12. Build APK (staging, debug, même job, pas d'upload) -> failure
+602:984:152	45801376130	feat/multistop-e2e-2026-11-15	2026-11-26T10:26:37Z	failure
+603:985:151	45782061889	feat/multistop-e2e-2026-11-15	2026-11-26T08:18:31Z	failure
+604:986:150	45778554984	feat/multistop-e2e-2026-11-15	2026-11-26T07:52:21Z	failure
+605:987:149	45768119261	feat/multistop-e2e-2026-11-15	2026-11-26T06:25:42Z	failure
+606:988:148	45766646463	feat/multistop-e2e-2026-11-15	2026-11-26T06:12:53Z	failure
+607:993:143	45100696324	feat/multistop-rider-close-2026-11-20	2026-11-23T02:31:24Z	failure
+608:994:142	45093391102	feat/multistop-rider-close-2026-11-20	2026-11-23T01:14:06Z	failure
+609:995:141	45083876294	feat/multistop-rider-close-2026-11-20	2026-11-22T23:33:17Z	failure
+610:997:139	45065480752	feat/multistop-rider-close-2026-11-20	2026-11-22T20:16:18Z	failure
+611:998:138	45059405073	main	2026-11-22T19:12:09Z	failure
+612:999:137	45058950773	feat/multistop-rider-close-2026-11-20	2026-11-22T19:07:30Z	failure
+613:1000:136	45058861163	main	2026-11-22T19:06:36Z	failure
+614:1001:135	45051973500	feat/multistop-rider-close-2026-11-20	2026-11-22T17:53:37Z	failure
+615:1002:134	45046315983	feat/multistop-rider-close-2026-11-20	2026-11-22T16:53:15Z	failure
+616:1003:133	45038707024	feat/multistop-rider-close-2026-11-20	2026-11-22T15:30:42Z	failure
+617:1004:132	45015029022	feat/multistop-rider-close-2026-11-20	2026-11-22T10:58:58Z	failure
+618:1005:131	45004400552	feat/multistop-rider-close-2026-11-20	2026-11-22T08:46:55Z	failure
+619:1006:130	44927908295	feat/multistop-rider-close-2026-11-20	2026-11-21T17:03:12Z	failure
+646:148	45766646463	feat/multistop-e2e-2026-11-15	0cc7a5ca	2026-11-26T06:12:53Z	completed	failure	workflow_dispatch
+651:143	45100696324	feat/multistop-rider-close-2026-11-20	da9814d1	2026-11-23T02:31:24Z	completed	failure	workflow_dispatch
+694:e2e	failure
+706:   12. Build APK (staging, debug, même job, pas d'upload) -> failure
+730:152	45801376130	feat/multistop-e2e-2026-11-15	2026-11-26T10:26:37Z	failure
+731:151	45782061889	feat/multistop-e2e-2026-11-15	2026-11-26T08:18:31Z	failure
+732:150	45778554984	feat/multistop-e2e-2026-11-15	2026-11-26T07:52:21Z	failure
+733:149	45768119261	feat/multistop-e2e-2026-11-15	2026-11-26T06:25:42Z	failure
+734:148	45766646463	feat/multistop-e2e-2026-11-15	2026-11-26T06:12:53Z	failure
+739:143	45100696324	feat/multistop-rider-close-2026-11-20	2026-11-23T02:31:24Z	failure
+740:142	45093391102	feat/multistop-rider-close-2026-11-20	2026-11-23T01:14:06Z	failure
+741:141	45083876294	feat/multistop-rider-close-2026-11-20	2026-11-22T23:33:17Z	failure
+743:139	45065480752	feat/multistop-rider-close-2026-11-20	2026-11-22T20:16:18Z	failure
+744:138	45059405073	main	2026-11-22T19:12:09Z	failure
+745:137	45058950773	feat/multistop-rider-close-2026-11-20	2026-11-22T19:07:30Z	failure
+746:136	45058861163	main	2026-11-22T19:06:36Z	failure
+747:135	45051973500	feat/multistop-rider-close-2026-11-20	2026-11-22T17:53:37Z	failure
+748:134	45046315983	feat/multistop-rider-close-2026-11-20	2026-11-22T16:53:15Z	failure
+749:133	45038707024	feat/multistop-rider-close-2026-11-20	2026-11-22T15:30:42Z	failure
+750:132	45015029022	feat/multistop-rider-close-2026-11-20	2026-11-22T10:58:58Z	failure
+751:131	45004400552	feat/multistop-rider-close-2026-11-20	2026-11-22T08:46:55Z	failure
+752:130	44927908295	feat/multistop-rider-close-2026-11-20	2026-11-21T17:03:12Z	failure
+753:129	44923374283	feat/multistop-rider-close-2026-11-20	2026-11-21T16:13:25Z	failure
+754:128	44918419310	feat/multistop-rider-close-2026-11-20	2026-11-21T15:17:53Z	failure
+755:127	44912533775	feat/multistop-rider-close-2026-11-20	2026-11-21T14:10:17Z	failure
+756:126	44892375725	feat/multistop-rider-close-2026-11-20	2026-11-21T10:02:09Z	failure
+757:125	44887614661	feat/multistop-rider-close-2026-11-20	2026-11-21T09:01:50Z	failure
+758:124	44882204874	feat/multistop-rider-close-2026-11-20	2026-11-21T07:52:02Z	failure
+760:122	44872883866	feat/multistop-rider-close-2026-11-20	2026-11-21T05:52:27Z	failure
+761:121	44854550555	feat/multistop-rider-close-2026-11-20	2026-11-21T02:12:07Z	failure
+765:117	44832994441	main	2026-11-20T22:56:35Z	failure
+766:116	44824339856	main	2026-11-20T21:53:58Z	failure
+767:115	44815323242	main	2026-11-20T20:52:55Z	failure
+768:114	44796823364	fix/real-places	2026-11-20T18:52:16Z	failure
+769:113	44775318762	fix/real-places	2026-11-20T16:38:00Z	failure
+787:e2e	completed	failure
+790:e2e	completed	failure
+793:e2e	completed	failure
+955:960:   12. Build APK (staging, debug, même job, pas d'upload) -> failure
+979:1390:45847515781	FullRun build-forge-code rider-apk-gradle → Galass_Rider@build/rider-apk-gradle	FullRun build-forge-code rider-apk-gradle → Galass_Rider@build/rider-apk-gradle	2026-11-26T15:17:00Z	completed	failure
+980:1397:45845316555	FullRun build-forge-code rider-apk-gradle → Galass_Rider@build/rider-apk-gradle	FullRun build-forge-code rider-apk-gradle → Galass_Rider@build/rider-apk-gradle	2026-11-26T15:04:08Z	completed	failure
+1081:   - Conclusion : **failure**
+1083:-  - Step 12 Build APK : **failure** (`BUILD FAILED in 1m 9s`, `assembleDebug exit 1`, Gradle wrapper `src/rider/android/gradle/wrapper/gradle-wrapper.properties` — version mismatch 3.50.1 vs projet 3.44.8)
+1084:+   - Step 12 Build APK : **failure** (`BUILD FAILED in 1m 9s`, `assembleDebug exit 1`, message Gradle renvoyant au wrapper `src/rider/android/gradle/wrapper/gradle-wrapper.properties`). Le log authentifié montre `FLUTTER_ROOT=…/stable-3.50.1-x64` mais la sortie du build est tronquée par `tail -n 15` : cause exacte non déterminable ici.
+1107:+- Relevé API public `galass-emu-actions-pub/actions/workflows/artemis-staging-e2e.yml/runs` : **total_count 152**, plus récent #152 `45801376130` (2026-11-26T10:26:37Z, `failure`, `feat/multistop-e2e-2026-11-15` @ `81d149d4`). Aucun run nouveau depuis la dernière consignation : BLOCK confirmé, aucune capture/logcat device exploitable pour W0.
+1130:   - Conclusion : **failure**
+1132:-   - Step 12 Build APK : **failure** (`BUILD FAILED in 1m 9s`, `assembleDebug exit 1`, message Gradle renvoyant au wrapper `src/rider/android/gradle/wrapper/gradle-wrapper.properties`). Le log authentifié montre `FLUTTER_ROOT=…/stable-3.50.1-x64` mais la sortie du build est tronquée par `tail -n 15` : cause exacte non déterminable ici.
+1133:+  - Step 12 Build APK : **failure** (`BUILD FAILED in 1m 9s`, `assembleDebug exit 1`, message Gradle renvoyant au wrapper `src/rider/android/gradle/wrapper/gradle-wrapper.properties`). Le log authentifié montre `FLUTTER_ROOT=…/stable-3.50.1-x64` mais la sortie du build est tronquée par `tail -n 15` : cause exacte non déterminable ici.
+1167:🔍 ANALYSIS: Relevé API indépendant : `artemis-staging-e2e.yml` plafonne à 152 runs, le dernier étant #152 `45801376130` (10:26:37Z, `failure`, `feat/multistop-e2e-2026-11-15` @ `81d149d4`, https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/45801376130). Step 11 vert (478 tests), step 12 `Build APK` en échec (`assembleDebug exit 1`), steps 13–19 skippés ; aucun artefact `e2e-out/*`, `ui/*.xml` ni `smoke.log`. Les captures des runs #139/#141/#142/#143 sont sur des refs hors consigne et des points multistop → non réutilisables. Défaut découvert : la ligne Decisions du commit `5fbbcfad` avait été ajoutée hors ISATool, invalidant `isa_stamp` (`provenance-mismatch`, ISAGate en échec).
+1995:Artemis `45801376130` : étape unitaires VERTES ; **Build APK Rider** ROUGE — validation dépendances Android Flutter 3.50.1 refuse le toolchain Rider actuel :
+2525:- **Build/test local non exécuté** : `flutter build` / `gradlew` interdits sur la box (politique build). Validation attendue côté CI Artemis (Build APK Rider).
+2554:- **Aucun `flutter build` / `gradlew` exécuté localement** (interdit sur la box, politique build). Validation attendue côté CI Artemis (Build APK Rider).
+3261:- **Build/test local non exécuté** : `flutter build` / `gradlew` interdits sur la box (politique build). Validation attendue côté CI Artemis (Build APK Rider).
+3322:- **Build/test local non exécuté** : `flutter build` / `gradlew` interdits sur la box (politique build). Validation attendue côté CI Artemis (Build APK Rider).
+
