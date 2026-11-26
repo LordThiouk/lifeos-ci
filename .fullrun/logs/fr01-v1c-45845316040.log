@@ -1,0 +1,2580 @@
+
+> Forge · deepseek-v4.1-flash-free
+
+I'll read the prompt file first.
+→ Read /home/ubuntu/actions-runner-2/_work/_temp/oc/prompt.md
+
+$ ls /home/ubuntu/actions-runner-2/_work/_temp/ && ls /home/ubuntu/actions-runner-2/_work/_temp/oc/
+02834e47-ec5c-4ebf-b8d8-291bee7b81b3.sh
+1a794973-0612-43ff-9268-468370d63360.sh
+1b588518-0be0-4ca5-b8cc-2ee69acfdbcf.sh
+30f45a7c-4cf1-4368-8226-8553151af016.sh
+3d886da1-0f74-4c19-9dd3-e08dd45db736.sh
+4b2e4ed8-d9cb-46b6-b2ef-013ded9d08ed.sh
+649a7517-05fc-4ac8-92f1-ada8cfa9e8cd.sh
+734ad39e-a47c-4e1d-99b4-6d72b884de0f.sh
+816bbe7f-6efb-492f-bb6e-95199742e6e2.sh
+9d500282-437c-49a9-9e01-fde9b174816b.sh
+_github_workflow
+_runner_file_commands
+aceec95e-bef3-4d12-bbdf-df6ffc59e55f.sh
+age
+age.tgz
+b24123ba-4fde-4452-8b92-441da7084efa.sh
+bdfa5ccd-c798-4f25-960d-8a92fde033d0.sh
+dcf3e2a7-1ee8-4bbb-819c-e25da04b8a15.sh
+ed60f0cb-e0f1-497f-9ead-f57bbe99a395.sh
+gitleaks.tgz
+gl
+live.out
+npm-global
+oc
+oc-agent
+preflight.err
+preflight.json
+wip.out
+opencode.json
+opencode.log
+prompt.md
+
+$ pwd && ls -la && git status --short && git log --oneline -5 && git branch --show-current
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target
+total 204
+drwxr-xr-x 15 ubuntu ubuntu  4096 Nov 26 20:53 .
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 20:53 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:53 .archive
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 20:53 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 20:53 .git
+-rw-r--r--  1 ubuntu ubuntu    66 Nov 26 20:53 .gitattributes
+-rw-r--r--  1 ubuntu ubuntu  1079 Nov 26 20:53 .gitignore
+-rw-r--r--  1 ubuntu ubuntu  7714 Nov 26 20:53 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu 14109 Nov 26 20:53 CHANGELOG.md
+-rw-r--r--  1 ubuntu ubuntu    70 Nov 26 20:53 Gemfile
+-rw-r--r--  1 ubuntu ubuntu 15826 Nov 26 20:53 Gemfile.lock
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:53 MEMORY
+-rw-r--r--  1 ubuntu ubuntu  2970 Nov 26 20:53 README.md
+-rw-r--r--  1 ubuntu ubuntu  1662 Nov 26 20:53 analysis_options.yaml
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 20:53 android
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 20:53 assets
+-rw-r--r--  1 ubuntu ubuntu   392 Nov 26 20:53 dart_test.yaml
+-rw-r--r--  1 ubuntu ubuntu   184 Nov 26 20:53 devtools_options.yaml
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:53 docs
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:53 fastlane
+-rw-r--r--  1 ubuntu ubuntu   639 Nov 26 20:53 firebase.json
+drwxr-xr-x  7 ubuntu ubuntu  4096 Nov 26 20:53 ios
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 20:53 lib
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 20:53 prompts
+-rw-r--r--  1 ubuntu ubuntu 68359 Nov 26 20:53 pubspec.lock
+-rw-r--r--  1 ubuntu ubuntu  2856 Nov 26 20:53 pubspec.yaml
+drwxr-xr-x 10 ubuntu ubuntu  4096 Nov 26 20:53 test
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:53 tool
+81e7be9 fix(build): file_picker ^13.4.1 pour AGP 9 (FilePickerPlugin)
+590fe53 isa(driver): coche ISC-F5-15 (preuve flutter test 1/1 + goldens 5/5)
+3f120b4 wip(autosave): arbre de travail
+dbfd2ee fix(build): flutter_inappwebview 6.2.0-beta.3 (AGP 9 stack)
+7baf7d9 fix(build): override flutter_inappwebview_android 1.2.0-beta.3 (AGP 9)
+feat/multistop-e2e-2026-11-15
+
+$ ls test && echo "---" && find test -name "*.dart" | sort | head -80
+core
+data
+fixtures
+goldens
+helpers
+presentation
+tool
+unit
+---
+test/core/helper/dispatch_ride_id_test.dart
+test/core/helper/last_ping_store_test.dart
+test/core/helper/location_ping_policy_test.dart
+test/core/helper/location_ping_send_outcome_test.dart
+test/core/helper/money_submit_gate_test.dart
+test/core/helper/string_converter_xof_test.dart
+test/core/helper/xof_money_helper_test.dart
+test/data/controller/dashboard/dispatch_accept_navigation_test.dart
+test/data/controller/dashboard/dispatch_offer_implicit_decline_test.dart
+test/data/controller/dashboard/offer_respond_gone_test.dart
+test/data/controller/dashboard/pending_dispatch_poll_test.dart
+test/data/controller/driver_kyc_controller/driver_kyc_controller_test.dart
+test/data/controller/map/ride_map_driver_pickup_bounds_test.dart
+test/data/controller/map/ride_map_multistop_test.dart
+test/data/controller/pusher/global_pusher_debug_smoke_test.dart
+test/data/controller/ride/ride_details/ride_details_complete_stop_test.dart
+test/data/controller/ride/ride_details/ride_details_controller_lifecycle_test.dart
+test/data/controller/ride/ride_details/ride_details_start_ride_test.dart
+test/data/controller/ride/ride_meassage/ride_meassage_controller_test.dart
+test/data/controller/ride/ride_meassage/ride_message_getx_freshness_test.dart
+test/data/controller/vehicle_verification/vehicle_verification_controller_test.dart
+test/data/model/auth/firebase_auth/driver_firebase_auth_response_model_test.dart
+test/data/model/dashboard/dashboard_response_model_test.dart
+test/data/model/global/app/ride_meassage_model_test.dart
+test/data/model/global/user/global_user_model_test.dart
+test/data/model/ride/ride_meassage_response_list_test.dart
+test/data/repo/auth/firebase_auth_repo_test.dart
+test/data/repo/dashboard/dashboard_repo_offer_test.dart
+test/data/repo/driver_profile_verification/driver_kyc_repo_test.dart
+test/data/repo/ride/ride_repo_start_ride_test.dart
+test/data/repo/vehicle_verification/vehicle_verification_repo_test.dart
+test/data/services/android_dispatch_offer_test.dart
+test/data/services/api_client_multipart_test.dart
+test/data/services/api_client_session_test.dart
+test/data/services/dispatch_attempt_registry_test.dart
+test/data/services/dispatch_callkit_accept_regression_test.dart
+test/data/services/dispatch_callkit_background_handler_test.dart
+test/data/services/dispatch_callkit_params_test.dart
+test/data/services/dispatch_offer_56_test.dart
+test/data/services/dispatch_offer_57_test.dart
+test/data/services/dispatch_offer_58_test.dart
+test/data/services/dispatch_offer_59_security_test.dart
+test/data/services/dispatch_offer_60_fare_test.dart
+test/data/services/dispatch_offer_alert_service_test.dart
+test/data/services/dispatch_offer_headless_respond_test.dart
+test/data/services/dispatch_offer_ingress_test.dart
+test/data/services/dispatch_offer_notification_tap_test.dart
+test/data/services/dispatch_offer_presenter_test.dart
+test/data/services/fcm_navigation_non_blocking_test.dart
+test/data/services/parse_ride_from_fcm_test.dart
+test/data/services/push_notification_service_test.dart
+test/goldens/driver/fixtures/golden_fixtures.dart
+test/goldens/driver/harness/golden_harness.dart
+test/goldens/driver/home_golden_test.dart
+test/goldens/driver/review_golden_test.dart
+test/goldens/driver/ride_details_golden_test.dart
+test/helpers/recording_api_client.dart
+test/presentation/components/rounded_button_semantics_test.dart
+test/presentation/dispatch_lock_screen_guard_test.dart
+test/presentation/dispatch_offer_fare_modal_60_test.dart
+test/presentation/dispatch_offer_modal_alert_test.dart
+test/presentation/screens/auth/login/login_crashlytics_debug_panel_test.dart
+test/presentation/screens/inbox/ride_message_loader_logic_test.dart
+test/tool/bump_version_cli_test.dart
+test/tool/export_version_test.dart
+test/tool/hygiene_anti_test.dart
+test/tool/pubspec_version_test.dart
+test/tool/release_cli_test.dart
+test/unit/multistop_chat_ride_id_test.dart
+test/unit/multistop_complete_stop_test.dart
+test/unit/multistop_end_gate_test.dart
+test/unit/multistop_itinerary_test.dart
+test/unit/multistop_offer_summary_test.dart
+test/unit/multistop_pusher_test.dart
+test/unit/multistop_regression_test.dart
+test/unit/multistop_ride_model_test.dart
+test/unit/multistop_stops_progress_test.dart
+test/unit/multistop_strings_sweep_test.dart
+test/unit/pusher_cash_payment_request_test.dart
+
+$ find lib -name "*.dart" | sort | head -100 && echo "---" && find lib -name "*ride_map*" -o -name "*forground*" -o -name "*dashboard*" | sort
+lib/core/di_service/di_services.dart
+lib/core/firebase/crashlytics_debug.dart
+lib/core/firebase/firebase_bootstrap.dart
+lib/core/helper/date_converter.dart
+lib/core/helper/last_ping_store.dart
+lib/core/helper/location_ping_policy.dart
+lib/core/helper/server_rejection.dart
+lib/core/helper/shared_preference_helper.dart
+lib/core/helper/string_format_helper.dart
+lib/core/helper/xof_money_helper.dart
+lib/core/route/route.dart
+lib/core/theme/light/light.dart
+lib/core/utils/app_route_observer.dart
+lib/core/utils/app_status.dart
+lib/core/utils/audio_utils.dart
+lib/core/utils/debouncer.dart
+lib/core/utils/dimensions.dart
+lib/core/utils/helper.dart
+lib/core/utils/localization/localization_loader.dart
+lib/core/utils/localization/localization_merge.dart
+lib/core/utils/messages.dart
+lib/core/utils/method.dart
+lib/core/utils/my_animation.dart
+lib/core/utils/my_color.dart
+lib/core/utils/my_enums.dart
+lib/core/utils/my_icons.dart
+lib/core/utils/my_images.dart
+lib/core/utils/my_strings.dart
+lib/core/utils/style.dart
+lib/core/utils/ticket_helper.dart
+lib/core/utils/url_container.dart
+lib/core/utils/util.dart
+lib/data/controller/account/change_password_controller.dart
+lib/data/controller/account/profile_complete_controller.dart
+lib/data/controller/account/profile_controller.dart
+lib/data/controller/auth/auth/email_verification_controler.dart
+lib/data/controller/auth/auth/registration_controller.dart
+lib/data/controller/auth/auth/sms_verification_controler.dart
+lib/data/controller/auth/firebase_phone_auth_controller.dart
+lib/data/controller/auth/forget_password/forget_password_controller.dart
+lib/data/controller/auth/forget_password/reset_password_controller.dart
+lib/data/controller/auth/forget_password/verify_password_controller.dart
+lib/data/controller/auth/login_controller.dart
+lib/data/controller/auth/social_auth_controller.dart
+lib/data/controller/auth/two_factor_controller.dart
+lib/data/controller/common/theme_controller.dart
+lib/data/controller/dashboard/dashboard_controller.dart
+lib/data/controller/dashboard/ride_queue_manager.dart
+lib/data/controller/deposit/add_new_deposit_controller.dart
+lib/data/controller/deposit/deposit_history_controller.dart
+lib/data/controller/driver_and_vehicle_info/driver_and_vehicle_info_controller.dart
+lib/data/controller/driver_kyc_controller/driver_kyc_controller.dart
+lib/data/controller/faq_controller/faq_controller.dart
+lib/data/controller/localization/localization_controller.dart
+lib/data/controller/map/ride_map_controller.dart
+lib/data/controller/my_language_controller/my_language_controller.dart
+lib/data/controller/payment_history/payment_history_controller.dart
+lib/data/controller/privacy/privacy_controller.dart
+lib/data/controller/pusher/global_pusher_controller.dart
+lib/data/controller/pusher/pusher_ride_controller.dart
+lib/data/controller/review/review_controller.dart
+lib/data/controller/ride/all_ride/all_ride_controller.dart
+lib/data/controller/ride/ride_action/ride_action_controller.dart
+lib/data/controller/ride/ride_details/ride_details_controller.dart
+lib/data/controller/ride/ride_meassage/ride_meassage_controller.dart
+lib/data/controller/splash/splash_controller.dart
+lib/data/controller/support/new_ticket_controller.dart
+lib/data/controller/support/support_controller.dart
+lib/data/controller/support/ticket_details_controller.dart
+lib/data/controller/transaction/transactions_controller.dart
+lib/data/controller/vehicle_verification/vehicle_verification_controller.dart
+lib/data/controller/withdraw/add_new_withdraw_controller.dart
+lib/data/controller/withdraw/withdraw_confirm_controller.dart
+lib/data/controller/withdraw/withdraw_history_controller.dart
+lib/data/model/about/privacy_response_model.dart
+lib/data/model/auth/firebase_auth/driver_firebase_auth_response_model.dart
+lib/data/model/auth/login/login_response_model.dart
+lib/data/model/auth/sign_up_model/registration_response_model.dart
+lib/data/model/auth/sign_up_model/sign_up_model.dart
+lib/data/model/auth/verification/email_verification_model.dart
+lib/data/model/authorization/authorization_response_model.dart
+lib/data/model/country_model/country_model.dart
+lib/data/model/dashboard/dashboard_response_model.dart
+lib/data/model/deposit/deposit_history_response_model.dart
+lib/data/model/deposit/deposit_insert_response_model.dart
+lib/data/model/deposit/deposit_method_response_model.dart
+lib/data/model/dispatch/dispatch_offer_ingress_event.dart
+lib/data/model/faq_response_model.dart
+lib/data/model/general_setting/general_setting_response_model.dart
+lib/data/model/global/app/ride_meassage_model.dart
+lib/data/model/global/formdata/global_kyc_form_data.dart
+lib/data/model/global/meassage_model.dart
+lib/data/model/global/payment_method/app_payment_gateway.dart
+lib/data/model/global/payment_method/app_payment_method.dart
+lib/data/model/global/pusher/pusher_event_response_model.dart
+lib/data/model/global/response_model/response_model.dart
+lib/data/model/global/response_model/unverified_response_model.dart
+lib/data/model/global/ride/app_service_model.dart
+lib/data/model/global/ride/multistop_stop_sync.dart
+lib/data/model/global/ride/ride_event_merge.dart
+---
+lib/data/controller/dashboard
+lib/data/controller/dashboard/dashboard_controller.dart
+lib/data/controller/map/ride_map_controller.dart
+lib/data/model/dashboard
+lib/data/model/dashboard/dashboard_response_model.dart
+lib/data/repo/dashboard
+lib/data/repo/dashboard/dashboard_repo.dart
+lib/data/services/forground_location_service.dart
+lib/presentation/screens/dashboard
+lib/presentation/screens/dashboard/dashboard_background.dart
+lib/presentation/screens/dashboard/dashboard_screen.dart
+lib/presentation/screens/dashboard/forground_task_widget.dart
+
+→ Read lib/data/controller/map/ride_map_controller.dart
+
+$ which flutter dart; flutter --version 2>/dev/null | head -5
+/usr/local/bin/flutter
+/usr/local/bin/dart
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+
+→ Read lib/data/services/forground_location_service.dart
+→ Read lib/core/helper/location_ping_policy.dart
+→ Read lib/core/helper/last_ping_store.dart
+→ Read lib/data/repo/dashboard/dashboard_repo.dart
+→ Read lib/data/controller/dashboard/dashboard_controller.dart
+→ Read lib/data/controller/ride/ride_details/ride_details_controller.dart
+
+$ find lib -name "home_screen.dart" -o -name "poly_line_map.dart" -o -name "ride_details_screen.dart" | sort
+lib/presentation/screens/ride_details/ride_details_screen.dart
+lib/presentation/screens/ride_details/widgets/poly_line_map.dart
+lib/presentation/screens/rides/home_screen/home_screen.dart
+
+$ grep -rn "getPositionStream\|StreamSubscription\|Geolocator" lib --include=*.dart | head -40
+lib/data/controller/map/ride_map_controller.dart:445:      final pos = await Geolocator.getCurrentPosition(
+lib/data/controller/dashboard/dashboard_controller.dart:123:      final GeolocatorPlatform geolocator = GeolocatorPlatform.instance;
+lib/data/controller/dashboard/dashboard_controller.dart:158:      final moved = Geolocator.distanceBetween(
+lib/data/services/dispatch_callkit_service.dart:321:  static StreamSubscription<CallEvent?>? _subscription;
+lib/data/services/forground_location_service.dart:16:  StreamSubscription<Position>? _positionStream;
+lib/data/services/forground_location_service.dart:79:      _positionStream = Geolocator.getPositionStream(
+lib/data/services/forground_location_service.dart:165:        position = await Geolocator.getLastKnownPosition();
+lib/core/utils/util.dart:200:    if (!await Geolocator.isLocationServiceEnabled()) {
+lib/core/utils/util.dart:206:    LocationPermission permission = await Geolocator.checkPermission();
+lib/core/utils/util.dart:232:        permission = await Geolocator.requestPermission().timeout(const Duration(seconds: 30));
+lib/core/utils/util.dart:420:    Position position = await Geolocator.getCurrentPosition(
+lib/presentation/screens/rides/home_screen/home_screen.dart:31:  StreamSubscription<Position>? _positionStreamSubscription;
+lib/presentation/screens/rides/home_screen/home_screen.dart:79:    _positionStreamSubscription?.cancel();
+lib/presentation/screens/rides/home_screen/home_screen.dart:224:    final position = await Geolocator.getCurrentPosition(
+lib/presentation/screens/rides/home_screen/home_screen.dart:243:    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+lib/presentation/screens/rides/home_screen/home_screen.dart:246:    LocationPermission permission = await Geolocator.checkPermission();
+lib/presentation/screens/rides/home_screen/home_screen.dart:248:      permission = await Geolocator.requestPermission();
+lib/presentation/screens/rides/home_screen/home_screen.dart:273:    _positionStreamSubscription?.cancel();
+lib/presentation/screens/rides/home_screen/home_screen.dart:274:    _positionStreamSubscription = null;
+lib/presentation/screens/rides/home_screen/home_screen.dart:279:    if (_positionStreamSubscription != null) return;
+lib/presentation/screens/rides/home_screen/home_screen.dart:360:    _positionStreamSubscription?.cancel();
+lib/presentation/screens/rides/home_screen/home_screen.dart:365:      final position = await Geolocator.getCurrentPosition(
+lib/presentation/screens/rides/home_screen/home_screen.dart:376:    _positionStreamSubscription = Geolocator.getPositionStream(
+lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:44:    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:52:    final permission = await Geolocator.checkPermission();
+lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:67:        await Geolocator.openLocationSettings();
+lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:69:        await Geolocator.openAppSettings();
+lib/presentation/screens/dashboard/forground_task_widget.dart:90:    final permission = await Geolocator.checkPermission();
+
+→ Read lib/presentation/screens/rides/home_screen/home_screen.dart [limit=140]
+→ Read lib/presentation/screens/rides/home_screen/home_screen.dart [offset=340, limit=80]
+→ Read lib/presentation/screens/ride_details/widgets/poly_line_map.dart
+→ Read lib/presentation/screens/ride_details/ride_details_screen.dart
+→ Read test/data/controller/map/ride_map_multistop_test.dart
+→ Read test/data/controller/map/ride_map_driver_pickup_bounds_test.dart
+→ Read lib/core/utils/url_container.dart
+
+$ grep -n "driverLocationUpdate\|mapDefaultZoom\|driverLocation" lib/environment.dart
+8:  static const int driverLocationUpdateAfterNmetersOrMovements = 50; //Driver location update after n meters or movements
+9:  static const int driverLocationUpdateMaxIntervalSeconds = 30; //Max seconds between GPS pings when online
+26:  static const double mapDefaultZoom = 20;
+
+→ Read test/helpers/recording_api_client.dart
+→ Read lib/core/utils/app_status.dart
+
+$ grep -rn "CameraUpdate" ~/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-*/lib/src/types/camera.dart 2>/dev/null | head; ls ~/.pub-cache/hosted/pub.dev/ | grep google_maps
+ls: cannot access '/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/': No such file or directory
+
+$ grep -n "markerCar\|marker_car" lib/core/utils/my_icons.dart; grep -n "class RideRepo" -A 15 lib/data/repo/ride/ride_repo.dart; grep -n "apiClient" lib/data/repo/ride/ride_repo.dart | head -5
+5:  static const String markerCar = "assets/icon/marker_car.png"; // marker_car.png
+9:class RideRepo {
+10-  ApiClient apiClient;
+11-  RideRepo({required this.apiClient});
+12-
+13-  Future<ResponseModel> getRideDetails(String id) async {
+14-    String url = "${UrlContainer.baseUrl}${UrlContainer.rideDetails}/$id";
+15-    ResponseModel responseModel = await apiClient.request(
+16-      url,
+17-      Method.getMethod,
+18-      null,
+19-      passHeader: true,
+20-    );
+21-    return responseModel;
+22-  }
+23-
+24-  Future<ResponseModel> getRideList({
+10:  ApiClient apiClient;
+11:  RideRepo({required this.apiClient});
+15:    ResponseModel responseModel = await apiClient.request(
+30:    ResponseModel responseModel = await apiClient.request(
+41:    ResponseModel responseModel = await apiClient.request(
+
+$ grep -n "google_maps_flutter" pubspec.yaml pubspec.lock | head -20; grep -rn "Position(" test lib --include=*.dart | head
+pubspec.yaml:37:  google_maps_flutter: ^2.17.0
+pubspec.lock:906:  google_maps_flutter:
+pubspec.lock:909:      name: google_maps_flutter
+pubspec.lock:914:  google_maps_flutter_android:
+pubspec.lock:917:      name: google_maps_flutter_android
+pubspec.lock:922:  google_maps_flutter_ios:
+pubspec.lock:925:      name: google_maps_flutter_ios
+pubspec.lock:930:  google_maps_flutter_platform_interface:
+pubspec.lock:933:      name: google_maps_flutter_platform_interface
+pubspec.lock:938:  google_maps_flutter_web:
+pubspec.lock:941:      name: google_maps_flutter_web
+lib/data/controller/map/ride_map_controller.dart:144:  void animateMapCameraPosition() {
+lib/data/controller/map/ride_map_controller.dart:146:      CameraUpdate.newCameraPosition(
+lib/data/controller/map/ride_map_controller.dart:147:        CameraPosition(
+lib/data/controller/map/ride_map_controller.dart:250:            CameraUpdate.newCameraPosition(
+lib/data/controller/map/ride_map_controller.dart:251:              CameraPosition(
+lib/data/controller/map/ride_map_controller.dart:276:                    CameraUpdate.newCameraPosition(
+lib/data/controller/map/ride_map_controller.dart:277:                      CameraPosition(
+lib/data/controller/map/ride_map_controller.dart:302:              CameraUpdate.newCameraPosition(
+lib/data/controller/map/ride_map_controller.dart:303:                CameraPosition(
+lib/data/controller/map/ride_map_controller.dart:332:          CameraUpdate.newCameraPosition(
+
+$ echo $HOME; ls ~/.pub-cache/hosted/pub.dev 2>/dev/null | head; find / -maxdepth 6 -type d -name "google_maps_flutter_platform_interface-*" 2>/dev/null | head
+/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home
+
+$ env | grep -i "pub\|flutter\|home" | head -20; ls /home/ubuntu/.pub-cache/hosted/pub.dev 2>/dev/null | head; find /home/ubuntu -maxdepth 5 -type d -name "google_maps_flutter_platform_interface-*" 2>/dev/null | head
+PWD=/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target
+HOME=/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home
+TMPDIR=/home/ubuntu/actions-runner-2/_work/_temp/oc-agent
+OPENCODE_CONFIG=/home/ubuntu/actions-runner-2/_work/_temp/oc/opencode.json
+_fe_analyzer_shared-82.0.0
+analyzer-7.4.5
+archive-3.6.1
+args-2.7.0
+async-2.13.0
+boolean_selector-2.1.2
+browser_launcher-1.1.3
+built_collection-5.1.1
+built_value-8.10.1
+checked_yaml-2.0.4
+
+$ ls /home/ubuntu/.pub-cache/hosted/pub.dev | grep google_maps; sed -n '1,80p' /home/ubuntu/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-*/lib/src/types/camera.dart 2>/dev/null | head -100
+(no output)
+
+$ ls -la .dart_tool 2>/dev/null | head; grep -o '"name": "google_maps_flutter[^"]*"[^}]*' .dart_tool/package_config.json 2>/dev/null | head; ls /home/ubuntu/.pub-cache/hosted/pub.dev | wc -l
+100
+
+$ ls /home/ubuntu/.pub-cache/hosted/pub.dev | grep -E "geolocator|google_maps|get-|flutter_foreground" | head -20
+(no output)
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && timeout 300 flutter pub get 2>&1 | tail -30
+Resolving dependencies...
+The current Dart SDK version is 3.9.2.
+
+Because galass_driver depends on timezone 0.11.0 which requires SDK version ^3.10.0, version solving failed.
+Failed to update packages.
+
+$ grep -n "timezone\|sdk:" pubspec.yaml | head; cat /usr/local/bin/flutter 2>/dev/null | head -5; ls -la /usr/local/bin/flutter
+9:  sdk: '>=3.5.0 <4.0.0'
+23:    sdk: flutter
+56:  timezone: 0.11.0
+68:    sdk: flutter
+#!/usr/bin/env bash
+# Copyright 2014 The Flutter Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+lrwxrwxrwx 1 root root 24 Nov 26 07:05 /usr/local/bin/flutter -> /opt/flutter/bin/flutter
+
+$ ls /usr/local/bin | grep -i flutter; ls /opt 2>/dev/null; ls /home/ubuntu 2>/dev/null; which fvm 2>/dev/null; ls /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/ 2>/dev/null
+flutter
+cursor
+flutter
+fullrun-live
+fullrun-tools
+fullrun-wip
+google
+lifeos-ci-state
+lifeos-ci-tools
+actions-runner
+actions-runner-2
+actions-runner-3
+go
+ci
+extra
+lifeos
+target
+
+$ ls -la /opt; echo ---; ls -la /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/; echo ---; ls -la /home/ubuntu/actions-runner-2/_work/lifeos-ci/ 2>/dev/null
+total 40
+drwxr-xr-x. 10 root   root   4096 Nov 26 18:20 .
+drwxr-xr-x. 25 root   root   4096 Nov 26 04:55 ..
+drwxrwxrwx.  7 root   root   4096 Nov 26 10:45 cursor
+drwxr-xr-x  13 ubuntu ubuntu 4096 Nov 26 07:05 flutter
+drwxr-xr-x   6 root   root   4096 Nov 26 20:55 fullrun-live
+drwxr-xr-x   5 root   root   4096 Nov 26 20:53 fullrun-tools
+drwxr-xr-x   5 root   root   4096 Nov 26 20:54 fullrun-wip
+drwxr-xr-x.  3 root   root   4096 Nov 11 01:54 google
+drwxr-xr-x   5 root   root   4096 Nov 26 20:53 lifeos-ci-state
+drwxr-xr-x   7 root   root   4096 Nov 26 20:53 lifeos-ci-tools
+---
+total 24
+drwxr-xr-x  6 ubuntu ubuntu 4096 Nov 26 20:53 .
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 15:06 ..
+drwxr-xr-x  8 ubuntu ubuntu 4096 Nov 26 15:06 ci
+drwxr-xr-x  4 ubuntu ubuntu 4096 Nov 26 19:09 extra
+dr-xr-xr-x 16 ubuntu ubuntu 4096 Nov 26 20:53 lifeos
+drwxr-xr-x 15 ubuntu ubuntu 4096 Nov 26 20:53 target
+---
+total 12
+drwxr-xr-x 3 ubuntu ubuntu 4096 Nov 26 15:06 .
+drwxr-xr-x 7 ubuntu ubuntu 4096 Nov 26 20:53 ..
+drwxr-xr-x 6 ubuntu ubuntu 4096 Nov 26 20:53 lifeos-ci
+
+$ cat /opt/flutter/version 2>/dev/null; ls /opt/flutter/bin/cache/dart-sdk/version 2>/dev/null && cat /opt/flutter/bin/cache/dart-sdk/version; find / -maxdepth 4 -name "flutter" -type d 2>/dev/null | head
+3.35.6/opt/flutter/bin/cache/dart-sdk/version
+3.9.2
+/opt/flutter
+/opt/flutter/packages/flutter
+/tmp/flutter_sdk/flutter
+/tmp/flutter
+/tmp/flutter/packages/flutter
+/home/ubuntu/.config/flutter
+
+$ for f in /tmp/flutter_sdk/flutter /tmp/flutter; do echo "== $f"; cat $f/version 2>/dev/null; cat $f/bin/cache/dart-sdk/version 2>/dev/null; done; ls -la /tmp/flutter_sdk 2>/dev/null
+== /tmp/flutter_sdk/flutter
+3.14.0
+== /tmp/flutter
+3.14.0
+total 1482868
+drwxr-xr-x   3 ubuntu ubuntu       4096 Nov 26 20:25 .
+drwxrwxrwt. 49 root   root        20480 Nov 26 20:55 ..
+drwxr-xr-x  19 ubuntu ubuntu       4096 Nov 26 20:26 flutter
+-rw-r--r--   1 ubuntu ubuntu 1518418752 Nov 26 20:25 flutter3501.tar.xz
+
+$ ls /tmp/flutter_sdk/flutter/bin/cache/dart-sdk 2>/dev/null | head; cat /tmp/flutter_sdk/flutter/bin/cache/dart-sdk/version 2>/dev/null; git -C /tmp/flutter_sdk/flutter describe --tags 2>/dev/null; /tmp/flutter_sdk/flutter/bin/flutter --version 2>&1 | head -5
+LICENSE
+README
+bin
+dartdoc_options.yaml
+include
+lib
+revision
+sdk_packages.yaml
+version
+3.14.0
+3.50.1
+Flutter 3.50.1 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision ae9b586f34 (8 days ago) • 2026-11-18 17:01:07 -0800
+Engine • hash 51379e6df48ea8ee7205623b90fe66491cad8df3 (revision 4d35714800) (8 days ago) • 2026-11-18 01:50:07.000Z
+Tools • Dart 3.14.0 • DevTools 2.61.0
+The Flutter CLI developer tool uses Google Analytics to report usage and diagnostic
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && timeout 600 /tmp/flutter_sdk/flutter/bin/flutter pub get 2>&1 | tail -20
+Resolving dependencies...
+Because no versions of device_info_plus match >12.4.0 <13.0.0 and device_info_plus 12.4.0 depends on win32 ^5.11.0, device_info_plus ^12.4.0 requires win32 ^5.11.0.
+And because file_picker >=13.3.3 depends on windows_file_picker ^2.0.2 which depends on win32 ^6.3.0, device_info_plus ^12.4.0 is incompatible with file_picker >=13.3.3.
+So, because galass_driver depends on both file_picker ^13.4.1 and device_info_plus ^12.4.0, version solving failed.
+
+
+You can try one of the following suggestions to make the pubspec resolve:
+* Try upgrading your constraint on device_info_plus: flutter pub add device_info_plus:^13.3.0
+* Consider downgrading your constraint on file_picker: flutter pub add file_picker:^11.0.2
+Failed to update packages.
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && for p in device_info_plus file_picker windows_file_picker win32; do echo "== $p"; awk -v pkg="  $p:" 'BEGIN{f=0} $0==pkg{f=1} f{print} f&&/^$/{exit}' pubspec.lock; done
+...output truncated...
+
+Full output saved to: /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.local/share/opencode/tool-output/tool_219a44a31001Q0rNLux3m24QIj
+
+    description:
+      name: flutter_rating_bar
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
+  flutter_secure_storage:
+    dependency: "direct main"
+    description:
+      name: flutter_secure_storage
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.3.1"
+  flutter_secure_storage_darwin:
+    dependency: transitive
+    description:
+      name: flutter_secure_storage_darwin
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.2"
+  flutter_secure_storage_linux:
+    dependency: transitive
+    description:
+      name: flutter_secure_storage_linux
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
+  flutter_secure_storage_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_secure_storage_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
+  flutter_secure_storage_web:
+    dependency: transitive
+    description:
+      name: flutter_secure_storage_web
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
+  flutter_secure_storage_windows:
+    dependency: transitive
+    description:
+      name: flutter_secure_storage_windows
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
+  flutter_shaders:
+    dependency: transitive
+    description:
+      name: flutter_shaders
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.3"
+  flutter_spinkit:
+    dependency: "direct main"
+    description:
+      name: flutter_spinkit
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.2"
+  flutter_svg:
+    dependency: "direct main"
+    description:
+      name: flutter_svg
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
+  flutter_test:
+    dependency: "direct dev"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  flutter_widget_from_html:
+    dependency: "direct main"
+    description:
+      name: flutter_widget_from_html
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.17.2"
+  flutter_widget_from_html_core:
+    dependency: transitive
+    description:
+      name: flutter_widget_from_html_core
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.17.2"
+  frontend_server_client:
+    dependency: transitive
+    description:
+      name: frontend_server_client
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
+  fwfh_cached_network_image:
+    dependency: transitive
+    description:
+      name: fwfh_cached_network_image
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.16.1"
+  fwfh_chewie:
+    dependency: transitive
+    description:
+      name: fwfh_chewie
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.16.1"
+  fwfh_just_audio:
+    dependency: transitive
+    description:
+      name: fwfh_just_audio
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.17.0"
+  fwfh_svg:
+    dependency: transitive
+    description:
+      name: fwfh_svg
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.16.1"
+  fwfh_url_launcher:
+    dependency: transitive
+    description:
+      name: fwfh_url_launcher
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.16.1"
+  fwfh_webview:
+    dependency: transitive
+    description:
+      name: fwfh_webview
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.15.7"
+  galass_driver_tool:
+    dependency: "direct dev"
+    description:
+      path: tool
+      relative: true
+    source: path
+    version: "0.0.0"
+  geoclue:
+    dependency: transitive
+    description:
+      name: geoclue
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
+  geocoding:
+    dependency: "direct main"
+    description:
+      name: geocoding
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
+  geocoding_android:
+    dependency: transitive
+    description:
+      name: geocoding_android
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
+  geocoding_ios:
+    dependency: transitive
+    description:
+      name: geocoding_ios
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
+  geocoding_platform_interface:
+    dependency: transitive
+    description:
+      name: geocoding_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
+  geolocator:
+    dependency: "direct main"
+    description:
+      name: geolocator
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "14.0.2"
+  geolocator_android:
+    dependency: transitive
+    description:
+      name: geolocator_android
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.2"
+  geolocator_apple:
+    dependency: transitive
+    description:
+      name: geolocator_apple
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.13"
+  geolocator_linux:
+    dependency: transitive
+    description:
+      name: geolocator_linux
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.4"
+  geolocator_platform_interface:
+    dependency: transitive
+    description:
+      name: geolocator_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.6"
+  geolocator_web:
+    dependency: transitive
+    description:
+      name: geolocator_web
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.3"
+  geolocator_windows:
+    dependency: transitive
+    description:
+      name: geolocator_windows
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.5"
+  get:
+    dependency: "direct main"
+    description:
+      name: get
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.7.3"
+  glob:
+    dependency: transitive
+    description:
+      name: glob
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.3"
+  golden_toolkit:
+    dependency: "direct dev"
+    description:
+      name: golden_toolkit
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.15.0"
+  google_identity_services_web:
+    dependency: transitive
+    description:
+      name: google_identity_services_web
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.3+1"
+  google_maps:
+    dependency: transitive
+    description:
+      name: google_maps
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.2.0"
+  google_maps_flutter:
+    dependency: "direct main"
+    description:
+      name: google_maps_flutter
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.17.1"
+  google_maps_flutter_android:
+    dependency: transitive
+    description:
+      name: google_maps_flutter_android
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.19.10"
+  google_maps_flutter_ios:
+    dependency: transitive
+    description:
+      name: google_maps_flutter_ios
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.18.3"
+  google_maps_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: google_maps_flutter_platform_interface
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.15.0"
+  google_maps_flutter_web:
+    dependency: transitive
+    description:
+      name: google_maps_flutter_web
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.2+3"
+  google_sign_in:
+    dependency: "direct main"
+    description:
+      name: google_sign_in
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.2.0"
+  google_sign_in_android:
+    dependency: transitive
+    description:
+      name: google_sign_in_android
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.2.11"
+  google_sign_in_ios:
+    dependency: transitive
+    description:
+      name: google_sign_in_ios
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.3.0"
+  google_sign_in_platform_interface:
+    dependency: transitive
+    description:
+      name: google_sign_in_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
+  google_sign_in_web:
+    dependency: transitive
+    description:
+      name: google_sign_in_web
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.3"
+  gsettings:
+    dependency: transitive
+    description:
+      name: gsettings
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.8"
+  hooks:
+    dependency: transitive
+    description:
+      name: hooks
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
+  html:
+    dependency: transitive
+    description:
+      name: html
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.15.6"
+  http:
+    dependency: transitive
+    description:
+      name: http
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.0"
+  http_multi_server:
+    dependency: transitive
+    description:
+      name: http_multi_server
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.2"
+  http_parser:
+    dependency: transitive
+    description:
+      name: http_parser
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.2"
+  image:
+    dependency: transitive
+    description:
+      name: image
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.8.0"
+  image_gallery_saver_plus:
+    dependency: "direct main"
+    description:
+      name: image_gallery_saver_plus
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
+  image_picker:
+    dependency: "direct main"
+    description:
+      name: image_picker
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
+  image_picker_android:
+    dependency: transitive
+    description:
+      name: image_picker_android
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.13+17"
+  image_picker_for_web:
+    dependency: transitive
+    description:
+      name: image_picker_for_web
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
+  image_picker_ios:
+    dependency: transitive
+    description:
+      name: image_picker_ios
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.13+6"
+  image_picker_linux:
+    dependency: transitive
+    description:
+      name: image_picker_linux
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
+  image_picker_macos:
+    dependency: transitive
+    description:
+      name: image_picker_macos
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2+1"
+  image_picker_platform_interface:
+    dependency: transitive
+    description:
+      name: image_picker_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.11.1"
+  image_picker_windows:
+    dependency: transitive
+    description:
+      name: image_picker_windows
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.2"
+  in_app_review:
+    dependency: "direct main"
+    description:
+      name: in_app_review
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.12"
+  in_app_review_platform_interface:
+    dependency: transitive
+    description:
+      name: in_app_review_platform_interface
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.20.2"
+  io:
+    dependency: transitive
+    description:
+      name: io
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
+  jni:
+    dependency: transitive
+    description:
+      name: jni
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  jni_flutter:
+    dependency: transitive
+    description:
+      name: jni_flutter
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.2"
+  json_annotation:
+    dependency: transitive
+    description:
+      name: json_annotation
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.12.0"
+  just_audio:
+    dependency: "direct main"
+    description:
+      name: just_audio
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.5"
+  just_audio_platform_interface:
+    dependency: transitive
+    description:
+      name: just_audio_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.6.0"
+  just_audio_web:
+    dependency: transitive
+    description:
+      name: just_audio_web
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.16"
+  leak_tracker:
+    dependency: transitive
+    description:
+      name: leak_tracker
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.0.2"
+  leak_tracker_flutter_testing:
+    dependency: transitive
+    description:
+      name: leak_tracker_flutter_testing
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.10"
+  leak_tracker_testing:
+    dependency: transitive
+    description:
+      name: leak_tracker_testing
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.2"
+  lints:
+    dependency: transitive
+    description:
+      name: lints
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.0"
+  listen:
+    dependency: transitive
+    description:
+      name: listen
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  logger:
+    dependency: "direct main"
+    description:
+      name: logger
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.0"
+  logging:
+    dependency: transitive
+    description:
+      name: logging
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.0"
+  lottie:
+    dependency: "direct main"
+    description:
+      name: lottie
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.3.3"
+  matcher:
+    dependency: transitive
+    description:
+      name: matcher
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.12.20"
+  material_color_utilities:
+    dependency: transitive
+    description:
+      name: material_color_utilities
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.13.0"
+  meta:
+    dependency: transitive
+    description:
+      name: meta
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.19.0"
+  mime:
+    dependency: transitive
+    description:
+      name: mime
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  nm:
+    dependency: transitive
+    description:
+      name: nm
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.0"
+  node_preamble:
+    dependency: transitive
+    description:
+      name: node_preamble
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
+  objective_c:
+    dependency: transitive
+    description:
+      name: objective_c
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.4.1"
+  octo_image:
+    dependency: transitive
+    description:
+      name: octo_image
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  open_file:
+    dependency: "direct main"
+    description:
+      name: open_file
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.11"
+  open_file_android:
+    dependency: transitive
+    description:
+      name: open_file_android
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.6"
+  open_file_ios:
+    dependency: transitive
+    description:
+      name: open_file_ios
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
+  open_file_linux:
+    dependency: transitive
+    description:
+      name: open_file_linux
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
+  open_file_mac:
+    dependency: transitive
+    description:
+      name: open_file_mac
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
+  open_file_platform_interface:
+    dependency: transitive
+    description:
+      name: open_file_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
+  open_file_web:
+    dependency: transitive
+    description:
+      name: open_file_web
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
+  open_file_windows:
+    dependency: transitive
+    description:
+      name: open_file_windows
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
+  package_config:
+    dependency: transitive
+    description:
+      name: package_config
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
+  package_info_plus:
+    dependency: transitive
+    description:
+      name: package_info_plus
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.0.1"
+  package_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: package_info_plus_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.1"
+  path:
+    dependency: transitive
+    description:
+      name: path
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.9.1"
+  path_parsing:
+    dependency: transitive
+    description:
+      name: path_parsing
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+  path_provider:
+    dependency: "direct main"
+    description:
+      name: path_provider
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.5"
+  path_provider_android:
+    dependency: transitive
+    description:
+      name: path_provider_android
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.1"
+  path_provider_foundation:
+    dependency: transitive
+    description:
+      name: path_provider_foundation
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.0"
+  path_provider_linux:
+    dependency: transitive
+    description:
+      name: path_provider_linux
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
+  path_provider_platform_interface:
+    dependency: transitive
+    description:
+      name: path_provider_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
+  path_provider_windows:
+    dependency: transitive
+    description:
+      name: path_provider_windows
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
+  pausable_timer:
+    dependency: transitive
+    description:
+      name: pausable_timer
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0+3"
+  permission_handler:
+    dependency: "direct main"
+    description:
+      name: permission_handler
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.0.3"
+  permission_handler_android:
+    dependency: transitive
+    description:
+      name: permission_handler_android
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "13.0.1"
+  permission_handler_apple:
+    dependency: transitive
+    description:
+      name: permission_handler_apple
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.4.9"
+  permission_handler_html:
+    dependency: transitive
+    description:
+      name: permission_handler_html
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.3+5"
+  permission_handler_platform_interface:
+    dependency: transitive
+    description:
+      name: permission_handler_platform_interface
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.0"
+  permission_handler_windows:
+    dependency: transitive
+    description:
+      name: permission_handler_windows
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
+  petitparser:
+    dependency: transitive
+    description:
+      name: petitparser
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.2"
+  pinput:
+    dependency: "direct main"
+    description:
+      name: pinput
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.2"
+  platform:
+    dependency: transitive
+    description:
+      name: platform
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.6"
+  plugin_platform_interface:
+    dependency: transitive
+    description:
+      name: plugin_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.8"
+  pool:
+    dependency: transitive
+    description:
+      name: pool
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.2"
+  posix:
+    dependency: transitive
+    description:
+      name: posix
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.5.0"
+  provider:
+    dependency: transitive
+    description:
+      name: provider
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.5+1"
+  pub_semver:
+    dependency: transitive
+    description:
+      name: pub_semver
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
+  pusher_channels_flutter:
+    dependency: "direct main"
+    description:
+      name: pusher_channels_flutter
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.0"
+  record_use:
+    dependency: transitive
+    description:
+      name: record_use
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.0"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.28.0"
+  sanitize_html:
+    dependency: transitive
+    description:
+      name: sanitize_html
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  shared_preferences:
+    dependency: "direct main"
+    description:
+      name: shared_preferences
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.5"
+  shared_preferences_android:
+    dependency: transitive
+    description:
+      name: shared_preferences_android
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.23"
+  shared_preferences_foundation:
+    dependency: transitive
+    description:
+      name: shared_preferences_foundation
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.6"
+  shared_preferences_linux:
+    dependency: transitive
+    description:
+      name: shared_preferences_linux
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
+  shared_preferences_platform_interface:
+    dependency: transitive
+    description:
+      name: shared_preferences_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.2"
+  shared_preferences_web:
+    dependency: transitive
+    description:
+      name: shared_preferences_web
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.3"
+  shared_preferences_windows:
+    dependency: transitive
+    description:
+      name: shared_preferences_windows
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
+  shelf:
+    dependency: transitive
+    description:
+      name: shelf
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.2"
+  shelf_packages_handler:
+    dependency: transitive
+    description:
+      name: shelf_packages_handler
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.2"
+  shelf_static:
+    dependency: transitive
+    description:
+      name: shelf_static
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.3"
+  shelf_web_socket:
+    dependency: transitive
+    description:
+      name: shelf_web_socket
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  shimmer:
+    dependency: "direct main"
+    description:
+      name: shimmer
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  sign_in_with_apple:
+    dependency: "direct main"
+    description:
+      name: sign_in_with_apple
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.1.0"
+  sign_in_with_apple_platform_interface:
+    dependency: transitive
+    description:
+      name: sign_in_with_apple_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
+  sign_in_with_apple_web:
+    dependency: transitive
+    description:
+      name: sign_in_with_apple_web
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  sky_engine:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  source_map_stack_trace:
+    dependency: transitive
+    description:
+      name: source_map_stack_trace
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
+  source_maps:
+    dependency: transitive
+    description:
+      name: source_maps
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.13"
+  source_span:
+    dependency: transitive
+    description:
+      name: source_span
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.10.2"
+  sqflite:
+    dependency: transitive
+    description:
+      name: sqflite
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.2+1"
+  sqflite_android:
+    dependency: transitive
+    description:
+      name: sqflite_android
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.2+3"
+  sqflite_common:
+    dependency: transitive
+    description:
+      name: sqflite_common
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.8"
+  sqflite_darwin:
+    dependency: transitive
+    description:
+      name: sqflite_darwin
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.2"
+  sqflite_platform_interface:
+    dependency: transitive
+    description:
+      name: sqflite_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
+  stack_trace:
+    dependency: transitive
+    description:
+      name: stack_trace
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.12.2"
+  stream_channel:
+    dependency: transitive
+    description:
+      name: stream_channel
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.4"
+  stream_transform:
+    dependency: transitive
+    description:
+      name: stream_transform
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
+  string_scanner:
+    dependency: transitive
+    description:
+      name: string_scanner
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.1"
+  synchronized:
+    dependency: transitive
+    description:
+      name: synchronized
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.0+1"
+  term_glyph:
+    dependency: transitive
+    description:
+      name: term_glyph
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
+  test:
+    dependency: "direct dev"
+    description:
+      name: test
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.32.0"
+  test_api:
+    dependency: transitive
+    description:
+      name: test_api
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.14"
+  test_core:
+    dependency: transitive
+    description:
+      name: test_core
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.20"
+  timelines_plus:
+    dependency: "direct main"
+    description:
+      name: timelines_plus
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
+  timezone:
+    dependency: "direct main"
+    description:
+      name: timezone
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.11.0"
+  toastification:
+    dependency: "direct main"
+    description:
+      name: toastification
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
+  typed_data:
+    dependency: transitive
+    description:
+      name: typed_data
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
+  url_launcher:
+    dependency: "direct main"
+    description:
+      name: url_launcher
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.3.2"
+  url_launcher_android:
+    dependency: transitive
+    description:
+      name: url_launcher_android
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.3.30"
+  url_launcher_ios:
+    dependency: transitive
+    description:
+      name: url_launcher_ios
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.4.1"
+  url_launcher_linux:
+    dependency: transitive
+    description:
+      name: url_launcher_linux
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.2"
+  url_launcher_macos:
+    dependency: transitive
+    description:
+      name: url_launcher_macos
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.5"
+  url_launcher_platform_interface:
+    dependency: transitive
+    description:
+      name: url_launcher_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.2"
+  url_launcher_web:
+    dependency: transitive
+    description:
+      name: url_launcher_web
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.3"
+  url_launcher_windows:
+    dependency: transitive
+    description:
+      name: url_launcher_windows
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.5"
+  uuid:
+    dependency: transitive
+    description:
+      name: uuid
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.6.0"
+  vector_graphics:
+    dependency: transitive
+    description:
+      name: vector_graphics
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.2"
+  vector_graphics_codec:
+    dependency: transitive
+    description:
+      name: vector_graphics_codec
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.13"
+  vector_graphics_compiler:
+    dependency: transitive
+    description:
+      name: vector_graphics_compiler
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.5"
+  vector_math:
+    dependency: transitive
+    description:
+      name: vector_math
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.4"
+  vibration:
+    dependency: "direct main"
+    description:
+      name: vibration
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.8"
+  vibration_platform_interface:
+    dependency: "direct dev"
+    description:
+      name: vibration_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2"
+  video_player:
+    dependency: transitive
+    description:
+      name: video_player
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.11.1"
+  video_player_android:
+    dependency: transitive
+    description:
+      name: video_player_android
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.9.5"
+  video_player_avfoundation:
+    dependency: transitive
+    description:
+      name: video_player_avfoundation
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.9.7"
+  video_player_platform_interface:
+    dependency: transitive
+    description:
+      name: video_player_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.7.0"
+  video_player_web:
+    dependency: transitive
+    description:
+      name: video_player_web
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
+  vm_service:
+    dependency: transitive
+    description:
+      name: vm_service
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "15.2.0"
+  wakelock_plus:
+    dependency: transitive
+    description:
+      name: wakelock_plus
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.2"
+  wakelock_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: wakelock_plus_platform_interface
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.1"
+  watcher:
+    dependency: transitive
+    description:
+      name: watcher
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
+  web:
+    dependency: transitive
+    description:
+      name: web
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
+  web_socket:
+    dependency: transitive
+    description:
+      name: web_socket
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  web_socket_channel:
+    dependency: transitive
+    description:
+      name: web_socket_channel
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.3"
+  webkit_inspection_protocol:
+    dependency: transitive
+    description:
+      name: webkit_inspection_protocol
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
+  webview_flutter:
+    dependency: transitive
+    description:
+      name: webview_flutter
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.13.1"
+  webview_flutter_android:
+    dependency: transitive
+    description:
+      name: webview_flutter_android
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.12.0"
+  webview_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: webview_flutter_platform_interface
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.15.1"
+  webview_flutter_wkwebview:
+    dependency: transitive
+    description:
+      name: webview_flutter_wkwebview
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.25.1"
+  win32:
+    dependency: transitive
+    description:
+      name: win32
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.15.0"
+  win32_registry:
+    dependency: transitive
+    description:
+      name: win32_registry
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  xdg_directories:
+    dependency: transitive
+    description:
+      name: xdg_directories
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+  xml:
+    dependency: transitive
+    description:
+      name: xml
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.6.1"
+  yaml:
+    dependency: transitive
+    description:
+      name: yaml
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.3"
+  zoom_tap_animation:
+    dependency: "direct main"
+    description:
+      name: zoom_tap_animation
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+sdks:
+  dart: ">=3.13.0 <4.0.0"
+  flutter: ">=3.41.0"
+== windows_file_picker
+== win32
+  win32:
+    dependency: transitive
+    description:
+      name: win32
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.15.0"
+  win32_registry:
+    dependency: transitive
+    description:
+      name: win32_registry
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  xdg_directories:
+    dependency: transitive
+    description:
+      name: xdg_directories
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+  xml:
+    dependency: transitive
+    description:
+      name: xml
+      sha256: "[REDACTED:hex64]"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.6.1"
+  yaml:
+    dependency: transitive
+    description:
+      name: yaml
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.3"
+  zoom_tap_animation:
+    dependency: "direct main"
+    description:
+      name: zoom_tap_animation
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
+sdks:
+  dart: ">=3.13.0 <4.0.0"
+  flutter: ">=3.41.0"
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && grep -n "device_info_plus\|file_picker\|win32\|windows_file_picker" pubspec.yaml
+17:  file_picker: ^13.4.1
+61:  device_info_plus: ^12.4.0
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && grep -n -A6 "^  file_picker:\|^  device_info_plus:\|^  windows_file_picker:" pubspec.lock
+228:  device_info_plus:
+229-    dependency: "direct main"
+230-    description:
+231-      name: device_info_plus
+232-      sha256: [REDACTED:hex64]
+233-      url: "https://pub.dev"
+234-    source: hosted
+--
+300:  file_picker:
+301-    dependency: "direct main"
+302-    description:
+303-      name: file_picker
+304-      sha256: [REDACTED:hex64]
+305-      url: "https://pub.dev"
+306-    source: hosted
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && sed -n '228,240p;300,312p' pubspec.lock
+device_info_plus:
+    dependency: "direct main"
+    description:
+      name: device_info_plus
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.4.0"
+  device_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: device_info_plus_platform_interface
+      sha256: [REDACTED:hex64]
+  file_picker:
+    dependency: "direct main"
+    description:
+      name: file_picker
+      sha256: [REDACTED:hex64]
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.0.2"
+  file_selector_linux:
+    dependency: transitive
+    description:
+      name: file_selector_linux
+      sha256: "[REDACTED:hex64]"
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git show --stat HEAD | head -30 && git show HEAD -- pubspec.yaml pubspec.lock | head -60
+commit 81e7be9ca06c607b3625d4ab8a85b341f76fdd1b
+Author: Cursor Agent <cursoragent@cursor.com>
+Date:   Thu Nov 26 20:51:44 2026 +0000
+
+    fix(build): file_picker ^13.4.1 pour AGP 9 (FilePickerPlugin)
+    
+    Artemis APK: symbole FilePickerPlugin introuvable sous AGP 9 avec ^11.
+    13.x corrige l'enregistrement plugin AGP9. Pas de golden.
+
+ pubspec.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+commit 81e7be9ca06c607b3625d4ab8a85b341f76fdd1b
+Author: Cursor Agent <cursoragent@cursor.com>
+Date:   Thu Nov 26 20:51:44 2026 +0000
+
+    fix(build): file_picker ^13.4.1 pour AGP 9 (FilePickerPlugin)
+    
+    Artemis APK: symbole FilePickerPlugin introuvable sous AGP 9 avec ^11.
+    13.x corrige l'enregistrement plugin AGP9. Pas de golden.
+
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 2bee066..7c07ea9 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -14,7 +14,7 @@ dependencies:
+   cupertino_icons: ^1.0.9
+   dio: ^5.9.2
+   dotted_border: ^3.1.0
+-  file_picker: ^11.0.2
++  file_picker: ^13.4.1
+   firebase_core: ^4.8.0
+   firebase_auth: ^6.5.0
+   firebase_messaging: ^16.2.1
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && cp pubspec.yaml /tmp/pubspec.yaml.orig && sed -i 's/^  file_picker: \^13\.4\.1$/  file_picker: ^11.0.2/' pubspec.yaml && grep -n "file_picker" pubspec.yaml && timeout 600 /tmp/flutter_sdk/flutter/bin/flutter pub get 2>&1 | tail -15
+17:  file_picker: ^11.0.2
+  vm_service 15.2.0 (15.4.0 available)
+  wakelock_plus 1.5.2 (1.8.2 available)
+  wakelock_plus_platform_interface 1.5.1 (1.7.0 available)
+  web 1.1.1 (1.1.2 available)
+  webview_flutter 4.13.1 (4.14.1 available)
+  webview_flutter_android 4.12.0 (4.14.1 available)
+  webview_flutter_wkwebview 3.25.1 (3.27.2 available)
+  win32 5.15.0 (6.4.0 available)
+  win32_registry 2.1.0 (3.0.3 available)
+  xml 6.6.1 (7.1.0 available)
+  yaml 3.1.3 (3.1.4 available)
+Changed 8 dependencies!
+1 package is discontinued.
+167 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && git status --short && ls .dart_tool | head
+M pubspec.lock
+ M pubspec.yaml
+package_config.json
+package_graph.json
+version
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && timeout 900 /tmp/flutter_sdk/flutter/bin/flutter test test/data/controller/map/ride_map_multistop_test.dart 2>&1 | tail -20
+00:00 +0: loading /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target/test/data/controller/map/ride_map_multistop_test.dart
+00:00 +0: RideMapController multistop markers loadMap stores intermediate stops
+00:00 +1: RideMapController multistop markers getMarkers includes intermediate stop pins
+00:00 +2: RideMapController multistop markers buildRouteBoundsLatLngs includes pickup stops and destination
+00:00 +3: RideMapController multistop markers loadMap currentLeg targets nav destination and skips waypoints
+00:00 +4: RideMapController multistop markers loadMap without currentLeg keeps full intermediate waypoints
+00:00 +5: RideStopProgress — ISC-F5-16 active vs dimmed numbered active stop is distinct, every other stop is numbered+dimmed
+00:00 +6: RideStopProgress — ISC-F5-16 active vs dimmed numbered getMarkers renders one active pin and numbered dimmed pins
+00:00 +7: RideStopProgress — ISC-F5-16 active vs dimmed numbered no stops keeps the legacy rendering path
+00:00 +8: All tests passed!
+
+$ sed -n '1,200p' /home/ubuntu/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0/lib/src/types/camera.dart 2>/dev/null | grep -n "class CameraUpdate\|toJson\|newLatLng\|newCameraPosition\|Map<String" 
+(no output)
+
+$ grep -rn "class CameraUpdate" /home/ubuntu/.pub-cache/hosted/pub.dev/google_maps_flutter*/lib 2>/dev/null | head; ls /home/ubuntu/.pub-cache/hosted/pub.dev | grep google_maps
+(no output)
+
+$ grep -o '"rootUri": "[^"]*google_maps_flutter_platform_interface[^"]*"' .dart_tool/package_config.json | head; grep -o '"rootUri": "[^"]*geolocator-14[^"]*"' .dart_tool/package_config.json | head
+"rootUri": "file:///home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0"
+"rootUri": "file:///home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/geolocator-14.0.2"
+
+$ grep -n "class CameraUpdate\|CameraUpdate.newLatLng\|Map<String, dynamic> toJson\|newCameraPosition" /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0/lib/src/types/camera.dart | head -30
+63:  /// Mainly for internal use when calling [CameraUpdate.newCameraPosition].
+116:  newCameraPosition,
+145:abstract class CameraUpdate {
+152:  static CameraUpdate newCameraPosition(CameraPosition cameraPosition) {
+158:  static CameraUpdate newLatLng(LatLng latLng) {
+166:  static CameraUpdate newLatLngBounds(LatLngBounds bounds, double padding) {
+172:  static CameraUpdate newLatLngZoom(LatLng latLng, double zoom) {
+219:class CameraUpdateNewCameraPosition extends CameraUpdate {
+222:    : super._(CameraUpdateType.newCameraPosition);
+227:  Object toJson() => <Object>['newCameraPosition', cameraPosition.toMap()];
+231:class CameraUpdateNewLatLng extends CameraUpdate {
+243:class CameraUpdateNewLatLngBounds extends CameraUpdate {
+258:class CameraUpdateNewLatLngZoom extends CameraUpdate {
+273:class CameraUpdateScrollBy extends CameraUpdate {
+288:class CameraUpdateZoomBy extends CameraUpdate {
+309:class CameraUpdateZoomIn extends CameraUpdate {
+317:class CameraUpdateZoomOut extends CameraUpdate {
+325:class CameraUpdateZoomTo extends CameraUpdate {
+337:class CameraUpdateAnimationConfiguration {
+
+$ sed -n '140,270p' /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0/lib/src/types/camera.dart
+zoomOut,
+}
+
+/// Defines a camera move, supporting absolute moves as well as moves relative
+/// the current position.
+abstract class CameraUpdate {
+  const CameraUpdate._(this.updateType);
+
+  /// Indicates which type of camera update this instance represents.
+  final CameraUpdateType updateType;
+
+  /// Returns a camera update that moves the camera to the specified position.
+  static CameraUpdate newCameraPosition(CameraPosition cameraPosition) {
+    return CameraUpdateNewCameraPosition(cameraPosition);
+  }
+
+  /// Returns a camera update that moves the camera target to the specified
+  /// geographical location.
+  static CameraUpdate newLatLng(LatLng latLng) {
+    return CameraUpdateNewLatLng(latLng);
+  }
+
+  /// Returns a camera update that transforms the camera so that the specified
+  /// geographical bounding box is centered in the map view at the greatest
+  /// possible zoom level. A non-zero [padding] insets the bounding box from the
+  /// map view's edges. The camera's new tilt and bearing will both be 0.0.
+  static CameraUpdate newLatLngBounds(LatLngBounds bounds, double padding) {
+    return CameraUpdateNewLatLngBounds(bounds, padding);
+  }
+
+  /// Returns a camera update that moves the camera target to the specified
+  /// geographical location and zoom level.
+  static CameraUpdate newLatLngZoom(LatLng latLng, double zoom) {
+    return CameraUpdateNewLatLngZoom(latLng, zoom);
+  }
+
+  /// Returns a camera update that moves the camera target the specified screen
+  /// distance.
+  ///
+  /// For a camera with bearing 0.0 (pointing north), scrolling by 50,75 moves
+  /// the camera's target to a geographical location that is 50 to the east and
+  /// 75 to the south of the current location, measured in screen coordinates.
+  static CameraUpdate scrollBy(double dx, double dy) {
+    return CameraUpdateScrollBy(dx, dy);
+  }
+
+  /// Returns a camera update that modifies the camera zoom level by the
+  /// specified amount. The optional [focus] is a screen point whose underlying
+  /// geographical location should be invariant, if possible, by the movement.
+  static CameraUpdate zoomBy(double amount, [Offset? focus]) {
+    return CameraUpdateZoomBy(amount, focus);
+  }
+
+  /// Returns a camera update that zooms the camera in, bringing the camera
+  /// closer to the surface of the Earth.
+  ///
+  /// Equivalent to the result of calling `zoomBy(1.0)`.
+  static CameraUpdate zoomIn() {
+    return const CameraUpdateZoomIn();
+  }
+
+  /// Returns a camera update that zooms the camera out, bringing the camera
+  /// further away from the surface of the Earth.
+  ///
+  /// Equivalent to the result of calling `zoomBy(-1.0)`.
+  static CameraUpdate zoomOut() {
+    return const CameraUpdateZoomOut();
+  }
+
+  /// Returns a camera update that sets the camera zoom level.
+  static CameraUpdate zoomTo(double zoom) {
+    return CameraUpdateZoomTo(zoom);
+  }
+
+  /// Converts this object to something serializable in JSON.
+  Object toJson();
+}
+
+/// Defines a camera move to a new position.
+class CameraUpdateNewCameraPosition extends CameraUpdate {
+  /// Creates a camera move.
+  const CameraUpdateNewCameraPosition(this.cameraPosition)
+    : super._(CameraUpdateType.newCameraPosition);
+
+  /// The new camera position.
+  final CameraPosition cameraPosition;
+  @override
+  Object toJson() => <Object>['newCameraPosition', cameraPosition.toMap()];
+}
+
+/// Defines a camera move to a latitude and longitude.
+class CameraUpdateNewLatLng extends CameraUpdate {
+  /// Creates a camera move to latitude and longitude.
+  const CameraUpdateNewLatLng(this.latLng)
+    : super._(CameraUpdateType.newLatLng);
+
+  /// New latitude and longitude of the camera..
+  final LatLng latLng;
+  @override
+  Object toJson() => <Object>['newLatLng', latLng.toJson()];
+}
+
+/// Defines a camera move to a new bounding latitude and longitude range.
+class CameraUpdateNewLatLngBounds extends CameraUpdate {
+  /// Creates a camera move to a bounding range.
+  const CameraUpdateNewLatLngBounds(this.bounds, this.padding)
+    : super._(CameraUpdateType.newLatLngBounds);
+
+  /// The northeast and southwest bounding coordinates.
+  final LatLngBounds bounds;
+
+  /// The amount of padding by which the view is inset.
+  final double padding;
+  @override
+  Object toJson() => <Object>['newLatLngBounds', bounds.toJson(), padding];
+}
+
+/// Defines a camera move to new coordinates with a zoom level.
+class CameraUpdateNewLatLngZoom extends CameraUpdate {
+  /// Creates a camera move with coordinates and zoom level.
+  const CameraUpdateNewLatLngZoom(this.latLng, this.zoom)
+    : super._(CameraUpdateType.newLatLngZoom);
+
+  /// New coordinates of the camera.
+  final LatLng latLng;
+
+  /// New zoom level of the camera.
+  final double zoom;
+  @override
+  Object toJson() => <Object>['newLatLngZoom', latLng.toJson(), zoom];
+}
+
+$ cd /home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/target && grep -rn "void printX\|printX(" lib/core/helper/string_format_helper.dart lib/core/utils/helper.dart | head; grep -rn "printX" lib/core/helper/*.dart | head
+lib/core/helper/string_format_helper.dart:222:void printX(Object? object) {
+lib/core/helper/string_format_helper.dart:222:void printX(Object? object) {
+
+$ grep -rn "static double distanceBetween" -A 20 /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/geolocator-14.0.2/lib/geolocator.dart
+249:  static double distanceBetween(
+250-    double startLatitude,
+251-    double startLongitude,
+252-    double endLatitude,
+253-    double endLongitude,
+254-  ) =>
+255-      GeolocatorPlatform.instance.distanceBetween(
+256-        startLatitude,
+257-        startLongitude,
+258-        endLatitude,
+259-        endLongitude,
+260-      );
+261-
+262-  /// Calculates the initial bearing between two points
+263-  ///
+264-  /// The initial bearing will most of the time be different than the end
+265-  /// bearing, see https://www.movable-type.co.uk/scripts/latlong.html#bearing.
+266-  /// The supplied coordinates [startLatitude], [startLongitude], [endLatitude]
+267-  /// and [endLongitude] should be supplied in degrees.
+268-  static double bearingBetween(
+269-    double startLatitude,
+
+$ grep -rn "double distanceBetween" -A 15 /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/geolocator_platform_interface-4.2.6/lib/src/geolocator_platform_interface.dart
+232:  double distanceBetween(
+233-    double startLatitude,
+234-    double startLongitude,
+235-    double endLatitude,
+236-    double endLongitude,
+237-  ) {
+238-    var earthRadius = 6378137.0;
+239-    var dLat = _toRadians(endLatitude - startLatitude);
+240-    var dLon = _toRadians(endLongitude - startLongitude);
+241-
+242-    var a = pow(sin(dLat / 2), 2) +
+243-        pow(sin(dLon / 2), 2) *
+244-            cos(_toRadians(startLatitude)) *
+245-            cos(_toRadians(endLatitude));
+246-    var c = 2 * asin(sqrt(a));
+247-
+
+$ grep -rn "class LatLng" -A 60 /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0/lib/src/types/lat_lng.dart | grep -n "toJson\|Map<" -A 8
+grep: /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0/lib/src/types/lat_lng.dart: No such file or directory
+
+$ grep -rln "class LatLng" /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0/lib | head; grep -rn "toJson" /home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0/lib/src/types/location.dart 2>/dev/null | head
+/home/ubuntu/actions-runner-2/_work/_temp/oc-agent/home/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.15.0/lib/src/types/location.dart
+32:  Object toJson() {
+85:  Object toJson() {
+86:    return <Object>[southwest.toJson(), northeast.toJson()];
+
