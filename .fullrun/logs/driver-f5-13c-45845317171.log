@@ -2487,3 +2487,30 @@ $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "RI
 $ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && grep -n "markerCar" lib/core/utils/my_icons.dart
 5:  static const String markerCar = "assets/icon/marker_car.png"; // marker_car.png
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_CACHE=/home/ubuntu/.pub-cache; export PATH=/tmp/flutter_sdk/flutter/bin:$PATH; flutter test test/unit/ride_map_live_location_test.dart --name "car marker uses the shared" 2>&1 | tail -25
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/ride_map_live_location_test.dart
+00:00 +0: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset
+00:30 +0 -1: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+00:30 +0 -1: Some tests failed.
+
+Failing tests:
+  /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/ride_map_live_location_test.dart: ISC-F5-19 live driver location in ride car marker uses the shared marker_car.png asset
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && export PUB_CACHE=/home/ubuntu/.pub-cache; export PATH=/tmp/flutter_sdk/flutter/bin:$PATH; flutter test test/unit/multistop_ride_model_test.dart 2>&1 | tail -15
+00:00 +0: loading /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/test/unit/multistop_ride_model_test.dart
+00:00 +0: RideModel multistop parse (ISC-F5-1 / ISC-F5-2) parses stops[] ordered by sequence ASC
+00:00 +1: RideModel multistop parse (ISC-F5-1 / ISC-F5-2) RideStopModel parses API fields
+00:00 +2: RideModel multistop parse (ISC-F5-1 / ISC-F5-2) legacy ride without stops key does not crash (ISC-F5-2)
+00:00 +3: RideModel multistop parse (ISC-F5-1 / ISC-F5-2) empty stops array yields hasStops false (ISC-F5-2)
+00:00 +4: RideStopModel.parsedCoordinates returns coords for valid lat/lng
+00:00 +5: RideStopModel.parsedCoordinates returns null when latitude missing
+00:00 +6: RideStopModel.parsedCoordinates returns null when longitude missing
+00:00 +7: RideStopModel.parsedCoordinates returns null for 0,0
+00:00 +8: RideStopModel.parsedCoordinates returns null when lat out of range
+00:00 +9: RideStopModel.parsedCoordinates returns null when lng out of range
+00:00 +10: RideModel.parseStops cap truncates to maxCountPerRide after sort by sequence
+00:00 +11: All tests passed!
+
