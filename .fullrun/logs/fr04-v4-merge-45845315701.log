@@ -2615,3 +2615,75 @@ Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (
 Tools • Dart 3.9.2 • DevTools 2.48.0
 /tmp/task_done.md
 
+$ git show 8c28139
+commit 8c28139ebea952d47e713aa8ed074d81df4d3da5
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 16:36:53 2026 +0000
+
+    fix(android): aligner le toolchain sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1)
+    
+    Artemis 45801376130 — Build APK Rider ROUGE : la validation des dépendances
+    Android de Flutter 3.50.1 refuse Gradle 9.1.0 / AGP 9.0.1.
+    
+    - gradle-wrapper.properties : gradle-9.1.0-all -> gradle-8.14-all
+    - settings.gradle.kts : AGP 9.0.1 -> 8.11.1 (Kotlin 2.2.20 conservé)
+    - gradle.properties : retrait des options réservées à AGP 9
+      (android.newDsl, android.builtInKotlin, android.r8.proguardAndroidTxt.disallowed)
+    
+    KGP 2.2.20 est pleinement supporté avec Gradle <= 8.14 et AGP <= 8.11.1
+    (matrice JetBrains) ; AGP 8.11 exige Gradle >= 8.13 et plafonne à l'API 36.
+    Firebase google-services 4.3.15 et Crashlytics 3.0.7 inchangés.
+    Aucun changement lib/, aucun golden régénéré, .fullrun intact.
+    flutter build / gradlew non exécutés sur la box (politique CI).
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index a7db2f3..810ca47 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
+ 
+ ## [Unreleased]
+ 
++### Fixed
++
++- Android : toolchain aligné sur Flutter 3.50.1 (Gradle 8.14, AGP 8.11.1, Kotlin 2.2.20) ; AGP 9.0.1 / Gradle 9.1.0 refusés par la validation CI
++
+ ## [1.0.13] - 2026-10-08
+ 
+ ### Fixed
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 0e4397f..4c72eeb 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -4,6 +4,3 @@ org.gradle.parallel=false
+ org.gradle.configureondemand=false
+ android.enableJetifier=false
+ android.useAndroidX=true
+-android.newDsl=false
+-android.builtInKotlin=false
+-android.r8.proguardAndroidTxt.disallowed=false
+diff --git a/android/gradle/wrapper/gradle-wrapper.properties b/android/gradle/wrapper/gradle-wrapper.properties
+index 2d428bf..e4ef43f 100644
+--- a/android/gradle/wrapper/gradle-wrapper.properties
++++ b/android/gradle/wrapper/gradle-wrapper.properties
+@@ -2,4 +2,4 @@ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+diff --git a/android/settings.gradle.kts b/android/settings.gradle.kts
+index 9400a7e..bfebd0b 100644
+--- a/android/settings.gradle.kts
++++ b/android/settings.gradle.kts
+@@ -18,7 +18,7 @@ pluginManagement {
+ 
+ plugins {
+     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+-    id("com.android.application") version "9.0.1" apply false
++    id("com.android.application") version "8.11.1" apply false
+     // START: FlutterFire Configuration
+     id("com.google.gms.google-services") version("4.3.15") apply false
+     id("com.google.firebase.crashlytics") version("3.0.7") apply false
+
+→ Read /tmp/task_done.md
