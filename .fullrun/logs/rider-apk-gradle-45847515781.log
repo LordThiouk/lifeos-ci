@@ -6024,3 +6024,305 @@ Please rewrite the input so it satisfies the expected schema.
 Error: The read tool was called with invalid arguments: SchemaError(Missing key
   at ["filePath"]).
 Please rewrite the input so it satisfies the expected schema.
+✗ Read  failed [path=/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/COMPLETENESS.yml]
+Error: The read tool was called with invalid arguments: SchemaError(Missing key
+  at ["filePath"]).
+Please rewrite the input so it satisfies the expected schema.
+✗ Read  failed [path=/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/fullrun-carry.json]
+Error: The read tool was called with invalid arguments: SchemaError(Missing key
+  at ["filePath"]).
+Please rewrite the input so it satisfies the expected schema.
+✗ Read  failed [path=/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/COMPLETENESS.yml]
+Error: The read tool was called with invalid arguments: SchemaError(Missing key
+  at ["filePath"]).
+Please rewrite the input so it satisfies the expected schema.
+
+$ cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/COMPLETENESS.yml; echo "---CARRY---"; cat /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/fullrun-carry.json
+cat: /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/COMPLETENESS.yml: No such file or directory
+---CARRY---
+cat: /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/fullrun-carry.json: No such file or directory
+
+$ head -150 /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/ISA.md
+head: cannot open '/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/ISA.md' for reading: No such file or directory
+
+Le tool `read` semble avoir un problème d'arguments. J'utilise `cat` en fallback.
+$ D=/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client; cat "$D/COMPLETENESS.yml"; echo "---CARRY---"; cat "$D/fullrun-carry.json"
+cat: /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/COMPLETENESS.yml: No such file or directory
+---CARRY---
+cat: /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/fullrun-carry.json: No such file or directory
+
+$ D=/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client; head -120 "$D/ISA.md"
+head: cannot open '/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11_22-galass-lot-client/ISA.md' for reading: No such file or directory
+
+Le dossier porte un `_` : `2026-11_22-galass-lot-client`. Correction.
+$ ls -la /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/ | cat -A | head -20
+total 44$
+drwxr-xr-x 11 ubuntu ubuntu 4096 Nov 26 20:52 .$
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 20:52 ..$
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 20:52 2026-11-22-galass-lot-client$
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 20:52 20260618-galass-wave-orange-money-payments$
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 20:52 20260619-galass-driver-runtime-fixes$
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 20:52 20260729-galass-seclists-offensive-pentest$
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 20:52 20260801-galass-vehicle-image-pdf-doc$
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 20:52 20261002-galass-auto-dispatch$
+drwxr-xr-x  3 ubuntu ubuntu 4096 Nov 26 20:52 20261006-galass-regression-multistop$
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 20:52 20261013-galass-fcm-service-account-outside-webroot$
+drwxr-xr-x  2 ubuntu ubuntu 4096 Nov 26 20:52 20261013-galass-security-general-setting-messages$
+
+$ D=/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-22-galass-lot-client; cat "$D/COMPLETENESS.yml"; echo "---CARRY---"; cat "$D/fullrun-carry.json"
+status: pass
+substance: substantial
+required_sections:
+  Problem: present
+  Vision: present
+  Out of Scope: present
+  Constraints: present
+  Goal: present
+  Claims: present
+  Test Strategy: present
+  Features: present
+gaps:
+isc_quality:
+  total: 64
+  checked: 0
+  anti_criteria_count: 16
+---CARRY---
+{
+  "payload": {
+    "v": 1,
+    "isa": "2026-11-22-galass-lot-client",
+    "head": "2aa0dcd1f4bf24c70d3929c180d498a5ac2fa7ff",
+    "steps": {
+      "1": {
+        "status": "pass",
+        "at": "2026-11-22T19:06:08Z",
+        "fp": "[REDACTED:hex64]",
+        "sha": "2aa0dcd1f4bf24c70d3929c180d498a5ac2fa7ff"
+      },
+      "2": {
+        "status": "pass",
+        "at": "2026-11-22T19:09:00Z",
+        "fp": "[REDACTED:hex64]",
+        "sha": "34b6e5ccbe2f8f55f722725e3285dc126e8c4117",
+        "criteriaIds": [
+          "Ajouter l'ISC enfant `ISC-N.1` dans l'IS\u000088a0cb85",
+          "Bridge-1\u0000a14776c5",
+          "Bridge-2\u0000b1fd2ee3",
+          "Bridge-4\u000086ea784e",
+          "Exécuter CheckCompleteness et l'audit Ve\u0000c961301b",
+          "ISC-1\u0000ff0488ab",
+          "ISC-10\u00003199ebfd",
+          "ISC-10\u00003d6f855b",
+          "ISC-10\u0000ac50bd76",
+          "ISC-10\u0000ba6f1be8",
+          "ISC-11\u0000385d9809",
+          "ISC-11\u0000424f2e8a",
+          "ISC-11\u000046a1e04c",
+          "ISC-11\u00005aa9508f",
+          "ISC-2\u0000c702f97b",
+          "ISC-20\u0000192535d6",
+          "ISC-20\u00005ea88e9f",
+          "ISC-20\u0000eed149ab",
+          "ISC-21\u0000303e1b9a",
+          "ISC-21\u00004099ac62",
+          "ISC-21\u00004aeb60a4",
+          "ISC-21\u00006dc7b287",
+          "ISC-21\u00007810b8c8",
+          "ISC-22\u0000631b566b",
+          "ISC-22\u00009568fc84",
+          "ISC-23\u000045016d95",
+          "ISC-23\u0000de5833cc",
+          "ISC-3\u0000e5b8a970",
+          "ISC-30\u00007424b311",
+          "ISC-4\u00002417faaa",
+          "ISC-40\u0000e17e6915",
+          "ISC-41\u00004348f5eb",
+          "ISC-42\u0000dbd5445f",
+          "ISC-43\u00000ed200bf",
+          "ISC-44\u0000ceffcc3d",
+          "ISC-5\u0000f3da2db0",
+          "ISC-50\u00004c04fa65",
+          "ISC-51\u00007ac349b3",
+          "ISC-52\u00001763b68e",
+          "ISC-53\u0000bfb9e94a",
+          "ISC-6\u0000311a5e2a",
+          "ISC-60\u000021f98366",
+          "ISC-61\u0000cc10c5b4",
+          "ISC-62\u00006f0dabe1",
+          "ISC-63\u00006381fa56",
+          "ISC-64\u000023a2beaa",
+          "ISC-65\u00001ce9a110",
+          "ISC-66\u000081cf834e",
+          "ISC-67\u0000d4a9ffea",
+          "ISC-68\u0000e6beb37a",
+          "ISC-69\u00001bd1e746",
+          "ISC-70\u0000105d467e",
+          "ISC-71\u000038750332",
+          "ISC-72\u0000b53eb02c",
+          "ISC-73\u0000db0faf0e",
+          "ISC-74\u00008fa33b12",
+          "ISC-75\u000016c2f59b",
+          "ISC-76\u00005c859cd5",
+          "ISC-80\u0000168ab501",
+          "ISC-80\u0000d8389405",
+          "ISC-81\u000008d8cc22",
+          "ISC-81\u00003d3bdaa7",
+          "ISC-82\u0000a2f1323d",
+          "ISC-82\u0000d0c991a8",
+          "ISC-83\u0000163e5ee9",
+          "ISC-83\u00003a67346a",
+          "ISC-83\u0000db672d51",
+          "ISC-84\u000010a56ca3",
+          "ISC-84\u0000e18f73c8",
+          "Miroir Linear de l'ISA, uniquement après\u0000086d550b",
+          "Scaffolder les ISAs enfants Rider et Dri\u00000dda3d80"
+        ]
+      }
+    }
+  },
+  "sig": "[REDACTED:hex64]"
+}
+
+$ D=/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target/MEMORY/WORK/2026-11-22-galass-lot-client; head -140 "$D/ISA.md"
+---
+task: "Galass — lot client (10 demandes) + bugs OUVERTS + re-tests"
+slug: 2026-11-22-galass-lot-client
+project: Galass_backend
+isa_kind: task
+phase: plan
+progress: 0/64
+algorithm: 8.20.2
+isa_spec: 2.21.0
+started: 2026-11-22T18:20:00Z
+updated: 2026-11-26T18:25:03.424Z
+context_sufficient: true
+isa_stamp: hmac-sha256:[REDACTED:hex64]
+---
+## Problem
+
+Le client a transmis une note de demandes et `docs/BUGS.md` (trié le 2026-11-22, PR #8, commit `c40c30de`) liste ce qui reste vraiment à corriger : **17 OUVERTS** (CFG-1 en P1, 16 en P2, aucun P0 établi) et **20 À REVÉRIFIER** dont cinq touchent directement la course (D-1, D-9 run7, D-12 run7, R-6, R-7 run7). Aujourd'hui : le chauffeur est validé en deux actions séparées (`ManageDriversController::verificationApprove` l.173 puis `vehicleApprove` l.194) sans SMS ; l'inscription chauffeur n'exige pas de photo et n'a pas de caméra intégrée ; l'écran d'inscription ne se rafraîchit pas ;  les services n'ont pas d'ordre ni d'affichage pilotables depuis l'admin (`Service` n'a qu'un `status`, F4 ISC-40→44) ; le clic admin « Vehicle Verify Pending » doit ouvrir la page pending (ISC-12) ; l'écran OTP n'affiche pas le numéro saisi. Rien de cela n'est encore tracé par un contrat vérifiable, et le travail se répartit sur trois dépôts (Galass_backend, Galass_Rider, Galass_Driver).
+
+## Vision
+
+Un lot livrable par vagues, où chaque ligne de la demande client et chaque bug OUVERT a un critère binaire, une app nommée, une preuve outillée et une classe (« correctif dû » ou « nouvelle fonctionnalité ») : Papa sait ce qu'il facture à part (points 1, 2, 3, 6, 9, 10) et ce qui est dû. Les cas douteux (D-1, D-9, D-12, R-6, R-7) sont d'abord reproduits sur appareil, puis corrigés seulement s'ils se reproduisent. Wave et Orange Money étant déjà branchés, le point 7 est résolu hors app et la plage de dépôt 500–500 000 F l'est aussi : aucun critère ne le porte.
+
+## Out of Scope
+
+- **Sélection de véhicule selon le solde du wallet** (exclue par le client).
+- Tout P0 non établi par preuve : aucun correctif « préventif » hors critères.
+- Toute modification du flux de paiement Wave 511 / Orange Money 512 existant (checkout, QR, webhooks, signatures) ; étude GO/NO-GO d'une API : retirée, les passerelles existent.
+- Géolocalisation « toujours » côté **Rider** (le Rider reste « pendant l'utilisation » — voir Decisions).
+- Refonte du dispatch, des enchères, du tarif multi-stop, des routes `ipn/*` et du header `dev-token`.
+- Build, signature et publication des APK/IPA (CI GitHub Actions et Codemagic uniquement, déclenchés par Papa).
+- Déploiement prod, soumission aux stores, fusion de la moindre PR.
+
+## Language
+
+- **Lot client** — les 10 points A du périmètre (numérotés 1–10 dans les Decisions), par opposition aux bugs B et aux re-tests C.
+- **Correctif dû** — défaut ou écart de l'existant, à corriger dans le forfait. _Avoid:_ « bug » pour une nouvelle demande.
+- **Nouvelle fonctionnalité** — comportement nouveau, facturé à part pour 1, 2, 3, 6, 9, 10 ; la classe sur les autres lignes est informative.
+- **Preuve** — sortie d'outil réelle : test PHPUnit/Flutter, requête API, capture e2e émulateur/appareil, `git grep`. _Avoid:_ « ça devrait marcher ».
+- **À REVÉRIFIER critique** — D-1, D-9 (run7), D-12 (run7), R-6, R-7 (run7) : test appareil d'abord, correction ensuite, jamais l'inverse.
+- **ID dupliqué** — BUGS.md réutilise R-5, R-6, R-7, D-9…D-13 dans deux tableaux ; la mention « (run7) » ou « (tableau) » désigne l'entrée visée.
+
+## Principles
+
+- **Repro avant correction** : un point incertain a une capture « avant » dans Decisions avant tout code.
+- **Red before green** : chaque correctif commence par un test rouge nommé dans Test Strategy.
+- **Chirurgical** : chaque ligne du diff se rattache à un ISC ; rien d'adjacent n'est « amélioré ».
+- **Backward compatible** : routes de validation séparées, courses mono-arrêt et passerelles existantes inchangées.
+- **Décision, pas hypothèse silencieuse** : tout point ambigu (7, 10, 8, 4) est tranché par écrit dans Decisions.
+- **Stabilité des IDs** : les ISC ne sont jamais renumérotés ; une scission s'écrit `ISC-N.1`.
+
+## Constraints
+
+- Header `dev-token` obligatoire sur `/api/*` ; `ipn/*` reste dans `VerifyCsrfToken::$except`.
+- Secrets PSP/SMS : `gateway_parameter` ou config admin seulement, jamais `.env` ni git ; aucune clé ni token, même factice, en dur (générés à l'exécution des tests).
+- Montants XOF entiers, multiples de 5 FCFA ; fuseau Africa/Dakar ; chaînes utilisateur FR via `MyStrings`/`fr_SN` (jamais de jeton de protocole traduit).
+- SQL prod préféré en `.sql` manuel sur le VPS ; migrations PHP = référence.
+- Build policy Flutter : **interdits** `flutter build`, `flutter run`, gradle ; **permis** `flutter test`, `flutter analyze`, `dart format`. APK uniquement via GitHub Actions (`LordThiouk/galass-emu-actions`) après OK de Papa.
+- Auth : aucun changement de code login/OTP/inscription sans ISC ou ISC enfant dans l'ISA phone-auth (Rider `.claude/PAI/MEMORY/WORK/galass-phone-auth-876543/ISA.md`) ; E.164 via `PhoneAuthHelper` (indicatif 221), sans divergence login/signup.
+- Branches `feature/*` ou `docs/*` uniquement ; PR en brouillon ; pas de push sur `main`, pas de merge, pas de force-push ; gitleaks avant chaque push ; pas de commit de `ios/Runner/GoogleService-Info.plist` (Driver).
+- Un dépôt à la fois, nommé avant d'en traverser un autre (Backend / Rider / Driver).
+- Le dossier `evidence/` n'est jamais lu ; les preuves vivent dans git, CI et captures citées par référence.
+- L'ISA est canonique dans Galass_backend ; Galass reste séparé de LifeOS (aucun dual-write vers un répertoire LifeOS).
+
+## Dependencies
+
+- requires: `docs/BUGS.md` trié — PR #8 (`docs/bugs-triage-2026-11-22`, c40c30de) ; statuts OUVERT / À REVÉRIFIER et ID de référence.
+- requires: ISA phone-auth Rider (CLOSED 2026-06-12) — ISC enfant à ouvrir pour les points 8 et 10 (ISC-5).
+- requires: branches multistop `feat/multistop-e2e-2026-11-15` (Driver, c9c65ff) et `feat/multistop-rider-close-2026-11-20` (Rider, 3a3731e) — correctifs prêts pour CFG-1 et R8-5.
+- downstream: ISAs enfants Rider et Driver (`parent: 2026-11-22-galass-lot-client`) à scaffolder avant tout code mobile.
+
+## Goal
+
+Les 10 demandes client, les 17 bugs OUVERTS de BUGS.md et les 5 re-tests critiques ont chacun un critère ISC vérifié par une preuve d'outil (PHPUnit, `flutter test`/`analyze`, requête API, capture e2e), et les points ambigus 7 et 10 sont tranchés par écrit avant tout code.
+
+## Anti-claims
+
+Ces lignes renvoient aux ISC `Anti:` déjà numérotés ; elles ne sont ni cochées ni comptées dans `progress`. Leur statut vit sur l'ISC référencé.
+
+- Anti: aucun secret (clé, token, même factice) dans le diff de chaque PR du lot → voir ISC-1.
+- Anti: aucune modification de la sélection de véhicule selon le solde du wallet (exclue par le client) → voir ISC-2.
+- Anti: `ipn/*` reste dans `VerifyCsrfToken::$except`, `dev-token` reste obligatoire, suite sécurité existante verte → voir ISC-3.
+- Anti: aucune PR du lot n'est fusionnée, aucun push sur `main`, aucun force-push → voir ISC-6.
+- Anti: un chauffeur sans document ou sans véhicule renseigné ne peut pas être validé en une étape ; états inchangés → voir ISC-10.1.
+- Anti: les routes séparées existantes (approbation/rejet documents, approbation/rejet véhicule) répondent comme avant → voir ISC-10.2.
+- Anti: un clic admin « Vehicle Verify Pending » ne mène pas à unverified ni ailleurs — uniquement la page pending → voir ISC-12.
+- Anti: aucun SMS si la validation est refusée (ISC-10.1) ni si le chauffeur est déjà validé (pas de doublon à la ré-approbation) → voir ISC-11.1.
+- Anti: l'échec d'envoi du SMS ne bloque pas la validation ; l'erreur est journalisée → voir ISC-11.3.
+- Anti: un chauffeur déjà inscrit sans photo se connecte normalement (pas de blocage rétroactif) → voir ISC-20.2.
+- Anti: permission caméra refusée → message FR et retour à l'écran sans crash → voir ISC-21.3.
+- Anti: permission « toujours » refusée → le chauffeur ne passe pas en ligne et la bannière existante reste affichée (D-5 inchangé) → voir ISC-23.1.
+- Anti: passerelles Wave 511 et Orange Money 512 et leur IPN inchangées → voir ISC-30.2.
+- Anti: un service masqué reste lisible pour les courses existantes (historique, détail, tarif) sans erreur → voir ISC-43.
+- Anti: un service masqué n'est pas proposable pour une nouvelle course (422 à la création) → voir ISC-44.
+- Anti: la normalisation E.164 (`PhoneAuthHelper`, indicatif 221) reste identique et le numéro n'est pas écrit en clair dans les logs release → voir ISC-53.
+
+## Not yet specified
+
+- fog: **résolu (Vera 2026-11-25)** — la passerelle SMS Laravel existe déjà : `core/app/Notify/Sms.php:28-31` (config `sms_config`, `sms_status`, `sms_body`, `sms_template`) et `:49-61` (`SmsGateway`, log d’erreur) ; `ManageDriversController.php:178,199` appelle déjà `notify(...)`. Restent à confirmer côté admin le fournisseur, le coût et le sender id avant ISC-11 ; aucun secret en clair.
+- fog: écran « d'inscription » du point 8 (Rider ou Driver, quel écran) — résolu par la capture de ISC-22.
+
+## Bridge Criteria
+
+- [ ] Bridge-1: Bridge: l'ordre et l'affichage des services posés dans l'admin = réponse API = liste affichée dans le Rider (backend → Rider). [app: backend+admin+Rider · classe: nouvelle fonctionnalité · preuve: PHPUnit + capture e2e]
+- [ ] Bridge-2: Bridge: la photo envoyée à l'inscription par le Driver est stockée par le backend et visible dans la fiche chauffeur admin (Driver → backend → admin). [app: Driver+backend+admin · classe: nouvelle fonctionnalité · preuve: PHPUnit + capture]
+- [ ] Bridge-4: Bridge: le SMS de validation part quand l'admin valide et le Driver reçoit le nouveau statut au rafraîchissement (admin → backend → Driver). [app: backend+Driver · classe: nouvelle fonctionnalité · preuve: PHPUnit SMS fake + capture e2e]
+
+## Test Strategy
+
+| isc | type | check | threshold | tool | anchors_to |
+|-----|------|-------|-----------|------|------------|
+| Bridge-1 | e2e | ordre admin = réponse API = liste du Rider | 3 listes identiques | capture Rider + php artisan test --filter=RiderServiceListOrderTest | cross: Galass_Rider |
+| Bridge-2 | e2e | photo d'inscription Driver visible dans la fiche chauffeur admin | même fichier | capture admin + PHPUnit DriverRegisterPhotoTest | cross: Galass_Driver |
+| Bridge-4 | e2e | SMS de validation envoyé puis statut « validé » vu dans le Driver au rafraîchissement | 1 SMS ; statut validé | PHPUnit DriverApprovedSmsTest + capture Driver | cross: Galass_Driver |
+| ISC-1 | bash | gitleaks sur origin/main..HEAD | 0 leak | gitleaks detect --source . --log-opts="origin/main..HEAD" --no-banner | literal |
+| ISC-2 | bash | diff sans motif véhicule/solde | 0 match | git diff origin/main...HEAD \| grep -iE '^\+.*(vehicle\|vehicule).*(balance\|wallet\|solde)' | literal |
+| ISC-3 | phpunit | grep + PHPUnit sécurité | grep présent ; suite 100 % verte | grep "ipn/\*" core/app/Http/Middleware/VerifyCsrfToken.php && php artisan test --group=security | literal |
+| ISC-4 | bash | rg sur docs/BUGS.md | 0 ligne OUVERT parmi les ID traités | rg -n 'OUVERT' docs/BUGS.md | literal |
+| ISC-5 | bash | grep + diff additions seules dans l'ISA phone-auth | ISC enfant présent ; 0 ligne supprimée | git diff -U0 -- .claude/PAI/MEMORY/WORK/galass-phone-auth-876543/ISA.md \| grep -c '^-[^-]' | literal |
+| ISC-6 | bash | gh api : PR en brouillon, mergedAt nul | isDraft=true ; mergedAt=null | for r in Galass_backend Galass_Rider Galass_Driver; do gh api "repos/LordThiouk/$r/pulls?state=all" --jq '.[]\|[.head.ref,.draft,.merged_at]'; done | literal |
+| ISC-10 | phpunit | PHPUnit Feature : un appel → les deux états approuvés | HTTP 200 ; 2 états = approuvé | php artisan test --filter=DriverOneStepApprovalTest | literal |
+| ISC-10.1 | phpunit | PHPUnit Feature : refus, états inchangés | refus ; 0 état modifié | php artisan test --filter=DriverOneStepApprovalTest::incomplete | literal |
+| ISC-10.2 | phpunit | PHPUnit : tests existants verts | 100 % pass | php artisan test --filter=ManageDrivers | literal |
+| ISC-10.3 | screenshot | capture e2e admin avant/après | bouton visible ; statut passé à validé | capture admin (Interceptor) sur fiche chauffeur de test | literal |
+| ISC-11 | phpunit | PHPUnit avec passerelle SMS factice : 1 envoi | 1 envoi, destinataire = mobile du chauffeur | php artisan test --filter=DriverApprovedSmsTest | literal |
+| ISC-11.1 | phpunit | PHPUnit : 0 envoi | 0 envoi | php artisan test --filter=DriverApprovedSmsTest::noSms | literal |
+| ISC-11.2 | phpunit | PHPUnit : longueur et contenu | longueur ≤ 160 | php artisan test --filter=DriverApprovedSmsTest::text | literal |
+| ISC-11.3 | phpunit | PHPUnit : passerelle qui lève une exception | validation OK ; 1 log d'erreur | php artisan test --filter=DriverApprovedSmsTest::gatewayDown | literal |
+| ISC-12 | phpunit | PHPUnit Feature : menu/notif/widget « vehicle pending » → route vehicle.verify.pending | HTTP 200 ; seed \`vv=PENDING\` présent ; lien widget/notif = route pending | php artisan test --filter=AdminVehicleRedirectTest | literal |
+| ISC-20 | phpunit | PHPUnit Feature avec stockage factice | 422 sans photo ; fichier stocké avec | php artisan test --filter=DriverRegisterPhotoTest | literal |
+| ISC-20.1 | flutter-test | flutter test widget | étape bloquée ; message FR | flutter test test/presentation/auth/registration_photo_test.dart | literal |
+| ISC-20.2 | phpunit | PHPUnit : connexion d'un chauffeur historique | HTTP 200 | php artisan test --filter=DriverLegacyLoginTest | literal |
+| ISC-21 | flutter-test | flutter test (source image factice) + capture appareil | capture directe appelée ; image transmise | flutter test test/core/camera/profile_camera_test.dart | literal |
+| ISC-21.1 | flutter-test | flutter test + capture appareil | capture directe appelée | flutter test test/core/camera/vehicle_docs_camera_test.dart | literal |
+| ISC-21.2 | flutter-test | flutter test + capture appareil | capture directe appelée | flutter test test/core/camera/license_camera_test.dart | literal |
+| ISC-21.3 | flutter-test | flutter test + logcat sans FATAL | message FR ; 0 exception | flutter test test/core/camera/camera_denied_test.dart | literal |
+| ISC-21.4 | flutter-test | flutter test taille ≤ limite backend + PHPUnit upload | taille ≤ limite ; upload 200 | flutter test test/core/camera/capture_size_test.dart | literal |
+| ISC-22 | device | captures émulateur + log, verdict en Decisions | écran identifié ; capture avant archivée par référence | emulateur Rider et Driver, scénario d'inscription | literal |
+| ISC-22.1 | flutter-test | flutter test rouge puis vert + capture après | rouge sans correctif ; vert avec | flutter test <test d'écran nommé après ISC-22> | literal |
+| ISC-23 | flutter-test | flutter test + capture appareil | demande « toujours » déclenchée après l'écran d'explication | flutter test test/presentation/permissions/always_location_flow_test.dart | literal |
+| ISC-23.1 | flutter-test | flutter test | passage en ligne refusé ; bannière visible | flutter test test/presentation/permissions/always_location_denied_test.dart | literal |
+
+Le nom est `2026-11-22-galass-lot-client` (tous des tirets). Je refais les lectures.
