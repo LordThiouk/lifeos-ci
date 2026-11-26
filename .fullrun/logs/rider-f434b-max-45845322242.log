@@ -16758,3 +16758,76 @@ GeneralSettingNoSecretsTest.php
 MapsWebAuthTest.php
 RideMessageOwnershipTest.php
 
+$ grep -rn "group security\|group=security" . --include='*.php' | grep -v vendor | head; git -C .. grep -n "group security" main -- core | head
+fatal: unable to resolve revision: main
+
+$ grep -rn "Group" tests/Feature/Security tests/Unit 2>/dev/null | head; ls ../; git -C .. branch -a | head
+2026_03_17_api_swagger_095dc7898c.json
+AGENTS.md
+CLAUDE.md
+MEMORY
+SECURITY.md
+assets
+core
+docs
+index.php
+om_Pay_Link_Swagger_02e4c3ae33.yml
+prompts
+scripts
+* fullrun/lot-client-w0
+  remotes/origin/ci/staging-branch-deploy
+  remotes/origin/cursor/vehicle-form-document-only-8855
+  remotes/origin/cursor/vehicle-image-pdf-doc-8855
+  remotes/origin/docs/bugs-triage-2026-11-22
+  remotes/origin/docs/isa-cloture-2026-11-18
+  remotes/origin/docs/isa-lot-client-2026-11-22
+  remotes/origin/feat/multistop-e2e-2026-11-15
+  remotes/origin/fix/fcm-service-account-outside-webroot
+  remotes/origin/fix/multistop-notifs
+
+$ git -C .. branch -a
+fatal: not a git repository (or any of the parent directories): .git
+
+$ git branch -a
+* fullrun/lot-client-w0
+  remotes/origin/ci/staging-branch-deploy
+  remotes/origin/cursor/vehicle-form-document-only-8855
+  remotes/origin/cursor/vehicle-image-pdf-doc-8855
+  remotes/origin/docs/bugs-triage-2026-11-22
+  remotes/origin/docs/isa-cloture-2026-11-18
+  remotes/origin/docs/isa-lot-client-2026-11-22
+  remotes/origin/feat/multistop-e2e-2026-11-15
+  remotes/origin/fix/fcm-service-account-outside-webroot
+  remotes/origin/fix/multistop-notifs
+  remotes/origin/fix/security-general-setting-messages
+  remotes/origin/fullrun-logs/e2e-cash-flow-confirm-44518677811
+  remotes/origin/fullrun-logs/e2e-cash-flow-confirm2-44525934498
+  remotes/origin/fullrun-logs/e2e-cash-flow-proof-44437097287
+  remotes/origin/fullrun-logs/e2e-cash-flow-proof-44464807833
+  remotes/origin/fullrun-logs/e2e-harness-ui-fixes-44407297560
+  remotes/origin/fullrun-logs/e2e-markers-diag-44237647451
+  remotes/origin/fullrun-logs/e2e-markers-diag-44342040881
+  remotes/origin/fullrun-logs/e2e-markers-diag-44342543904
+  remotes/origin/fullrun-logs/galass-lot-client-w0-45058681462
+  remotes/origin/fullrun-logs/lot-client-w0-device-45859637248
+  remotes/origin/fullrun-logs/lot-client-w1b-45881720439
+  remotes/origin/fullrun-logs/multistop-e2e-43751313445
+  remotes/origin/fullrun-logs/multistop-e2e-43760316585
+  remotes/origin/fullrun-logs/multistop-e2e-43770976519
+  remotes/origin/fullrun-logs/multistop-e2e-43783993566
+  remotes/origin/fullrun-logs/multistop-e2e-43811353270
+  remotes/origin/fullrun-logs/multistop-e2e-43891514434
+  remotes/origin/fullrun-logs/multistop-e2e-43933388766
+  remotes/origin/fullrun-logs/multistop-e2e-43954435095
+  remotes/origin/fullrun-logs/multistop-e2e-44002265225
+  remotes/origin/fullrun-logs/multistop-e2e-44019727387
+  remotes/origin/fullrun-logs/multistop-e2e-44104107093
+  remotes/origin/fullrun-logs/multistop-e2e-44163682423
+  remotes/origin/fullrun-logs/multistop-e2e-44188053956
+  remotes/origin/fullrun-logs/multistop-e2e-44192764974
+  remotes/origin/fullrun-logs/rider-stop-progress-44204665548
+  remotes/origin/fullrun-prompts
+  remotes/origin/fullrun/lot-client-w0
+  remotes/origin/main
+  remotes/origin/ovo-customizations
+
