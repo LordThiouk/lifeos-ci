@@ -4313,3 +4313,14 @@ $ grep -rn "allProjectValidators\|ValidateProjectCommand\|validators" /tmp/flutt
 /tmp/flutter/packages/flutter_tools/lib/src/commands/analyze.dart:213:  List<ProjectValidator> allProjectValidators() => _allProjectValidators;
 /tmp/flutter/packages/flutter_tools/lib/src/commands/analyze.dart:356:        allProjectValidators: _allProjectValidators,
 
+$ for f in DisableNewDslMigration DisableBuiltInKotlinMigration; do echo "=== $f"; find /tmp/flutter/packages/flutter_tools/lib -name "$f.dart" -exec cat {} \; ; done
+=== DisableNewDslMigration
+=== DisableBuiltInKotlinMigration
+
+$ grep -rln "DisableNewDslMigration\|DisableBuiltInKotlinMigration" /tmp/flutter/packages/flutter_tools/lib | head; echo ===; grep -rn "newDsl\|builtInKotlin" /tmp/flutter/packages/flutter_tools/lib/src/android/*.dart | head -30
+/tmp/flutter/packages/flutter_tools/lib/src/android/migrations/disable_new_dsl_migration.dart
+/tmp/flutter/packages/flutter_tools/lib/src/android/migrations/disable_built_in_kotlin_migration.dart
+/tmp/flutter/packages/flutter_tools/lib/src/android/gradle.dart
+===
+/tmp/flutter/packages/flutter_tools/lib/src/android/gradle_errors.dart:736:\nTo resolve this update flutter or opt out of `android.newDsl`.
+
