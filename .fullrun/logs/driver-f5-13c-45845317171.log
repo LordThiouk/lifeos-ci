@@ -859,3 +859,63 @@ valid_repo_name() {
   case "$r" in
     *..*) return 1 ;;
 
+$ whoami; command -v apt-get dpkg; ls /var/cache/apt/archives/*.deb 2>/dev/null | head; echo "=== check php via dpkg"; dpkg -l 2>/dev/null | grep -i php | head
+ubuntu
+/usr/bin/apt-get
+/usr/bin/dpkg
+=== check php via dpkg
+
+$ grep -rn "php artisan test" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/REPORT.md | head -10; echo ===; grep -rln "php" /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/ci/targets/ 2>/dev/null | head
+===
+
+$ command -v curl wget; curl -sS -m 15 -o /dev/null -w "%{http_code}\n" https://dl.static-php.dev/static-php-cli/common/ 2>&1 | tail -3
+/usr/bin/curl
+/usr/bin/wget
+200
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls -a core | head -30; cat core/phpunit.xml
+.
+..
+.env.example
+.graphifyignore
+app
+artisan
+bootstrap
+composer.json
+composer.lock
+config
+database
+phpunit.xml
+resources
+routes
+storage
+tests
+vendor
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory>tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing" force="true"/>
+        <env name="APP_KEY" value="base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" force="true"/>
+        <env name="FIREBASE_PROJECT_ID" value="test-project" force="true"/>
+        <env name="DEVELOPER_TOKEN" value="test-dev-token-g35" force="true"/>
+        <env name="CRON_SECRET" value="baseline-cron-secret" force="true"/>
+        <env name="CACHE_STORE" value="array" force="true"/>
+        <env name="BROADCAST_CONNECTION" value="null" force="true"/>
+        <env name="DB_CONNECTION" value="sqlite" force="true"/>
+        <env name="DB_DATABASE" value=":memory:" force="true"/>
+        <env name="BCRYPT_ROUNDS" value="4" force="true"/>
+    </php>
+</phpunit>
+
