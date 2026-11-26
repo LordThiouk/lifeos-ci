@@ -3241,3 +3241,11 @@ commit
 
 ✱ Grep "applyLiveDriverLocation" in . · 2 matches
 ✱ Grep "location-update" in . · 25 matches
+
+$ ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/
+ci
+extra
+lifeos
+target
+
+Des commits `driver-f5-19` existent déjà. Je vérifie le code réel (`applyLiveDriverLocation`, ping `location-update`) et l'existence du commit `d088550`, plus le dépôt `lifeos/` séparé.
