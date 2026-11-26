@@ -84,6 +84,6 @@ appliquée à la relance `fr-fullrun.yml` (job `loop`).
 
 - Cause du startup_failure 45747836096 : `_next.yml` dispatchait sans `--ref`, donc sur `main`, dont la version exige `actions: write` alors que `fr-plan-serena` plafonne à `contents: read` ; GitHub rejette le workflow au chargement.
 - Correctif : `chain` booléen défaut `false` sur les 10 workflows d'étape, job `next` gardé par `inputs.chain` ; un mini workflow lancé seul reste donc à son étape.
-- `_next.yml` : sortie immédiate si `chain != true`, propagation de `chain=true` au lien suivant, dispatch sur la même réf (`--ref "$GITHUB_REF_NAME"`) au lieu de `main`.
+- `_next.yml` : job `next` conditionné à `inputs.chain` (+ sortie immédiate si `chain != true`), propagation de `chain=true` au lien suivant, dispatch sur la même réf (`--ref "$GITHUB_REF_NAME"`) au lieu de `main`.
 - `fr-fullrun.yml` reste l'assemblage FullRun complet et passe `chain: false` à ses briques (il orchestre via `needs`/`gate`/`loop`) ; le chaînage `_next` ne sert qu'à une chaîne complète lancée explicitement avec `chain=true`.
 - Vérifié : `yaml.safe_load` des 17 workflows OK, `bash -n` des scripts `_next.yml` et `loop` OK, aucun `default: true` restant sur `chain`.

@@ -72,7 +72,7 @@ permissions:
 
 jobs:
   next:
-    if: github.actor == 'LordThiouk'
+    if: github.actor == 'LordThiouk' && inputs.chain
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
