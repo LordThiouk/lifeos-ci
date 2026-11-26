@@ -1327,3 +1327,14 @@ multistop-ui-gaps-serena-2026-11-24-r6_checkpoint.json
 multistop-ui-gaps-vera-2026-11-23_DONE.md
 multistop-ui-gaps-vera-2026-11-23_checkpoint.json
 
+$ flutter --version 2>&1 | head -5; echo ---; java -version 2>&1; echo ---; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.dart_tool 2>/dev/null | head -3; ls /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/build 2>/dev/null | head -5
+Flutter 3.35.6 • channel [user-branch] • unknown source
+Framework • revision 9f455d2486 (1 year, 2 months ago) • 2025-10-08 14:55:31 -0500
+Engine • hash a5f2c36e367c13f868cfe98db5806f562c52c35e (revision d2913632a4) (13 months ago) • 2025-10-07 17:26:21.000Z
+Tools • Dart 3.9.2 • DevTools 2.48.0
+---
+openjdk version "21.0.13.0.3" 2026-10-24
+OpenJDK Runtime Environment (build 21.0.13.0.3+1-1-24.04.1-Ubuntu)
+OpenJDK 64-Bit Server VM (build 21.0.13.0.3+1-1-24.04.1-Ubuntu, mixed mode, sharing)
+---
+
