@@ -2887,3 +2887,27 @@ Analyzing 2 items...
 
 1 issue found. (ran in 10.5s)
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && ls ~/.claude/LIFEOS/TOOLS/ 2>/dev/null | grep -i isa; find / -name "*ISATool*" 2>/dev/null | head; ls MEMORY/WORK/20261006-galass-driver-multistop/
+ISAGate.ts
+ISARender
+ISARender.ts
+ISATool.ts
+ISAToolHumanTick.test.ts
+ISAToolScopeLog.test.ts
+IsaFeatures.test.ts
+IsaFeatures.ts
+IsaFrontier.ts
+IsaReconcile.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISATool.ts
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.claude/LIFEOS/TOOLS/ISAToolHumanTick.test.ts
+/home/ubuntu/actions-runner-2/_work/lifeos-ci/lifeos-ci/lifeos/LIFEOS/TOOLS/ISAToolScopeLog.test.ts
+ISA.html
+ISA.md
+
