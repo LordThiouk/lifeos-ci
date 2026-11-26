@@ -12369,3 +12369,84 @@ index c0e70ee7..f8bef79e 100755
 83:                                                <x-admin.other.status_switch :status="$service->is_visible ? 1 : 0" :action="route('admin.service.visibility', $service->id)"
 84:                                                    title="visibility" />
 
+$ cd /agent/repos/Galass_backend && git show 4ba56ea1 --stat; echo "==="; cat core/tests/Feature/Admin/AdminVehicleRedirectTest.php | head -120
+commit 4ba56ea1e3d83d0e00a664e5e5ff9bc8bfcaacf2
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 18:25:03 2026 +0000
+
+    fix(admin): ISC-12 — clic Vehicle Pending → page pending
+    
+    Widget dashboard et compteur menu pointent vers vehicle.verify.pending
+    (vv=PENDING). Test AdminVehicleRedirectTest. ISA précisée par Papa.
+
+ MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md    | 13 ++---
+ .../app/Http/Controllers/Admin/AdminController.php |  1 +
+ .../Providers/GlobalVariablesServiceProvider.php   |  5 +-
+ .../ui/widget/group/dashboard/driver.blade.php     |  2 +-
+ .../Feature/Admin/AdminVehicleRedirectTest.php     | 63 ++++++++++++++++++++++
+ 5 files changed, 75 insertions(+), 9 deletions(-)
+===
+<?php
+
+namespace Tests\Feature\Admin;
+
+use Tests\TestCase;
+
+/**
+ * ISA 2026-11-22-galass-lot-client — ISC-12.
+ * Clic admin « Vehicle Verify Pending » → page vehicle.verify.pending.
+ */
+class AdminVehicleRedirectTest extends TestCase
+{
+    public function test_vehicle_pending_route_is_registered(): void
+    {
+        $this->assertTrue(
+            \Illuminate\Support\Facades\Route::has('admin.driver.vehicle.verify.pending'),
+            'Route admin.driver.vehicle.verify.pending must exist'
+        );
+
+        $uri = app('router')->getRoutes()->getByName('admin.driver.vehicle.verify.pending')->uri();
+        $this->assertStringContainsString('vehicle-verify-pending', $uri);
+    }
+
+    public function test_dashboard_vehicle_widget_links_to_pending_not_unverified(): void
+    {
+        $blade = file_get_contents(resource_path('views/components/admin/ui/widget/group/dashboard/driver.blade.php'));
+        $this->assertNotFalse($blade);
+        $this->assertStringContainsString(
+            "route('admin.driver.vehicle.verify.pending')",
+            $blade,
+            'Dashboard vehicle widget must link to vehicle pending'
+        );
+        $this->assertStringNotContainsString(
+            "route('admin.driver.vehicle.unverified')",
+            $blade,
+            'Dashboard vehicle widget must not link to vehicle unverified'
+        );
+        $this->assertStringContainsString('vehicle_pending_driver', $blade);
+    }
+
+    public function test_menu_pending_vehicle_counter_is_provided_to_views(): void
+    {
+        $src = file_get_contents(app_path('Providers/GlobalVariablesServiceProvider.php'));
+        $this->assertNotFalse($src);
+        $this->assertStringContainsString(
+            "'pendingVehicleVerificationCount'",
+            $src,
+            'View composer must share pendingVehicleVerificationCount for menu.json counter'
+        );
+        $this->assertStringContainsString('vehicleVerifyPending()', $src);
+    }
+
+    public function test_vehicle_submit_notification_click_url_targets_pending(): void
+    {
+        $src = file_get_contents(app_path('Http/Controllers/Api/Driver/DriverController.php'));
+        $this->assertNotFalse($src);
+        $this->assertMatchesRegularExpression(
+            "/click_url\s*=\s*urlPath\(\s*'admin\.driver\.vehicle\.verify\.pending'\s*\)/",
+            $src,
+            'Vehicle submit notification must point to vehicle pending page'
+        );
+    }
+}
+
