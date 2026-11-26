@@ -5593,3 +5593,230 @@ $ grep -rn "pendingVehicleVerificationCount\|vehicle_verify_pending" core/resour
 $ grep -B2 -A40 "vehicle_pending_driver\|Vehicle Verify Pending" core/resources/views/admin/dashboard.blade.php | head -60
 (no output)
 
+$ grep -n "ISC-12" MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md | head -20
+17:Le client a transmis une note de demandes et `docs/BUGS.md` (trié le 2026-11-22, PR #8, commit `c40c30de`) liste ce qui reste vraiment à corriger : **17 OUVERTS** (CFG-1 en P1, 16 en P2, aucun P0 établi) et **20 À REVÉRIFIER** dont cinq touchent directement la course (D-1, D-9 run7, D-12 run7, R-6, R-7 run7). Aujourd'hui : le chauffeur est validé en deux actions séparées (`ManageDriversController::verificationApprove` l.173 puis `vehicleApprove` l.194) sans SMS ; l'inscription chauffeur n'exige pas de photo et n'a pas de caméra intégrée ; l'écran d'inscription ne se rafraîchit pas ;  les services n'ont pas d'ordre ni d'affichage pilotables depuis l'admin (`Service` n'a qu'un `status`, F4 ISC-40→44) ; le clic admin « Vehicle Verify Pending » doit ouvrir la page pending (ISC-12) ; l'écran OTP n'affiche pas le numéro saisi. Rien de cela n'est encore tracé par un contrat vérifiable, et le travail se répartit sur trois dépôts (Galass_backend, Galass_Rider, Galass_Driver).
+85:- Anti: un clic admin « Vehicle Verify Pending » ne mène pas à unverified ni ailleurs — uniquement la page pending → voir ISC-12.
+128:| ISC-12 | phpunit | PHPUnit Feature : menu/notif/widget « vehicle pending » → route vehicle.verify.pending | HTTP 200 ; seed \`vv=PENDING\` présent ; lien widget/notif = route pending | php artisan test --filter=AdminVehicleRedirectTest | literal |
+202:- [ ] ISC-12: Un clic admin sur « Vehicle Verify Pending » / « Vérification du véhicule en attente » (menu, notification, widget dashboard) ouvre la page \`admin.driver.vehicle.verify.pending\` (HTTP 200) listant les chauffeurs \`vv=PENDING\` — jamais une autre file (ex. unverified) ni une page vide alors qu'il existe des pending. [app: backend+admin · classe: correctif dû · preuve: PHPUnit Feature AdminVehicleRedirectTest]
+499:**2026-11-26 18:20 — Papa : services admin + redirection véhicule non confirmée.** (1) Afficher et ordonner les services depuis l'admin backend = déjà F4 ISC-40→44 + Bridge-1 (W1) — à construire, pas un nouvel ISC. (2) Correctif dû admin : la redirection « véhicule non confirmé/non vérifié » (notif `click_url`, widget dashboard, menu) doit ouvrir la liste/fiche permettant de traiter le véhicule en attente — aujourd'hui notif → `admin.driver.vehicle.verify.pending` (DriverController.php:491) alors que le widget dashboard compte/lien `vv=UNVERIFIED` → `admin.driver.vehicle.unverified` (AdminController.php:70 + driver.blade.php:16) ; risque de liste vide ou mauvaise file. **refined:** ajout ISC-12 sous F1 + ligne Test Strategy ; progress 0/63 → 0/64.
+500:**2026-11-26 18:25 — Papa précise ISC-12.** Clic panneau admin « Vehicle Verify Pending » / véhicule en attente → page `admin.driver.vehicle.verify.pending` (liste `vv=PENDING`). Pas le débat notif vs unverified : la cible unique est la page pending. Compteur menu `pendingVehicleVerificationCount` absent du View composer ; widget dashboard véhicule pointe aujourd'hui vers unverified.
+
+$ sed -n '1,220p' core/tests/Feature/Admin/AdminVehicleRedirectTest.php
+<?php
+
+namespace Tests\Feature\Admin;
+
+use Tests\TestCase;
+
+/**
+ * ISA 2026-11-22-galass-lot-client — ISC-12.
+ * Clic admin « Vehicle Verify Pending » → page vehicle.verify.pending.
+ */
+class AdminVehicleRedirectTest extends TestCase
+{
+    public function test_vehicle_pending_route_is_registered(): void
+    {
+        $this->assertTrue(
+            \Illuminate\Support\Facades\Route::has('admin.driver.vehicle.verify.pending'),
+            'Route admin.driver.vehicle.verify.pending must exist'
+        );
+
+        $uri = app('router')->getRoutes()->getByName('admin.driver.vehicle.verify.pending')->uri();
+        $this->assertStringContainsString('vehicle-verify-pending', $uri);
+    }
+
+    public function test_dashboard_vehicle_widget_links_to_pending_not_unverified(): void
+    {
+        $blade = file_get_contents(resource_path('views/components/admin/ui/widget/group/dashboard/driver.blade.php'));
+        $this->assertNotFalse($blade);
+        $this->assertStringContainsString(
+            "route('admin.driver.vehicle.verify.pending')",
+            $blade,
+            'Dashboard vehicle widget must link to vehicle pending'
+        );
+        $this->assertStringNotContainsString(
+            "route('admin.driver.vehicle.unverified')",
+            $blade,
+            'Dashboard vehicle widget must not link to vehicle unverified'
+        );
+        $this->assertStringContainsString('vehicle_pending_driver', $blade);
+    }
+
+    public function test_menu_pending_vehicle_counter_is_provided_to_views(): void
+    {
+        $src = file_get_contents(app_path('Providers/GlobalVariablesServiceProvider.php'));
+        $this->assertNotFalse($src);
+        $this->assertStringContainsString(
+            "'pendingVehicleVerificationCount'",
+            $src,
+            'View composer must share pendingVehicleVerificationCount for menu.json counter'
+        );
+        $this->assertStringContainsString('vehicleVerifyPending()', $src);
+    }
+
+    public function test_vehicle_submit_notification_click_url_targets_pending(): void
+    {
+        $src = file_get_contents(app_path('Http/Controllers/Api/Driver/DriverController.php'));
+        $this->assertNotFalse($src);
+        $this->assertMatchesRegularExpression(
+            "/click_url\s*=\s*urlPath\(\s*'admin\.driver\.vehicle\.verify\.pending'\s*\)/",
+            $src,
+            'Vehicle submit notification must point to vehicle pending page'
+        );
+    }
+}
+
+$ git show c40c30de:docs/BUGS.md | sed -n '1,120p'
+# Galass — bugs found (test runs 1–5, 2026-10-18/19, Android 14 emulators, debug builds)
+
+Severity: P0 = blocks core flow / safety · P1 = major · P2 = visible defect · P3 = cosmetic/minor.
+"Cause" for run4 driver items: **PERM** = artefact of missing permission/config in the test, **REAL** = genuine app bug, **ENV** = emulator/test-environment.
+Screenshots are in `/workspace/galass/`. Times UTC.
+
+## État au 2026-11-22
+
+Tri sans aucun correctif de code. Preuves : Galass_backend `main` (682f235d), Galass_Rider et Galass_Driver sur leurs branches par défaut, plus les branches multistop en cours (Driver `feat/multistop-e2e-2026-11-15`, Rider `feat/multistop-rider-close-2026-11-20`). Les colonnes « Triage 2026-11-22 » et « Preuve triage » ont été ajoutées aux tableaux ; le contenu d'origine est inchangé.
+
+| Statut | Nombre |
+|---|---|
+| OUVERT | 17 (P0 : 0 · P1 : 1 · P2 : 16) |
+| CORRIGÉ | 25 |
+| OBSOLÈTE | 9 |
+| À REVÉRIFIER | 20 |
+| **Total** | **71** (70 lignes de tableaux + « NEW R-5 » du run6) |
+
+Les entrées « E-1 » du run6/run7 et les deux blocs « N-11 » sont des notes sans ligne de tableau : annotées, non comptées.
+
+**OUVERTS P0** : aucun établi par preuve (voir réserve ci-dessous).
+
+**OUVERTS P1** :
+- CFG-1 — Driver : `route.dart:7` importe `Profile/` sur `main` (build Linux/CI cassé). Correctif prêt sur la branche multistop (c9c65ff), non fusionné.
+
+**OUVERTS P2** : CFG-4, R-2 (= R8-8), R-4, R-5 (« NEW R-5 », run6), R-11, D-3, D-6, D-12, D-13, D-15, N-4, N-6, N-7, MS-5, R8-5 (corrigé sur la branche Rider multistop, absent de `main`), R8-8.
+
+**Lecture des statuts**
+- Le statut reflète la branche par défaut : un correctif présent seulement sur une branche multistop non fusionnée reste OUVERT (CFG-1, R8-5), avec le SHA du correctif.
+- OBSOLÈTE est aussi utilisé, par écart à la définition stricte, pour les entrées qui ne sont pas des bugs du code : environnement de test (ENV : D-4, D-8, E-2, R8-11), décision produit voulue (E-4, E-5), comportement correct (D-5), information (E-3, N-9). Elles sont repérées « Hors bug » dans la colonne preuve.
+- Aucune entrée n'est classée P0 faute de preuve : un P0 peut se cacher parmi les À REVÉRIFIER (D-1 démarrage auto en ligne, D-9, D-12, R-6, R-7), qui demandent un test sur appareil.
+
+**ID en double** : R-5, R-6, R-7, D-9, D-10, D-11, D-12, D-13 (tableau Rider/Driver et tableau Run7), E-1 (tableau run5, Run6, Run7). Doublons de fond : D-7 = CFG-3, D-14 = R-7, R8-8 = R-2, R8-6 = D-10 (run7), MS-2 ≈ N-1, MS-6 ≈ D-11, R8-3 ≈ D-11.
+
+**Demandes de fonctionnalité / hors bug** : MS-5 (facturation de l'attente par arrêt, V2.1), N-6 (canaux Android séparés), N-9 (boîte de réception), N-11 (spécification des textes, déjà implémentée), E-4 et E-5 (décisions produit), R-12 (donnée de test), MS-3 et MS-4 (documentation / exploitation).
+
+## Setup / build / config
+| ID | Area | Sev | Issue | Expected vs actual | Evidence | Suspected file / fix | Triage 2026-11-22 | Preuve triage |
+|---|---|---|---|---|---|---| --- | --- |
+| CFG-1 | Driver build | P1 | Linux/CI build fails: `route.dart` imports `screens/Profile/profile_screen.dart` but the folder is `profile/` (works only on case-insensitive macOS). | Builds on any OS; actual: compile error "Error when reading … No such file". Worked around with a local symlink (uncommitted). | `driver-build.log` (run1) | `Galass_Driver/lib/core/route/route.dart:7` → fix import case | **OUVERT P1** | DR origin/main `lib/core/route/route.dart:7` importe toujours `Profile/` (casse sur Linux/CI). Correctif prêt sur DR feat/multistop-e2e-2026-11-15 (`route.dart:7` → `profile/`, c9c65ff, 2026-11-16), **non fusionné** : à merger. |
+| CFG-2 | Firebase / GCP | P0 (debug/CI only) | Phone auth blocked for non-registered signing keys: `17499 Requests from this Android client application … are blocked` (403 GetAuthDomainTask). | Two separate places needed the debug SHA-1 `6D:97:52:…:11:A9`: Firebase app fingerprints **and** GCP "Android key (auto created by Firebase)" restrictions. **Fixed by Papa 00:00** (run4 OK). | `run3-driver-01-blocked.png`, logcat run3 | Document in SECURE_CREDENTIALS_SETUP.md | **CORRIGÉ** | Config externe (Firebase + GCP), corrigée par Papa selon l'entrée ; run4 puis le run7 E2E complet passent l'auth téléphone. Pas de code à prouver. |
+| CFG-3 | Google Maps key | P1 (debug/CI) | Maps SDK `Authorization failure` → **blank maps** (driver home, rider ride map). Maps key in `AndroidManifest.xml` (`com.google.android.geo.API_KEY`) does not allow the box debug SHA-1. | Map tiles render; actual: beige empty map with Google logo. Same fix as CFG-2 but on the **Maps** key (and check "Maps SDK for Android" enabled). | `run5-driver-03-home.png`, `run4-driver-04-home.png`, `run4-rider-05-where.png` | GCP Credentials → Maps key → add `sn.galass.galassdriver` / `sn.galass.galassrider` + SHA-1 | **CORRIGÉ** | Section « Maps fix — RESOLVED » (run6, 2026-10-19) : cartes rendues sur les deux apps après ajout du SHA-1 à la clé. Config externe. |
+| CFG-4 | Builds | P3 | Repo gradle `jvmargs` −Xmx6–8G: OOM-kills the daemon on 15 GB/no-swap CI box; NDK 29 install race when building both in parallel. | — | run1 build logs | `android/gradle.properties` | **OUVERT P2** | DR `android/gradle.properties:1` `-Xmx8G` ; RI `android/gradle.properties:1` `-Xmx6g` toujours en place (main). CI : les APK se compilent sur GitHub Actions, risque limité à la box locale. |
+
+## Rider
+| ID | Sev | Issue | Steps | Expected vs actual | Evidence | Suspected file | Triage 2026-11-22 | Preuve triage |
+|---|---|---|---|---|---|---| --- | --- |
+| R-1 | P1 | Login failure is silent | Login with blocked/failed phone auth (run3) | Error message; actual: Connexion does nothing, error only in logcat | `run2-rider-after-connexion.png` | `lib/services/AuthService.dart` (`verificationFailed` → no UI) | **CORRIGÉ** | RI `lib/data/controller/auth/login_controller.dart:135-138` : `FirebaseAuthException` → `CustomSnackBar.error`. (`AuthService.dart:125-132` propage l'erreur via le completer.) |
+| R-2 | P1 | Address autocomplete not restricted to Senegal (biased by device location only) | Device GPS outside SN, search "Place de l'Independance Dakar" | SN results; actual: only US places (Moses Lake WA, Newark DE). With Dakar GPS (run5) results are correct → add `components=country:sn` | `run4-rider-06-pickup-search.png`, `run4-rider-07-search-us-results.png`, OK: `run5-e2e-02-dest-search.png` | places autocomplete call (select location controller) | **OUVERT P2** | RI `lib/data/repo/location/location_search_repo.dart:93-98` : `components=country:` vient du pays de la **position de l'appareil**, jamais forcé à `sn`. Hors Sénégal → résultats étrangers. N'affecte pas un usage réel à Dakar. Voir aussi R8-8 (doublon). |
+| R-3 | P1 | No service-area / max distance check on fares | Pickup + destination 4 360 km apart (US) | Refuse / out of zone; actual: quote 1 744 230 CFA Economie, 4 360 585 CFA luxe, "Trouver un chauffeur" enabled | `run4-rider-08-after-confirm-location.png`, `run4-rider-09-pre-confirm.png` | fare endpoint + rider validation | **CORRIGÉ** | BE `core/app/Services/Rider/RideService.php:466-478` `detectZones()` : refuse un départ ou une destination hors zone et deux pays différents (`not_found`), avant tout tarif (`getFareAndRouteData` l.25-31). |
+| R-4 | P1 | Google Directions API called on every ride-detail poll (~every 4 s) while searching | Request a ride, stay on search screen | Route fetched once; actual: `maps/api/directions` + `ride/details` every ~4 s (cost + battery) | logcat run5 01:12:39–01:14 | `ride_details_controller.dart:396+`, `flutter_polyline_points/network_util.dart:82` | **OUVERT P2** | RI `ride_details_controller.dart:410` appelle `mapController.loadMap` à chaque rafraîchissement des détails → `ride_map_controller.dart:176` `getPolyLinePoints()` sans cache de route (seul `_numberedStopIconCache` existe, l.34). |
+| R-5 | P2 | Cancelled-by-system ride shows "Par moi" + raw code `NO_DRIVER_AVAILABLE` (no space) | Ride gets no driver | "Annulée : aucun chauffeur disponible"; actual: "Par moiNO_DRIVER_AVAILABLE" | `run5-e2e-10-rider-cancelled-tab.png` | ride list card cancel-reason widget | **À REVÉRIFIER** | Chaîne FR existe (`my_strings.dart:95` « Aucun chauffeur disponible ») mais le widget de raison d'annulation de la liste n'a pas été localisé en 2 recherches. **DOUBLON d'ID** avec « NEW R-5 » (run6). |
+| R-6 | P2 | Searching screen never tells the user the ride was cancelled (app died; on relaunch ride silently gone from active list) | — | Clear "aucun chauffeur" state | `run5-e2e-05-rider-searching.png` → `run5-e2e-09-rider-new-rides.png` | dispatch search UI | **À REVÉRIFIER** | Écran de recherche non relu. Côté serveur, push « aucun chauffeur » ajouté : BE `DispatchOrchestrator.php:352` `RidePushNotifier->noDriver`. **DOUBLON d'ID** avec R-6 (run7, crash). |
+| R-7 | P2 | OTP screen number mask wrong: "+2217******7777777" | Login | "+221 7•• ••• •77"; actual: more digits than number | `run4-rider-01-after-connexion.png` | OTP screen mask helper (also Driver) | **À REVÉRIFIER** | Aucun code de masque du numéro OTP trouvé côté Rider (`AuthService._maskPhone` l.58 ne sert qu'aux logs). **DOUBLON d'ID** avec R-7 (run7) ; même défaut que D-14. |
+| R-8 | P2 | Home location stuck "Chargement…" when position unavailable; ride map spinner forever | Run4 (no fix) | Fallback/error; actual: infinite loading. With GPS (run5) the address resolves → partly ENV | `run4-rider-04-home.png`, `run4-rider-05-where.png` | home header / location controller | **À REVÉRIFIER** | Dépend de l'absence de position (run4 sans GPS), en partie ENV selon l'entrée ; non reproductible par lecture du code. |
+| R-9 | P2 | Debug "Test Crashlytics" button visible on login screen | Open login | Hidden outside debug; verify release build | `artemis-rider-login.png` | login screen | **CORRIGÉ** | RI `lib/presentation/screens/auth/login/login_screen.dart:~213` bouton « Test Crashlytics » sous `if (kDebugMode)`. |
+| R-10 | P3 | Internal slug "voiture/economie" shown as Economie subtitle | Home | Human label | `run4-rider-04-home.png` | service model display | **À REVÉRIFIER** | Aucun `voiture/economie` / slug dans `lib/` du Rider en 2 recherches : le sous-titre vient probablement de la réponse backend. |
+| R-11 | P3 | Copy: placeholder "Destination de prise en charge"; "les Confidentialité et conditions"; "Livraison par  2 roues" (double space); "/kilomètres" plural; mixed "CFA1230" vs "1230 XOF", no thousands separators | — | — | `run4-rider-05-where.png`, `artemis-rider-signup.png`, `run4-rider-09-pre-confirm.png` | `fr` strings / formatters | **OUVERT P2** | RI `lib/core/utils/my_strings.dart:42` `pickUpDestination = "Destination de prise en charge"` toujours là. Autres libellés de l'entrée non revérifiés. |
+| R-12 | P3 | Test account name junk "hejjjdb jjejjdb" | — | Test data | `run4-rider-04-home.png` | backend test data | **À REVÉRIFIER** | Donnée de test backend (compte de test), pas de code. **Hors bug.** |
+
+## Driver
+| ID | Sev | Cause (run4) | Issue | Expected vs actual | Evidence | Suspected file | Triage 2026-11-22 | Preuve triage |
+|---|---|---|---|---|---|---| --- | --- |
+| D-1 | **P0** | REAL | **Auto back "En ligne" after restart/reboot** without user action; FGS restarts on boot/update and pings GPS | Stay offline or ask; actual: run4 after system restart app showed En ligne and pinged. Code: `autoRunOnBoot: true`, `autoRunOnMyPackageReplaced: true`; UI online state from server, FGS from local pref (no sync) | `run4-driver-07-online-unexpected.png` | `forground_task_widget.dart:65-81`, `dashboard_controller.dart:254`, see DRIVER-GPS-ANALYSIS.md | **À REVÉRIFIER** | Atténué mais non prouvé : DR `lib/data/services/forground_location_service.dart:33-37` `_shouldKeepRunning()` arrête le service si la pref locale est hors ligne (9b34386). `forground_task_widget.dart:69-70` garde `autoRunOnBoot/OnMyPackageReplaced: true`. Aucun test de redémarrage trouvé. |
+| D-2 | P1 | REAL | Online toggle requires several taps / unreliable to go offline: two taps at 01:21 did not switch (state stayed online server-side) before app was killed by ENV; third tap after relaunch worked | One tap switches; actual: no change | `run5-driver-06-toggle-stuck.png`, `run5-driver-07-offline-final.png` | `online_status_widget.dart:71` / `changeOnlineStatus` (possibly `isChangingOnlineStatusLoading` guard) — needs repro | **À REVÉRIFIER** | Entrée « needs repro » ; garde `isChangingOnlineStatusLoading` toujours là (DR `dashboard_controller.dart:533-569`), aucune preuve de correction ni de test. |
+| D-3 | P1 | REAL | Raw English Firebase error shown to user on login failure | French message; actual: "unknown: An internal error has occurred. Requests from this Android client application … are blocked." | `run2-driver-after-send.png` | phone auth error mapping | **OUVERT P2** | DR `lib/data/controller/auth/firebase_phone_auth_controller.dart:303-305` (aussi l.329, l.418) affiche `e.message` brut de Firebase (anglais) sans mappage FR. |
+| D-4 | P1 | ENV/PERM | ANR "Galass Chauffeur isn't responding" after login (run4) | Run5 with all permissions + Dakar GPS: **no ANR**. Run4 coincided with CPU 85% + Maps SDK timeouts → mostly ENV; still watch main-thread work at dashboard init | `run4-driver-03-anr.png` | dashboard init / map | **OBSOLÈTE** | ENV selon l'entrée : run5 avec permissions + GPS de Dakar sans ANR. Aucun code à corriger. **Hors bug (ENV).** |
+| D-5 | P2 | PERM | "Autoriser la localisation en permanence" banner shown | Shown only when not Always — correct behaviour; disappears with Always (run5) | `run4-driver-07-online-unexpected.png` vs `run5-driver-03-home.png` | — | **OBSOLÈTE** | L'entrée dit elle-même « correct behaviour » (bannière affichée seulement hors permission Toujours). **Hors bug.** |
+| D-6 | P2 | REAL | Banner CTA "Ouvrir les paramètres" text clipped (fixed 145×36 box) | Full label | `run4-driver-07-online-unexpected.png` | `always_location_permission_checker.dart:123-139` | **OUVERT P2** | DR `lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:~124-126` `SizedBox(width: 145, height: 36)` fixe autour du bouton. |
+| D-7 | P1 | CFG | Blank map (driver home) | = CFG-3 Maps key, not permission (run5 still blank with Always) | `run5-driver-03-home.png` | Maps key | **CORRIGÉ** | Même cause que CFG-3 (clé Maps) : résolue au run6. **DOUBLON de CFG-3.** |
+| D-8 | P2 | ENV | US address on home (Ukiah CA) | Emulator GPS; run5 Dakar mock → "4267 Allees Seydou Nourou Tall, Dakar" | `run5-driver-04-online.png` | — | **OBSOLÈTE** | ENV émulateur (GPS), résolu au run5 avec GPS de Dakar. **Hors bug (ENV).** |
+| D-9 | P2 | REAL | Untranslated English on driver documents: "License Number", "License Expire" (+ "12:00:00 AM"), "License Photo", "NID Image_Both SIde", "Driving Experience" | French labels | `run4-driver-11-infos-vehicule.png` | driver info tab labels (backend form field names?) | **À REVÉRIFIER** | « License Number », « Driving Experience », etc. : 0 résultat dans DR `lib/` → libellés issus du backend (champs de formulaire). **DOUBLON d'ID** avec D-9 (run7). |
+| D-10 | P2 | REAL | Wallet: "Solde total CFA0" while transactions +690/+10/commission 700; labels "Balance Add", "Ride Commission" in English | Coherent balance, French labels | `run4-driver-14-portefeuille.png` | wallet screen / backend trx remarks | **À REVÉRIFIER** | « Balance Add / Ride Commission » : 0 résultat dans DR `lib/` → viennent des remarques de transaction backend. Cohérence du solde non revérifiée. **DOUBLON d'ID** avec D-10 (run7). |
+| D-11 | P2 | REAL | Debug block on login: "Crashlytics (debug)", "Erreurs", "Crash fatal (test)" | Hidden in release (verify) | `run4-driver-login` / `run2-driver-phone.png` | login screen | **CORRIGÉ** | DR `lib/presentation/screens/auth/login/widgets/login_crashlytics_debug_panel.dart:15` `if (!kDebugMode)` masque le bloc en release. **DOUBLON d'ID** avec D-11 (run7). |
+| D-12 | P3 | REAL | Activité: "2 Min • 23.37 km" implausible ETA; 12-h AM/PM times; rides stuck "En attente de paiement" | — | `run4-driver-13-activite.png` | ride card | **OUVERT P2** | DR `lib/core/helper/date_converter.dart:18` (`'hh:mm aa'`) et `:90` (`'hh:mm:ss a'`) : heures 12 h AM/PM. ETA 2 min / statut bloqué non revérifiés. **DOUBLON d'ID** avec D-12 (run7). |
+| D-13 | P3 | REAL | Menu: "Changer le mot de passe" in OTP-only app; bottom nav overlaps last items ("Inter-villes"); Profil "Senegal" (not "Sénégal"); vehicle tab "Nom du service : Voiture" raw | — | `run4-driver-09-menu.png`, `run4-driver-10-profil.png`, `run4-driver-12-infos-vehicule-tab2.png` | — | **OUVERT P2** | DR `lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:~130` « Changer le mot de passe » (`my_strings.dart:425`, route `route.dart:64`) toujours exposé alors que l'app est OTP seule. Autres points du menu non revérifiés. **DOUBLON d'ID** avec D-13 (run7). |
+| D-14 | P3 | REAL | OTP mask "+2217******7777777" (same as R-7) | — | run4 driver OTP | — | **À REVÉRIFIER** | **DOUBLON** de R-7 : aucun masque OTP localisé côté Driver non plus (`firebase_phone_auth_controller.dart` non relu en entier). |
+| D-15 | P2 | REAL | iOS location purpose strings English only; FGS notification channel name English | French | Info.plist, `forground_task_widget.dart:54-56` | — | **OUVERT P2** | DR `ios/Runner/Info.plist:18-25` descriptions `NSLocation*UsageDescription` en anglais ; `forground_task_widget.dart:54-56` canal « Foreground Service Notification » en anglais. |
+
+## End-to-end (run5)
+| ID | Sev | Issue | Steps | Expected vs actual | Evidence | Triage 2026-11-22 | Preuve triage |
+|---|---|---|---|---|---| --- | --- |
+| E-1 | **P0** (to confirm) | **No dispatch offer to an eligible online test driver**: ride #249 (Voiture, cash, 1230 XOF, 4.91 km, pickup MHV3+674 Rue CO 38 → Place de l'Indépendance) created 01:12:39; driver #18 (zone 1, service 3, dv=1, vv=1) online since 01:11:58 at 1.5 km with `location ping HTTP=200` every ≤30 s; driver poll `pending_rides=0 active_offer=false` throughout; ride ended **cancelled `NO_DRIVER_AVAILABLE`** (~3 min). | Rider request while test driver online | Offer to driver 18 within seconds; actual none. Candidate causes (backend `DispatchService::eligibleDrivers`): pickup_zone_id ≠ driver zone 1, `service_id` mismatch, `notRunning()` (driver has old rides), stale `location_updated_at` vs TTL, or dispatch queue/cron not processing. Needs server log/DB check for ride 249 attempts. | `run5-e2e-04-pre-request.png`, `run5-e2e-05-rider-searching.png`, `run5-e2e-06-driver-screen.png`, `run5-e2e-10-rider-cancelled-tab.png` | **CORRIGÉ** | Cause confirmée au run7 (« RESOLVED ») : solde -0,40 < `negative_balance_driver` 0. BE `DispatchOrchestrator.php:365-366` `balance >= gs('negative_balance_driver')`. **DOUBLON d'ID** : E-1 apparaît aussi dans « Run6 update » et « Run7 update ». |
+| E-2 | P3 (ENV) | Both apps killed by SIGKILL while foreground (rider 01:14:12, driver 01:22:15), concurrently with other processes → Play services/Play Store update on emulator, not app crash (no FATAL). | — | — | logcat run5 | **OBSOLÈTE** | ENV (SIGKILL émulateur, Play Services), pas un crash applicatif. **Hors bug (ENV).** |
+| E-3 | info | Rider and driver test accounts use the same phone (+221777777777) — fine (separate tables) but confusing in logs. | — | — | — | **OBSOLÈTE** | Entrée « info » (même numéro de test pour rider et driver). **Hors bug.** |
+
+## Counts
+P0: 3 (D-1 auto-online, E-1 no dispatch, CFG-2 resolved) · P1: 10 · P2: 12 · P3: 8 · info: 1 — 34 entries.
+
+---
+## Run6 update (2026-10-19 01:30–01:42 UTC)
+
+### Maps fix — RESOLVED
+
+> **Triage 2026-11-22 — CORRIGÉ** : même résolution que CFG-3 / D-7 (config de clé, hors code).
+After the debug SHA-1 was added to the 'Android App API KEY' (~01:28 UTC), maps render on both apps: Driver (run6-driver-map.png, run6-driver-offer.png) and Rider. No "Authorization failure" in logcat on either app.
+
+### NEW R-5 (Rider, minor): GoogleMapController used after dispose
+
+> **Triage 2026-11-22 — OUVERT P2** (entrée « NEW R-5 », **DOUBLON de l'ID R-5** du tableau Rider) : RI `lib/data/controller/location/select_location_controller.dart:382-393` `animateMapCameraPosition` appelle `mapController?.animateCamera` sans garde de disposition de la carte.
+Crashlytics error `Bad state: GoogleMapController for map ID 0 was used after the associated GoogleMap widget had already been disposed` in SelectLocationController.animateMapCameraPosition (select_location_controller.dart:393), called from getCurrentPosition (:224). It happens when the location screen opens or closes while the GPS fix is still pending. The select-location map also stayed on a spinner for more than 15 s (run6-rider-map.png, run6-rider-map2.png).
+
+### E-1 (dispatch: driver never gets an offer) — STILL FAILING, new evidence
+
+> **Triage 2026-11-22 — CORRIGÉ** (**DOUBLON d'ID** : E-1 du tableau run5, section Run6 « STILL FAILING », puis « RESOLVED » au run7) : cause = solde < `negative_balance_driver` (BE `DispatchOrchestrator.php:365-366`). Voir E-1.
+- Before the ride, the driver went OFFLINE→ONLINE. `online-status` returned OK, `save-device-token OK` (the FCM token was re-registered), and `location-update` returned HTTP 200 about every 10 s for the whole wait.
+- Driver app's own log: `driverId=18 zoneId=1 serviceId=3 dv=1 vv=1 online=true`. Wallet screen: "Solde portefeuille CFA0".
+- Ride #250 (Voiture, cash, 1230 XOF, 4.91 km, created 01:34:03 UTC): `service_id=3, pickup_zone_id=1, destination_zone_id=1`. It was cancelled at 01:37:01 UTC with `cancel_reason=NO_DRIVER_AVAILABLE`, status 9. The driver saw `pending_rides=0 active_offer=false` the whole time.
+- Code path: the cancel after ~3 min matches DispatchOrchestrator's expired-ride sweep. That sweep only cancels PENDING rides with **no DispatchAttempt at all** (window = max_attempts × offer_timeout = 5×30 s). So the server **never created an offer**: `eligibleDrivers()` or `filterFreshLocation()` returned nothing. FCM or Pusher delivery is not the cause.
+- These conditions match: zone (1=1), service (3=3), dv, vv, online_status, location freshness (pings every 10 s, TTL 60 s, fallback 120 s).
+- notRunning: it only excludes rides with status 3 (RIDE_RUNNING), and the "Course en cours" tab is empty. The driver does have 3 old rides stuck at status 4 "En attente de paiement" (09–12 Oct). The cloned code does not count those, but the deployed code might.
+- Still unverified, and the likely failing condition: `Driver::active()` = `status=USER_ACTIVE AND ev=1 AND sv=1 AND vv=1`, or `balance >= gs('negative_balance_driver')`. If the admin set negative_balance_driver to a value ≥ 0 (for example a minimum positive balance), a balance of 0 / -700 fails. The app logs do not include the response bodies, so these fields cannot be read from the client. They need to be checked in the DB or admin panel for driver 18: status, ev, sv, balance, plus gs.negative_balance_driver, and whether the deployed backend matches the cloned DispatchService.
+- Driver set back OFFLINE; after force-stop and relaunch the server reports online=false.
+
+---
+## Run7 update (2026-10-19 03:04–03:52 UTC) — FIRST FULL E2E RIDE OK (#253)
+
+Fresh emulators (run 39192926887), APKs rebuilt (box had rebooted; same debug SHA-1). Driver 18 balance 0.00 ≥ negative_balance_driver 0 before start; OFFLINE→ONLINE gave `FCM save-device-token OK`, DB online_status=1.
+
+Timeline #253 (Voiture service_id=3, cash payment_type=2, 1170 XOF, 4.68 km, MHV3+674 Rue CO 38 → Place de l'Indépendance):
+
+$ git show c40c30de:docs/BUGS.md | rg -n "OUVERT|À REVÉRIFIER|CFG-1|D-1|D-9|D-12|R-6|R-7" | head -30
+13:| OUVERT | 17 (P0 : 0 · P1 : 1 · P2 : 16) |
+16:| À REVÉRIFIER | 20 |
+21:**OUVERTS P0** : aucun établi par preuve (voir réserve ci-dessous).
+23:**OUVERTS P1** :
+24:- CFG-1 — Driver : `route.dart:7` importe `Profile/` sur `main` (build Linux/CI cassé). Correctif prêt sur la branche multistop (c9c65ff), non fusionné.
+26:**OUVERTS P2** : CFG-4, R-2 (= R8-8), R-4, R-5 (« NEW R-5 », run6), R-11, D-3, D-6, D-12, D-13, D-15, N-4, N-6, N-7, MS-5, R8-5 (corrigé sur la branche Rider multistop, absent de `main`), R8-8.
+29:- Le statut reflète la branche par défaut : un correctif présent seulement sur une branche multistop non fusionnée reste OUVERT (CFG-1, R8-5), avec le SHA du correctif.
+31:- Aucune entrée n'est classée P0 faute de preuve : un P0 peut se cacher parmi les À REVÉRIFIER (D-1 démarrage auto en ligne, D-9, D-12, R-6, R-7), qui demandent un test sur appareil.
+33:**ID en double** : R-5, R-6, R-7, D-9, D-10, D-11, D-12, D-13 (tableau Rider/Driver et tableau Run7), E-1 (tableau run5, Run6, Run7). Doublons de fond : D-7 = CFG-3, D-14 = R-7, R8-8 = R-2, R8-6 = D-10 (run7), MS-2 ≈ N-1, MS-6 ≈ D-11, R8-3 ≈ D-11.
+40:| CFG-1 | Driver build | P1 | Linux/CI build fails: `route.dart` imports `screens/Profile/profile_screen.dart` but the folder is `profile/` (works only on case-insensitive macOS). | Builds on any OS; actual: compile error "Error when reading … No such file". Worked around with a local symlink (uncommitted). | `driver-build.log` (run1) | `Galass_Driver/lib/core/route/route.dart:7` → fix import case | **OUVERT P1** | DR origin/main `lib/core/route/route.dart:7` importe toujours `Profile/` (casse sur Linux/CI). Correctif prêt sur DR feat/multistop-e2e-2026-11-15 (`route.dart:7` → `profile/`, c9c65ff, 2026-11-16), **non fusionné** : à merger. |
+43:| CFG-4 | Builds | P3 | Repo gradle `jvmargs` −Xmx6–8G: OOM-kills the daemon on 15 GB/no-swap CI box; NDK 29 install race when building both in parallel. | — | run1 build logs | `android/gradle.properties` | **OUVERT P2** | DR `android/gradle.properties:1` `-Xmx8G` ; RI `android/gradle.properties:1` `-Xmx6g` toujours en place (main). CI : les APK se compilent sur GitHub Actions, risque limité à la box locale. |
+49:| R-2 | P1 | Address autocomplete not restricted to Senegal (biased by device location only) | Device GPS outside SN, search "Place de l'Independance Dakar" | SN results; actual: only US places (Moses Lake WA, Newark DE). With Dakar GPS (run5) results are correct → add `components=country:sn` | `run4-rider-06-pickup-search.png`, `run4-rider-07-search-us-results.png`, OK: `run5-e2e-02-dest-search.png` | places autocomplete call (select location controller) | **OUVERT P2** | RI `lib/data/repo/location/location_search_repo.dart:93-98` : `components=country:` vient du pays de la **position de l'appareil**, jamais forcé à `sn`. Hors Sénégal → résultats étrangers. N'affecte pas un usage réel à Dakar. Voir aussi R8-8 (doublon). |
+51:| R-4 | P1 | Google Directions API called on every ride-detail poll (~every 4 s) while searching | Request a ride, stay on search screen | Route fetched once; actual: `maps/api/directions` + `ride/details` every ~4 s (cost + battery) | logcat run5 01:12:39–01:14 | `ride_details_controller.dart:396+`, `flutter_polyline_points/network_util.dart:82` | **OUVERT P2** | RI `ride_details_controller.dart:410` appelle `mapController.loadMap` à chaque rafraîchissement des détails → `ride_map_controller.dart:176` `getPolyLinePoints()` sans cache de route (seul `_numberedStopIconCache` existe, l.34). |
+52:| R-5 | P2 | Cancelled-by-system ride shows "Par moi" + raw code `NO_DRIVER_AVAILABLE` (no space) | Ride gets no driver | "Annulée : aucun chauffeur disponible"; actual: "Par moiNO_DRIVER_AVAILABLE" | `run5-e2e-10-rider-cancelled-tab.png` | ride list card cancel-reason widget | **À REVÉRIFIER** | Chaîne FR existe (`my_strings.dart:95` « Aucun chauffeur disponible ») mais le widget de raison d'annulation de la liste n'a pas été localisé en 2 recherches. **DOUBLON d'ID** avec « NEW R-5 » (run6). |
+53:| R-6 | P2 | Searching screen never tells the user the ride was cancelled (app died; on relaunch ride silently gone from active list) | — | Clear "aucun chauffeur" state | `run5-e2e-05-rider-searching.png` → `run5-e2e-09-rider-new-rides.png` | dispatch search UI | **À REVÉRIFIER** | Écran de recherche non relu. Côté serveur, push « aucun chauffeur » ajouté : BE `DispatchOrchestrator.php:352` `RidePushNotifier->noDriver`. **DOUBLON d'ID** avec R-6 (run7, crash). |
+54:| R-7 | P2 | OTP screen number mask wrong: "+2217******7777777" | Login | "+221 7•• ••• •77"; actual: more digits than number | `run4-rider-01-after-connexion.png` | OTP screen mask helper (also Driver) | **À REVÉRIFIER** | Aucun code de masque du numéro OTP trouvé côté Rider (`AuthService._maskPhone` l.58 ne sert qu'aux logs). **DOUBLON d'ID** avec R-7 (run7) ; même défaut que D-14. |
+55:| R-8 | P2 | Home location stuck "Chargement…" when position unavailable; ride map spinner forever | Run4 (no fix) | Fallback/error; actual: infinite loading. With GPS (run5) the address resolves → partly ENV | `run4-rider-04-home.png`, `run4-rider-05-where.png` | home header / location controller | **À REVÉRIFIER** | Dépend de l'absence de position (run4 sans GPS), en partie ENV selon l'entrée ; non reproductible par lecture du code. |
+57:| R-10 | P3 | Internal slug "voiture/economie" shown as Economie subtitle | Home | Human label | `run4-rider-04-home.png` | service model display | **À REVÉRIFIER** | Aucun `voiture/economie` / slug dans `lib/` du Rider en 2 recherches : le sous-titre vient probablement de la réponse backend. |
+58:| R-11 | P3 | Copy: placeholder "Destination de prise en charge"; "les Confidentialité et conditions"; "Livraison par  2 roues" (double space); "/kilomètres" plural; mixed "CFA1230" vs "1230 XOF", no thousands separators | — | — | `run4-rider-05-where.png`, `artemis-rider-signup.png`, `run4-rider-09-pre-confirm.png` | `fr` strings / formatters | **OUVERT P2** | RI `lib/core/utils/my_strings.dart:42` `pickUpDestination = "Destination de prise en charge"` toujours là. Autres libellés de l'entrée non revérifiés. |
+59:| R-12 | P3 | Test account name junk "hejjjdb jjejjdb" | — | Test data | `run4-rider-04-home.png` | backend test data | **À REVÉRIFIER** | Donnée de test backend (compte de test), pas de code. **Hors bug.** |
+64:| D-1 | **P0** | REAL | **Auto back "En ligne" after restart/reboot** without user action; FGS restarts on boot/update and pings GPS | Stay offline or ask; actual: run4 after system restart app showed En ligne and pinged. Code: `autoRunOnBoot: true`, `autoRunOnMyPackageReplaced: true`; UI online state from server, FGS from local pref (no sync) | `run4-driver-07-online-unexpected.png` | `forground_task_widget.dart:65-81`, `dashboard_controller.dart:254`, see DRIVER-GPS-ANALYSIS.md | **À REVÉRIFIER** | Atténué mais non prouvé : DR `lib/data/services/forground_location_service.dart:33-37` `_shouldKeepRunning()` arrête le service si la pref locale est hors ligne (9b34386). `forground_task_widget.dart:69-70` garde `autoRunOnBoot/OnMyPackageReplaced: true`. Aucun test de redémarrage trouvé. |
+65:| D-2 | P1 | REAL | Online toggle requires several taps / unreliable to go offline: two taps at 01:21 did not switch (state stayed online server-side) before app was killed by ENV; third tap after relaunch worked | One tap switches; actual: no change | `run5-driver-06-toggle-stuck.png`, `run5-driver-07-offline-final.png` | `online_status_widget.dart:71` / `changeOnlineStatus` (possibly `isChangingOnlineStatusLoading` guard) — needs repro | **À REVÉRIFIER** | Entrée « needs repro » ; garde `isChangingOnlineStatusLoading` toujours là (DR `dashboard_controller.dart:533-569`), aucune preuve de correction ni de test. |
+66:| D-3 | P1 | REAL | Raw English Firebase error shown to user on login failure | French message; actual: "unknown: An internal error has occurred. Requests from this Android client application … are blocked." | `run2-driver-after-send.png` | phone auth error mapping | **OUVERT P2** | DR `lib/data/controller/auth/firebase_phone_auth_controller.dart:303-305` (aussi l.329, l.418) affiche `e.message` brut de Firebase (anglais) sans mappage FR. |
+69:| D-6 | P2 | REAL | Banner CTA "Ouvrir les paramètres" text clipped (fixed 145×36 box) | Full label | `run4-driver-07-online-unexpected.png` | `always_location_permission_checker.dart:123-139` | **OUVERT P2** | DR `lib/presentation/screens/rides/home_screen/widget/always_location_permission_checker.dart:~124-126` `SizedBox(width: 145, height: 36)` fixe autour du bouton. |
+72:| D-9 | P2 | REAL | Untranslated English on driver documents: "License Number", "License Expire" (+ "12:00:00 AM"), "License Photo", "NID Image_Both SIde", "Driving Experience" | French labels | `run4-driver-11-infos-vehicule.png` | driver info tab labels (backend form field names?) | **À REVÉRIFIER** | « License Number », « Driving Experience », etc. : 0 résultat dans DR `lib/` → libellés issus du backend (champs de formulaire). **DOUBLON d'ID** avec D-9 (run7). |
+73:| D-10 | P2 | REAL | Wallet: "Solde total CFA0" while transactions +690/+10/commission 700; labels "Balance Add", "Ride Commission" in English | Coherent balance, French labels | `run4-driver-14-portefeuille.png` | wallet screen / backend trx remarks | **À REVÉRIFIER** | « Balance Add / Ride Commission » : 0 résultat dans DR `lib/` → viennent des remarques de transaction backend. Cohérence du solde non revérifiée. **DOUBLON d'ID** avec D-10 (run7). |
+74:| D-11 | P2 | REAL | Debug block on login: "Crashlytics (debug)", "Erreurs", "Crash fatal (test)" | Hidden in release (verify) | `run4-driver-login` / `run2-driver-phone.png` | login screen | **CORRIGÉ** | DR `lib/presentation/screens/auth/login/widgets/login_crashlytics_debug_panel.dart:15` `if (!kDebugMode)` masque le bloc en release. **DOUBLON d'ID** avec D-11 (run7). |
+75:| D-12 | P3 | REAL | Activité: "2 Min • 23.37 km" implausible ETA; 12-h AM/PM times; rides stuck "En attente de paiement" | — | `run4-driver-13-activite.png` | ride card | **OUVERT P2** | DR `lib/core/helper/date_converter.dart:18` (`'hh:mm aa'`) et `:90` (`'hh:mm:ss a'`) : heures 12 h AM/PM. ETA 2 min / statut bloqué non revérifiés. **DOUBLON d'ID** avec D-12 (run7). |
+76:| D-13 | P3 | REAL | Menu: "Changer le mot de passe" in OTP-only app; bottom nav overlaps last items ("Inter-villes"); Profil "Senegal" (not "Sénégal"); vehicle tab "Nom du service : Voiture" raw | — | `run4-driver-09-menu.png`, `run4-driver-10-profil.png`, `run4-driver-12-infos-vehicule-tab2.png` | — | **OUVERT P2** | DR `lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:~130` « Changer le mot de passe » (`my_strings.dart:425`, route `route.dart:64`) toujours exposé alors que l'app est OTP seule. Autres points du menu non revérifiés. **DOUBLON d'ID** avec D-13 (run7). |
+77:| D-14 | P3 | REAL | OTP mask "+2217******7777777" (same as R-7) | — | run4 driver OTP | — | **À REVÉRIFIER** | **DOUBLON** de R-7 : aucun masque OTP localisé côté Driver non plus (`firebase_phone_auth_controller.dart` non relu en entier). |
+
