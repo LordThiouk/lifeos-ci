@@ -6160,3 +6160,14 @@ class TextPainter {
   /// resources. Doing this operation is expensive and should be avoided
   /// whenever it is possible to preserve the [TextPainter] to paint the
 
+$ which llvm-ar llvm-ar-18 llvm-ar-20 2>&1 | head -10; echo "==="; find /usr/bin -name '*llvm-ar*' 2>&1 | head -15; echo "==="; ls -la /usr/lib/llvm-18/bin/ 2>&1 | head -15
+===
+===
+total 148
+drwxr-xr-x. 2 root root   4096 Nov 11 01:52 .
+drwxr-xr-x. 5 root root   4096 Nov 11 01:52 ..
+-rwxr-xr-x. 1 root root 140592 May 27  2024 clang
+lrwxrwxrwx. 1 root root      5 May 27  2024 clang++ -> clang
+lrwxrwxrwx. 1 root root      5 May 27  2024 clang-18 -> clang
+lrwxrwxrwx. 1 root root      5 May 27  2024 clang-cpp -> clang
+
