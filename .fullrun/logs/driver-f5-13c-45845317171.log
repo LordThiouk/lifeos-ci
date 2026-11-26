@@ -5820,3 +5820,82 @@ $ git show c40c30de:docs/BUGS.md | rg -n "OUVERT|À REVÉRIFIER|CFG-1|D-1|D-9|D-
 76:| D-13 | P3 | REAL | Menu: "Changer le mot de passe" in OTP-only app; bottom nav overlaps last items ("Inter-villes"); Profil "Senegal" (not "Sénégal"); vehicle tab "Nom du service : Voiture" raw | — | `run4-driver-09-menu.png`, `run4-driver-10-profil.png`, `run4-driver-12-infos-vehicule-tab2.png` | — | **OUVERT P2** | DR `lib/presentation/screens/profile_and_settings/profile_and_settings_screen.dart:~130` « Changer le mot de passe » (`my_strings.dart:425`, route `route.dart:64`) toujours exposé alors que l'app est OTP seule. Autres points du menu non revérifiés. **DOUBLON d'ID** avec D-13 (run7). |
 77:| D-14 | P3 | REAL | OTP mask "+2217******7777777" (same as R-7) | — | run4 driver OTP | — | **À REVÉRIFIER** | **DOUBLON** de R-7 : aucun masque OTP localisé côté Driver non plus (`firebase_phone_auth_controller.dart` non relu en entier). |
 
+$ ls core/tests/Feature/Payment | head -30
+ls: cannot access 'core/tests/Feature/Payment': No such file or directory
+
+$ ls core/tests/Feature/Admin | head -30
+AdminVehicleRedirectTest.php
+
+$ ls core/tests/Feature/Security 2>&1 | head -30
+DeveloperTokenStatusTest.php
+DispatchSecurityBaselineTest.php
+FcmServiceAccountOutsideWebrootTest.php
+GeneralSettingNoSecretsTest.php
+MapsWebAuthTest.php
+RideMessageOwnershipTest.php
+
+$ cat core/tests/Feature/Admin/AdminVehicleRedirectTest.php
+<?php
+
+namespace Tests\Feature\Admin;
+
+use Tests\TestCase;
+
+/**
+ * ISA 2026-11-22-galass-lot-client — ISC-12.
+ * Clic admin « Vehicle Verify Pending » → page vehicle.verify.pending.
+ */
+class AdminVehicleRedirectTest extends TestCase
+{
+    public function test_vehicle_pending_route_is_registered(): void
+    {
+        $this->assertTrue(
+            \Illuminate\Support\Facades\Route::has('admin.driver.vehicle.verify.pending'),
+            'Route admin.driver.vehicle.verify.pending must exist'
+        );
+
+        $uri = app('router')->getRoutes()->getByName('admin.driver.vehicle.verify.pending')->uri();
+        $this->assertStringContainsString('vehicle-verify-pending', $uri);
+    }
+
+    public function test_dashboard_vehicle_widget_links_to_pending_not_unverified(): void
+    {
+        $blade = file_get_contents(resource_path('views/components/admin/ui/widget/group/dashboard/driver.blade.php'));
+        $this->assertNotFalse($blade);
+        $this->assertStringContainsString(
+            "route('admin.driver.vehicle.verify.pending')",
+            $blade,
+            'Dashboard vehicle widget must link to vehicle pending'
+        );
+        $this->assertStringNotContainsString(
+            "route('admin.driver.vehicle.unverified')",
+            $blade,
+            'Dashboard vehicle widget must not link to vehicle unverified'
+        );
+        $this->assertStringContainsString('vehicle_pending_driver', $blade);
+    }
+
+    public function test_menu_pending_vehicle_counter_is_provided_to_views(): void
+    {
+        $src = file_get_contents(app_path('Providers/GlobalVariablesServiceProvider.php'));
+        $this->assertNotFalse($src);
+        $this->assertStringContainsString(
+            "'pendingVehicleVerificationCount'",
+            $src,
+            'View composer must share pendingVehicleVerificationCount for menu.json counter'
+        );
+        $this->assertStringContainsString('vehicleVerifyPending()', $src);
+    }
+
+    public function test_vehicle_submit_notification_click_url_targets_pending(): void
+    {
+        $src = file_get_contents(app_path('Http/Controllers/Api/Driver/DriverController.php'));
+        $this->assertNotFalse($src);
+        $this->assertMatchesRegularExpression(
+            "/click_url\s*=\s*urlPath\(\s*'admin\.driver\.vehicle\.verify\.pending'\s*\)/",
+            $src,
+            'Vehicle submit notification must point to vehicle pending page'
+        );
+    }
+}
+
