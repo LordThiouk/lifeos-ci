@@ -3926,3 +3926,55 @@ fi
 === _PipelineMapping ===
 LordThiouk
 
+$ sed -n '78,116p' /tmp/dvc_3501.kt; echo "=== grep whole fs for the run id ==="; grep -rl "45801376130" /home/ubuntu/actions-runner/_work /tmp 2>/dev/null | head
+"defined in the android block of the app-level `build.gradle(.kts)` file " +
+            "($projectDirectory/app/build.gradle(.kts))."
+
+    // The following versions define our support policy for Gradle, Java, AGP, and KGP.
+    // Before updating any "error" version, ensure that you have updated the corresponding
+    // "warn" version for a full release to provide advanced warning. See
+    // flutter.dev/go/android-dependency-versions for more.
+    // Advice for maintainers for other areas of code that are impacted are documented
+    // in packages/flutter_tools/lib/src/android/README.md.
+
+    @VisibleForTesting internal val warnGradleVersion: Version = Version(9, 5, 0)
+
+    @VisibleForTesting internal val errorGradleVersion: Version = Version(9, 3, 1)
+
+    // Java error and warn should align with packages/flutter_tools/lib/src/android/gradle_utils.dart.
+    @VisibleForTesting internal val warnJavaVersion: JavaVersion = JavaVersion.VERSION_17
+
+    @VisibleForTesting internal val errorJavaVersion: JavaVersion = JavaVersion.VERSION_17
+
+    @VisibleForTesting internal val warnAGPVersion: AndroidPluginVersion = AndroidPluginVersion(9, 3, 1)
+
+    @VisibleForTesting internal val errorAGPVersion: AndroidPluginVersion = AndroidPluginVersion(9, 1, 1)
+
+    @VisibleForTesting internal val firstUnsupportedAGPMajorVersion: Int = 10
+
+    @VisibleForTesting internal val warnKGPVersion: Version = Version(2, 4, 20)
+
+    @VisibleForTesting internal val errorKGPVersion: Version = Version(2, 4, 10)
+
+    // If this value is changed, then make sure to change the documentation on https://docs.flutter.dev/reference/supported-platforms
+    // Non inclusive.
+    @VisibleForTesting
+    internal val warnMinSdkVersion: Int = 24
+
+    @VisibleForTesting
+    internal val errorMinSdkVersion: Int = 23
+
+    /**
+     * Checks if the project's Android build time dependencies are each within the respective
+=== grep whole fs for the run id ===
+/home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/.git/COMMIT_EDITMSG
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/run-deepseek-v4.1-flash-free.log
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/run-mimo-v2.6-flash-free.log
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/redacted.log
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.local/share/opencode/log/opencode.log
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.local/share/opencode/opencode.db-wal
+/home/ubuntu/actions-runner/_work/_temp/oc-agent/home/.local/share/opencode/opencode.db
+/home/ubuntu/actions-runner/_work/_temp/oc/opencode.log
+/home/ubuntu/actions-runner/_work/_temp/oc/prompt.md
+/tmp/cursor/cloud-agent-transcripts/2026-11-26T15-19-41Z-69df/bc-01a21635-25cb-7ae8-b0a3-c6995247e410/transcript.json
+
