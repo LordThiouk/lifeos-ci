@@ -16107,3 +16107,66 @@ $ cat /home/ubuntu/actions-runner-3/_work/_temp/task_done.md
 
 > Forge · seaglass-alpha-free
 
+→ Read /home/ubuntu/actions-runner-3/_work/_temp/oc/prompt.md
+
+$ ls -la /home/ubuntu/actions-runner-3/_work/lifeos-ci/lifeos-ci/target
+total 192
+drwxr-xr-x 13 ubuntu ubuntu  4096 Nov 26 20:53 .
+drwxr-xr-x  6 ubuntu ubuntu  4096 Nov 26 20:53 ..
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:52 .archive
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 20:52 .fullrun
+drwxr-xr-x  8 ubuntu ubuntu  4096 Nov 26 21:33 .git
+-rw-r--r--  1 ubuntu ubuntu    68 Nov 26 20:52 .gitattributes
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:52 .github
+-rw-r--r--  1 ubuntu ubuntu   480 Nov 26 20:52 .gitignore
+-rw-r--r--  1 ubuntu ubuntu    32 Nov 26 20:52 .graphifyignore
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 20:52 .history
+-rwxr-xr-x  1 ubuntu ubuntu  1325 Nov 26 20:52 .htaccess
+-rw-r--r--  1 ubuntu ubuntu 89305 Nov 26 20:52 2026_03_17_api_swagger_095dc7898c.json
+-rw-r--r--  1 ubuntu ubuntu  5714 Nov 26 20:52 AGENTS.md
+-rw-r--r--  1 ubuntu ubuntu  2384 Nov 26 20:52 CLAUDE.md
+drwxr-xr-x  3 ubuntu ubuntu  4096 Nov 26 20:52 MEMORY
+-rw-r--r--  1 ubuntu ubuntu   619 Nov 26 20:52 SECURITY.md
+drwxr-xr-x  9 ubuntu ubuntu  4096 Nov 26 20:52 assets
+drwxr-xr-x 11 ubuntu ubuntu  4096 Nov 26 20:52 core
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 20:53 docs
+-rwxr-xr-x  1 ubuntu ubuntu   478 Nov 26 20:53 index.php
+-rw-r--r--  1 ubuntu ubuntu 12489 Nov 26 20:53 om_Pay_Link_Swagger_02e4c3ae33.yml
+drwxr-xr-x  2 ubuntu ubuntu  4096 Nov 26 20:53 prompts
+drwxr-xr-x  5 ubuntu ubuntu  4096 Nov 26 20:53 scripts
+
+✗ git remote -v && git branch --show-current && git log --oneline -5 && git status failed
+Error: The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"bash","pattern":"*","action":"allow"},{"permission":"bash","pattern":"git push*","action":"deny"},{"permission":"bash","pattern":"git merge*","action":"deny"},{"permission":"bash","pattern":"gh *","action":"deny"},{"permission":"bash","pattern":"ssh *","action":"deny"},{"permission":"bash","pattern":"scp *","action":"deny"},{"permission":"bash","pattern":"sudo *","action":"deny"},{"permission":"bash","pattern":"*sudo *","action":"deny"},{"permission":"bash","pattern":"*git remote*","action":"deny"},{"permission":"bash","pattern":"*http.extraheader*","action":"deny"}]
+
+$ git branch --show-current && git log --oneline -5 && git status
+fullrun/lot-client-w0
+ba46cf67 fix(driver-register): S-W1-11 — photo absente renvoie 422
+b1a8d143 test(sms): S-W1-07/08/09/10 — capturer le vrai SMS envoyé
+074690f0 test(approval): S-W1-03/04/05 — rendre le mock SMS exécutable
+37c6c90f fix(ride): S-W1-18 service masque renvoie validation_error (422)
+c6fce121 feat(admin-services): S-W1-15 exposer ordre/visibilite dans le modal
+On branch fullrun/lot-client-w0
+Your branch is ahead of 'origin/fullrun/lot-client-w0' by 6 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+$ ls core && ls MEMORY/WORK/2026-11-22-galass-lot-client/ 2>/dev/null | head -50
+app
+artisan
+bootstrap
+composer.json
+composer.lock
+config
+database
+phpunit.xml
+resources
+routes
+storage
+tests
+vendor
+COMPLETENESS.yml
+ISA.md
+fullrun-carry.json
+
+→ Read MEMORY/WORK/2026-11-22-galass-lot-client/ISA.md
