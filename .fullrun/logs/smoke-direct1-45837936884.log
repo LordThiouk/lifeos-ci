@@ -1,3 +1,7 @@
 
 > build · big-pickle
 
+Silence 180s sans nouvelle sortie (journal=32 o) : coupure opencode pid=4182
+
+> build · deepseek-v4.1-flash-free
+
