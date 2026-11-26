@@ -15644,3 +15644,6 @@ Ne commence pas W2. Pas de revue. Bugs multistop exclus. Pas de secrets PSP. Aut
 [ ] W1-S18: Verify no outstanding issues
 
 The codex CLI is not available in this environment, so I'll proceed with making the necessary code changes manually and produce a Forge report. Let me start by examining the current state and implementing the W1 backend tasks.
+→ Read core/app/Models/Service.php
+Let me start by verifying the current state of the service model and implementing the necessary changes.
+→ Read core/app/Http/Controllers/Admin/ServiceController.php
