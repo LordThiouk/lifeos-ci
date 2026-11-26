@@ -4965,3 +4965,16 @@ Route::get('banned', 'bannedDrivers')->name('banned')->middleware('permission:vi
         Route::get('send-notification', 'showNotificationAllForm')->name('notification.all')->middleware('permission:notification to all drivers,admin');
         Route::post('send-notification', 'sendNotificationAll')->name('notification.all.send')->middleware('permission:notification to all drivers,admin');
 
+$ git reset HEAD docs/BUGS.md && git status --short
+Unstaged changes after reset:
+M	docs/BUGS.md
+ M docs/BUGS.md
+
+$ git add docs/BUGS.md && git commit -m "docs(bugs): porter triage c40c30de pour prerequis S-W1-02/ISC-4
+
+Source: git show c40c30de:docs/BUGS.md (PR #8, docs/bugs-triage-2026-11-22).
+Aucun test PHPUnit exécuté (php absent dans le runner).
+Preuve prerequis: fichier trié présent; fermeture des IDs OUVERT/À REVÉRIFIER traités reste à faire au fil des correctifs." --author="Papa Diop <76528706+LordThiouk@users.noreply.github.com>"
+[fullrun/lot-client-w0 f55b012b] docs(bugs): porter triage c40c30de pour prerequis S-W1-02/ISC-4
+ 1 file changed, 128 insertions(+), 86 deletions(-)
+
