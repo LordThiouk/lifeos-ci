@@ -1338,3 +1338,90 @@ OpenJDK Runtime Environment (build 21.0.13.0.3+1-1-24.04.1-Ubuntu)
 OpenJDK 64-Bit Server VM (build 21.0.13.0.3+1-1-24.04.1-Ubuntu, mixed mode, sharing)
 ---
 
+$ for f in settings.gradle.kts gradle.properties gradle/wrapper/gradle-wrapper.properties build.gradle.kts; do echo "=== $f"; diff /agent/repos/Galass_Driver/android/$f /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/android/$f; done; echo "=== app/build.gradle.kts (Driver)"; cat /agent/repos/Galass_Driver/android/app/build.gradle.kts | sed -n '1,40p'
+=== settings.gradle.kts
+21c21
+<     id("com.android.application") version "8.11.1" apply false
+---
+>     id("com.android.application") version "9.0.1" apply false
+24c24
+<     id("com.google.firebase.crashlytics") version("3.0.3") apply false
+---
+>     id("com.google.firebase.crashlytics") version("3.0.7") apply false
+26c26
+<     id("org.jetbrains.kotlin.android") version "2.3.0" apply false
+---
+>     id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+=== gradle.properties
+1c1,5
+< org.gradle.jvmargs=-Xmx8G -XX:MaxMetaspaceSize=4G -XX:ReservedCodeCacheSize=512m -XX:+HeapDumpOnOutOfMemoryError
+---
+> org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+> org.gradle.daemon=false
+> org.gradle.parallel=false
+> org.gradle.configureondemand=false
+> android.enableJetifier=false
+3,6d6
+< android.enableJetifier=true
+< # This builtInKotlin flag was added automatically by Flutter migrator
+< android.builtInKotlin=false
+< # This newDsl flag was added automatically by Flutter migrator
+8,14c8,9
+< 
+< # Build speed (local Fastlane / incremental)
+< org.gradle.caching=true
+< org.gradle.parallel=true
+< org.gradle.daemon=true
+< org.gradle.configureondemand=true
+< org.gradle.vfs.watch=true
+---
+> android.builtInKotlin=false
+> android.r8.proguardAndroidTxt.disallowed=false
+=== gradle/wrapper/gradle-wrapper.properties
+5c5
+< distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+---
+> distributionUrl=https\://services.gradle.org/distributions/gradle-9.1.0-all.zip
+=== build.gradle.kts
+=== app/build.gradle.kts (Driver)
+import java.io.FileInputStream
+import java.util.Properties
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    id("com.android.application")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    // END: FlutterFire Configuration
+    id("kotlin-android")
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("dev.flutter.flutter-gradle-plugin")
+}
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
+fun signingValue(key: String, envName: String): String? {
+    return keystoreProperties.getProperty(key) ?: System.getenv(envName)
+}
+
+android {
+    namespace = "sn.galass.galassdriver"
+    compileSdk = 36
+    ndkVersion = "29.0.14033849"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
+    }
+
+    defaultConfig {
+        applicationId = "sn.galass.galassdriver"
+        minSdk = flutter.minSdkVersion
+        targetSdk = 36
+
