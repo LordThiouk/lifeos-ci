@@ -14686,3 +14686,192 @@ class Vehicle extends Model
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show a88f69e9 --stat | head -40
+commit a88f69e95fcef3b6d09696397f5b9b97d34f9c14
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 19:54:38 2026 +0000
+
+    feat(services): S-W1-14/15/16/17/18 ordre+visibilité services (ISC-40..44)
+    
+    - Migration + SQL manuel sort_order/is_visible sur services
+    - Admin: store/visibility + liste ordonnée; route admin.service.visibility
+    - API Rider/Repo: services actifs visibles ordonnés; service masqué non créable
+    - Tests ServiceOrderVisibilityTest/HiddenServiceRideTest ajoutés
+    php artisan test --filter=ServiceOrder* : NON EXÉCUTÉ (php absent du runner)
+    php artisan test --filter=HiddenService* : NON EXÉCUTÉ (php absent du runner)
+
+ .../Http/Controllers/Admin/ServiceController.php   |  21 ++-
+ .../Http/Controllers/Api/User/UserController.php   |   2 +-
+ core/app/Models/Service.php                        |  12 ++
+ core/app/Repositories/RideRepo.php                 |  10 +-
+ core/app/Repositories/ServiceRepo.php              |   2 +-
+ ..._11_26_000001_add_order_visible_to_services.php |  43 ++++++
+ .../sql/2026_11_26_services_order_visible.sql      |  13 ++
+ core/routes/admin.php                              |   1 +
+ core/tests/Feature/Admin/HiddenServiceRideTest.php |  64 +++++++++
+ .../Feature/Admin/ServiceOrderVisibilityTest.php   | 154 +++++++++++++++++++++
+ 10 files changed, 316 insertions(+), 6 deletions(-)
+
+$ cd /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target && git show a88f69e9 -- core/app/Models/Service.php
+commit a88f69e95fcef3b6d09696397f5b9b97d34f9c14
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Thu Nov 26 19:54:38 2026 +0000
+
+    feat(services): S-W1-14/15/16/17/18 ordre+visibilité services (ISC-40..44)
+    
+    - Migration + SQL manuel sort_order/is_visible sur services
+    - Admin: store/visibility + liste ordonnée; route admin.service.visibility
+    - API Rider/Repo: services actifs visibles ordonnés; service masqué non créable
+    - Tests ServiceOrderVisibilityTest/HiddenServiceRideTest ajoutés
+    php artisan test --filter=ServiceOrder* : NON EXÉCUTÉ (php absent du runner)
+    php artisan test --filter=HiddenService* : NON EXÉCUTÉ (php absent du runner)
+
+diff --git a/core/app/Models/Service.php b/core/app/Models/Service.php
+index 898fb39d..251a4b82 100755
+--- a/core/app/Models/Service.php
++++ b/core/app/Models/Service.php
+@@ -19,5 +19,17 @@ class Service extends Model
+         'intercity_recommend_fare'  => 'double',
+         'intercity_fare_commission' => 'double',
+         'status'                    => 'integer',
++        'sort_order'                => 'integer',
++        'is_visible'                => 'boolean',
+     ];
++
++    public function scopeVisible($query)
++    {
++        return $query->where('is_visible', true);
++    }
++
++    public function scopeOrdered($query)
++    {
++        return $query->orderBy('sort_order')->orderBy('id');
++    }
+ }
+
+$ cat /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Models/Service.php
+<?php
+
+namespace App\Models;
+
+use App\Traits\GlobalStatus;
+use Illuminate\Database\Eloquent\Model;
+
+class Service extends Model
+{
+    use  GlobalStatus;
+
+    protected $casts = [
+        'city_min_fare'             => 'double',
+        'city_max_fare'             => 'double',
+        'city_recommend_fare'       => 'double',
+        'city_fare_commission'      => 'double',
+        'intercity_min_fare'        => 'double',
+        'intercity_max_fare'        => 'double',
+        'intercity_recommend_fare'  => 'double',
+        'intercity_fare_commission' => 'double',
+        'status'                    => 'integer',
+        'sort_order'                => 'integer',
+        'is_visible'                => 'boolean',
+    ];
+
+    public function scopeVisible($query)
+    {
+        return $query->where('is_visible', true);
+    }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order')->orderBy('id');
+    }
+}
+
+$ sed -n '1,90p' /home/ubuntu/actions-runner/_work/lifeos-ci/lifeos-ci/target/core/app/Http/Controllers/Admin/ServiceController.php
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\Service;
+use Illuminate\Http\Request;
+use App\Rules\FileTypeValidate;
+use App\Http\Controllers\Controller;
+
+class ServiceController extends Controller {
+    public function index() {
+        $pageTitle = 'All Services';
+        $services  = Service::searchable(['name'])->ordered()->paginate(getPaginate());
+        return view('admin.services.index', compact('pageTitle', 'services'));
+    }
+
+    public function store(Request $request, $id = 0) {
+        $request->validate([
+            'image'                     => ['image', new FileTypeValidate(['jpg', 'jpeg', 'png'])],
+            'name'                      => 'required|unique:services,name,' . $id,
+            'subtitle'                  => 'required|string',
+            'city_min_fare'             => 'required|numeric|gt:0',
+            'city_max_fare'             => 'required|numeric|gt:city_min_fare',
+            'city_recommend_fare'       => 'required|numeric|gte:city_min_fare|lte:city_max_fare',
+            'city_fare_commission'      => 'required|numeric|gt:0|lt:100',
+            'intercity_min_fare'        => 'required|numeric|gt:0',
+            'intercity_max_fare'        => 'required|numeric|gt:intercity_min_fare',
+            'intercity_recommend_fare'  => 'required|numeric|gte:intercity_min_fare|lte:intercity_max_fare',
+            'intercity_fare_commission' => 'required|numeric|gt:0|lt:100',
+            'sort_order'                => 'nullable|integer|min:0',
+            'is_visible'                => 'nullable|boolean',
+        ]);
+
+        if ($id) {
+            $service      = Service::findOrFail($id);
+            $notification = 'Service updated successfully';
+        } else {
+            $service      = new Service();
+            $notification = 'Service added successfully';
+            $service->sort_order = (int) (Service::max('sort_order') ?? 0) + 1;
+            $service->is_visible = true;
+        }
+
+        if ($request->hasFile('image')) {
+            try {
+                $service->image = fileUploader($request->image, getFilePath('service'), getFileSize('service'), @$service->image);
+            } catch (\Exception $exp) {
+                $notify[] = ['error', 'Couldn\'t upload your image'];
+                return back()->withNotify($notify);
+            }
+        }
+
+        $service->name                      = $request->name;
+        $service->subtitle                  = $request->subtitle;
+        $service->city_min_fare             = $request->city_min_fare;
+        $service->city_max_fare             = $request->city_max_fare;
+        $service->city_recommend_fare       = $request->city_recommend_fare;
+        $service->city_fare_commission      = $request->city_fare_commission;
+        $service->intercity_min_fare        = $request->intercity_min_fare;
+        $service->intercity_max_fare        = $request->intercity_max_fare;
+        $service->intercity_recommend_fare  = $request->intercity_recommend_fare;
+        $service->intercity_fare_commission = $request->intercity_fare_commission;
+        if ($request->has('sort_order') && $request->sort_order !== null && $request->sort_order !== '') {
+            $service->sort_order = (int) $request->sort_order;
+        }
+        if ($request->has('is_visible')) {
+            $service->is_visible = $request->boolean('is_visible');
+        }
+        $service->save();
+
+        $notify[] = ['success',  $notification];
+        return back()->withNotify($notify);
+    }
+
+    public function status($id) {
+        return Service::changeStatus($id);
+    }
+
+    public function visibility($id) {
+        $service = Service::findOrFail($id);
+        $service->is_visible = !$service->is_visible;
+        $service->save();
+
+        $notify[] = ['success', 'Service visibility changed successfully'];
+        return back()->withNotify($notify);
+    }
+}
+
