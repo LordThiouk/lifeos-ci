@@ -11069,3 +11069,28 @@ curl -s -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+jso
 48 Post Run actions/checkout@v4 completed success
 49 Complete job completed success
 
+$ mkdir -p /tmp/ghlogs && cd /tmp/ghlogs && TOKEN=$(sed -n 's/.*oauth_token: //p' /home/ubuntu/.config/gh/hosts.yml | head -1) && curl -sL -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/LordThiouk/galass-emu-actions-pub/actions/jobs/139845170423/logs" -o joblogs.zip && ls -la && unzip -l joblogs.zip | head -40
+total 996
+drwxr-xr-x   2 ubuntu ubuntu   4096 Nov 26 17:59 .
+drwxrwxrwt. 39 root   root    16384 Nov 26 17:59 ..
+-rw-r--r--   1 ubuntu ubuntu 998821 Nov 26 17:59 joblogs.zip
+  End-of-central-directory signature not found.  Either this file is not
+  a zipfile, or it constitutes one disk of a multi-part archive.  In the
+  latter case the central directory and zipfile comment will be found on
+  the last disk(s) of this archive.
+unzip:  cannot find zipfile directory in one of joblogs.zip or
+        joblogs.zip.zip, and cannot find joblogs.zip.ZIP, period.
+Archive:  joblogs.zip
+
+$ cd /tmp/ghlogs && file joblogs.zip && head -c 500 joblogs.zip | cat -v | head -20
+joblogs.zip: Unicode text, UTF-8 (with BOM) text, with very long lines (314), with escape sequences
+M-oM-;M-?2026-11-26T10:26:42.0075949Z Current runner version: '2.338.2'
+2026-11-26T10:26:42.0117677Z ##[group]Runner Image Provisioner
+2026-11-26T10:26:42.0118376Z Hosted Compute Agent
+2026-11-26T10:26:42.0118899Z Version: 20261111.635
+2026-11-26T10:26:42.0119385Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+2026-11-26T10:26:42.0120036Z Build Date: 2026-11-11T01:49:01Z
+2026-11-26T10:26:42.0120534Z Worker ID: {21ec2ff2-d548-42a4-8230-88f31c4a4d38}
+2026-11-26T10:26:42.0121124Z Region: centralus
+2026
+
