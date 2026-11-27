@@ -54,14 +54,14 @@ Tests Flutter 3.44.8 : goldens + contract → **+11 ~3 All other tests passed**.
 | `cursor/isc10-revert-separate-kyc-e410` | `feat/lot-w2-driver` | `8d6da37` |
 | `cursor/lot-parent-isa-sync-1922-e410` | `fullrun/lot-client-w0` | `db7f0339` |
 
-**Verify ×3 Rider tip** lancé 20:21 Africa/Dakar (chain=false) :
-| Agent | Run |
-|---|---|
-| Forge | https://github.com/LordThiouk/lifeos-ci/actions/runs/46063079202 |
-| Silas | https://github.com/LordThiouk/lifeos-ci/actions/runs/46063079195 |
-| Code review | https://github.com/LordThiouk/lifeos-ci/actions/runs/46063079240 |
+**Verify ×3 Rider tip** (20:21 Africa/Dakar, chain=false) — 1ers runs parallèles **cancelled** (concurrence runner) ; relance sérialisée :
+| Agent | Run | Note |
+|---|---|---|
+| Silas | https://github.com/LordThiouk/lifeos-ci/actions/runs/46063079195 | 1er wave (en cours) |
+| Code review | https://github.com/LordThiouk/lifeos-ci/actions/runs/46063122912 | cr2 relancé |
+| Forge | https://github.com/LordThiouk/lifeos-ci/actions/runs/46063161855 | relancé après cancel 46063079202 |
 
-Max + **OK merge main** : seulement après 3× PASS — pas encore demandé.
+Max + **OK merge main** : seulement après 3× PASS — **pas encore demandé**.
 
 ---
 
