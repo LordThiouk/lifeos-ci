@@ -90,3 +90,7 @@ Aucune ISA complète → pas de verify×3 → **pas de demande OK merge**.
 - Rapport https://github.com/LordThiouk/lifeos-ci/pull/35
 
 Aikido : auth MCP KO ce tour — à rejouer.
+
+## 9. Forge ISC-50
+- Annulé : opencode-fullrun 46059236404 (mauvais dépôt antenly)
+- Relance : `fr-build-forge-code` → `Galass_Driver@cursor/isc10-revert-separate-kyc-e410` · `prompts:galass/lot-w4-driver-otp.md`
