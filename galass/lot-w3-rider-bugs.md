@@ -1,6 +1,6 @@
 # Lot-client W3 Rider — suite bugs (vague 2026-11-27)
 
-Dépôt `Galass_Rider`, branche `feat/lot-w2-rider` (déjà W2 : ISC-62/63/64/71/72/73). ISA parent : `Galass_backend` `MEMORY/WORK/2026-11-22-galass-lot-client/` (extra lecture ; coche via ISATool si write possible sinon preuves tests + note commit).
+Dépôt `Galass_Rider`, branche `feat/lot-w2-rider` (déjà W2 : ISC-62/63/64/71/72/73). ISA **enfant** : `MEMORY/WORK/2026-11-22-galass-rider-lot-client/ISA.md` (`parent: 2026-11-22-galass-lot-client`). Coche les ISC dans l’enfant via ISATool ; parent rollup ensuite. Extra backend = lecture parent seulement.
 
 Forge W3 Rider — **pas** login/OTP/inscription profond (ISC-5/51 hors vague sauf si déjà trivial) :
 - ISC-65 R-11 : libellé `pickUpDestination` → FR naturel (MyStrings + usages)
