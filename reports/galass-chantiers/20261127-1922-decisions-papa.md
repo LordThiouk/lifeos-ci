@@ -74,3 +74,19 @@ Deploy ISC-21/24 : **attente GO Papa**.
 
 ## 7. Merge
 Aucune ISA complète → pas de verify×3 → **pas de demande OK merge**.
+
+## 8. Relance Artemis (ce tour)
+- Run : https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/46059160839
+- Ref workflow : `cursor/artemis-ms-close-b7-ids-e410` @ `449f0d4` (Flutter **3.44.8**)
+- `rider_ref` : `cursor/f4-26-revert-main-screen-e410`
+- `driver_ref` : `cursor/isc10-revert-separate-kyc-e410`
+- Objectifs device : goldens 3.44.8, ISC-22 captures, ISC-81 offer_timeout, P0 500 m (selon harnais)
+
+## PRs
+- Driver https://github.com/LordThiouk/Galass_Driver/pull/13
+- Rider https://github.com/LordThiouk/Galass_Rider/pull/26
+- Artemis https://github.com/LordThiouk/galass-emu-actions-pub/pull/13
+- Parent ISA https://github.com/LordThiouk/Galass_backend/pull/16
+- Rapport https://github.com/LordThiouk/lifeos-ci/pull/35
+
+Aikido : auth MCP KO ce tour — à rejouer.
