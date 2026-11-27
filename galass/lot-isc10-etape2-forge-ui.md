@@ -13,10 +13,11 @@ Un seul écran Driver affiche **les deux formulaires** (sections permis + véhic
 - Navigation post-auth : si `dv` ou `vv` manquant → cet écran unique (plus `Get.offAllNamed` séparé permis puis véhicule).
 - Anti ISC-10.1 : `git diff` repos sans changement d'endpoint / payload.
 
-## Preuves
-- Test rouge → vert (widget/écran) prouvant permis + véhicule visibles sur **un** écran.
-- `flutter test` ciblé + `flutter analyze` clean sur fichiers touchés.
-- ISATool tick **ISC-10** et **ISC-10.1** (enfant Driver ; rollup parent si le contrat l'exige) uniquement sur preuve mesurée.
+## Preuves + ordre obligatoire (anti-timeout après livraison)
+1. Test rouge → vert (widget/écran) prouvant permis + véhicule visibles sur **un** écran ; `flutter analyze` clean sur fichiers touchés.
+2. **ISATool tick ISC-10 et ISC-10.1** (enfant Driver ; rollup parent si le contrat l'exige) — evidence = sorties + SHA.
+3. **git push**
+4. **STOP** immédiat — ne pas enchaîner Étape 3 ni autre ISC.
 - Ne pas cocher ISC-10.2 / ISC-10.3 (Étape 3).
 
 ## Hors scope
