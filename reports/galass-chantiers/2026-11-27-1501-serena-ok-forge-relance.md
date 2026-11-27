@@ -78,3 +78,12 @@ Progress lot parent tip : toujours **38/64** (Serena = plan/carry, pas de coche 
 ---
 
 *Généré 2026-11-27 15:01 Africa/Dakar.*
+
+---
+
+## Addendum 15:02 Dakar — ISC-39 préflight
+
+Relance forge [46021082355](https://github.com/LordThiouk/lifeos-ci/actions/runs/46021082355) : prompt `.md` OK, puis **préflight code=2** — `start_step=build` → porte `completeness_pre` (MS branch sans carry build).  
+**Correctif :** dispatch `fr-plan-serena` (porte plan) pour le tick ISC-39 — pas de forge tant que pas de carry MS.
+
+Forge upload [46021105072](https://github.com/LordThiouk/lifeos-ci/actions/runs/46021105072) : prep + préflight **OK**, opencode en cours.
