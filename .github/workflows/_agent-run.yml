@@ -460,6 +460,8 @@ jobs:
 
       - name: Préparer le socle ISA inscriptible (agents FullRun)
         if: ${{ inputs.agent != 'task' }}
+        env:
+          ISA_STAMP_KEY: ${{ secrets.ISA_STAMP_KEY }}
         run: |
           set -euo pipefail
           command -v bun >/dev/null || { echo "::error::bun absent après installation"; exit 1; }
@@ -498,6 +500,17 @@ jobs:
           chmod u+w "$agent_home/.local/share/opencode-lifeos/nix-lifeos.prompt.md"
           chmod -R u+w "$agent_home/.claude"
           mkdir -p "$agent_home/.claude/LIFEOS/MEMORY/STATE"
+          # Clé d'empreinte AVANT le préflight : sinon FullRunPreflight / FullRunCarry
+          # voient « clé absente » ou une clé éphémère et rejettent le carry signé
+          # (porte → completeness_pre, code 2) alors que ISA_STAMP_KEY est dispo.
+          if [ -n "${ISA_STAMP_KEY:-}" ]; then
+            keyf="$agent_home/.claude/LIFEOS/MEMORY/STATE/.isa-stamp-key"
+            ( umask 077; printf '%s' "$ISA_STAMP_KEY" > "$keyf" )
+            [ "$(tr -d '\n' < "$keyf" | wc -c)" -ge 64 ] \
+              || { echo "::error::ISA_STAMP_KEY trop courte (64 hex attendus)"; exit 1; }
+          else
+            echo "::warning::ISA_STAMP_KEY absente : préflight/carry non vérifiables (porte redescendra)"
+          fi
           if [ ! -e /home/box ] && [ ! -L /home/box ]; then
             sudo ln -s "$agent_home" /home/box
           fi
