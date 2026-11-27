@@ -5,7 +5,7 @@ Africa/Dakar · tips : Driver `e23060e` · Rider MS `0fe56d0` · Rider W4 `78aa4
 ## En vol maintenant
 | Job | run | note |
 |---|---|---|
-| Signup Driver ISC-22 | relance (isa_path vide) | Papa : jamais demandé d’annuler |
+| Signup Driver ISC-22 | [46053882693](https://github.com/LordThiouk/lifeos-ci/actions/runs/46053882693) | Papa : jamais demandé d’annuler |
 | Artemis multistop 1× | [46053833147](https://github.com/LordThiouk/galass-emu-actions-pub/actions/runs/46053833147) | Rider `feat/multistop-rider-close-2026-11-20` · Driver `feat/lot-w2-driver` · mode **diagnostic** goldens 2–4 px |
 
 ## Cause goldens Driver `driver_ride_running_*` (2–4 px / 0.00 %)
