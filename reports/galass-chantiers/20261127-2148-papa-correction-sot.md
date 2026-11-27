@@ -15,7 +15,7 @@ Faux : tip « écrasé à bf9dcb6 sans F4-27 ». **Vrai** : tip était `1173e93`
 ## 1. Merge normal F4-27 → tip
 - Merge `cursor/f4-27-papa-2122-e410` (`deb9390`) → canonique → tip `50385de` (push normal).
 - Vérif Flutter 3.44.8 : goldens + contract **11/11 PASS** ; `course_en_cours_simple` **PASS** (bytes = tip pré-merge, inchangé) ; anti-bandeaux + liste Arrêt N **PASS**.
-- **PR #28 → liste à fermer** (pas fermée ici). PR unique reste **#24**.
+- **PR #28 → liste à fermer** : déjà **MERGED** dans la canonique (merge tip `50385de`). PR unique vers main reste **#24**.
 
 ## 2. Verify lecture seule
 - Prompt `galass/verify-rider-multistop.md` durci : tout état / carry / VERIFY **uniquement** sur `verify/rider-ms-*` ; tip canonique intouchable.
