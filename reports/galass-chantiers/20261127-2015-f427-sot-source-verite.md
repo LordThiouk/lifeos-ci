@@ -57,9 +57,9 @@ Tests Flutter 3.44.8 : goldens + contract → **+11 ~3 All other tests passed**.
 **Verify ×3 Rider tip** (20:21 Africa/Dakar, chain=false) — 1ers runs parallèles **cancelled** (concurrence runner) ; relance sérialisée :
 | Agent | Run | Note |
 |---|---|---|
-| Silas | https://github.com/LordThiouk/lifeos-ci/actions/runs/46063079195 | 1er wave (en cours) |
-| Code review | https://github.com/LordThiouk/lifeos-ci/actions/runs/46063122912 | cr2 relancé |
-| Forge | https://github.com/LordThiouk/lifeos-ci/actions/runs/46063161855 | relancé après cancel 46063079202 |
+| Silas | https://github.com/LordThiouk/lifeos-ci/actions/runs/46063079195 | vague 1 en cours |
+| Forge | https://github.com/LordThiouk/lifeos-ci/actions/runs/46063161855 | forge2 en file |
+| Code review | — | cr/cr2 cancelled ; **après** Silas+Forge |
 
 Max + **OK merge main** : seulement après 3× PASS — **pas encore demandé**.
 
@@ -70,8 +70,8 @@ Max + **OK merge main** : seulement après 3× PASS — **pas encore demandé**.
 | Repo | PR | Motif |
 |---|---|---|
 | Rider | #25 | pin 3.50.1 interdit |
-| Rider | #26 | F4-26 revert obsolète post f4-27 |
-| Rider | #27 | bandeaux repris dans f4-27 |
+| Rider | #27 | bandeaux repris dans tip |
 | Rider | #5, #7–#20, #23 | anciennes / verify |
 | Driver | #5–#10 | verify post-OK |
-| Backend | #13–#15 | CI hors lot (décision Papa) |
+| Backend | #13–#15 | CI hors lot (OK Papa) |
+| Déjà MERGED | Rider #26 · Driver #13 · Backend #16 | rien à faire |
