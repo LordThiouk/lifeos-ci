@@ -588,11 +588,21 @@ jobs:
             { echo "### Préflight du lien"; echo "**NON ÉVALUÉ** : lifeos_ref sans FullRunPreflight.ts."; } >> "$GITHUB_STEP_SUMMARY" || true
             exit 0
           fi
-          eff_step="${CHAIN_PHASE:-$STOP_AFTER_STEP}"
-          if [ -z "$eff_step" ]; then
-            echo "::warning::préflight : ni chain_phase ni stop_after_step — contrôle sauté"
-            exit 0
-          fi
+          # chain_phase (plan|build|verify|close) ≠ start_step FullRun.
+          # Bug: passer « plan » tel quel → code 64 (start_step invalide).
+          raw_step="${CHAIN_PHASE:-$STOP_AFTER_STEP}"
+          case "$raw_step" in
+            plan) eff_step=completeness_pre ;;
+            build|verify|max|close|scaffold|completeness_pre|vera|serena|[0-7]) eff_step="$raw_step" ;;
+            "")
+              echo "::warning::préflight : ni chain_phase ni stop_after_step — contrôle sauté"
+              exit 0
+              ;;
+            *)
+              echo "::error::préflight : étape inconnue pour start_step : '$raw_step'"
+              exit 1
+              ;;
+          esac
           args=(--isa "$GITHUB_WORKSPACE/target/$IN_ISA" --start-step "$eff_step")
           if [ -n "${TARGET_AGENT:-}" ]; then
             args+=(--next "$TARGET_AGENT")
