@@ -4,9 +4,9 @@
 
 | ISA | Branche canonique | Tip SHA | PR → main | Compteurs | Secondaires (action) |
 |---|---|---|---|---|---|
-| Rider MS | `feat/multistop-rider-close-2026-11-20` | `bf9dcb6` | [#24](https://github.com/LordThiouk/Galass_Rider/pull/24) | tip 28/39 ; travail F4-27 **30/39** | `cursor/f4-27-arret-n-e410` **à fusionner** ; #25/#26/#27 **à fermer** (OK Papa) |
-| Driver lot | `feat/lot-w2-driver` | `a5ddb53` | [#12](https://github.com/LordThiouk/Galass_Driver/pull/12) | **19/30** | #13 ISC-10 revert **à fusionner** ; verify #5–#10 **à fermer** (OK Papa) |
-| Parent lot | `fullrun/lot-client-w0` | `2a59ba85` | [#10](https://github.com/LordThiouk/Galass_backend/pull/10) | **40/64** | #16 sync **à fusionner** ; #13–#15 CI **à fermer**/garder (OK Papa) |
+| Rider MS | `feat/multistop-rider-close-2026-11-20` | `ea4156b` | [#24](https://github.com/LordThiouk/Galass_Rider/pull/24) | **30/39** | f4-27 **fusionné** ; #25/#26/#27 + f4-27 **à fermer** (OK Papa) |
+| Driver lot | `feat/lot-w2-driver` | `8d6da37` | [#12](https://github.com/LordThiouk/Galass_Driver/pull/12) | **19/30** | #13 **fusionné** → **à fermer** (OK Papa) ; verify #5–#10 **à fermer** |
+| Parent lot | `fullrun/lot-client-w0` | `db7f0339` | [#10](https://github.com/LordThiouk/Galass_backend/pull/10) | **41/64** | #16 **fusionné** → **à fermer** (OK Papa) ; #13–#15 CI (OK Papa) |
 | Backend MS | `feat/multistop-e2e-2026-11-15` | tip MS | [#12](https://github.com/LordThiouk/Galass_backend/pull/12) | 95/125 | secondaires CI hors MS |
 
 Aucune branche/PR fermée sans OK Papa. Merge → tip canonique uniquement (pas de push main).
@@ -46,13 +46,15 @@ Tests Flutter 3.44.8 : goldens + contract → **+11 ~3 All other tests passed**.
 
 ---
 
-## 3. Merge tip (en cours)
+## 3. Merge tip — FAIT (pas de push main)
 
-- Rider : merge `cursor/f4-27-arret-n-e410` → `feat/multistop-rider-close-2026-11-20`
-- Driver : merge `cursor/isc10-revert-separate-kyc-e410` → `feat/lot-w2-driver`
-- Parent : merge `cursor/lot-parent-isa-sync-1922-e410` → `fullrun/lot-client-w0`
+| Secondaire | → Canonique | Tip après merge |
+|---|---|---|
+| `cursor/f4-27-arret-n-e410` | `feat/multistop-rider-close-2026-11-20` | `ea4156b` |
+| `cursor/isc10-revert-separate-kyc-e410` | `feat/lot-w2-driver` | `8d6da37` |
+| `cursor/lot-parent-isa-sync-1922-e410` | `fullrun/lot-client-w0` | `db7f0339` |
 
-**Verify ×3 / Max / merge main** : non demandé — attendre OK Papa.
+**Verify ×3 / Max / merge main** : pas encore — **demande OK Papa** avant irréversible.
 
 ---
 
