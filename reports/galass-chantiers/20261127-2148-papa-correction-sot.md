@@ -19,7 +19,7 @@ Faux : tip « écrasé à bf9dcb6 sans F4-27 ». **Vrai** : tip était `1173e93`
 
 ## 2. Verify lecture seule
 - Prompt `galass/verify-rider-multistop.md` durci : tout état / carry / VERIFY **uniquement** sur `verify/rider-ms-*` ; tip canonique intouchable.
-- À relancer Verify×3 **après** Artemis (ordre Papa).
+- **Annulé** forge3 `46067444430` + silas3 `46069145141` : le démon WIP FullRun poussait sur la branche cible = tip canonique (risque `fullrun-carry` / wip). Relance Verify×3 **après** Artemis, avec `IN_BRANCH=verify/rider-ms-*` uniquement.
 
 ## 3. Compteur MS
 - Tip déjà lignée `93776f3c` + ticks → **137/157** (`992d308`).
