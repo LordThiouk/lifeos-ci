@@ -1,8 +1,8 @@
-# Chantiers actifs — SSoT ~13:40 Africa/Dakar
+# Chantiers actifs — SSoT ~13:45 Africa/Dakar
 
 | Chantier | run | état | live |
 |---|---|---|---|
-| Rider MS carry9 | 46148788973 | **GELÉ** 24min | livelog 42B ; tip 61e19ca wip — STOP F4-23 |
+| Rider MS carry9 | 46148788973 | **GELÉ** 29min | livelog=42B « Architect · deepseek » ; tip 61e19ca wip — STOP F4-23 |
 | F4-29 | 46141301050 | PASS tip a9fbc7d | — |
 | Rider lot | 46145139130 | PASS tip cc65dbc | — |
 | Driver lot | 46145139220 | PASS tip 42a298f | — |
