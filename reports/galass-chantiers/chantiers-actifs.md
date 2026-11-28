@@ -1,11 +1,11 @@
-# Chantiers actifs — SSoT ~12:45 Africa/Dakar
+# Chantiers actifs — SSoT ~12:50 Africa/Dakar
 
 | Chantier | run | état | live |
 |---|---|---|---|
-| Artemis B lot 3 | 46139910287 | FAIL — pas essai 4 | — |
-| Harnais lot only | 46143928920 | PASS | — |
-| F4-29 | 46141301050 | gel tip a5ed36f | 287Ko figé ; ~13:15 |
+| F4-29 | 46141301050 | gel tip a5ed36f | 287Ko ; ~13:15 |
+| Driver lot caméra | 46145139220 | in_progress (post-task_done?) | 215Ko ; tip remote ff64e5e |
+| Rider lot ISC-85 | 46145139130 | in_progress | 139Ko ; preuve ISC-85 |
 | Parent forge | 46144671990 | PASS tip b37cc38 | — |
-| Driver lot caméra | 46145139220 | in_progress | 171Ko ; lit plan Serena ISC-21/22 |
-| Rider lot ISC-85 | 46145139130 | in_progress | 126Ko ; rejoue rouge→vert ISC-85 ; ISA écrite |
+| Harnais only | 46143928920 | PASS | — |
+| Artemis lot 3 | 46139910287 | FAIL — pas essai 4 | — |
 | Idle #45 | e471831 | draft | — |
