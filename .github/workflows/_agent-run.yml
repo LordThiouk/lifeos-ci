@@ -825,6 +825,25 @@ jobs:
           switched=0
           error_switches=0
           rc=""
+          # Papa 12:15 : idle-watchdog — tuer SEULEMENT si task_done + commits locaux
+          # + N min sans nouvelle sortie ; sinon laisser le timeout global.
+          # Après kill, la porte gitleaks+push (if: always()) s'exécute.
+          IDLE_SECS="${OC_IDLE_SECS:-600}"
+          count_new_commits() {
+            local n=0 r dir base c
+            while IFS=$'\t' read -r r dir base; do
+              [ -n "$r" ] || continue
+              c=$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                -C "$dir" rev-list --count "$base..HEAD" 2>/dev/null || echo 0)
+              n=$((n + c))
+            done < "$STATE_DIR/bases"
+            if [ "$LIFEOS_WRITE" = true ] && [ -f "$STATE_DIR/lifeos-base" ] && [ -d lifeos/.git ]; then
+              c=$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                -C lifeos rev-list --count "$(cat "$STATE_DIR/lifeos-base")..HEAD" 2>/dev/null || echo 0)
+              n=$((n + c))
+            fi
+            printf '%s' "$n"
+          }
           for m in "${models[@]}"; do
             used="$m"
             now=$(date +%s)
@@ -838,6 +857,41 @@ jobs:
             marker="$agent_tmp/attempt.start"
             : > "$agent_tmp/oc-tail"
             touch "$marker"
+            idle_killed=0
+            idle_mark="$agent_tmp/idle.killed"
+            rm -f "$idle_mark"
+            # Watchdog en arrière-plan : armé seulement post-task_done + ≥1 commit.
+            # Surveille live_log (tee) ; kill du process opencode uniquement (pas git).
+            (
+              last_bytes=0
+              quiet=0
+              while true; do
+                sleep 30
+                if ! pgrep -f '(^|[ /])opencode run ' >/dev/null 2>&1; then
+                  exit 0
+                fi
+                bytes=$(wc -c < "$live_log" 2>/dev/null || echo 0)
+                commits=$(count_new_commits)
+                if [ -f /tmp/task_done.md ] && [ "${commits:-0}" -ge 1 ]; then
+                  if [ "$bytes" -eq "$last_bytes" ]; then
+                    quiet=$((quiet + 30))
+                  else
+                    quiet=0
+                    last_bytes=$bytes
+                  fi
+                  if [ "$quiet" -ge "$IDLE_SECS" ]; then
+                    echo "idle-watchdog: task_done + commits=${commits} + ${IDLE_SECS}s sans sortie — kill opencode"
+                    : > "$idle_mark"
+                    pkill -KILL -f '(^|[ /])opencode run ' 2>/dev/null || true
+                    exit 77
+                  fi
+                else
+                  quiet=0
+                  last_bytes=$bytes
+                fi
+              done
+            ) &
+            idle_pid=$!
             set +e
             (cd target && env -i \
               PATH="/usr/local/bin:/usr/bin:/bin" \
@@ -852,6 +906,11 @@ jobs:
               tee -a "$live_log" > "$log"
             rc=${PIPESTATUS[0]}
             set -e
+            kill "$idle_pid" 2>/dev/null || true
+            wait "$idle_pid" 2>/dev/null || true
+            if [ -f "$idle_mark" ]; then
+              idle_killed=1
+            fi
             # Conserve une trace masquée : le brut reste dans RUNNER_TEMP (agent),
             # la copie root-owned est publiée plus bas pour le statut.
             if [ -s "$log" ]; then
@@ -883,6 +942,10 @@ jobs:
               echo "quota.sh next a échoué (qrc=$qrc) : arrêt"
               break
             fi
+            if [ "$idle_killed" -eq 1 ]; then
+              status="idle"
+              break
+            fi
             if [ "$rc" -eq 124 ]; then
               status="timeout"
               break
@@ -899,17 +962,8 @@ jobs:
               echo "opencode a échoué sur $m (rc=$rc) : bascule unique vers le modèle suivant"
               continue
             fi
-            new_commits=0
-            while IFS=$'\t' read -r r dir base; do
-              [ -n "$r" ] || continue
-              c=$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
-                -C "$dir" rev-list --count "$base..HEAD" 2>/dev/null || echo 0)
-              new_commits=$((new_commits + c))
-            done < "$STATE_DIR/bases"
+            new_commits=$(count_new_commits)
             if [ "$LIFEOS_WRITE" = true ] && [ -f "$STATE_DIR/lifeos-base" ] && [ -d lifeos/.git ]; then
-              c=$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
-                -C lifeos rev-list --count "$(cat "$STATE_DIR/lifeos-base")..HEAD" 2>/dev/null || echo 0)
-              new_commits=$((new_commits + c))
               if [ -n "$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
                     -C lifeos status --porcelain 2>/dev/null)" ]; then
                 new_commits=$((new_commits + 1))
@@ -927,7 +981,7 @@ jobs:
           # Filet : opencode encore vivant ne doit plus écrire pendant les contrôles.
           pkill -KILL -f '(^|[ /])opencode run ' 2>/dev/null || true
           case "$status" in
-            ok) stop_prog=ok ;;
+            ok|idle) stop_prog=ok ;;
             timeout) stop_prog=plafond ;;
             *) stop_prog=erreur ;;
           esac
@@ -958,7 +1012,7 @@ jobs:
             model=$(printf '%s\n' "$res" | sed -n 's/^model=//p' | tail -1)
             rc=$(printf '%s\n' "$res" | sed -n 's/^rc=//p' | tail -1)
             case "$s" in
-              ok|quota|timeout|vide|erreur) status="$s" ;;
+              ok|quota|timeout|vide|erreur|idle) status="$s" ;;
             esac
           fi
           printf 'status=%s\n' "$status" >> "$GITHUB_OUTPUT"
@@ -1174,6 +1228,9 @@ jobs:
           case "${OC_STATUS:-erreur}" in
             ok)
               echo "Run opencode terminé : ok"
+              ;;
+            idle)
+              echo "::notice::idle-watchdog : opencode tué après task_done+commits+silence — porte push déjà exécutée"
               ;;
             quota)
               echo "::notice::quota atteint sur tous les modèles disponibles : fin propre, pas de lien suivant"

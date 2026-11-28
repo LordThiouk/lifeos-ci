@@ -1,7 +1,7 @@
 # Proposition — porte push malgré gel opencode (Papa 12:05)
 
 **Fichier :** `.github/workflows/_agent-run.yml`  
-**Statut :** proposition seulement — **ne pas merger sans OK Papa**.
+**Statut :** implémenté dans PR (branche `cursor/agent-idle-push-e410`) — **ne pas merger sans OK Papa** (diff complet à relire).
 
 ## Cause racine (preuve livelog)
 
