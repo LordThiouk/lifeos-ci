@@ -460,8 +460,11 @@ jobs:
 
       - name: Préparer le socle ISA inscriptible (agents FullRun)
         if: ${{ inputs.agent != 'task' }}
+        env:
+          ISA_STAMP_KEY: ${{ secrets.ISA_STAMP_KEY }}
         run: |
           set -euo pipefail
+          set +x
           command -v bun >/dev/null || { echo "::error::bun absent après installation"; exit 1; }
           # L'étape opencode tourne avec `env -i PATH=/usr/local/bin:/usr/bin:/bin` :
           # le bun du tool cache n'y est pas visible, on l'installe dans /usr/local/bin.
@@ -498,6 +501,14 @@ jobs:
           chmod u+w "$agent_home/.local/share/opencode-lifeos/nix-lifeos.prompt.md"
           chmod -R u+w "$agent_home/.claude"
           mkdir -p "$agent_home/.claude/LIFEOS/MEMORY/STATE"
+          # Clé CI partagée : sans elle exportCarry/ISATool créent une clé éphémère et le
+          # forge suivant lit « signature invalide (autre clé) » → préflight code 2.
+          [ -n "${ISA_STAMP_KEY:-}" ] || { echo "::error::secret ISA_STAMP_KEY absent (acte Papa requis)"; exit 1; }
+          echo "::add-mask::$ISA_STAMP_KEY"
+          K="$agent_home/.claude/LIFEOS/MEMORY/STATE/.isa-stamp-key"
+          ( umask 077; printf '%s' "$ISA_STAMP_KEY" > "$K" )
+          [ "$(tr -d '\n' < "$K" | wc -c)" -ge 64 ] || { echo "::error::ISA_STAMP_KEY trop courte (64 hex attendus)"; exit 1; }
+          echo "Clé ISA écrite dans agent_home (0600)"
           if [ ! -e /home/box ] && [ ! -L /home/box ]; then
             sudo ln -s "$agent_home" /home/box
           fi
