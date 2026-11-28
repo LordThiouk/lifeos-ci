@@ -15,3 +15,11 @@ ISC-22 / 22.1 ; ISC-21 / 21.1 / 21.2 / 21.3 / 21.4 (caméra + upload conservé).
 - Ne pas cocher ; ne pas coder.
 
 ISATool Decisions + **exportCarry** frais. Commit unique `chore(fullrun): carry signé — étapes 1-3 pass, start_step=build (Driver lot E3)` auteur Papa Diop. Push. **STOP** — aucun autre commit avant Forge.
+
+## Vérification obligatoire avant STOP
+
+Après `exportCarry`, vérifier localement que la signature est valable avec la clé CI déjà dans `~/.claude/LIFEOS/MEMORY/STATE/.isa-stamp-key` (ne jamais créer une autre clé) :
+
+`bun ~/.claude/LIFEOS/TOOLS/FullRunPreflight.ts --isa <ISA.md> --start-step build --chain-phase build --details`
+
+Doit donner `exit: 0` et `got: build`. Si `signature invalide` : la clé agent ≠ clé CI — ne pas committer, STOP avec le motif.
