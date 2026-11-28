@@ -1,0 +1,141 @@
+{
+  "results": [
+    {
+      "file": "accueil.png",
+      "source": "tip dbd2577 (=main 21b9de4 octets)",
+      "commit": "dbd2577",
+      "main_commit": "21b9de4",
+      "pct": 0.0,
+      "mism": 0,
+      "total": 1507920,
+      "preuve": "planches/accueil_main_branche_diff.png"
+    },
+    {
+      "file": "choix_service.png",
+      "source": "tip dbd2577 (=main 21b9de4 octets)",
+      "commit": "dbd2577",
+      "main_commit": "21b9de4",
+      "pct": 0.0,
+      "mism": 0,
+      "total": 1507920,
+      "preuve": "planches/choix_service_main_branche_diff.png"
+    },
+    {
+      "file": "composition_multistop.png",
+      "source": "tip dbd2577 (=main 21b9de4 octets)",
+      "commit": "dbd2577",
+      "main_commit": "21b9de4",
+      "pct": 0.0,
+      "mism": 0,
+      "total": 1507920,
+      "preuve": "planches/composition_multistop_main_branche_diff.png"
+    },
+    {
+      "file": "course_en_cours_simple.png",
+      "source": "tip dbd2577 (=main 21b9de4 octets)",
+      "commit": "dbd2577",
+      "main_commit": "21b9de4",
+      "pct": 0.0,
+      "mism": 0,
+      "total": 1507920,
+      "preuve": "planches/course_en_cours_simple_main_branche_diff.png"
+    },
+    {
+      "file": "course_terminee.png",
+      "source": "tip dbd2577 (=main 21b9de4 octets)",
+      "commit": "dbd2577",
+      "main_commit": "21b9de4",
+      "pct": 0.0,
+      "mism": 0,
+      "total": 1507920,
+      "preuve": "planches/course_terminee_main_branche_diff.png"
+    },
+    {
+      "file": "notation.png",
+      "source": "tip dbd2577 (=main 21b9de4 octets)",
+      "commit": "dbd2577",
+      "main_commit": "21b9de4",
+      "pct": 0.0,
+      "mism": 0,
+      "total": 1507920,
+      "preuve": "planches/notation_main_branche_diff.png"
+    },
+    {
+      "file": "rider_en_recherche.png",
+      "source": "tip dbd2577 (=main 21b9de4 octets)",
+      "commit": "dbd2577",
+      "main_commit": "21b9de4",
+      "pct": 0.0,
+      "mism": 0,
+      "total": 1507920,
+      "preuve": "planches/rider_en_recherche_main_branche_diff.png"
+    },
+    {
+      "file": "course_en_cours_f427_2_arrets.png",
+      "source": "copie octet-identique depuis 85a2713 (feat/multistop-rider-close)",
+      "commit": "dbd2577 (blob=85a2713)",
+      "main_commit": "(absent)",
+      "pct": null,
+      "mism": null,
+      "total": null,
+      "preuve": "planches/course_en_cours_f427_2_arrets_main_branche_diff.png"
+    },
+    {
+      "file": "course_en_cours_f427_3_arrets.png",
+      "source": "copie octet-identique depuis 85a2713 (feat/multistop-rider-close)",
+      "commit": "dbd2577 (blob=85a2713)",
+      "main_commit": "(absent)",
+      "pct": null,
+      "mism": null,
+      "total": null,
+      "preuve": "planches/course_en_cours_f427_3_arrets_main_branche_diff.png"
+    }
+  ],
+  "tip_files": [
+    {
+      "file": "accueil.png",
+      "sha256": "eeb71d688af3",
+      "bytes": 106650
+    },
+    {
+      "file": "choix_service.png",
+      "sha256": "30e206b5412e",
+      "bytes": 44217
+    },
+    {
+      "file": "composition_multistop.png",
+      "sha256": "1f480a1e20ee",
+      "bytes": 136374
+    },
+    {
+      "file": "course_en_cours_simple.png",
+      "sha256": "4794e22d5af7",
+      "bytes": 71924
+    },
+    {
+      "file": "course_terminee.png",
+      "sha256": "14ab5a7e647d",
+      "bytes": 76952
+    },
+    {
+      "file": "notation.png",
+      "sha256": "cef607e2a810",
+      "bytes": 68798
+    },
+    {
+      "file": "rider_en_recherche.png",
+      "sha256": "04e0d4a77817",
+      "bytes": 51457
+    },
+    {
+      "file": "course_en_cours_f427_2_arrets.png",
+      "sha256": "e18bc8948a66",
+      "bytes": 103723
+    },
+    {
+      "file": "course_en_cours_f427_3_arrets.png",
+      "sha256": "e4977ff7abbb",
+      "bytes": 114227
+    }
+  ]
+}
