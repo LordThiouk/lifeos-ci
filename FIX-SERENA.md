@@ -1,0 +1,5 @@
+# FIX-SERENA — plantage immédiat du job serena (run 45696188565)
+
+- **Cause** : serena transmet `stop_after_step: "3"` (fr-plan-serena.yml:142) ; `_agent-run.yml` le convertissait en argument CLI `--stop-after-step` (ancienne ligne 478). Or `opencode run` 1.19.4 ne connaît pas cette option : il affiche l'aide et sort en rc=1 en moins d'une seconde, sans lancer l'agent ni produire de commit. vera n'envoie pas cet input, d'où son succès.
+- **Correction** : `--stop-after-step` n'est plus passé à `opencode run` ; la consigne est exportée via l'environnement `FULLRUN_STOP_AFTER_STEP` (et `FULLRUN_TARGET_AGENT`), mécanisme attendu par LifeOS (`opencode/run-fullrun.sh:92-104`), dans `_agent-run.yml:477-486` et `_agent-run.yml:501`.
+- **Preuve** : `opencode run --help` ne liste pas `--stop-after-step` ; reproduction locale `opencode run --model opencode/x-free --agent Architect --stop-after-step 3 test` → aide + rc=1. La diff serena/vera se limite à `stop_after_step`/`target_agent`/`chain_phase` (fr-plan-serena.yml:141-143).

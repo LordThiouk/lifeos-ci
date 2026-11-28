@@ -10,6 +10,9 @@ set -euo pipefail
 # Noms exacts, stables, sans espaces. L'ordre est celui des options: du workflow.
 ALLOWED_REPOS='antenly antenly-ci galass-ci Galass_Rider Galass_Driver Galass_backend galass-emu-actions-pub lifeos lifeos-ci'
 
+# Dépôts acceptés uniquement comme extra_repos (jamais comme target_repo).
+EXTRA_ONLY_REPOS='acr-senegal'
+
 allowed_repos_list() {
   local r
   # shellcheck disable=SC2086
@@ -39,8 +42,21 @@ allowed_repo() {
   return 1
 }
 
+# Accepté comme extra_repos : liste principale ou liste extra uniquement.
+extra_repo_allowed() {
+  local r="${1-}" a
+  valid_repo_name "$r" || return 1
+  allowed_repo "$r" && return 0
+  # shellcheck disable=SC2086
+  for a in $EXTRA_ONLY_REPOS; do
+    [ "$r" = "$a" ] && return 0
+  done
+  return 1
+}
+
 # Normalise extra_repos (virgules et/ou espaces) en liste séparée par des
 # virgules, sans doublon. Échoue si un élément est invalide ou hors liste.
+# Les dépôts de EXTRA_ONLY_REPOS sont acceptés ici, jamais comme target_repo.
 normalize_extra_repos() {
   local raw="${1-}" token out=""
   local IFS=$', \t\n'
@@ -48,7 +64,7 @@ normalize_extra_repos() {
   for token in $raw; do
     [ -n "$token" ] || continue
     valid_repo_name "$token" || return 1
-    allowed_repo "$token" || return 1
+    extra_repo_allowed "$token" || return 1
     case ",$out," in
       *",$token,"*) return 1 ;;
     esac
