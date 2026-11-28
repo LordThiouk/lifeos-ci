@@ -685,6 +685,8 @@ jobs:
           echo "Journal en direct démarré → $TARGET_REPO@$LOGB"
 
       # Push périodique wip + autosave (comme opencode-fullrun) : un timeout ne perd plus les commits.
+      # Papa 2026-11-28 08:10 : désactivé sur jobs FullRun Serena/Forge — un wip entre carry et forge
+      # corrompait fullrun-carry.json (tip ≠ head signé → PF2 / carry périmé).
       - name: Push périodique des wip (démon root, jeton hors d'opencode)
         id: wip
         continue-on-error: true
@@ -694,6 +696,12 @@ jobs:
         run: |
           set +x
           T=/opt/fullrun-tools; L=/opt/fullrun-wip
+          # Garde FullRun : pas d'autosave wip sur branches canoniques pendant carry/forge.
+          if [[ "$IN_JOB" =~ ^(e3-serena|e3-forge|sot-serena|lot-w|ms-|fr-) ]]; then
+            echo "::notice::autosave wip désactivé pour job FullRun $IN_JOB (anti-corruption carry)"
+            echo "- Push wip : **désactivé** pour \`$IN_JOB\` (Papa 08:10)" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           [[ "$IN_JOB" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$ && "$RUN_ID" =~ ^[0-9]{1,20}$ ]] \
             || { echo "::warning::job ou run invalide : pas de push périodique"; exit 0; }
           [ -n "${PUSH_TOKEN:-}" ] || { echo "::warning::CI_TOKEN absent : pas de push périodique"; exit 0; }
