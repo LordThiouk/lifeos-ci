@@ -19,3 +19,11 @@ ISA : `MEMORY/WORK/20261006-galass-rider-multistop/ISA.md`.
 ## Règles
 
 Ne pas coder. **Ne pas cocher.** ISATool append Decisions + **exportCarry** signé étapes 1–3 (`scope_fp` / `progress_fp` / `criteriaIds` au tip). Commit `chore(fullrun): carry signé — étapes 1-3 pass, start_step=build (Rider MS E3)` auteur `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`. Push. **STOP**. Pas d’autre commit après.
+
+## Vérification obligatoire avant STOP
+
+Après `exportCarry`, vérifier localement que la signature est valable avec la clé CI déjà dans `~/.claude/LIFEOS/MEMORY/STATE/.isa-stamp-key` (ne jamais créer une autre clé) :
+
+`bun ~/.claude/LIFEOS/TOOLS/FullRunPreflight.ts --isa <ISA.md> --start-step build --chain-phase build --details`
+
+Doit donner `exit: 0` et `got: build`. Si `signature invalide` : la clé agent ≠ clé CI — ne pas committer, STOP avec le motif.
