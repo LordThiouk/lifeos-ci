@@ -1,0 +1,92 @@
+[
+  {
+    "name": "course_en_cours_simple",
+    "bbox": [
+      32,
+      28,
+      792,
+      884
+    ],
+    "size": [
+      824,
+      1830
+    ],
+    "pct": "21.04%",
+    "px": 317205
+  },
+  {
+    "name": "course_active_avant_prise_en_charge",
+    "bbox": [
+      32,
+      700,
+      792,
+      954
+    ],
+    "size": [
+      824,
+      1830
+    ],
+    "pct": "0.02%",
+    "px": 328
+  },
+  {
+    "name": "course_en_cours_stop1_actif",
+    "bbox": [
+      32,
+      38,
+      792,
+      1212
+    ],
+    "size": [
+      824,
+      1830
+    ],
+    "pct": "28.00%",
+    "px": 422283
+  },
+  {
+    "name": "course_en_cours_stop1_fait",
+    "bbox": [
+      32,
+      38,
+      792,
+      1212
+    ],
+    "size": [
+      824,
+      1830
+    ],
+    "pct": "27.99%",
+    "px": 422024
+  },
+  {
+    "name": "course_en_cours_tous_arrets_faits",
+    "bbox": [
+      32,
+      38,
+      792,
+      1212
+    ],
+    "size": [
+      824,
+      1830
+    ],
+    "pct": "27.99%",
+    "px": 422113
+  },
+  {
+    "name": "course_terminee",
+    "bbox": [
+      32,
+      147,
+      792,
+      905
+    ],
+    "size": [
+      824,
+      1830
+    ],
+    "pct": "4.55%",
+    "px": 68667
+  }
+]
