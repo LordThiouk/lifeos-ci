@@ -9,7 +9,7 @@ Auteur : `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`. Pas `.fullr
 
 ## Scope
 
-1. **Test de contrat** `STOP_COMPLETED` uniquement : canal (`rider-user-{id}` / private), nom d’événement, enveloppe (clés payload). PHPUnit nommé exécutable.
+1. **Test de contrat** `STOP_COMPLETED` uniquement : canal `private-rider-user-{id}`, nom d’événement, enveloppe (clés payload). PHPUnit nommé exécutable.
 2. **Ne pas modifier** le code d’émission / broadcast existant.
 3. ISC-40 : aligner nom de test ; ISATool tick seulement avec preuve verte.
 4. Push feat. **STOP**.
