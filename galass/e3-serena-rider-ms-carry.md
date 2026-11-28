@@ -5,6 +5,10 @@ ISA : `MEMORY/WORK/20261006-galass-rider-multistop/ISA.md`.
 
 **But :** produire le **carry signé** FullRun (étapes 1–3, `start_step=build`) pour débloquer `completeness_pre` avant Forge E3. Modèle : `galass/lot-w4-serena-driver.md`.
 
+## Urgence Papa 08:10 — carry invalidé
+
+Tip `583ac7b` = `wip(carry)` qui a **écrasé** `fullrun-carry.json` (payload périmé head=`b2e4cc8`, step1 skipped). Le carry `324cfdc` n'est plus au tip. **Refaire un carry frais** au tip distant actuel, puis STOP. Aucun autre commit après le carry. Forge seulement après proveStart `exit: 0` / `got: build` sur ce tip.
+
 ## Périmètre plan uniquement
 
 - F4-21 / F4-23 / F4-24 / F4-28 / F4-29

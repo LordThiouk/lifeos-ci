@@ -1,23 +1,21 @@
-# E3 Forge — Rider MS F4-* + Bridge-F17-3
+# E3 Forge — Rider MS (après carry frais)
 
 Dépôt `Galass_Rider`, branche **`feat/multistop-rider-close-2026-11-20`**.
 ISA : `MEMORY/WORK/20261006-galass-rider-multistop/ISA.md`.
 
-**Prérequis :** carry tip frais 1–3 pass. Aucun commit entre carry et ce build.
+Flutter **3.44.8**. Auteur : `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`.
 
-Flutter **3.44.8**, aucun golden regen, pas de `flutter build`, pas `.fullrun`.
-Auteur : `Papa Diop <76528706+LordThiouk@users.noreply.github.com>`.
+## Préflight
+
+Si préflight ≠ `exit: 0` / `got: build` : **STOP** — ne pas coder ; demander re-carry. Aucun commit wip entre carry et ce Forge.
 
 ## Scope
 
-1. **F4-29** fixture `vehicleData` complète → 8/8 ; test nommé.
-2. **F4-23** destination finale ; **F4-24** régression état neuf ; **F4-21** si preuve.
-3. **F4-28 SOS** test widget.
-4. **F4-32/33** fix carte jambe courante ; porter logique #30 après fix ; frise Papa intacte.
-5. **Bridge-F17-3** — resync quand `stops` est vide ; marqueur client **`stop_completed`** visible dans les logs (pas toucher émission backend).
-6. RUNNING refresh ; notes UI_END (vrai tap) sans lancer Artemis.
-7. ISATool ticks avec `flutter test` nommés. Push. **STOP**.
+1. **F4-29** — fixture `vehicleData` : plaque, distance, temps, tarif.
+2. **F4-23**, **F4-24**, **F4-21**, **F4-28**.
+3. **Bridge-F17-3** — resync si `stops` vide + marqueur client `stop_completed` (logs) ; **ne pas** changer l'émission backend.
+4. Régression **F4-32/33** (PR #30) : absorb logique après fix, pas de merge #25.
 
-## Hors scope
+## Règles
 
-Artemis E4, Verify×3, Max, merge main, lot caméra, regen goldens, modification backend STOP_COMPLETED.
+ISATool seul pour coches. Sans preuve tierce → `NON VALIDÉ` + raison. Push branche canonique. **STOP**. Pas Artemis ici, pas regen goldens, pas main.
