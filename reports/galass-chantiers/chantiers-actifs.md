@@ -1,10 +1,11 @@
-# Chantiers actifs — SSoT ~13:11 Africa/Dakar
+# Chantiers actifs — SSoT ~13:16 Africa/Dakar
 
 | Chantier | run | état | live |
 |---|---|---|---|
 | F4-29 | 46141301050 | **PASS** tip a9fbc7d | push OK |
-| Rider MS carry8 | 46148360023 | in_progress | post-F4-29 |
-| Rider lot ISC-85 | 46145139130 | in_progress (gel?) tip 99114b9 | commit local 128b0ed |
+| Rider MS carry8 | 46148360023 | FAIL préflight code64 (plan→start_step) | pas de livelog |
+| Rider MS carry9 | 46148788973 | in_progress | ref preflight-plan-map + deepseek |
+| Rider lot ISC-85 | 46145139130 | **PASS** tip cc65dbc | ISC-85 [x] + plist FR + tests 6/6 |
 | Driver lot caméra | 46145139220 | PASS tip 42a298f | — |
 | Parent forge | 46144671990 | PASS tip b37cc38 | — |
 | Harnais only | 46143928920 | PASS | — |
