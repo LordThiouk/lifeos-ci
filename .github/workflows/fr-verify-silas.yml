@@ -68,7 +68,6 @@ on:
         description: "Dépôt cible (liste blanche targets/allowed-repos.sh)"
         type: string
         required: true
-        default: antenly
       extra_repos:
         description: "Dépôts supplémentaires, séparés par des virgules ou espaces (vide = aucun)"
         type: string

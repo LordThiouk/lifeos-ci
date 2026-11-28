@@ -1,0 +1,241 @@
+diff --git a/.github/workflows/_agent-run.yml b/.github/workflows/_agent-run.yml
+index 1f143b81..30a8da89 100644
+--- a/.github/workflows/_agent-run.yml
++++ b/.github/workflows/_agent-run.yml
+@@ -599,11 +599,21 @@ jobs:
+             { echo "### Préflight du lien"; echo "**NON ÉVALUÉ** : lifeos_ref sans FullRunPreflight.ts."; } >> "$GITHUB_STEP_SUMMARY" || true
+             exit 0
+           fi
+-          eff_step="${CHAIN_PHASE:-$STOP_AFTER_STEP}"
+-          if [ -z "$eff_step" ]; then
+-            echo "::warning::préflight : ni chain_phase ni stop_after_step — contrôle sauté"
+-            exit 0
+-          fi
++          # chain_phase (plan|build|verify|close) ≠ start_step FullRun.
++          # Bug: passer « plan » tel quel → code 64 (start_step invalide).
++          raw_step="${CHAIN_PHASE:-$STOP_AFTER_STEP}"
++          case "$raw_step" in
++            plan) eff_step=completeness_pre ;;
++            build|verify|max|close|scaffold|completeness_pre|vera|serena|[0-7]) eff_step="$raw_step" ;;
++            "")
++              echo "::warning::préflight : ni chain_phase ni stop_after_step — contrôle sauté"
++              exit 0
++              ;;
++            *)
++              echo "::error::préflight : étape inconnue pour start_step : '$raw_step'"
++              exit 1
++              ;;
++          esac
+           args=(--isa "$GITHUB_WORKSPACE/target/$IN_ISA" --start-step "$eff_step")
+           if [ -n "${TARGET_AGENT:-}" ]; then
+             args+=(--next "$TARGET_AGENT")
+@@ -696,10 +706,12 @@ jobs:
+         run: |
+           set +x
+           T=/opt/fullrun-tools; L=/opt/fullrun-wip
+-          # Garde FullRun : pas d'autosave wip sur branches canoniques pendant carry/forge.
+-          if [[ "$IN_JOB" =~ ^(e3-serena|e3-forge|sot-serena|lot-w|ms-|fr-) ]]; then
++          # Garde FullRun : pas d'autosave/wippush sur carry Serena ni Forge (Papa 08:10 + 15:15).
++          # Mécanisme : démon root ci/opencode/wippush.sh (autosave.sh) → commit « wip(carry): reprise du run ».
++          # Job carry10 sur preflight-plan-map sans cette garde a corrompu fullrun-carry.json (f3cb505).
++          if [[ "$IN_JOB" =~ (serena|forge|carry|e3-|sot-|lot-w|ms-|fr-) ]]; then
+             echo "::notice::autosave wip désactivé pour job FullRun $IN_JOB (anti-corruption carry)"
+-            echo "- Push wip : **désactivé** pour \`$IN_JOB\` (Papa 08:10)" >> "$GITHUB_STEP_SUMMARY"
++            echo "- Push wip : **désactivé** pour \`$IN_JOB\` (Papa 08:10/15:15)" >> "$GITHUB_STEP_SUMMARY"
+             exit 0
+           fi
+           [[ "$IN_JOB" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$ && "$RUN_ID" =~ ^[0-9]{1,20}$ ]] \
+@@ -825,6 +837,25 @@ jobs:
+           switched=0
+           error_switches=0
+           rc=""
++          # Papa 12:15 : idle-watchdog — tuer SEULEMENT si task_done + commits locaux
++          # + N min sans nouvelle sortie ; sinon laisser le timeout global.
++          # Après kill, la porte gitleaks+push (if: always()) s'exécute.
++          IDLE_SECS="${OC_IDLE_SECS:-600}"
++          count_new_commits() {
++            local n=0 r dir base c
++            while IFS=$'\t' read -r r dir base; do
++              [ -n "$r" ] || continue
++              c=$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
++                -C "$dir" rev-list --count "$base..HEAD" 2>/dev/null || echo 0)
++              n=$((n + c))
++            done < "$STATE_DIR/bases"
++            if [ "$LIFEOS_WRITE" = true ] && [ -f "$STATE_DIR/lifeos-base" ] && [ -d lifeos/.git ]; then
++              c=$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
++                -C lifeos rev-list --count "$(cat "$STATE_DIR/lifeos-base")..HEAD" 2>/dev/null || echo 0)
++              n=$((n + c))
++            fi
++            printf '%s' "$n"
++          }
+           for m in "${models[@]}"; do
+             used="$m"
+             now=$(date +%s)
+@@ -838,6 +869,41 @@ jobs:
+             marker="$agent_tmp/attempt.start"
+             : > "$agent_tmp/oc-tail"
+             touch "$marker"
++            idle_killed=0
++            idle_mark="$agent_tmp/idle.killed"
++            rm -f "$idle_mark"
++            # Watchdog en arrière-plan : armé seulement post-task_done + ≥1 commit.
++            # Surveille live_log (tee) ; kill du process opencode uniquement (pas git).
++            (
++              last_bytes=0
++              quiet=0
++              while true; do
++                sleep 30
++                if ! pgrep -f '(^|[ /])opencode run ' >/dev/null 2>&1; then
++                  exit 0
++                fi
++                bytes=$(wc -c < "$live_log" 2>/dev/null || echo 0)
++                commits=$(count_new_commits)
++                if [ -f /tmp/task_done.md ] && [ "${commits:-0}" -ge 1 ]; then
++                  if [ "$bytes" -eq "$last_bytes" ]; then
++                    quiet=$((quiet + 30))
++                  else
++                    quiet=0
++                    last_bytes=$bytes
++                  fi
++                  if [ "$quiet" -ge "$IDLE_SECS" ]; then
++                    echo "idle-watchdog: task_done + commits=${commits} + ${IDLE_SECS}s sans sortie — kill opencode"
++                    : > "$idle_mark"
++                    pkill -KILL -f '(^|[ /])opencode run ' 2>/dev/null || true
++                    exit 77
++                  fi
++                else
++                  quiet=0
++                  last_bytes=$bytes
++                fi
++              done
++            ) &
++            idle_pid=$!
+             set +e
+             (cd target && env -i \
+               PATH="/usr/local/bin:/usr/bin:/bin" \
+@@ -852,6 +918,11 @@ jobs:
+               tee -a "$live_log" > "$log"
+             rc=${PIPESTATUS[0]}
+             set -e
++            kill "$idle_pid" 2>/dev/null || true
++            wait "$idle_pid" 2>/dev/null || true
++            if [ -f "$idle_mark" ]; then
++              idle_killed=1
++            fi
+             # Conserve une trace masquée : le brut reste dans RUNNER_TEMP (agent),
+             # la copie root-owned est publiée plus bas pour le statut.
+             if [ -s "$log" ]; then
+@@ -883,6 +954,10 @@ jobs:
+               echo "quota.sh next a échoué (qrc=$qrc) : arrêt"
+               break
+             fi
++            if [ "$idle_killed" -eq 1 ]; then
++              status="idle"
++              break
++            fi
+             if [ "$rc" -eq 124 ]; then
+               status="timeout"
+               break
+@@ -899,17 +974,8 @@ jobs:
+               echo "opencode a échoué sur $m (rc=$rc) : bascule unique vers le modèle suivant"
+               continue
+             fi
+-            new_commits=0
+-            while IFS=$'\t' read -r r dir base; do
+-              [ -n "$r" ] || continue
+-              c=$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+-                -C "$dir" rev-list --count "$base..HEAD" 2>/dev/null || echo 0)
+-              new_commits=$((new_commits + c))
+-            done < "$STATE_DIR/bases"
++            new_commits=$(count_new_commits)
+             if [ "$LIFEOS_WRITE" = true ] && [ -f "$STATE_DIR/lifeos-base" ] && [ -d lifeos/.git ]; then
+-              c=$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+-                -C lifeos rev-list --count "$(cat "$STATE_DIR/lifeos-base")..HEAD" 2>/dev/null || echo 0)
+-              new_commits=$((new_commits + c))
+               if [ -n "$(git -c core.hooksPath=/dev/null -c core.fsmonitor=false \
+                     -C lifeos status --porcelain 2>/dev/null)" ]; then
+                 new_commits=$((new_commits + 1))
+@@ -927,7 +993,7 @@ jobs:
+           # Filet : opencode encore vivant ne doit plus écrire pendant les contrôles.
+           pkill -KILL -f '(^|[ /])opencode run ' 2>/dev/null || true
+           case "$status" in
+-            ok) stop_prog=ok ;;
++            ok|idle) stop_prog=ok ;;
+             timeout) stop_prog=plafond ;;
+             *) stop_prog=erreur ;;
+           esac
+@@ -958,7 +1024,7 @@ jobs:
+             model=$(printf '%s\n' "$res" | sed -n 's/^model=//p' | tail -1)
+             rc=$(printf '%s\n' "$res" | sed -n 's/^rc=//p' | tail -1)
+             case "$s" in
+-              ok|quota|timeout|vide|erreur) status="$s" ;;
++              ok|quota|timeout|vide|erreur|idle) status="$s" ;;
+             esac
+           fi
+           printf 'status=%s\n' "$status" >> "$GITHUB_OUTPUT"
+@@ -1175,6 +1241,9 @@ jobs:
+             ok)
+               echo "Run opencode terminé : ok"
+               ;;
++            idle)
++              echo "::notice::idle-watchdog : opencode tué après task_done+commits+silence — porte push déjà exécutée"
++              ;;
+             quota)
+               echo "::notice::quota atteint sur tous les modèles disponibles : fin propre, pas de lien suivant"
+               ;;
+diff --git a/docs/proposals/20261128-agent-idle-push.md b/docs/proposals/20261128-agent-idle-push.md
+new file mode 100644
+index 00000000..ce09e7bb
+--- /dev/null
++++ b/docs/proposals/20261128-agent-idle-push.md
+@@ -0,0 +1,50 @@
++# Proposition — porte push malgré gel opencode (Papa 12:05)
++
++**Fichier :** `.github/workflows/_agent-run.yml`  
++**Statut :** implémenté dans PR (branche `cursor/agent-idle-push-e410`) — **ne pas merger sans OK Papa** (diff complet à relire).
++
++## Cause racine (preuve livelog)
++
++1. L’agent **ne pousse jamais** (préambule `ci-preamble.md` : « Tu ne pousses rien »).
++2. L’étape **« Porte gitleaks, garde-fou, push fast-forward… »** a déjà `if: always()` — elle s’exécute **dès que** l’étape « Exécuter opencode » se termine (ok/timeout/erreur), **pas** à la rédaction de `/tmp/task_done.md`.
++3. Gel observé (runs `46131105603`, `46137897145`, `46141301050`) : après `task_done` + commits locaux, l’agent **relit le prompt / dump ISATool.ts** et **ne quitte pas** → `timeout ${IN_TIMEOUT_MIN*60} opencode run` reste bloqué jusqu’au plafond (souvent 90 min) → la porte push n’est pas atteinte tant que le process vit.
++4. Un **cancel** GitHub tue le job **avant** la porte → commits locaux **perdus** (SHA absents du remote ; corps des `Write` absents du livelog).
++
++### Extrait gel F4-29 (`46141301050`)
++
++Dernières lignes utiles (~11:55 UTC) : commits `b8703db` + `a9fbc7d`, `WORKTREE CLEAN`, `← Write /tmp/task_done.md`, rapport FORGE COMPLETED.  
++Puis : `→ Read …/prompt.md` + relecture / dumps — **début de la boucle**.
++
++## Correctif proposé
++
++Dans l’étape « Exécuter opencode », wrapper `opencode run` avec un **idle-watchdog** (démon root, hors portée agent) :
++
++1. Surveiller : mtime de `$log` **et** `git -C target rev-parse HEAD` (nouveau commit).
++2. **Armer** le watchdog seulement si **les deux** sont vrais :
++   - `test -f /tmp/task_done.md`
++   - `rev-list --count $base..HEAD >= 1`
++3. Si **aucune** nouvelle sortie log **et** aucun nouveau commit pendant **N=10 min** (configurable) → `pkill -KILL` le process `opencode run` du job.
++4. Le `timeout` global reste le filet (90 min).
++5. Après kill : status = `timeout` (ou nouveau `idle`) → étapes `if: always()` (statut + **porte push**) s’exécutent → push des commits déjà sur le disque du runner.
++
++### Limite anti « commit à moitié »
++
++Ne tuer sur idle **que si** :
++
++- `/tmp/task_done.md` existe **et** contient une ligne `COMPLETED` / `VERDICT` / `commits` (heuristique), **ou**
++- le dernier commit message matche `^(test|feat|fix|docs)\(` **et** (option) un fichier preuve listé dans le prompt a été touché ;
++
++Sinon : ne pas idle-kill (laisser le timeout global).  
++Ne **jamais** `git add`/`commit` depuis le workflow pour « sauver » un worktree dirty — seulement pousser des commits déjà créés par l’agent (comportement actuel de la porte, lignes `count -eq 0` → skip).
++
++### Risques
++
++| Risque | Mitigation |
++|---|---|
++| Kill trop tôt pendant un `flutter test` long silencieux | N=10 min + armement seulement post-`task_done` |
++| Push d’un commit de code sans tick ISA | Jobs minuscules 1 ISC ; ou exiger 2 commits (code+docs) si le prompt le demande |
++| Faux `timeout` OC_STATUS | Nouveau status `idle` distinct, traité comme ok-pour-push si `count>0` |
++
++## Hors scope
++
++Pas de merge `main`. Pas Artemis. Pas changement des seuils P0.

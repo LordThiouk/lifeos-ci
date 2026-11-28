@@ -1,0 +1,107 @@
+commit b835bcaac4a570a83e163ebd93179adfef25f65f
+Author: Papa Diop <76528706+LordThiouk@users.noreply.github.com>
+Date:   Sat Nov 28 15:23:36 2026 +0000
+
+    fix(fullrun): idle-watchdog — clear task_done + kill PGID ciblé (Papa 15:25)
+    
+    a) rm /tmp/task_done.md au début de chaque tentative opencode.
+    b) ubuntu-latest = VM dédiée ; kill via PGID setsid (plus de pkill -f global).
+    
+    Co-authored-by: Papa Diop <LordThiouk@users.noreply.github.com>
+
+diff --git a/.github/workflows/_agent-run.yml b/.github/workflows/_agent-run.yml
+index 30a8da8..dfb9864 100644
+--- a/.github/workflows/_agent-run.yml
++++ b/.github/workflows/_agent-run.yml
+@@ -869,17 +869,25 @@ jobs:
+             marker="$agent_tmp/attempt.start"
+             : > "$agent_tmp/oc-tail"
+             touch "$marker"
++            # Papa 15:25 : effacer task_done périmé avant chaque tentative (sinon watchdog armé à tort).
++            rm -f /tmp/task_done.md
+             idle_killed=0
+             idle_mark="$agent_tmp/idle.killed"
+-            rm -f "$idle_mark"
+-            # Watchdog en arrière-plan : armé seulement post-task_done + ≥1 commit.
+-            # Surveille live_log (tee) ; kill du process opencode uniquement (pas git).
++            oc_pgid_file="$agent_tmp/oc.pgid"
++            rm -f "$idle_mark" "$oc_pgid_file"
++            # Watchdog : armé seulement post-task_done + ≥1 commit.
++            # runs-on: ubuntu-latest → VM GitHub éphémère dédiée à CE job (isolation native).
++            # Kill ciblé : PGID du setsid(timeout/opencode) de CETTE tentative.
+             (
+               last_bytes=0
+               quiet=0
+               while true; do
+                 sleep 30
+-                if ! pgrep -f '(^|[ /])opencode run ' >/dev/null 2>&1; then
++                if [ ! -f "$oc_pgid_file" ]; then
++                  continue
++                fi
++                oc_pgid=$(cat "$oc_pgid_file" 2>/dev/null || true)
++                if ! [[ "$oc_pgid" =~ ^[0-9]+$ ]] || ! kill -0 -- "-$oc_pgid" 2>/dev/null; then
+                   exit 0
+                 fi
+                 bytes=$(wc -c < "$live_log" 2>/dev/null || echo 0)
+@@ -892,9 +900,9 @@ jobs:
+                     last_bytes=$bytes
+                   fi
+                   if [ "$quiet" -ge "$IDLE_SECS" ]; then
+-                    echo "idle-watchdog: task_done + commits=${commits} + ${IDLE_SECS}s sans sortie — kill opencode"
++                    echo "idle-watchdog: task_done + commits=${commits} + ${IDLE_SECS}s sans sortie — kill PGID=$oc_pgid"
+                     : > "$idle_mark"
+-                    pkill -KILL -f '(^|[ /])opencode run ' 2>/dev/null || true
++                    kill -KILL -- "-$oc_pgid" 2>/dev/null || true
+                     exit 77
+                   fi
+                 else
+@@ -905,17 +913,30 @@ jobs:
+             ) &
+             idle_pid=$!
+             set +e
+-            (cd target && env -i \
+-              PATH="/usr/local/bin:/usr/bin:/bin" \
+-              HOME="$agent_home" TMPDIR="$agent_tmp" LANG=C.UTF-8 \
+-              CHAIN_PHASE="$CHAIN_PHASE" \
+-              "${agent_env[@]}" \
+-              "${hf_env[@]}" \
+-              OPENCODE_CONFIG="$RUNNER_TEMP/oc/opencode.json" \
+-              timeout "$remaining" opencode run --model "$m" \
+-              "${agent_args[@]}" \
+-              "Lis $RUNNER_TEMP/oc/prompt.md et exécute-le complètement.") 2>&1 | \
+-              tee -a "$live_log" > "$log"
++            # setsid bash = leader de session ; $$ = PGID tuable via kill -- -PGID.
++            export OC_PGID_FILE="$oc_pgid_file"
++            export OC_HOME="$agent_home" OC_TMP="$agent_tmp" OC_CHAIN="$CHAIN_PHASE"
++            export OC_CFG="$RUNNER_TEMP/oc/opencode.json" OC_REMAIN="$remaining" OC_MODEL="$m"
++            export OC_PROMPT="$RUNNER_TEMP/oc/prompt.md"
++            (cd target && setsid bash -c '
++              printf "%s" "$$" > "$OC_PGID_FILE"
++              exec env -i \
++                PATH="/usr/local/bin:/usr/bin:/bin" \
++                HOME="$OC_HOME" TMPDIR="$OC_TMP" LANG=C.UTF-8 \
++                CHAIN_PHASE="$OC_CHAIN" \
++                '"$(
++                  # agent_env/hf_env déjà en KEY=VAL ; les injecter dans le bash -c.
++                  for kv in "${agent_env[@]}" "${hf_env[@]}"; do
++                    printf "%q " "$kv"
++                  done
++                )"' \
++                OPENCODE_CONFIG="$OC_CFG" \
++                timeout "$OC_REMAIN" opencode run --model "$OC_MODEL" \
++                '"$(
++                  for a in "${agent_args[@]}"; do printf "%q " "$a"; done
++                )"' \
++                "Lis $OC_PROMPT et exécute-le complètement."
++            ') 2>&1 | tee -a "$live_log" > "$log"
+             rc=${PIPESTATUS[0]}
+             set -e
+             kill "$idle_pid" 2>/dev/null || true
+@@ -923,6 +944,7 @@ jobs:
+             if [ -f "$idle_mark" ]; then
+               idle_killed=1
+             fi
++
+             # Conserve une trace masquée : le brut reste dans RUNNER_TEMP (agent),
+             # la copie root-owned est publiée plus bas pour le statut.
+             if [ -s "$log" ]; then
